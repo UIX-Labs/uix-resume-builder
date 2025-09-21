@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { sendAuthCodeToBackend } from '@/shared/lib/google-auth';
 
 export default function GoogleCallbackClient() {
@@ -10,6 +11,7 @@ export default function GoogleCallbackClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -18,12 +20,16 @@ export default function GoogleCallbackClient() {
 
       if (error) {
         setError(`Google authentication failed: ${error}`);
+        
+        queryClient.removeQueries({ queryKey: ['user'] });
+        queryClient.removeQueries({ queryKey: ['userProfile'] });
         setLoading(false);
         return;
       }
 
       if (!code) {
         setError('No authorization code received from Google');
+        queryClient.removeQueries({ queryKey: ['user'] });
         setLoading(false);
         return;
       }
@@ -34,15 +40,19 @@ export default function GoogleCallbackClient() {
         const authResponse = await sendAuthCodeToBackend(code) as any;
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
+          queryClient.invalidateQueries({ queryKey: ['user'] });
+          queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {
             router.push('/dashboard');
           }, 1000);
         } else {
           setError(authResponse.message || 'Authentication failed');
+          queryClient.removeQueries({ queryKey: ['user'] });
           setLoading(false);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to authenticate with backend');
+        queryClient.removeQueries({ queryKey: ['user'] });
         setLoading(false);
       }
     };
@@ -79,6 +89,12 @@ export default function GoogleCallbackClient() {
           <h2 className="text-xl font-semibold mb-2">Authentication Error</h2>
           <p className="mb-4">{error}</p>
 
+          <button
+            type="button"
+            onClick={() => router.push('/auth')}
+            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Try Again</button>
           <button
             type="button"
             onClick={() => router.push('/')}

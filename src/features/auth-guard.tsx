@@ -23,13 +23,16 @@ function LoadingSpinner() {
 }
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { data: user, isLoading, isError, error } = useUser();
   const router = useRouter();
   const pathname = usePathname();
 
   const isPublicRoute = PUBLIC_ROUTES.some(route => 
     pathname === route || pathname.startsWith(route + '/')
   );
+
+  const { data: user, isLoading, isError, error } = useUser({
+    enabled: !isPublicRoute
+  });
 
   useEffect(() => {
     if (isLoading) return;
@@ -49,20 +52,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     }
   }, [user, isLoading, isError, isPublicRoute, pathname, router]);
 
+  if (isPublicRoute) {
+    return <>{children}</>;
+  }
+
   if (isLoading) {
     return <LoadingSpinner />;
-  }
-
-  if ((isError || !user || !user.isLoggedIn) && !isPublicRoute) {
-    return <LoadingSpinner />;
-  }
-
-  if (user?.isLoggedIn && pathname === '/auth') {
-    if (user.isVerified) {
-      return <LoadingSpinner />;
-    } else {
-      
-    }
   }
 
   return <>{children}</>;

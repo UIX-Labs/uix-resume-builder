@@ -66,7 +66,7 @@ export default function AllResumePage() {
                 }
               />
 
-              <div className="flex gap-6 mt-6 mx-4">
+              <div className="flex gap-6 mt-6 mx-4 flex-wrap">
                 <div className="w-[240px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition">
                   <div className="text-center">
                     <span className="text-3xl text-gray-500">+</span>

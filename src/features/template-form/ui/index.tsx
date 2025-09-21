@@ -6,6 +6,7 @@ import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Draggable } from './draggable';
 import { UrlInput } from './url';
 import type { ResumeData, ResumeDataKey } from '@entities/resume/types';
+import { Dropdown } from './dropdown';
 
 export function TemplateForm({
   formSchema,
@@ -58,6 +59,10 @@ export function TemplateForm({
 
       case 'url': {
         return <UrlInput data={data} onChange={onChange} section={section} />;
+      }
+
+      case 'dropdown': {
+        return <Dropdown data={data} onChange={onChange} section={section} />;
       }
     }
   }

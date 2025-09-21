@@ -4,10 +4,13 @@ import { useTemplateFormData, useTemplateFormSchema } from '@entities/resume';
 import { camelToHumanString } from '@shared/lib/string';
 import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
 import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
+import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export default function FormPage() {
-  const { data: resumeData } = useTemplateFormData();
+  const params = useParams();
+  const id = params.id as string;
+  const { data: resumeData } = useTemplateFormData(id);
   const { data: schema } = useTemplateFormSchema();
 
   const [currentStep, setCurrentStep] = useState<string>('');
@@ -33,23 +36,15 @@ export default function FormPage() {
     setCurrentStep(Object.keys(schema ?? {})[0] ?? '');
   }, [schema]);
 
+  console.log('Qwe');
+
   return (
     <FormPageBuilderProvider value={{ currentStep, setCurrentStep, navs }}>
-      <div className="flex gap-6 py-4 pl-4 ">
+      <div className="flex pl-4 ">
         <Sidebar />
 
-        <div className="relative flex bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] overflow-y-auto pt-5 px-5 gap-3">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
-          />
-
-          <div className="relative flex w-full">
-            <FormPageBuilder formSchema={schema ?? {}} defaultValues={resumeData ?? {}} />
-          </div>
+        <div className="relative flex w-full">
+          <FormPageBuilder formSchema={schema ?? {}} defaultValues={resumeData ?? {}} />
         </div>
       </div>
     </FormPageBuilderProvider>

@@ -25,7 +25,7 @@ const aniketTemplate = {
           {
             id: 'header-section',
             type: 'container',
-            className: 'flex flex-col items-center justify-center text-center border-b border-neutral-300 pb-4',
+            className: 'flex flex-col items-start justify-center text-center',
             break: true,
             children: [
               {
@@ -87,87 +87,57 @@ const aniketTemplate = {
           {
             id: 'summary-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.professionalSummary.title', fallback: 'Summary' },
+            pathWithFallback: { path: 'data.personDetails.title', fallback: 'Summary' },
             className: 'uppercase tracking-wide text-sm font-semibold text-blue-600',
           },
           { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
           {
             type: 'list',
             id: 'professionalSummary',
-            pathWithFallback: { path: 'data.professionalSummary.items' },
+            pathWithFallback: { path: 'data.personalDetails.items' },
             className: 'flex flex-col',
             presentation: [
               {
-                id: 'summary-section',
-                type: 'container',
-                className: 'flex flex-col gap-2',
-                children: [
-                  {
-                    id: 'summary-text',
-                    type: 'html',
-                    pathWithFallback: { path: 'data.summary' },
-                    className: 'text-sm text-neutral-700 text-justify',
-                  },
-                ],
+                id: 'summary-text',
+                type: 'html',
+                pathWithFallback: { path: 'data.description', fallback: 'Summary' },
+                className: 'text-sm text-neutral-700 text-justify',
               },
             ],
           },
         ],
       },
 
-      // // Skills
-      // {
-      //   id: 'skills-section',
-      //   type: 'container',
-      //   className: 'flex flex-col gap-2',
-      //   children: [
-      //     {
-      //       id: 'skills-heading',
-      //       type: 'text',
-      //       pathWithFallback: { path: 'data.skills.heading', fallback: 'Skills' },
-      //       className: 'uppercase tracking-wide text-sm font-semibold text-blue-600',
-      //     },
-      //     { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
-      //     {
-      //       type: 'list',
-      //       id: 'skills',
-      //       pathWithFallback: { path: 'data.skills.list' },
-      //       className: 'grid grid-cols-2 gap-x-4 gap-y-1',
-      //       presentation: [
-      //         {
-      //           type: 'container',
-      //           id: 'skill',
-      //           className: 'flex flex-row gap-1',
-      //           children: [
-      //             {
-      //               id: 'skill-label',
-      //               type: 'text',
-      //               pathWithFallback: { path: 'data.label' },
-      //               className: 'font-medium text-xs text-neutral-800',
-      //               suffix: ': ',
-      //             },
-      //             {
-      //               id: 'skill-value',
-      //               type: 'list',
-      //               className: 'flex flex-wrap gap-1',
-      //               pathWithFallback: { path: 'data.value' },
-      //               presentation: [
-      //                 {
-      //                   id: 'skill-value-item',
-      //                   type: 'text',
-      //                   className: 'text-neutral-600 text-xs',
-      //                   suffix: ', ',
-      //                 },
-      //               ],
-      //             },
-      //           ],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
+      // Skills
+      {
+        id: 'skills',
+        type: 'container',
+        className: 'flex flex-col gap-2',
+        children: [
+          {
+            id: 'skills-heading',
+            type: 'text',
+            pathWithFallback: { path: 'data.skills.heading', fallback: 'Skills' },
+            className: 'uppercase tracking-wide text-sm font-semibold text-blue-600',
+          },
+          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            id: 'skills-list',
+            type: 'list',
+            pathWithFallback: { path: 'data.skills.items' },
+            className: 'flex flex-wrap gap-1',
+            presentation: [
+              {
+                type: 'text',
+                pathWithFallback: { path: 'data.name' },
+                className: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+              },
+            ],
+          },
+        ],
+      },
 
-      // // Experience
+      // Experience
       {
         id: 'experience-section',
         type: 'container',
@@ -232,7 +202,7 @@ const aniketTemplate = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs text-neutral-700 list-disc pl-4',
+                    className: 'text-sm text-neutral-700 text-justify',
                   },
                 ],
               },
@@ -278,8 +248,8 @@ const aniketTemplate = {
                       {
                         id: 'education-period',
                         type: 'text',
-                        pathWithFallback: { path: 'data.startDate' },
-                        className: 'text-neutral-600 text-xs',
+                        pathWithFallback: { path: 'data.startDate', fallback: 'Start Date' },
+                        className: 'text-sm text-neutral-700 text-justify italic',
                       },
                     ],
                   },
@@ -295,12 +265,12 @@ const aniketTemplate = {
                             id: 'education-degree',
                             type: 'text',
                             pathWithFallback: { path: 'data.degree' },
-                            className: 'text-xs italic text-black-600',
+                            className: 'text-sm text-semibold text-justify',
                           },
                           {
                             type: 'text',
-                            pathWithFallback: { path: 'data.fieldOfStudy' },
-                            className: 'text-xs italic text-black-600',
+                            pathWithFallback: { path: 'data.fieldOfStudy', fallback: 'Field of Study' },
+                            className: 'text-sm text-neutral-700 text-justify italic',
                           },
                         ],
                       },
@@ -309,7 +279,66 @@ const aniketTemplate = {
                         id: 'education-grade',
                         type: 'text',
                         pathWithFallback: { path: 'data.grade' },
-                        className: 'text-xs italic text-neutral-600',
+                        className: 'text-sm text-neutral-700 text-justify',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          {
+            id: 'projects-section',
+            type: 'container',
+            className: 'flex flex-col gap-2',
+            children: [
+              {
+                id: 'projects-heading',
+                type: 'text',
+                pathWithFallback: { path: 'data.projects.title', fallback: 'Projects' },
+                className: 'uppercase tracking-wide text-sm font-semibold text-blue-600',
+              },
+              { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+              {
+                type: 'list',
+                id: 'projects-list',
+                pathWithFallback: { path: 'data.projects.items' },
+                className: 'flex flex-col gap-4',
+                presentation: [
+                  {
+                    type: 'container',
+                    className: 'flex flex-col gap-1',
+                    children: [
+                      // Project Title
+                      {
+                        type: 'text',
+                        pathWithFallback: { path: 'data.title', fallback: 'Project Title' },
+                        className: 'text-base font-semibold text-neutral-900',
+                      },
+
+                      // Duration (Start - End)
+                      {
+                        type: 'text',
+                        pathWithFallback: {
+                          path: 'data.duration',
+                          fallback: '',
+                        },
+                        className: 'text-xs text-neutral-600 italic',
+                      },
+
+                      // Description
+                      {
+                        type: 'html',
+                        pathWithFallback: { path: 'data.description', fallback: '' },
+                        className: 'text-sm text-neutral-700 text-justify',
+                      },
+
+                      // Project Link
+                      {
+                        type: 'link',
+                        pathWithFallback: { path: 'data.link', fallback: '' },
+                        className: 'text-sm text-blue-600 hover:underline mt-1',
                       },
                     ],
                   },

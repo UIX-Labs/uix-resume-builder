@@ -19,16 +19,6 @@ export {
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
 } from './dropdown';
-export {
-  useFormField,
-  Form,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-  FormField,
-} from './form';
 export { Label } from './label';
 export { ProgressCircle } from './progress-circle';
 export { TiptapTextArea } from './components/textarea';

@@ -13,7 +13,7 @@ export function useTemplateFormSchema() {
   });
 }
 
-export function useTemplateFormData(id: string = 'e70de270-5e70-4ce7-8527-a66d17ca8b3a') {
+export function useTemplateFormData(id: string) {
   return useFetch<ResumeData, Error, ResumeData>({
     queryKey: ['resume-data'],
     queryFn: () => getResumeData(id),

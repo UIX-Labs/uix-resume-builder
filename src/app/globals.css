@@ -416,18 +416,28 @@
     @apply border-border outline-ring/50;
   }
 
+  * {
+    @apply border-border outline-ring/50;
+  }
+
   body {
     background-color: #ffffff; /* Fallback color */
     background-image: url("../../public/images/landing-page-bg.svg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
+    @apply bg-background text-foreground;
   }
 
   img,
   canvas {
     @apply inline-block;
   }
+}
+
+.scroll-hidden {
+  scrollbar-width: none;
 }
 
 .glass-card {
@@ -587,13 +597,4 @@
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }

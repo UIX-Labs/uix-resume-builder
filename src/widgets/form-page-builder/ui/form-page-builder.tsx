@@ -11,7 +11,6 @@ import { camelToHumanString } from '@shared/lib/string';
 import { saveFormData } from '@entities/resume/api';
 import { useMutation } from '@tanstack/react-query';
 
-const width = 580;
 export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: FormSchema; defaultValues: any }) {
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
 
@@ -38,19 +37,28 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
   return (
     <>
       <div
-        className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] overflow-auto scroll-hidden w-full min-w-0 absolute top-0 left-0"
+        className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-6"
         style={{
           transformOrigin: 'top left',
-          width: '794px',
-          height: '1122px',
-          transform: `scale(${width / 794})`,
+          minWidth: '794px',
         }}
       >
-        <ResumeRenderer template={aniketTemplate} data={{ ...aniketSampleData, ...formData }} />
+        <div className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0">
+          <ResumeRenderer template={aniketTemplate} data={{ ...aniketSampleData, ...formData }} />
+        </div>
       </div>
 
-      <div className="pl-8 flex-1 h-full max-h-[calc(100vh-32px)] overflow-y-auto pb-5" style={{ marginLeft: width }}>
-        {/* <div className="flex justify-end items-center gap-4">
+      <div className="relative flex bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] overflow-y-auto pt-5 px-5 gap-3 mt-4">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+          }}
+        />
+
+        <div className="flex-1 h-full max-h-[calc(100vh-32px)] overflow-y-auto pb-5">
+          {/* <div className="flex justify-end items-center gap-4">
           <div className="flex items-center gap-2">
             <Image src="/images/circle-alert.svg" alt="circle-alert" width={16} height={16} />
             <span className="text-[13px] font-regular text-[#E12121]">Sign In to save progress</span>
@@ -59,29 +67,31 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
             Sign In
           </Button>
         </div> */}
-        <div
-          className="mt-6 mb-4"
-          style={{
-            background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
-            height: '1px',
-            width: '100%',
-          }}
-        />
 
-        <TemplateForm
-          formSchema={formSchema ?? {}}
-          currentStep={currentStep}
-          values={formData ?? {}}
-          onChange={(formData) => setFormData(formData)}
-        />
+          {/* <div
+            className="mt-6 mb-4"
+            style={{
+              background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
+              height: '1px',
+              width: '100%',
+            }}
+          /> */}
 
-        <div className="mt-[20px] cursor-pointer z-100 relative ml-auto flex">
-          <Button
-            className="mt-auto ml-auto bg-[#E9F4FF] w-[247px] h-[48px] rounded-[8px] text-sm font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
-            onClick={handleNextStep}
-          >
-            Next: {camelToHumanString(navs[nextStepIndex]?.name ?? '')}
-          </Button>
+          <TemplateForm
+            formSchema={formSchema ?? {}}
+            currentStep={currentStep}
+            values={formData ?? {}}
+            onChange={(formData) => setFormData(formData)}
+          />
+
+          <div className="mt-[20px] cursor-pointer z-100 relative ml-auto flex">
+            <Button
+              className="mt-auto ml-auto bg-[#E9F4FF] w-[247px] h-[48px] rounded-[8px] text-sm font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
+              onClick={handleNextStep}
+            >
+              Next: {camelToHumanString(navs[nextStepIndex]?.name ?? '')}
+            </Button>
+          </div>
         </div>
       </div>
     </>

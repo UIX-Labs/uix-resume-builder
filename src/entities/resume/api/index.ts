@@ -66,28 +66,36 @@ const data = {
       fluid: true,
       required: true,
     },
-  },
-  professionalSummary: {
-    label: 'Professional Summary',
-    subTitle:
-      'Write 2-4 short, energetic sentences about how great you are. Mention the role and what you did. What were the big achievements? Describe your motivation and list your skills.',
-    heading: {
-      name: 'heading',
-      type: 'text',
-      placeholder: 'Enter your heading',
-      label: 'Heading',
-      required: true,
-      fluid: true,
-    },
-    summary: {
-      name: 'summary',
+    description: {
+      name: 'description',
       type: 'textarea',
-      placeholder: 'Enter your summary',
-      label: 'Summary',
+      label: 'Description',
+      placeholder: 'Enter your description',
       required: true,
       fluid: true,
     },
   },
+  // professionalSummary: {
+  //   label: 'Professional Summary',
+  //   subTitle:
+  //     'Write 2-4 short, energetic sentences about how great you are. Mention the role and what you did. What were the big achievements? Describe your motivation and list your skills.',
+  //   heading: {
+  //     name: 'heading',
+  //     type: 'text',
+  //     placeholder: 'Enter your heading',
+  //     label: 'Heading',
+  //     required: true,
+  //     fluid: true,
+  //   },
+  //   summary: {
+  //     name: 'summary',
+  //     type: 'textarea',
+  //     placeholder: 'Enter your summary',
+  //     label: 'Summary',
+  //     required: true,
+  //     fluid: true,
+  //   },
+  // },
   experience: {
     label: 'Experience',
     subTitle:
@@ -149,26 +157,43 @@ const data = {
       fluid: true,
     },
   },
-  // skills: {
-  //   label: 'Skills',
-  //   description: 'Enter your skills',
-  //   heading: {
-  //     name: 'heading',
-  //     type: 'text',
-  //     placeholder: 'Enter your heading',
-  //     required: true,
-  //   },
-  //   items: {
-  //     name: 'items',
-  //     type: 'draggable',
-  //   },
-  //   skill: {
-  //     name: 'skill',
-  //     type: 'text',
-  //     placeholder: 'Enter your skill',
-  //     required: true,
-  //   },
-  // },
+
+  skills: {
+    label: 'Skills',
+    description: 'Enter your skills',
+    itemsType: 'draggable',
+
+    collapsedState: {
+      titleKey: 'name',
+      subTitleKey: 'level',
+    },
+
+    category: {
+      name: 'category',
+      type: 'text',
+      placeholder: 'Enter your category',
+      required: true,
+      fluid: true,
+      label: 'Category',
+    },
+
+    level: {
+      name: 'level',
+      type: 'dropdown',
+      placeholder: 'Select your level',
+      required: true,
+      label: 'Level',
+      options: ['Beginner', 'Intermediate', 'Expert'],
+    },
+
+    name: {
+      name: 'name',
+      type: 'text',
+      placeholder: 'Enter your skill name',
+      required: true,
+      label: 'Name',
+    },
+  },
   education: {
     label: 'Education',
     subTitle:
@@ -185,6 +210,7 @@ const data = {
     itemsType: 'draggable',
 
     fluid: true,
+
     collapsedState: {
       titleKey: 'degree',
       subTitleKey: 'institution',
@@ -230,77 +256,68 @@ const data = {
       label: 'Grade',
     },
   },
+
+  projects: {
+    label: 'Projects',
+    subTitle: 'Show your relevant projects',
+
+    collapsedState: {
+      titleKey: 'title',
+      subTitleKey: 'duration',
+    },
+
+    itemsType: 'draggable',
+
+    duration: {
+      name: 'duration',
+      type: 'date',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
+      required: true,
+    },
+
+    link: {
+      name: 'link',
+      type: 'url',
+      placeholder: 'Enter your link',
+      label: 'Link',
+      required: true,
+      fluid: true,
+    },
+
+    techStack: {
+      name: 'techStack',
+      type: 'chips',
+      placeholder: 'Enter your tech stack',
+      label: 'Tech Stack',
+      required: true,
+      fluid: true,
+    },
+
+    description: {
+      name: 'description',
+      type: 'textarea',
+      placeholder: 'Enter your description',
+      label: 'Description',
+      required: true,
+      fluid: true,
+    },
+
+    title: {
+      name: 'title',
+      type: 'text',
+      placeholder: 'Enter your title',
+      label: 'Title',
+      fluid: true,
+      required: true,
+    },
+  },
 };
 
 export async function getResumeData(id: string): Promise<ResumeData> {
   const data = await fetch<ResumeData>(`resume/${id}`);
 
-  if (data.personalDetails.items.length === 0) {
-    data.personalDetails.items.push({
-      id: 'pd-1',
-      fullName: 'John Doe',
-      email: 'john.doe@example.com',
-      title: 'Engineer',
-      phone: '1234567890',
-      address: '123 Main St, Anytown, USA',
-      linkedin: 'https://www.linkedin.com/in/john-doe',
-      github: '',
-    });
-  }
-
-  // if (data.professionalSummary.items.length === 0) {
-  //   data.professionalSummary.items.push({
-  //     id: 'ps-1',
-  //     summary: '',
-  //   });
-  // }
-
-  data.professionalSummary = {
-    id: 'professional-1',
-    title: 'Professional Summary',
-    items: [
-      {
-        id: 'ps-1',
-        summary: 'I am a software engineer with 10 years of experience in the industry.',
-      },
-    ],
-  };
-
-  if (data.experience.items.length === 0) {
-    data.experience.items.push({
-      id: 'exp-1-1',
-      company: 'Google',
-      position: 'Software Engineer',
-      location: 'San Francisco, CA',
-      startDate: '',
-      endDate: '2024-01-01',
-      ongoing: true,
-      link: 'https://www.google.com',
-      description: 'qweqwe',
-    });
-  }
-
-  if (data.skills.items.length === 0) {
-    data.skills.items.push({
-      id: 'skill-1',
-      name: 'JavaScript',
-      category: 'Programming Languages',
-      level: 'Expert',
-    });
-  }
-
-  if (data.education.items.length === 0) {
-    data.education.items.push({
-      id: 'edu-1',
-      degree: 'Bachelor of Science in Computer Science',
-      institution: 'Harvard University',
-      fieldOfStudy: 'Computer Science',
-      startDate: '',
-      endDate: '2024-01-01',
-      grade: 'A',
-      ongoing: true,
-    });
-  }
+  console.log(data);
 
   return data;
 }
@@ -340,6 +357,31 @@ export async function saveFormData<T extends keyof ResumeData>({
     options: {
       method: 'PUT',
       body: JSON.stringify(data),
+    },
+  });
+
+  return res;
+}
+
+export async function createResume(): Promise<any> {
+  const res = await fetch<{
+    createdAt: string;
+    deleted_at: string | null;
+    id: string;
+    templateId: string;
+    title: string;
+    updatedAt: string;
+    userId: string;
+  }>('resume/create', {
+    options: {
+      method: 'POST',
+      body: JSON.stringify({
+        title: 'Frontend Engineer Resume',
+        userInfo: {
+          userId: '60fdfb6c-21d6-4717-98ac-425e6a592cb8',
+        },
+        templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
+      }),
     },
   });
 

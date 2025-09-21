@@ -22,7 +22,7 @@ export function Draggable({
         const collapsedSubTitleValue = item[section.collapsedState?.subTitleKey];
 
         return (
-          <div key={item.id} className="relative">
+          <div key={item.itemId} className="relative">
             <button
               type="button"
               className={cn(
@@ -85,11 +85,11 @@ export function Draggable({
                 onClick={() => {
                   const newItem = Object.entries(item).reduce(
                     (acc, [key]) => {
-                      if (key === 'id') {
-                        acc[key] = Math.random().toString(36).substring(2, 15);
-                      } else {
-                        acc[key] = '';
+                      if (key === 'itemId' || key === 'rank') {
+                        return acc;
                       }
+
+                      acc[key] = '';
 
                       return acc;
                     },
@@ -97,7 +97,7 @@ export function Draggable({
                   );
 
                   const newData = [...data];
-                  newData.splice(i, 0, newItem);
+                  newData.push(newItem);
                   onChange(newData);
                 }}
               >

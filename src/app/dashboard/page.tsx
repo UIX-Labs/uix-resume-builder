@@ -1,5 +1,5 @@
 "use client"
-import { useUser } from "@shared/hooks/use-user";
+import { useUserProfile } from "@shared/hooks/use-user";
 import { SidebarProvider } from "@shared/ui/sidebar";
 import DashboardCarousel from "@widgets/dashboard/ui/dashboard-carousel";
 import DashboardSidebar from "@widgets/dashboard/ui/dashboard-sidebar";
@@ -9,7 +9,7 @@ import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
 import { Bell, Search } from "lucide-react";
 
 export default function DashboardLayout() {
-  const { data: user } = useUser();
+  const { data: user } = useUserProfile();
 
   return (
     <SidebarProvider>

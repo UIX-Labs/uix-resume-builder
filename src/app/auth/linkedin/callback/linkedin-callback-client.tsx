@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { sendAuthCodeToBackend } from '@/shared/lib/linkedin-auth';
 
 export default function LinkedInCallbackClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -20,18 +22,23 @@ export default function LinkedInCallbackClient() {
 
       if (receivedState !== expectedState) {
         setError('State mismatch. Possible CSRF attack.');
+        queryClient.removeQueries({ queryKey: ['user'] });
+        queryClient.removeQueries({ queryKey: ['userProfile'] });
         setLoading(false);
         return;
       }
 
       if (error) {
         setError(`LinkedIn authentication failed: ${error}`);
+        queryClient.removeQueries({ queryKey: ['user'] });
+        queryClient.removeQueries({ queryKey: ['userProfile'] });
         setLoading(false);
         return;
       }
 
       if (!code) {
         setError('No authorization code received from LinkedIn');
+        queryClient.removeQueries({ queryKey: ['user'] });
         setLoading(false);
         return;
       }
@@ -43,15 +50,21 @@ export default function LinkedInCallbackClient() {
 
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
+          queryClient.invalidateQueries({ queryKey: ['user'] });
+          queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {
             router.push('/dashboard');
           }, 1000);
         } else {
           setError(authResponse.message || 'Authentication failed');
+          queryClient.removeQueries({ queryKey: ['user'] });
+          queryClient.removeQueries({ queryKey: ['userProfile'] });
           setLoading(false);
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to authenticate with backend');
+        queryClient.removeQueries({ queryKey: ['user'] });
+        queryClient.removeQueries({ queryKey: ['userProfile'] });
         setLoading(false);
       }
     };
@@ -87,6 +100,13 @@ export default function LinkedInCallbackClient() {
         <div className="text-center text-red-600 max-w-md px-4">
           <h2 className="text-xl font-semibold mb-2">Authentication Error</h2>
           <p className="mb-4">{error}</p>
+          <button
+            type="button"
+            onClick={() => router.push('/auth')}
+            className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Try Again
+          </button>
           <button
             type="button"
             onClick={() => router.push('/')}

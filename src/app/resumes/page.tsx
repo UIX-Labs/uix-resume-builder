@@ -1,6 +1,7 @@
 "use client";
 import { fetchUserDetails } from "@entities/auth-page/api/auth-queries";
 import { useGetAllResumes } from "@entities/resume/api/get-all-resume";
+import { useCachedUser, useUser } from "@shared/hooks/use-user";
 import { formatDate } from "@shared/lib/date-time";
 import { SidebarProvider } from "@shared/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
@@ -9,21 +10,9 @@ import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
 import { Bell, MoreVertical, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function DashboardLayout() {
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
-    setUserId(id);
-  }, []);
-
-  const { data: user } = useQuery({
-    queryKey: ["user", userId],
-    queryFn: () => fetchUserDetails(userId as string),
-    enabled: !!userId,
-  });
-
-  const { data: resumes } = useGetAllResumes(userId);
+export default function AllResumePage() {
+  const user = useCachedUser();
+  const { data: resumes } = useGetAllResumes(user?.id ?? null);
 
   return (
     <SidebarProvider>

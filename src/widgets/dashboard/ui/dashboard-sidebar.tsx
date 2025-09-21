@@ -20,9 +20,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
+  const logoutMutation = useLogoutUser();
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
 
   return (
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
@@ -136,12 +142,14 @@ export default function DashboardSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 
-                  className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                  onClick={handleLogout}
+                  disabled={logoutMutation.isPending}
+                  className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
                 >
-                  <Link href="/logout">
+                  <div className="flex items-center">
                     <LogOut className="w-5 h-5" />
-                    Logout
-                  </Link>
+                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                  </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>

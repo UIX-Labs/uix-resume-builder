@@ -39,15 +39,10 @@ export default function LinkedInCallbackClient() {
       try {
         setSuccess('Authenticating with backend...');
 
-        const authResponse = await sendAuthCodeToBackend(code);
+        const authResponse = await sendAuthCodeToBackend(code) as any;
 
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
-          
-          localStorage.setItem('userId', authResponse.id); 
-
-          localStorage.setItem('user', JSON.stringify(authResponse));
-
           setTimeout(() => {
             router.push('/dashboard');
           }, 1000);

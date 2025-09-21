@@ -1,29 +1,15 @@
 "use client"
-import { fetchUserDetails } from "@entities/auth-page/api/auth-queries";
+import { useUser } from "@shared/hooks/use-user";
 import { SidebarProvider } from "@shared/ui/sidebar";
-import { useQuery } from "@tanstack/react-query";
 import DashboardCarousel from "@widgets/dashboard/ui/dashboard-carousel";
 import DashboardSidebar from "@widgets/dashboard/ui/dashboard-sidebar";
 import LinkedinIntegrationCard from "@widgets/dashboard/ui/linkedin-integration-card";
 import ResumeCreationCard from "@widgets/dashboard/ui/resume-creation-card";
 import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
 import { Bell, Search } from "lucide-react";
-import { useEffect, useState } from "react";
 
 export default function DashboardLayout() {
-const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const id = localStorage.getItem('userId');
-    setUserId(id);
-  }, []);
-
-  const { data: user } = useQuery({
-    queryKey: ['user', userId],
-    queryFn: () => fetchUserDetails(userId as string),
-    enabled: !!userId,
-  });
-
+  const { data: user } = useUser();
 
   return (
     <SidebarProvider>
@@ -63,11 +49,11 @@ const [userId, setUserId] = useState<string | null>(null);
                   <span
                     className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal"
                   >
-                    {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
+                    {user ? `${user.firstName} ${user.lastName ?? ''}` : ''}
                   </span>
 
                    <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                    {user?.email ?? 'Loading...'}
+                    {user?.email ?? ''}
                   </span>
                 </div>
 

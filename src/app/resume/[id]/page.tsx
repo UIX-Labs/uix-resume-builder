@@ -36,8 +36,6 @@ export default function FormPage() {
     setCurrentStep(Object.keys(schema ?? {})[0] ?? '');
   }, [schema]);
 
-  console.log('Qwe');
-
   return (
     <FormPageBuilderProvider value={{ currentStep, setCurrentStep, navs }}>
       <div className="flex pl-4 ">

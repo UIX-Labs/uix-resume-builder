@@ -7,6 +7,7 @@ import { Draggable } from './draggable';
 import { UrlInput } from './url';
 import type { ResumeData, ResumeDataKey } from '@entities/resume/types';
 import { Dropdown } from './dropdown';
+import { Duration } from './duration';
 
 export function TemplateForm({
   formSchema,
@@ -63,6 +64,10 @@ export function TemplateForm({
 
       case 'dropdown': {
         return <Dropdown data={data} onChange={onChange} section={section} />;
+      }
+
+      case 'duration': {
+        return <Duration data={data} onChange={onChange} section={section} />;
       }
     }
   }

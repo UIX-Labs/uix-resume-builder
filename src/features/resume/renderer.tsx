@@ -1,7 +1,18 @@
-import type { ContainerNode, HtmlNode, LinkNode, ListNode, Nodes, ResumeData, SeperatorNode, TextNode } from './types';
+import type {
+  ContainerNode,
+  DurationNode,
+  HtmlNode,
+  LinkNode,
+  ListNode,
+  Nodes,
+  ResumeData,
+  SeperatorNode,
+  TextNode,
+} from './types';
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
 import React from 'react';
+import dayjs from 'dayjs';
 
 type RenderProps = {
   template: any;
@@ -43,6 +54,8 @@ function renderNode(node: Nodes, data: ResumeData): React.ReactNode {
       return renderLink(node as LinkNode, data);
     case 'html':
       return renderHtml(node as HtmlNode, data);
+    case 'duration':
+      return renderDuration(node as DurationNode, data);
     default:
       return null;
   }
@@ -129,4 +142,21 @@ function renderLink(node: LinkNode, data: ResumeData) {
       {resolved}
     </a>
   );
+}
+
+function renderDuration(node: DurationNode, data: ResumeData) {
+  const { pathWithFallback, className } = node;
+
+  const resolved = resolvePath({ data, ...pathWithFallback });
+
+  if (resolved && resolved.start && resolved.end) {
+    const startDate = dayjs().month(resolved.start.month).year(resolved.start.year);
+    const endDate = dayjs().month(resolved.end.month).year(resolved.end.year);
+    return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - ${endDate.format('MMM YYYY')}`}</p>;
+  } else if (resolved && resolved.start && resolved.ongoing) {
+    const startDate = dayjs().month(resolved.start.month).year(resolved.start.year);
+    return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - Present`}</p>;
+  } else {
+    return <p className={cn(className)}></p>;
+  }
 }

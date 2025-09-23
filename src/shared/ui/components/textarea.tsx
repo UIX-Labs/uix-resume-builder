@@ -188,7 +188,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
               'prose-ol:text-sm prose-ol:mt-0 prose-ol:mb-2 prose-ol:list-decimal prose-ol:pl-6',
               'prose-li:mt-0 prose-li:mb-1 prose-li:marker:text-gray-600',
               'prose-strong:font-semibold',
-              'prose-em:italic',
+              'prose-em:italic  ml-2',
               'prose-a:text-primary prose-a:underline prose-a:underline-offset-4',
               '[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-full',
               '[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]',

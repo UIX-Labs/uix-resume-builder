@@ -7,7 +7,6 @@ import { cn } from '@shared/lib/cn';
 import { ProgressCircle } from '@shared/ui/progress-circle';
 import { useFormPageBuilder } from '../models/ctx';
 import Image from 'next/image';
-import { Button } from '@shared/ui/components/button';
 import { Achievements } from '@shared/icons/achievements';
 
 const icons = {
@@ -26,7 +25,7 @@ export function Sidebar() {
   const progress = Math.round(((currentStepIndex + 1) / navs.length) * 100);
 
   return (
-    <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[249px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4">
+    <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4">
       <p className="text-[#0B0A09] text-lg font-semibold">Resume Builder</p>
 
       <div className="flex items-center gap-2 text-[12px] font-bold text-white px-3 py-[4.5px] bg-[#02A44F] rounded-[25px] mt-1">

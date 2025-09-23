@@ -51,8 +51,27 @@ export interface HtmlNode extends TemplateNode {
   className?: string;
 }
 
-export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode;
+export interface DurationNode extends TemplateNode {
+  type: 'duration';
+  pathWithFallback: DataBindingPath;
+  className?: string;
+}
 
-export type ResumeDataValue = string | number;
+export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode;
+
+export type ResumeDataValue =
+  | string
+  | number
+  | {
+      start: {
+        month: string;
+        year: number;
+      } | null;
+      end: {
+        month: string;
+        year: number;
+      } | null;
+      ongoing: boolean;
+    };
 
 export type ResumeData = Record<string, ResumeDataValue> | Array<Record<string, ResumeDataValue>> | ResumeDataValue;

@@ -116,6 +116,15 @@ const data = {
       subTitleKey: 'startDate',
     },
 
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
+      fluid: true,
+      required: true,
+    },
+
     company: {
       name: 'company',
       type: 'text',
@@ -270,7 +279,7 @@ const data = {
 
     duration: {
       name: 'duration',
-      type: 'date',
+      type: 'duration',
       placeholder: 'Enter your duration',
       label: 'Duration',
       required: true,
@@ -317,8 +326,6 @@ const data = {
 export async function getResumeData(id: string): Promise<ResumeData> {
   const data = await fetch<ResumeData>(`resume/${id}`);
 
-  console.log(data);
-
   return data;
 }
 
@@ -350,8 +357,6 @@ export async function saveFormData<T extends keyof ResumeData>({
   } else if (type === 'projects') {
     url = 'projects';
   }
-
-  console.log(type);
 
   const res = await fetch(`${url}/${data.id}`, {
     options: {

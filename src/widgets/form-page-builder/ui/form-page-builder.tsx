@@ -32,7 +32,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  console.log(formData[currentStep], currentStep);
+  console.log(formData, currentStep);
 
   return (
     <>

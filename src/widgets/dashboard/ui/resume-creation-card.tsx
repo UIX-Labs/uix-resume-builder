@@ -5,6 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { ChevronDown, FileText } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Button } from '@shared/ui/components/button';
+import { FileUpload } from '@widgets/resumes/file-upload';
 
 export default function ResumeCreationCard() {
   const router = useRouter();
@@ -16,6 +18,15 @@ export default function ResumeCreationCard() {
     const data = await createResumeMutation.mutateAsync();
     router.push(`/resume/${data.id}`);
   };
+
+  const handleUploadSuccess = (data: any) => {
+    router.push(`/resumes/builder/${data.resumeId}`);
+  };
+
+  const handleUploadError = (error: any) => {
+    console.error('Upload error:', error);
+  };
+
   return (
     <div className="min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
       <div className="z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center">
@@ -25,21 +36,28 @@ export default function ResumeCreationCard() {
           </div>
 
           <div className="relative w-full h-[52px] border-2 border-[rgb(199,219,250)] rounded-[15px] p-1 flex items-center">
-            <button
-              className="flex items-center justify-center gap-2 bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
-              onClick={resumeCreateHandler}
-            >
-              <span
-                className="text-[18px] font-semibold leading-[1.333] tracking-[-0.014em] text-center"
-                style={{ fontFamily: 'Geist' }}
+            <div className='flex flex-row gap-3'>
+              <Button
+                className="flex items-center justify-center gap-2 bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
+                onClick={resumeCreateHandler}
               >
-                Create Resume
-              </span>
-              <ChevronDown className="w-6 h-6" strokeWidth={2} />
-            </button>
+                <span
+                  className="text-[18px] font-semibold leading-[1.333] tracking-[-0.014em] text-center"
+                  style={{ fontFamily: 'Geist' }}
+                >
+                  Create Resume
+                </span>
+                <ChevronDown className="w-6 h-6" strokeWidth={2} />
+              </Button>
+
+              <FileUpload
+                onSuccess={handleUploadSuccess}
+                onError={handleUploadError}
+              />
+            </div>
 
             <div className="absolute inset-0 flex items-center justify-center -z-1">
-              <div className="absolute -left-[34px] -top-[60px] flex flex-col gap-2 rotate-[-38deg]">
+              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 rotate-[-45deg]">
                 <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-[4px] flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
@@ -51,7 +69,7 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute left-[180px] -top-[60px] flex flex-col gap-2 rotate-[38deg]">
+              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-[45deg]">
                 <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-[4px] flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
@@ -63,7 +81,7 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute -left-[34px] -top-[60px] flex flex-col gap-2 rotate-[-20.9deg]">
+              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-[32deg]">
                 <div className="w-[81.58px] h-[95.96px] bg-white rounded-[4px] flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
@@ -75,7 +93,7 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute left-[180px] -top-[60px] flex flex-col gap-2 rotate-[20.9deg]">
+              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-[25deg]">
                 <div className="w-[81.49px] h-[95.92px] bg-[#1FB272] rounded-[4px] flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"

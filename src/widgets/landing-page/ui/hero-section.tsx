@@ -1,10 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
 
 const HeroSection = () => {
+  const router = useRouter();
+
   const overlays = [
     {
       id: 'resume-score',
@@ -56,6 +59,10 @@ const HeroSection = () => {
     },
   ];
 
+  const handleUploadRedirect = () => {
+    router.push('/auth');
+  };
+
   return (
     <section className="relative w-full h-full">
       <div className="max-w-7xl mx-auto relative text-center">
@@ -100,7 +107,10 @@ const HeroSection = () => {
             Auto-fill via LinkedIn
           </Button>
 
-          <Button className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer">
+          <Button 
+            onClick={handleUploadRedirect}
+            className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Upload existing resume
           </Button>
         </div>

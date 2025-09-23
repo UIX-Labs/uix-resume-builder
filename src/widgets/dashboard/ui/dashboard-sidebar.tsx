@@ -33,7 +33,7 @@ export default function DashboardSidebar() {
   return (
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
 
-      <SidebarHeader className="p-6 pb-4">
+      <SidebarHeader className="p-6 pl-14 pb-4">
         <div className="flex flex-col items-center gap-1">
           <h1 className="text-lg font-semibold text-gray-900">Resume Builder</h1>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full">

@@ -3,13 +3,11 @@ import React from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
 
 function Header() {
-  const router =useRouter();
-
-  const handleSignIn=()=>{
-    router.push("/auth")
-  }
+  const router = useRouter();
+  const user = useCachedUser();
 
   return (
     <header className="w-full flex items-center justify-between px-12 py-4">
@@ -31,10 +29,10 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={handleSignIn}
+          onClick={() => router.push(user ? "/dashboard" : "/auth")}
           className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
         >
-          Sign In
+          {user ? "Dashboard" : "Sign In"}
         </Button>
 
         <Button

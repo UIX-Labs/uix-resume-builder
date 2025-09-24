@@ -20,28 +20,12 @@ interface UseUserOptions {
 }
 
 const fetchAuthCheck = async (): Promise<User> => {
-  const response = await fetch<AuthCheckResponse>('auth/check', {
-    options: {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    },
-  });
+  const response = await fetch<AuthCheckResponse>('auth/check');
   return response.user;
 };
 
 const fetchUserProfile = async (): Promise<User> => {
-  return await fetch<User>('auth/me', {
-    options: {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    },
-  });
+  return await fetch<User>('auth/me', {});
 };
 
 export const useUser = (options?: UseUserOptions) => {

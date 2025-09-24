@@ -103,14 +103,14 @@ export function TemplateForm({
           </div>
         ) : (
           currentData.items.map((section, itemIdx) => {
-            return Object.entries(section).map(([key, value]) => {
+            return Object.entries(section).map(([key, value], i) => {
               const section = currentSchema[key];
 
               if (!section) return null;
 
               return (
                 <label
-                  key={key}
+                  key={key + i}
                   className={cn(
                     'text-sm text-[#0C1118] font-semibold flex flex-col gap-2',
                     section.fluid && 'col-span-2',

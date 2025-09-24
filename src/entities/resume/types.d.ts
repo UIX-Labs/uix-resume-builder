@@ -86,6 +86,30 @@ export type ResumeData = {
     }>;
   };
 
+  certifications: {
+    id: string;
+    title: string;
+    items: Array<{
+      id: string;
+      title: string;
+      issuer: string;
+
+      ongoing: boolean;
+    }>;
+  };
+
+  interests: {
+    id: string;
+    title: string;
+    items: string[];
+  };
+
+  achievements: {
+    id: string;
+    title: string;
+    items: string[];
+  };
+
   templateId: string;
 };
 

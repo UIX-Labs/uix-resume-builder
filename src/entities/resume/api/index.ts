@@ -420,6 +420,12 @@ export async function saveFormData<T extends keyof ResumeData>({
     url = 'skills';
   } else if (type === 'projects') {
     url = 'projects';
+  } else if (type === 'certifications') {
+    url = 'certifications';
+  } else if (type === 'interests') {
+    url = 'interests';
+  } else if (type === 'achievements') {
+    url = 'achievements';
   }
 
   const res = await fetch(`${url}/${data.id}`, {

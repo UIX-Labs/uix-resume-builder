@@ -12,10 +12,30 @@ import { MoreVertical, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { createResume } from '@entities/resume/api';
 
 export default function AllResumePage() {
   const user = useCachedUser();
   const { data: resumes } = useGetAllResumes(user?.id ?? null);
+  const createResumeMutation = useMutation({
+    mutationFn: createResume,
+  });
+  const router = useRouter();
+
+  const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+
+  async function handleCreateResume() {
+    console.log(user);
+    const data = await createResumeMutation.mutateAsync({
+      title: 'Frontend Engineer Resume',
+      userInfo: {
+        userId: user?.id,
+      },
+      templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
+    });
+    router.push(`/resume/${data.id}`);
+  }
 
   return (
     <SidebarProvider>
@@ -62,14 +82,18 @@ export default function AllResumePage() {
               <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
 
               <div className="flex gap-6 mt-6 mx-4 flex-wrap">
-                <div className="w-[240px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition">
+                <button
+                  type="button"
+                  className="w-[240px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
+                  onClick={handleCreateResume}
+                >
                   <div className="text-center">
                     <span className="text-3xl text-gray-500">+</span>
                     <p className="text-gray-600 font-medium mt-1">New resume</p>
                   </div>
-                </div>
+                </button>
 
-                {resumes?.map((resume, index) => (
+                {sortedResumes?.map((resume, index) => (
                   <ResumeCard key={resume.id} resume={resume} index={index} />
                 ))}
               </div>

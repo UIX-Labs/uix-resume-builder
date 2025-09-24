@@ -8,6 +8,8 @@ import { ProgressCircle } from '@shared/ui/progress-circle';
 import { useFormPageBuilder } from '../models/ctx';
 import Image from 'next/image';
 import { Achievements } from '@shared/icons/achievements';
+import { useEffect, useState } from 'react';
+import { useFormDataStore } from '../models/store';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -19,10 +21,16 @@ const icons = {
 };
 
 export function Sidebar() {
+  const [progress, setProgress] = useState(0);
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
+  const data = useFormDataStore((state) => state.formData);
+
+  useEffect(() => {
+    const progress = Math.round((Object.keys(data).length / navs.length) * 100);
+    setProgress(progress);
+  }, [data]);
 
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
-  const progress = Math.round(((currentStepIndex + 1) / navs.length) * 100);
 
   return (
     <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4">
@@ -35,7 +43,7 @@ export function Sidebar() {
 
       {/* Progress Circle */}
       <div className="mt-5">
-        <ProgressCircle progress={10 || 0} totalSteps={navs.length} currentStep={currentStepIndex + 1} />
+        <ProgressCircle progress={progress} totalSteps={navs.length} currentStep={currentStepIndex + 1} />
       </div>
 
       <div className="flex flex-col gap-2 mt-12 w-full pl-6">

@@ -7,11 +7,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@shared/ui/components/button';
 import { FileUpload } from '@widgets/resumes/file-upload';
-import { useUser } from '@shared/hooks/use-user';
+import { useUserProfile } from '@shared/hooks/use-user';
 
 export default function ResumeCreationCard() {
   const router = useRouter();
-  const user = useUser();
+  const user = useUserProfile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });

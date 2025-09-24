@@ -3,22 +3,20 @@ import React from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
 
 function Header() {
-  const router =useRouter();
+  const router = useRouter();
+  const user = useCachedUser();
 
-  const handleSignIn=()=>{
-    router.push("/auth")
-  }
+  const handleNavigate = () => {
+    router.push(user ? '/dashboard' : '/auth');
+  };
 
   return (
     <header className="w-full flex items-center justify-between px-12 py-4">
       <div className="flex items-center gap-4">
-        <span
-          className="text-2xl font-[900] text-[rgb(11,10,9)]"
-        >
-          Resume Builder
-        </span>
+        <span className="text-2xl font-[900] text-[rgb(11,10,9)]">Resume Builder</span>
 
         <div className="flex items-center gap-1 px-2 py-1 bg-[rgb(2,164,79)] text-white rounded-full text-xs font-bold">
           <span>AI Powered</span>
@@ -31,15 +29,16 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={handleSignIn}
+          onClick={handleNavigate}
           className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
         >
-          Sign In
+          {user ? 'Dashboard' : 'Sign In'}
         </Button>
 
         <Button
           variant="default"
           size="default"
+          onClick={handleNavigate}
           className="bg-blue-900 hover:bg-blue-700 text-white font-medium p-3 rounded-lg shadow-sm cursor-pointer"
         >
           Create My Resume

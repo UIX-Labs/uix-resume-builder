@@ -1,10 +1,19 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
+import { useCachedUser } from '@shared/hooks/use-user';
 
 const HeroSection = () => {
+  const router = useRouter();
+  const user = useCachedUser();
+
+  const handleNavigate = () => {
+    router.push(user ? '/dashboard' : '/auth');
+  };
+
   const overlays = [
     {
       id: 'resume-score',
@@ -56,6 +65,7 @@ const HeroSection = () => {
     },
   ];
 
+
   return (
     <section className="relative w-full h-full">
       <div className="max-w-7xl mx-auto relative text-center">
@@ -63,17 +73,17 @@ const HeroSection = () => {
           <div className="flex -space-x-2">
             <Avatar className="w-12 h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className='text-black'>JD</AvatarFallback>
+              <AvatarFallback className="text-black">JD</AvatarFallback>
             </Avatar>
 
             <Avatar className="w-12 h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className='text-black'>SM</AvatarFallback>
+              <AvatarFallback className="text-black">SM</AvatarFallback>
             </Avatar>
 
             <Avatar className="w-12 h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className='text-black'>AR</AvatarFallback>
+              <AvatarFallback className="text-black">AR</AvatarFallback>
             </Avatar>
           </div>
 
@@ -94,13 +104,17 @@ const HeroSection = () => {
 
         <div className="mt-10 flex flex-col items-center gap-[16px]">
           <Button
+            onClick={handleNavigate}
             className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >
             Auto-fill via LinkedIn
           </Button>
 
-          <Button className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer">
+          <Button
+            onClick={handleNavigate}
+            className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Upload existing resume
           </Button>
         </div>

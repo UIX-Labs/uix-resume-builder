@@ -63,7 +63,6 @@ export const useGetAllResumes = (
   return useQuery({
     queryKey: ['resumes', userId],
     queryFn: () => fetchAllResumes(userId as string),
-    enabled: !!userId && (options?.enabled ?? true),
     staleTime: options?.staleTime ?? 5 * 60 * 1000,
   });
 };

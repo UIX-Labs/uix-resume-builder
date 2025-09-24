@@ -150,11 +150,11 @@ function renderDuration(node: DurationNode, data: ResumeData) {
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   if (resolved && resolved.start && resolved.end) {
-    const startDate = dayjs().month(resolved.start.month).year(resolved.start.year);
-    const endDate = dayjs().month(resolved.end.month).year(resolved.end.year);
+    const startDate = dayjs(resolved.start);
+    const endDate = dayjs(resolved.end);
     return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - ${endDate.format('MMM YYYY')}`}</p>;
   } else if (resolved && resolved.start && resolved.ongoing) {
-    const startDate = dayjs().month(resolved.start.month).year(resolved.start.year);
+    const startDate = dayjs(resolved.start);
     return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - Present`}</p>;
   } else {
     return <p className={cn(className)}></p>;

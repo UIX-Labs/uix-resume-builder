@@ -7,15 +7,23 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@shared/ui/components/button';
 import { FileUpload } from '@widgets/resumes/file-upload';
+import { useUser } from '@shared/hooks/use-user';
 
 export default function ResumeCreationCard() {
   const router = useRouter();
+  const user = useUser();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
 
   const resumeCreateHandler = async () => {
-    const data = await createResumeMutation.mutateAsync();
+    const data = await createResumeMutation.mutateAsync({
+      title: 'Frontend Engineer Resume',
+      userInfo: {
+        userId: user.data?.id,
+      },
+      // templateId: "25c2fb78-b90c-4f77-bbda-7c9198bfe091",
+    });
     router.push(`/resume/${data.id}`);
   };
 

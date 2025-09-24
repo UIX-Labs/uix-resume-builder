@@ -438,7 +438,13 @@ export async function saveFormData<T extends keyof ResumeData>({
   return res;
 }
 
-export async function createResume(): Promise<any> {
+export async function createResume(data: {
+  title: string;
+  userInfo: {
+    userId: string;
+  };
+  templateId: string;
+}): Promise<any> {
   const res = await fetch<{
     createdAt: string;
     deleted_at: string | null;
@@ -450,13 +456,7 @@ export async function createResume(): Promise<any> {
   }>('resume/create', {
     options: {
       method: 'POST',
-      body: JSON.stringify({
-        title: 'Frontend Engineer Resume',
-        userInfo: {
-          userId: '60fdfb6c-21d6-4717-98ac-425e6a592cb8',
-        },
-        templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
-      }),
+      body: JSON.stringify(data),
     },
   });
 

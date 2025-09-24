@@ -25,7 +25,10 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
   }, [defaultValues]);
 
   async function handleNextStep() {
-    await saveMutation.mutateAsync({ type: currentStep, data: formData[currentStep] });
+    await saveMutation.mutateAsync({
+      type: currentStep,
+      data: formData[currentStep],
+    });
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
@@ -37,6 +40,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-6"
         style={{
           transformOrigin: 'top left',
+          maxWidth: '794px',
           minWidth: '794px',
         }}
       >

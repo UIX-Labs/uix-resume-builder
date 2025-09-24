@@ -8,8 +8,10 @@ const queryClient = new QueryClient({});
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-        {children}
-        <Toaster />
+      {/*<AuthGuard>*/}
+      {children}
+      <Toaster />
+      {/*</AuthGuard>*/}
     </QueryClientProvider>
   );
 }

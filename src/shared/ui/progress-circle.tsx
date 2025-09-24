@@ -25,7 +25,7 @@ export function ProgressCircle({ currentStep, totalSteps }: ProgressCircleProps)
       // requestAnimationFrame(animate);
     };
 
-    setInterval(animate, 100);
+    setInterval(animate, 10000);
   }, []);
 
   return (

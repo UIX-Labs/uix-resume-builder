@@ -8,14 +8,8 @@ import dayjs from 'dayjs';
 
 interface DurationProps {
   data: {
-    start: {
-      month: string;
-      year: number;
-    };
-    end: {
-      month: string;
-      year: number;
-    };
+    start: string;
+    end: string;
     ongoing: boolean;
   };
   onChange: (data: any) => void;
@@ -26,16 +20,17 @@ export function Duration({ data, onChange }: DurationProps) {
   const [isOngoing, setIsOngoing] = useState(data?.ongoing || false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(() => {
-    if (data?.start?.month !== undefined && data?.start?.year !== undefined) {
-      return dayjs().year(data.start.year).month(Number(data.start.month)).date(1).toDate();
+    if (data?.start) {
+      return dayjs(data.start).toDate();
     }
 
     return undefined;
   });
 
   const [endDate, setEndDate] = useState<Date | undefined>(() => {
-    if (data?.end?.month !== undefined && data?.end?.year !== undefined) {
-      return dayjs().year(data.end.year).month(Number(data.end.month)).date(1).toDate();
+    if (data?.end !== undefined) {
+      console.log(data.end, dayjs(data.end));
+      return dayjs(data.end).toDate();
     }
 
     return undefined;
@@ -43,20 +38,8 @@ export function Duration({ data, onChange }: DurationProps) {
 
   useEffect(() => {
     const updatedData = {
-      start: startDate
-        ? {
-            month: dayjs(startDate).month().toString(),
-            year: dayjs(startDate).year(),
-          }
-        : null,
-      end: isOngoing
-        ? null
-        : endDate
-          ? {
-              month: dayjs(endDate).month().toString(),
-              year: dayjs(endDate).year(),
-            }
-          : null,
+      start: startDate ? dayjs(startDate).format('YYYY-MM-DD') : null,
+      end: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM-DD') : null,
       ongoing: isOngoing,
     };
 

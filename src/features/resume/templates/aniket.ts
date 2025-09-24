@@ -31,24 +31,33 @@ const aniketTemplate = {
               {
                 id: 'name-text',
                 type: 'text',
-                pathWithFallback: { path: 'data.fullName', fallback: 'Your Name' },
+                pathWithFallback: {
+                  path: 'data.fullName',
+                  fallback: 'Your Name',
+                },
                 className: 'tracking-wide text-3xl font-extrabold text-blue-600',
               },
               {
                 id: 'name-text',
                 type: 'text',
-                pathWithFallback: { path: 'data.title', fallback: 'Your Title' },
+                pathWithFallback: {
+                  path: 'data.title',
+                  fallback: 'Your Title',
+                },
                 className: 'tracking-wide text-sm text-gray-600',
               },
               {
                 id: 'contact-section',
                 type: 'container',
-                className: 'flex flex-row flex-wrap justify-center gap-2 mt-2 text-xs text-neutral-600',
+                className: 'flex flex-row flex-wrap justify-start gap-2 mt-2 text-xs text-neutral-600',
                 children: [
                   {
                     id: 'address-text',
                     type: 'text',
-                    pathWithFallback: { path: 'data.address', fallback: 'City' },
+                    pathWithFallback: {
+                      path: 'data.address',
+                      fallback: 'City',
+                    },
                   },
                   { type: 'seperator', variant: 'pipe' },
                   {
@@ -68,7 +77,10 @@ const aniketTemplate = {
                   {
                     id: 'linkedin-text',
                     type: 'link',
-                    pathWithFallback: { path: 'data.linkedin', fallback: 'LinkedIn' },
+                    pathWithFallback: {
+                      path: 'data.linkedin',
+                      fallback: 'LinkedIn',
+                    },
                     href: 'https://www.linkedin.com/in/aniket98/',
                     className: 'hover:text-blue-600',
                   },
@@ -87,10 +99,17 @@ const aniketTemplate = {
           {
             id: 'summary-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.personDetails.title', fallback: 'Summary' },
+            pathWithFallback: {
+              path: 'data.personDetails.title',
+              fallback: 'Summary',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             type: 'list',
             id: 'professionalSummary',
@@ -100,7 +119,10 @@ const aniketTemplate = {
               {
                 id: 'summary-text',
                 type: 'html',
-                pathWithFallback: { path: 'data.description', fallback: 'Summary' },
+                pathWithFallback: {
+                  path: 'data.description',
+                  fallback: 'Summary',
+                },
                 className: 'text-xs text-neutral-700 text-justify',
               },
             ],
@@ -117,10 +139,17 @@ const aniketTemplate = {
           {
             id: 'skills-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.skills.heading', fallback: 'Skills' },
+            pathWithFallback: {
+              path: 'data.skills.heading',
+              fallback: 'Skills',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             id: 'skills-list',
             type: 'list',
@@ -147,10 +176,17 @@ const aniketTemplate = {
           {
             id: 'experience-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.experience.heading', fallback: 'Experience' },
+            pathWithFallback: {
+              path: 'data.experience.heading',
+              fallback: 'Experience',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             id: 'experience',
             type: 'list',
@@ -220,10 +256,17 @@ const aniketTemplate = {
           {
             id: 'education-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.education.heading', fallback: 'Education' },
+            pathWithFallback: {
+              path: 'data.education.heading',
+              fallback: 'Education',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             id: 'education',
             type: 'list',
@@ -248,7 +291,10 @@ const aniketTemplate = {
                       {
                         id: 'education-period',
                         type: 'text',
-                        pathWithFallback: { path: 'data.startDate', fallback: 'Start Date' },
+                        pathWithFallback: {
+                          path: 'data.startDate',
+                          fallback: 'Start Date',
+                        },
                         className: 'text-xs text-neutral-700 text-justify italic',
                       },
                     ],
@@ -269,7 +315,10 @@ const aniketTemplate = {
                           },
                           {
                             type: 'text',
-                            pathWithFallback: { path: 'data.fieldOfStudy', fallback: 'Field of Study' },
+                            pathWithFallback: {
+                              path: 'data.fieldOfStudy',
+                              fallback: 'Field of Study',
+                            },
                             className: 'text-xs text-neutral-700 italic',
                           },
                         ],
@@ -298,10 +347,17 @@ const aniketTemplate = {
           {
             id: 'projects-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.projects.title', fallback: 'Projects' },
+            pathWithFallback: {
+              path: 'data.projects.title',
+              fallback: 'Projects',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             type: 'list',
             id: 'projects-list',
@@ -315,7 +371,10 @@ const aniketTemplate = {
                   // Project Title
                   {
                     type: 'text',
-                    pathWithFallback: { path: 'data.title', fallback: 'Project Title' },
+                    pathWithFallback: {
+                      path: 'data.title',
+                      fallback: 'Project Title',
+                    },
                     className: 'text-sm font-semibold text-neutral-900',
                   },
 
@@ -332,7 +391,10 @@ const aniketTemplate = {
                   // Description
                   {
                     type: 'html',
-                    pathWithFallback: { path: 'data.description', fallback: '' },
+                    pathWithFallback: {
+                      path: 'data.description',
+                      fallback: '',
+                    },
                     className: 'text-xs text-neutral-700 text-justify',
                   },
 
@@ -357,10 +419,17 @@ const aniketTemplate = {
           {
             id: 'interests-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.interests.title', fallback: 'Interests' },
+            pathWithFallback: {
+              path: 'data.interests.title',
+              fallback: 'Interests',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             id: 'interests-list',
             type: 'list',
@@ -390,10 +459,17 @@ const aniketTemplate = {
           {
             id: 'achievements-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.achievements.title', fallback: 'Achievements' },
+            pathWithFallback: {
+              path: 'data.achievements.title',
+              fallback: 'Achievements',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             id: 'achievements-list',
             type: 'list',
@@ -423,10 +499,17 @@ const aniketTemplate = {
           {
             id: 'certifications-heading',
             type: 'text',
-            pathWithFallback: { path: 'data.certifications.title', fallback: 'Certifications' },
+            pathWithFallback: {
+              path: 'data.certifications.title',
+              fallback: 'Certifications',
+            },
             className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
           },
-          { type: 'seperator', variant: 'line', className: 'border-neutral-300' },
+          {
+            type: 'seperator',
+            variant: 'line',
+            className: 'border-neutral-300',
+          },
           {
             type: 'list',
             id: 'certifications-list',
@@ -438,12 +521,18 @@ const aniketTemplate = {
                 children: [
                   {
                     type: 'text',
-                    pathWithFallback: { path: 'data.title', fallback: 'Certification Title' },
+                    pathWithFallback: {
+                      path: 'data.title',
+                      fallback: 'Certification Title',
+                    },
                     className: 'text-sm font-semibold text-neutral-900',
                   },
                   {
                     type: 'text',
-                    pathWithFallback: { path: 'data.issuer', fallback: 'Issuer' },
+                    pathWithFallback: {
+                      path: 'data.issuer',
+                      fallback: 'Issuer',
+                    },
                     className: 'text-xs text-neutral-700',
                   },
                   {

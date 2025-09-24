@@ -11,7 +11,7 @@ async function checkAuth(request: NextRequest): Promise<boolean> {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Cookie': request.headers.get('cookie') || '',
+        Cookie: request.headers.get('cookie') || '',
       },
       credentials: 'include',
     });
@@ -29,8 +29,6 @@ async function checkAuth(request: NextRequest): Promise<boolean> {
 }
 
 export async function middleware(request: NextRequest) {
-  console.log('➡️ Middleware hit for:', request.nextUrl.pathname);
-
   const { pathname } = request.nextUrl;
   const isAuthRoute = pathname === '/auth';
   const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + '/'));
@@ -53,7 +51,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)'],
 };

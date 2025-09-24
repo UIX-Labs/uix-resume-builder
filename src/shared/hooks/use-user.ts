@@ -10,33 +10,16 @@ interface User {
   isLoggedIn: boolean;
 }
 
-interface AuthCheckResponse {
-  message: string;
-  user: User;
-}
 
 interface UseUserOptions {
   enabled?: boolean;
 }
 
-const fetchAuthCheck = async (): Promise<User> => {
-  const response = await fetch<AuthCheckResponse>('auth/check');
-  return response.user;
-};
 
 const fetchUserProfile = async (): Promise<User> => {
   return await fetch<User>('auth/me', {});
 };
 
-export const useUser = (options?: UseUserOptions) => {
-  return useQuery({
-    queryKey: ['user'],
-    queryFn: fetchAuthCheck,
-    retry: false,
-    staleTime: 5 * 60 * 1000,
-    enabled: options?.enabled !== false,
-  });
-};
 
 export const useUserProfile = (options?: UseUserOptions) => {
   return useQuery({

@@ -36,7 +36,7 @@ export default function ResumeCreationCard() {
           </div>
 
           <div className="relative w-full h-[52px] border-2 border-[rgb(199,219,250)] rounded-[15px] p-1 flex items-center">
-            <div className='flex flex-row gap-3'>
+            <div className="flex flex-row gap-3">
               <Button
                 className="flex items-center justify-center gap-2 bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
                 onClick={resumeCreateHandler}
@@ -50,10 +50,7 @@ export default function ResumeCreationCard() {
                 <ChevronDown className="w-6 h-6" strokeWidth={2} />
               </Button>
 
-              <FileUpload
-                onSuccess={handleUploadSuccess}
-                onError={handleUploadError}
-              />
+              <FileUpload onSuccess={handleUploadSuccess} onError={handleUploadError} />
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center -z-1">

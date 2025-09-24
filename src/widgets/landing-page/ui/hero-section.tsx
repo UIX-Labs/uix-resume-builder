@@ -65,7 +65,6 @@ const HeroSection = () => {
     },
   ];
 
-
   return (
     <section className="relative w-full h-full">
       <div className="max-w-7xl mx-auto relative text-center">

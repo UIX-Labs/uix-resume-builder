@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetch } from "@shared/api";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { fetch } from '@shared/api';
 
 interface User {
   id: string;
@@ -20,33 +20,33 @@ interface UseUserOptions {
 }
 
 const fetchAuthCheck = async (): Promise<User> => {
-  const response = await fetch<AuthCheckResponse>("auth/check", {
+  const response = await fetch<AuthCheckResponse>('auth/check', {
     options: {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
     },
   });
   return response.user;
 };
 
 const fetchUserProfile = async (): Promise<User> => {
-  return await fetch<User>("auth/me", {
+  return await fetch<User>('auth/me', {
     options: {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
     },
   });
 };
 
 export const useUser = (options?: UseUserOptions) => {
   return useQuery({
-    queryKey: ["user"],
+    queryKey: ['user'],
     queryFn: fetchAuthCheck,
     retry: false,
     staleTime: 5 * 60 * 1000,
@@ -56,7 +56,7 @@ export const useUser = (options?: UseUserOptions) => {
 
 export const useUserProfile = (options?: UseUserOptions) => {
   return useQuery({
-    queryKey: ["userProfile"],
+    queryKey: ['userProfile'],
     queryFn: fetchUserProfile,
     retry: false,
     staleTime: 5 * 60 * 1000,
@@ -66,7 +66,7 @@ export const useUserProfile = (options?: UseUserOptions) => {
 
 export const useCachedUser = () => {
   const queryClient = useQueryClient();
-  const cachedUser = queryClient.getQueryData<User>(["userProfile"]);
+  const cachedUser = queryClient.getQueryData<User>(['userProfile']);
 
   const { data } = useUserProfile({
     enabled: !cachedUser,

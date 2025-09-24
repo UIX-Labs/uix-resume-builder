@@ -13,11 +13,7 @@ export async function parseLinkedInProfile(url: string): Promise<ParseLinkedInRe
     return response;
   } catch (error) {
     console.error('Error parsing LinkedIn profile:', error);
-    throw new Error(
-      error instanceof Error 
-        ? error.message 
-        : 'Failed to parse LinkedIn profile. Please try again.'
-    );
+    throw new Error(error instanceof Error ? error.message : 'Failed to parse LinkedIn profile. Please try again.');
   }
 }
 

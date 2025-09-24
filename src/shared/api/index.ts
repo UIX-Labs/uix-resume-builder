@@ -1,5 +1,4 @@
 async function fetcher<T>(url: string, { options }: { options?: RequestInit } = {}): Promise<T> {
-  
   const isFormData = options?.body instanceof FormData;
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, {

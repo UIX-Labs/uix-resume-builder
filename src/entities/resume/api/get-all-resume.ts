@@ -7,7 +7,16 @@ export interface ResumeItem {
   updatedAt: string;
   deleted_at: string | null;
   resumeId: string;
-  sectionType: 'personal_info' | 'education' | 'skills' | 'experience' | 'projects' | 'certifications' | 'publications' | 'achievements' | 'interests';
+  sectionType:
+    | 'personal_info'
+    | 'education'
+    | 'skills'
+    | 'experience'
+    | 'projects'
+    | 'certifications'
+    | 'publications'
+    | 'achievements'
+    | 'interests';
   sectionId: string;
   rank: number;
 }
@@ -21,27 +30,23 @@ export interface Resume {
   templateId: string | null;
   title: string;
   items: ResumeItem[];
-  template: any | null; 
+  template: any | null;
 }
 
 export type GetAllResumesResponse = Resume[];
-
-
 
 export const fetchAllResumes = async (userId: string): Promise<GetAllResumesResponse> => {
   if (!userId) {
     throw new Error('User ID is required');
   }
   const response = await fetch<GetAllResumesResponse>(`resume/${userId}/getAll`, {
-    options:{
+    options: {
       method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
     },
-    credentials: 'include',
-
-    }
-    
   });
 
   return response;
@@ -53,12 +58,12 @@ export const useGetAllResumes = (
     enabled?: boolean;
     staleTime?: number;
     cacheTime?: number;
-  }
+  },
 ) => {
   return useQuery({
     queryKey: ['resumes', userId],
     queryFn: () => fetchAllResumes(userId as string),
     enabled: !!userId && (options?.enabled ?? true),
-    staleTime: options?.staleTime ?? 5 * 60 * 1000, 
+    staleTime: options?.staleTime ?? 5 * 60 * 1000,
   });
 };

@@ -20,7 +20,7 @@ export default function GoogleCallbackClient() {
 
       if (error) {
         setError(`Google authentication failed: ${error}`);
-        
+
         queryClient.removeQueries({ queryKey: ['user'] });
         queryClient.removeQueries({ queryKey: ['userProfile'] });
         setLoading(false);
@@ -37,7 +37,7 @@ export default function GoogleCallbackClient() {
       try {
         setSuccess('Authenticating with backend...');
 
-        const authResponse = await sendAuthCodeToBackend(code) as any;
+        const authResponse = (await sendAuthCodeToBackend(code)) as any;
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
           queryClient.invalidateQueries({ queryKey: ['user'] });
@@ -94,7 +94,8 @@ export default function GoogleCallbackClient() {
             onClick={() => router.push('/auth')}
             className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
-            Try Again</button>
+            Try Again
+          </button>
           <button
             type="button"
             onClick={() => router.push('/')}

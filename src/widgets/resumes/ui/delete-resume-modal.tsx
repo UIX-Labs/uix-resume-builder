@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import { useDeleteResume } from "@entities/resume/api/delete-resume";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@shared/ui/dialog";
-import { Button } from "@shared/ui/button";
-import { toast } from "sonner";
+import { useDeleteResume } from '@entities/resume/api/delete-resume';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/dialog';
+import { Button } from '@shared/ui/button';
+import { toast } from 'sonner';
 
 interface DeleteResumeModalProps {
   isOpen: boolean;
@@ -21,12 +15,7 @@ interface DeleteResumeModalProps {
   onDeleteSuccess?: () => void;
 }
 
-export function DeleteResumeModal({
-  isOpen,
-  onClose,
-  resume,
-  onDeleteSuccess,
-}: DeleteResumeModalProps) {
+export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: DeleteResumeModalProps) {
   const deleteResumeMutation = useDeleteResume();
 
   const handleConfirmDelete = async () => {
@@ -34,12 +23,11 @@ export function DeleteResumeModal({
 
     try {
       await deleteResumeMutation.mutateAsync(resume.id);
-      toast.success("Resume Deleted Successfully");
+      toast.success('Resume Deleted Successfully');
       onDeleteSuccess?.();
       onClose();
-
     } catch (error) {
-      toast.error("Error deleting Resume");
+      toast.error('Error deleting Resume');
       console.error('Delete failed:', error);
     }
   };
@@ -51,7 +39,6 @@ export function DeleteResumeModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-md bg-[rgba(245,248,250,1)]">
-        
         <DialogHeader>
           <DialogTitle className="text-center">Delete Resume</DialogTitle>
           <DialogDescription>

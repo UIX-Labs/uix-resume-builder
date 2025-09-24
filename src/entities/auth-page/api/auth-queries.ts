@@ -37,12 +37,11 @@ interface User {
   isLoggedIn: boolean;
 }
 
-interface LogoutResponse{
-  message:string
+interface LogoutResponse {
+  message: string;
 }
 
 export const fetchUserDetails = async (userId: string): Promise<User> => {
-
   const response = await fetch<User>(`auth/${userId}`, {
     options: {
       method: 'GET',
@@ -57,7 +56,6 @@ export const fetchUserDetails = async (userId: string): Promise<User> => {
 };
 
 const checkEmailExistsAPI = async (email: string): Promise<EmailCheckResponse> => {
-
   const response = await fetch<EmailCheckResponse>('auth/check-email', {
     options: {
       method: 'POST',
@@ -127,7 +125,6 @@ const logoutUserAPI = async (): Promise<LogoutResponse> => {
   return response;
 };
 
-
 export const useCheckEmailExists = () => {
   return useMutation({
     mutationFn: checkEmailExistsAPI,
@@ -169,17 +166,17 @@ export const useLogoutUser = () => {
   return useMutation({
     mutationFn: logoutUserAPI,
     onSuccess: (data) => {
-      localStorage.removeItem("linkedin_oauth_state");
+      localStorage.removeItem('linkedin_oauth_state');
       queryClient.clear();
       router.push('/auth');
     },
     onError: (error) => {
-      localStorage.removeItem("linkedin_oauth_state");
+      localStorage.removeItem('linkedin_oauth_state');
       queryClient.clear();
       router.push('/auth');
     },
   });
-}
+};
 
 export const validateEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

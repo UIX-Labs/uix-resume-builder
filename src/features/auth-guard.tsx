@@ -4,12 +4,7 @@ import { useUser } from '@shared/hooks/use-user';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-const PUBLIC_ROUTES = [
-  '/',                          
-  '/auth',
-  '/auth/google/callback',
-  '/auth/linkedin/callback',
-];
+const PUBLIC_ROUTES = ['/', '/auth', '/auth/google/callback', '/auth/linkedin/callback'];
 
 function LoadingSpinner() {
   return (
@@ -26,12 +21,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const isPublicRoute = PUBLIC_ROUTES.some(route => 
-    pathname === route || pathname.startsWith(route + '/')
-  );
+  const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + '/'));
 
-  const { data: user, isLoading, isError, error } = useUser({
-    enabled: !isPublicRoute
+  const {
+    data: user,
+    isLoading,
+    isError,
+    error,
+  } = useUser({
+    enabled: !isPublicRoute,
   });
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       if (user.isVerified) {
         router.push('/dashboard');
       } else {
-        router.push('/auth'); 
+        router.push('/auth');
       }
       return;
     }

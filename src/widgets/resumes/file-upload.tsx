@@ -12,7 +12,7 @@ interface FileUploadProps {
   className?: string;
   buttonText?: string;
   acceptedFileTypes?: string;
-  maxFileSize?: number; 
+  maxFileSize?: number;
 }
 
 export function FileUpload({
@@ -22,7 +22,7 @@ export function FileUpload({
   className = '',
   buttonText = 'Upload Resume',
   acceptedFileTypes = '.pdf',
-  maxFileSize = 10
+  maxFileSize = 10,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
@@ -56,7 +56,7 @@ export function FileUpload({
         const errorMessage = error?.message;
         alert(`Upload failed: ${errorMessage}`);
         onError?.(error);
-      }
+      },
     });
   };
 
@@ -68,13 +68,7 @@ export function FileUpload({
 
   return (
     <>
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={acceptedFileTypes}
-        onChange={handleFileUpload}
-        className="hidden"
-      />
+      <input ref={fileInputRef} type="file" accept={acceptedFileTypes} onChange={handleFileUpload} className="hidden" />
 
       <Button
         className={`flex items-center justify-center gap-2 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black border-2 border-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(46,125,50)] disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
@@ -82,9 +76,7 @@ export function FileUpload({
         disabled={isDisabled}
       >
         {!isPending && <Upload className="w-4 h-4" />}
-        <span
-          className="text-[18px] font-semibold leading-[1.333] tracking-[-0.014em] text-center"
-        >
+        <span className="text-[18px] font-semibold leading-[1.333] tracking-[-0.014em] text-center">
           {isPending ? 'Processing...' : buttonText}
         </span>
       </Button>

@@ -1,26 +1,19 @@
-"use client"
-import { 
-  Sidebar, 
-  SidebarContent, 
-  SidebarGroup, 
-  SidebarGroupContent, 
-  SidebarGroupLabel, 
+'use client';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu, 
+  SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-} from "@shared/ui/sidebar";
-import { 
-  Home, 
-  FileText, 
-  Settings, 
-  HelpCircle, 
-  LogOut, 
-  Sparkles, 
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
+} from '@shared/ui/sidebar';
+import { Home, FileText, Settings, HelpCircle, LogOut, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -32,7 +25,6 @@ export default function DashboardSidebar() {
 
   return (
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
-
       <SidebarHeader className="p-6 pl-14 pb-4">
         <div className="flex flex-col items-center gap-1">
           <h1 className="text-lg font-semibold text-gray-900">Resume Builder</h1>
@@ -52,10 +44,7 @@ export default function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1.5">
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={pathname === "/dashboard"}
-                >
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'}>
                   <Link href="/dashboard">
                     <Home className="w-5 h-5" />
                     Dashboard
@@ -64,10 +53,7 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  isActive={pathname === "/resumes"}
-                >
+                <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
                   <Link href="/resumes">
                     <FileText className="w-5 h-5" />
                     Your Resumes
@@ -116,10 +102,7 @@ export default function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="">
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                >
+                <SidebarMenuButton asChild className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                   <Link href="/settings">
                     <Settings className="w-5 h-5" />
                     Settings
@@ -128,10 +111,7 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
-                  className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                >
+                <SidebarMenuButton asChild className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900">
                   <Link href="/help">
                     <HelpCircle className="w-5 h-5" />
                     Help
@@ -140,8 +120,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  asChild 
+                <SidebarMenuButton
+                  asChild
                   onClick={handleLogout}
                   disabled={logoutMutation.isPending}
                   className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
@@ -153,7 +133,6 @@ export default function DashboardSidebar() {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
-
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import React from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';

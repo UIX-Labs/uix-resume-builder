@@ -15,7 +15,6 @@ export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
 
     const formData = new FormData();
     formData.append('file', file);
-    
 
     const data = await fetch<ParsePdfResponse>('resume/parse-pdf', {
       options: {
@@ -23,17 +22,13 @@ export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
         body: formData,
         headers: {},
         credentials: 'include',
-      }
+      },
     });
 
     return data;
   } catch (error) {
     console.error('Error parsing PDF resume:', error);
-    throw new Error(
-      error instanceof Error
-        ? error.message
-        : 'Failed to parse PDF resume. Please try again.'
-    );
+    throw new Error(error instanceof Error ? error.message : 'Failed to parse PDF resume. Please try again.');
   }
 }
 

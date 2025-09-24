@@ -8,6 +8,7 @@ import { UrlInput } from './url';
 import type { ResumeData, ResumeDataKey } from '@entities/resume/types';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
+import { TagsInput } from './tags-input';
 
 export function TemplateForm({
   formSchema,
@@ -68,6 +69,10 @@ export function TemplateForm({
 
       case 'duration': {
         return <Duration data={data} onChange={onChange} section={section} />;
+      }
+
+      case 'tags': {
+        return <TagsInput data={data} onChange={onChange} section={section} />;
       }
     }
   }

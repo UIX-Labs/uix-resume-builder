@@ -99,7 +99,7 @@ function renderText(node: TextNode, data: ResumeData) {
 function renderList(node: ListNode, data: ResumeData) {
   const { pathWithFallback, presentation, transform } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
-
+  console.log(resolved);
   if (!Array.isArray(resolved)) {
     return null;
   }

@@ -11,6 +11,7 @@ import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
 import { MoreVertical, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function AllResumePage() {
   const user = useCachedUser();
@@ -94,6 +95,7 @@ interface ResumeCardProps {
 }
 
 function ResumeCard({ resume }: ResumeCardProps) {
+  const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   return (
@@ -133,7 +135,10 @@ function ResumeCard({ resume }: ResumeCardProps) {
         </div>
 
         <div className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100">
-          <Button className="text-sm bg-transparent hover:bg-transparent font-semibold text-purple-900 hover:underline flex items-center gap-1">
+          <Button
+            className="text-sm bg-transparent hover:bg-transparent font-semibold text-purple-900 hover:underline flex items-center gap-1"
+            onClick={() => router.push(`/resume/${resume.id}`)}
+          >
             VIEW RESUME →
           </Button>
 

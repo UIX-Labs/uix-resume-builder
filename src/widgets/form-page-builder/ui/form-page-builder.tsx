@@ -1,6 +1,5 @@
 import type { FormSchema } from '@entities/resume';
 import { ResumeRenderer } from '@features/resume/renderer';
-import { aniketSampleData } from '@features/resume/sample-data-aniket';
 import aniketTemplate from '@features/resume/templates/aniket';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
@@ -32,8 +31,6 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  console.log(formData, currentStep);
-
   return (
     <>
       <div
@@ -44,7 +41,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
         }}
       >
         <div className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0">
-          <ResumeRenderer template={aniketTemplate} data={{ ...aniketSampleData, ...formData }} />
+          <ResumeRenderer template={aniketTemplate} data={{ ...formData }} />
         </div>
       </div>
 
@@ -89,7 +86,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
               className="mt-auto ml-auto bg-[#E9F4FF] w-[247px] h-[48px] rounded-[8px] text-sm font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
               onClick={handleNextStep}
             >
-              Next: {camelToHumanString(navs[nextStepIndex]?.name ?? '')}
+              {navs[nextStepIndex]?.name ? `Next: ${camelToHumanString(navs[nextStepIndex]?.name)}` : 'Save'}
             </Button>
           </div>
         </div>

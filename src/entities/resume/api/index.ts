@@ -321,6 +321,70 @@ const data = {
       required: true,
     },
   },
+
+  interests: {
+    label: 'Interests',
+    subTitle: 'Show your relevant interests',
+
+    items: {
+      fluid: true,
+      name: 'items',
+      type: 'tags',
+      placeholder: 'Enter your interests',
+    },
+  },
+
+  achievements: {
+    label: 'Achievements',
+    subTitle: 'Show your relevant achievements',
+
+    items: {
+      fluid: true,
+      name: 'items',
+      type: 'tags',
+      placeholder: 'Enter your achievements',
+    },
+  },
+
+  certifications: {
+    label: 'Certifications',
+    subTitle: 'Show your relevant certifications',
+    itemsType: 'draggable',
+
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
+      required: true,
+      fluid: true,
+    },
+
+    issuer: {
+      name: 'issuer',
+      type: 'text',
+      placeholder: 'Enter your issuer',
+      label: 'Issuer',
+    },
+
+    link: {
+      name: 'link',
+      type: 'url',
+      placeholder: 'Enter your link',
+      label: 'Link',
+      required: true,
+      fluid: true,
+    },
+
+    title: {
+      name: 'title',
+      type: 'text',
+      placeholder: 'Enter your title',
+      label: 'Title',
+      required: true,
+      fluid: true,
+    },
+  },
 };
 
 export async function getResumeData(id: string): Promise<ResumeData> {

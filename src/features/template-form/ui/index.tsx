@@ -41,6 +41,22 @@ export function TemplateForm({
         );
       }
 
+      case 'data': {
+        return (
+          <Input
+            placeholder={section.placeholder}
+            className={cn(
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
+            )}
+            defaultValue={data.value}
+            onChange={(e) => onChange({ ...data, value: e.target.value })}
+          />
+        );
+      }
+
       case 'textarea': {
         return (
           <TiptapTextArea

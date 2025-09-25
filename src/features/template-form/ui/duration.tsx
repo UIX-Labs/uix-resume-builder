@@ -24,16 +24,15 @@ export function Duration({ data, onChange }: DurationProps) {
       return dayjs(data.start).toDate();
     }
 
-    return undefined;
+    return dayjs().toDate();
   });
 
   const [endDate, setEndDate] = useState<Date | undefined>(() => {
-    if (data?.end !== undefined) {
-      console.log(data.end, dayjs(data.end));
+    if (data?.end) {
       return dayjs(data.end).toDate();
     }
 
-    return undefined;
+    return dayjs().toDate();
   });
 
   useEffect(() => {

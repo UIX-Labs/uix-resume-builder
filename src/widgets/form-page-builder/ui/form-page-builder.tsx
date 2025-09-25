@@ -1,6 +1,6 @@
 import type { FormSchema } from '@entities/resume';
 import { ResumeRenderer } from '@features/resume/renderer';
-import aniketTemplate from '@features/resume/templates/aniket';
+import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
 import { useEffect } from 'react';
@@ -9,9 +9,26 @@ import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
 import { saveFormData } from '@entities/resume/api';
 import { useMutation } from '@tanstack/react-query';
+import { Resolution, usePDF } from 'react-to-pdf';
 
 export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: FormSchema; defaultValues: any }) {
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
+  const { toPDF, targetRef } = usePDF({
+    filename: 'resume.pdf',
+    resolution: Resolution.EXTREME,
+    overrides: {
+      pdf: {
+        unit: 'px',
+      },
+      canvas: {
+        useCORS: true,
+      },
+    },
+  });
+
+  const handleDownloadPDF = () => {
+    toPDF();
+  };
 
   const formData = useFormDataStore((state) => state.formData);
   const setFormData = useFormDataStore((state) => state.setFormData);
@@ -39,19 +56,27 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
       <div
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-6"
         style={{
-          transformOrigin: 'top left',
-          maxWidth: '794px',
-          minWidth: '794px',
+          minWidth: 794 + 48 + 6,
+          maxWidth: 794 + 48 + 6,
         }}
       >
-        <div className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0">
-          <ResumeRenderer template={aniketTemplate} data={{ ...formData }} />
+        <div className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0 flex-1">
+          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+            <ResumeRenderer template={aniketTemplate} data={{ ...formData }} />
+          </div>
+
+          <Button
+            onClick={handleDownloadPDF}
+            className="absolute z-[1000] top-8 left-[calc(16px+12px+794px-12px)] -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
+          >
+            Save as PDF
+          </Button>
         </div>
       </div>
 
-      <div className="relative flex bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] overflow-y-auto pt-5 px-5 gap-3 mt-4">
+      <div className="relative flex bg-white rounded-tl-[36px] rounded-bl-[36px] max-h-[calc(100vh-32px)] overflow-y-auto pt-5 px-5 gap-3 mt-4 w-full">
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
             backgroundSize: '20px 20px',
@@ -60,23 +85,23 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
 
         <div className="flex-1 h-full max-h-[calc(100vh-32px)] overflow-y-auto pb-5">
           {/* <div className="flex justify-end items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Image src="/images/circle-alert.svg" alt="circle-alert" width={16} height={16} />
-            <span className="text-[13px] font-regular text-[#E12121]">Sign In to save progress</span>
-          </div>
-          <Button className="border border-[#CBE7FF] bg-[#E9F4FF] text-[18px] font-semibold text-[#005FF2] h-12">
-            Sign In
-          </Button>
-        </div> */}
+            <div className="flex items-center gap-2">
+              <Image src="/images/circle-alert.svg" alt="circle-alert" width={16} height={16} />
+              <span className="text-[13px] font-regular text-[#E12121]">Sign In to save progress</span>
+            </div>
+            <Button className="border border-[#CBE7FF] bg-[#E9F4FF] text-[18px] font-semibold text-[#005FF2] h-12">
+              Sign In
+            </Button>
+          </div> */}
 
-          {/* <div
+          <div
             className="mt-6 mb-4"
             style={{
               background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
               height: '1px',
               width: '100%',
             }}
-          /> */}
+          />
 
           <TemplateForm
             formSchema={formSchema ?? {}}

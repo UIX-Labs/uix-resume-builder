@@ -259,7 +259,7 @@ const data = {
 
     grade: {
       name: 'grade',
-      type: 'text',
+      type: 'data',
       placeholder: 'Enter your grade',
       required: true,
       label: 'Grade',

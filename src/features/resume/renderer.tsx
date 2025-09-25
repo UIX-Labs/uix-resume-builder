@@ -27,8 +27,6 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
     <div
       className={cn(page.className, className)}
       style={{
-        // width: page.width ?? 794, // ~ A4 at 96dpi
-        // height: page.height,
         padding: page.padding ?? 24,
         background: page.background ?? 'white',
         fontFamily: page.fontFamily,
@@ -64,13 +62,19 @@ function renderNode(node: Nodes, data: ResumeData): React.ReactNode {
 function renderContainer(node: ContainerNode, data: ResumeData) {
   const { children, className } = node;
 
-  return (
-    <div className={cn(`flex`, className)}>
-      {children.map((child, index) => (
-        <React.Fragment>{renderNode(child, data)}</React.Fragment>
-      ))}
-    </div>
-  );
+  const renderedChildren: React.ReactNode[] = [];
+
+  for (const child of children) {
+    const rendered = renderNode(child, data);
+
+    if (typeof child.isData === 'boolean' && child.isData && !rendered) {
+      return null;
+    } else {
+      renderedChildren.push(rendered);
+    }
+  }
+
+  return <div className={cn(`flex`, className)}>{renderedChildren.map((child) => child)}</div>;
 }
 
 function renderSeperator(node: SeperatorNode) {
@@ -91,17 +95,43 @@ function renderText(node: TextNode, data: ResumeData) {
   const { pathWithFallback, className, prefix = '', suffix = '' } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
+
+  if (!resolved) {
+    return null;
+  }
+
   const finalString = `${prefix}${resolved}${suffix}`;
 
   return <p className={cn(className)}>{finalString}</p>;
 }
 
 function renderList(node: ListNode, data: ResumeData) {
-  const { pathWithFallback, presentation, transform } = node;
+  const { pathWithFallback, presentation, transform, groupBy } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
-  console.log(resolved);
-  if (!Array.isArray(resolved)) {
+
+  if (!Array.isArray(resolved) || resolved.length === 0) {
     return null;
+  }
+
+  if (groupBy) {
+    const grouped = resolved.reduce((acc, item) => {
+      const key = item[groupBy];
+      acc[key] = {
+        label: key,
+        items: [...(acc[key]?.items || []), item],
+      };
+      return acc;
+    }, {});
+
+    return (
+      <div className={cn('flex flex-wrap', node.className)}>
+        {Object.entries(grouped).map(([_key, value]) =>
+          presentation.map((child) => {
+            return renderNode(child, value);
+          }),
+        )}
+      </div>
+    );
   }
 
   if (transform?.variant === 'flatten') {
@@ -138,7 +168,7 @@ function renderLink(node: LinkNode, data: ResumeData) {
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   return (
-    <a href={href} className={cn(className)}>
+    <a href={resolved} className={cn(className)}>
       {resolved}
     </a>
   );

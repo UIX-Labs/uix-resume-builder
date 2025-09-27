@@ -1,11 +1,10 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { FormSchema, FormField as IFormField } from '@entities/resume';
+import type { FormSchema, ResumeDataKey, ResumeData } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Draggable } from './draggable';
 import { UrlInput } from './url';
-import type { ResumeData, ResumeDataKey } from '@entities/resume/types';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
 import { TagsInput } from './tags-input';

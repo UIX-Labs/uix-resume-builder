@@ -1,6 +1,6 @@
 'use client';
 
-import { useParseLinkedInProfile } from '@entities/resume/api/parse-linkedin';
+import { useParseLinkedInProfile } from '@entities/resume';
 import { Button } from '@shared/ui';
 import { Input } from '@shared/ui/components/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';

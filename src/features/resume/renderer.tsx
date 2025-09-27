@@ -11,7 +11,7 @@ import type {
 } from './types';
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
-import React from 'react';
+import type React from 'react';
 import dayjs from 'dayjs';
 
 type RenderProps = {

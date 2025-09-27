@@ -1,5 +1,4 @@
 'use client';
-import { useGetAllResumes } from '@entities/resume/api/get-all-resume';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
 import { SidebarProvider } from '@shared/ui/sidebar';
@@ -13,24 +12,30 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { createResume } from '@entities/resume/api';
+import { useGetAllResumes, createResume } from '@entities/resume';
 
 export default function AllResumePage() {
   const user = useCachedUser();
+
   const { data: resumes } = useGetAllResumes(user?.id ?? null);
+
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
+
   const router = useRouter();
 
   const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   async function handleCreateResume() {
-    console.log(user);
+    if (!user) {
+      return;
+    }
+
     const data = await createResumeMutation.mutateAsync({
       title: 'Frontend Engineer Resume',
       userInfo: {
-        userId: user?.id,
+        userId: user.id,
       },
       templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
     });

@@ -10,16 +10,13 @@ interface User {
   isLoggedIn: boolean;
 }
 
-
 interface UseUserOptions {
   enabled?: boolean;
 }
 
-
 const fetchUserProfile = async (): Promise<User> => {
   return await fetch<User>('auth/me', {});
 };
-
 
 export const useUserProfile = (options?: UseUserOptions) => {
   return useQuery({

@@ -1,9 +1,5 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetch } from '@shared/api';
-
-export interface DeleteResumeResponse {
-  message: string;
-}
+import type { DeleteResumeResponse } from '../types';
 
 export const deleteResume = async (resumeId: string): Promise<DeleteResumeResponse> => {
   if (!resumeId) {
@@ -21,18 +17,4 @@ export const deleteResume = async (resumeId: string): Promise<DeleteResumeRespon
   });
 
   return response;
-};
-
-export const useDeleteResume = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: deleteResume,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['resumes'] });
-    },
-    onError: (error) => {
-      console.error('Failed to delete resume:', error);
-    },
-  });
 };

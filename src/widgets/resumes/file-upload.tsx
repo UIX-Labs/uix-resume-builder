@@ -1,6 +1,6 @@
 'use client';
 
-import { useParsePdfResume } from '@entities/resume/api/pdf-parse';
+import { useParsePdfResume } from '@entities/resume';
 import { Upload } from 'lucide-react';
 import { useRef } from 'react';
 import { Button } from '@shared/ui/components/button';

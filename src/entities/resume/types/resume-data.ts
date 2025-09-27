@@ -1,10 +1,3 @@
-import type { formDataValidator } from './lib/formDataValidator';
-import type { formSchemaValidator } from './lib/formSchemaValidator';
-import type { z } from 'zod';
-
-export type FormSchema = z.infer<typeof formSchemaValidator>;
-export type FormSection = FormSchema[number];
-export type FormField = FormSection['fields'][number];
 export type ResumeData = {
   experience: {
     id: string;

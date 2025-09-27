@@ -7,7 +7,6 @@ import { useEffect } from 'react';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
-import { saveFormData } from '@entities/resume/api';
 import { useMutation } from '@tanstack/react-query';
 import { Resolution, usePDF } from 'react-to-pdf';
 
@@ -46,6 +45,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
       type: currentStep,
       data: formData[currentStep],
     });
+
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 

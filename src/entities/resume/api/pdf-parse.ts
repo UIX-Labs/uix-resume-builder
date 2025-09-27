@@ -1,10 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetch } from '@shared/api';
-
-export interface ParsePdfResponse {
-  message: string;
-  resumeId: string;
-}
+import type { ParsePdfResponse } from '../types';
 
 export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
   try {
@@ -31,18 +27,3 @@ export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
     throw new Error(error instanceof Error ? error.message : 'Failed to parse PDF resume. Please try again.');
   }
 }
-
-export const useParsePdfResume = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation<ParsePdfResponse, Error, File>({
-    mutationFn: (file: File) => parsePdfResume(file),
-    onError: (error) => {
-      console.error('PDF resume parsing failed:', error);
-    },
-    onSuccess: (data) => {
-      console.log('PDF resume parsed successfully:', data);
-      queryClient.invalidateQueries({ queryKey: ['resumes'] });
-    },
-  });
-};

@@ -27,12 +27,10 @@ export function SortableItem({
 }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.itemId });
 
-const style = {
-  transform: transform
-    ? `translateY(${transform.y ?? 0}px)` 
-    : undefined,
-  transition,
-};
+  const style = {
+    transform: transform ? `translateY(${transform.y ?? 0}px)` : undefined,
+    transition,
+  };
 
   const collapsedTitleValue = item[section.collapsedState?.titleKey];
   const collapsedSubTitleValue = item[section.collapsedState?.subTitleKey];

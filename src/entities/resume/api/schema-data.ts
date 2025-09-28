@@ -303,24 +303,14 @@ export const data = {
     label: 'Interests',
     subTitle: 'Show your relevant interests',
 
-    items: {
-      fluid: true,
-      name: 'items',
-      type: 'tags',
-      placeholder: 'Enter your interests',
-    },
+    itemsType: 'draggable',
   },
 
   achievements: {
     label: 'Achievements',
     subTitle: 'Show your relevant achievements',
 
-    items: {
-      fluid: true,
-      name: 'items',
-      type: 'tags',
-      placeholder: 'Enter your achievements',
-    },
+    itemsType: 'draggable',
   },
 
   certifications: {

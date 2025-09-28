@@ -58,7 +58,3 @@ export interface DurationNode extends TemplateNode {
 }
 
 export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode;
-
-export type ResumeDataValue = string | number;
-
-export type ResumeData = Record<string, ResumeDataValue> | Array<Record<string, ResumeDataValue>> | ResumeDataValue;

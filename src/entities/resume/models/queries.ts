@@ -8,9 +8,11 @@ import {
   parsePdfResume,
   deleteResume,
   fetchAllResumes,
+  saveFormData,
 } from '../api';
 
 import { useQueryClient, useMutation } from '@tanstack/react-query';
+import type { ResumeData, ResumeDataKey } from '../types/resume-data';
 
 export function useTemplateFormSchema() {
   return useFetch({
@@ -19,10 +21,36 @@ export function useTemplateFormSchema() {
   });
 }
 
-export function useTemplateFormData(id: string) {
+export function useResumeData(id: string) {
   return useFetch({
-    queryKey: ['resume-data'],
-    queryFn: () => getResumeData(id),
+    queryKey: ['resume-data', id],
+    queryFn: async () => {
+      const promisesArray = [getResumeData(id), getResumeEmptyData()];
+      const [actualData, emptyData] = await Promise.all(promisesArray);
+
+      const mergedRes = Object.entries(emptyData).reduce((acc, cur) => {
+        const key = cur[0] as ResumeDataKey;
+        const value = cur[1] as ResumeData[ResumeDataKey];
+
+        if (!acc[key]) {
+          acc[key] = value;
+
+          return acc;
+        }
+
+        const flatItems = actualData[key].items;
+
+        if (flatItems.length === 0) {
+          acc[key].items = value.items;
+        }
+
+        return acc;
+      }, actualData);
+
+      console.log(mergedRes);
+
+      return mergedRes as ResumeData;
+    },
   });
 }
 
@@ -66,5 +94,11 @@ export const useParsePdfResume = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
+  });
+};
+
+export const useSaveResumeForm = () => {
+  return useMutation({
+    mutationFn: (data: { type: ResumeDataKey; data: ResumeData[ResumeDataKey] }) => saveFormData(data),
   });
 };

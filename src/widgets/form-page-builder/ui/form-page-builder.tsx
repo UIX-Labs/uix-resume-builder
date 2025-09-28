@@ -1,4 +1,4 @@
-import type { FormSchema } from '@entities/resume';
+import { useSaveResumeForm, type FormSchema } from '@entities/resume';
 import { ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
@@ -7,11 +7,13 @@ import { useEffect } from 'react';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
-import { useMutation } from '@tanstack/react-query';
 import { Resolution, usePDF } from 'react-to-pdf';
 
 export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: FormSchema; defaultValues: any }) {
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
+
+  const saveMutation = useSaveResumeForm();
+
   const { toPDF, targetRef } = usePDF({
     filename: 'resume.pdf',
     resolution: Resolution.EXTREME,
@@ -29,12 +31,7 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
     toPDF();
   };
 
-  const formData = useFormDataStore((state) => state.formData);
-  const setFormData = useFormDataStore((state) => state.setFormData);
-
-  const saveMutation = useMutation({
-    mutationFn: saveFormData,
-  });
+  const { formData, setFormData } = useFormDataStore();
 
   useEffect(() => {
     useFormDataStore.setState({ formData: defaultValues ?? {} });

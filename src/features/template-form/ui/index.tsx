@@ -16,30 +16,12 @@ export function TemplateForm({
   currentStep = 'personalDetails',
 }: {
   formSchema: FormSchema;
-  values: ResumeData;
-  onChange: (data: any) => void;
+  values: Omit<ResumeData, 'templateId'>;
+  onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
 }) {
-  function getItem(section: IFormField, data: any, onChange: (data: any) => void) {
+  function getItem<T extends string | boolean>(section: any, data: T, onChange: (data: T) => void) {
     switch (section.type) {
-      case 'text':
-      case 'email':
-      case 'tel': {
-        return (
-          <Input
-            placeholder={section.placeholder}
-            className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
-              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
-              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-              'bg-[#FAFBFC]',
-            )}
-            defaultValue={data}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        );
-      }
-
       case 'data': {
         return (
           <Input
@@ -88,6 +70,22 @@ export function TemplateForm({
 
       case 'tags': {
         return <TagsInput data={data} onChange={onChange} section={section} />;
+      }
+
+      default: {
+        return (
+          <Input
+            placeholder={section.placeholder}
+            className={cn(
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
+            )}
+            defaultValue={data}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        );
       }
     }
   }

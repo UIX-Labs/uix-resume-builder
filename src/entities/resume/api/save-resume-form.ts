@@ -1,14 +1,8 @@
-import type { ResumeData } from '../types/resume-data';
+import type { ResumeData, ResumeDataKey } from '../types/resume-data';
 
 import { fetch } from '@shared/api';
 
-export async function saveFormData<T extends keyof ResumeData>({
-  type,
-  data,
-}: {
-  type: T;
-  data: ResumeData[T];
-}): Promise<any> {
+export async function saveFormData<T extends ResumeDataKey>({ type, data }: { type: T; data: ResumeData[T] }) {
   let url = 'personal-details';
 
   if (type === 'education') {

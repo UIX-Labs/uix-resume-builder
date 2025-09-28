@@ -39,7 +39,7 @@ function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     setError(null);
 
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
-      onSuccess: (response) => {
+      onSuccess: () => {
         onClose();
         setLinkedinUrl('');
       },
@@ -138,6 +138,7 @@ export default function LinkedinIntegrationCard() {
             </div>
 
             <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="flex items-center justify-center bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
             >

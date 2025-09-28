@@ -1,9 +1,10 @@
+import type { ResumeData } from '@entities/resume';
 import { create } from 'zustand';
 
 export const useFormDataStore = create<{
-  formData: any;
-  setFormData: (formData: any) => void;
+  formData: Omit<ResumeData, 'templateId'>;
+  setFormData: (formData: Omit<ResumeData, 'templateId'>) => void;
 }>((set) => ({
-  formData: {},
-  setFormData: (formData: any) => set({ formData }),
+  formData: {} as Omit<ResumeData, 'templateId'>,
+  setFormData: (formData: Omit<ResumeData, 'templateId'>) => set({ formData }),
 }));

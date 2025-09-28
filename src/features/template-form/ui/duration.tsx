@@ -8,8 +8,8 @@ import dayjs from 'dayjs';
 
 interface DurationProps {
   data: {
-    start: string;
-    end: string;
+    startDate: string;
+    endDate: string;
     ongoing: boolean;
   };
   onChange: (data: any) => void;
@@ -20,16 +20,16 @@ export function Duration({ data, onChange }: DurationProps) {
   const [isOngoing, setIsOngoing] = useState(data?.ongoing || false);
 
   const [startDate, setStartDate] = useState<Date | undefined>(() => {
-    if (data?.start) {
-      return dayjs(data.start).toDate();
+    if (data?.startDate) {
+      return dayjs(data.startDate).toDate();
     }
 
     return dayjs().toDate();
   });
 
   const [endDate, setEndDate] = useState<Date | undefined>(() => {
-    if (data?.end) {
-      return dayjs(data.end).toDate();
+    if (data?.endDate) {
+      return dayjs(data.endDate).toDate();
     }
 
     return dayjs().toDate();
@@ -37,8 +37,8 @@ export function Duration({ data, onChange }: DurationProps) {
 
   useEffect(() => {
     const updatedData = {
-      start: startDate ? dayjs(startDate).format('YYYY-MM-DD') : null,
-      end: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM-DD') : null,
+      startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : null,
+      endDate: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM-DD') : null,
       ongoing: isOngoing,
     };
 
@@ -54,7 +54,7 @@ export function Duration({ data, onChange }: DurationProps) {
       return '';
     }
 
-    return dayjs(date).format('MMM YYYY');
+    return dayjs(date).format('DD MMM YYYY');
   };
 
   return (
@@ -71,7 +71,7 @@ export function Duration({ data, onChange }: DurationProps) {
                 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
                 'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
                 'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-                'bg-[#FAFBFC] cursor-pointer text-left',
+                'bg-[#FAFBFC] cursor-pointer min-w-[120px] text-center',
               )}
               placeholder="Select start date"
               value={formatDateForDisplay(startDate)}
@@ -105,7 +105,7 @@ export function Duration({ data, onChange }: DurationProps) {
                 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
                 'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
                 'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-                'bg-[#FAFBFC] cursor-pointer text-left',
+                'bg-[#FAFBFC] cursor-pointer min-w-[120px] text-center',
               )}
               placeholder="Select end date"
               value={isOngoing ? 'Ongoing' : formatDateForDisplay(endDate)}

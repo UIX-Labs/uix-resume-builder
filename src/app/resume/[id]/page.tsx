@@ -17,16 +17,16 @@ export default function FormPage() {
 
   const navs = useMemo(
     () =>
-      Object.keys(resumeData ?? ({} as ResumeDataKey[]))
+      Object.keys(resumeData ?? ({} as Record<string, any>))
         .map((key) => {
-          if (key === 'templateId') return;
+          if (key === 'templateId') return null;
 
           return {
             label: camelToHumanString(key),
-            name: key,
+            name: key as ResumeDataKey,
           };
         })
-        .filter(Boolean),
+        .filter((item): item is { label: string; name: ResumeDataKey; completion: number } => item !== null),
     [resumeData],
   );
 
@@ -44,7 +44,7 @@ export default function FormPage() {
         <Sidebar />
 
         <div className="relative flex w-full">
-          <FormPageBuilder formSchema={schema ?? {}} defaultValues={resumeData ?? {}} />
+          {schema && <FormPageBuilder formSchema={schema} defaultValues={resumeData ?? {}} />}
         </div>
       </div>
     </FormPageBuilderProvider>

@@ -8,6 +8,8 @@ import { UrlInput } from './url';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
 import { TagsInput } from './tags-input';
+import { LinksInput } from './links-input';
+import { StringsInput } from './strings-input';
 
 export function TemplateForm({
   formSchema,
@@ -72,6 +74,14 @@ export function TemplateForm({
         return <TagsInput data={data} onChange={onChange} section={section} />;
       }
 
+      case 'links': {
+        return <LinksInput data={data} onChange={onChange} section={section} />;
+      }
+
+      case 'strings': {
+        return <StringsInput data={data} onChange={onChange} section={section} />;
+      }
+
       default: {
         return (
           <Input
@@ -114,6 +124,16 @@ export function TemplateForm({
               getItem={getItem}
             />
           </div>
+        ) : currentSchema.itemsType === 'strings' ? (
+          <div className="col-span-2">
+            <StringsInput
+              data={currentData.items}
+              onChange={(items) => {
+                onChange({ ...values, [currentStep]: { ...currentData, items } });
+              }}
+              section={currentSchema}
+            />
+          </div>
         ) : (
           currentData.items.map((section, itemIdx) => {
             return Object.entries(section).map(([key, value], i) => {
@@ -123,7 +143,7 @@ export function TemplateForm({
 
               return (
                 <label
-                  key={key + i}
+                  key={key}
                   className={cn(
                     'text-sm text-[#0C1118] font-semibold flex flex-col gap-2',
                     section.fluid && 'col-span-2',

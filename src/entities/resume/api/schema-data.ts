@@ -19,6 +19,7 @@ export const data = {
       placeholder: 'Enter your name',
       required: true,
     },
+
     title: {
       name: 'title',
       type: 'text',
@@ -34,6 +35,7 @@ export const data = {
       required: true,
     },
     phone: {
+      fluid: true,
       name: 'phone',
       type: 'tel',
       label: 'Phone',
@@ -46,29 +48,22 @@ export const data = {
       label: 'Address',
       placeholder: 'Enter your address',
       required: true,
-    },
-    linkedin: {
-      name: 'linkedin',
-      type: 'url',
-      label: 'LinkedIn',
-      placeholder: 'Enter your LinkedIn profile URL',
       fluid: true,
-      required: true,
     },
-    github: {
-      name: 'github',
-      type: 'url',
-      label: 'GitHub',
-      placeholder: 'Enter your GitHub profile URL',
-      fluid: true,
-      required: true,
-    },
+
     description: {
       name: 'description',
       type: 'textarea',
       label: 'Description',
       placeholder: 'Enter your description',
       required: true,
+      fluid: true,
+    },
+
+    links: {
+      name: 'links',
+      label: 'Links',
+      type: 'links',
       fluid: true,
     },
   },
@@ -180,10 +175,12 @@ export const data = {
       label: 'Name',
     },
   },
+
   education: {
     label: 'Education',
     subTitle:
       'A varied education on your resume sums up the value that your learnings and background will bring to job.',
+
     heading: {
       name: 'heading',
       type: 'text',
@@ -207,6 +204,7 @@ export const data = {
       type: 'text',
       placeholder: 'Enter your school',
       required: true,
+      fluid: true,
       label: 'School',
     },
 
@@ -302,15 +300,13 @@ export const data = {
   interests: {
     label: 'Interests',
     subTitle: 'Show your relevant interests',
-
-    itemsType: 'draggable',
+    itemsType: 'strings',
   },
 
   achievements: {
     label: 'Achievements',
     subTitle: 'Show your relevant achievements',
-
-    itemsType: 'draggable',
+    itemsType: 'strings',
   },
 
   certifications: {

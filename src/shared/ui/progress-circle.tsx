@@ -6,8 +6,7 @@ interface ProgressCircleProps {
   totalSteps: number;
 }
 
-export function ProgressCircle({ currentStep, totalSteps }: ProgressCircleProps) {
-  const [progress, setProgress] = useState(0);
+export function ProgressCircle({ currentStep, totalSteps, progress }: ProgressCircleProps) {
   const radius = 82.5;
   const circumference = 2 * Math.PI * radius;
   const strokeDasharray = `${(progress / 100) * circumference} ${circumference}`;
@@ -17,16 +16,6 @@ export function ProgressCircle({ currentStep, totalSteps }: ProgressCircleProps)
   const angle = (progress / 100) * 2 * Math.PI - Math.PI / 2; // -90 degrees to start from top
   const indicatorX = 94 + radius * Math.cos(angle);
   const indicatorY = 94 + radius * Math.sin(angle);
-
-  useEffect(() => {
-    const animate = () => {
-      setProgress((progress) => (progress > 100 ? 0 : progress + 1));
-
-      // requestAnimationFrame(animate);
-    };
-
-    setInterval(animate, 10000);
-  }, []);
 
   return (
     <div className="relative w-[188px] h-[188px] flex items-center justify-center">

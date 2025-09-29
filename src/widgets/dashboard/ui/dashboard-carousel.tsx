@@ -1,6 +1,5 @@
 'use client';
 
-import { TemplatesDialog } from '@features/templates-dialog/ui/templates-dialog';
 import { Button } from '@shared/ui/components/button';
 import { templates } from '@widgets/landing-page/models/constants';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
@@ -42,6 +41,7 @@ export default function DashboardCarousel() {
 
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={scrollPrev}
             className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition"
           >
@@ -49,21 +49,13 @@ export default function DashboardCarousel() {
           </button>
 
           <button
+            type="button"
             onClick={scrollNext}
             className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
-
-        <TemplatesDialog>
-          <Button 
-            variant="outline" 
-            className="bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600"
-          >
-            See All Templates
-          </Button>
-        </TemplatesDialog>
       </div>
 
       <div className="overflow-hidden rounded-xl" ref={emblaRef}>

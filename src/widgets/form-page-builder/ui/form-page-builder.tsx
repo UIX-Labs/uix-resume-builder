@@ -1,5 +1,5 @@
-import { useSaveResumeForm, type FormSchema } from '@entities/resume';
-import { ResumeRenderer } from '@features/resume/renderer';
+import { useGetAllResumes, useSaveResumeForm, type FormSchema } from '@entities/resume';
+import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
@@ -10,9 +10,21 @@ import { camelToHumanString } from '@shared/lib/string';
 import { Resolution, usePDF } from 'react-to-pdf';
 import { useParams } from 'next/navigation';
 import { uploadThumbnail } from '@entities/resume/api/upload-resume';
+import { useMutation } from '@tanstack/react-query';
+import { useUserProfile } from '@shared/hooks/use-user';
 
 export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: FormSchema; defaultValues: any }) {
+  const params = useParams();
+  const resumeId = params?.id as string;
+
+  const thumbnailGenerated = useRef(false);
+
+  const { data: user } = useUserProfile();
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
+  const { data: resumes, refetch: refetchResumes } = useGetAllResumes({ userId: user?.id as string });
+  const { mutateAsync: uploadThumbnailMutation } = useMutation({
+    mutationFn: uploadThumbnail,
+  });
 
   const saveMutation = useSaveResumeForm();
 
@@ -29,9 +41,6 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
     },
   });
 
-  const params = useParams();
-  const resumeId = params?.id as string;
-
   const handleDownloadPDF = () => {
     toPDF();
   };
@@ -42,8 +51,6 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
     useFormDataStore.setState({ formData: defaultValues ?? {} });
   }, [defaultValues]);
 
-  const hasGeneratedThumbnail = useRef(false);
-
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
       return;
@@ -51,23 +58,29 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
 
     try {
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
-      console.log(thumbnailDataUrl);
-      if (thumbnailDataUrl) {
-        await uploadThumbnail({ resumeId, thumbnail: thumbnailDataUrl });
+
+      if (!thumbnailDataUrl) {
+        return;
       }
+
+      await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
+
+      thumbnailGenerated.current = true;
+      refetchResumes();
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
     }
   }
 
   useEffect(() => {
-    if (!hasGeneratedThumbnail.current) {
-      hasGeneratedThumbnail.current = true;
-      setTimeout(() => {
-        generateAndSaveThumbnail();
-      }, 500);
+    const curResume = resumes?.find((resume) => resume.id === resumeId);
+
+    if (!curResume || curResume.publicThumbnail || thumbnailGenerated.current) {
+      return;
     }
-  }, [resumeId]);
+
+    generateAndSaveThumbnail();
+  }, [resumeId, resumes]);
 
   async function handleNextStep() {
     handleSaveResume();
@@ -76,6 +89,8 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
 
   async function handleSaveResume() {
     try {
+      thumbnailGenerated.current = false;
+
       await saveMutation.mutateAsync({
         type: currentStep,
         data: formData[currentStep],

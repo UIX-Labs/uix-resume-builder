@@ -1,6 +1,16 @@
 import type { ResumeData, ResumeDataKey } from '@entities/resume/types/resume-data';
 
-const whiteList = ['id', 'itemId', 'city', 'country', 'state', 'pincode', 'templateId'];
+const whiteList = [
+  'id',
+  'itemId',
+  'city',
+  'country',
+  'state',
+  'pincode',
+  'templateId',
+  'publicThumbnailUrl',
+  'privateThumbnailUrl',
+];
 
 function calculateSectionWeight(value: any) {
   if (typeof value !== 'object') {
@@ -33,7 +43,6 @@ export function calculateResumeCompletion(resumeData: ResumeData) {
       // }
 
       if (whiteList.includes(key)) return acc;
-      console.log(value, 'qweqweqweqweqwe');
       const firstItem = value.items[0];
 
       acc.total += calculateSectionWeight(firstItem);

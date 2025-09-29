@@ -5,6 +5,7 @@ import { Button } from '@shared/ui';
 import { Input } from '@shared/ui/components/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface LinkedInModalProps {
@@ -15,6 +16,7 @@ interface LinkedInModalProps {
 function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const router=useRouter();
 
   const parseLinkedInMutation = useParseLinkedInProfile();
 
@@ -41,6 +43,7 @@ function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
       onSuccess: () => {
         onClose();
+        router.push(`/resume/${response.resumeId}`);
         setLinkedinUrl('');
       },
       onError: (err) => {

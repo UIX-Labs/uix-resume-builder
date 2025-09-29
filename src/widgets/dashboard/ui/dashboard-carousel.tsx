@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@shared/ui/components/button';
 import { templates } from '@widgets/landing-page/models/constants';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
@@ -40,6 +41,7 @@ export default function DashboardCarousel() {
 
         <div className="flex items-center gap-3">
           <button
+            type="button"
             onClick={scrollPrev}
             className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition"
           >
@@ -47,6 +49,7 @@ export default function DashboardCarousel() {
           </button>
 
           <button
+            type="button"
             onClick={scrollNext}
             className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition"
           >

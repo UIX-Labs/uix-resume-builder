@@ -1,5 +1,5 @@
 'use client';
-import { useCachedUser } from '@shared/hooks/use-user';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
@@ -15,9 +15,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useGetAllResumes, createResume } from '@entities/resume';
 
 export default function AllResumePage() {
-  const user = useCachedUser();
-
-  const { data: resumes } = useGetAllResumes(user?.id ?? null);
+  const { data: user } = useUserProfile();
+  const { data: resumes } = useGetAllResumes({ userId: user?.id as string });
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -37,8 +36,8 @@ export default function AllResumePage() {
       userInfo: {
         userId: user.id,
       },
-      templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
     });
+
     router.push(`/resume/${data.id}`);
   }
 
@@ -114,6 +113,7 @@ interface ResumeCardProps {
   resume: {
     id: string;
     title: string;
+    publicThumbnail?: { url: string; expiresAt: string } | null;
     updatedAt: string;
     items: Array<{
       sectionType: string;
@@ -129,10 +129,14 @@ function ResumeCard({ resume }: ResumeCardProps) {
 
   return (
     <>
-      <div className="relative w-[240px] h-[320px] rounded-2xl bg-white shadow-sm border transition-all duration-300 overflow-hidden group cursor-pointer">
-        <div className="w-full h-full relative rounded-t-2xl">
+      <div className="relative w-[260px] h-[320px] rounded-2xl bg-white shadow-sm border transition-all duration-300 overflow-hidden group cursor-pointer">
+        <div className="w-full h-full overflow-hidden rounded-t-2xl">
           <div className="">
-            <Image src="images/image-14.svg" alt={resume.title} className="w-full h-full object-cover" fill />
+            {resume.publicThumbnail?.url ? (
+              <Image src={resume.publicThumbnail.url} width={260} height={320} alt={resume.title} unoptimized />
+            ) : (
+              <Image src="/images/image-14.svg" alt={resume.title} className="w-full h-full object-contain" fill />
+            )}
           </div>
 
           <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">

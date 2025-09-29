@@ -1,7 +1,9 @@
 import { fetch } from '@shared/api';
 import type { Resume } from '../types';
 
-export const fetchAllResumes = async (userId: string) => {
+export type GetAllResumesResponse = Resume[];
+
+export const fetchAllResumes = async (userId: string): Promise<GetAllResumesResponse> => {
   if (!userId) {
     throw new Error('User ID is required');
   }

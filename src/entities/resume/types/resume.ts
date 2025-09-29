@@ -19,6 +19,8 @@ export interface Resume {
   userId: string;
   templateId: string | null;
   title: string;
+  publicThumbnail?: { url: string; expiresAt: string } | null;
+  privateThumbnailUrl?: string | null;
   items: ResumeItem[];
   template: any | null;
 }

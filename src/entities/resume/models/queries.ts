@@ -13,6 +13,7 @@ import {
 
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import type { ResumeData, ResumeDataKey } from '../types/resume-data';
+import { useCachedUser, useUserProfile } from '@shared/hooks/use-user';
 
 export function useTemplateFormSchema() {
   return useFetch({
@@ -78,10 +79,10 @@ export const useParseLinkedInProfile = () => {
   });
 };
 
-export const useGetAllResumes = (userId: string | null) => {
+export const useGetAllResumes = ({ userId }: { userId: string }) => {
   return useFetch({
     queryKey: ['resumes', userId],
-    queryFn: () => fetchAllResumes(userId as string),
+    queryFn: () => fetchAllResumes(userId),
     staleTime: 0,
   });
 };

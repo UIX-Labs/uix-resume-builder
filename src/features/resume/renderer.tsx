@@ -190,3 +190,99 @@ function renderDuration(node: DurationNode, data: ResumeData) {
     return <p className={cn(className)}></p>;
   }
 }
+
+
+function cloneWithInlineStyles(element: HTMLElement): HTMLElement {
+  const clone = element.cloneNode(true) as HTMLElement;
+
+  const originalElements = element.getElementsByTagName('*');
+  const cloneElements = clone.getElementsByTagName('*');
+
+  for (let i = -1; i < originalElements.length; i++) {
+    const original = (i === -1 ? element : originalElements[i]) as HTMLElement;
+    const copy = (i === -1 ? clone : cloneElements[i]) as HTMLElement;
+
+    const computedStyle = window.getComputedStyle(original);
+
+    for (let j = 0; j < computedStyle.length; j++) {
+      const prop = computedStyle[j];
+      copy.style.setProperty(prop, computedStyle.getPropertyValue(prop));
+    }
+  }
+
+  return clone;
+}
+
+async function generateThumbnailFromDOM(
+  element: HTMLElement,
+  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+): Promise<string | null> {
+  const data = new XMLSerializer().serializeToString(cloneWithInlineStyles(element));
+
+  const computedStyle = window.getComputedStyle(element);
+  const backgroundColor = computedStyle.backgroundColor || 'white';
+  const fontFamily = computedStyle.fontFamily ;
+
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
+      <defs>
+        <style>
+          * {
+            font-family: ${fontFamily};
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+          }
+        </style>
+      </defs>
+      <rect width="100%" height="100%" fill="${backgroundColor}"/>
+      <foreignObject width="100%" height="100%">
+        ${data}
+      </foreignObject>
+    </svg>
+  `;
+
+  const dataUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+
+  return new Promise<string | null>((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/png', 0.8);
+      resolve(dataUrl);
+    };
+    img.onerror = () => {
+      resolve(null);
+    };
+    img.src = dataUrl;
+  });
+}
+
+export async function generateThumbnail(element: HTMLElement, scale = 1): Promise<string | null> {
+  const width = element.offsetWidth;
+  const height = element.offsetHeight;
+
+  if (width === 0 || height === 0) {
+    return null;
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = width * scale;
+  canvas.height = height * scale;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    return null;
+  }
+
+  try {
+    return await generateThumbnailFromDOM(element, canvas, ctx, width, height);
+  } catch (error) {
+    console.error('Failed to generate thumbnail from DOM:', error);
+    return null;
+  }
+}

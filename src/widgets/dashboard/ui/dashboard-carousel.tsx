@@ -1,5 +1,7 @@
 'use client';
 
+import { TemplatesDialog } from '@features/templates-dialog/ui/templates-dialog';
+import { Button } from '@shared/ui/components/button';
 import { templates } from '@widgets/landing-page/models/constants';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
@@ -53,6 +55,15 @@ export default function DashboardCarousel() {
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
+
+        <TemplatesDialog>
+          <Button 
+            variant="outline" 
+            className="bg-blue-500 hover:bg-blue-600 text-white border-blue-500 hover:border-blue-600"
+          >
+            See All Templates
+          </Button>
+        </TemplatesDialog>
       </div>
 
       <div className="overflow-hidden rounded-xl" ref={emblaRef}>

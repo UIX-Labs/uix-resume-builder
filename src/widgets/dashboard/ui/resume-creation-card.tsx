@@ -28,7 +28,7 @@ export default function ResumeCreationCard() {
   };
 
   const handleUploadSuccess = (data: any) => {
-    router.push(`/resumes/builder/${data.resumeId}`);
+    router.push(`/resume/${data.resumeId}`);
   };
 
   const handleUploadError = (error: any) => {

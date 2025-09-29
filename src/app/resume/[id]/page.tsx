@@ -19,7 +19,7 @@ export default function FormPage() {
     () =>
       Object.keys(resumeData ?? ({} as Record<string, any>))
         .map((key) => {
-          if (key === 'templateId') return null;
+          if (['templateId', 'id', 'publicThumbnailUrl', 'privateThumbnailUrl'].includes(key)) return null;
 
           return {
             label: camelToHumanString(key),

@@ -216,12 +216,13 @@ export const data = {
       label: 'Degree',
     },
 
-    startDate: {
-      name: 'startDate',
-      type: 'text',
-      placeholder: 'Enter your start date',
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
       required: true,
-      label: 'Start Date',
+      label: 'Duration',
+      fluid: true,
     },
 
     fieldOfStudy: {

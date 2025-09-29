@@ -13,7 +13,6 @@ import {
 
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import type { ResumeData, ResumeDataKey } from '../types/resume-data';
-import { useCachedUser, useUserProfile } from '@shared/hooks/use-user';
 
 export function useTemplateFormSchema() {
   return useFetch({
@@ -29,28 +28,74 @@ export function useResumeData(id: string) {
       const promisesArray = [getResumeData(id), getResumeEmptyData()];
       const [actualData, emptyData] = await Promise.all(promisesArray);
 
-      const mergedRes = Object.entries(emptyData).reduce((acc, cur) => {
-        const key = cur[0] as ResumeDataKey;
-        const value = cur[1] as ResumeData[ResumeDataKey];
-
-        if (!acc[key]) {
-          acc[key] = value;
-
-          return acc;
+      // Enhanced deep merge function to recursively check all nested object fields
+      const deepMerge = (target: any, source: any): any => {
+        // If source is null/undefined, return target as-is
+        if (source === null || source === undefined) {
+          return target;
+        }
+        // If target is null/undefined, return source (provides missing structure)
+        if (target === null || target === undefined) {
+          return source;
         }
 
-        const flatItems = actualData[key].items;
+        // Start with target's existing values
+        const result = { ...target };
 
-        if (flatItems.length === 0) {
-          acc[key].items = value.items;
+        // Recursively check every property in source
+        for (const key in source) {
+          if (key in source) {
+            const sourceValue = source[key];
+            const targetValue = result[key];
+
+            if (key === 'items' && Array.isArray(sourceValue)) {
+              // Special handling for items arrays
+              if (!targetValue || !Array.isArray(targetValue) || targetValue.length === 0) {
+                // If target has no items, use source items (default empty items)
+                result[key] = sourceValue;
+              } else {
+                // Merge each existing item with the empty item template to fill missing fields
+                const emptyItemTemplate = sourceValue[0];
+                result[key] = targetValue.map((item: any) => {
+                  // For string arrays (interests/achievements), don't merge
+                  if (typeof emptyItemTemplate === 'string') {
+                    return item;
+                  }
+                  // For object items, recursively merge to fill missing nested fields
+                  return deepMerge(item, emptyItemTemplate);
+                });
+              }
+            } else if (Array.isArray(sourceValue)) {
+              // Handle other arrays - use target if exists, otherwise source
+              if (targetValue === undefined || targetValue === null) {
+                result[key] = sourceValue;
+              }
+            } else if (typeof sourceValue === 'object' && sourceValue !== null) {
+              // Recursively merge nested objects
+              result[key] = deepMerge(targetValue, sourceValue);
+            } else {
+              // For primitive values, only use source if target is missing/null
+              if (targetValue === undefined || targetValue === null) {
+                result[key] = sourceValue;
+              }
+            }
+          }
         }
 
-        return acc;
-      }, actualData);
+        return result;
+      };
 
-      console.log(mergedRes);
+      const mergedRes: ResumeData = {
+        ...actualData,
+        templateId: (actualData as any).templateId || '', // Ensure templateId is always present
+      };
 
-      return mergedRes as ResumeData;
+      Object.keys(emptyData).forEach((key) => {
+        const resumeKey = key as keyof typeof emptyData;
+        mergedRes[resumeKey] = deepMerge(actualData[resumeKey], emptyData[resumeKey]);
+      });
+
+      return mergedRes;
     },
   });
 }

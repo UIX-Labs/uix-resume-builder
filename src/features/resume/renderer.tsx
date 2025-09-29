@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import type {
   ContainerNode,
   DurationNode,
@@ -5,18 +6,16 @@ import type {
   LinkNode,
   ListNode,
   Nodes,
-  ResumeData,
   SeperatorNode,
   TextNode,
 } from './types';
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
-import React from 'react';
-import dayjs from 'dayjs';
+import type React from 'react';
 
 type RenderProps = {
   template: any;
-  data: ResumeData;
+  data: any;
   className?: string;
 };
 
@@ -38,7 +37,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
   );
 }
 
-function renderNode(node: Nodes, data: ResumeData): React.ReactNode {
+function renderNode(node: Nodes, data: any): React.ReactNode {
   switch (node.type) {
     case 'container':
       return renderContainer(node as ContainerNode, data);
@@ -59,19 +58,14 @@ function renderNode(node: Nodes, data: ResumeData): React.ReactNode {
   }
 }
 
-function renderContainer(node: ContainerNode, data: ResumeData) {
+function renderContainer(node: ContainerNode, data: any) {
   const { children, className } = node;
 
   const renderedChildren: React.ReactNode[] = [];
 
   for (const child of children) {
     const rendered = renderNode(child, data);
-
-    if (typeof child.isData === 'boolean' && child.isData && !rendered) {
-      return null;
-    } else {
-      renderedChildren.push(rendered);
-    }
+    renderedChildren.push(rendered);
   }
 
   return <div className={cn(`flex`, className)}>{renderedChildren.map((child) => child)}</div>;
@@ -91,7 +85,7 @@ function renderSeperator(node: SeperatorNode) {
   }
 }
 
-function renderText(node: TextNode, data: ResumeData) {
+function renderText(node: TextNode, data: any) {
   const { pathWithFallback, className, prefix = '', suffix = '' } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
@@ -105,7 +99,7 @@ function renderText(node: TextNode, data: ResumeData) {
   return <p className={cn(className)}>{finalString}</p>;
 }
 
-function renderList(node: ListNode, data: ResumeData) {
+function renderList(node: ListNode, data: any) {
   const { pathWithFallback, presentation, transform, groupBy } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
 
@@ -116,10 +110,12 @@ function renderList(node: ListNode, data: ResumeData) {
   if (groupBy) {
     const grouped = resolved.reduce((acc, item) => {
       const key = item[groupBy];
+
       acc[key] = {
         label: key,
         items: [...(acc[key]?.items || []), item],
       };
+
       return acc;
     }, {});
 
@@ -155,36 +151,37 @@ function renderList(node: ListNode, data: ResumeData) {
   );
 }
 
-function renderHtml(node: HtmlNode, data: ResumeData) {
+function renderHtml(node: HtmlNode, data: any) {
   const { pathWithFallback, className } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   return <div className={cn(className)} dangerouslySetInnerHTML={{ __html: resolved as string }} />;
 }
 
-function renderLink(node: LinkNode, data: ResumeData) {
-  const { pathWithFallback, href, className } = node;
+function renderLink(node: LinkNode, data: any) {
+  const { pathWithFallback, hrefPathWithFallback, className } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
+  const href = resolvePath({ data, ...hrefPathWithFallback });
 
   return (
-    <a href={resolved} className={cn(className)}>
+    <a href={href} className={cn(className)}>
       {resolved}
     </a>
   );
 }
 
-function renderDuration(node: DurationNode, data: ResumeData) {
+function renderDuration(node: DurationNode, data: any) {
   const { pathWithFallback, className } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
 
-  if (resolved && resolved.start && resolved.end) {
-    const startDate = dayjs(resolved.start);
-    const endDate = dayjs(resolved.end);
+  if (resolved && resolved.startDate && resolved.endDate) {
+    const startDate = dayjs(resolved.startDate);
+    const endDate = dayjs(resolved.endDate);
     return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - ${endDate.format('MMM YYYY')}`}</p>;
-  } else if (resolved && resolved.start && resolved.ongoing) {
-    const startDate = dayjs(resolved.start);
+  } else if (resolved && resolved.startDate && resolved.ongoing) {
+    const startDate = dayjs(resolved.startDate);
     return <p className={cn(className)}>{`${startDate.format('MMM YYYY')} - Present`}</p>;
   } else {
     return <p className={cn(className)}></p>;

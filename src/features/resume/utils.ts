@@ -14,11 +14,15 @@ export function resolvePath({
     .split('.')
     .flatMap((segment) => {
       const parts = [];
+
       const regex = /([^[\]]+)|\[(\d+)\]/g;
+
       let match: RegExpExecArray | null;
+
       while ((match = regex.exec(segment))) {
         parts.push(match[1] ?? match[2]);
       }
+
       return parts;
     });
 

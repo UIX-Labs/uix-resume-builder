@@ -2,8 +2,23 @@ import { cn } from '@shared/lib/cn';
 import { Input } from '@shared/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-export const UrlInput = ({ data, onChange }: { data: string; onChange: (data: string) => void; section: any }) => {
+export const UrlInput = ({
+  data,
+  onChange,
+}: {
+  data: { title: string; link: string };
+  onChange: (data: { title: string; link: string }) => void;
+  section: any;
+}) => {
+  const [title, setTitle] = useState(data.title);
+  const [link, setLink] = useState(data.link);
+
+  useEffect(() => {
+    onChange({ title, link });
+  }, [title, link]);
+
   return (
     <div className="relative">
       <Input
@@ -14,8 +29,8 @@ export const UrlInput = ({ data, onChange }: { data: string; onChange: (data: st
           'font-normal focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
           'bg-[#FAFBFC]',
         )}
-        defaultValue={data}
-        onChange={(e) => onChange(e.target.value)}
+        defaultValue={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
 
       <div className="absolute top-0 right-2 bottom-0 flex items-center justify-center text-muted-foreground">
@@ -24,7 +39,7 @@ export const UrlInput = ({ data, onChange }: { data: string; onChange: (data: st
             <Image src="/images/link.svg" alt="link" width={16} height={16} />
           </PopoverTrigger>
           <PopoverContent>
-            <Input placeholder="Enter URL" />
+            <Input placeholder="Enter URL" defaultValue={link} onChange={(e) => setLink(e.target.value)} />
           </PopoverContent>
         </Popover>
       </div>

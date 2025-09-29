@@ -1,14 +1,15 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { FormSchema, FormField as IFormField } from '@entities/resume';
+import type { FormSchema, ResumeDataKey, ResumeData } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Draggable } from './draggable';
 import { UrlInput } from './url';
-import type { ResumeData, ResumeDataKey } from '@entities/resume/types';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
 import { TagsInput } from './tags-input';
+import { LinksInput } from './links-input';
+import { StringsInput } from './strings-input';
 
 export function TemplateForm({
   formSchema,
@@ -17,30 +18,12 @@ export function TemplateForm({
   currentStep = 'personalDetails',
 }: {
   formSchema: FormSchema;
-  values: ResumeData;
-  onChange: (data: any) => void;
+  values: Omit<ResumeData, 'templateId'>;
+  onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
 }) {
-  function getItem(section: IFormField, data: any, onChange: (data: any) => void) {
+  function getItem<T extends string | boolean>(section: any, data: T, onChange: (data: T) => void) {
     switch (section.type) {
-      case 'text':
-      case 'email':
-      case 'tel': {
-        return (
-          <Input
-            placeholder={section.placeholder}
-            className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
-              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
-              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-              'bg-[#FAFBFC]',
-            )}
-            defaultValue={data}
-            onChange={(e) => onChange(e.target.value)}
-          />
-        );
-      }
-
       case 'data': {
         return (
           <Input
@@ -90,6 +73,30 @@ export function TemplateForm({
       case 'tags': {
         return <TagsInput data={data} onChange={onChange} section={section} />;
       }
+
+      case 'links': {
+        return <LinksInput data={data} onChange={onChange} section={section} />;
+      }
+
+      case 'strings': {
+        return <StringsInput data={data} onChange={onChange} section={section} />;
+      }
+
+      default: {
+        return (
+          <Input
+            placeholder={section.placeholder}
+            className={cn(
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
+            )}
+            defaultValue={data}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        );
+      }
     }
   }
 
@@ -117,6 +124,16 @@ export function TemplateForm({
               getItem={getItem}
             />
           </div>
+        ) : currentSchema.itemsType === 'strings' ? (
+          <div className="col-span-2">
+            <StringsInput
+              data={currentData.items}
+              onChange={(items) => {
+                onChange({ ...values, [currentStep]: { ...currentData, items } });
+              }}
+              section={currentSchema}
+            />
+          </div>
         ) : (
           currentData.items.map((section, itemIdx) => {
             return Object.entries(section).map(([key, value], i) => {
@@ -126,7 +143,7 @@ export function TemplateForm({
 
               return (
                 <label
-                  key={key + i}
+                  key={key}
                   className={cn(
                     'text-sm text-[#0C1118] font-semibold flex flex-col gap-2',
                     section.fluid && 'col-span-2',

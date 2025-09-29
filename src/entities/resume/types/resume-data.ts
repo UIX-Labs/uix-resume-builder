@@ -1,11 +1,4 @@
-import type { formDataValidator } from './lib/formDataValidator';
-import type { formSchemaValidator } from './lib/formSchemaValidator';
-import type { z } from 'zod';
-
-export type FormSchema = z.infer<typeof formSchemaValidator>;
-export type FormSection = FormSchema[number];
-export type FormField = FormSection['fields'][number];
-export type ResumeData = {
+export interface ResumeData extends Record<ResumeDataKey, any> {
   experience: {
     id: string;
     title: string;
@@ -93,7 +86,6 @@ export type ResumeData = {
       id: string;
       title: string;
       issuer: string;
-
       ongoing: boolean;
     }>;
   };
@@ -111,6 +103,15 @@ export type ResumeData = {
   };
 
   templateId: string;
-};
+}
 
-export type ResumeDataKey = keyof ResumeData;
+export type ResumeDataKey =
+  | 'experience'
+  | 'skills'
+  | 'projects'
+  | 'personalDetails'
+  | 'professionalSummary'
+  | 'education'
+  | 'certifications'
+  | 'interests'
+  | 'achievements';

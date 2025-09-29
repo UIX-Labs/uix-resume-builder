@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Achievements } from '@shared/icons/achievements';
 import { useEffect, useState } from 'react';
 import { useFormDataStore } from '../models/store';
+import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -23,12 +24,16 @@ const icons = {
 export function Sidebar() {
   const [progress, setProgress] = useState(0);
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
-  const data = useFormDataStore((state) => state.formData);
+
+  const resumeData = useFormDataStore((state) => state.formData);
 
   useEffect(() => {
-    const progress = Math.round((Object.keys(data).length / navs.length) * 100);
-    setProgress(progress);
-  }, [data]);
+    if (!resumeData) return;
+
+    const p = calculateResumeCompletion(resumeData);
+
+    setProgress(p.toFixed(0));
+  }, [resumeData]);
 
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { createResume } from '@entities/resume/api';
+import { createResume } from '@entities/resume';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronDown, FileText } from 'lucide-react';
 import Image from 'next/image';
@@ -17,13 +17,18 @@ export default function ResumeCreationCard() {
   });
 
   const resumeCreateHandler = async () => {
+    if (!user.data?.id) {
+      return;
+    }
+
     const data = await createResumeMutation.mutateAsync({
       title: 'Frontend Engineer Resume',
       userInfo: {
-        userId: user.data?.id,
+        userId: user.data.id,
       },
-      // templateId: "25c2fb78-b90c-4f77-bbda-7c9198bfe091",
+      templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
     });
+
     router.push(`/resume/${data.id}`);
   };
 

@@ -118,7 +118,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       onUpdate: ({ editor }) => {
         const html = editor.getHTML();
         const value = editor.getText();
-        onChange?.(value, html);
+
+        onChange?.(value, !value ? '' : html);
       },
       onFocus: () => {
         setIsToolbarVisible(true);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useDeleteResume } from '@entities/resume/api/delete-resume';
+import { useDeleteResume } from '@entities/resume';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/dialog';
 import { Button } from '@shared/ui/button';
 import { toast } from 'sonner';

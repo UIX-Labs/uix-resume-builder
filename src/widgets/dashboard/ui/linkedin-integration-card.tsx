@@ -1,6 +1,6 @@
 'use client';
 
-import { useParseLinkedInProfile } from '@entities/resume/api/parse-linkedin';
+import { useParseLinkedInProfile } from '@entities/resume';
 import { Button } from '@shared/ui';
 import { Input } from '@shared/ui/components/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@shared/ui/dialog';
@@ -41,7 +41,7 @@ function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     setError(null);
 
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
-      onSuccess: (response) => {
+      onSuccess: () => {
         onClose();
         router.push(`/resume/${response.resumeId}`);
         setLinkedinUrl('');
@@ -141,6 +141,7 @@ export default function LinkedinIntegrationCard() {
             </div>
 
             <button
+              type="button"
               onClick={() => setIsModalOpen(true)}
               className="flex items-center justify-center bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
             >

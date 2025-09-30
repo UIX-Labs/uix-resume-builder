@@ -167,16 +167,12 @@ function ResumeCard({ resume }: ResumeCardProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100">
-          <Button
-            className="text-sm bg-transparent hover:bg-transparent font-semibold text-purple-900 hover:underline flex items-center gap-1"
-            onClick={() => router.push(`/resume/${resume.id}`)}
-          >
-            VIEW RESUME →
-          </Button>
-
-          <div className="w-12 h-[1px] bg-gray-300"></div>
-        </div>
+        <button
+          className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          onClick={() => router.push(`/resume/${resume.id}`)}
+        >
+          <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>
+        </button>
       </div>
 
       <DeleteResumeModal isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} resume={resume} />

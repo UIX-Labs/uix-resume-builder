@@ -53,6 +53,21 @@ export function FormPageBuilder() {
     toPDF();
   };
 
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const isMeta = e.metaKey || e.ctrlKey;
+      if (e.key === 's' && isMeta) {
+        handleSaveResume();
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [data]);
+
   const { formData, setFormData } = useFormDataStore();
 
   useEffect(() => {

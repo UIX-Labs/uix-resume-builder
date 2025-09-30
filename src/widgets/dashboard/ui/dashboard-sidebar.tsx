@@ -102,24 +102,6 @@ export default function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-                  <Link href="/settings">
-                    <Settings className="w-5 h-5" />
-                    Settings
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900">
-                  <Link href="/help">
-                    <HelpCircle className="w-5 h-5" />
-                    Help
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-
-              <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
                   onClick={handleLogout}

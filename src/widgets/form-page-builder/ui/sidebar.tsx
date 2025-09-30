@@ -11,6 +11,7 @@ import { Achievements } from '@shared/icons/achievements';
 import { useEffect, useState } from 'react';
 import { useFormDataStore } from '../models/store';
 import { calculateResumeCompletion } from '@shared/lib/resume-completion';
+import { useRouter } from 'next/navigation';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -26,20 +27,32 @@ export function Sidebar() {
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
 
   const resumeData = useFormDataStore((state) => state.formData);
+  const router = useRouter();
 
   useEffect(() => {
     if (!resumeData) return;
 
     const p = calculateResumeCompletion(resumeData);
 
-    setProgress(p.toFixed(0));
+    const fixed = +p.toFixed(0);
+    setProgress(isNaN(fixed) ? 0 : Number(fixed));
   }, [resumeData]);
 
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 
   return (
     <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4">
-      <p className="text-[#0B0A09] text-lg font-semibold">Resume Builder</p>
+      <div className="flex items-center gap-2">
+        <div
+          onClick={() => router.push('/resumes')}
+          className="px-1 text-lg text-gray-800 cursor-pointer transition-all duration-300 hover:bg-gray-200 rounded-md 
+        flex items-center justify-center w-6 h-6"
+        >
+          <span>{'\u2190'}</span>
+        </div>
+
+        <p className="text-[#0B0A09] text-lg font-semibold">Resume Builder</p>
+      </div>
 
       <div className="flex items-center gap-2 text-[12px] font-bold text-white px-3 py-[4.5px] bg-[#02A44F] rounded-[25px] mt-1">
         AI Powered

@@ -7,7 +7,7 @@ const aniketTemplate = {
     padding: 32,
     background: '#ffffff',
     className: 'text-black leading-relaxed',
-    fontFamily: 'fangsong',
+    fontFamily: 'Inter',
   },
 
   body: {
@@ -58,7 +58,6 @@ const aniketTemplate = {
                       fallback: 'City',
                     },
                   },
-                  { type: 'seperator', variant: 'pipe' },
                   {
                     id: 'phone-text',
                     type: 'text',
@@ -66,8 +65,8 @@ const aniketTemplate = {
                       path: 'data.phone',
                       fallback: 'Phone',
                     },
+                    prefix: ' | ',
                   },
-                  { type: 'seperator', variant: 'pipe' },
                   {
                     id: 'email-link',
                     type: 'link',
@@ -76,8 +75,8 @@ const aniketTemplate = {
                       fallback: 'Email',
                     },
                     href: 'mailto:aniket@gmail.com',
+                    prefix: ' | ',
                   },
-                  { type: 'seperator', variant: 'pipe' },
                   {
                     id: 'linkedin-text',
                     type: 'link',
@@ -90,8 +89,8 @@ const aniketTemplate = {
                       fallback: 'LinkedIn',
                     },
                     className: 'text-neutral-900',
+                    prefix: ' | ',
                   },
-                  { type: 'seperator', variant: 'pipe' },
                   {
                     id: 'github-text',
                     type: 'link',
@@ -104,6 +103,7 @@ const aniketTemplate = {
                       fallback: 'GitHub',
                     },
                     className: 'text-neutral-900',
+                    prefix: ' | ',
                   },
                 ],
               },
@@ -357,7 +357,6 @@ const aniketTemplate = {
                       {
                         type: 'text',
                         pathWithFallback: { path: 'data.name' },
-                        suffix: ', ',
                       },
                     ],
                   },

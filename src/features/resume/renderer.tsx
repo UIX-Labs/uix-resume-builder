@@ -123,7 +123,7 @@ function renderList(node: ListNode, data: any) {
       <div className={cn('flex flex-wrap', node.className)}>
         {Object.entries(grouped).map(([_key, value]) =>
           presentation.map((child) => {
-            return renderNode(child, value);
+            return <>{renderNode(child, value)}</>;
           }),
         )}
       </div>
@@ -135,7 +135,9 @@ function renderList(node: ListNode, data: any) {
 
     return (
       <div className={cn('flex flex-wrap', node.className)}>
-        {flattened.map((child) => renderNode(presentation[0], child))}
+        {flattened.map((child) => (
+          <>{renderNode(presentation[0], child)}</>
+        ))}
       </div>
     );
   }
@@ -144,7 +146,7 @@ function renderList(node: ListNode, data: any) {
     <div className={cn('flex flex-wrap', node.className)}>
       {Object.entries(resolved).map(([_key, value]) =>
         presentation.map((child) => {
-          return renderNode(child, value);
+          return <>{renderNode(child, value)}</>;
         }),
       )}
     </div>
@@ -159,13 +161,18 @@ function renderHtml(node: HtmlNode, data: any) {
 }
 
 function renderLink(node: LinkNode, data: any) {
-  const { pathWithFallback, hrefPathWithFallback, className } = node;
+  const { pathWithFallback, hrefPathWithFallback, className, prefix = '' } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
   const href = resolvePath({ data, ...hrefPathWithFallback });
 
+  if (!resolved) {
+    return null;
+  }
+
   return (
     <a href={href} className={cn(className)}>
+      {prefix}
       {resolved}
     </a>
   );

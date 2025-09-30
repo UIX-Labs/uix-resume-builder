@@ -33,6 +33,7 @@ export interface ListNode extends TemplateNode {
   type: 'list';
   pathWithFallback: DataBindingPath;
   presentation: Nodes[];
+  seperator?: string;
   transform?: {
     variant: 'flatten';
     key: string;

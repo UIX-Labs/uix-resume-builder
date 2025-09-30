@@ -1,8 +1,8 @@
-import { Sortable, SortableItem } from '@shared/ui/components/sortable';
-import { Input } from '@shared/ui/components/input';
 import { cn } from '@shared/lib/cn';
-import Image from 'next/image';
+import { Sortable, SortableItem } from '@shared/ui/components/sortable';
 import { useState } from 'react';
+import { Input } from '@shared/ui/components/input';
+import Image from 'next/image';
 
 export function StringInput({ data, onChange }: { data: any; onChange: (data: any) => void }) {
   const [value, setValue] = useState(data);
@@ -30,41 +30,35 @@ export function StringsInput({
 }: {
   data: { itemId: string; items: string[] };
   onChange: (data: any) => void;
-  section: any;
 }) {
   const [localData, setLocalData] = useState(data.items);
 
-  function handleDragEnd(data: any) {
-    onChange({ ...data, items: data });
-    setLocalData(data);
+  function handleDragEnd(newItems: string[]) {
+    onChange({ ...data, items: newItems });
+    setLocalData(newItems);
   }
 
   function handlePlusClick(index: number) {
     const newData = [...localData];
-
-    //Insert after index
     newData.splice(index + 1, 0, '');
-
     onChange({ ...data, items: newData });
     setLocalData(newData);
   }
 
   return (
     <div className="flex flex-col gap-2">
-      <Sortable data={localData} getId={(item) => item as string} onDragEnd={handleDragEnd}>
-        {localData.map((item: any, index: number) => (
-          <SortableItem id={item} key={index + item} className="group">
+      <Sortable data={localData} getId={(item) => item} onDragEnd={handleDragEnd}>
+        {localData.map((item, index) => (
+          <SortableItem id={item} key={item} className="group">
             <StringInput
               data={item}
               onChange={(value) => {
                 const newData = [...localData];
                 newData[index] = value;
-
                 onChange({ ...data, items: newData });
                 setLocalData(newData);
               }}
             />
-
             <button
               type="button"
               className={cn(

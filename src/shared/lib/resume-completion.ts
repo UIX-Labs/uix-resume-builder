@@ -39,10 +39,9 @@ export function calculateResumeCompletion(resumeData: ResumeData) {
       const value = cur[1] as ResumeData[ResumeDataKey];
 
       if (!whiteList.includes(key)) return acc;
-      const firstItem = value.items[0];
 
-      acc.total += calculateSectionWeight(firstItem);
-      acc.filled += calculateItemWeight(firstItem);
+      acc.total += calculateSectionWeight(value.items[0]);
+      acc.filled += value.items.reduce((acc, item) => Math.max(acc, calculateItemWeight(item)), -Infinity);
 
       return acc;
     },

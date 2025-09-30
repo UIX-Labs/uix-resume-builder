@@ -1,15 +1,15 @@
 import type { ResumeData, ResumeDataKey } from '@entities/resume/types/resume-data';
 
 const whiteList = [
-  'id',
-  'itemId',
-  'city',
-  'country',
-  'state',
-  'pincode',
-  'templateId',
-  'publicThumbnailUrl',
-  'privateThumbnailUrl',
+  'personalDetails',
+  'professionalSummary',
+  'experience',
+  'education',
+  'skills',
+  'projects',
+  'certifications',
+  'interests',
+  'achievements',
 ];
 
 function calculateSectionWeight(value: any) {
@@ -38,11 +38,7 @@ export function calculateResumeCompletion(resumeData: ResumeData) {
       const key = cur[0] as ResumeDataKey;
       const value = cur[1] as ResumeData[ResumeDataKey];
 
-      // if (key !== 'education') {
-      //   return acc;
-      // }
-
-      if (whiteList.includes(key)) return acc;
+      if (!whiteList.includes(key)) return acc;
       const firstItem = value.items[0];
 
       acc.total += calculateSectionWeight(firstItem);

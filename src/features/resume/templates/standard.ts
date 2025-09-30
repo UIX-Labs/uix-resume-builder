@@ -460,12 +460,19 @@ const aniketTemplate = {
             className: 'flex gap-1 mt-2',
             presentation: [
               {
-                type: 'container',
-                className: 'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md',
-                children: [
+                type: 'list',
+                className: 'flex gap-1',
+                pathWithFallback: { path: 'data.items' },
+                presentation: [
                   {
-                    type: 'text',
-                    className: 'text-xs text-white font-semibold whitespace-nowrap',
+                    type: 'container',
+                    className: 'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md',
+                    children: [
+                      {
+                        type: 'text',
+                        className: 'text-xs text-white font-semibold whitespace-nowrap',
+                      },
+                    ],
                   },
                 ],
               },
@@ -500,12 +507,19 @@ const aniketTemplate = {
             className: 'flex gap-1 mt-2',
             presentation: [
               {
-                type: 'container',
-                className: 'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md',
-                children: [
+                type: 'list',
+                className: 'flex gap-1',
+                pathWithFallback: { path: 'data.items' },
+                presentation: [
                   {
-                    type: 'text',
-                    className: 'text-xs text-white font-semibold whitespace-nowrap',
+                    type: 'container',
+                    className: 'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md',
+                    children: [
+                      {
+                        type: 'text',
+                        className: 'text-xs text-white font-semibold whitespace-nowrap',
+                      },
+                    ],
                   },
                 ],
               },

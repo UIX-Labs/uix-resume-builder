@@ -2,7 +2,7 @@ import { Sortable, SortableItem } from '@shared/ui/components/sortable';
 import { Input } from '@shared/ui/components/input';
 import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 export function StringInput({ data, onChange }: { data: any; onChange: (data: any) => void }) {
   const [value, setValue] = useState(data);
@@ -24,21 +24,28 @@ export function StringInput({ data, onChange }: { data: any; onChange: (data: an
   );
 }
 
-export function StringsInput({ data, onChange }: { data: any; onChange: (data: any) => void; section: any }) {
-  const [localData, setLocalData] = useState(data);
+export function StringsInput({
+  data,
+  onChange,
+}: {
+  data: { itemId: string; items: string[] };
+  onChange: (data: any) => void;
+  section: any;
+}) {
+  const [localData, setLocalData] = useState(data.items);
 
   function handleDragEnd(data: any) {
-    onChange(data);
+    onChange({ ...data, items: data });
     setLocalData(data);
   }
 
-  function handlePlusClick(data: any, index: number) {
-    const newData = [...data];
+  function handlePlusClick(index: number) {
+    const newData = [...localData];
 
     //Insert after index
     newData.splice(index + 1, 0, '');
 
-    onChange(newData);
+    onChange({ ...data, items: newData });
     setLocalData(newData);
   }
 
@@ -46,14 +53,14 @@ export function StringsInput({ data, onChange }: { data: any; onChange: (data: a
     <div className="flex flex-col gap-2">
       <Sortable data={localData} getId={(item) => item as string} onDragEnd={handleDragEnd}>
         {localData.map((item: any, index: number) => (
-          <SortableItem id={item} key={index} className="relative group">
+          <SortableItem id={item} key={index + item} className="group">
             <StringInput
               data={item}
               onChange={(value) => {
                 const newData = [...localData];
                 newData[index] = value;
 
-                onChange(newData);
+                onChange({ ...data, items: newData });
                 setLocalData(newData);
               }}
             />
@@ -62,9 +69,9 @@ export function StringsInput({ data, onChange }: { data: any; onChange: (data: a
               type="button"
               className={cn(
                 'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
-                'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300',
+                'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300 z-10',
               )}
-              onClick={() => handlePlusClick(localData, index)}
+              onClick={() => handlePlusClick(index)}
             >
               <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
             </button>

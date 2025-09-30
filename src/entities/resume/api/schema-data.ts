@@ -248,7 +248,6 @@ export const data = {
 
     collapsedState: {
       titleKey: 'title',
-      subTitleKey: 'duration',
     },
 
     itemsType: 'draggable',

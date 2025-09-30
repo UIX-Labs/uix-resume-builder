@@ -1,42 +1,54 @@
 'use client';
 
-import { type ResumeDataKey, useResumeData, useTemplateFormSchema } from '@entities/resume';
-import { camelToHumanString } from '@shared/lib/string';
+import { type ResumeDataKey } from '@entities/resume';
 import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
 import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function FormPage() {
   const params = useParams();
   const id = params.id as string;
-  const { data: resumeData } = useResumeData(id);
-  const { data: schema } = useTemplateFormSchema();
 
   const [currentStep, setCurrentStep] = useState<ResumeDataKey>('personalDetails');
 
   const navs = useMemo(
-    () =>
-      Object.keys(resumeData ?? ({} as Record<string, any>))
-        .map((key) => {
-          if (['templateId', 'id', 'publicThumbnailUrl', 'privateThumbnailUrl'].includes(key)) return null;
-
-          return {
-            label: camelToHumanString(key),
-            name: key as ResumeDataKey,
-          };
-        })
-        .filter((item): item is { label: string; name: ResumeDataKey; completion: number } => item !== null),
-    [resumeData],
+    () => [
+      {
+        label: 'Personal Details',
+        name: 'personalDetails',
+      },
+      {
+        label: 'Experience',
+        name: 'experience',
+      },
+      {
+        label: 'Education',
+        name: 'education',
+      },
+      {
+        label: 'Skills',
+        name: 'skills',
+      },
+      {
+        label: 'Projects',
+        name: 'projects',
+      },
+      {
+        label: 'Certifications',
+        name: 'certifications',
+      },
+      {
+        label: 'Interests',
+        name: 'interests',
+      },
+      {
+        label: 'Achievements',
+        name: 'achievements',
+      },
+    ],
+    [],
   );
-
-  useEffect(() => {
-    if (!schema) return;
-
-    const firstKey = Object.keys(schema)[0];
-
-    setCurrentStep(firstKey as ResumeDataKey);
-  }, [schema]);
 
   return (
     <FormPageBuilderProvider value={{ currentStep, setCurrentStep, navs }}>
@@ -44,7 +56,7 @@ export default function FormPage() {
         <Sidebar />
 
         <div className="relative flex w-full">
-          {schema && <FormPageBuilder formSchema={schema} defaultValues={resumeData ?? {}} />}
+          <FormPageBuilder />
         </div>
       </div>
     </FormPageBuilderProvider>

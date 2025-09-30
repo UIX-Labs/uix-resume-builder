@@ -126,13 +126,18 @@ export function TemplateForm({
           </div>
         ) : currentSchema.itemsType === 'strings' ? (
           <div className="col-span-2">
-            <StringsInput
-              data={currentData.items}
-              onChange={(items) => {
-                onChange({ ...values, [currentStep]: { ...currentData, items } });
-              }}
-              section={currentSchema}
-            />
+            {currentData.items.map((item, i) => (
+              <StringsInput
+                key={item.itemId}
+                data={item}
+                onChange={(value) => {
+                  const newData = { ...currentData };
+                  newData.items[i] = value;
+                  onChange({ ...values, [currentStep]: newData });
+                }}
+                section={currentSchema}
+              />
+            ))}
           </div>
         ) : (
           currentData.items.map((section, itemIdx) => {

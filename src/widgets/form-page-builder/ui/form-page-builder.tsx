@@ -1,4 +1,10 @@
-import { useGetAllResumes, useSaveResumeForm, type FormSchema } from '@entities/resume';
+import {
+  useGetAllResumes,
+  useResumeData,
+  useSaveResumeForm,
+  useTemplateFormSchema,
+  type FormSchema,
+} from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
@@ -12,21 +18,23 @@ import { useParams } from 'next/navigation';
 import { uploadThumbnail } from '@entities/resume/api/upload-resume';
 import { useMutation } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
+import { toast } from 'sonner';
+import { useResumeManager } from '@entities/resume/models/use-resume-data';
 
-export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: FormSchema; defaultValues: any }) {
+export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
 
   const thumbnailGenerated = useRef(false);
 
+  const { data, save } = useResumeManager(resumeId);
+  const { data: formSchema } = useTemplateFormSchema();
   const { data: user } = useUserProfile();
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { data: resumes, refetch: refetchResumes } = useGetAllResumes({ userId: user?.id as string });
   const { mutateAsync: uploadThumbnailMutation } = useMutation({
     mutationFn: uploadThumbnail,
   });
-
-  const saveMutation = useSaveResumeForm();
 
   const { toPDF, targetRef } = usePDF({
     filename: 'resume.pdf',
@@ -48,8 +56,8 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
   const { formData, setFormData } = useFormDataStore();
 
   useEffect(() => {
-    useFormDataStore.setState({ formData: defaultValues ?? {} });
-  }, [defaultValues]);
+    useFormDataStore.setState({ formData: data ?? {} });
+  }, [data]);
 
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
@@ -91,14 +99,17 @@ export function FormPageBuilder({ formSchema, defaultValues }: { formSchema: For
     try {
       thumbnailGenerated.current = false;
 
-      await saveMutation.mutateAsync({
+      await save({
         type: currentStep,
         data: formData[currentStep],
+        updatedAt: Date.now(),
       });
 
       await generateAndSaveThumbnail();
-    } catch (error) {
-      console.error('Failed to save resume:', error);
+
+      toast.success(`Resume saved successfully`);
+    } catch {
+      toast.error('Failed to save resume');
     }
   }
 

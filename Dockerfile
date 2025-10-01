@@ -1,39 +1,60 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install pnpm globally
+# Install pnpm
 RUN npm install -g pnpm
 
 # Copy package files
 COPY package.json pnpm-lock.yaml* ./
 
-# Install dependencies only (no dev dependencies for production)
+# Install deps
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
+# Copy source
 COPY . .
 
-ENV NODE_ENV production
+# Accept build args (Next.js will replace these at build time)
+ARG NEXT_PUBLIC_REDIRECT_URI
+ARG NEXT_PUBLIC_LINKEDIN_CLIENT_ID
+ARG NEXT_PUBLIC_GOOGLE_REDIRECT_URI
+ARG NEXT_PUBLIC_BACKEND_URL
+ARG NEXT_PUBLIC_GOOGLE_CLIENT_ID
+ARG NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET
 
-# Build the application
+# Export them as ENV so pnpm build sees them
+ENV NEXT_PUBLIC_REDIRECT_URI=$NEXT_PUBLIC_REDIRECT_URI
+ENV NEXT_PUBLIC_LINKEDIN_CLIENT_ID=$NEXT_PUBLIC_LINKEDIN_CLIENT_ID
+ENV NEXT_PUBLIC_GOOGLE_REDIRECT_URI=$NEXT_PUBLIC_GOOGLE_REDIRECT_URI
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+ENV NEXT_PUBLIC_GOOGLE_CLIENT_ID=$NEXT_PUBLIC_GOOGLE_CLIENT_ID
+ENV NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=$NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET
+
+# Build Next.js app
+ENV NODE_ENV=production
 RUN pnpm build
 
-# Create non-root user for security
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# --------- Runtime Image ----------
+FROM node:18-alpine AS runner
+WORKDIR /app
 
-# Change ownership of the app directory
-RUN chown -R nextjs:nodejs /app
+RUN npm install -g pnpm
 
-# Switch to non-root user
+# Copy only built output + node_modules from builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 nextjs \
+  && chown -R nextjs:nodejs /app
+
 USER nextjs
 
-# Expose port
 EXPOSE 3000
-
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["pnpm", "start"]

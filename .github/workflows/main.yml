@@ -2,8 +2,8 @@ name: deploy resume-builder-fe-service
 on:
   push:
     branches:
-      - main # Run only on pushes to main
-  workflow_dispatch: # (Optional) allow manual runs
+      - main
+  workflow_dispatch:
 
 env:
   AWS_REGION: ap-south-1
@@ -25,9 +25,11 @@ jobs:
           echo "ECS_CLUSTER=resume-builder-stage-cluster" >> $GITHUB_ENV
           echo "TASK_DEFINITION_NAME=resume-builder-stage-fe-td" >> $GITHUB_ENV
           echo "CONTAINER_NAME=resume-builder-stage-fe-container" >> $GITHUB_ENV
+
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
 
+          # Next.js build-time env vars
           echo "NEXT_PUBLIC_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_REDIRECT_URI }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }}" >> $GITHUB_ENV
@@ -61,12 +63,16 @@ jobs:
             --build-arg NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ env.NEXT_PUBLIC_GOOGLE_CLIENT_ID }} \
             --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }} \
             -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG} .
-          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${PROJECT_NAME}-${IMAGE_TAG}
-          echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${PROJECT_NAME}-${IMAGE_TAG}" >> $GITHUB_OUTPUT
+
+          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG}
+          echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG}" >> $GITHUB_OUTPUT
 
       - name: Download Task Definition
         run: |
-          aws ecs describe-task-definition --task-definition ${{ env.TASK_DEFINITION_NAME }} --query taskDefinition > tmp-task-definition.json
+          aws ecs describe-task-definition \
+            --task-definition ${{ env.TASK_DEFINITION_NAME }} \
+            --query taskDefinition > tmp-task-definition.json
+
       - name: Clean Task Definition
         run: |
           jq 'del(.enableFaultInjection)' tmp-task-definition.json > task-definition.json

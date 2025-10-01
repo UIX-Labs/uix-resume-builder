@@ -25,8 +25,8 @@ jobs:
           echo "ECS_CLUSTER=resume-builder-stage-cluster" >> $GITHUB_ENV
           echo "TASK_DEFINITION_NAME=resume-builder-stage-fe-td" >> $GITHUB_ENV
           echo "CONTAINER_NAME=resume-builder-stage-fe-container" >> $GITHUB_ENV
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID}}" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
 
           echo "NEXT_PUBLIC_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_REDIRECT_URI }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}" >> $GITHUB_ENV
@@ -54,6 +54,12 @@ jobs:
         run: |
           docker build \
             --build-arg ENVIRONMENT=${{ env.ENVIRONMENT }} \
+            --build-arg NEXT_PUBLIC_REDIRECT_URI=${{ env.NEXT_PUBLIC_REDIRECT_URI }} \
+            --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }} \
+            --build-arg NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }} \
+            --build-arg NEXT_PUBLIC_BACKEND_URL=${{ env.NEXT_PUBLIC_BACKEND_URL }} \
+            --build-arg NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ env.NEXT_PUBLIC_GOOGLE_CLIENT_ID }} \
+            --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }} \
             -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG} .
           docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${PROJECT_NAME}-${IMAGE_TAG}
           echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${PROJECT_NAME}-${IMAGE_TAG}" >> $GITHUB_OUTPUT
@@ -73,7 +79,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy demandify-fe-warehouse-svc
+      - name: Deploy resume-builder-fe-service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-definition }}

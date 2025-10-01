@@ -31,7 +31,8 @@ export const sendAuthCodeToBackend = async (authCode: string) => {
         credentials: 'include',
         body: JSON.stringify({
           authCode: authCode,
-          redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI!,
+          redirectUri:
+            process.env.NEXT_PUBLIC_REDIRECT_URI || 'https://resume-builder.craftstacks.co/auth/linkedin/callback',
         }),
       },
     });

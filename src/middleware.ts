@@ -5,7 +5,7 @@ const PUBLIC_ROUTES = ['/', '/auth/google/callback', '/auth/linkedin/callback'];
 
 async function checkAuth(request: NextRequest): Promise<boolean> {
   try {
-    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3002';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://resume-builder-be.craftstacks.co';
 
     const response = await fetch(`${backendUrl}/auth/check`, {
       method: 'GET',

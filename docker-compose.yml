@@ -5,18 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_REDIRECT_URI: ${NEXT_PUBLIC_REDIRECT_URI:-http://localhost:3000/auth/linkedin/callback}
+        NEXT_PUBLIC_LINKEDIN_CLIENT_ID: ${NEXT_PUBLIC_LINKEDIN_CLIENT_ID}
+        NEXT_PUBLIC_GOOGLE_REDIRECT_URI: ${NEXT_PUBLIC_GOOGLE_REDIRECT_URI:-http://localhost:3000/auth/google/callback}
+        NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL:-http://localhost:3002}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET: ${NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET}
     ports:
       - "3000:3000"
-    environment:
-      # Production environment variables
-      - NODE_ENV=production
-      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
-      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${NEXT_PUBLIC_LINKEDIN_CLIENT_ID}
-      - NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET}
-      - NEXT_PUBLIC_GOOGLE_CLIENT_ID=${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
-      - NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-http://localhost:3002}
-      - NEXT_PUBLIC_REDIRECT_URI=${NEXT_PUBLIC_REDIRECT_URI:-http://localhost:3000/auth/linkedin/callback}
-      - NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${NEXT_PUBLIC_GOOGLE_REDIRECT_URI:-http://localhost:3000/auth/google/callback}
     restart: unless-stopped

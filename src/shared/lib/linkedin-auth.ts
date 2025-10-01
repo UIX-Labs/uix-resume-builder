@@ -6,9 +6,9 @@ export const getLinkedInAuthUrl = () => {
 
   const params = new URLSearchParams({
     response_type: 'code',
-    client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID ?? '77r4muxaihs19b',
+    client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || '77r4muxaihs19b',
     redirect_uri:
-      process.env.NEXT_PUBLIC_REDIRECT_URI ?? "https://resume-builder.craftstacks.co/auth/linkedin/callback",
+      process.env.NEXT_PUBLIC_REDIRECT_URI || "https://resume-builder.craftstacks.co/auth/linkedin/callback",
     scope: 'openid profile email',
     state: state,
   });

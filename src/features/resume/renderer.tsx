@@ -3,14 +3,17 @@ import type {
   ContainerNode,
   DurationNode,
   HtmlNode,
+  IconNode,
   LinkNode,
   ListNode,
   Nodes,
   SeperatorNode,
   TextNode,
+  SkillLevelNode,
 } from './types';
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
+import * as Icons from 'lucide-react';
 import type React from 'react';
 
 type RenderProps = {
@@ -53,6 +56,10 @@ function renderNode(node: Nodes, data: any): React.ReactNode {
       return renderHtml(node as HtmlNode, data);
     case 'duration':
       return renderDuration(node as DurationNode, data);
+    case 'icon':
+      return renderIcon(node as IconNode);
+    case 'skillLevel':
+      return renderSkillLevel(node as SkillLevelNode, data);
     default:
       return null;
   }
@@ -193,6 +200,46 @@ function renderDuration(node: DurationNode, data: any) {
   } else {
     return <p className={cn(className)}></p>;
   }
+}
+
+function renderIcon(node: IconNode) {
+  const { name, size = 16, className } = node;
+
+  const IconComponent = Icons[name as keyof typeof Icons] as React.ComponentType<any>;
+
+  if (!IconComponent) {
+    return null;
+  }
+
+  return <IconComponent size={size} className={cn(className)} />;
+}
+
+function renderSkillLevel(node: SkillLevelNode, data: any) {
+  const { pathWithFallback, className } = node;
+  const resolved = resolvePath({ data, ...pathWithFallback });
+
+  if (!resolved) {
+    return null;
+  }
+
+  const levelMap: Record<string, number> = {
+    'Beginner': 2,
+    'Intermediate': 3,
+    'Expert': 5,
+  };
+
+  const circleCount = levelMap[resolved] || 3; 
+
+  return (
+    <div className={cn('flex gap-1', className)}>
+      {Array.from({ length: 5 }, (_, index) => (
+        <div
+          key={index}
+          className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400')}
+        />
+      ))}
+    </div>
+  );
 }
 
 import html2canvas from 'html2canvas';

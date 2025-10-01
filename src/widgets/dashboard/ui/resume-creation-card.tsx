@@ -26,7 +26,7 @@ export default function ResumeCreationCard() {
       userInfo: {
         userId: user.data.id,
       },
-      templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
+      // templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
     });
 
     router.push(`/resume/${data.id}`);

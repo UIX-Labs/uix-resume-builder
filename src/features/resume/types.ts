@@ -58,4 +58,15 @@ export interface DurationNode extends TemplateNode {
   className?: string;
 }
 
-export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode;
+export interface IconNode extends TemplateNode {
+  type: 'icon';
+  name: string;
+  size?: number;
+}
+
+export interface SkillLevelNode extends TemplateNode {
+  type: 'skillLevel';
+  pathWithFallback: DataBindingPath;
+}
+
+export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode | IconNode | SkillLevelNode;

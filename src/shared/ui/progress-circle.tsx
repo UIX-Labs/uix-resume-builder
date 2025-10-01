@@ -77,11 +77,11 @@ export function ProgressCircle({ currentStep, totalSteps, progress }: ProgressCi
             y2="166.424"
             gradientUnits="userSpaceOnUse"
           >
-            <stop offset="0.131506" stop-color="#FF2727" />
-            <stop offset="0.247414" stop-color="#FF187C" />
-            <stop offset="0.505769" stop-color="#BB32FF" />
-            <stop offset="0.721154" stop-color="#6DC1E8" />
-            <stop offset="0.942308" stop-color="#1DF9D0" />
+            <stop offset="0.131506" stopColor="#FF2727" />
+            <stop offset="0.247414" stopColor="#FF187C" />
+            <stop offset="0.505769" stopColor="#BB32FF" />
+            <stop offset="0.721154" stopColor="#6DC1E8" />
+            <stop offset="0.942308" stopColor="#1DF9D0" />
           </linearGradient>
 
           <filter

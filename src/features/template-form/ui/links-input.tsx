@@ -2,6 +2,11 @@ import { Sortable, SortableItem } from '@shared/ui/components/sortable';
 import { UrlInput } from './url';
 
 export function LinksInput({ data, onChange, section }: { data: any; onChange: (data: any) => void; section: any }) {
+  // Handle null/undefined data
+  if (!data || typeof data !== 'object') {
+    return null;
+  }
+
   function handleDragEnd(data: any) {
     const transformedData = data.reduce((acc: any, item: any) => {
       const { key, ...rest } = item;

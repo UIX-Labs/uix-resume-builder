@@ -40,9 +40,13 @@ export function calculateResumeCompletion(resumeData: ResumeData) {
 
       if (!whiteList.includes(key)) return acc;
 
-      acc.total += calculateSectionWeight(value.items[0]);
-      acc.filled += value.items.reduce((acc, item) => Math.max(acc, calculateItemWeight(item)), -Infinity);
+      const items = value?.items || [];
 
+      if (items.length > 0) {
+        acc.total += calculateSectionWeight(items[0]);
+        acc.filled += items.reduce((acc, item) => Math.max(acc, calculateItemWeight(item)), 0);
+      }
+      
       return acc;
     },
     { total: 0, filled: 0 },

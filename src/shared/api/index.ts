@@ -1,7 +1,7 @@
 async function fetcher<T>(url: string, { options }: { options?: RequestInit } = {}): Promise<T> {
   const isFormData = options?.body instanceof FormData;
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || "https://resume-builder-be.craftstacks.co"}/${url}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, {
     ...(options ?? {}),
     headers: {
       ...(!isFormData && { 'Content-Type': 'application/json' }),

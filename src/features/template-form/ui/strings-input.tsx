@@ -31,7 +31,7 @@ export function StringsInput({
   data: { itemId: string; items: string[] };
   onChange: (data: any) => void;
 }) {
-  const [localData, setLocalData] = useState(data.items);
+  const [localData, setLocalData] = useState(data?.items || []);
 
   function handleDragEnd(newItems: string[]) {
     onChange({ ...data, items: newItems });

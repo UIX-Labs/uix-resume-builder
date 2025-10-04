@@ -12,7 +12,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
-import { useGetAllResumes, createResume } from '@entities/resume';
+import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
 
 export default function AllResumePage() {
   const { data: user } = useUserProfile();
@@ -88,7 +88,7 @@ export default function AllResumePage() {
               <div className="flex gap-6 mt-6 mx-4 flex-wrap">
                 <button
                   type="button"
-                  className="w-[240px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
+                  className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
                   onClick={handleCreateResume}
                 >
                   <div className="text-center">
@@ -110,16 +110,7 @@ export default function AllResumePage() {
 }
 
 interface ResumeCardProps {
-  resume: {
-    id: string;
-    title: string;
-    publicThumbnail?: { url: string; expiresAt: string } | null;
-    updatedAt: string;
-    items: Array<{
-      sectionType: string;
-      rank: number;
-    }>;
-  };
+  resume: Resume;
   index: number;
 }
 

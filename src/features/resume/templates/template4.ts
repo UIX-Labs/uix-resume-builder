@@ -135,7 +135,7 @@ const brianWayneTemplate = {
                     type: 'link',
                     pathWithFallback: {
                       path: 'data.links.linkedin.title',
-                      fallback: 'linkedin.com',
+                      fallback: 'linkedin',
                     },
                     hrefPathWithFallback: {
                       path: 'data.links.linkedin.link',
@@ -258,7 +258,7 @@ const brianWayneTemplate = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'text-lg font-bold border-b border-white pb-1',
+                className: 'first-letter:uppercase text-lg font-bold border-b border-white pb-1',
               },
               {
                 id: 'interests-list',
@@ -318,14 +318,14 @@ const brianWayneTemplate = {
                       // Position and Company on same line
                       {
                         type: 'container',
-                        className: 'flex flex-row items-baseline gap-0',
+                        className: 'flex flex-row items-baseline gap-1',
                         children: [
                           {
                             id: 'experience-position',
                             type: 'text',
                             pathWithFallback: { path: 'data.position' },
                             className: 'text-base font-semibold text-[rgb(56,76,65)]',
-                            suffix: ',',
+                            suffix: ', ',
                           },
                           {
                             id: 'experience-company',
@@ -429,7 +429,8 @@ const brianWayneTemplate = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                className:
+                  'first-letter:uppercase text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
               },
               {
                 type: 'list',
@@ -451,7 +452,7 @@ const brianWayneTemplate = {
                       },
                       {
                         type: 'container',
-                        className: 'flex flex-row items-baseline',
+                        className: 'flex flex-row items-baseline gap-1',
                         children: [
                           {
                             type: 'text',

@@ -1,4 +1,4 @@
-const aniketTemplate = {
+const aniketTemplate1 = {
   name: 'Aniket Modern Classic',
 
   page: {
@@ -38,15 +38,6 @@ const aniketTemplate = {
                 className: 'tracking-wide text-3xl font-extrabold text-blue-600',
               },
               {
-                id: 'name-text',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.title',
-                  fallback: 'Your Title',
-                },
-                className: 'tracking-wide text-sm text-gray-600',
-              },
-              {
                 id: 'contact-section',
                 type: 'container',
                 className: 'flex flex-row flex-wrap justify-start gap-2 mt-2 text-xs text-neutral-600',
@@ -77,8 +68,12 @@ const aniketTemplate = {
                   {
                     id: 'linkedin-text',
                     type: 'link',
+                    hrefPathWithFallback: {
+                      path: 'data.links.linkedin.link',
+                      fallback: 'https://linkedin.com',
+                    },
                     pathWithFallback: {
-                      path: 'data.linkedin',
+                      path: 'data.links.linkedin.title',
                       fallback: 'LinkedIn',
                     },
                     href: 'https://www.linkedin.com/in/aniket98/',
@@ -290,9 +285,9 @@ const aniketTemplate = {
                       },
                       {
                         id: 'education-period',
-                        type: 'text',
+                        type: 'duration',
                         pathWithFallback: {
-                          path: 'data.startDate',
+                          path: 'data.duration',
                           fallback: 'Start Date',
                         },
                         className: 'text-xs text-neutral-700 text-justify italic',
@@ -401,7 +396,8 @@ const aniketTemplate = {
                   // Project Link
                   {
                     type: 'link',
-                    pathWithFallback: { path: 'data.link', fallback: '' },
+                    pathWithFallback: { path: 'data.link.title', fallback: '' },
+                    hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
                     className: 'text-xs text-blue-600 hover:underline mt-1',
                   },
                 ],
@@ -434,15 +430,22 @@ const aniketTemplate = {
             id: 'interests-list',
             type: 'list',
             pathWithFallback: { path: 'data.interests.items' },
+            className: 'flex gap-1',
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex gap-1',
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
-                    type: 'text',
-                    className: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+                    type: 'container',
+                    className: 'flex flex-wrap gap-1',
+                    children: [
+                      {
+                        type: 'text',
+                        className: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+                      },
+                    ],
                   },
                 ],
               },
@@ -474,15 +477,22 @@ const aniketTemplate = {
             id: 'achievements-list',
             type: 'list',
             pathWithFallback: { path: 'data.achievements.items' },
+            className: 'flex gap-1',
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex gap-1',
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
-                    type: 'text',
-                    className: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+                    type: 'container',
+                    className: 'flex flex-wrap gap-1',
+                    children: [
+                      {
+                        type: 'text',
+                        className: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+                      },
+                    ],
                   },
                 ],
               },
@@ -513,6 +523,7 @@ const aniketTemplate = {
           {
             type: 'list',
             id: 'certifications-list',
+            className: 'flex flex-col gap-4 px-2',
             pathWithFallback: { path: 'data.certifications.items' },
             presentation: [
               {
@@ -542,7 +553,8 @@ const aniketTemplate = {
                   },
                   {
                     type: 'link',
-                    pathWithFallback: { path: 'data.link', fallback: '' },
+                    pathWithFallback: { path: 'data.link.title', fallback: '' },
+                    hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
                     className: 'text-xs text-blue-600 hover:underline mt-1',
                   },
                 ],
@@ -555,4 +567,4 @@ const aniketTemplate = {
   },
 };
 
-export default aniketTemplate;
+export default aniketTemplate1;

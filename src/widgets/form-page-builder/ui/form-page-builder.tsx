@@ -1,8 +1,4 @@
-import {
-  useGetAllResumes,
-
-  useTemplateFormSchema,
-} from '@entities/resume';
+import { useGetAllResumes, useTemplateFormSchema } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
@@ -16,13 +12,10 @@ import { useParams } from 'next/navigation';
 import { uploadThumbnail } from '@entities/resume/api/upload-resume';
 import { useMutation } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
-import aniketTemplate2 from '@features/resume/templates/template1';
-import brianWayneTemplate from '@features/resume/templates/template4';
 import { toast } from 'sonner';
 import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Template } from '@entities/template-page/api/template-data';
-import Image from 'next/image';
 import TemplateButton from './change-template-button';
 
 export function FormPageBuilder() {
@@ -31,11 +24,7 @@ export function FormPageBuilder() {
 
   const thumbnailGenerated = useRef(false);
 
-  const templateMap = {
-    '0bf8167e-7827-4de6-910a-a872bbb173a2': aniketTemplate,
-    'c2370fb9-7ff4-43e3-9350-498a2ec5e3a7': brianWayneTemplate,
-  };
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   const { data, save } = useResumeManager(resumeId);
   const { data: formSchema } = useTemplateFormSchema();
@@ -95,7 +84,7 @@ export function FormPageBuilder() {
       if (!thumbnailDataUrl) {
         return;
       }
-    
+
       await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
 
       thumbnailGenerated.current = true;
@@ -141,7 +130,7 @@ export function FormPageBuilder() {
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
   const handleTemplateSelect = (template: Template) => {
-    setSelectedTemplateId(template.id);
+    setSelectedTemplate(template);
   };
 
   return (
@@ -158,10 +147,7 @@ export function FormPageBuilder() {
                         outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0 flex-1"
         >
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer
-              template={templateMap[selectedTemplateId as keyof typeof templateMap] || aniketTemplate2}
-              data={{ ...formData }}
-            />
+            <ResumeRenderer template={selectedTemplate?.json || aniketTemplate} data={{ ...formData }} />
           </div>
 
           <Button
@@ -186,7 +172,7 @@ export function FormPageBuilder() {
 
         <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
           <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <TemplateButton/>
+            <TemplateButton />
           </TemplatesDialog>
 
           <div

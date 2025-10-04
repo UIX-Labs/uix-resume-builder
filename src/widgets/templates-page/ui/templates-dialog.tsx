@@ -13,13 +13,11 @@ interface TemplatesDialogProps {
 }
 
 export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogProps) {
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: templates } = useGetAllTemplates();
 
   const handleTemplateSelect = (template: Template) => {
-    setSelectedTemplate(template);
     onTemplateSelect?.(template);
     setIsOpen(false);
   };
@@ -45,7 +43,6 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
                 <TemplateCard
                   key={template.id}
                   template={template}
-                  isSelected={selectedTemplate?.id === template.id}
                   onClick={() => handleTemplateSelect(template)}
                 />
               ))}
@@ -59,7 +56,6 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
 
 interface TemplateCardProps {
   template: Template;
-  isSelected: boolean;
   onClick: () => void;
 }
 
@@ -77,7 +73,6 @@ function TemplateCard({ template, onClick }: TemplateCardProps) {
           />
         </div>
 
-        {/* Select Button - appears on hover */}
         <div className="absolute inset-0 flex items-end justify-center pb-9 gap-2 transition-colors duration-500">
           <Button
             variant="secondary"

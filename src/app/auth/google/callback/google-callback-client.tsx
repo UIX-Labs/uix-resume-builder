@@ -35,7 +35,7 @@ export default function GoogleCallbackClient() {
       }
 
       try {
-        setSuccess('Authenticating with backend...');
+        setSuccess('Authenticating...');
 
         const authResponse = (await sendAuthCodeToBackend(code)) as any;
         if (authResponse.status === 'success') {

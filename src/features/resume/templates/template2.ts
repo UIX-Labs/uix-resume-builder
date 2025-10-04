@@ -397,7 +397,7 @@ const andrewTemplate = {
               path: 'data.interests.title',
               fallback: 'Interests',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'interests-list',
@@ -433,7 +433,7 @@ const andrewTemplate = {
               path: 'data.achievements.title',
               fallback: 'Achievements',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'achievements-list',
@@ -469,7 +469,7 @@ const andrewTemplate = {
               path: 'data.certifications.title',
               fallback: 'Certifications',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             type: 'list',

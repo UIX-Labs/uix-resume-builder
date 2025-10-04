@@ -12,8 +12,12 @@ export const UrlInput = ({
   onChange: (data: { title: string; link: string }) => void;
   section: any;
 }) => {
-  const [title, setTitle] = useState(data?.title || '');
-  const [link, setLink] = useState(data?.link || '');
+  const [title, setTitle] = useState(() => {
+    return data?.title ?? '';
+  });
+  const [link, setLink] = useState(() => {
+    return data?.link ?? '';
+  });
 
   useEffect(() => {
     onChange({ title, link: link });

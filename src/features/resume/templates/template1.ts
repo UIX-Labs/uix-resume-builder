@@ -144,7 +144,7 @@ const aniketTemplate2 = {
             id: 'skills-list',
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
-            className: 'flex flex-wrap',
+            className: 'flex flex-wrap gap-1',
             presentation: [
               {
                 type: 'text',
@@ -334,7 +334,7 @@ const aniketTemplate2 = {
               path: 'data.interests.title',
               fallback: 'Interests',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'interests-list',
@@ -370,7 +370,7 @@ const aniketTemplate2 = {
               path: 'data.achievements.title',
               fallback: 'Achievements',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'achievements-list',
@@ -397,7 +397,7 @@ const aniketTemplate2 = {
       {
         id: 'certifications-section',
         type: 'container',
-        className: 'flex flex-col gap-2',
+        className: 'flex flex-col gap-2 mt-4',
         children: [
           {
             id: 'certifications-heading',
@@ -406,12 +406,13 @@ const aniketTemplate2 = {
               path: 'data.certifications.title',
               fallback: 'Certifications',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             type: 'list',
             id: 'certifications-list',
             pathWithFallback: { path: 'data.certifications.items' },
+            className: 'flex flex-col gap-3 mt-2',
             presentation: [
               {
                 type: 'container',

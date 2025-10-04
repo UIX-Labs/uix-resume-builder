@@ -10,6 +10,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
 import { templates } from '../models/constants';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -45,6 +47,11 @@ export function TemplateCarousel() {
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+  const user= useCachedUser();
+  const router = useRouter();
+  const handleNavigate = () => {
+    router.push(user ? '/dashboard' : '/auth');
+  };
 
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[36px] overflow-hidden min-h-[556px] m-4">
@@ -102,6 +109,7 @@ export function TemplateCarousel() {
                               <Button
                                 variant="secondary"
                                 size="lg"
+                                onClick={handleNavigate}
                                 className={cn(
                                   'transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
                                   'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border  border-gray-400 shadow-sm px-7 py-3 h-12 text-lg font-semibold rounded-xl',

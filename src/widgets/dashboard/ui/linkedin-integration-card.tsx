@@ -41,7 +41,7 @@ function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     setError(null);
 
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
-      onSuccess: () => {
+      onSuccess: (response) => {
         onClose();
         router.push(`/resume/${response.resumeId}`);
         setLinkedinUrl('');

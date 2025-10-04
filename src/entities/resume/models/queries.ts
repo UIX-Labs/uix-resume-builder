@@ -9,6 +9,7 @@ import {
   deleteResume,
   fetchAllResumes,
   saveFormData,
+  updateResumeTemplate,
 } from '../api';
 
 import { useQueryClient, useMutation } from '@tanstack/react-query';
@@ -112,6 +113,17 @@ export const useDeleteResume = () => {
 
   return useMutation({
     mutationFn: deleteResume,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
+    },
+  });
+};
+
+export const useUpdateResumeTemplate = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateResumeTemplate,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },

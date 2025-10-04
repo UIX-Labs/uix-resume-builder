@@ -47,9 +47,9 @@ export function StringsInput({
 
   return (
     <div className="flex flex-col gap-2">
-      <Sortable data={localData} getId={(item) => item} onDragEnd={handleDragEnd}>
+      <Sortable data={localData} getId={(item) => item.id} onDragEnd={handleDragEnd}>
         {localData.map((item, index) => (
-          <SortableItem id={item} key={item} className="group">
+          <SortableItem id={item.id} key={item.id} className="group">
             <StringInput
               data={item}
               onChange={(value) => {

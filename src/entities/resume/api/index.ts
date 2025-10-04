@@ -8,3 +8,4 @@ export * from './pdf-parse';
 export * from './save-resume-form';
 export * from './parse-linkedin';
 export * from './get-resume-empty-data';
+export * from './update-resume-template';

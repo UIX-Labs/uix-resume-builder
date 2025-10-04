@@ -1,4 +1,4 @@
-import { useGetAllResumes, useTemplateFormSchema } from '@entities/resume';
+import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
@@ -28,12 +28,20 @@ export function FormPageBuilder() {
 
   const { data, save } = useResumeManager(resumeId);
   const { data: formSchema } = useTemplateFormSchema();
+
   const { data: user } = useUserProfile();
-  const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { data: resumes, refetch: refetchResumes } = useGetAllResumes({ userId: user?.id as string });
+
+  const currentResume = resumes?.find(resume => resume.id === resumeId);
+  const templateId = currentResume?.templateId || null;
+  const embeddedTemplate = currentResume?.template;
+
+  const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { mutateAsync: uploadThumbnailMutation } = useMutation({
     mutationFn: uploadThumbnail,
   });
+
+  const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   const { toPDF, targetRef } = usePDF({
     filename: 'resume.pdf',
@@ -72,6 +80,18 @@ export function FormPageBuilder() {
   useEffect(() => {
     useFormDataStore.setState({ formData: data ?? {} });
   }, [data]);
+
+  
+  useEffect(() => {
+    if (embeddedTemplate) {
+      setSelectedTemplate(embeddedTemplate);
+    } else if (templateId === null && currentResume) {
+      setSelectedTemplate({
+        id: 'default',
+        json: aniketTemplate,
+      } as Template);
+    }
+  }, [embeddedTemplate, templateId, currentResume]);
 
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
@@ -129,8 +149,20 @@ export function FormPageBuilder() {
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  const handleTemplateSelect = (template: Template) => {
-    setSelectedTemplate(template);
+  const handleTemplateSelect = async (template: Template) => {
+    try {
+      await updateResumeTemplateMutation({
+        resumeId: resumeId,
+        templateId: template.id,
+      });
+
+      setSelectedTemplate(template);
+      refetchResumes();
+
+      toast.success('Template updated successfully');
+    } catch (error) {
+      toast.error('Failed to update template');
+    }
   };
 
   return (

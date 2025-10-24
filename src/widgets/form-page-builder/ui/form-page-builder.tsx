@@ -17,6 +17,7 @@ import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
+import dayjs from 'dayjs';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -41,10 +42,14 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user'; 
+  const resumeFileName = `${username}-${currentMonthYear}-resume.pdf`;
+
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   const { toPDF, targetRef } = usePDF({
-    filename: 'resume.pdf',
+    filename: resumeFileName,
     resolution: Resolution.EXTREME,
     overrides: {
       pdf: {

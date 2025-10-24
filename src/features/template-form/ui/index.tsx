@@ -10,6 +10,7 @@ import { Duration } from './duration';
 import { TagsInput } from './tags-input';
 import { LinksInput } from './links-input';
 import { StringsInput } from './strings-input';
+import { PhoneInput } from './phone-input';
 
 export function TemplateForm({
   formSchema,
@@ -54,6 +55,19 @@ export function TemplateForm({
             onChange={(_value, html) => {
               onChange(html);
             }}
+          />
+        );
+      }
+
+      case 'tel': {
+        return (
+          <PhoneInput
+            defaultValue={typeof data === 'string' ? data : data?.value || ''}
+            placeholder={section.placeholder}
+            onChange={(phoneValue) => {
+              onChange(phoneValue || '');
+            }}
+            className="w-full"
           />
         );
       }

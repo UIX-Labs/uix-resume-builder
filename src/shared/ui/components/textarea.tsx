@@ -8,6 +8,15 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { Bold, Italic, List, ListOrdered, Underline as UnderlineIcon, Link as LinkIcon } from 'lucide-react';
 import * as React from 'react';
+import { ErrorHighlight } from './textarea-extensions/error-highlight';
+import { useEffect } from 'react';
+import { SuggestionType } from '@entities/resume/types';
+
+interface ErrorSuggestion {
+  old?: string;
+  new: string;
+  type: SuggestionType;
+}
 
 interface TiptapTextAreaProps {
   defaultValue?: string;
@@ -21,6 +30,7 @@ interface TiptapTextAreaProps {
   'aria-invalid'?: boolean;
   id?: string;
   showToolbar?: boolean;
+  errorSuggestions?: ErrorSuggestion[];
 }
 
 interface FormatButtonProps {
@@ -72,6 +82,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       'aria-invalid': ariaInvalid,
       id,
       showToolbar = true,
+      errorSuggestions,
       ...props
     },
     ref,
@@ -111,6 +122,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
             class: 'text-primary underline underline-offset-4',
           },
         }),
+        ErrorHighlight,
       ],
       content: defaultValue,
       immediatelyRender: false,
@@ -132,6 +144,47 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         onBlur?.();
       },
     });
+
+    // Apply error highlights when errorSuggestions change
+    useEffect(() => {
+      if (!editor || !errorSuggestions || errorSuggestions.length === 0) {
+        return;
+      }
+
+      const colorMap = {
+        spelling_error: '#D97706',
+        sentence_refinement: '#DC2626',
+        new_summary: '#10B981',
+      };
+
+      // Get the current text content
+      const text = editor.getText();
+
+      errorSuggestions.forEach((suggestion) => {
+        if (!suggestion.old) return;
+
+        const color = colorMap[suggestion.type];
+        const searchText = suggestion.old.replace(/<[^>]*>/g, '').trim();
+
+        // Find the position of the text in the editor
+        const index = text.indexOf(searchText);
+
+        if (index !== -1) {
+          const from = index + 1; // TipTap uses 1-based indexing
+          const to = from + searchText.length;
+
+          // Apply the error highlight mark
+          editor
+            .chain()
+            .setTextSelection({ from, to })
+            .setErrorHighlight(color)
+            .setTextSelection(editor.state.selection.to) // Reset selection
+            .run();
+        } else {
+          console.log('⚠️ Text not found in editor:', searchText.substring(0, 50));
+        }
+      });
+    }, [editor, errorSuggestions]);
 
     // Update editor editable state when disabled prop changes
     React.useEffect(() => {

@@ -17,6 +17,7 @@ import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
+import { updateResumeByAnalyzer } from '@entities/resume/api/update-resume-by-analyzer';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -77,9 +78,50 @@ export function FormPageBuilder() {
 
   const { formData, setFormData } = useFormDataStore();
 
-  useEffect(() => {
-    useFormDataStore.setState({ formData: data ?? {} });
-  }, [data]);
+
+
+  async function analyzeResume() {
+    if (!resumeId || !data) return;
+
+      try {
+       
+        const result = await updateResumeByAnalyzer(undefined, resumeId);
+
+        if (result?.resume) {
+          const mergedData: any = { ...(data as Record<string, any>) };
+
+          Object.keys(result.resume).forEach((key: any) => {
+            const resumeField = result.resume[key as keyof typeof result.resume];
+
+            
+
+            if (resumeField && typeof resumeField === 'object' && 'suggestedUpdates' in resumeField) {
+           
+              mergedData[key] = {
+                ...mergedData[key],
+                suggestedUpdates: resumeField.suggestedUpdates,
+              };
+            }
+          });
+
+        
+       
+          useFormDataStore.setState({ formData: mergedData });
+        }
+      } catch (error) {
+        console.error('Error analyzing resume:', error);
+      }
+    }
+
+    useEffect(() => {
+      if (!data) return;
+
+      if (resumeId) {
+        analyzeResume();
+      } else {
+        useFormDataStore.setState({ formData: data });
+      }
+    }, [data, resumeId]);
 
   
   useEffect(() => {
@@ -223,11 +265,11 @@ export function FormPageBuilder() {
             onChange={(formData) => setFormData(formData)}
           />
 
-          <div className="mt-[20px] cursor-pointer z-100 relative ml-auto flex justify-end border-0">
+          <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
             {navs[nextStepIndex]?.name && (
               // Secondary
               <Button
-                className="mt-auto bg-[#E9F4FF] rounded-[8px] text-sm font-semibold 
+                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
                 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"
                 onClick={handleNextStep}
               >
@@ -235,7 +277,7 @@ export function FormPageBuilder() {
               </Button>
             )}
             <Button
-              className="mt-auto bg-[#E9F4FF] rounded-[8px] text-sm font-semibold
+              className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
               onClick={handleSaveResume}
             >

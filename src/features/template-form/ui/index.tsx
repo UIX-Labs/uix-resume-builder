@@ -1,6 +1,6 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { FormSchema, ResumeDataKey, ResumeData } from '@entities/resume';
+import type { FormSchema, ResumeDataKey, ResumeData, SuggestedUpdates } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Draggable } from './draggable';
@@ -10,6 +10,8 @@ import { Duration } from './duration';
 import { TagsInput } from './tags-input';
 import { LinksInput } from './links-input';
 import { StringsInput } from './strings-input';
+import { FieldErrorBadges } from './error-badges';
+import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
 
 export function TemplateForm({
   formSchema,
@@ -17,12 +19,19 @@ export function TemplateForm({
   onChange,
   currentStep = 'personalDetails',
 }: {
-  formSchema: FormSchema;
+  formSchema: FormSchema|{};
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
 }) {
-  function getItem<T extends string | boolean>(section: any, data: T, onChange: (data: T) => void) {
+  function getItem<T extends string | boolean>(
+    section: any,
+    data: T,
+    onChange: (data: T) => void,
+    suggestedUpdates?: SuggestedUpdates,
+    itemId?: string,
+    fieldName?: string
+  ) {
     switch (section.type) {
       case 'data': {
         return (
@@ -41,12 +50,18 @@ export function TemplateForm({
       }
 
       case 'textarea': {
+        // Get error suggestions for this field
+        const errorSuggestions = suggestedUpdates && itemId && fieldName
+          ? getFieldSuggestions(suggestedUpdates, itemId, fieldName)
+          : undefined;
+
         return (
           <TiptapTextArea
-            defaultValue={data}
+            defaultValue={data as string}
             placeholder={section.placeholder}
+            errorSuggestions={errorSuggestions}
             className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl',
               'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
@@ -103,7 +118,9 @@ export function TemplateForm({
   const currentData = values[currentStep];
   const currentSchema = formSchema?.[currentStep];
 
-  if (!currentSchema || !currentData || typeof currentData === 'string' || !('items' in currentData)) return null;
+  if (!currentSchema || !currentData || typeof currentData === 'string' || !('items' in currentData)) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-4 w-full">
@@ -122,6 +139,7 @@ export function TemplateForm({
                 onChange({ ...values, [currentStep]: { ...currentData, items } });
               }}
               getItem={getItem}
+              suggestedUpdates={currentData.suggestedUpdates}
             />
           </div>
         ) : currentSchema.itemsType === 'strings' ? (
@@ -140,11 +158,17 @@ export function TemplateForm({
             ))}
           </div>
         ) : (
-          currentData.items.map((section, itemIdx) => {
-            return Object.entries(section).map(([key, value], i) => {
+          currentData.items.map((item, itemIdx) => {
+            const itemId = item.id || `item-${itemIdx}`;
+
+            return Object.entries(item).map(([key, value], i) => {
               const section = currentSchema[key];
 
-              if (!section) return null;
+              if (!section) {
+                return null;
+              }
+
+              const errorCounts = getFieldErrors(currentData.suggestedUpdates, itemId, key);
 
               return (
                 <label
@@ -155,14 +179,27 @@ export function TemplateForm({
                   )}
                   htmlFor={key}
                 >
-                  {section.label}
+                  <div className="flex items-center justify-between gap-2">
+                    <span>{section.label}</span>
+                    <FieldErrorBadges
+                      spellingCount={errorCounts.spellingCount}
+                      sentenceCount={errorCounts.sentenceCount}
+                      newSummaryCount={errorCounts.newSummaryCount}
+                    />
+                  </div>
 
-                  {getItem(section, value, (value) => {
-                    const items = [...currentData.items];
-                    items[itemIdx][key] = value;
-
-                    onChange({ ...values, [currentStep]: { ...currentData, items } });
-                  })}
+                  {getItem(
+                    section,
+                    value,
+                    (value) => {
+                      const items = [...currentData.items];
+                      items[itemIdx][key] = value;
+                      onChange({ ...values, [currentStep]: { ...currentData, items } });
+                    },
+                    currentData.suggestedUpdates,
+                    itemId,
+                    key
+                  )}
                 </label>
               );
             });

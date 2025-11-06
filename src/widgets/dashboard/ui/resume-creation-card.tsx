@@ -26,7 +26,6 @@ export default function ResumeCreationCard() {
       userInfo: {
         userId: user.data.id,
       },
-      // templateId: '25c2fb78-b90c-4f77-bbda-7c9198bfe091',
     });
 
     router.push(`/resume/${data.id}`);
@@ -67,8 +66,8 @@ export default function ResumeCreationCard() {
             </div>
 
             <div className="absolute inset-0 flex items-center justify-center -z-1">
-              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 rotate-[-45deg]">
-                <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-[4px] flex items-center justify-center overflow-hidden">
+              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-45">
+                <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-lg flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
                     alt="Template 1"
@@ -79,8 +78,8 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-[45deg]">
-                <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-[4px] flex items-center justify-center overflow-hidden">
+              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-45">
+                <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-lg flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
                     alt="Template 2"
@@ -91,8 +90,8 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-[32deg]">
-                <div className="w-[81.58px] h-[95.96px] bg-white rounded-[4px] flex items-center justify-center overflow-hidden">
+              <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-32">
+                <div className="w-[81.58px] h-[95.96px] bg-white rounded-lg flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
                     alt="Template 3"
@@ -103,8 +102,8 @@ export default function ResumeCreationCard() {
                 </div>
               </div>
 
-              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-[25deg]">
-                <div className="w-[81.49px] h-[95.92px] bg-[#1FB272] rounded-[4px] flex items-center justify-center overflow-hidden">
+              <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-25">
+                <div className="w-[81.49px] h-[95.92px] bg-[#1FB272] rounded-lg flex items-center justify-center overflow-hidden">
                   <Image
                     src="/images/template-dashboard.png"
                     alt="Template 4"

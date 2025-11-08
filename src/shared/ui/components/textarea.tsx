@@ -20,6 +20,7 @@ interface ErrorSuggestion {
 
 interface TiptapTextAreaProps {
   defaultValue?: string;
+  value?: string;
   onChange?: (value: string, html: string) => void;
   onBlur?: () => void;
   placeholder?: string;
@@ -72,6 +73,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   (
     {
       defaultValue = '',
+      value,
       onChange,
       onBlur,
       placeholder = 'Enter text...',
@@ -144,6 +146,16 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         onBlur?.();
       },
     });
+
+    // Update editor content when value prop changes
+    useEffect(() => {
+      if (!editor || value === undefined) return;
+
+      const currentContent = editor.getHTML();
+      if (currentContent !== value) {
+        editor.commands.setContent(value, { emitUpdate: false });
+      }
+    }, [editor, value]);
 
     // Apply error highlights when errorSuggestions change
     useEffect(() => {

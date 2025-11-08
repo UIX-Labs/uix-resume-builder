@@ -24,6 +24,7 @@ function UnCollapsedState({
   data,
   getItem,
   suggestedUpdates,
+  onOpenAnalyzerModal,
 }: {
   item: any;
   section: any;
@@ -32,6 +33,7 @@ function UnCollapsedState({
   data: any[];
   getItem: (section: any, data: any, onChange: (data: any[]) => void, suggestedUpdates?: SuggestedUpdates, itemId?: string, fieldName?: string) => void;
   suggestedUpdates?: SuggestedUpdates;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   const itemId = item.itemId;
 
@@ -57,6 +59,7 @@ function UnCollapsedState({
                 spellingCount={errorCounts.spellingCount}
                 sentenceCount={errorCounts.sentenceCount}
                 newSummaryCount={errorCounts.newSummaryCount}
+                onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
               />
             </div>
             {getItem(section[key], value, (value: any) => {
@@ -77,12 +80,14 @@ export function Draggable({
   onChange,
   getItem,
   suggestedUpdates,
+  onOpenAnalyzerModal,
 }: {
   data: any[];
   section: any;
   onChange: (data: any[]) => void;
   getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
   suggestedUpdates?: SuggestedUpdates;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   const [collapsed, setCollapsed] = useState<boolean[]>([]);
 
@@ -182,6 +187,7 @@ export function Draggable({
                     data={data}
                     getItem={getItem}
                     suggestedUpdates={suggestedUpdates}
+                    onOpenAnalyzerModal={onOpenAnalyzerModal}
                   />
                 ) : (
                   <CollapsedState value={collapsedTitleValue} subValue={collapsedSubTitleValue} />

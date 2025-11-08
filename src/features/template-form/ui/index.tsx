@@ -1,3 +1,5 @@
+
+
 import { Input } from '@/shared/ui/components/input';
 
 import type { FormSchema, ResumeDataKey, ResumeData, SuggestedUpdates } from '@entities/resume';
@@ -18,11 +20,13 @@ export function TemplateForm({
   values,
   onChange,
   currentStep = 'personalDetails',
+  onOpenAnalyzerModal,
 }: {
   formSchema: FormSchema|{};
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   function getItem<T extends string | boolean>(
     section: any,
@@ -57,7 +61,8 @@ export function TemplateForm({
 
         return (
           <TiptapTextArea
-            defaultValue={data as string}
+            key={`${itemId}-${fieldName}`}
+            value={data as string}
             placeholder={section.placeholder}
             errorSuggestions={errorSuggestions}
             className={cn(
@@ -140,6 +145,7 @@ export function TemplateForm({
               }}
               getItem={getItem}
               suggestedUpdates={currentData.suggestedUpdates}
+              onOpenAnalyzerModal={onOpenAnalyzerModal}
             />
           </div>
         ) : currentSchema.itemsType === 'strings' ? (
@@ -185,6 +191,7 @@ export function TemplateForm({
                       spellingCount={errorCounts.spellingCount}
                       sentenceCount={errorCounts.sentenceCount}
                       newSummaryCount={errorCounts.newSummaryCount}
+                      onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
                     />
                   </div>
 
@@ -209,3 +216,4 @@ export function TemplateForm({
     </div>
   );
 }
+

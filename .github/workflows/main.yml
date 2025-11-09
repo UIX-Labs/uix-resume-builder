@@ -4,7 +4,7 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+      
 env:
   AWS_REGION: ap-south-1
 
@@ -18,13 +18,12 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo "ENVIRONMENT=staging" >> $GITHUB_ENV
           echo "PROJECT_NAME=resume-builder" >> $GITHUB_ENV
-          echo "ECR_REPOSITORY=resume-builder-stage-fe" >> $GITHUB_ENV
-          echo "ECS_SERVICE=resume-builder-stage-fe-svc" >> $GITHUB_ENV
-          echo "ECS_CLUSTER=resume-builder-stage-cluster" >> $GITHUB_ENV
-          echo "TASK_DEFINITION_NAME=resume-builder-stage-fe-td" >> $GITHUB_ENV
-          echo "CONTAINER_NAME=resume-builder-stage-fe-container" >> $GITHUB_ENV
+          echo "ECR_REPOSITORY=resume-builder-fe-image" >> $GITHUB_ENV
+          echo "ECS_SERVICE=resume-builder-fe-svc" >> $GITHUB_ENV
+          echo "ECS_CLUSTER=resume-builder-cluster" >> $GITHUB_ENV
+          echo "TASK_DEFINITION_NAME=resume-builder-fe-td" >> $GITHUB_ENV
+          echo "CONTAINER_NAME=resume-builder-fe-container" >> $GITHUB_ENV
 
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV

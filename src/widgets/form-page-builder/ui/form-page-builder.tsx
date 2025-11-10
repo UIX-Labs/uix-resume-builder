@@ -21,7 +21,7 @@ import { updateResumeByAnalyzer } from '@entities/resume/api/update-resume-by-an
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 
 import type { SuggestedUpdate, ResumeData, UpdateResumeAnalyzer } from '@entities/resume';
-import { SuggestionType } from '@entities/resume';
+import type { SuggestionType } from '@entities/resume';
 import {
   findItemById,
   applySuggestionsToFieldValue,
@@ -236,9 +236,10 @@ export function FormPageBuilder() {
     }
 
     const fieldData = itemUpdate.fields[fieldName];
-    const suggestions = fieldData.suggestedUpdates?.filter(
-      (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType
-    ) || [];
+    const suggestions =
+      fieldData.suggestedUpdates?.filter(
+        (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType,
+      ) || [];
 
     setAnalyzerModalData({
       suggestions,
@@ -250,12 +251,16 @@ export function FormPageBuilder() {
   };
 
   // Apply suggestions handler
-  const handleApplySuggestions = async (
-    selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>
-  ) => {
-    if (!analyzerModalData) return;
+  const handleApplySuggestions = async (selectedNewValues: string[]) => {
+    if (!analyzerModalData) {
+      return;
+    }
 
-    const { itemId, fieldName } = analyzerModalData;
+    const { itemId, fieldName, suggestions: allSuggestions } = analyzerModalData;
+
+    // Match the selected new values back to the original full suggestion objects
+    const selectedSuggestions = allSuggestions.filter((suggestion) => selectedNewValues.includes(suggestion.new));
+
     const currentData = formData?.[currentStep];
 
     if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
@@ -287,7 +292,7 @@ export function FormPageBuilder() {
         currentData.suggestedUpdates,
         itemId,
         fieldName,
-        selectedSuggestions
+        selectedSuggestions,
       );
 
       const updatedData = {
@@ -296,9 +301,7 @@ export function FormPageBuilder() {
           ...currentData,
           items: updatedItems,
           suggestedUpdates:
-            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
-              ? updatedSuggestedUpdates
-              : undefined,
+            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
         },
       };
 
@@ -317,8 +320,6 @@ export function FormPageBuilder() {
       toast.error('Failed to apply suggestions');
     }
   };
-
-  console.log(formData?.experience,"expro")
 
   return (
     <>
@@ -417,4 +418,3 @@ export function FormPageBuilder() {
     </>
   );
 }
-

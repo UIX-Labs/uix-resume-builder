@@ -1,4 +1,3 @@
-import { cn } from '@shared/lib/cn';
 import { Button } from '../button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../dialog';
 import type { SuggestionType } from '@entities/resume';
@@ -16,7 +15,7 @@ interface AnalyzerModalProps {
   onOpenChange: (open: boolean) => void;
   suggestions: Suggestion[];
   suggestionType: SuggestionType;
-  onApply: (selectedSuggestions: Suggestion[]) => void;
+  onApply: (selectedNewValues: string[]) => void;
 }
 
 export default function AnalyzerModal({
@@ -34,12 +33,6 @@ export default function AnalyzerModal({
     new_summary: 'New Points',
   };
 
-  const typeColors = {
-    spelling_error: 'text-[#D97706]',
-    sentence_refinement: 'text-[#DC2626]',
-    new_summary: 'text-[#10B981]',
-  };
-
   const handleCheckboxChange = (index: number, checked: boolean) => {
     const newSelected = new Set(selectedIndices);
     if (checked) {
@@ -51,18 +44,31 @@ export default function AnalyzerModal({
   };
 
   const handleApply = () => {
-    const selected = suggestions.filter((_, index) => selectedIndices.has(index));
-    onApply(selected);
+    const selectedNewValues = suggestions
+      .filter((_, index) => selectedIndices.has(index))
+      .map((suggestion) => suggestion.new);
+
+    onApply(selectedNewValues);
     onOpenChange(false);
     setSelectedIndices(new Set());
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="!max-w-3xl max-h-[80vh] overflow-y-auto">
+      <DialogContent
+        className="!max-w-3xl max-h-[80vh] overflow-y-auto"
+        style={{
+          backgroundImage: 'url(/images/background.svg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <DialogHeader>
           <DialogTitle className="flex items-center justify-center">
-            <span className={cn(typeColors[suggestionType], 'text-2xl font-semibold')}>
+            <span className="flex items-center gap-2 text-2xl font-semibold text-white">
+              {/** biome-ignore lint/performance/noImgElement: <explanation> */}
+              <img src="/images/auto_awesome.svg" alt="Stars" className="w-6 h-6" />
               {typeLabels[suggestionType]}
             </span>
           </DialogTitle>

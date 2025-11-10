@@ -37,14 +37,6 @@ export default function ResumeCreationCard() {
     router.push(`/resume/${data.id}`);
   };
 
-  const handleUploadSuccess = (data: any) => {
-    router.push(`/resume/${data.resumeId}`);
-  };
-
-  const handleUploadError = (error: any) => {
-    console.error('Upload error:', error);
-  };
-
   return (
     <>
       <div className="min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">

@@ -203,7 +203,7 @@ function renderDuration(node: DurationNode, data: any) {
 }
 
 function renderIcon(node: IconNode) {
-  const { name, size = 16, className } = node;
+  const { name, size = 16, className, fill = false } = node;
 
   const IconComponent = Icons[name as keyof typeof Icons] as React.ComponentType<any>;
 
@@ -211,7 +211,7 @@ function renderIcon(node: IconNode) {
     return null;
   }
 
-  return <IconComponent size={size} className={cn(className)} />;
+  return <IconComponent size={size} className={cn(className)} fill={fill ? 'currentColor' : 'none'} />;
 }
 
 function renderSkillLevel(node: SkillLevelNode, data: any) {

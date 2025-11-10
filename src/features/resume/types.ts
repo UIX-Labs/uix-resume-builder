@@ -62,6 +62,7 @@ export interface IconNode extends TemplateNode {
   type: 'icon';
   name: string;
   size?: number;
+  fill?: boolean;
 }
 
 export interface SkillLevelNode extends TemplateNode {

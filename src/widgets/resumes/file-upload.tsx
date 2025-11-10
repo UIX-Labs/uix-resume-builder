@@ -4,6 +4,7 @@ import { useParsePdfResume } from '@entities/resume';
 import { Upload } from 'lucide-react';
 import { useRef } from 'react';
 import { Button } from '@shared/ui/components/button';
+import StarsIcon from '@shared/icons/stars-icon';
 
 interface FileUploadProps {
   onSuccess?: (data: any) => void;
@@ -70,16 +71,17 @@ export function FileUpload({
     <>
       <input ref={fileInputRef} type="file" accept={acceptedFileTypes} onChange={handleFileUpload} className="hidden" />
 
-      <Button
-        className={`flex items-center justify-center gap-2 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black border-2 border-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(46,125,50)] disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
-        onClick={handleButtonClick}
-        disabled={isDisabled}
-      >
-        {!isPending && <Upload className="w-4 h-4" />}
-        <span className="text-[18px] font-semibold leading-[1.333] tracking-[-0.014em] text-center">
-          {isPending ? 'Processing...' : buttonText}
-        </span>
-      </Button>
+ <Button
+                      variant="outline"
+                      className="relative border-none w-full flex flex-row items-center justify-start gap-2 bg-white text-black rounded-xl h-11 shadow-none hover:bg-[#E9F4FF]"
+                      onClick={handleButtonClick}
+                      disabled={isDisabled}
+                    >
+                      <StarsIcon />
+                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal text-left">
+                        Upload Resume
+                      </span>
+                    </Button>
     </>
   );
 }

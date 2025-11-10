@@ -37,6 +37,14 @@ export default function ResumeCreationCard() {
     router.push(`/resume/${data.id}`);
   };
 
+    const handleUploadSuccess = (data: any) => {
+    router.push(`/resume/${data.resumeId}`);
+  };
+
+  const handleUploadError = (error: any) => {
+    console.error('Upload error:', error);
+  };
+
   return (
     <>
       <div className="min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
@@ -66,6 +74,8 @@ export default function ResumeCreationCard() {
                         From scratch
                       </span>
                     </Button>
+                 
+                    <FileUpload onSuccess={handleUploadSuccess} onError={handleUploadError} />
                     <Button
                       className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
                       variant="outline"

@@ -17,10 +17,9 @@ import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
-import { updateResumeByAnalyzer } from '@entities/resume/api/update-resume-by-analyzer';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 
-import type { SuggestedUpdate, ResumeData, UpdateResumeAnalyzer } from '@entities/resume';
+import type { SuggestedUpdate, ResumeData } from '@entities/resume';
 import { SuggestionType } from '@entities/resume';
 import {
   findItemById,
@@ -29,6 +28,7 @@ import {
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
 import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -37,6 +37,8 @@ export function FormPageBuilder() {
   const thumbnailGenerated = useRef(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+
+  const {analyzedData}=useAnalyzerStore();
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -102,13 +104,12 @@ export function FormPageBuilder() {
     if (!resumeId || !data) return;
 
     try {
-      const result: UpdateResumeAnalyzer = await updateResumeByAnalyzer(undefined, resumeId);
-
-      if (result?.resume && typeof data === 'object' && data !== null) {
+      if (analyzedData && typeof analyzedData === 'object' && typeof data === 'object' && data !== null) {
+        
         const mergedData = { ...(data as Record<string, unknown>) };
 
-        Object.keys(result.resume).forEach((key: string) => {
-          const resumeField = result.resume[key as keyof ResumeData];
+        Object.keys(analyzedData).forEach((key: string) => {
+          const resumeField = analyzedData[key as keyof typeof analyzedData];
 
           if (resumeField && typeof resumeField === 'object' && 'suggestedUpdates' in resumeField) {
             const currentField = mergedData[key];
@@ -116,12 +117,12 @@ export function FormPageBuilder() {
               mergedData[key] = {
                 ...(currentField as Record<string, unknown>),
                 suggestedUpdates: resumeField.suggestedUpdates,
-              };
+              }; 
             }
           }
         });
 
-        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+        setFormData(mergedData as Omit<ResumeData, 'templateId'>);
       }
     } catch (error) {
       console.error('Error analyzing resume:', error);
@@ -130,8 +131,8 @@ export function FormPageBuilder() {
 
   useEffect(() => {
     if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });
-      analyzeResume();
+      useFormDataStore.setState({ formData: data ?? {} });  
+      analyzeResume(); 
     }
   }, [data]);
 
@@ -249,8 +250,7 @@ export function FormPageBuilder() {
     setAnalyzerModalOpen(true);
   };
 
-  // Apply suggestions handler
-  const handleApplySuggestions = async (
+   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>
   ) => {
     if (!analyzerModalData) return;
@@ -304,21 +304,13 @@ export function FormPageBuilder() {
 
       setFormData(updatedData as Omit<ResumeData, 'templateId'>);
 
-      await save({
-        type: currentStep,
-        data: updatedData[currentStep],
-        updatedAt: Date.now(),
-      });
-
-      toast.success('Suggestions applied successfully');
+      toast.success('Suggestions applied successfully.');
       setAnalyzerModalOpen(false);
     } catch (error) {
       console.error('Failed to apply suggestions:', error);
       toast.error('Failed to apply suggestions');
     }
   };
-
-  console.log(formData?.experience,"expro")
 
   return (
     <>
@@ -383,8 +375,7 @@ export function FormPageBuilder() {
           />
 
           <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
-            {navs[nextStepIndex]?.name && (
-              // Secondary
+            {navs[nextStepIndex]?.name && (         
               <Button
                 className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
                 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"

@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { Sortable, SortableItem } from '@shared/ui/components/sortable';
 import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
+import { FieldErrorBadges } from '../error-badges';
+import { getFieldErrors } from '../../lib/get-field-errors';
+import type { SuggestedUpdates } from '@entities/resume';
 
 function CollapsedState({ value, subValue }: { value: string; subValue: string }) {
   return (
@@ -20,18 +23,27 @@ function UnCollapsedState({
   onChange,
   data,
   getItem,
+  suggestedUpdates,
+  onOpenAnalyzerModal,
 }: {
   item: any;
   section: any;
   index: number;
   onChange: (data: any[]) => void;
   data: any[];
-  getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
+  getItem: (section: any, data: any, onChange: (data: any[]) => void, suggestedUpdates?: SuggestedUpdates, itemId?: string, fieldName?: string) => void;
+  suggestedUpdates?: SuggestedUpdates;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
+  const itemId = item.itemId;
+
   return (
     <div className="p-4 grid grid-cols-2 gap-y-1.5 gap-x-8 relative group">
       {Object.entries(item).map(([key, value]) => {
         if (!section[key]) return null;
+
+        // Get error counts for this field
+        const errorCounts = getFieldErrors(suggestedUpdates, itemId, key);
 
         return (
           <div
@@ -41,12 +53,20 @@ function UnCollapsedState({
               section[key]?.fluid && 'col-span-2',
             )}
           >
-            {section[key]?.label}
+            <div className="flex items-center justify-between gap-2">
+              <span>{section[key]?.label}</span>
+              <FieldErrorBadges
+                spellingCount={errorCounts.spellingCount}
+                sentenceCount={errorCounts.sentenceCount}
+                newSummaryCount={errorCounts.newSummaryCount}
+                onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
+              />
+            </div>
             {getItem(section[key], value, (value: any) => {
               const newData = [...data];
               newData[index][key] = value;
               onChange(newData);
-            })}
+            }, suggestedUpdates, itemId, key)}
           </div>
         );
       })}
@@ -59,11 +79,15 @@ export function Draggable({
   section,
   onChange,
   getItem,
+  suggestedUpdates,
+  onOpenAnalyzerModal,
 }: {
   data: any[];
   section: any;
   onChange: (data: any[]) => void;
   getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
+  suggestedUpdates?: SuggestedUpdates;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   const [collapsed, setCollapsed] = useState<boolean[]>([]);
 
@@ -162,6 +186,8 @@ export function Draggable({
                     onChange={onChange}
                     data={data}
                     getItem={getItem}
+                    suggestedUpdates={suggestedUpdates}
+                    onOpenAnalyzerModal={onOpenAnalyzerModal}
                   />
                 ) : (
                   <CollapsedState value={collapsedTitleValue} subValue={collapsedSubTitleValue} />

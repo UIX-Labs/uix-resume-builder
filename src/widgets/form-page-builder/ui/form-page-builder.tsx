@@ -15,8 +15,20 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { toast } from 'sonner';
 import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Template } from '@entities/template-page/api/template-data';
+import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
+import { updateResumeByAnalyzer } from '@entities/resume/api/update-resume-by-analyzer';
+import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+
+import type { SuggestedUpdate, ResumeData, UpdateResumeAnalyzer } from '@entities/resume';
+import type { SuggestionType } from '@entities/resume';
+import {
+  findItemById,
+  applySuggestionsToFieldValue,
+  removeAppliedSuggestions,
+  updateItemFieldValue,
+} from '../lib/suggestion-helpers';
+import { getCleanDataForRenderer } from '../lib/data-cleanup';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -26,13 +38,22 @@ export function FormPageBuilder() {
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
+  // Analyzer modal state
+  const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
+  const [analyzerModalData, setAnalyzerModalData] = useState<{
+    suggestions: Array<{ old?: string; new: string; type: SuggestionType }>;
+    fieldName: string;
+    itemId: string;
+    suggestionType: SuggestionType;
+  } | null>(null);
+
   const { data, save } = useResumeManager(resumeId);
   const { data: formSchema } = useTemplateFormSchema();
 
   const { data: user } = useUserProfile();
   const { data: resumes, refetch: refetchResumes } = useGetAllResumes({ userId: user?.id as string });
 
-  const currentResume = resumes?.find(resume => resume.id === resumeId);
+  const currentResume = resumes?.find((resume) => resume.id === resumeId);
   const templateId = currentResume?.templateId || null;
   const embeddedTemplate = currentResume?.template;
 
@@ -77,11 +98,43 @@ export function FormPageBuilder() {
 
   const { formData, setFormData } = useFormDataStore();
 
+  async function analyzeResume() {
+    if (!resumeId || !data) return;
+
+    try {
+      const result: UpdateResumeAnalyzer = await updateResumeByAnalyzer(undefined, resumeId);
+
+      if (result?.resume && typeof data === 'object' && data !== null) {
+        const mergedData = { ...(data as Record<string, unknown>) };
+
+        Object.keys(result.resume).forEach((key: string) => {
+          const resumeField = result.resume[key as keyof ResumeData];
+
+          if (resumeField && typeof resumeField === 'object' && 'suggestedUpdates' in resumeField) {
+            const currentField = mergedData[key];
+            if (currentField && typeof currentField === 'object') {
+              mergedData[key] = {
+                ...(currentField as Record<string, unknown>),
+                suggestedUpdates: resumeField.suggestedUpdates,
+              };
+            }
+          }
+        });
+
+        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+      }
+    } catch (error) {
+      console.error('Error analyzing resume:', error);
+    }
+  }
+
   useEffect(() => {
-    useFormDataStore.setState({ formData: data ?? {} });
+    if (data) {
+      useFormDataStore.setState({ formData: data ?? {} });
+      analyzeResume();
+    }
   }, [data]);
 
-  
   useEffect(() => {
     if (embeddedTemplate) {
       setSelectedTemplate(embeddedTemplate);
@@ -161,7 +214,110 @@ export function FormPageBuilder() {
 
       toast.success('Template updated successfully');
     } catch (error) {
+      console.error('Failed to update template:', error);
       toast.error('Failed to update template');
+    }
+  };
+
+  // Callback to open analyzer modal with specific field data
+  const handleOpenAnalyzerModal = (itemId: string, fieldName: string, suggestionType: SuggestionType) => {
+    // Get suggestions for this specific field and type
+    const currentData = formData?.[currentStep];
+
+    if (!currentData || !currentData.suggestedUpdates) {
+      return;
+    }
+
+    const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
+
+    if (!itemUpdate || !itemUpdate.fields[fieldName]) {
+      console.log('⚠️ No updates found for this field');
+      return;
+    }
+
+    const fieldData = itemUpdate.fields[fieldName];
+    const suggestions =
+      fieldData.suggestedUpdates?.filter(
+        (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType,
+      ) || [];
+
+    setAnalyzerModalData({
+      suggestions,
+      fieldName,
+      itemId,
+      suggestionType,
+    });
+    setAnalyzerModalOpen(true);
+  };
+
+  // Apply suggestions handler
+  const handleApplySuggestions = async (selectedNewValues: string[]) => {
+    if (!analyzerModalData) {
+      return;
+    }
+
+    const { itemId, fieldName, suggestions: allSuggestions } = analyzerModalData;
+
+    // Match the selected new values back to the original full suggestion objects
+    const selectedSuggestions = allSuggestions.filter((suggestion) => selectedNewValues.includes(suggestion.new));
+
+    const currentData = formData?.[currentStep];
+
+    if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
+      toast.error('Failed to apply suggestions');
+      return;
+    }
+
+    try {
+      const items = currentData.items;
+      const itemIndex = findItemById(items, itemId);
+
+      if (itemIndex === -1) {
+        toast.error('Item not found');
+        return;
+      }
+
+      const currentItem = items[itemIndex];
+      if (typeof currentItem !== 'object' || currentItem === null) {
+        toast.error('Invalid item type');
+        return;
+      }
+
+      const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
+      const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
+
+      const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
+
+      const updatedSuggestedUpdates = removeAppliedSuggestions(
+        currentData.suggestedUpdates,
+        itemId,
+        fieldName,
+        selectedSuggestions,
+      );
+
+      const updatedData = {
+        ...formData,
+        [currentStep]: {
+          ...currentData,
+          items: updatedItems,
+          suggestedUpdates:
+            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
+        },
+      };
+
+      setFormData(updatedData as Omit<ResumeData, 'templateId'>);
+
+      await save({
+        type: currentStep,
+        data: updatedData[currentStep],
+        updatedAt: Date.now(),
+      });
+
+      toast.success('Suggestions applied successfully');
+      setAnalyzerModalOpen(false);
+    } catch (error) {
+      console.error('Failed to apply suggestions:', error);
+      toast.error('Failed to apply suggestions');
     }
   };
 
@@ -179,7 +335,10 @@ export function FormPageBuilder() {
                         outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0 flex-1"
         >
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer template={selectedTemplate?.json || aniketTemplate} data={{ ...formData }} />
+            <ResumeRenderer
+              template={selectedTemplate?.json || aniketTemplate}
+              data={getCleanDataForRenderer(formData ?? {})}
+            />
           </div>
 
           <Button
@@ -221,13 +380,14 @@ export function FormPageBuilder() {
             currentStep={currentStep}
             values={formData ?? {}}
             onChange={(formData) => setFormData(formData)}
+            onOpenAnalyzerModal={handleOpenAnalyzerModal}
           />
 
-          <div className="mt-[20px] cursor-pointer z-100 relative ml-auto flex justify-end border-0">
+          <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
             {navs[nextStepIndex]?.name && (
               // Secondary
               <Button
-                className="mt-auto bg-[#E9F4FF] rounded-[8px] text-sm font-semibold 
+                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
                 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"
                 onClick={handleNextStep}
               >
@@ -235,7 +395,7 @@ export function FormPageBuilder() {
               </Button>
             )}
             <Button
-              className="mt-auto bg-[#E9F4FF] rounded-[8px] text-sm font-semibold
+              className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
               onClick={handleSaveResume}
             >
@@ -244,6 +404,17 @@ export function FormPageBuilder() {
           </div>
         </div>
       </div>
+
+      {/* Analyzer Modal */}
+      {analyzerModalData && (
+        <AnalyzerModal
+          open={analyzerModalOpen}
+          onOpenChange={setAnalyzerModalOpen}
+          suggestions={analyzerModalData.suggestions}
+          suggestionType={analyzerModalData.suggestionType}
+          onApply={handleApplySuggestions}
+        />
+      )}
     </>
   );
 }

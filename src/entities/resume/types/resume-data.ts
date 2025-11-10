@@ -12,7 +12,8 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       ongoing: boolean;
       link: string;
       description: string;
-    }>;
+    }>
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   skills: {
@@ -24,6 +25,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       level: string;
       name: string;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   projects: {
@@ -38,6 +40,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       link: string;
       description: string;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   personalDetails: {
@@ -53,6 +56,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       linkedin: string;
       github: string;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   professionalSummary: {
@@ -62,6 +66,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       id: string;
       summary: string;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   education: {
@@ -77,6 +82,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       grade: string;
       ongoing: boolean;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   certifications: {
@@ -88,18 +94,21 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       issuer: string;
       ongoing: boolean;
     }>;
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   interests: {
     id: string;
     title: string;
     items: string[];
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   achievements: {
     id: string;
     title: string;
     items: string[];
+    suggestedUpdates?: SuggestedUpdates;
   };
 
   templateId: string;
@@ -115,3 +124,33 @@ export type ResumeDataKey =
   | 'certifications'
   | 'interests'
   | 'achievements';
+
+
+export enum SuggestionType {
+  SPELLING_ERROR = 'spelling_error',
+  SENTENCE_REFINEMENT = 'sentence_refinement',
+  NEW_SUMMARY = 'new_summary',
+}
+
+export interface SuggestedUpdateField {
+  suggestedUpdates: {
+    old?: string;
+    new: string;
+    type:
+      | SuggestionType.NEW_SUMMARY
+      | SuggestionType.SPELLING_ERROR
+      | SuggestionType.SENTENCE_REFINEMENT;
+  }[];
+  fieldCounts: {
+    [SuggestionType.NEW_SUMMARY]: number;
+    [SuggestionType.SPELLING_ERROR]: number;
+    [SuggestionType.SENTENCE_REFINEMENT]: number;
+  };
+}
+
+export interface SuggestedUpdate {
+  itemId: string;
+  fields: Record<string, SuggestedUpdateField>;
+}
+
+export type SuggestedUpdates = SuggestedUpdate[];

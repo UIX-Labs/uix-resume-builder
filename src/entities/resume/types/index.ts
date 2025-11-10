@@ -5,3 +5,4 @@ export * from './parse-linkedin';
 export * from './parse-pdf';
 export * from './delete-resume';
 export * from './create-resume';
+export * from './update-resume-analyzer';

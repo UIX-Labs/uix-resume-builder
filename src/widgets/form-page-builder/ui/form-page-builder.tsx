@@ -17,6 +17,10 @@ import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
+import template6 from '@features/resume/templates/template6';
+import template9 from '@features/resume/templates/template9';
+import template8 from '@features/resume/templates/template8';
+import template5 from '@features/resume/templates/template5';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -179,7 +183,8 @@ export function FormPageBuilder() {
                         outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0 flex-1"
         >
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer template={selectedTemplate?.json || aniketTemplate} data={{ ...formData }} />
+            {/* <ResumeRenderer template={selectedTemplate?.json || aniketTemplate} data={{ ...formData }} /> */}
+            <ResumeRenderer template={template5} data={{ ...formData }} />
           </div>
 
           <Button

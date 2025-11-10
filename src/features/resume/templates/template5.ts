@@ -7,7 +7,7 @@ const template5 = {
     padding: 0,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Calibri',
+    fontFamily: 'Merriweather, "PT Serif", Georgia, serif',
   },
 
   body: {
@@ -18,19 +18,19 @@ const template5 = {
       // Left Column - Dark Green Sidebar
       {
         type: 'container',
-        className: 'w-[300px] bg-[#C9D6EC] text-white p-8 flex flex-col ',
+        className: 'w-[300px] bg-[#C9D6EC] text-white p-6 flex flex-col ',
         children: [
           // Header Section
           {
             type: 'list',
             id: 'personalDetails',
             pathWithFallback: { path: 'data.personalDetails.items' },
-            className: 'flex flex-col gap-4',
+            className: 'flex flex-col gap-3',
             presentation: [
               {
                 id: 'header-section',
                 type: 'container',
-                className: 'flex flex-col gap-2 text-center',
+                className: 'flex flex-col text-center',
                 children: [
                   // Name
                   {
@@ -40,7 +40,7 @@ const template5 = {
                       path: 'data.fullName',
                       fallback: 'Divyam Malik',
                     },
-                    className: 'text-4xl font-bold text-[#1a1a1a]',
+                    className: 'text-3xl font-bold text-[#1a1a1a]',
                   },
                   // Title
                   {
@@ -60,7 +60,7 @@ const template5 = {
           // Contact Information
           {
             type: 'container',
-            className: 'flex flex-col gap-3 mt-6 p-4 border-2 border-[#5b7fc7] rounded-sm',
+            className: 'flex flex-col gap-1.5 mt-4 p-4 border border-[#5b7fc7] rounded-sm',
             children: [
               // Email
               {
@@ -79,7 +79,7 @@ const template5 = {
                       path: 'data.personalDetails.items.0.address',
                       fallback: 'Noida',
                     },
-                    className: 'text-base text-[#1a1a1a] font-normal',
+                    className: 'text-sm text-[#1a1a1a] font-normal',
                   },
                 ],
               },
@@ -97,7 +97,7 @@ const template5 = {
                   {
                     type: 'text',
                     pathWithFallback: { path: 'data.personalDetails.items.0.phone', fallback: '+918527886118' },
-                    className: 'text-base text-[#1a1a1a] font-normal underline',
+                    className: 'text-sm text-[#1a1a1a] font-normal underline',
                   },
                 ],
               },
@@ -118,7 +118,7 @@ const template5 = {
                       path: 'data.personalDetails.items.0.email',
                       fallback: 'divyam.malik@gmail.com',
                     },
-                    className: 'text-base text-[#1a1a1a] font-normal underline',
+                    className: 'text-sm text-[#1a1a1a] font-normal underline',
                   },
                 ],
               },
@@ -138,12 +138,12 @@ const template5 = {
                   path: 'data.profiles.title',
                   fallback: 'Profiles',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-2 border-[#5b7fc7] pb-1',
+                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               // LinkedIn Profile
               {
                 type: 'container',
-                className: 'flex items-center gap-2 mt-2',
+                className: 'flex items-center gap-2',
                 children: [
                   {
                     type: 'icon',
@@ -173,7 +173,7 @@ const template5 = {
           {
             id: 'skills-section',
             type: 'container',
-            className: 'flex flex-col gap-3 mt-6',
+            className: 'flex flex-col gap-3 mt-4',
             children: [
               {
                 id: 'skills-heading',
@@ -182,18 +182,18 @@ const template5 = {
                   path: 'data.skills.heading',
                   fallback: 'Skills',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-2 border-[#5b7fc7] pb-1',
+                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'skills-list',
                 type: 'list',
                 pathWithFallback: { path: 'data.skills.items' },
-                className: 'flex flex-col gap-4 mt-2',
+                className: 'flex flex-col gap-4',
                 presentation: [
                   {
                     type: 'container',
                     id: 'skill-category',
-                    className: 'flex flex-col gap-1',
+                    className: 'flex flex-col',
                     children: [
                       {
                         id: 'skill-name',
@@ -207,12 +207,11 @@ const template5 = {
                         pathWithFallback: { path: 'data.level' },
                         className: 'text-sm text-[#1a1a1a] font-normal',
                       },
-                    //   {
-                    //     id: 'skill-level-bar',
-                    //     type: 'skillLevel',
-                    //     pathWithFallback: { path: 'data.level' },
-                    //   },
-
+                      //   {
+                      //     id: 'skill-level-bar',
+                      //     type: 'skillLevel',
+                      //     pathWithFallback: { path: 'data.level' },
+                      //   },
                     ],
                   },
                 ],
@@ -224,7 +223,7 @@ const template5 = {
           {
             id: 'certifications-section',
             type: 'container',
-            className: 'flex flex-col gap-3 mt-6',
+            className: 'flex flex-col gap-3 mt-4',
             children: [
               {
                 id: 'certifications-heading',
@@ -233,17 +232,17 @@ const template5 = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className: 'first-letter:uppercase text-xl font-bold text-[#5b7fc7] border-b-2 border-[#5b7fc7] pb-1',
+                className: 'first-letter:uppercase text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 type: 'list',
                 id: 'certifications-list',
                 pathWithFallback: { path: 'data.certifications.items' },
-                className: 'flex flex-col gap-3 mt-2',
+                className: 'flex flex-col gap-3',
                 presentation: [
                   {
                     type: 'container',
-                    className: 'flex flex-col gap-1',
+                    className: 'flex flex-col',
                     children: [
                       {
                         type: 'text',
@@ -273,7 +272,7 @@ const template5 = {
           {
             id: 'interests-section',
             type: 'container',
-            className: 'flex flex-col gap-3 mt-6',
+            className: 'flex flex-col gap-3 mt-4',
             children: [
               {
                 id: 'interests-heading',
@@ -282,7 +281,7 @@ const template5 = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-2 border-[#5b7fc7] pb-1',
+                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'interests-list',
@@ -291,7 +290,7 @@ const template5 = {
                 presentation: [
                   {
                     type: 'list',
-                    className: 'flex flex-col gap-2 mt-2',
+                    className: 'flex flex-col gap-2',
                     pathWithFallback: { path: 'data.items' },
                     presentation: [
                       {
@@ -325,7 +324,7 @@ const template5 = {
                   path: 'data.experience.heading',
                   fallback: 'Experience',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                className: 'text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'experience',
@@ -370,7 +369,7 @@ const template5 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1',
                       },
                     ],
                   },
@@ -392,7 +391,7 @@ const template5 = {
                   path: 'data.education.heading',
                   fallback: 'Education',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'education',
@@ -457,7 +456,7 @@ const template5 = {
                   path: 'data.awards.heading',
                   fallback: 'Awards',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'achievements-list',

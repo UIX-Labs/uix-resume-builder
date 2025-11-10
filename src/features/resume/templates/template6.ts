@@ -7,7 +7,7 @@ const template6 = {
     padding: 0,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Arial, Helvetica, sans-serif',
   },
 
   body: {
@@ -18,7 +18,7 @@ const template6 = {
       // Left Column - Dark Navy Sidebar
       {
         type: 'container',
-        className: 'w-[270px] bg-[#2C3E50] text-white flex flex-col pt-[232px] pb-8',
+        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8',
         children: [
           // Education Section
           {
@@ -33,7 +33,7 @@ const template6 = {
                   path: 'data.education.heading',
                   fallback: 'EDUCATION',
                 },
-                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-2',
               },
               {
                 id: 'education',
@@ -44,13 +44,13 @@ const template6 = {
                   {
                     type: 'container',
                     id: 'education-item',
-                    className: 'flex flex-col gap-1',
+                    className: 'flex flex-col',
                     children: [
                       {
                         id: 'education-degree',
                         type: 'text',
                         pathWithFallback: { path: 'data.degree' },
-                        className: 'text-white text-sm font-bold',
+                        className: 'text-[#F2936F] uppercase text-sm font-bold',
                       },
                       {
                         id: 'education-school',
@@ -85,13 +85,13 @@ const template6 = {
                   path: 'data.skills.heading',
                   fallback: 'SKILLS',
                 },
-                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+                className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
               },
               {
                 id: 'skills-list',
                 type: 'list',
                 pathWithFallback: { path: 'data.skills.items' },
-                className: 'flex flex-col gap-1',
+                className: 'flex flex-col',
                 presentation: [
                   {
                     type: 'text',
@@ -115,11 +115,11 @@ const template6 = {
                   path: 'data.contact.heading',
                   fallback: 'CONTACT',
                 },
-                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-1',
               },
               {
                 type: 'container',
-                className: 'flex flex-col gap-2',
+                className: 'flex flex-col',
                 children: [
                   {
                     type: 'text',
@@ -156,7 +156,7 @@ const template6 = {
                   path: 'data.social.heading',
                   fallback: 'SOCIAL',
                 },
-                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-2',
               },
               {
                 type: 'container',
@@ -170,7 +170,7 @@ const template6 = {
                         type: 'icon',
                         name: 'Linkedin',
                         size: 18,
-                        className: 'text-[#E8A87C]',
+                        className: 'text-[#F2936F]',
                       },
                       {
                         id: 'linkedin-link',
@@ -187,31 +187,6 @@ const template6 = {
                       },
                     ],
                   },
-                //   {
-                //     type: 'container',
-                //     className: 'flex items-center gap-2',
-                //     children: [
-                //       {
-                //         type: 'icon',
-                //         name: 'Globe',
-                //         size: 18,
-                //         className: 'text-[#E8A87C]',
-                //       },
-                //       {
-                //         id: 'blog-link',
-                //         type: 'link',
-                //         pathWithFallback: {
-                //           path: 'data.personalDetails.items.0.links.github.link',
-                //           fallback: 'pondersabode.blogspot.in',
-                //         },
-                //         hrefPathWithFallback: {
-                //           path: 'data.personalDetails.items.0.links.github.link',
-                //           fallback: 'https://pondersabode.blogspot.in',
-                //         },
-                //         className: 'text-white text-sm font-normal underline break-all',
-                //       },
-                //     ],
-                //   },
                 ],
               },
             ],
@@ -229,12 +204,12 @@ const template6 = {
             type: 'list',
             id: 'personalDetails',
             pathWithFallback: { path: 'data.personalDetails.items' },
-            className: 'bg-[#E8A87C] px-8 py-20 flex flex-col justify-center',
+            className: 'bg-[#F2936F] px-8 py-20 flex flex-col justify-center',
             presentation: [
               {
                 id: 'header-section',
                 type: 'container',
-                className: 'flex flex-col gap-2',
+                className: 'flex flex-col gap-4',
                 children: [
                   {
                     id: 'name-text',
@@ -243,7 +218,7 @@ const template6 = {
                       path: 'data.fullName',
                       fallback: 'JAY RUSTOGI',
                     },
-                    className: 'text-5xl font-bold text-black tracking-wider',
+                    className: 'text-4xl font-extrabold text-black tracking-wider',
                   },
                   {
                     id: 'title-text',
@@ -252,7 +227,7 @@ const template6 = {
                       path: 'data.title',
                       fallback: 'PRODUCT | GROWTH | STRATEGY',
                     },
-                    className: 'text-base font-normal text-black tracking-widest',
+                    className: 'text-sm font-normal text-black tracking-widest',
                   },
                 ],
               },
@@ -276,7 +251,7 @@ const template6 = {
                       path: 'data.about.heading',
                       fallback: 'ABOUT',
                     },
-                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                    className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
                   },
                   {
                     type: 'list',
@@ -311,7 +286,7 @@ const template6 = {
                       path: 'data.experience.heading',
                       fallback: 'WORK EXPERIENCE',
                     },
-                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                    className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
                   },
                   {
                     id: 'experience',
@@ -322,14 +297,14 @@ const template6 = {
                       {
                         type: 'container',
                         id: 'experience-item',
-                        className: 'flex flex-col gap-2',
+                        className: 'flex flex-col gap-1',
                         children: [
                           // Position Title
                           {
                             id: 'experience-position',
                             type: 'text',
                             pathWithFallback: { path: 'data.position' },
-                            className: 'text-[#E8A87C] text-base font-bold uppercase',
+                            className: 'text-[#F2936F] text-xs font-bold uppercase',
                           },
                           // Company and Duration
                           {
@@ -393,7 +368,7 @@ const template6 = {
                       path: 'data.certifications.title',
                       fallback: 'CERTIFICATIONS',
                     },
-                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                    className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider',
                   },
                   {
                     type: 'list',
@@ -403,7 +378,7 @@ const template6 = {
                     presentation: [
                       {
                         type: 'container',
-                        className: 'flex flex-col gap-1',
+                        className: 'flex flex-col',
                         children: [
                           {
                             type: 'text',
@@ -446,7 +421,7 @@ const template6 = {
                       path: 'data.achievements.title',
                       fallback: 'ACHIEVEMENTS',
                     },
-                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                    className: 'uppercase text-[#F2936F] text-base font-[900] tracking-wider',
                   },
                   {
                     id: 'achievements-list',
@@ -455,7 +430,7 @@ const template6 = {
                     presentation: [
                       {
                         type: 'list',
-                        className: 'flex flex-col gap-2',
+                        className: 'flex flex-col',
                         pathWithFallback: { path: 'data.items' },
                         presentation: [
                           {

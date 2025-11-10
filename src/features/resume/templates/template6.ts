@@ -1,0 +1,481 @@
+const template6 = {
+  name: 'Jay Rustogi Professional',
+
+  page: {
+    width: 794,
+    height: 1122,
+    padding: 0,
+    background: '#ffffff',
+    className: 'text-neutral-900 leading-relaxed',
+    fontFamily: 'Inter, sans-serif',
+  },
+
+  body: {
+    id: 'body',
+    type: 'container',
+    className: 'flex flex-row h-full',
+    children: [
+      // Left Column - Dark Navy Sidebar
+      {
+        type: 'container',
+        className: 'w-[270px] bg-[#2C3E50] text-white flex flex-col pt-[232px] pb-8',
+        children: [
+          // Education Section
+          {
+            id: 'education-section',
+            type: 'container',
+            className: 'flex flex-col gap-3 px-8 mb-8',
+            children: [
+              {
+                id: 'education-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.education.heading',
+                  fallback: 'EDUCATION',
+                },
+                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+              },
+              {
+                id: 'education',
+                type: 'list',
+                pathWithFallback: { path: 'data.education.items' },
+                className: 'flex flex-col gap-4',
+                presentation: [
+                  {
+                    type: 'container',
+                    id: 'education-item',
+                    className: 'flex flex-col gap-1',
+                    children: [
+                      {
+                        id: 'education-degree',
+                        type: 'text',
+                        pathWithFallback: { path: 'data.degree' },
+                        className: 'text-white text-sm font-bold',
+                      },
+                      {
+                        id: 'education-school',
+                        type: 'text',
+                        pathWithFallback: { path: 'data.institution' },
+                        className: 'text-white text-sm font-normal',
+                      },
+                      {
+                        id: 'education-period',
+                        type: 'duration',
+                        pathWithFallback: { path: 'data.duration' },
+                        className: 'text-white text-sm font-normal',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          //  Skills Section
+
+          {
+            id: 'skills-section',
+            type: 'container',
+            className: 'flex flex-col gap-3 px-8 mb-8',
+            children: [
+              {
+                id: 'skills-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.skills.heading',
+                  fallback: 'SKILLS',
+                },
+                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+              },
+              {
+                id: 'skills-list',
+                type: 'list',
+                pathWithFallback: { path: 'data.skills.items' },
+                className: 'flex flex-col gap-1',
+                presentation: [
+                  {
+                    type: 'text',
+                    pathWithFallback: { path: 'data.name' },
+                    className: 'text-white text-sm font-normal leading-relaxed',
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Contact Section
+          {
+            type: 'container',
+            className: 'flex flex-col gap-3 px-8 mb-8',
+            children: [
+              {
+                id: 'contact-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.contact.heading',
+                  fallback: 'CONTACT',
+                },
+                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+              },
+              {
+                type: 'container',
+                className: 'flex flex-col gap-2',
+                children: [
+                  {
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.personalDetails.items.0.phone',
+                      fallback: 'P: +91 99996 48417',
+                    },
+                    className: 'text-white text-sm font-normal',
+                    prefix: 'P: ',
+                  },
+                  {
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.personalDetails.items.0.email',
+                      fallback: 'jay02rustogi@gmail.com',
+                    },
+                    className: 'text-white text-sm font-normal break-all',
+                    prefix: 'E: ',
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Social Section
+          {
+            type: 'container',
+            className: 'flex flex-col gap-3 px-8',
+            children: [
+              {
+                id: 'social-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.social.heading',
+                  fallback: 'SOCIAL',
+                },
+                className: 'text-[#E8A87C] text-lg font-bold tracking-wider mb-2',
+              },
+              {
+                type: 'container',
+                className: 'flex flex-col gap-3',
+                children: [
+                  {
+                    type: 'container',
+                    className: 'flex items-center gap-2',
+                    children: [
+                      {
+                        type: 'icon',
+                        name: 'Linkedin',
+                        size: 18,
+                        className: 'text-[#E8A87C]',
+                      },
+                      {
+                        id: 'linkedin-link',
+                        type: 'link',
+                        pathWithFallback: {
+                          path: 'data.personalDetails.items.0.links.linkedin.title',
+                          fallback: 'linkedin.com/in/jay-rustogi',
+                        },
+                        hrefPathWithFallback: {
+                          path: 'data.personalDetails.items.0.links.linkedin.link',
+                          fallback: 'https://linkedin.com/in/jay-rustogi',
+                        },
+                        className: 'text-white text-sm font-normal underline break-all',
+                      },
+                    ],
+                  },
+                //   {
+                //     type: 'container',
+                //     className: 'flex items-center gap-2',
+                //     children: [
+                //       {
+                //         type: 'icon',
+                //         name: 'Globe',
+                //         size: 18,
+                //         className: 'text-[#E8A87C]',
+                //       },
+                //       {
+                //         id: 'blog-link',
+                //         type: 'link',
+                //         pathWithFallback: {
+                //           path: 'data.personalDetails.items.0.links.github.link',
+                //           fallback: 'pondersabode.blogspot.in',
+                //         },
+                //         hrefPathWithFallback: {
+                //           path: 'data.personalDetails.items.0.links.github.link',
+                //           fallback: 'https://pondersabode.blogspot.in',
+                //         },
+                //         className: 'text-white text-sm font-normal underline break-all',
+                //       },
+                //     ],
+                //   },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Right Column
+      {
+        type: 'container',
+        className: 'flex-1 flex flex-col',
+        children: [
+          // Header Section with Peach Background
+          {
+            type: 'list',
+            id: 'personalDetails',
+            pathWithFallback: { path: 'data.personalDetails.items' },
+            className: 'bg-[#E8A87C] px-8 py-20 flex flex-col justify-center',
+            presentation: [
+              {
+                id: 'header-section',
+                type: 'container',
+                className: 'flex flex-col gap-2',
+                children: [
+                  {
+                    id: 'name-text',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.fullName',
+                      fallback: 'JAY RUSTOGI',
+                    },
+                    className: 'text-5xl font-bold text-black tracking-wider',
+                  },
+                  {
+                    id: 'title-text',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.title',
+                      fallback: 'PRODUCT | GROWTH | STRATEGY',
+                    },
+                    className: 'text-base font-normal text-black tracking-widest',
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Content Area
+          {
+            type: 'container',
+            className: 'flex-1 px-8 py-8 flex flex-col gap-6',
+            children: [
+              // About Section
+              {
+                type: 'container',
+                className: 'flex flex-col gap-3 pb-6 -mx-8 px-8 border-b-4 border-[#E8A87C]',
+                children: [
+                  {
+                    id: 'about-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.about.heading',
+                      fallback: 'ABOUT',
+                    },
+                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                  },
+                  {
+                    type: 'list',
+                    id: 'about-summary',
+                    pathWithFallback: { path: 'data.personalDetails.items' },
+                    className: 'flex flex-col',
+                    presentation: [
+                      {
+                        id: 'about-text',
+                        type: 'html',
+                        pathWithFallback: {
+                          path: 'data.description',
+                          fallback: 'About text',
+                        },
+                        className: 'text-sm text-black leading-relaxed break-all',
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Work Experience Section
+              {
+                id: 'experience-section',
+                type: 'container',
+                className: 'flex flex-col gap-4',
+                children: [
+                  {
+                    id: 'experience-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.experience.heading',
+                      fallback: 'WORK EXPERIENCE',
+                    },
+                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                  },
+                  {
+                    id: 'experience',
+                    type: 'list',
+                    pathWithFallback: { path: 'data.experience.items' },
+                    className: 'flex flex-col gap-6',
+                    presentation: [
+                      {
+                        type: 'container',
+                        id: 'experience-item',
+                        className: 'flex flex-col gap-2',
+                        children: [
+                          // Position Title
+                          {
+                            id: 'experience-position',
+                            type: 'text',
+                            pathWithFallback: { path: 'data.position' },
+                            className: 'text-[#E8A87C] text-base font-bold uppercase',
+                          },
+                          // Company and Duration
+                          {
+                            type: 'container',
+                            className: 'flex flex-row gap-2 items-baseline',
+                            children: [
+                              {
+                                id: 'experience-company',
+                                type: 'text',
+                                pathWithFallback: { path: 'data.company' },
+                                className: 'text-black text-sm font-normal italic',
+                              },
+                              {
+                                type: 'text',
+                                pathWithFallback: { path: 'data.separator', fallback: '|' },
+                                className: 'text-black text-sm font-normal',
+                              },
+                              {
+                                id: 'experience-period',
+                                type: 'duration',
+                                pathWithFallback: { path: 'data.duration' },
+                                className: 'text-black text-sm font-normal italic',
+                              },
+                            ],
+                          },
+                          // Company Type/Description (if applicable)
+                          {
+                            id: 'experience-type',
+                            type: 'text',
+                            pathWithFallback: {
+                              path: 'data.companyType',
+                              fallback: '',
+                            },
+                            className: 'text-black text-sm font-normal',
+                          },
+                          // Responsibilities/Achievements
+                          {
+                            id: 'experience-bullets',
+                            type: 'html',
+                            pathWithFallback: { path: 'data.description' },
+                            className:
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-all',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Additional Sections (Projects, Certifications, etc.)
+              {
+                id: 'certifications-section',
+                type: 'container',
+                className: 'flex flex-col gap-3',
+                children: [
+                  {
+                    id: 'certifications-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.certifications.title',
+                      fallback: 'CERTIFICATIONS',
+                    },
+                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                  },
+                  {
+                    type: 'list',
+                    id: 'certifications-list',
+                    pathWithFallback: { path: 'data.certifications.items' },
+                    className: 'flex flex-col gap-3',
+                    presentation: [
+                      {
+                        type: 'container',
+                        className: 'flex flex-col gap-1',
+                        children: [
+                          {
+                            type: 'text',
+                            pathWithFallback: {
+                              path: 'data.title',
+                              fallback: 'Certification Title',
+                            },
+                            className: 'text-sm font-bold text-black',
+                          },
+                          {
+                            type: 'text',
+                            pathWithFallback: {
+                              path: 'data.issuer',
+                              fallback: 'Issuer',
+                            },
+                            className: 'text-sm text-black',
+                          },
+                          {
+                            type: 'duration',
+                            pathWithFallback: { path: 'data.duration' },
+                            className: 'text-sm text-black italic',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Achievements Section
+              {
+                id: 'achievements-section',
+                type: 'container',
+                className: 'flex flex-col gap-3',
+                children: [
+                  {
+                    id: 'achievements-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.achievements.title',
+                      fallback: 'ACHIEVEMENTS',
+                    },
+                    className: 'text-[#E8A87C] text-lg font-bold tracking-wider',
+                  },
+                  {
+                    id: 'achievements-list',
+                    type: 'list',
+                    pathWithFallback: { path: 'data.achievements.items' },
+                    presentation: [
+                      {
+                        type: 'list',
+                        className: 'flex flex-col gap-2',
+                        pathWithFallback: { path: 'data.items' },
+                        presentation: [
+                          {
+                            type: 'text',
+                            className: 'text-sm text-black',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Skills Section (if needed in right column)
+            ],
+          },
+        ],
+      },
+    ],
+  },
+};
+
+export default template6;

@@ -12,6 +12,7 @@ import { LinksInput } from './links-input';
 import { StringsInput } from './strings-input';
 import { FieldErrorBadges } from './error-badges';
 import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
+import { PhoneInput } from './phone-input';
 
 export function TemplateForm({
   formSchema,
@@ -73,6 +74,19 @@ export function TemplateForm({
             onChange={(_value, html) => {
               onChange(html);
             }}
+          />
+        );
+      }
+
+      case 'tel': {
+        return (
+          <PhoneInput
+            defaultValue={typeof data === 'string' ? data : data?.value || ''}
+            placeholder={section.placeholder}
+            onChange={(phoneValue) => {
+              onChange(phoneValue || '');
+            }}
+            className="w-full"
           />
         );
       }

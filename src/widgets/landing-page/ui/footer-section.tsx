@@ -5,8 +5,17 @@ import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import FooterNavigation from './navigation-footer';
 import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
 
 const FooterSection = () => {
+  const router = useRouter();
+    const user = useCachedUser();
+  
+    const handleNavigate = () => {
+      router.push(user ? '/dashboard' : '/auth');
+    };
+  
   const overlays = [
     {
       id: 'colors',
@@ -159,7 +168,10 @@ const FooterSection = () => {
             </h1>
 
             <div className="mt-10 flex flex-col items-center gap-[10px]">
-              <Button className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-[88px]">
+              <Button
+                onClick={handleNavigate}
+                className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-[88px]"
+              >
                 Create My Resume
               </Button>
             </div>

@@ -28,6 +28,7 @@ import {
 } from '../lib/suggestion-helpers';
 import { getCleanDataForRenderer } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import dayjs from 'dayjs';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -63,10 +64,14 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user'; 
+  const resumeFileName = `${username}-${currentMonthYear}-resume.pdf`;
+
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   const { toPDF, targetRef } = usePDF({
-    filename: 'resume.pdf',
+    filename: resumeFileName,
     resolution: Resolution.EXTREME,
     overrides: {
       pdf: {

@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
     // ❗ This will ignore type errors during build
     ignoreBuildErrors: true,
   },
+   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'uix-resume-builder.s3.ap-south-1.amazonaws.com',
+      },
+    ],
+  },
   output: 'standalone',
 };
 

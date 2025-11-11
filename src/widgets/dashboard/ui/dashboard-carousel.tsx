@@ -1,7 +1,6 @@
 'use client';
 
-import { Button } from '@shared/ui/components/button';
-import { templates } from '@widgets/landing-page/models/constants';
+import { useGetAllTemplates } from '@entities/template-page/api/template-data';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -21,6 +20,8 @@ export default function DashboardCarousel() {
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
+
+  const { data: templates } = useGetAllTemplates();
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -60,13 +61,19 @@ export default function DashboardCarousel() {
 
       <div className="overflow-hidden rounded-xl" ref={emblaRef}>
         <div className="flex">
-          {templates.map((template) => (
+          {templates?.map((template) => (
             <div key={template.id} className="group">
               <div className="cursor-pointer">
                 <div className="p-4 ">
                   <div className="relative min-w-[350px] h-[548px] glass-card1 p-4 rounded-[20px] border-2 border-white overflow-hidden">
                     <div className="w-full h-full relative">
-                      <Image src={template.image} alt={template.name} fill className="object-cover rounded-[20px]" />
+                      <Image
+                        src={template.publicImageUrl}
+                        alt={`Template ${template.id}`}
+                        fill
+                        className="object-cover rounded-[20px]"
+                        unoptimized
+                      />
                     </div>
                   </div>
                 </div>

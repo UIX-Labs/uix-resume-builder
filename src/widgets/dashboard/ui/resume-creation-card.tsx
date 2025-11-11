@@ -9,7 +9,7 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 export default function ResumeCreationCard() {
   const router = useRouter();
@@ -22,34 +22,105 @@ export default function ResumeCreationCard() {
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
+  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
+  const [optionsLocked, setOptionsLocked] = useState(false);
+  const [showScanningOverlay, setShowScanningOverlay] = useState(false);
+
+  const lockOptions = useCallback((action: 'create' | 'upload' | 'tailoredResume' | 'tailoredJD') => {
+    setActiveAction(action);
+    setOptionsLocked(true);
+  }, []);
+
+  const releaseOptions = useCallback(() => {
+    setActiveAction(null);
+    setOptionsLocked(false);
+  }, []);
 
   const resumeCreateHandler = async () => {
+    lockOptions('create');
+
     if (!user.data?.id) {
+      releaseOptions();
       return;
     }
 
-    const data = await createResumeMutation.mutateAsync({
-      title: 'Frontend Engineer Resume',
-      userInfo: {
-        userId: user.data.id,
-      },
-    });
+    try {
+      const data = await createResumeMutation.mutateAsync({
+        title: 'Frontend Engineer Resume',
+        userInfo: {
+          userId: user.data.id,
+        },
+      });
 
-    router.push(`/resume/${data.id}`);
+      router.push(`/resume/${data.id}`);
+    } catch (error) {
+      console.error('Failed to create resume:', error);
+      releaseOptions();
+    }
   };
 
   const handleUploadSuccess = (data: any) => {
+    setShowScanningOverlay(false);
     router.push(`/resume/${data.resumeId}`);
   };
 
   const handleUploadError = (error: any) => {
+    setShowScanningOverlay(false);
+    releaseOptions();
     console.error('Upload error:', error);
+  };
+
+  const handleUploadPendingChange = (pending: boolean) => {
+    if (pending) {
+      lockOptions('upload');
+      setShowScanningOverlay(true);
+      return;
+    }
+
+    if (activeAction === 'upload') {
+      setShowScanningOverlay(false);
+      releaseOptions();
+    }
+  };
+
+  const handleOpenTailoredResume = () => {
+    lockOptions('tailoredResume');
+    setShowResumeUpload(true);
+    setShowJDUpload(false);
+    setIsBuilderIntelligenceModalOpen(true);
+  };
+
+  const handleOpenTailoredWithJD = () => {
+    lockOptions('tailoredJD');
+    setShowResumeUpload(false);
+    setShowJDUpload(true);
+    setIsBuilderIntelligenceModalOpen(true);
+  };
+
+  const handleCloseBuilderIntelligence = () => {
+    setIsBuilderIntelligenceModalOpen(false);
+    setShowResumeUpload(false);
+    setShowJDUpload(false);
+    releaseOptions();
   };
 
   return (
     <>
-      <div className="min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
-        <div className="z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center">
+      <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
+        {showScanningOverlay && (
+          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+            <video
+              src="/videos/scanning-video-animation.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-[80%] w-[80%] object-contain rounded-[24px]"
+            />
+          </div>
+        )}
+
+        <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center">
           <div className="flex flex-col items-center gap-2 z-20 rounded-xl p-4">
             <div className="w-[44.07px] h-10 flex items-center justify-center">
               <FileText className="w-[29.38px] h-[33.33px] text-black" strokeWidth={1.5} />
@@ -68,6 +139,7 @@ export default function ResumeCreationCard() {
                     <Button
                       variant="outline"
                       className="relative border-none w-full flex flex-row items-center justify-start gap-2 bg-white text-black rounded-xl h-11 shadow-none hover:bg-[#E9F4FF]"
+                      disabled={optionsLocked && activeAction !== 'create'}
                       onClick={resumeCreateHandler}
                     >
                       <StarsIcon />
@@ -76,16 +148,18 @@ export default function ResumeCreationCard() {
                       </span>
                     </Button>
 
-                    <FileUpload onSuccess={handleUploadSuccess} onError={handleUploadError} />
+                    <FileUpload
+                      onSuccess={handleUploadSuccess}
+                      onError={handleUploadError}
+                      onPendingChange={handleUploadPendingChange}
+                      disabled={optionsLocked && activeAction !== 'upload'}
+                    />
 
                     <Button
                       className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
                       variant="outline"
-                      onClick={() => {
-                        setShowResumeUpload(true);
-                        setShowJDUpload(false);
-                        setIsBuilderIntelligenceModalOpen(true);
-                      }}
+                      disabled={optionsLocked && activeAction !== 'tailoredResume'}
+                      onClick={handleOpenTailoredResume}
                     >
                       <StarsIcon />
 
@@ -99,11 +173,8 @@ export default function ResumeCreationCard() {
                     <Button
                       className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
                       variant="outline"
-                      onClick={() => {
-                        setShowResumeUpload(false);
-                        setShowJDUpload(true);
-                        setIsBuilderIntelligenceModalOpen((prev) => !prev);
-                      }}
+                      disabled={optionsLocked && activeAction !== 'tailoredJD'}
+                      onClick={handleOpenTailoredWithJD}
                     >
                       <StarsIcon />
 
@@ -175,7 +246,7 @@ export default function ResumeCreationCard() {
       {isBuilderIntelligenceModalOpen && (
         <BuilderIntelligenceModal
           isOpen={isBuilderIntelligenceModalOpen}
-          onClose={() => setIsBuilderIntelligenceModalOpen(false)}
+          onClose={handleCloseBuilderIntelligence}
           showJDUpload={showJDUpload}
           showResumeUpload={showResumeUpload}
         />

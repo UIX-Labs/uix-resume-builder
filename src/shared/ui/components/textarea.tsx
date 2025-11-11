@@ -10,7 +10,7 @@ import { Bold, Italic, List, ListOrdered, Underline as UnderlineIcon, Link as Li
 import * as React from 'react';
 import { ErrorHighlight } from './textarea-extensions/error-highlight';
 import { useEffect } from 'react';
-import { SuggestionType } from '@entities/resume/types';
+import type { SuggestionType } from '@entities/resume/types';
 
 interface ErrorSuggestion {
   old?: string;
@@ -69,6 +69,32 @@ const FormatButton: React.FC<FormatButtonProps> = ({
   </button>
 );
 
+function normalizeContent(content: string | undefined): string {
+  if (!content) {
+    return '';
+  }
+
+  const trimmed = content.trim();
+  const isHtml = /<\/?[a-z][\s\S]*>/i.test(trimmed);
+
+  if (isHtml) {
+    return content;
+  }
+
+  const lines = content.split(/\r?\n/);
+
+  return lines
+    .map((line) => {
+      if (!line) {
+        return '<p><br /></p>';
+      }
+
+      const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return `<p>${escaped}</p>`;
+    })
+    .join('');
+}
+
 const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   (
     {
@@ -91,6 +117,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   ) => {
     const [isToolbarVisible, setIsToolbarVisible] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
+
+    const normalizedDefaultValue = React.useMemo(() => normalizeContent(defaultValue), [defaultValue]);
 
     const editor = useEditor({
       extensions: [
@@ -124,9 +152,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
             class: 'text-primary underline underline-offset-4',
           },
         }),
-        ErrorHighlight,
-      ],
-      content: defaultValue,
+        ErrorHighlight as any,
+      ] as any,
+      content: normalizedDefaultValue,
       immediatelyRender: false,
       editable: !disabled,
       onUpdate: ({ editor }) => {
@@ -151,9 +179,10 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     useEffect(() => {
       if (!editor || value === undefined) return;
 
+      const normalizedValue = normalizeContent(value);
       const currentContent = editor.getHTML();
-      if (currentContent !== value) {
-        editor.commands.setContent(value, { emitUpdate: false });
+      if (currentContent !== normalizedValue) {
+        editor.commands.setContent(normalizedValue, { emitUpdate: false });
       }
     }, [editor, value]);
 
@@ -186,7 +215,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
           const to = from + searchText.length;
 
           // Apply the error highlight mark
-          editor
+          (editor as any)
             .chain()
             .setTextSelection({ from, to })
             .setErrorHighlight(color)

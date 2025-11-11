@@ -1,10 +1,10 @@
 'use client';
 
 import { useParsePdfResume } from '@entities/resume';
-import { Upload } from 'lucide-react';
 import { useRef } from 'react';
 import { Button } from '@shared/ui/components/button';
 import StarsIcon from '@shared/icons/stars-icon';
+import { cn } from '@shared/lib/cn';
 
 interface FileUploadProps {
   onSuccess?: (data: any) => void;
@@ -14,6 +14,7 @@ interface FileUploadProps {
   buttonText?: string;
   acceptedFileTypes?: string;
   maxFileSize?: number;
+  onPendingChange?: (pending: boolean) => void;
 }
 
 export function FileUpload({
@@ -24,6 +25,7 @@ export function FileUpload({
   buttonText = 'Upload Resume',
   acceptedFileTypes = '.pdf',
   maxFileSize = 10,
+  onPendingChange,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
@@ -47,16 +49,20 @@ export function FileUpload({
       return;
     }
 
+    onPendingChange?.(true);
+
     parsePdfResume(file, {
       onSuccess: (data) => {
         console.log('Resume parsed successfully:', data);
         onSuccess?.(data);
+        onPendingChange?.(false);
       },
       onError: (error) => {
         console.error('Upload error:', error);
         const errorMessage = error?.message;
         alert(`Upload failed: ${errorMessage}`);
         onError?.(error);
+        onPendingChange?.(false);
       },
     });
   };
@@ -71,17 +77,18 @@ export function FileUpload({
     <>
       <input ref={fileInputRef} type="file" accept={acceptedFileTypes} onChange={handleFileUpload} className="hidden" />
 
- <Button
-                      variant="outline"
-                      className="relative border-none w-full flex flex-row items-center justify-start gap-2 bg-white text-black rounded-xl h-11 shadow-none hover:bg-[#E9F4FF]"
-                      onClick={handleButtonClick}
-                      disabled={isDisabled}
-                    >
-                      <StarsIcon />
-                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal text-left">
-                        Upload Resume
-                      </span>
-                    </Button>
+      <Button
+        variant="outline"
+        className={cn(
+          'relative border-none w-full flex flex-row items-center justify-start gap-2 bg-white text-black rounded-xl h-11 shadow-none hover:bg-[#E9F4FF]',
+          className,
+        )}
+        onClick={handleButtonClick}
+        disabled={isDisabled}
+      >
+        <StarsIcon />
+        <span className="flex items-center gap-2 text-[#656A72] text-base font-normal text-left">{buttonText}</span>
+      </Button>
     </>
   );
 }

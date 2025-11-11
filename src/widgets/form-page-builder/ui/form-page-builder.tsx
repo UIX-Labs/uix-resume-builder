@@ -19,8 +19,7 @@ import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 
-import type { SuggestedUpdate, ResumeData } from '@entities/resume';
-import { SuggestionType } from '@entities/resume';
+import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
 import {
   findItemById,
   applySuggestionsToFieldValue,
@@ -38,7 +37,7 @@ export function FormPageBuilder() {
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
-  const {analyzedData}=useAnalyzerStore();
+  const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -100,41 +99,20 @@ export function FormPageBuilder() {
 
   const { formData, setFormData } = useFormDataStore();
 
-  async function analyzeResume() {
-    if (!resumeId || !data) return;
-
-    try {
-      if (analyzedData && typeof analyzedData === 'object' && typeof data === 'object' && data !== null) {
-        
-        const mergedData = { ...(data as Record<string, unknown>) };
-
-        Object.keys(analyzedData).forEach((key: string) => {
-          const resumeField = analyzedData[key as keyof typeof analyzedData];
-
-          if (resumeField && typeof resumeField === 'object' && 'suggestedUpdates' in resumeField) {
-            const currentField = mergedData[key];
-            if (currentField && typeof currentField === 'object') {
-              mergedData[key] = {
-                ...(currentField as Record<string, unknown>),
-                suggestedUpdates: resumeField.suggestedUpdates,
-              }; 
-            }
-          }
-        });
-
-        setFormData(mergedData as Omit<ResumeData, 'templateId'>);
-      }
-    } catch (error) {
-      console.error('Error analyzing resume:', error);
-    }
-  }
-
   useEffect(() => {
-    if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });  
-      analyzeResume(); 
+    if (!resumeId) {
+      return;
     }
-  }, [data]);
+
+    if (analyzerResumeId === resumeId && analyzedData) {
+      useFormDataStore.setState({ formData: analyzedData ?? {} });
+      return;
+    }
+
+    if (data) {
+      useFormDataStore.setState({ formData: data ?? {} });
+    }
+  }, [resumeId, data, analyzedData, analyzerResumeId]);
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -237,9 +215,10 @@ export function FormPageBuilder() {
     }
 
     const fieldData = itemUpdate.fields[fieldName];
-    const suggestions = fieldData.suggestedUpdates?.filter(
-      (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType
-    ) || [];
+    const suggestions =
+      fieldData.suggestedUpdates?.filter(
+        (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType,
+      ) || [];
 
     setAnalyzerModalData({
       suggestions,
@@ -250,8 +229,8 @@ export function FormPageBuilder() {
     setAnalyzerModalOpen(true);
   };
 
-   const handleApplySuggestions = async (
-    selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>
+  const handleApplySuggestions = async (
+    selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
     if (!analyzerModalData) return;
 
@@ -287,7 +266,7 @@ export function FormPageBuilder() {
         currentData.suggestedUpdates,
         itemId,
         fieldName,
-        selectedSuggestions
+        selectedSuggestions,
       );
 
       const updatedData = {
@@ -296,9 +275,7 @@ export function FormPageBuilder() {
           ...currentData,
           items: updatedItems,
           suggestedUpdates:
-            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
-              ? updatedSuggestedUpdates
-              : undefined,
+            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
         },
       };
 
@@ -375,7 +352,7 @@ export function FormPageBuilder() {
           />
 
           <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
-            {navs[nextStepIndex]?.name && (         
+            {navs[nextStepIndex]?.name && (
               <Button
                 className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
                 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"
@@ -408,4 +385,3 @@ export function FormPageBuilder() {
     </>
   );
 }
-

@@ -1,5 +1,3 @@
-'use client';
-
 import { createResume } from '@entities/resume';
 import { useMutation } from '@tanstack/react-query';
 import { ChevronDown, FileText } from 'lucide-react';
@@ -22,6 +20,9 @@ export default function ResumeCreationCard() {
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
 
+  const [showJDUpload, setShowJDUpload] = useState(false);
+  const [showResumeUpload, setShowResumeUpload] = useState(false);
+
   const resumeCreateHandler = async () => {
     if (!user.data?.id) {
       return;
@@ -37,7 +38,7 @@ export default function ResumeCreationCard() {
     router.push(`/resume/${data.id}`);
   };
 
-    const handleUploadSuccess = (data: any) => {
+  const handleUploadSuccess = (data: any) => {
     router.push(`/resume/${data.resumeId}`);
   };
 
@@ -74,17 +75,40 @@ export default function ResumeCreationCard() {
                         From scratch
                       </span>
                     </Button>
-                 
+
                     <FileUpload onSuccess={handleUploadSuccess} onError={handleUploadError} />
+
                     <Button
                       className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
                       variant="outline"
-                      onClick={() => setIsBuilderIntelligenceModalOpen((prev) => !prev)}
+                      onClick={() => {
+                        setShowResumeUpload(true);
+                        setShowJDUpload(false);
+                        setIsBuilderIntelligenceModalOpen(true);
+                      }}
                     >
                       <StarsIcon />
 
                       <span className="flex items-center gap-2 text-[#656A72] text-base font-normal justify-center">
-                        Builder Intelligence
+                        Tailored Resume
+                        <span className="bg-[#02A44F] text-white text-xs font-medium rounded-full px-2 py-[2px] justify-center">
+                          recommended
+                        </span>
+                      </span>
+                    </Button>
+                    <Button
+                      className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
+                      variant="outline"
+                      onClick={() => {
+                        setShowResumeUpload(false);
+                        setShowJDUpload(true);
+                        setIsBuilderIntelligenceModalOpen((prev) => !prev);
+                      }}
+                    >
+                      <StarsIcon />
+
+                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal justify-center">
+                        Tailored with JD
                         <span className="bg-[#02A44F] text-white text-xs font-medium rounded-full px-2 py-[2px] justify-center">
                           recommended
                         </span>
@@ -152,6 +176,8 @@ export default function ResumeCreationCard() {
         <BuilderIntelligenceModal
           isOpen={isBuilderIntelligenceModalOpen}
           onClose={() => setIsBuilderIntelligenceModalOpen(false)}
+          showJDUpload={showJDUpload}
+          showResumeUpload={showResumeUpload}
         />
       )}
     </>

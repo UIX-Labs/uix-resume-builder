@@ -1,5 +1,3 @@
-
-
 import { Input } from '@/shared/ui/components/input';
 
 import type { FormSchema, ResumeDataKey, ResumeData, SuggestedUpdates } from '@entities/resume';
@@ -22,7 +20,7 @@ export function TemplateForm({
   currentStep = 'personalDetails',
   onOpenAnalyzerModal,
 }: {
-  formSchema: FormSchema|{};
+  formSchema: FormSchema | {};
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
@@ -34,7 +32,7 @@ export function TemplateForm({
     onChange: (data: T) => void,
     suggestedUpdates?: SuggestedUpdates,
     itemId?: string,
-    fieldName?: string
+    fieldName?: string,
   ) {
     switch (section.type) {
       case 'data': {
@@ -47,7 +45,7 @@ export function TemplateForm({
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
             )}
-            defaultValue={data.value}
+            value={data.value}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
           />
         );
@@ -55,9 +53,10 @@ export function TemplateForm({
 
       case 'textarea': {
         // Get error suggestions for this field
-        const errorSuggestions = suggestedUpdates && itemId && fieldName
-          ? getFieldSuggestions(suggestedUpdates, itemId, fieldName)
-          : undefined;
+        const errorSuggestions =
+          suggestedUpdates && itemId && fieldName
+            ? getFieldSuggestions(suggestedUpdates, itemId, fieldName)
+            : undefined;
 
         return (
           <TiptapTextArea
@@ -112,7 +111,7 @@ export function TemplateForm({
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
             )}
-            defaultValue={data}
+            value={data}
             onChange={(e) => onChange(e.target.value)}
           />
         );
@@ -205,7 +204,7 @@ export function TemplateForm({
                     },
                     currentData.suggestedUpdates,
                     itemId,
-                    key
+                    key,
                   )}
                 </label>
               );
@@ -216,4 +215,3 @@ export function TemplateForm({
     </div>
   );
 }
-

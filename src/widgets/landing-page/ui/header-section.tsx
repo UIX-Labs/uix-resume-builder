@@ -29,10 +29,28 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
+          onClick={() => router.push('/')}
+          className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
+        >
+          Home
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={handleNavigate}
           className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
         >
           {user ? 'Dashboard' : 'Sign In'}
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => router.push('/about-us')}
+          className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
+        >
+          About Us
         </Button>
 
         <Button

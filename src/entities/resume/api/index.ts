@@ -9,3 +9,4 @@ export * from './save-resume-form';
 export * from './parse-linkedin';
 export * from './get-resume-empty-data';
 export * from './update-resume-template';
+export * from './upload-profile-picture';

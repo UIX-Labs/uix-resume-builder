@@ -171,7 +171,7 @@ const annaFieldTemplate = {
                   fallback: 'Summary',
                 },
                 className:
-                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
               },
             ],
           },
@@ -260,7 +260,7 @@ const annaFieldTemplate = {
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
                     className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all w-[520px]',
+                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words w-[520px]',
                   },
                 ],
               },

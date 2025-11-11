@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-const PUBLIC_ROUTES = ['/', '/auth/google/callback', '/auth/linkedin/callback'];
+const PUBLIC_ROUTES = ['/', '/auth/google/callback', '/auth/linkedin/callback', '/about-us'];
 
 async function checkAuth(request: NextRequest): Promise<boolean> {
   try {

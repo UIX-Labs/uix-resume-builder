@@ -12,6 +12,7 @@ import { LinksInput } from './links-input';
 import { StringsInput } from './strings-input';
 import { FieldErrorBadges } from './error-badges';
 import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
+import { ProfilePictureInput } from './profile-picture';
 import { PhoneInput } from './phone-input';
 
 export function TemplateForm({
@@ -36,6 +37,17 @@ export function TemplateForm({
     fieldName?: string,
   ) {
     switch (section.type) {
+      case 'profilePicture': {
+        return (
+          <ProfilePictureInput
+            data={typeof data === 'string' ? { profilePicturePublicUrl: data } : undefined}
+            onChange={(value) => onChange(value.profilePicturePublicUrl as T)}
+            personalDetailItemId={itemId || ''}
+            section={section}
+          />
+        );
+      }
+
       case 'data': {
         return (
           <Input
@@ -219,6 +231,7 @@ export function TemplateForm({
                     currentData.suggestedUpdates,
                     itemId,
                     key,
+                    currentData.items[itemIdx]?.itemId,
                   )}
                 </label>
               );

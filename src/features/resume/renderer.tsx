@@ -10,6 +10,7 @@ import type {
   SeperatorNode,
   TextNode,
   SkillLevelNode,
+  ImageNode,
 } from './types';
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
@@ -60,6 +61,8 @@ function renderNode(node: Nodes, data: any): React.ReactNode {
       return renderIcon(node as IconNode);
     case 'skillLevel':
       return renderSkillLevel(node as SkillLevelNode, data);
+    case 'image':
+      return renderImage(node as ImageNode, data);
     default:
       return null;
   }
@@ -203,7 +206,7 @@ function renderDuration(node: DurationNode, data: any) {
 }
 
 function renderIcon(node: IconNode) {
-  const { name, size = 16, className } = node;
+  const { name, size = 16, className, fill = false } = node;
 
   const IconComponent = Icons[name as keyof typeof Icons] as React.ComponentType<any>;
 
@@ -211,7 +214,7 @@ function renderIcon(node: IconNode) {
     return null;
   }
 
-  return <IconComponent size={size} className={cn(className)} />;
+  return <IconComponent size={size} className={cn(className)} fill={fill ? 'currentColor' : 'none'} />;
 }
 
 function renderSkillLevel(node: SkillLevelNode, data: any) {
@@ -239,6 +242,23 @@ function renderSkillLevel(node: SkillLevelNode, data: any) {
         />
       ))}
     </div>
+  );
+}
+
+function renderImage(node: ImageNode, data: any) {
+  const { pathWithFallback, className, alt = 'Image' } = node;
+  const resolved = resolvePath({ data, ...pathWithFallback });
+
+  if (!resolved) {
+    return null;
+  }
+
+  return (
+    <img
+      src={resolved as string}
+      alt={alt}
+      className={cn(className)}
+    />
   );
 }
 

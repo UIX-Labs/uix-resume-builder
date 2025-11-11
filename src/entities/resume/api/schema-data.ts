@@ -4,6 +4,13 @@ export const data = {
 
     subTitle: 'Users who added phone number and email received 64% more positive feedback from recruiters.',
 
+    profilePicturePublicUrl: {
+      name: 'profilePicturePublicUrl',
+      type: 'profilePicture',
+      label: 'Profile Picture',
+      fluid: true,
+    },
+
     heading: {
       name: 'heading',
       type: 'text',
@@ -49,6 +56,13 @@ export const data = {
       placeholder: 'Enter your address',
       required: true,
       fluid: true,
+    },
+    jobTitle: {
+      name: 'jobTitle',
+      type: 'text',
+      label: 'Job Title',
+      placeholder: 'Enter your job title',
+      required: true,
     },
 
     description: {

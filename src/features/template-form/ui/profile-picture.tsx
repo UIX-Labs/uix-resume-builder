@@ -1,0 +1,150 @@
+import { cn } from '@shared/lib/cn';
+import { uploadProfilePicture } from '@entities/resume/api/upload-profile-picture';
+import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
+
+export const ProfilePictureInput = ({
+  data,
+  onChange,
+  personalDetailItemId,
+}: {
+  data?: { profilePicturePublicUrl?: string };
+  onChange: (data: { profilePicturePublicUrl: string }) => void;
+  personalDetailItemId: string;
+  section: any;
+}) => {
+  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl ?? '');
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (imageUrl) {
+      onChange({ profilePicturePublicUrl: imageUrl });
+    }
+  }, [imageUrl]);
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const result = reader.result as string;
+        console.log('re', result);
+        const base64 = result.split(',')[1];
+        console.log(base64);
+        resolve(base64);
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const handleFileUpload = async (file: File) => {
+    setError(null);
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please upload an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setError('Image size should be less than 5MB');
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+      const base64 = await convertToBase64(file);
+
+      const response = await uploadProfilePicture({
+        personalDetailItemId,
+        base64,
+      });
+
+      console.log('API Response:', response);
+
+      if (response) {
+        setImageUrl(response.url);
+      } else {
+        const errorMsg = 'Failed to upload image - API returned success: false';
+        console.error(errorMsg, response);
+        setError(errorMsg);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
+        className={cn(
+          'relative border-2 border-dashed rounded-[8px] p-4 transition-colors',
+          'flex flex-col items-center justify-center cursor-pointer',
+          isDragging ? 'border-[#0059ED] bg-[#CBE7FF]' : 'border-[#959DA8] bg-[#FAFBFC]',
+          isUploading && 'opacity-50 cursor-not-allowed',
+        )}
+        onClick={() => !isUploading && fileInputRef.current?.click()}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {imageUrl ? (
+          <div className="relative w-24 h-24 rounded-full overflow-hidden">
+            <Image src={imageUrl} alt="Profile" fill className="object-cover" />
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="text-[#0C1118] font-semibold mb-1">
+              {isUploading ? 'Uploading...' : 'Upload Profile Picture'}
+            </div>
+            <div className="text-sm text-[#959DA8]">Click or drag and drop an image here</div>
+            <div className="text-xs text-[#959DA8] mt-1">Max size: 5MB</div>
+          </div>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+          disabled={isUploading}
+        />
+      </button>
+      {error && <div className="text-sm text-red-500">{error}</div>}
+    </div>
+  );
+};

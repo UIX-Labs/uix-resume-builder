@@ -234,7 +234,6 @@ export function FormPageBuilder() {
   ) => {
     if (!analyzerModalData) return;
 
-    const { itemId, fieldName } = analyzerModalData;
     const currentData = formData?.[currentStep];
 
     if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {

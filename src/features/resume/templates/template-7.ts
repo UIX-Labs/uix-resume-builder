@@ -1,4 +1,4 @@
-const template7= {
+const template7 = {
   name: 'Simran Professional',
 
   page: {
@@ -31,9 +31,8 @@ const template7= {
               // Profile Photo and Name Container
               {
                 type: 'container',
-                className: 'flex flex-row gap-6 items-start mb-3',
+                className: 'flex flex-row gap-6 items-center mb-3',
                 children: [
-                  // Profile Photo (placeholder - you'll need to handle image rendering)
                   {
                     type: 'container',
                     className: 'w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden',
@@ -41,7 +40,7 @@ const template7= {
                       {
                         type: 'image',
                         pathWithFallback: {
-                          path: 'data.profilePhoto',
+                          path: 'data.profilePicturePublicUrl',
                           fallback: '',
                         },
                         className: 'w-full h-full object-cover',
@@ -80,7 +79,7 @@ const template7= {
                             'A proactive learner with a flair for adopting emerging trends & addressing industry requirements to achieve organisational objectives. Excellent spoken & written communication skills, problem solving and leadership skills.',
                         },
                         className:
-                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
                       },
                     ],
                   },
@@ -299,7 +298,7 @@ const template7= {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
                       },
                     ],
                   },

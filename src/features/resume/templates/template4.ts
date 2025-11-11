@@ -176,7 +176,7 @@ const brianWayneTemplate = {
                       fallback: 'Summary',
                     },
                     className:
-                      'text-sm text-white text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                      'text-sm text-white text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
                   },
                 ],
               },
@@ -362,7 +362,7 @@ const brianWayneTemplate = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-all',
+                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
                       },
                     ],
                   },

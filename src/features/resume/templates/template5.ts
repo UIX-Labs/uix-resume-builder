@@ -47,7 +47,7 @@ const template5 = {
                     id: 'title-text',
                     type: 'text',
                     pathWithFallback: {
-                      path: 'data.personalDetails.items.0.title',
+                      path: 'data.jobTitle',
                       fallback: 'Technical Lead, Sopra Steria',
                     },
                     className: 'text-lg font-normal text-[#1a1a1a]',
@@ -138,7 +138,7 @@ const template5 = {
                   path: 'data.profiles.title',
                   fallback: 'Profiles',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               // LinkedIn Profile
               {
@@ -182,7 +182,7 @@ const template5 = {
                   path: 'data.skills.heading',
                   fallback: 'Skills',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'skills-list',
@@ -232,7 +232,7 @@ const template5 = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className: 'first-letter:uppercase text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'first-letter:uppercase text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 type: 'list',
@@ -281,7 +281,7 @@ const template5 = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'text-xl font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'interests-list',
@@ -391,7 +391,7 @@ const template5 = {
                   path: 'data.education.heading',
                   fallback: 'Education',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
+                className: 'text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'education',
@@ -456,7 +456,7 @@ const template5 = {
                   path: 'data.awards.heading',
                   fallback: 'Awards',
                 },
-                className: 'text-xl font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
+                className: 'text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'achievements-list',

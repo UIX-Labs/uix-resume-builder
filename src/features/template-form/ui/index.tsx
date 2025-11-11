@@ -45,7 +45,7 @@ export function TemplateForm({
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
             )}
-            defaultValue={data.value}
+            value={data.value}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
           />
         );
@@ -111,7 +111,7 @@ export function TemplateForm({
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
             )}
-            value={data as string}
+            value={data}
             onChange={(e) => onChange(e.target.value)}
           />
         );

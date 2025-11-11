@@ -17,11 +17,9 @@ import { useResumeManager } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
-import { updateResumeByAnalyzer } from '@entities/resume/api/update-resume-by-analyzer';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 
-import type { SuggestedUpdate, ResumeData, UpdateResumeAnalyzer } from '@entities/resume';
-import type { SuggestionType } from '@entities/resume';
+import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
 import {
   findItemById,
   applySuggestionsToFieldValue,
@@ -29,6 +27,7 @@ import {
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
 import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -37,6 +36,8 @@ export function FormPageBuilder() {
   const thumbnailGenerated = useRef(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+
+  const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -98,42 +99,20 @@ export function FormPageBuilder() {
 
   const { formData, setFormData } = useFormDataStore();
 
-  async function analyzeResume() {
-    if (!resumeId || !data) return;
-
-    try {
-      const result: UpdateResumeAnalyzer = await updateResumeByAnalyzer(undefined, resumeId);
-
-      if (result?.resume && typeof data === 'object' && data !== null) {
-        const mergedData = { ...(data as Record<string, unknown>) };
-
-        Object.keys(result.resume).forEach((key: string) => {
-          const resumeField = result.resume[key as keyof ResumeData];
-
-          if (resumeField && typeof resumeField === 'object' && 'suggestedUpdates' in resumeField) {
-            const currentField = mergedData[key];
-            if (currentField && typeof currentField === 'object') {
-              mergedData[key] = {
-                ...(currentField as Record<string, unknown>),
-                suggestedUpdates: resumeField.suggestedUpdates,
-              };
-            }
-          }
-        });
-
-        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
-      }
-    } catch (error) {
-      console.error('Error analyzing resume:', error);
-    }
-  }
-
   useEffect(() => {
+    if (!resumeId) {
+      return;
+    }
+
+    if (analyzerResumeId === resumeId && analyzedData) {
+      useFormDataStore.setState({ formData: analyzedData ?? {} });
+      return;
+    }
+
     if (data) {
       useFormDataStore.setState({ formData: data ?? {} });
-      analyzeResume();
     }
-  }, [data]);
+  }, [resumeId, data, analyzedData, analyzerResumeId]);
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -250,16 +229,10 @@ export function FormPageBuilder() {
     setAnalyzerModalOpen(true);
   };
 
-  // Apply suggestions handler
-  const handleApplySuggestions = async (selectedNewValues: string[]) => {
-    if (!analyzerModalData) {
-      return;
-    }
-
-    const { itemId, fieldName, suggestions: allSuggestions } = analyzerModalData;
-
-    // Match the selected new values back to the original full suggestion objects
-    const selectedSuggestions = allSuggestions.filter((suggestion) => selectedNewValues.includes(suggestion.new));
+  const handleApplySuggestions = async (
+    selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
+  ) => {
+    if (!analyzerModalData) return;
 
     const currentData = formData?.[currentStep];
 
@@ -307,13 +280,7 @@ export function FormPageBuilder() {
 
       setFormData(updatedData as Omit<ResumeData, 'templateId'>);
 
-      await save({
-        type: currentStep,
-        data: updatedData[currentStep],
-        updatedAt: Date.now(),
-      });
-
-      toast.success('Suggestions applied successfully');
+      toast.success('Suggestions applied successfully.');
       setAnalyzerModalOpen(false);
     } catch (error) {
       console.error('Failed to apply suggestions:', error);
@@ -385,7 +352,6 @@ export function FormPageBuilder() {
 
           <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
             {navs[nextStepIndex]?.name && (
-              // Secondary
               <Button
                 className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
                 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"

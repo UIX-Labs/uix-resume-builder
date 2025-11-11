@@ -21,6 +21,8 @@ export interface FormSchema extends Record<ResumeDataKey, any> {
   personalDetails: {
     label: string;
     subTitle: string;
+    profilePicturePublicUrl: BaseField;
+    jobTitle: string;
     heading: BaseField;
     fullName: BaseField;
     title: BaseField;

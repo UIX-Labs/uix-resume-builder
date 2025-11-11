@@ -10,6 +10,7 @@ import { Duration } from './duration';
 import { TagsInput } from './tags-input';
 import { LinksInput } from './links-input';
 import { StringsInput } from './strings-input';
+import { ProfilePictureInput } from './profile-picture';
 
 export function TemplateForm({
   formSchema,
@@ -22,8 +23,19 @@ export function TemplateForm({
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
 }) {
-  function getItem<T extends string | boolean>(section: any, data: T, onChange: (data: T) => void) {
+  function getItem<T extends string | boolean>(section: any, data: T, onChange: (data: T) => void, itemId?: string) {
     switch (section.type) {
+      case 'profilePicture': {
+        return (
+          <ProfilePictureInput
+            data={typeof data === 'string' ? { profilePicturePublicUrl: data } : undefined}
+            onChange={(value) => onChange(value.profilePicturePublicUrl as T)}
+            personalDetailItemId={itemId || ''}
+            section={section}
+          />
+        );
+      }
+
       case 'data': {
         return (
           <Input
@@ -162,7 +174,9 @@ export function TemplateForm({
                     items[itemIdx][key] = value;
 
                     onChange({ ...values, [currentStep]: { ...currentData, items } });
-                  })}
+                  }, currentData.items[itemIdx]?.itemId
+
+)}
                 </label>
               );
             });

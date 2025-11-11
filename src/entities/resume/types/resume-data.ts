@@ -45,7 +45,8 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
     title: string;
     items: Array<{
       id: string;
-      title: string;
+      profilePicturePublicUrl?: string;
+      jobTitle: string;
       fullName: string;
       email: string;
       phone: string;

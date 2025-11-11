@@ -70,4 +70,10 @@ export interface SkillLevelNode extends TemplateNode {
   pathWithFallback: DataBindingPath;
 }
 
-export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode | IconNode | SkillLevelNode;
+export interface ImageNode extends TemplateNode {
+  type: 'image';
+  pathWithFallback: DataBindingPath;
+  alt?: string;
+}
+
+export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode | IconNode | SkillLevelNode | ImageNode;

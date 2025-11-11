@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
     // ❗ This will ignore type errors during build
     ignoreBuildErrors: true,
   },
-  images: {
+   images: {
     remotePatterns: [
       {
         protocol: 'https',

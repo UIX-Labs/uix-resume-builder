@@ -9,9 +9,12 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import React, { useCallback, useEffect, useState } from 'react';
-import { templates } from '../models/constants';
 import { useRouter } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
+import { useGetAllTemplates, Template } from '@entities/template-page/api/template-data';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
+import { useMutation } from '@tanstack/react-query';
+import { createResume } from '@entities/resume';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -47,11 +50,38 @@ export function TemplateCarousel() {
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
-  const user= useCachedUser();
+  const user = useCachedUser();
   const router = useRouter();
+
+  const createResumeMutation = useMutation({
+    mutationFn: createResume,
+  });
+
   const handleNavigate = () => {
     router.push(user ? '/dashboard' : '/auth');
   };
+
+  const handleTemplateSelect = async (template: Template) => {
+    if (!user) {
+      router.push('/auth');
+      return;
+    }
+
+    try {
+      const data = await createResumeMutation.mutateAsync({
+        title: 'New Resume',
+        userInfo: {
+          userId: user.id,
+        },
+        templateId: template.id,
+      });
+      router.push(`/resume/${data.id}`);
+    } catch (error) {
+      console.error('Failed to create resume:', error);
+    }
+  };
+
+  const { data: templates } = useGetAllTemplates();
 
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[36px] overflow-hidden min-h-[556px] m-4">
@@ -76,13 +106,16 @@ export function TemplateCarousel() {
               </div>
             </div>
 
-            <Button
-              variant="default"
-              size="lg"
-              className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-7 py-4 h-[68px] text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl"
-            >
-              Check All Templates
-            </Button>
+            <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+              <Button
+                variant="default"
+                size="lg"
+                className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-7 py-4 h-[68px] text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl"
+              >
+                Check All Templates
+              </Button>
+            </TemplatesDialog>
+
           </div>
         </div>
 
@@ -91,17 +124,17 @@ export function TemplateCarousel() {
             <div className="pl-[61px]">
               <div className="overflow-hidden w-[900px]" ref={emblaRef}>
                 <div className="flex gap-2 items-center">
-                  {templates.map((template) => (
+                  {templates?.map((template) => (
                     <div key={template.id} className="group">
                       <div className="cursor-pointer h-full">
                         <div className="p-4 h-full">
                           <div className="relative w-[312px] h-[428px] bg-white/5 p-4 rounded-[20px] overflow-hidden">
                             <div className="w-full h-full relative">
                               <Image
-                                src={template.image}
-                                alt={template.name}
+                                src={template.publicImageUrl}
+                                alt={`Template ${template.id}`}
                                 fill
-                                className="object-cover rounded-[20px]"
+                                className="object-fit rounded-[20px]"
                               />
                             </div>
 
@@ -152,7 +185,7 @@ export function TemplateCarousel() {
 
           <div className="flex justify-end pr-[440px] pb-[29px]">
             <div className="flex items-center gap-3">
-              {templates.map((_, index) => (
+              {templates?.map((_, index) => (
                 <button
                   type="button"
                   key={index}

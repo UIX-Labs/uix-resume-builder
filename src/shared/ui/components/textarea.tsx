@@ -95,6 +95,15 @@ function normalizeContent(content: string | undefined): string {
     .join('');
 }
 
+/**
+ * Removes error highlight spans from HTML content
+ * Error highlights use CSS text-decoration directly, so we just need to remove the spans
+ */
+function stripErrorHighlightSpans(html: string): string {
+  // Simply remove spans with data-error-color attribute and return their inner content
+  return html.replace(/<span[^>]*data-error-color[^>]*>(.*?)<\/span>/gi, '$1');
+}
+
 const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   (
     {
@@ -175,22 +184,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       },
     });
 
-    // Update editor content when value prop changes
-    useEffect(() => {
-      if (!editor || value === undefined) return;
-
-      const normalizedValue = normalizeContent(value);
-      const currentContent = editor.getHTML();
-      if (currentContent !== normalizedValue) {
-        editor.commands.setContent(normalizedValue, { emitUpdate: false });
-      }
-    }, [editor, value]);
-
-    // Apply error highlights when errorSuggestions change
-    useEffect(() => {
-      if (!editor || !errorSuggestions || errorSuggestions.length === 0) {
-        return;
-      }
+    // Helper function to apply error highlights
+    const applyErrorHighlights = React.useCallback(() => {
+      if (!editor || !errorSuggestions || errorSuggestions.length === 0) return;
 
       const colorMap = {
         spelling_error: '#D97706',
@@ -198,21 +194,25 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         new_summary: '#10B981',
       };
 
-      // Get the current text content
       const text = editor.getText();
+      const underlineType = editor.state.schema.marks.underline;
 
       errorSuggestions.forEach((suggestion) => {
         if (!suggestion.old) return;
 
         const color = colorMap[suggestion.type];
         const searchText = suggestion.old.replace(/<[^>]*>/g, '').trim();
+        if (!searchText) return;
 
-        // Find the position of the text in the editor
         const index = text.indexOf(searchText);
-
         if (index !== -1) {
           const from = index + 1; // TipTap uses 1-based indexing
           const to = from + searchText.length;
+
+          // Remove any underline marks first (to avoid <u> tag wrapping)
+          if (underlineType) {
+            editor.chain().setTextSelection({ from, to }).unsetMark('underline').run();
+          }
 
           // Apply the error highlight mark
           (editor as any)
@@ -221,11 +221,69 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
             .setErrorHighlight(color)
             .setTextSelection(editor.state.selection.to) // Reset selection
             .run();
-        } else {
-          console.log('⚠️ Text not found in editor:', searchText.substring(0, 50));
         }
       });
     }, [editor, errorSuggestions]);
+
+    // Update editor content when value prop changes
+    useEffect(() => {
+      if (!editor || value === undefined) return;
+
+      const normalizedValue = normalizeContent(value);
+      // Strip error highlight spans from HTML to prevent marks from being recreated
+      // The marks will be reapplied by the errorSuggestions effect
+      const cleanValue = stripErrorHighlightSpans(normalizedValue);
+      const currentContent = editor.getHTML();
+      if (currentContent !== cleanValue) {
+        editor.commands.setContent(cleanValue, { emitUpdate: false });
+        // Reapply error highlights after content is set (with small delay to ensure content is ready)
+        if (errorSuggestions && errorSuggestions.length > 0) {
+          setTimeout(() => {
+            applyErrorHighlights();
+          }, 100);
+        }
+      }
+    }, [editor, value, errorSuggestions, applyErrorHighlights]);
+
+    // Apply error highlights when errorSuggestions change
+    useEffect(() => {
+      if (!editor) return;
+
+      // Use a small delay to ensure editor content is ready
+      const timeoutId = setTimeout(() => {
+        // First, clear all existing error highlight marks from the entire document
+        const clearAllErrorHighlights = () => {
+          const { state } = editor;
+          const { tr } = state;
+          let hasChanges = false;
+
+          state.doc.descendants((node, pos) => {
+            if (node.marks) {
+              node.marks.forEach((mark) => {
+                if (mark.type.name === 'errorHighlight') {
+                  const from = pos;
+                  const to = pos + node.nodeSize;
+                  tr.removeMark(from, to, mark.type);
+                  hasChanges = true;
+                }
+              });
+            }
+          });
+
+          if (hasChanges) {
+            editor.view.dispatch(tr);
+          }
+        };
+
+        // Clear all existing marks first
+        clearAllErrorHighlights();
+
+        // Then apply the current error highlights
+        applyErrorHighlights();
+      }, 50); // Small delay to ensure content is ready
+
+      return () => clearTimeout(timeoutId);
+    }, [editor, errorSuggestions, applyErrorHighlights]);
 
     // Update editor editable state when disabled prop changes
     React.useEffect(() => {

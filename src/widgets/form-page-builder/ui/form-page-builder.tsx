@@ -300,7 +300,7 @@ export function FormPageBuilder() {
       >
         <div
           className="bg-white border-[3px] border-blue-800 outline-[3px] 
-                        outline-blue-400 rounded-[18px] overflow-auto w-full min-w-0 flex-1"
+                        outline-blue-400 rounded-[18px] overflow-auto  min-w-0 flex-1"
         >
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
             <ResumeRenderer

@@ -9,9 +9,13 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-export default function ResumeCreationCard() {
+interface ResumeCreationCardProps {
+  onBuilderIntelligenceSubmittingChange?: (isSubmitting: boolean) => void;
+}
+
+export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChange }: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
   const createResumeMutation = useMutation({
@@ -97,28 +101,89 @@ export default function ResumeCreationCard() {
     setIsBuilderIntelligenceModalOpen(true);
   };
 
-  const handleCloseBuilderIntelligence = () => {
-    setIsBuilderIntelligenceModalOpen(false);
-    setShowResumeUpload(false);
-    setShowJDUpload(false);
-    releaseOptions();
-  };
+  const closeBuilderIntelligenceModal = useCallback(
+    (shouldRelease = true) => {
+      setIsBuilderIntelligenceModalOpen(false);
+      setShowResumeUpload(false);
+      setShowJDUpload(false);
+
+      if (shouldRelease) {
+        releaseOptions();
+      }
+    },
+    [releaseOptions],
+  );
+
+  const handleCloseBuilderIntelligence = useCallback(() => {
+    closeBuilderIntelligenceModal();
+  }, [closeBuilderIntelligenceModal]);
+
+  const handleBuilderIntelligenceSubmittingChange = useCallback(
+    (isSubmitting: boolean) => {
+      onBuilderIntelligenceSubmittingChange?.(isSubmitting);
+
+      if (isSubmitting) {
+        closeBuilderIntelligenceModal(false);
+        return;
+      }
+
+      releaseOptions();
+    },
+    [closeBuilderIntelligenceModal, onBuilderIntelligenceSubmittingChange, releaseOptions],
+  );
+
+  const builderIntelligenceModalProps = useMemo(
+    () => ({
+      isOpen: isBuilderIntelligenceModalOpen,
+      onClose: handleCloseBuilderIntelligence,
+      showJDUpload,
+      showResumeUpload,
+      onSubmittingChange: handleBuilderIntelligenceSubmittingChange,
+    }),
+    [
+      handleBuilderIntelligenceSubmittingChange,
+      handleCloseBuilderIntelligence,
+      isBuilderIntelligenceModalOpen,
+      showJDUpload,
+      showResumeUpload,
+    ],
+  );
+
+  const shouldRenderBuilderIntelligenceModal = isBuilderIntelligenceModalOpen;
+
+  const builderIntelligenceModal = useMemo(() => {
+    if (!shouldRenderBuilderIntelligenceModal) {
+      return null;
+    }
+
+    return <BuilderIntelligenceModal {...builderIntelligenceModalProps} />;
+  }, [builderIntelligenceModalProps, shouldRenderBuilderIntelligenceModal]);
+
+  const shouldShowScanningOverlay = showScanningOverlay;
+
+  const scanningOverlay = useMemo(() => {
+    if (!shouldShowScanningOverlay) {
+      return null;
+    }
+
+    return (
+      <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+        <video
+          src="/videos/scanning-animation-resize.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="h-full w-full object-cover rounded-[24px]"
+        />
+      </div>
+    );
+  }, [shouldShowScanningOverlay]);
 
   return (
     <>
       <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
-        {showScanningOverlay && (
-          <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-            <video
-              src="/videos/scanning-video-animation.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="h-[80%] w-[80%] object-contain rounded-[24px]"
-            />
-          </div>
-        )}
+        {scanningOverlay}
 
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center">
           <div className="flex flex-col items-center gap-2 z-20 rounded-xl p-4">
@@ -243,14 +308,7 @@ export default function ResumeCreationCard() {
         </div>
       </div>
 
-      {isBuilderIntelligenceModalOpen && (
-        <BuilderIntelligenceModal
-          isOpen={isBuilderIntelligenceModalOpen}
-          onClose={handleCloseBuilderIntelligence}
-          showJDUpload={showJDUpload}
-          showResumeUpload={showResumeUpload}
-        />
-      )}
+      {builderIntelligenceModal}
     </>
   );
 }

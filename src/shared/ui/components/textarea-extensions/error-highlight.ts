@@ -58,6 +58,8 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
       setErrorHighlight:
         (color: string) =>
         ({ commands }) => {
+          // We use CSS text-decoration directly in the style attribute,
+          // so we don't need TipTap's underline mark (which creates <u> tags)
           return commands.setMark(this.name, { color });
         },
       unsetErrorHighlight:

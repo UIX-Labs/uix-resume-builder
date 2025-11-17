@@ -94,11 +94,11 @@ const template8 = {
                         id: 'linkedin-link',
                         type: 'link',
                         pathWithFallback: {
-                          path: 'data.links.LinkedIn.title',
-                          fallback: 'LinkedIn',
+                          path: 'data.links.linkedin.title',
+                          fallback: '',
                         },
                         hrefPathWithFallback: {
-                          path: 'data.links.LinkedIn.link',
+                          path: 'data.links.linkedin.link',
                           fallback: 'https://linkedin.com',
                         },
                         className: 'text-xs underline',
@@ -119,62 +119,12 @@ const template8 = {
                         id: 'github-link',
                         type: 'link',
                         pathWithFallback: {
-                          path: 'data.links.Github.title',
+                          path: 'data.links.github.title',
                           fallback: 'Github',
                         },
                         hrefPathWithFallback: {
-                          path: 'data.links.Github.link',
+                          path: 'data.links.github.link',
                           fallback: 'https://github.com',
-                        },
-                        className: 'text-xs underline',
-                      },
-                    ],
-                  },
-                  {
-                    id: 'portfolio-container',
-                    type: 'container',
-                    className: 'flex flex-row items-center gap-1',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Globe',
-                        className: 'w-3 h-3',
-                      },
-                      {
-                        id: 'portfolio-link',
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.links.Portfolio.title',
-                          fallback: 'Portfolio',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.links.Portfolio.link',
-                          fallback: 'https://portfolio.com',
-                        },
-                        className: 'text-xs underline',
-                      },
-                    ],
-                  },
-                  {
-                    id: 'leetcode-container',
-                    type: 'container',
-                    className: 'flex flex-row items-center gap-1',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Code',
-                        className: 'w-3 h-3',
-                      },
-                      {
-                        id: 'leetcode-link',
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.links.leetcode.title',
-                          fallback: 'LeetCode',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.links.leetcode.link',
-                          fallback: 'https://leetcode.com',
                         },
                         className: 'text-xs underline',
                       },

@@ -31,9 +31,7 @@ export const ProfilePictureInput = ({
       reader.readAsDataURL(file);
       reader.onload = () => {
         const result = reader.result as string;
-        console.log('re', result);
         const base64 = result.split(',')[1];
-        console.log(base64);
         resolve(base64);
       };
       reader.onerror = (error) => reject(error);

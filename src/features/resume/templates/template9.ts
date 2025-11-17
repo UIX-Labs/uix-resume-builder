@@ -309,7 +309,7 @@ const template9 = {
                           {
                             type: 'container',
                             className:
-                              'flex flex-row items-center gap-3 pb-2 mb-2 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0',
+                              'flex flex-row items-start gap-3 pb-2 mb-2 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0',
                             children: [
                               // Diamond Icon
                               {

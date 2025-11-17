@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
    images: {
     remotePatterns: [
       {
+        protocol:'https',
+        hostname:'uixlabs.co',
+      },
+      {
         protocol: 'https',
         hostname: 'uix-resume-builder.s3.ap-south-1.amazonaws.com',
       },

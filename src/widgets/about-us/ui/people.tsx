@@ -15,73 +15,73 @@ const teamMembers = [
     id: 1,
     name: 'Aman',
     role: 'CEO and Founder',
-    image: '/images/intro.png',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FAman.4cefaeb6.png&w=640&q=75',
     description: 'Leading the vision for human-centric resumes',
-    bio: 'Aman is passionate about creating tools that help people present their best selves. With years of experience in product development, he leads our team with a vision for innovation and inclusivity.',
+    bio: 'With over 12 years of expertise in product development, I am the chief hustler at UIX Labs.',
   },
   {
     id: 2,
-    name: 'Sarah',
-    role: 'Head of Design',
-    image: '/images/intro.png',
+    name: 'Anmol Saxena',
+    role: 'Chief Technology Officer',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FPhoneix.1e85ac43.jpg&w=640&q=75',
     description: 'Crafting beautiful and inclusive experiences',
-    bio: 'Sarah brings a unique perspective to design, focusing on creating experiences that are both beautiful and accessible to everyone.',
+    bio: 'Software architect and industry leader with a knack for building and managing teams across big tech, fintech and deep tech.',
   },
   {
     id: 3,
-    name: 'Rajesh',
-    role: 'Chief Technology Officer',
-    image: '/images/intro.png',
+    name: 'Vaibhav Bhatnagar',
+    role: 'Growth Hacker',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fvaibhav.5be2c197.jpg&w=640&q=75',
     description: 'Building innovative solutions for the future',
-    bio: 'Rajesh leads our technical team with expertise in building scalable, innovative solutions that power our platform.',
+    bio: 'Handles everything non-tech @ UIX LABS. Expertise in recruitment and lead acuisition.',
   },
   {
     id: 4,
-    name: 'Emily',
-    role: 'Head of Product',
-    image: '/images/intro.png',
+    name: 'Kunal Gupta',
+    role: 'Backend Engineer, L1',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FkunalGupta.bda211d5.jpeg&w=640&q=75',
     description: 'Shaping products that make an impact',
-    bio: "Emily focuses on creating products that truly make a difference in people's careers and lives.",
+    bio: 'Aspiring Backend Engineer (L1) driven by a strong desire to learn, grow, and prove his potential through consistent effort and curiosity.',
   },
   {
     id: 5,
-    name: 'Michael',
-    role: 'VP of Engineering',
-    image: '/images/intro.png',
+    name: 'Vishnu Malav',
+    role: 'UI Engineer, L2',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fenzo.a98443ad.jpg&w=640&q=75',
     description: 'Driving technical excellence',
-    bio: 'Michael ensures our engineering team delivers high-quality, reliable solutions that exceed expectations.',
+    bio: 'Ex MX Player, IIT Roorkee Alum with 2+ years of working experience as a UI Engineer.',
   },
   {
     id: 6,
-    name: 'Michael',
-    role: 'VP of Engineering',
-    image: '/images/intro.png',
+    name: 'Kunal Yadav',
+    role: 'UI Engineer, L2',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLoki.1f66544d.jpg&w=640&q=75',
     description: 'Driving technical excellence',
-    bio: 'Michael ensures our engineering team delivers high-quality, reliable solutions that exceed expectations.',
+    bio: 'Driving user engagement and optimizing performance, I engineer seamless digital experiences at UIX Labs.',
   },
   {
     id: 7,
-    name: 'Michael',
-    role: 'VP of Engineering',
-    image: '/images/intro.png',
+    name: 'Devendra Joshi',
+    role: 'Backend Engineer, L2',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FGeoris.ca1cd52e.jpg&w=640&q=75',
     description: 'Driving technical excellence',
-    bio: 'Michael ensures our engineering team delivers high-quality, reliable solutions that exceed expectations.',
+    bio: 'Fullstack developer with a love for clean code, crisp photos, and compelling stories.',
   },
   {
     id: 8,
-    name: 'Michael',
-    role: 'VP of Engineering',
-    image: '/images/intro.png',
+    name: 'Deepanshu',
+    role: 'Full Stack Engineer, L1',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FDeepanshu.3676d747.jpeg&w=640&q=75',
     description: 'Driving technical excellence',
-    bio: 'Michael ensures our engineering team delivers high-quality, reliable solutions that exceed expectations.',
+    bio: 'Gen Z dev with MERN stack expertise — just a chill guy with a guitar.',
   },
   {
     id: 9,
-    name: 'Michael',
-    role: 'VP of Engineering',
-    image: '/images/intro.png',
+    name: 'Tanushi Gupta',
+    role: 'UI Engineer, L1',
+    image: 'https://uixlabs.co/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FTanushiGupta.9f42715b.jpeg&w=640&q=75',
     description: 'Driving technical excellence',
-    bio: 'Michael ensures our engineering team delivers high-quality, reliable solutions that exceed expectations.',
+    bio: 'Hardworking and smart frontend ninja by day, bug whisperer by night — trying to transform Figma dreams into pixel-perfect realities with a dash of caffeine and code.',
   },
 ];
 
@@ -169,8 +169,7 @@ export function People() {
                   const cardWidth = isExpanded ? 'w-[324px]' : 'w-[125px]';
 
                   return (
-                    <button
-                      type="button"
+                    <div
                       key={template.id}
                       onClick={() => handleOpenModal(template)}
                       onMouseEnter={() => setHoveredIndex(index)}
@@ -221,7 +220,7 @@ export function People() {
                           </div>
                         </div>
                       </div>
-                    </button>
+                    </div>
                   );
                 })}
               </div>

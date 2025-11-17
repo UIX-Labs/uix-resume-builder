@@ -229,8 +229,6 @@ export function TemplateForm({
                       onChange({ ...values, [currentStep]: { ...currentData, items } });
                     },
                     currentData.suggestedUpdates,
-                    itemId,
-                    key,
                     currentData.items[itemIdx]?.itemId,
                   )}
                 </label>

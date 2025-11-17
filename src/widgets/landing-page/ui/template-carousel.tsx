@@ -139,6 +139,7 @@ export function TemplateCarousel() {
                                 alt={`Template ${template.id}`}
                                 fill
                                 className="object-cover rounded-[20px]"
+                                unoptimized
                               />
                             </div>
 

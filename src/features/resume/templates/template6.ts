@@ -103,6 +103,43 @@ const template6 = {
             ],
           },
 
+          // Interests Section
+          {
+            id: 'interests-section',
+            type: 'container',
+            className: 'flex flex-col gap-3 px-8 mb-8',
+            children: [
+              {
+                id: 'interests-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.interests.title',
+                  fallback: 'INTERESTS',
+                },
+                className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
+              },
+              {
+                id: 'interests-list',
+                type: 'list',
+                pathWithFallback: { path: 'data.interests.items' },
+                className: 'flex flex-col',
+                presentation: [
+                  {
+                    type: 'list',
+                    pathWithFallback: { path: 'data.items' },
+                    className: 'flex flex-col',
+                    presentation: [
+                      {
+                        type: 'text',
+                        className: 'text-white text-sm font-normal leading-relaxed',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
           // Contact Section
           {
             type: 'container',
@@ -355,7 +392,69 @@ const template6 = {
                 ],
               },
 
-              // Additional Sections (Projects, Certifications, etc.)
+              // Projects Section
+              {
+                id: 'projects-section',
+                type: 'container',
+                className: 'flex flex-col gap-4',
+                children: [
+                  {
+                    id: 'projects-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.projects.title',
+                      fallback: 'PROJECTS',
+                    },
+                    className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
+                  },
+                  {
+                    id: 'projects',
+                    type: 'list',
+                    pathWithFallback: { path: 'data.projects.items' },
+                    className: 'flex flex-col gap-6',
+                    presentation: [
+                      {
+                        type: 'container',
+                        id: 'project-item',
+                        className: 'flex flex-col gap-1',
+                        children: [
+                          // Project Title (as link)
+                          {
+                            id: 'project-title',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.title' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-black text-xs uppercase hover:underline',
+                          },
+                          // Duration
+                          {
+                            type: 'container',
+                            className: 'flex flex-row gap-2 items-baseline',
+                            children: [
+                              {
+                                id: 'project-period',
+                                type: 'duration',
+                                pathWithFallback: { path: 'data.duration' },
+                                className: 'text-black text-sm font-normal italic',
+                              },
+                            ],
+                          },
+                          // Description
+                          {
+                            id: 'project-description',
+                            type: 'html',
+                            pathWithFallback: { path: 'data.description' },
+                            className:
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Certifications Section
               {
                 id: 'certifications-section',
                 type: 'container',
@@ -386,7 +485,7 @@ const template6 = {
                               path: 'data.title',
                               fallback: 'Certification Title',
                             },
-                            className: 'text-sm font-bold text-black',
+                            className: 'text-sm text-black',
                           },
                           {
                             type: 'text',

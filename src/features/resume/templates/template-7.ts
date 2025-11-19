@@ -31,7 +31,7 @@ const template7 = {
               // Profile Photo and Name Container
               {
                 type: 'container',
-                className: 'flex flex-row gap-6 items-center mb-3',
+                className: 'flex flex-row gap-6 items-start mb-3',
                 children: [
                   {
                     type: 'container',
@@ -301,6 +301,105 @@ const template7 = {
                           'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
                       },
                     ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Projects Section
+      {
+        id: 'projects-section',
+        type: 'container',
+        className: 'px-8 py-4 flex flex-col',
+        children: [
+          {
+            id: 'projects-heading',
+            type: 'text',
+            pathWithFallback: {
+              path: 'data.projects.title',
+              fallback: 'PROJECTS',
+            },
+            className: 'text-xl uppercase font-bold text-[#4178B4] mb-2 tracking-wide',
+          },
+          {
+            id: 'projects',
+            type: 'list',
+            pathWithFallback: { path: 'data.projects.items' },
+            className: 'flex flex-col gap-2',
+            presentation: [
+              {
+                type: 'container',
+                id: 'project-item',
+                className: 'flex flex-col',
+                children: [
+                  // Project Title (as link)
+                  {
+                    id: 'project-title',
+                    type: 'link',
+                    pathWithFallback: { path: 'data.title' },
+                    hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                    className: 'text-base font-medium text-gray-900',
+                  },
+                  // Duration
+                  {
+                    type: 'container',
+                    className: 'flex flex-row justify-between items-start',
+                    children: [
+                      {
+                        id: 'project-period',
+                        type: 'duration',
+                        pathWithFallback: { path: 'data.duration' },
+                        className: 'text-sm text-gray-500 italic',
+                      },
+                    ],
+                  },
+                  // Description
+                  {
+                    id: 'project-description',
+                    type: 'html',
+                    pathWithFallback: { path: 'data.description' },
+                    className:
+                      'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Interests section
+      {
+        id: 'interests-section',
+        type: 'container',
+        className: 'flex flex-col gap-2 px-8 py-4',
+        children: [
+          {
+            id: 'interests-heading',
+            type: 'text',
+            pathWithFallback: {
+              path: 'data.interests.title',
+              fallback: 'Interests',
+            },
+            className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide',
+          },
+          {
+            id: 'interests-list',
+            type: 'list',
+            pathWithFallback: { path: 'data.interests.items' },
+            className: 'flex flex-row flex-wrap justify-between gap-4',
+            presentation: [
+              {
+                type: 'list',
+                className: 'flex flex-col flex-1 min-w-[45%]',
+                pathWithFallback: { path: 'data.items' },
+                presentation: [
+                  {
+                    type: 'text',
+                    className: 'text-sm text-black',
                   },
                 ],
               },

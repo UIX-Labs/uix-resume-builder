@@ -138,7 +138,7 @@ export function TemplateCarousel() {
                                 src={template.publicImageUrl}
                                 alt={`Template ${template.id}`}
                                 fill
-                                className="object-cover rounded-[20px]"
+                                className="object-fit rounded-[20px]"
                                 unoptimized
                               />
                             </div>
@@ -149,7 +149,7 @@ export function TemplateCarousel() {
                                 size="lg"
                                 onClick={() => handleTemplateSelect(template)}
                                 className={cn(
-                                  'transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
+                                  'cursor-pointer transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
                                   'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border  border-gray-400 shadow-sm px-7 py-3 h-12 text-lg font-semibold rounded-xl',
                                 )}
                               >

@@ -59,20 +59,25 @@ export function FormPageBuilder() {
   const templateId = currentResume?.templateId || null;
   const embeddedTemplate = currentResume?.template;
 
+  const { formData, setFormData } = useFormDataStore();
+
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { mutateAsync: uploadThumbnailMutation } = useMutation({
     mutationFn: uploadThumbnail,
   });
 
   const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
-  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user'; 
-  const resumeFileName = `${username}-${currentMonthYear}-resume.pdf`;
+  const fullName = formData?.personalDetails?.items?.[0]?.fullName;
+  const formattedName = fullName 
+    ? fullName.toLowerCase().replace(/\s+/g, '-') 
+    : 'resume';
+  const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   const { toPDF, targetRef } = usePDF({
     filename: resumeFileName,
-    resolution: Resolution.EXTREME,
+    resolution: Resolution.HIGH,
     overrides: {
       pdf: {
         unit: 'px',
@@ -101,8 +106,6 @@ export function FormPageBuilder() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
-
-  const { formData, setFormData } = useFormDataStore();
 
   useEffect(() => {
     if (!resumeId) {

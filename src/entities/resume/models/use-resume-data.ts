@@ -27,6 +27,26 @@ function deepMerge<T>(target: T, source: T): T {
   return (target ?? source) as T;
 }
 
+function normalizeStringsFields(data: any): any {
+  if (!data) return data;
+
+  const stringsFields = ['interests', 'achievements'];
+
+  for (const field of stringsFields) {
+    if (data[field] && data[field].items) {
+      if (Array.isArray(data[field].items) && data[field].items.length > 0) {
+        const firstItem = data[field].items[0];
+        if (typeof firstItem === 'string') {
+          data[field].items = [
+            { itemId: crypto.randomUUID(), items: data[field].items }
+          ];
+        }
+      }
+    }
+  }
+  return data;
+}
+
 // --- Unified Hook ---
 export function useResumeManager(id: string) {
   const fullKey = `resume-${id}`;
@@ -72,6 +92,8 @@ export function useResumeManager(id: string) {
       for (const key of Object.keys(emptyData)) {
         finalData[key] = deepMerge(finalData[key], emptyData[key]);
       }
+
+      finalData = normalizeStringsFields(finalData);
 
       setData(finalData);
     })();

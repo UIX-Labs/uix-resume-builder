@@ -145,12 +145,12 @@ const aniketTemplate2 = {
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
             className: 'flex flex-wrap gap-1',
+            seperator: ',',
             presentation: [
               {
                 type: 'text',
                 pathWithFallback: { path: 'data.name' },
                 className: 'text-sm text-black',
-                suffix: ', ',
               },
             ],
           },
@@ -334,7 +334,7 @@ const aniketTemplate2 = {
               path: 'data.interests.title',
               fallback: 'Interests',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'interests-list',
@@ -345,11 +345,11 @@ const aniketTemplate2 = {
                 type: 'list',
                 className: 'flex flex-wrap gap-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
                     className: 'text-sm text-black',
-                    suffix: ', ',
                   },
                 ],
               },
@@ -370,7 +370,7 @@ const aniketTemplate2 = {
               path: 'data.achievements.title',
               fallback: 'Achievements',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'achievements-list',
@@ -381,11 +381,11 @@ const aniketTemplate2 = {
                 type: 'list',
                 className: 'flex flex-wrap gap-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
                     className: 'text-sm text-black',
-                    suffix: ', ',
                   },
                 ],
               },
@@ -406,7 +406,7 @@ const aniketTemplate2 = {
               path: 'data.certifications.title',
               fallback: 'Certifications',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             type: 'list',

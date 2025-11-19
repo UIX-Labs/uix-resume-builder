@@ -1,9 +1,11 @@
 'use client';
 
+import { Button } from '@shared/ui';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export function AuthHeader() {
+  const router= useRouter();
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -17,11 +19,8 @@ export function AuthHeader() {
         <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">AI Powered ✨</span>
       </div>
 
-      <nav className="hidden md:flex items-center gap-6 text-sm text-slate-600">
-        <Link href="https://uixlabs.co/our-team" className="hover:text-slate-800 transition-colors">
-          About Us
-        </Link>
-
+      <nav className="hidden md:flex items-center gap-6 text-base text-slate-600">
+        <Button className="hover:text-slate-800 transition-colors bg-transparent text-black hover:bg-transparent text-base" onClick={()=>router.push('/about-us')}> About Us</Button>
         {/* <Link href="/explore" className="hover:text-slate-800 transition-colors">
           Explore
         </Link>

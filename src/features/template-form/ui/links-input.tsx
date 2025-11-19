@@ -23,10 +23,10 @@ export function LinksInput({ data, onChange, section }: { data: any; onChange: (
   }));
 
   return (
-    <Sortable data={transformedData} getId={(item) => item.link} onDragEnd={handleDragEnd}>
+    <Sortable data={transformedData} getId={(item) => item.key} onDragEnd={handleDragEnd}>
       {(localData) => {
         return localData.map((item: any) => (
-          <SortableItem id={item.link} key={item.link}>
+          <SortableItem id={item.key} key={item.key}>
             <UrlInput
               data={item}
               onChange={(newValue) => {

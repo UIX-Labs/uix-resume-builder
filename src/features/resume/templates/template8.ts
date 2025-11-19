@@ -372,6 +372,7 @@ const template8 = {
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
             className: 'flex flex-row gap-1 mt-2',
+            seperator: ',',
             presentation: [
               {
                 type: 'container',
@@ -391,7 +392,6 @@ const template8 = {
                             type: 'text',
                             pathWithFallback: { path: 'data.name' },
                             className: 'text-sm text-black',
-                            suffix: ', ',
                           },
                           {
                             id: 'skill-category',
@@ -539,11 +539,11 @@ const template8 = {
                 type: 'list',
                 className: 'flex flex-wrap gap-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
                     className: 'text-xs',
-                    suffix: ', ',
                   },
                 ],
               },

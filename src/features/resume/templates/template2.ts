@@ -148,7 +148,7 @@ const andrewTemplate = {
               path: 'data.personDetails.title',
               fallback: 'Summary',
             },
-            className: 'text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'text-lg font-bold text-black border-b border-black pb-1',
           },
 
           {
@@ -196,17 +196,17 @@ const andrewTemplate = {
               {
                 type: 'container',
                 id: 'experience-item',
-                className: 'flex flex-col gap-3',
+                className: 'flex flex-col',
                 children: [
                   // Top row: Date + Location | Position + Company
                   {
                     type: 'container',
-                    className: 'flex flex-row gap-10 items-start',
+                    className: 'flex flex-row gap-4 items-start w-full',
                     children: [
                       // Left column: Date + Location
                       {
                         type: 'container',
-                        className: 'flex flex-col min-w-[150px]',
+                        className: 'flex flex-col w-[180px]',
                         children: [
                           {
                             id: 'experience-period',
@@ -218,14 +218,14 @@ const andrewTemplate = {
                             id: 'experience-location',
                             type: 'text',
                             pathWithFallback: { path: 'data.location' },
-                            className: 'text-sm text-gray-700',
+                            className: 'text-sm text-gray-700 break-words',
                           },
                         ],
                       },
                       // Right column: Position + Company
                       {
                         type: 'container',
-                        className: 'flex flex-col',
+                        className: 'flex flex-col flex-1',
                         children: [
                           {
                             id: 'experience-position',
@@ -244,6 +244,84 @@ const andrewTemplate = {
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
                             className: 'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Projects
+      {
+        id: 'projects-section',
+        type: 'container',
+        className: 'flex flex-col gap-3',
+        children: [
+          {
+            id: 'projects-heading',
+            type: 'text',
+            pathWithFallback: {
+              path: 'data.projects.title',
+              fallback: 'Projects',
+            },
+            className: 'capitalize text-lg font-bold text-black border-b border-black pb-1',
+          },
+          {
+            id: 'projects',
+            type: 'list',
+            pathWithFallback: { path: 'data.projects.items' },
+            className: 'flex flex-col gap-5',
+            presentation: [
+              {
+                type: 'container',
+                id: 'project-item',
+                className: 'flex flex-col gap-3',
+                children: [
+                  {
+                    type: 'container',
+                    className: 'flex flex-row gap-4 items-start w-full',
+                    children: [
+                      // Left column: Date
+                      {
+                        type: 'container',
+                        className: 'flex flex-col w-[180px]',
+                        children: [
+                          {
+                            id: 'project-period',
+                            type: 'duration',
+                            pathWithFallback: { path: 'data.duration' },
+                            className: 'text-sm text-black font-normal',
+                          },
+                        ],
+                      },
+                      // Right column: Title + Description + Link
+                      {
+                        type: 'container',
+                        className: 'flex flex-col flex-1',
+                        children: [
+                          {
+                            id: 'project-title',
+                            type: 'text',
+                            pathWithFallback: { path: 'data.title' },
+                            className: 'text-sm font-bold text-black',
+                          },
+                          {
+                            id: 'project-description',
+                            type: 'html',
+                            pathWithFallback: { path: 'data.description' },
+                            className: 'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc',
+                          },
+                          {
+                            id: 'project-link',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.link.title', fallback: '' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-sm text-blue-600 hover:underline mt-1',
                           },
                         ],
                       },
@@ -280,12 +358,12 @@ const andrewTemplate = {
               {
                 type: 'container',
                 id: 'education-item',
-                className: 'flex flex-row gap-10 items-start',
+                className: 'flex flex-row gap-4 items-start w-full',
                 children: [
                   // Left column: Date + Location
                   {
                     type: 'container',
-                    className: 'flex flex-col w-[150px] shrink-0',
+                    className: 'flex flex-col w-[180px] shrink-0',
                     children: [
                       {
                         id: 'education-period',
@@ -397,7 +475,7 @@ const andrewTemplate = {
               path: 'data.interests.title',
               fallback: 'Interests',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'interests-list',
@@ -433,7 +511,7 @@ const andrewTemplate = {
               path: 'data.achievements.title',
               fallback: 'Achievements',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             id: 'achievements-list',
@@ -469,7 +547,7 @@ const andrewTemplate = {
               path: 'data.certifications.title',
               fallback: 'Certifications',
             },
-            className: 'first-letter:uppercase text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
+            className: 'capitalize text-lg font-bold text-black border-b-2 border-neutral-400 pb-1',
           },
           {
             type: 'list',
@@ -479,16 +557,16 @@ const andrewTemplate = {
             presentation: [
               {
                 type: 'container',
-                className: 'flex flex-row gap-10 items-start',
+                className: 'flex flex-row gap-4 items-start w-full',
                 children: [
                   {
                     type: 'duration',
                     pathWithFallback: { path: 'data.duration' },
-                    className: 'text-sm text-black font-normal w-[150px]',
+                    className: 'text-sm text-black font-normal w-[180px]',
                   },
                   {
                     type: 'container',
-                    className: 'flex flex-col',
+                    className: 'flex flex-col flex-1',
                     children: [
                       {
                         type: 'text',

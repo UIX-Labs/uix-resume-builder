@@ -258,12 +258,49 @@ const brianWayneTemplate = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'first-letter:uppercase text-lg font-bold border-b border-white pb-1',
+                className: 'capitalize text-lg font-bold border-b border-white pb-1',
               },
               {
                 id: 'interests-list',
                 type: 'list',
                 pathWithFallback: { path: 'data.interests.items' },
+                presentation: [
+                  {
+                    type: 'list',
+                    className: 'flex flex-col gap-1',
+                    pathWithFallback: { path: 'data.items' },
+                    presentation: [
+                      {
+                        prefix: '• ',
+                        type: 'text',
+                        className: 'text-sm text-white',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Achievements Section
+          {
+            id: 'achievements-section',
+            type: 'container',
+            className: 'flex flex-col gap-2',
+            children: [
+              {
+                id: 'achievements-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.achievements.title',
+                  fallback: 'Achievements',
+                },
+                className: 'capitalize text-lg font-bold border-b border-white pb-1',
+              },
+              {
+                id: 'achievements-list',
+                type: 'list',
+                pathWithFallback: { path: 'data.achievements.items' },
                 presentation: [
                   {
                     type: 'list',
@@ -371,6 +408,75 @@ const brianWayneTemplate = {
             ],
           },
 
+          // Projects Section
+          {
+            id: 'projects-section',
+            type: 'container',
+            className: 'flex flex-col gap-4',
+            children: [
+              {
+                id: 'projects-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.projects.title',
+                  fallback: 'Projects',
+                },
+                className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+              },
+              {
+                id: 'projects',
+                type: 'list',
+                pathWithFallback: { path: 'data.projects.items' },
+                className: 'flex flex-col gap-6 mt-4',
+                presentation: [
+                  {
+                    type: 'container',
+                    id: 'project-item',
+                    className: 'flex flex-col',
+                    children: [
+                      // Project Title
+                      {
+                        type: 'container',
+                        className: 'flex flex-row items-baseline gap-2',
+                        children: [
+                          
+                           {
+                        id: 'project-title',
+                        type: 'link',
+                        pathWithFallback: { path: 'data.title' },
+                        hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                        className: 'text-base font-semibold text-[rgb(56,76,65)] hover:underline',
+                      },
+                        ],
+                      },
+                      // Duration
+                      {
+                        type: 'container',
+                        className: 'flex flex-row items-baseline gap-2',
+                        children: [
+                          {
+                            id: 'project-period',
+                            type: 'duration',
+                            pathWithFallback: { path: 'data.duration' },
+                            className: 'text-sm text-[rgb(56,76,65)]',
+                          },
+                        ],
+                      },
+                      // Description
+                      {
+                        id: 'project-description',
+                        type: 'html',
+                        pathWithFallback: { path: 'data.description' },
+                        className:
+                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
           // Skills Section
           {
             id: 'skills-section',
@@ -430,7 +536,7 @@ const brianWayneTemplate = {
                   fallback: 'Certifications',
                 },
                 className:
-                  'first-letter:uppercase text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                  'capitalize text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
               },
               {
                 type: 'list',

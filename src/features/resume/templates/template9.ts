@@ -52,7 +52,7 @@ const template9 = {
               {
                 id: 'contact-section',
                 type: 'container',
-                className: 'flex flex-row flex-wrap items-center gap-4 mt-2 text-sm text-neutral-600 font-bold',
+                className: 'flex flex-row flex-wrap items-center gap-4 mt-2 text-sm text-neutral-900 font-bold',
                 children: [
                   {
                     id: 'phone-container',
@@ -158,7 +158,7 @@ const template9 = {
                           fallback:
                             'I am a software engineer with 8 years of backend engineering and leadership experience...',
                         },
-                        className: 'text-xs text-neutral-600 text-justify',
+                        className: 'text-sm text-neutral-900 text-justify',
                       },
                     ],
                   },
@@ -231,7 +231,7 @@ const template9 = {
                                     id: 'experience-period',
                                     type: 'duration',
                                     pathWithFallback: { path: 'data.duration' },
-                                    className: 'text-neutral-600 text-xs font-normal',
+                                    className: 'text-neutral-900 text-sm font-normal',
                                   },
                                 ],
                               },
@@ -249,7 +249,7 @@ const template9 = {
                                     id: 'experience-location',
                                     type: 'text',
                                     pathWithFallback: { path: 'data.location' },
-                                    className: 'text-xs text-neutral-600 font-normal',
+                                    className: 'text-sm text-neutral-900 font-normal',
                                   },
                                 ],
                               },
@@ -260,7 +260,7 @@ const template9 = {
                             id: 'experience-bullets',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-xs text-neutral-600 leading-relaxed mt-1 whitespace-pre-wrap',
+                            className: 'text-sm text-neutral-900 leading-relaxed mt-1 whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -327,7 +327,7 @@ const template9 = {
                                     id: 'project-period',
                                     type: 'duration',
                                     pathWithFallback: { path: 'data.duration' },
-                                    className: 'text-neutral-600 text-xs font-normal',
+                                    className: 'text-neutral-900 text-sm font-normal',
                                   },
                                 ],
                               },
@@ -338,7 +338,7 @@ const template9 = {
                             id: 'project-description',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-xs text-neutral-600 leading-relaxed mt-1 whitespace-pre-wrap',
+                            className: 'text-sm text-neutral-900 leading-relaxed mt-1 whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -479,7 +479,7 @@ const template9 = {
                                     id: 'education-period',
                                     type: 'duration',
                                     pathWithFallback: { path: 'data.duration' },
-                                    className: 'text-neutral-600 text-xs font-normal',
+                                    className: 'text-neutral-900 text-sm font-normal',
                                   },
                                 ],
                               },
@@ -497,7 +497,7 @@ const template9 = {
                                     id: 'education-location',
                                     type: 'text',
                                     pathWithFallback: { path: 'data.location', fallback: 'Patiala, Punjab' },
-                                    className: 'text-xs text-neutral-600 font-normal',
+                                    className: 'text-sm text-neutral-900 font-normal',
                                   },
                                 ],
                               },
@@ -508,7 +508,7 @@ const template9 = {
                             id: 'education-bullets',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-xs text-neutral-600 leading-relaxed mt-1',
+                            className: 'text-sm text-neutral-900 leading-relaxed mt-1',
                           },
                         ],
                       },
@@ -541,16 +541,16 @@ const template9 = {
                     id: 'skills-list',
                     type: 'list',
                     pathWithFallback: { path: 'data.skills.items' },
-                    className: 'grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] gap-3 mt-3',
+                    className: 'flex flex-wrap gap-x-6 gap-y-3 mt-3',
                     presentation: [
                       {
                         type: 'container',
-                        className: 'flex flex-col gap-1',
+                        className: 'flex flex-col w-fit',
                         children: [
                           {
                             type: 'text',
                             pathWithFallback: { path: 'data.name' },
-                            className: 'text-sm font-semibold text-neutral-600 break-words',
+                            className: 'text-sm font-semibold text-neutral-900 break-words',
                           },
                           {
                             type: 'seperator',
@@ -596,7 +596,7 @@ const template9 = {
                         presentation: [
                           {
                             type: 'text',
-                            className: 'text-sm text-neutral-600 bg-blue-50 px-3 py-1 rounded-full',
+                            className: 'text-sm text-neutral-900 bg-blue-50 px-3 py-1 rounded-full',
                           },
                         ],
                       },
@@ -643,12 +643,12 @@ const template9 = {
                           {
                             type: 'text',
                             pathWithFallback: { path: 'data.issuer' },
-                            className: 'text-sm text-neutral-600',
+                            className: 'text-sm text-neutral-900',
                           },
                           {
                             type: 'duration',
                             pathWithFallback: { path: 'data.duration' },
-                            className: 'text-xs text-neutral-500',
+                            className: 'text-sm text-neutral-500',
                           },
                         ],
                       },

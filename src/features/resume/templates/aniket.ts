@@ -322,7 +322,7 @@ const aniketTemplate1 = {
                       {
                         id: 'education-grade',
                         type: 'text',
-                        pathWithFallback: { path: 'data.grade' },
+                        pathWithFallback: { path: 'data.grade.value' },
                         className: 'text-xs text-neutral-700',
                       },
                     ],

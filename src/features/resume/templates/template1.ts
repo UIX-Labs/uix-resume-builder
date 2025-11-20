@@ -13,7 +13,7 @@ const aniketTemplate2 = {
   body: {
     id: 'body',
     type: 'container',
-    className: 'flex flex-col gap-6',
+    className: 'flex flex-col gap-4',
     children: [
       // Header Section
       {
@@ -389,7 +389,7 @@ const aniketTemplate2 = {
       {
         id: 'certifications-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col gap-2',
         children: [
           {
             id: 'certifications-heading',

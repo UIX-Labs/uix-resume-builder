@@ -233,7 +233,7 @@ const template7 = {
       {
         id: 'experience-section',
         type: 'container',
-        className: 'px-8 py-4 flex flex-col',
+        className: 'px-8 pb-4 flex flex-col',
         break: true,
         children: [
           {
@@ -313,7 +313,7 @@ const template7 = {
       {
         id: 'projects-section',
         type: 'container',
-        className: 'px-8 py-4 flex flex-col',
+        className: 'px-8 pb-4 flex flex-col',
         children: [
           {
             id: 'projects-heading',
@@ -375,7 +375,7 @@ const template7 = {
       {
         id: 'interests-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
         children: [
           {
             id: 'interests-heading',
@@ -398,6 +398,7 @@ const template7 = {
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
+                    prefix: '• ',
                     type: 'text',
                     className: 'text-sm text-black',
                   },
@@ -412,7 +413,7 @@ const template7 = {
       {
         id: 'achievements-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
         children: [
           {
             id: 'achievements-heading',
@@ -435,6 +436,7 @@ const template7 = {
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
+                    prefix: '• ',
                     type: 'text',
                     className: 'text-sm text-black',
                   },
@@ -449,7 +451,7 @@ const template7 = {
       {
         id: 'certifications-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
 
         children: [
           {
@@ -477,7 +479,7 @@ const template7 = {
                       path: 'data.title',
                       fallback: 'Certification Title',
                     },
-                    className: 'text-sm font-bold text-gray-900',
+                    className: 'text-base font-medium text-gray-900',
                   },
                   {
                     type: 'text',
@@ -490,7 +492,7 @@ const template7 = {
                   {
                     type: 'duration',
                     pathWithFallback: { path: 'data.duration' },
-                    className: 'text-sm text-gray-700',
+                    className: 'text-sm text-gray-500 italic',
                   },
                 ],
               },
@@ -503,7 +505,7 @@ const template7 = {
       {
         id: 'education-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
         children: [
           {
             id: 'education-heading',

@@ -24,7 +24,7 @@ const template6 = {
           {
             id: 'education-section',
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'education-heading',
@@ -76,7 +76,7 @@ const template6 = {
           {
             id: 'skills-section',
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'skills-heading',
@@ -107,7 +107,7 @@ const template6 = {
           {
             id: 'interests-section',
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'interests-heading',
@@ -143,7 +143,7 @@ const template6 = {
           // Contact Section
           {
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'contact-heading',
@@ -156,25 +156,47 @@ const template6 = {
               },
               {
                 type: 'container',
-                className: 'flex flex-col',
+                className: 'flex flex-col gap-2',
                 children: [
                   {
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.personalDetails.items.0.phone',
-                      fallback: 'P: +91 99996 48417',
-                    },
-                    className: 'text-white text-sm font-normal break-words whitespace-normal',
-                    prefix: 'P: ',
+                    type: 'container',
+                    className: 'flex items-center gap-2',
+                    children: [
+                      {
+                        type: 'icon',
+                        name: 'Phone',
+                        size: 16,
+                        className: 'text-[#F2936F]',
+                      },
+                      {
+                        type: 'text',
+                        pathWithFallback: {
+                          path: 'data.personalDetails.items.0.phone',
+                          fallback: '+91 9999999999',
+                        },
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
+                      },
+                    ],
                   },
                   {
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.personalDetails.items.0.email',
-                      fallback: 'jay02rustogi@gmail.com',
-                    },
-                    className: 'text-white text-sm font-normal break-words whitespace-normal',
-                    prefix: 'E: ',
+                    type: 'container',
+                    className: 'flex items-center gap-2',
+                    children: [
+                      {
+                        type: 'icon',
+                        name: 'Mail',
+                        size: 16,
+                        className: 'text-[#F2936F]',
+                      },
+                      {
+                        type: 'text',
+                        pathWithFallback: {
+                          path: 'data.personalDetails.items.0.email',
+                          fallback: 'jay02rustogi@gmail.com',
+                        },
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
+                      },
+                    ],
                   },
                 ],
               },
@@ -184,7 +206,7 @@ const template6 = {
           // Social Section
           {
             type: 'container',
-            className: 'flex flex-col gap-3 px-8',
+            className: 'flex flex-col gap-3 pl-6',
             children: [
               {
                 id: 'social-heading',

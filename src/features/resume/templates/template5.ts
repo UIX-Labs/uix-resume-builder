@@ -295,7 +295,7 @@ const template5 = {
                     presentation: [
                       {
                         type: 'text',
-                        className: 'text-lg font-bold text-[#1a1a1a]',
+                        className: 'text-lg text-[#1a1a1a]',
                       },
                     ],
                   },
@@ -474,7 +474,7 @@ const template5 = {
                             id: 'education-school',
                             type: 'text',
                             pathWithFallback: { path: 'data.institution' },
-                            className: 'text-lg font-bold text-[rgb(0,0,0)]',
+                            className: 'text-base font-bold text-[rgb(0,0,0)] w-[300px]',
                           },
                           // Right column with date and degree
                           {
@@ -491,7 +491,7 @@ const template5 = {
                                 id: 'education-degree',
                                 type: 'text',
                                 pathWithFallback: { path: 'data.degree' },
-                                className: 'text-base font-normal text-[rgb(0,0,0)]',
+                                className: 'text-sm font-normal text-[rgb(0,0,0)]',
                               },
                             ],
                           },
@@ -526,12 +526,12 @@ const template5 = {
                 presentation: [
                   {
                     type: 'list',
-                    className: 'flex flex-col gap-2 mt-2',
+                    className: 'flex flex-col gap-2',
                     pathWithFallback: { path: 'data.items' },
                     presentation: [
                       {
                         type: 'text',
-                        className: 'text-sm text-black',
+                        className: 'text-base text-black',
                       },
                     ],
                   },

@@ -110,58 +110,6 @@ const template9 = {
                   },
                 ],
               },
-
-              // Certifications Section
-              {
-                id: 'certifications-section',
-                type: 'container',
-                className: 'flex flex-col',
-                children: [
-                  {
-                    id: 'certifications-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.certifications.heading',
-                      fallback: 'CERTIFICATIONS',
-                    },
-                    className: 'uppercase tracking-wide text-lg font-bold text-black',
-                  },
-                  {
-                    type: 'seperator',
-                    variant: 'line',
-                    className: 'border-black border-t-3',
-                  },
-                  {
-                    id: 'certifications-list',
-                    type: 'list',
-                    pathWithFallback: { path: 'data.certifications.items' },
-                    className: 'flex flex-col mt-3 gap-4',
-                    presentation: [
-                      {
-                        type: 'container',
-                        className: 'flex flex-col gap-1',
-                        children: [
-                          {
-                            type: 'text',
-                            pathWithFallback: { path: 'data.title' },
-                            className: 'text-sm font-bold text-neutral-900',
-                          },
-                          {
-                            type: 'text',
-                            pathWithFallback: { path: 'data.issuer' },
-                            className: 'text-sm text-neutral-600',
-                          },
-                          {
-                            type: 'duration',
-                            pathWithFallback: { path: 'data.duration' },
-                            className: 'text-xs text-neutral-500',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
             ],
           },
         ],
@@ -312,7 +260,7 @@ const template9 = {
                             id: 'experience-bullets',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-xs text-neutral-600 leading-relaxed mt-1',
+                            className: 'text-xs text-neutral-600 leading-relaxed mt-1 whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -321,81 +269,83 @@ const template9 = {
                 ],
               },
 
-{
-               id: 'projects-section',
-               type: 'container',
-               className: 'flex flex-col',
-               children: [
-                 {
-                   id: 'projects-heading',
-                   type: 'text',
-                   pathWithFallback: {
-                     path: 'data.projects.title',
-                     fallback: 'PROJECTS',
-                   },
-                   className: 'uppercase tracking-wide text-lg font-bold text-black',
-                 },
-                 {
-                   type: 'seperator',
-                   variant: 'line',
-                   className: 'border-black border-t-3',
-                 },
-                 {
-                   id: 'projects',
-                   type: 'list',
-                   pathWithFallback: { path: 'data.projects.items' },
-                   className: 'flex flex-col mt-2',
-                   presentation: [
-                     {
-                       type: 'container',
-                       id: 'project-item',
-                       className:
-                         'flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0',
-                       children: [
-                         // Project Title
-                         {
-                           id: 'project-title',
-                           type: 'link',
-                           pathWithFallback: { path: 'data.title' },
-                           hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
-                           className: 'text-base font-bold text-neutral-900 mb-1 hover:underline',
-                         },
-                         // Duration Row
-                         {
-                           type: 'container',
-                           className: 'flex flex-row items-center gap-4 mt-1',
-                           children: [
-                             // Date with Calendar Icon
-                             {
-                               type: 'container',
-                               className: 'flex flex-row items-center gap-1.5',
-                               children: [
-                                 {
-                                   type: 'icon',
-                                   name: 'Calendar',
-                                   className: 'w-3.5 h-3.5 text-neutral-500',
-                                 },
-                                 {
-                                   id: 'project-period',
-                                   type: 'duration',
-                                   pathWithFallback: { path: 'data.duration' },
-                                   className: 'text-neutral-600 text-xs font-normal',
-                                 },
-                               ],
-                             },
-                           ],
-                         },
-                         // Description/Bullets
-                         {
-                           id: 'project-description',
-                           type: 'html',
-                           pathWithFallback: { path: 'data.description' },
-                           className: 'text-xs text-neutral-600 leading-relaxed mt-1',
-                         },
-                       ],
-                     },
-                   ]
-                 } ] }
+              {
+                id: 'projects-section',
+                type: 'container',
+                className: 'flex flex-col',
+                children: [
+                  {
+                    id: 'projects-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.projects.title',
+                      fallback: 'PROJECTS',
+                    },
+                    className: 'uppercase tracking-wide text-lg font-bold text-black',
+                  },
+                  {
+                    type: 'seperator',
+                    variant: 'line',
+                    className: 'border-black border-t-3',
+                  },
+                  {
+                    id: 'projects',
+                    type: 'list',
+                    pathWithFallback: { path: 'data.projects.items' },
+                    className: 'flex flex-col mt-2',
+                    presentation: [
+                      {
+                        type: 'container',
+                        id: 'project-item',
+                        className:
+                          'flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0',
+                        children: [
+                          // Project Title
+                          {
+                            id: 'project-title',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.title' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-base font-bold text-neutral-900 mb-1 hover:underline',
+                          },
+                          // Duration Row
+                          {
+                            type: 'container',
+                            className: 'flex flex-row items-center gap-4 mt-1',
+                            children: [
+                              // Date with Calendar Icon
+                              {
+                                type: 'container',
+                                className: 'flex flex-row items-center gap-1.5',
+                                children: [
+                                  {
+                                    type: 'icon',
+                                    name: 'Calendar',
+                                    className: 'w-3.5 h-3.5 text-neutral-500',
+                                  },
+                                  {
+                                    id: 'project-period',
+                                    type: 'duration',
+                                    pathWithFallback: { path: 'data.duration' },
+                                    className: 'text-neutral-600 text-xs font-normal',
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                          // Description/Bullets
+                          {
+                            id: 'project-description',
+                            type: 'html',
+                            pathWithFallback: { path: 'data.description' },
+                            className: 'text-xs text-neutral-600 leading-relaxed mt-1 whitespace-pre-wrap',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
             ],
           },
 
@@ -591,7 +541,7 @@ const template9 = {
                     id: 'skills-list',
                     type: 'list',
                     pathWithFallback: { path: 'data.skills.items' },
-                    className: 'grid grid-cols-3 gap-x-4 gap-y-3 mt-3',
+                    className: 'grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] gap-3 mt-3',
                     presentation: [
                       {
                         type: 'container',
@@ -600,7 +550,7 @@ const template9 = {
                           {
                             type: 'text',
                             pathWithFallback: { path: 'data.name' },
-                            className: 'text-sm font-semibold text-neutral-600',
+                            className: 'text-sm font-semibold text-neutral-600 break-words',
                           },
                           {
                             type: 'seperator',

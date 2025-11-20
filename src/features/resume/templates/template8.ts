@@ -273,7 +273,8 @@ const template8 = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold',
+                    className:
+                      'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
                   },
                 ],
               },
@@ -343,7 +344,8 @@ const template8 = {
                     id: 'project-description',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold',
+                    className:
+                      'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
                   },
                 ],
               },
@@ -537,13 +539,12 @@ const template8 = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-xs text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
                 seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-xs',
                   },
                 ],
               },

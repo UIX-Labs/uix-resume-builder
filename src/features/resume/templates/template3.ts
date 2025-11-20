@@ -171,7 +171,7 @@ const annaFieldTemplate = {
                   fallback: 'Summary',
                 },
                 className:
-                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -260,7 +260,7 @@ const annaFieldTemplate = {
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
                     className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words w-[520px]',
+                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words w-[520px] whitespace-pre-wrap',
                   },
                 ],
               },
@@ -316,7 +316,6 @@ const annaFieldTemplate = {
                             pathWithFallback: { path: 'data.title' },
                             className: 'text-base font-bold text-black',
                           },
-
                         ],
                       },
                       // Right column: Date
@@ -339,7 +338,7 @@ const annaFieldTemplate = {
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
                     className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                   },
                 ],
               },
@@ -401,13 +400,19 @@ const annaFieldTemplate = {
                   },
                   {
                     type: 'container',
-                    className: 'text-right',
+                    className: 'text-right flex flex-col flex-1',
                     children: [
                       {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
                         className: 'text-sm text-black',
+                      },
+                      {
+                        id: 'education-grade',
+                        type: 'text',
+                        pathWithFallback: { path: 'data.grade.value' },
+                        className: 'text-sm text-gray-600',
                       },
                     ],
                   },
@@ -444,7 +449,7 @@ const annaFieldTemplate = {
             id: 'skills-list',
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
-            className: 'flex flex-wrap gap-1',
+            className: 'text-sm text-black leading-relaxed space-x-1',
             seperator: ',',
             presentation: [
               {
@@ -487,13 +492,12 @@ const annaFieldTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
                 seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-gray-700',
                   },
                 ],
               },
@@ -532,13 +536,12 @@ const annaFieldTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
                 seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-gray-700',
                   },
                 ],
               },

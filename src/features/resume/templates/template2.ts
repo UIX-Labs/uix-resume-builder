@@ -164,7 +164,8 @@ const andrewTemplate = {
                   path: 'data.description',
                   fallback: 'Summary',
                 },
-                className: 'text-sm text-neutral-700 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 text-justify break-words',
+                className:
+                  'text-sm text-neutral-700 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 text-justify break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -243,7 +244,8 @@ const andrewTemplate = {
                             id: 'experience-bullets',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc',
+                            className:
+                              'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -314,7 +316,8 @@ const andrewTemplate = {
                             id: 'project-description',
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
-                            className: 'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc',
+                            className:
+                              'text-sm text-gray-700 leading-relaxed break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
                           },
                           {
                             id: 'project-link',
@@ -484,13 +487,12 @@ const andrewTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-black',
-                    suffix: ', ',
                   },
                 ],
               },
@@ -520,13 +522,12 @@ const andrewTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex flex-col gap-1',
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
                     type: 'text',
                     className: 'text-sm text-black',
-                    suffix: ', ',
                   },
                 ],
               },

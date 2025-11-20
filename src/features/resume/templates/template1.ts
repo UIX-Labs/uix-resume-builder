@@ -25,7 +25,7 @@ const aniketTemplate2 = {
           {
             id: 'header-section',
             type: 'container',
-            className: 'flex flex-col',
+            className: 'flex flex-col w-full',
             break: true,
             children: [
               {
@@ -118,7 +118,8 @@ const aniketTemplate2 = {
                   path: 'data.description',
                   fallback: 'Summary',
                 },
-                className: 'text-sm text-neutral-700 text-justify [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1 break-words',
+                className:
+                  'text-sm text-neutral-700 text-justify [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -144,13 +145,12 @@ const aniketTemplate2 = {
             id: 'skills-list',
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
-            className: 'flex flex-wrap gap-1',
+            className: 'text-sm text-black leading-relaxed space-x-1',
             seperator: ',',
             presentation: [
               {
                 type: 'text',
                 pathWithFallback: { path: 'data.name' },
-                className: 'text-sm text-black',
               },
             ],
           },
@@ -228,7 +228,7 @@ const aniketTemplate2 = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-sm text-black break-words [&_ul]:ml-3 [&_li]:list-disc',
+                    className: 'text-sm text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
                   },
                 ],
               },
@@ -295,13 +295,6 @@ const aniketTemplate2 = {
                     className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
                     children: [
                       {
-                        id: 'education-field',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.fieldOfStudy', fallback: 'Field of Study' },
-                        className: 'text-sm font-semibold',
-                      },
-                      { type: 'seperator', variant: 'pipe' },
-                      {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
@@ -312,7 +305,7 @@ const aniketTemplate2 = {
                   {
                     id: 'education-grade',
                     type: 'text',
-                    pathWithFallback: { path: 'data.grade' },
+                    pathWithFallback: { path: 'data.grade.value' },
                     className: 'text-sm text-black',
                   },
                 ],
@@ -343,13 +336,13 @@ const aniketTemplate2 = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
                 seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-black',
+                    // className: 'text-sm text-black',
                   },
                 ],
               },
@@ -379,9 +372,8 @@ const aniketTemplate2 = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex flex-col gap-1',
                 pathWithFallback: { path: 'data.items' },
-                seperator: ',',
                 presentation: [
                   {
                     type: 'text',

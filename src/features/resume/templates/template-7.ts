@@ -79,7 +79,7 @@ const template7 = {
                             'A proactive learner with a flair for adopting emerging trends & addressing industry requirements to achieve organisational objectives. Excellent spoken & written communication skills, problem solving and leadership skills.',
                         },
                         className:
-                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -298,7 +298,7 @@ const template7 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -362,7 +362,7 @@ const template7 = {
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
                     className:
-                      'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                      'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                   },
                 ],
               },
@@ -536,6 +536,12 @@ const template7 = {
                     type: 'text',
                     pathWithFallback: { path: 'data.institution' },
                     className: 'text-base text-gray-900',
+                  },
+                  {
+                    id: 'education-grade',
+                    type: 'text',
+                    pathWithFallback: { path: 'data.grade.value' },
+                    className: 'text-sm text-gray-700',
                   },
                   {
                     type: 'container',

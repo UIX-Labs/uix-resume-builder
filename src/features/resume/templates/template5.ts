@@ -281,7 +281,7 @@ const template5 = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'capitalize text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'interests-list',
@@ -369,7 +369,7 @@ const template5 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1',
+                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -391,7 +391,7 @@ const template5 = {
                   path: 'data.projects.title',
                   fallback: 'Projects',
                 },
-                className: 'text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
+                className: 'capitalize text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'projects',
@@ -430,7 +430,7 @@ const template5 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1',
+                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
                       },
                     ],
                   },

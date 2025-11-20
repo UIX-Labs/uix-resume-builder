@@ -176,7 +176,7 @@ const brianWayneTemplate = {
                       fallback: 'Summary',
                     },
                     className:
-                      'text-sm text-white text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                      'text-sm text-white text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                   },
                 ],
               },
@@ -399,7 +399,7 @@ const brianWayneTemplate = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -439,14 +439,13 @@ const brianWayneTemplate = {
                         type: 'container',
                         className: 'flex flex-row items-baseline gap-2',
                         children: [
-                          
-                           {
-                        id: 'project-title',
-                        type: 'link',
-                        pathWithFallback: { path: 'data.title' },
-                        hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
-                        className: 'text-base font-semibold text-[rgb(56,76,65)] hover:underline',
-                      },
+                          {
+                            id: 'project-title',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.title' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-base font-semibold text-[rgb(56,76,65)] hover:underline',
+                          },
                         ],
                       },
                       // Duration
@@ -468,7 +467,7 @@ const brianWayneTemplate = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -535,8 +534,7 @@ const brianWayneTemplate = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className:
-                  'capitalize text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
+                className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] border-b-2 border-gray-800 pb-1',
               },
               {
                 type: 'list',

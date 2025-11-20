@@ -13,12 +13,12 @@ const template6 = {
   body: {
     id: 'body',
     type: 'container',
-    className: 'flex flex-row h-full',
+    className: 'flex flex-row',
     children: [
       // Left Column - Dark Navy Sidebar
       {
         type: 'container',
-        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8',
+        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8 pr-4',
         children: [
           // Education Section
           {
@@ -56,13 +56,13 @@ const template6 = {
                         id: 'education-school',
                         type: 'text',
                         pathWithFallback: { path: 'data.institution' },
-                        className: 'text-white text-sm font-normal',
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
                       },
                       {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
-                        className: 'text-white text-sm font-normal',
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
                       },
                     ],
                   },
@@ -96,7 +96,7 @@ const template6 = {
                   {
                     type: 'text',
                     pathWithFallback: { path: 'data.name' },
-                    className: 'text-white text-sm font-normal leading-relaxed',
+                    className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
                   },
                 ],
               },
@@ -131,7 +131,7 @@ const template6 = {
                     presentation: [
                       {
                         type: 'text',
-                        className: 'text-white text-sm font-normal leading-relaxed',
+                        className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
                       },
                     ],
                   },
@@ -164,7 +164,7 @@ const template6 = {
                       path: 'data.personalDetails.items.0.phone',
                       fallback: 'P: +91 99996 48417',
                     },
-                    className: 'text-white text-sm font-normal',
+                    className: 'text-white text-sm font-normal break-words whitespace-normal',
                     prefix: 'P: ',
                   },
                   {
@@ -173,7 +173,7 @@ const template6 = {
                       path: 'data.personalDetails.items.0.email',
                       fallback: 'jay02rustogi@gmail.com',
                     },
-                    className: 'text-white text-sm font-normal break-words',
+                    className: 'text-white text-sm font-normal break-words whitespace-normal',
                     prefix: 'E: ',
                   },
                 ],
@@ -303,7 +303,7 @@ const template6 = {
                           path: 'data.description',
                           fallback: 'About text',
                         },
-                        className: 'text-sm text-black leading-relaxed break-words',
+                        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -383,7 +383,7 @@ const template6 = {
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
                             className:
-                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words',
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -445,7 +445,7 @@ const template6 = {
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
                             className:
-                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words',
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
                           },
                         ],
                       },

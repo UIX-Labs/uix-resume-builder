@@ -201,10 +201,19 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         if (!suggestion.old) return;
 
         const color = colorMap[suggestion.type];
-        const searchText = suggestion.old.replace(/<[^>]*>/g, '').trim();
+
+        const normalizeText = (str: string) =>
+          str
+            .replace(/<[^>]*>/g, '') // Remove HTML tags
+            .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
+            .trim(); // Trim leading/trailing spaces
+
+        const searchText = normalizeText(suggestion.old);
+        const editorText = normalizeText(text);
+
         if (!searchText) return;
 
-        const index = text.indexOf(searchText);
+        const index = editorText.indexOf(searchText);
         if (index !== -1) {
           const from = index + 1; // TipTap uses 1-based indexing
           const to = from + searchText.length;

@@ -22,8 +22,30 @@ export const findItemById = (items: unknown[], itemId: string): number => {
 };
 
 /**
+ * Normalizes text for comparison: removes HTML tags and normalizes whitespace
+ */
+const normalizeText = (str: string): string => {
+  return str
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/\s+/g, ' ')     // Normalize multiple spaces to single space
+    .trim();                  // Trim leading/trailing spaces
+};
+
+/**
+ * Creates a regex that matches text with flexible whitespace
+ */
+const createFlexibleRegex = (text: string): RegExp => {
+  // Escape special regex characters except spaces
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Replace spaces with flexible whitespace pattern
+  const flexible = escaped.replace(/\s+/g, '\\s+');
+  return new RegExp(flexible, 'gi');
+};
+
+/**
  * Applies selected suggestions to a field value
  * Handles both replacement and append operations
+ * Uses flexible whitespace matching to handle spacing differences
  */
 export const applySuggestionsToFieldValue = (
   currentValue: string,
@@ -33,8 +55,16 @@ export const applySuggestionsToFieldValue = (
 
   suggestions.forEach((suggestion) => {
     if (suggestion.old) {
-      updatedValue = updatedValue.replace(suggestion.old, suggestion.new);
+      // Normalize the old text to create a pattern
+      const normalizedOld = normalizeText(suggestion.old);
+
+      // Create a flexible regex that allows for varying whitespace
+      const regex = createFlexibleRegex(normalizedOld);
+
+      // Replace using the regex
+      updatedValue = updatedValue.replace(regex, suggestion.new);
     } else {
+      // For new summaries, append to the end
       updatedValue = updatedValue + (updatedValue ? '\n' : '') + suggestion.new;
     }
   });

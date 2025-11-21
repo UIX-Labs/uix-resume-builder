@@ -64,8 +64,8 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
-  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user'; 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
+  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user';
   const resumeFileName = `${username}-${currentMonthYear}-resume.pdf`;
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
@@ -316,7 +316,7 @@ export function FormPageBuilder() {
 
           <Button
             onClick={handleDownloadPDF}
-            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] 
+            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] cursor-pointer
                       -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] 
                       font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
           >

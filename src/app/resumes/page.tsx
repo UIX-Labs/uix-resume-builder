@@ -7,7 +7,7 @@ import { Button } from '@shared/ui/button';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { MoreVertical, Search, Trash2 } from 'lucide-react';
+import { HomeIcon, MoreVertical, Search, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -59,6 +59,17 @@ export default function AllResumePage() {
             </div>
 
             <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => router.push('/')}
+                  className="border-none bg-transparent hover:bg-transparent"
+                >
+                  <HomeIcon className="w-full h-full" />
+                </Button>
+              </div>
+
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
                 <span className="text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
               </div>
@@ -159,6 +170,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
         </div>
 
         <button
+          type="button"
           className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >

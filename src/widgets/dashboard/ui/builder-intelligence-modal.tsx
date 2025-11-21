@@ -17,7 +17,7 @@ interface BuilderIntelligenceModalProps {
   onClose: () => void;
   showJDUpload?: boolean;
   showResumeUpload?: boolean;
-  onSubmittingChange?: (isSubmitting: boolean) => void;
+  onSubmittingChange?: (isSubmitting: boolean, hasError?: boolean) => void;
 }
 
 export default function BuilderIntelligenceModal({
@@ -35,7 +35,9 @@ export default function BuilderIntelligenceModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    onSubmittingChange?.(isSubmitting);
+    if (onSubmittingChange) {
+      onSubmittingChange(isSubmitting, false);
+    }
   }, [isSubmitting, onSubmittingChange]);
 
   useEffect(() => {
@@ -89,6 +91,7 @@ export default function BuilderIntelligenceModal({
     } catch (error) {
       toast.error('Failed to analyze. Please try again.');
       console.error('Analysis error:', error);
+      onSubmittingChange?.(false, true);
     } finally {
       setIsSubmitting(false);
     }

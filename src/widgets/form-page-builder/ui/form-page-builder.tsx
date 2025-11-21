@@ -30,6 +30,8 @@ import { getCleanDataForRenderer } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
+import WishlistModal from './wishlist-modal';
+import WishlistSuccessModal from './waitlist-success-modal';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -38,6 +40,9 @@ export function FormPageBuilder() {
   const thumbnailGenerated = useRef(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -100,9 +105,9 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        toPDF();
+        setIsWishlistModalOpen(true);
       } else {
-        toast.error('You must be a community member to download PDF');
+        toPDF();
       }
     } catch (error) {
       console.error('Failed to check community membership:', error);
@@ -408,6 +413,21 @@ export function FormPageBuilder() {
           suggestions={analyzerModalData.suggestions}
           suggestionType={analyzerModalData.suggestionType}
           onApply={handleApplySuggestions}
+        />
+      )}
+
+      {isWishlistModalOpen && (
+        <WishlistModal
+          isOpen={isWishlistModalOpen}
+          onClose={() => setIsWishlistModalOpen(false)}
+          onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
+        />
+      )}
+
+      {isWishlistSuccessModalOpen && (
+        <WishlistSuccessModal
+          isOpen={isWishlistSuccessModalOpen}
+          onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
       )}
     </>

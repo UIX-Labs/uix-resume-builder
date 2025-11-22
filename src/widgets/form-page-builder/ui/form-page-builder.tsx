@@ -1,4 +1,4 @@
-import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate } from '@entities/resume';
+import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
@@ -13,7 +13,7 @@ import { uploadThumbnail } from '@entities/resume/api/upload-resume';
 import { useMutation } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { toast } from 'sonner';
-import { useResumeManager } from '@entities/resume/models/use-resume-data';
+import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
@@ -59,20 +59,29 @@ export function FormPageBuilder() {
   const templateId = currentResume?.templateId || null;
   const embeddedTemplate = currentResume?.template;
 
+  const { formData, setFormData } = useFormDataStore();
+
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { mutateAsync: uploadThumbnailMutation } = useMutation({
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
-  const username = user?.firstName?.toLowerCase().replace(/\s+/g, '-') || 'user';
-  const resumeFileName = `${username}-${currentMonthYear}-resume.pdf`;
+
+
+
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const fullName = formData?.personalDetails?.items?.[0]?.fullName;
+  const formattedName = fullName 
+    ? fullName.toLowerCase().replace(/\s+/g, '-') 
+    : 'resume';
+  const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
+
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   const { toPDF, targetRef } = usePDF({
     filename: resumeFileName,
-    resolution: Resolution.EXTREME,
+    resolution: Resolution.HIGH,
     overrides: {
       pdf: {
         unit: 'px',
@@ -102,15 +111,31 @@ export function FormPageBuilder() {
     };
   }, []);
 
-  const { formData, setFormData } = useFormDataStore();
-
   useEffect(() => {
+    async function processAnalyzerData() {
+      if (!resumeId || !analyzedData) return;
+
+      // Fetch empty data for defaults
+      const emptyData = await getResumeEmptyData();
+
+      // Deep merge analyzer data with empty data to ensure all fields have default values
+      let processedData = { ...analyzedData };
+      for (const key of Object.keys(emptyData)) {
+        processedData[key] = deepMerge(processedData[key], emptyData[key]);
+      }
+
+      // Normalize string fields (interests, achievements)
+      processedData = normalizeStringsFields(processedData);
+
+      useFormDataStore.setState({ formData: processedData ?? {} });
+    }
+
     if (!resumeId) {
       return;
     }
 
     if (analyzerResumeId === resumeId && analyzedData) {
-      useFormDataStore.setState({ formData: analyzedData ?? {} });
+      processAnalyzerData();
       return;
     }
 

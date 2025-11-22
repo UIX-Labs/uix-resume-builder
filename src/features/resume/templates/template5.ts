@@ -232,7 +232,7 @@ const template5 = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className: 'first-letter:uppercase text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'capitalize text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 type: 'list',
@@ -281,7 +281,7 @@ const template5 = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
+                className: 'capitalize text-base font-bold text-[#5b7fc7] border-b-1 border-[#5b7fc7]',
               },
               {
                 id: 'interests-list',
@@ -295,7 +295,7 @@ const template5 = {
                     presentation: [
                       {
                         type: 'text',
-                        className: 'text-lg font-bold text-[#1a1a1a]',
+                        className: 'text-lg text-[#1a1a1a]',
                       },
                     ],
                   },
@@ -369,7 +369,68 @@ const template5 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1',
+                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Projects Section
+          {
+            id: 'projects-section',
+            type: 'container',
+            className: 'flex flex-col gap-4',
+            children: [
+              {
+                id: 'projects-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.projects.title',
+                  fallback: 'Projects',
+                },
+                className: 'capitalize text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
+              },
+              {
+                id: 'projects',
+                type: 'list',
+                pathWithFallback: { path: 'data.projects.items' },
+                className: 'flex flex-col gap-6 -mt-2',
+                presentation: [
+                  {
+                    type: 'container',
+                    id: 'project-item',
+                    className: 'flex flex-col',
+                    children: [
+                      // Project title and date on same line
+                      {
+                        type: 'container',
+                        className: 'flex flex-row justify-between items-baseline',
+                        children: [
+                          {
+                            id: 'project-title',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.title' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-lg font-bold text-[rgb(0,0,0)] hover:underline',
+                          },
+                          {
+                            id: 'project-period',
+                            type: 'duration',
+                            pathWithFallback: { path: 'data.duration' },
+                            className: 'text-base font-bold text-[rgb(0,0,0)]',
+                          },
+                        ],
+                      },
+                      // Description
+                      {
+                        id: 'project-description',
+                        type: 'html',
+                        pathWithFallback: { path: 'data.description' },
+                        className:
+                          'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -413,7 +474,7 @@ const template5 = {
                             id: 'education-school',
                             type: 'text',
                             pathWithFallback: { path: 'data.institution' },
-                            className: 'text-lg font-bold text-[rgb(0,0,0)]',
+                            className: 'text-base font-bold text-[rgb(0,0,0)] w-[300px]',
                           },
                           // Right column with date and degree
                           {
@@ -430,7 +491,7 @@ const template5 = {
                                 id: 'education-degree',
                                 type: 'text',
                                 pathWithFallback: { path: 'data.degree' },
-                                className: 'text-base font-normal text-[rgb(0,0,0)]',
+                                className: 'text-sm font-normal text-[rgb(0,0,0)]',
                               },
                             ],
                           },
@@ -450,13 +511,13 @@ const template5 = {
             className: 'flex flex-col gap-4',
             children: [
               {
-                id: 'awards-heading',
+                id: 'achievements-heading',
                 type: 'text',
                 pathWithFallback: {
-                  path: 'data.awards.heading',
-                  fallback: 'Awards',
+                  path: 'data.achievements.title',
+                  fallback: 'Achievements',
                 },
-                className: 'text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
+                className: 'capitalize text-base font-semibold text-[rgb(56,76,65)] border-b-1 border-gray-800 pb-1',
               },
               {
                 id: 'achievements-list',
@@ -465,12 +526,12 @@ const template5 = {
                 presentation: [
                   {
                     type: 'list',
-                    className: 'flex flex-col gap-2 mt-2',
+                    className: 'flex flex-col gap-2',
                     pathWithFallback: { path: 'data.items' },
                     presentation: [
                       {
                         type: 'text',
-                        className: 'text-sm text-black',
+                        className: 'text-base text-black',
                       },
                     ],
                   },

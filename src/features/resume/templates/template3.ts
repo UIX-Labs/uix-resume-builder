@@ -171,7 +171,7 @@ const annaFieldTemplate = {
                   fallback: 'Summary',
                 },
                 className:
-                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -260,7 +260,85 @@ const annaFieldTemplate = {
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
                     className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words w-[520px]',
+                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Projects
+      {
+        id: 'projects-section',
+        type: 'container',
+        className: 'flex flex-col gap-3',
+        children: [
+          {
+            id: 'projects-header',
+            type: 'container',
+            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
+            children: [
+              {
+                id: 'projects-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.projects.title',
+                  fallback: 'Projects',
+                },
+                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
+              },
+            ],
+          },
+          {
+            id: 'projects',
+            type: 'list',
+            pathWithFallback: { path: 'data.projects.items' },
+            className: 'flex flex-col gap-6 px-2',
+            presentation: [
+              {
+                type: 'container',
+                id: 'project-item',
+                className: 'flex flex-col gap-3',
+                children: [
+                  {
+                    type: 'container',
+                    className: 'flex flex-row justify-between items-start',
+                    children: [
+                      {
+                        type: 'container',
+                        className: 'flex flex-col flex-1',
+                        children: [
+                          {
+                            id: 'project-title',
+                            type: 'text',
+                            pathWithFallback: { path: 'data.title' },
+                            className: 'text-base font-bold text-black',
+                          },
+                        ],
+                      },
+                      // Right column: Date
+                      {
+                        type: 'container',
+                        className: 'flex flex-col items-end text-right w-[160px] shrink-0',
+                        children: [
+                          {
+                            id: 'project-period',
+                            type: 'duration',
+                            pathWithFallback: { path: 'data.duration' },
+                            className: 'text-sm text-black',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 'project-description',
+                    type: 'html',
+                    pathWithFallback: { path: 'data.description' },
+                    className:
+                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                   },
                 ],
               },
@@ -322,13 +400,19 @@ const annaFieldTemplate = {
                   },
                   {
                     type: 'container',
-                    className: 'text-right',
+                    className: 'text-right flex flex-col flex-1',
                     children: [
                       {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
                         className: 'text-sm text-black',
+                      },
+                      {
+                        id: 'education-grade',
+                        type: 'text',
+                        pathWithFallback: { path: 'data.grade.value' },
+                        className: 'text-sm text-gray-600',
                       },
                     ],
                   },
@@ -365,13 +449,13 @@ const annaFieldTemplate = {
             id: 'skills-list',
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
-            className: 'flex flex-wrap gap-1',
+            className: 'text-sm text-black leading-relaxed space-x-1',
+            seperator: ',',
             presentation: [
               {
                 type: 'text',
                 pathWithFallback: { path: 'data.name' },
                 className: 'text-sm text-black',
-                suffix: ', ',
               },
             ],
           },
@@ -396,7 +480,7 @@ const annaFieldTemplate = {
                   path: 'data.interests.title',
                   fallback: 'Interests',
                 },
-                className: 'first-letter:uppercase text-lg font-bold text-[rgb(17,9,128)]',
+                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
               },
             ],
           },
@@ -408,13 +492,12 @@ const annaFieldTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-gray-700',
-                    suffix: ', ',
                   },
                 ],
               },
@@ -441,7 +524,7 @@ const annaFieldTemplate = {
                   path: 'data.achievements.title',
                   fallback: 'Achievements',
                 },
-                className: 'first-letter:uppercase text-lg font-bold text-[rgb(17,9,128)]',
+                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
               },
             ],
           },
@@ -453,13 +536,12 @@ const annaFieldTemplate = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-sm text-gray-700',
-                    suffix: ', ',
                   },
                 ],
               },
@@ -486,7 +568,7 @@ const annaFieldTemplate = {
                   path: 'data.certifications.title',
                   fallback: 'Certifications',
                 },
-                className: 'first-letter:uppercase text-lg font-bold text-[rgb(17,9,128)]',
+                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
               },
             ],
           },

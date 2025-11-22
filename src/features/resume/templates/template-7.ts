@@ -31,7 +31,7 @@ const template7 = {
               // Profile Photo and Name Container
               {
                 type: 'container',
-                className: 'flex flex-row gap-6 items-center mb-3',
+                className: 'flex flex-row gap-6 items-start mb-3',
                 children: [
                   {
                     type: 'container',
@@ -79,7 +79,7 @@ const template7 = {
                             'A proactive learner with a flair for adopting emerging trends & addressing industry requirements to achieve organisational objectives. Excellent spoken & written communication skills, problem solving and leadership skills.',
                         },
                         className:
-                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-gray-700 leading-relaxed text-justify [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -233,7 +233,7 @@ const template7 = {
       {
         id: 'experience-section',
         type: 'container',
-        className: 'px-8 py-4 flex flex-col',
+        className: 'px-8 pb-4 flex flex-col',
         break: true,
         children: [
           {
@@ -298,9 +298,109 @@ const template7 = {
                         type: 'html',
                         pathWithFallback: { path: 'data.description' },
                         className:
-                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words',
+                          'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
                       },
                     ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Projects Section
+      {
+        id: 'projects-section',
+        type: 'container',
+        className: 'px-8 pb-4 flex flex-col',
+        children: [
+          {
+            id: 'projects-heading',
+            type: 'text',
+            pathWithFallback: {
+              path: 'data.projects.title',
+              fallback: 'PROJECTS',
+            },
+            className: 'text-xl uppercase font-bold text-[#4178B4] mb-2 tracking-wide',
+          },
+          {
+            id: 'projects',
+            type: 'list',
+            pathWithFallback: { path: 'data.projects.items' },
+            className: 'flex flex-col gap-2',
+            presentation: [
+              {
+                type: 'container',
+                id: 'project-item',
+                className: 'flex flex-col',
+                children: [
+                  // Project Title (as link)
+                  {
+                    id: 'project-title',
+                    type: 'link',
+                    pathWithFallback: { path: 'data.title' },
+                    hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                    className: 'text-base font-medium text-gray-900',
+                  },
+                  // Duration
+                  {
+                    type: 'container',
+                    className: 'flex flex-row justify-between items-start',
+                    children: [
+                      {
+                        id: 'project-period',
+                        type: 'duration',
+                        pathWithFallback: { path: 'data.duration' },
+                        className: 'text-sm text-gray-500 italic',
+                      },
+                    ],
+                  },
+                  // Description
+                  {
+                    id: 'project-description',
+                    type: 'html',
+                    pathWithFallback: { path: 'data.description' },
+                    className:
+                      'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+
+      // Interests section
+      {
+        id: 'interests-section',
+        type: 'container',
+        className: 'flex flex-col gap-2 px-8 pb-4',
+        children: [
+          {
+            id: 'interests-heading',
+            type: 'text',
+            pathWithFallback: {
+              path: 'data.interests.title',
+              fallback: 'Interests',
+            },
+            className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide',
+          },
+          {
+            id: 'interests-list',
+            type: 'list',
+            pathWithFallback: { path: 'data.interests.items' },
+            className: 'flex flex-row flex-wrap justify-between gap-4',
+            presentation: [
+              {
+                type: 'list',
+                className: 'flex flex-col flex-1 min-w-[45%]',
+                pathWithFallback: { path: 'data.items' },
+                presentation: [
+                  {
+                    prefix: '• ',
+                    type: 'text',
+                    className: 'text-sm text-black',
                   },
                 ],
               },
@@ -313,7 +413,7 @@ const template7 = {
       {
         id: 'achievements-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
         children: [
           {
             id: 'achievements-heading',
@@ -336,6 +436,7 @@ const template7 = {
                 pathWithFallback: { path: 'data.items' },
                 presentation: [
                   {
+                    prefix: '• ',
                     type: 'text',
                     className: 'text-sm text-black',
                   },
@@ -350,7 +451,7 @@ const template7 = {
       {
         id: 'certifications-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
 
         children: [
           {
@@ -378,7 +479,7 @@ const template7 = {
                       path: 'data.title',
                       fallback: 'Certification Title',
                     },
-                    className: 'text-sm font-bold text-gray-900',
+                    className: 'text-base font-medium text-gray-900',
                   },
                   {
                     type: 'text',
@@ -391,7 +492,7 @@ const template7 = {
                   {
                     type: 'duration',
                     pathWithFallback: { path: 'data.duration' },
-                    className: 'text-sm text-gray-700',
+                    className: 'text-sm text-gray-500 italic',
                   },
                 ],
               },
@@ -404,7 +505,7 @@ const template7 = {
       {
         id: 'education-section',
         type: 'container',
-        className: 'flex flex-col gap-2 px-8 py-4',
+        className: 'flex flex-col gap-2 px-8 pb-4',
         children: [
           {
             id: 'education-heading',
@@ -437,6 +538,12 @@ const template7 = {
                     type: 'text',
                     pathWithFallback: { path: 'data.institution' },
                     className: 'text-base text-gray-900',
+                  },
+                  {
+                    id: 'education-grade',
+                    type: 'text',
+                    pathWithFallback: { path: 'data.grade.value' },
+                    className: 'text-sm text-gray-700',
                   },
                   {
                     type: 'container',

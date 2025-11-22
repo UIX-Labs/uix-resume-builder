@@ -129,7 +129,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             id: 'education',
@@ -213,7 +213,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             type: 'list',
@@ -228,7 +228,7 @@ const aniketTemplate = {
                   path: 'data.description',
                   fallback: 'Summary',
                 },
-                className: 'text-xs text-neutral-800 text-justify',
+                className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap',
               },
             ],
           },
@@ -238,7 +238,7 @@ const aniketTemplate = {
       {
         id: 'experience-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         break: true,
         children: [
           {
@@ -253,7 +253,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             id: 'experience',
@@ -304,7 +304,7 @@ const aniketTemplate = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs text-neutral-800 text-justify ml-[1.6ch]',
+                    className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap',
                   },
                 ],
               },
@@ -313,10 +313,12 @@ const aniketTemplate = {
         ],
       },
       // Skills
+      
+
       {
         id: 'skills-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         children: [
           {
             id: 'skills-heading',
@@ -330,37 +332,19 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             id: 'skills-list',
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
-            className: 'flex flex-col gap-1 mt-2',
-            groupBy: 'category',
+            className: 'flex flex-wrap gap-1 mt-3 text-xs',
+            seperator: ',',
             presentation: [
               {
-                type: 'container',
-                className: 'flex gap-1 items-center text-xs',
-                children: [
-                  {
-                    type: 'text',
-                    pathWithFallback: { path: 'data.label' },
-                    suffix: ': ',
-                    className: 'font-semibold',
-                  },
-                  {
-                    type: 'list',
-                    pathWithFallback: { path: 'data.items' },
-                    className: 'flex gap-1',
-                    presentation: [
-                      {
-                        type: 'text',
-                        pathWithFallback: { path: 'data.name' },
-                      },
-                    ],
-                  },
-                ],
+                type: 'text',
+                pathWithFallback: { path: 'data.name' },
+                className: 'text-xs text-neutral-800',
               },
             ],
           },
@@ -370,7 +354,7 @@ const aniketTemplate = {
       {
         id: 'projects-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         children: [
           {
             id: 'projects-heading',
@@ -384,7 +368,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             type: 'list',
@@ -418,7 +402,7 @@ const aniketTemplate = {
                       path: 'data.description',
                       fallback: '',
                     },
-                    className: 'text-xs text-neutral-800 text-justify',
+                    className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap',
                   },
                   {
                     type: 'link',
@@ -436,7 +420,7 @@ const aniketTemplate = {
       {
         id: 'interests-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         children: [
           {
             id: 'interests-heading',
@@ -450,7 +434,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             id: 'interests-list',
@@ -483,7 +467,7 @@ const aniketTemplate = {
       {
         id: 'achievements-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         children: [
           {
             id: 'achievements-heading',
@@ -497,7 +481,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             id: 'achievements-list',
@@ -530,7 +514,7 @@ const aniketTemplate = {
       {
         id: 'certifications-section',
         type: 'container',
-        className: 'flex flex-col gap-2 mt-4',
+        className: 'flex flex-col mt-4',
         children: [
           {
             id: 'certifications-heading',
@@ -544,7 +528,7 @@ const aniketTemplate = {
           {
             type: 'seperator',
             variant: 'line',
-            className: 'bg-black w-full h-[1.5px] ml-[1.5ch] mt-0.5',
+            className: 'bg-black w-full h-[1.5px] mt-0.5',
           },
           {
             type: 'list',

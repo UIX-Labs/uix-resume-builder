@@ -15,6 +15,7 @@ interface FileUploadProps {
   acceptedFileTypes?: string;
   maxFileSize?: number;
   onPendingChange?: (pending: boolean) => void;
+  renderAsOverlay?: boolean;
 }
 
 export function FileUpload({
@@ -26,6 +27,7 @@ export function FileUpload({
   acceptedFileTypes = '.pdf',
   maxFileSize = 10,
   onPendingChange,
+  renderAsOverlay = false,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
@@ -72,6 +74,25 @@ export function FileUpload({
   };
 
   const isDisabled = disabled || isPending;
+
+  if (renderAsOverlay) {
+    return (
+      <>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={acceptedFileTypes}
+          onChange={handleFileUpload}
+          className="hidden"
+        />
+        <button
+          type="button"
+          className={cn('absolute inset-0 cursor-pointer rounded-xl', isDisabled && 'cursor-not-allowed', className)}
+          onClick={isDisabled ? undefined : handleButtonClick}
+        />
+      </>
+    );
+  }
 
   return (
     <>

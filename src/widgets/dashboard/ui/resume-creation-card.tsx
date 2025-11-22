@@ -1,12 +1,10 @@
 import { createResume } from '@entities/resume';
 import { useMutation } from '@tanstack/react-query';
-import { ChevronDown, FileText } from 'lucide-react';
-import Image from 'next/image';
+import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@shared/ui/components/button';
 import { FileUpload } from '@widgets/resumes/file-upload';
 import { useUserProfile } from '@shared/hooks/use-user';
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
 import { useCallback, useMemo, useState } from 'react';
@@ -87,13 +85,6 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
     }
   };
 
-  const handleOpenTailoredResume = () => {
-    lockOptions('tailoredResume');
-    setShowResumeUpload(true);
-    setShowJDUpload(false);
-    setIsBuilderIntelligenceModalOpen(true);
-  };
-
   const handleOpenTailoredWithJD = () => {
     lockOptions('tailoredJD');
     setShowResumeUpload(false);
@@ -167,15 +158,12 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
     }
 
     return (
-      <div className="absolute inset-0 z-30 flex items-center justify-center bg-white/80 backdrop-blur-sm">
-        <video
-          src="/videos/scanning-animation-resize.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="h-full w-full object-cover rounded-[24px]"
-        />
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-[20px]">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-lg font-semibold text-gray-800">Uploading Resume...</p>
+          <p className="text-sm text-gray-600">Please wait while we process your file</p>
+        </div>
       </div>
     );
   }, [shouldShowScanningOverlay]);
@@ -185,110 +173,65 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
       <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
         {scanningOverlay}
 
-        <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center">
-          <div className="flex flex-col items-center gap-2 z-20 rounded-xl p-4">
-            <div className="w-[44.07px] h-10 flex items-center justify-center">
-              <FileText className="w-[29.38px] h-[33.33px] text-black" strokeWidth={1.5} />
-            </div>
+        <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
+          <div className="w-full">
+            {/* Options Grid */}
+            <div className="grid grid-cols-3 gap-3">
+              {/* From Scratch */}
+              <Button
+                variant="outline"
+                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-gray-200 disabled:hover:bg-white"
+                disabled={optionsLocked && activeAction !== 'create'}
+                onClick={resumeCreateHandler}
+              >
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                  <StarsIcon />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1">From Scratch</h3>
+                  <p className="text-xs text-gray-600">Start with a blank canvas</p>
+                </div>
+              </Button>
 
-            <div className="relative w-full h-[52px] rounded-[15px] p-1 flex items-center">
-              <div className="flex flex-row gap-3">
-                <Popover>
-                  <PopoverTrigger>
-                    <Button className="flex items-center justify-center gap-2 bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]">
-                      <span>Create Resume</span>
-                      <ChevronDown className="w-6 h-6" strokeWidth={2} />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="flex flex-col gap-2 w-full">
-                    <Button
-                      variant="outline"
-                      className="relative border-none w-full flex flex-row items-center justify-start gap-2 bg-white text-black rounded-xl h-11 shadow-none hover:bg-[#E9F4FF]"
-                      disabled={optionsLocked && activeAction !== 'create'}
-                      onClick={resumeCreateHandler}
-                    >
-                      <StarsIcon />
-                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal text-left">
-                        From scratch
-                      </span>
-                    </Button>
-
-                    <FileUpload
-                      onSuccess={handleUploadSuccess}
-                      onError={handleUploadError}
-                      onPendingChange={handleUploadPendingChange}
-                      disabled={optionsLocked && activeAction !== 'upload'}
-                    />
-
-                    <Button
-                      className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
-                      variant="outline"
-                      disabled={optionsLocked && activeAction !== 'tailoredJD'}
-                      onClick={handleOpenTailoredWithJD}
-                    >
-                      <StarsIcon />
-
-                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal justify-center">
-                        Tailored with JD
-                        <span className="bg-[#02A44F] text-white text-xs font-medium rounded-full px-2 py-[2px] justify-center">
-                          recommended
-                        </span>
-                      </span>
-                    </Button>
-                  </PopoverContent>
-                </Popover>
+              {/* Upload Resume */}
+              <div className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 rounded-xl transition-all group">
+                <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                  <Upload className="w-5 h-5 text-purple-600" />
+                </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1">Upload Resume</h3>
+                  <p className="text-xs text-gray-600">Import existing resume</p>
+                </div>
+                <FileUpload
+                  onSuccess={handleUploadSuccess}
+                  onError={handleUploadError}
+                  onPendingChange={handleUploadPendingChange}
+                  disabled={optionsLocked && activeAction !== 'upload'}
+                  renderAsOverlay={true}
+                />
               </div>
 
-              <div className="absolute inset-0 flex items-center justify-center -z-1">
-                <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-45">
-                  <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image
-                      src="/images/template-dashboard.png"
-                      alt="Template 1"
-                      width={97.7}
-                      height={101.91}
-                      className="object-cover"
-                    />
-                  </div>
+              {/* Tailored with JD - Recommended */}
+              <Button
+                variant="outline"
+                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-500 hover:border-green-600 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-green-500 disabled:hover:shadow-none"
+                disabled={optionsLocked && activeAction !== 'tailoredJD'}
+                onClick={handleOpenTailoredWithJD}
+              >
+                <span className="absolute top-2 right-2 bg-green-500 text-white text-[10px] font-medium rounded-full px-2 py-0.5">
+                  Recommended
+                </span>
+                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                  <StarsIcon />
                 </div>
-
-                <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-45">
-                  <div className="w-[95.07px] h-[99.23px] bg-[rgb(141,48,48)] rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image
-                      src="/images/template-dashboard.png"
-                      alt="Template 2"
-                      width={100.11}
-                      height={104.65}
-                      className="object-cover"
-                    />
-                  </div>
+                <div className="text-center">
+                  <h3 className="font-semibold text-gray-900 text-sm mb-1">Tailored with JD</h3>
+                  <p className="text-xs text-gray-600">AI-optimized for job</p>
                 </div>
-
-                <div className="absolute -left-[50px] -top-[70px] flex flex-col gap-2 -rotate-32">
-                  <div className="w-[81.58px] h-[95.96px] bg-white rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image
-                      src="/images/template-dashboard.png"
-                      alt="Template 3"
-                      width={82.84}
-                      height={97.22}
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-
-                <div className="absolute -right-[50px] -top-[70px] flex flex-col gap-2 rotate-25">
-                  <div className="w-[81.49px] h-[95.92px] bg-[#1FB272] rounded-lg flex items-center justify-center overflow-hidden">
-                    <Image
-                      src="/images/template-dashboard.png"
-                      alt="Template 4"
-                      width={87.87}
-                      height={102.72}
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              </div>
+              </Button>
             </div>
+
+            {/* Template Preview Section */}
           </div>
         </div>
       </div>

@@ -29,6 +29,9 @@ import {
 import { getCleanDataForRenderer } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
+import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
+import WishlistModal from './wishlist-modal';
+import WishlistSuccessModal from './waitlist-success-modal';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -37,6 +40,9 @@ export function FormPageBuilder() {
   const thumbnailGenerated = useRef(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -53,6 +59,7 @@ export function FormPageBuilder() {
   const { data: formSchema } = useTemplateFormSchema();
 
   const { data: user } = useUserProfile();
+
   const { data: resumes, refetch: refetchResumes } = useGetAllResumes({ userId: user?.id as string });
 
   const currentResume = resumes?.find((resume) => resume.id === resumeId);
@@ -76,6 +83,8 @@ export function FormPageBuilder() {
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
+  const { mutateAsync: checkCommunityMember } = useCheckIfCommunityMember();
+
   const { toPDF, targetRef } = usePDF({
     filename: resumeFileName,
     resolution: Resolution.HIGH,
@@ -89,8 +98,27 @@ export function FormPageBuilder() {
     },
   });
 
-  const handleDownloadPDF = () => {
-    toPDF();
+  const handleDownloadPDF = async () => {
+    try {
+      if (!user?.email) {
+        toast.error('User email is required to download PDF');
+        return;
+      }
+
+      const response = await checkCommunityMember({
+        personal_email: user?.email,
+        uix_email: user?.email,
+      });
+
+      if (response?.is_uix_member) {
+        toPDF();
+      } else {
+        setIsWishlistModalOpen(true);
+      }
+    } catch (error) {
+      console.error('Failed to check community membership:', error);
+      toast.error('Failed to verify community membership');
+    }
   };
 
   useEffect(() => {
@@ -411,6 +439,21 @@ export function FormPageBuilder() {
           suggestions={analyzerModalData.suggestions}
           suggestionType={analyzerModalData.suggestionType}
           onApply={handleApplySuggestions}
+        />
+      )}
+
+      {isWishlistModalOpen && (
+        <WishlistModal
+          isOpen={isWishlistModalOpen}
+          onClose={() => setIsWishlistModalOpen(false)}
+          onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
+        />
+      )}
+
+      {isWishlistSuccessModalOpen && (
+        <WishlistSuccessModal
+          isOpen={isWishlistSuccessModalOpen}
+          onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
       )}
     </>

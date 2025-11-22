@@ -66,9 +66,6 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-
-
-
   const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
   const formattedName = fullName 
@@ -262,8 +259,6 @@ export function FormPageBuilder() {
   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
-    console.log('🚀 APPLY CLICKED');
-    console.log('Selected suggestions:', selectedSuggestions);
 
     if (!analyzerModalData) return;
 

@@ -192,6 +192,7 @@ export function People() {
                                   'object-cover rounded-[20px] transition-all duration-500',
                                   isExpanded ? 'brightness-75' : 'brightness-100',
                                 )}
+                                unoptimized
                               />
 
                               {/* Text Overlay - Only visible when expanded */}

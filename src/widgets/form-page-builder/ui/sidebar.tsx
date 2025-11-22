@@ -15,6 +15,8 @@ import { useRouter, useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
 import { CheckIcon, Sparkles } from 'lucide-react';
 import { Button } from '@shared/ui/button';
+import { getResumeEmptyData } from '@entities/resume';
+import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
 import { toast } from 'sonner';
 
@@ -133,7 +135,17 @@ export function Sidebar() {
       const response = await updateResumeByAnalyzerWithResumeId(resumeId);
 
       if (response?.resume) {
-        setFormData(response.resume);
+        const emptyData = await getResumeEmptyData();
+
+        let processedData = { ...response.resume };
+        for (const key of Object.keys(emptyData)) {
+          processedData[key] = deepMerge(processedData[key], emptyData[key]);
+        }
+
+        processedData = normalizeStringsFields(processedData);
+
+        setFormData(processedData);
+
         toast.success('Builder Intelligence analysis complete!');
       }
     } catch (error) {

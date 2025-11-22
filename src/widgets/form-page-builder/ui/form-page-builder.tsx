@@ -410,11 +410,11 @@ export function FormPageBuilder() {
             onOpenAnalyzerModal={handleOpenAnalyzerModal}
           />
 
-          <div className="mt-5 cursor-pointer z-100 relative ml-auto flex justify-end border-0">
+          <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
             {navs[nextStepIndex]?.name && (
               <Button
                 className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
-                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4"
+                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
                 onClick={handleNextStep}
               >
                 {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
@@ -422,7 +422,7 @@ export function FormPageBuilder() {
             )}
             <Button
               className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
-               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF]"
+               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleSaveResume}
             >
               Save

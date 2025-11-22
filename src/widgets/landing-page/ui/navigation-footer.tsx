@@ -72,7 +72,7 @@ const FooterNavigation = () => {
         <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
           <button
             type="button"
-            className="flex items-center gap-3 group hover:opacity-80 transition-opacity duration-200"
+            className="flex items-center gap-3 group hover:opacity-80 transition-opacity duration-200 cursor-pointer"
           >
             <div className="w-6 h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
               <ArrowRight />

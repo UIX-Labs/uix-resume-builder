@@ -69,6 +69,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                 width={483}
                 height={494}
                 className="w-full h-full object-cover"
+                unoptimized
               />
             </div>
 

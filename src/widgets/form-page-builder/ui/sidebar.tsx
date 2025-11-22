@@ -266,7 +266,7 @@ export function Sidebar() {
         </p>
 
         <Button
-          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] border-none h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5"
+          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] border-none h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
           onClick={handleBuilderIntelligence}
           disabled={isAnalyzing}
         >

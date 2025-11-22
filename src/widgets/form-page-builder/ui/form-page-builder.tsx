@@ -66,12 +66,16 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
+
+
+
   const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
   const formattedName = fullName 
     ? fullName.toLowerCase().replace(/\s+/g, '-') 
     : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
+
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
@@ -258,6 +262,9 @@ export function FormPageBuilder() {
   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
+    console.log('🚀 APPLY CLICKED');
+    console.log('Selected suggestions:', selectedSuggestions);
+
     if (!analyzerModalData) return;
 
     const { itemId, fieldName } = analyzerModalData;
@@ -284,7 +291,10 @@ export function FormPageBuilder() {
       }
 
       const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
+      console.log('Current field value:', currentFieldValue);
+
       const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
+      console.log('Updated field value:', updatedFieldValue);
 
       const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
 
@@ -310,7 +320,7 @@ export function FormPageBuilder() {
       toast.success('Suggestions applied successfully.');
       setAnalyzerModalOpen(false);
     } catch (error) {
-      console.error('Failed to apply suggestions:', error);
+      console.error('❌ Failed to apply suggestions:', error);
       toast.error('Failed to apply suggestions');
     }
   };
@@ -337,7 +347,7 @@ export function FormPageBuilder() {
 
           <Button
             onClick={handleDownloadPDF}
-            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] 
+            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] cursor-pointer
                       -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] 
                       font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
           >

@@ -11,9 +11,12 @@ import { Achievements } from '@shared/icons/achievements';
 import { useEffect, useState } from 'react';
 import { useFormDataStore } from '../models/store';
 import { calculateResumeCompletion } from '@shared/lib/resume-completion';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, Sparkles } from 'lucide-react';
+import { Button } from '@shared/ui/button';
+import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
+import { toast } from 'sonner';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -110,10 +113,36 @@ function sectionHasContent(sectionData: unknown): boolean {
 
 export function Sidebar() {
   const [progress, setProgress] = useState(0);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
 
   const resumeData = useFormDataStore((state) => state.formData);
+  const setFormData = useFormDataStore((state) => state.setFormData);
   const router = useRouter();
+  const params = useParams();
+  const resumeId = params?.id as string;
+
+  const handleBuilderIntelligence = async () => {
+    if (!resumeId) {
+      toast.error('Resume ID not found');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    try {
+      const response = await updateResumeByAnalyzerWithResumeId(resumeId);
+
+      if (response?.resume) {
+        setFormData(response.resume);
+        toast.success('Builder Intelligence analysis complete!');
+      }
+    } catch (error) {
+      console.error('Builder Intelligence error:', error);
+      toast.error('Failed to analyze resume. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   useEffect(() => {
     if (!resumeData) return;
@@ -204,19 +233,33 @@ export function Sidebar() {
         })}
       </div>
 
-      {/* <div
-        className="w-[217px] rounded-3xl p-4 mt-auto"
+      {/* Builder Intelligence Card */}
+      <div
+        className="w-[180px] rounded-2xl p-3 mt-auto mx-auto mb-2"
         style={{
           background: 'linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)',
         }}
       >
-        <p className="text-sm font-semibold text-white">Don’t Lose Your Progress</p>
-        <p className="text-[12px] font-normal text-white mt-[3px]">
-          Sign in to save your resume, access more templates, and unlock smart features.
+        <p className="text-sm font-semibold text-white">Switch to Builder Intelligence</p>
+        <p className="text-[11px] font-normal text-white/80 mt-1">
+          Get grammar fixes, stronger verbs, and tailored improvements.
         </p>
 
-        <Button className="w-full mt-4 bg-[#006BFF] border border-[#94CDFF] h-8 w-fit">Sign In</Button>
-      </div> */}
+        <Button
+          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] border-none h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5"
+          onClick={handleBuilderIntelligence}
+          disabled={isAnalyzing}
+        >
+          {isAnalyzing ? (
+            'Analyzing...'
+          ) : (
+            <>
+              Builder Intelligence
+              <Sparkles className="w-3.5 h-3.5" />
+            </>
+          )}
+        </Button>
+      </div>
     </div>
   );
 }

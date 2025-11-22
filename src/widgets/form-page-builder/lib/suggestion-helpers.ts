@@ -22,8 +22,52 @@ export const findItemById = (items: unknown[], itemId: string): number => {
 };
 
 /**
+ * Normalizes text for comparison: removes HTML tags, bullets, and normalizes whitespace
+ */
+const normalizeText = (str: string): string => {
+  return str
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/[•\-\*◦▪▫►▸]/g, '') // Remove bullet characters
+    .replace(/\s+/g, ' ')     // Normalize multiple spaces to single space
+    .trim();                  // Trim leading/trailing spaces
+};
+
+/**
+ * Converts text with \n to proper HTML format for TipTap
+ * Handles both plain text and text that already contains HTML tags
+ */
+const convertTextToHtml = (text: string): string => {
+  if (!text) return '';
+
+  // Check if text already contains HTML paragraph tags
+  const hasHtmlParagraphs = /<p[^>]*>/.test(text);
+
+  if (hasHtmlParagraphs) {
+    // Already has proper HTML structure, return as-is
+    return text;
+  }
+
+  // Check if text has other HTML tags (like <b>, <strong>, etc.)
+  const hasHtmlTags = /<[^>]+>/.test(text);
+
+  if (hasHtmlTags) {
+    // Has HTML tags but no paragraphs - split by \n and wrap each in <p>
+    const lines = text.split('\n').filter(line => line.trim());
+    if (lines.length === 0) return '';
+    if (lines.length === 1) return `<p>${lines[0]}</p>`;
+    return lines.map(line => `<p>${line}</p>`).join('');
+  }
+
+  // Plain text - split by \n and wrap in <p> tags
+  const lines = text.split('\n').filter(line => line.trim());
+  if (lines.length === 0) return '';
+  if (lines.length === 1) return `<p>${lines[0]}</p>`;
+  return lines.map(line => `<p>${line}</p>`).join('');
+};
+
+/**
  * Applies selected suggestions to a field value
- * Handles both replacement and append operations
+ * Simple comparison: normalize both, if equal, replace with new
  */
 export const applySuggestionsToFieldValue = (
   currentValue: string,
@@ -33,9 +77,31 @@ export const applySuggestionsToFieldValue = (
 
   suggestions.forEach((suggestion) => {
     if (suggestion.old) {
-      updatedValue = updatedValue.replace(suggestion.old, suggestion.new);
+      const normalizedCurrent = normalizeText(currentValue);
+      const normalizedOld = normalizeText(suggestion.old);
+
+      console.log('Current (normalized):', normalizedCurrent);
+      console.log('Old (normalized):', normalizedOld);
+      console.log('Match:', normalizedCurrent === normalizedOld);
+
+      if (normalizedCurrent === normalizedOld) {
+        // Check if current value has HTML (TipTap field) or is plain text (regular input)
+        const isHtmlField = /<[^>]+>/.test(currentValue);
+
+        if (isHtmlField) {
+          // TipTap field - convert to proper HTML
+          updatedValue = convertTextToHtml(suggestion.new);
+        } else {
+          // Regular input field - keep as plain text, just replace \n with space
+          updatedValue = suggestion.new.replace(/\n/g, ' ');
+        }
+
+        console.log('Replaced with:', updatedValue);
+      }
     } else {
-      updatedValue = updatedValue + (updatedValue ? '\n' : '') + suggestion.new;
+      // For new summaries (no old value), always treat as HTML field
+      const newTextHtml = convertTextToHtml(suggestion.new);
+      updatedValue = updatedValue + newTextHtml;
     }
   });
 

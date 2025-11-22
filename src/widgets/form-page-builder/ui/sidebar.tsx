@@ -113,11 +113,14 @@ function sectionHasContent(sectionData: unknown): boolean {
 
 export function Sidebar() {
   const [progress, setProgress] = useState(0);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
 
   const resumeData = useFormDataStore((state) => state.formData);
   const setFormData = useFormDataStore((state) => state.setFormData);
+  const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
+  const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
+  const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
+  const setRetryAnalyzer = useFormDataStore((state) => state.setRetryAnalyzer);
   const router = useRouter();
   const params = useParams();
   const resumeId = params?.id as string;
@@ -129,6 +132,7 @@ export function Sidebar() {
     }
 
     setIsAnalyzing(true);
+    setAnalyzerError(false);
     try {
       const response = await updateResumeByAnalyzerWithResumeId(resumeId);
 
@@ -138,11 +142,15 @@ export function Sidebar() {
       }
     } catch (error) {
       console.error('Builder Intelligence error:', error);
-      toast.error('Failed to analyze resume. Please try again.');
+      setAnalyzerError(true);
     } finally {
       setIsAnalyzing(false);
     }
   };
+
+  useEffect(() => {
+    setRetryAnalyzer(() => handleBuilderIntelligence);
+  }, [resumeId]);
 
   useEffect(() => {
     if (!resumeData) return;
@@ -156,7 +164,7 @@ export function Sidebar() {
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 
   return (
-    <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4">
+    <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <div className="flex items-center gap-2">
         <button
           type="button"
@@ -181,7 +189,7 @@ export function Sidebar() {
         <ProgressCircle progress={progress} totalSteps={navs.length} currentStep={currentStepIndex + 1} />
       </div>
 
-      <div className="flex flex-col gap-2 mt-12 w-full pl-6">
+      <div className="flex flex-col gap-2 mt-4 w-full pl-6 pr-2">
         {navs.map((nav) => {
           const Icon = icons[nav.name as keyof typeof icons] ?? ProfessionalSummary;
           const sectionData = resumeData?.[nav.name as keyof typeof resumeData];
@@ -235,7 +243,7 @@ export function Sidebar() {
 
       {/* Builder Intelligence Card */}
       <div
-        className="w-[180px] rounded-2xl p-3 mt-auto mx-auto mb-2"
+        className="w-[180px] rounded-2xl p-3 mt-4 mx-auto mb-2"
         style={{
           background: 'linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)',
         }}

@@ -28,7 +28,7 @@ export const UrlInput = ({
   return (
     <div className="relative">
       <Input
-        placeholder="Enter URL"
+        placeholder="ENTER URL LABEL"
         className={cn(
           'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
           'placeholder:text-[#DBCFD4] text-base text-[#0C1118]',

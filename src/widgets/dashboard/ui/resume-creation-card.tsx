@@ -180,7 +180,7 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               {/* From Scratch */}
               <Button
                 variant="outline"
-                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-gray-200 disabled:hover:bg-white"
+                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-gray-200 disabled:hover:bg-white cursor-pointer"
                 disabled={optionsLocked && activeAction !== 'create'}
                 onClick={resumeCreateHandler}
               >
@@ -194,7 +194,7 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               </Button>
 
               {/* Upload Resume */}
-              <div className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 rounded-xl transition-all group">
+              <div className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 rounded-xl transition-all group cursor-pointer">
                 <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                   <Upload className="w-5 h-5 text-purple-600" />
                 </div>
@@ -214,7 +214,7 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               {/* Tailored with JD - Recommended */}
               <Button
                 variant="outline"
-                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-500 hover:border-green-600 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-green-500 disabled:hover:shadow-none"
+                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-500 hover:border-green-600 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-green-500 disabled:hover:shadow-none cursor-pointer"
                 disabled={optionsLocked && activeAction !== 'tailoredJD'}
                 onClick={handleOpenTailoredWithJD}
               >

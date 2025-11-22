@@ -31,8 +31,12 @@ export default function AllResumePage() {
       return;
     }
 
+    const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    const userName = `${user.firstName} ${user.lastName || ''}`.trim();
+    const title = `${userName}-Resume-${currentDate}`;
+
     const data = await createResumeMutation.mutateAsync({
-      title: 'Frontend Engineer Resume',
+      title: title,
       userInfo: {
         userId: user.id,
       },

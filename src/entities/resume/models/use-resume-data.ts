@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getResumeData, getResumeEmptyData, saveFormData } from '../api';
 
 // --- Deep merge utility ---
-function deepMerge<T>(target: T, source: T): T {
+export function deepMerge<T>(target: T, source: T): T {
   if (source === null || source === undefined) return target;
   if (target === null || target === undefined) return source;
 
@@ -27,7 +27,7 @@ function deepMerge<T>(target: T, source: T): T {
   return (target ?? source) as T;
 }
 
-function normalizeStringsFields(data: any): any {
+export function normalizeStringsFields(data: any): any {
   if (!data) return data;
 
   const stringsFields = ['interests', 'achievements'];

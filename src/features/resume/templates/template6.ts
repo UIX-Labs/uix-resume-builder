@@ -13,18 +13,18 @@ const template6 = {
   body: {
     id: 'body',
     type: 'container',
-    className: 'flex flex-row h-full',
+    className: 'flex flex-row',
     children: [
       // Left Column - Dark Navy Sidebar
       {
         type: 'container',
-        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8',
+        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8 pr-4',
         children: [
           // Education Section
           {
             id: 'education-section',
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'education-heading',
@@ -56,13 +56,13 @@ const template6 = {
                         id: 'education-school',
                         type: 'text',
                         pathWithFallback: { path: 'data.institution' },
-                        className: 'text-white text-sm font-normal',
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
                       },
                       {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
-                        className: 'text-white text-sm font-normal',
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
                       },
                     ],
                   },
@@ -76,7 +76,7 @@ const template6 = {
           {
             id: 'skills-section',
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'skills-heading',
@@ -96,7 +96,44 @@ const template6 = {
                   {
                     type: 'text',
                     pathWithFallback: { path: 'data.name' },
-                    className: 'text-white text-sm font-normal leading-relaxed',
+                    className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
+                  },
+                ],
+              },
+            ],
+          },
+
+          // Interests Section
+          {
+            id: 'interests-section',
+            type: 'container',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
+            children: [
+              {
+                id: 'interests-heading',
+                type: 'text',
+                pathWithFallback: {
+                  path: 'data.interests.title',
+                  fallback: 'INTERESTS',
+                },
+                className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
+              },
+              {
+                id: 'interests-list',
+                type: 'list',
+                pathWithFallback: { path: 'data.interests.items' },
+                className: 'flex flex-col',
+                presentation: [
+                  {
+                    type: 'list',
+                    pathWithFallback: { path: 'data.items' },
+                    className: 'flex flex-col',
+                    presentation: [
+                      {
+                        type: 'text',
+                        className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
+                      },
+                    ],
                   },
                 ],
               },
@@ -106,7 +143,7 @@ const template6 = {
           // Contact Section
           {
             type: 'container',
-            className: 'flex flex-col gap-3 px-8 mb-8',
+            className: 'flex flex-col gap-3 pl-6 mb-8',
             children: [
               {
                 id: 'contact-heading',
@@ -119,25 +156,47 @@ const template6 = {
               },
               {
                 type: 'container',
-                className: 'flex flex-col',
+                className: 'flex flex-col gap-2',
                 children: [
                   {
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.personalDetails.items.0.phone',
-                      fallback: 'P: +91 99996 48417',
-                    },
-                    className: 'text-white text-sm font-normal',
-                    prefix: 'P: ',
+                    type: 'container',
+                    className: 'flex items-center gap-2',
+                    children: [
+                      {
+                        type: 'icon',
+                        name: 'Phone',
+                        size: 16,
+                        className: 'text-[#F2936F]',
+                      },
+                      {
+                        type: 'text',
+                        pathWithFallback: {
+                          path: 'data.personalDetails.items.0.phone',
+                          fallback: '+91 9999999999',
+                        },
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
+                      },
+                    ],
                   },
                   {
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.personalDetails.items.0.email',
-                      fallback: 'jay02rustogi@gmail.com',
-                    },
-                    className: 'text-white text-sm font-normal break-words',
-                    prefix: 'E: ',
+                    type: 'container',
+                    className: 'flex items-center gap-2',
+                    children: [
+                      {
+                        type: 'icon',
+                        name: 'Mail',
+                        size: 16,
+                        className: 'text-[#F2936F]',
+                      },
+                      {
+                        type: 'text',
+                        pathWithFallback: {
+                          path: 'data.personalDetails.items.0.email',
+                          fallback: 'jay02rustogi@gmail.com',
+                        },
+                        className: 'text-white text-sm font-normal break-words whitespace-normal',
+                      },
+                    ],
                   },
                 ],
               },
@@ -147,7 +206,7 @@ const template6 = {
           // Social Section
           {
             type: 'container',
-            className: 'flex flex-col gap-3 px-8',
+            className: 'flex flex-col gap-3 pl-6',
             children: [
               {
                 id: 'social-heading',
@@ -266,7 +325,7 @@ const template6 = {
                           path: 'data.description',
                           fallback: 'About text',
                         },
-                        className: 'text-sm text-black leading-relaxed break-words',
+                        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap',
                       },
                     ],
                   },
@@ -346,7 +405,7 @@ const template6 = {
                             type: 'html',
                             pathWithFallback: { path: 'data.description' },
                             className:
-                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words',
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
                           },
                         ],
                       },
@@ -355,7 +414,69 @@ const template6 = {
                 ],
               },
 
-              // Additional Sections (Projects, Certifications, etc.)
+              // Projects Section
+              {
+                id: 'projects-section',
+                type: 'container',
+                className: 'flex flex-col gap-4',
+                children: [
+                  {
+                    id: 'projects-heading',
+                    type: 'text',
+                    pathWithFallback: {
+                      path: 'data.projects.title',
+                      fallback: 'PROJECTS',
+                    },
+                    className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
+                  },
+                  {
+                    id: 'projects',
+                    type: 'list',
+                    pathWithFallback: { path: 'data.projects.items' },
+                    className: 'flex flex-col gap-6',
+                    presentation: [
+                      {
+                        type: 'container',
+                        id: 'project-item',
+                        className: 'flex flex-col gap-1',
+                        children: [
+                          // Project Title (as link)
+                          {
+                            id: 'project-title',
+                            type: 'link',
+                            pathWithFallback: { path: 'data.title' },
+                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
+                            className: 'text-black text-xs uppercase hover:underline',
+                          },
+                          // Duration
+                          {
+                            type: 'container',
+                            className: 'flex flex-row gap-2 items-baseline',
+                            children: [
+                              {
+                                id: 'project-period',
+                                type: 'duration',
+                                pathWithFallback: { path: 'data.duration' },
+                                className: 'text-black text-sm font-normal italic',
+                              },
+                            ],
+                          },
+                          // Description
+                          {
+                            id: 'project-description',
+                            type: 'html',
+                            pathWithFallback: { path: 'data.description' },
+                            className:
+                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              // Certifications Section
               {
                 id: 'certifications-section',
                 type: 'container',
@@ -386,7 +507,7 @@ const template6 = {
                               path: 'data.title',
                               fallback: 'Certification Title',
                             },
-                            className: 'text-sm font-bold text-black',
+                            className: 'text-sm text-black',
                           },
                           {
                             type: 'text',

@@ -18,6 +18,8 @@ export const UrlInput = ({
   const [link, setLink] = useState(() => {
     return data?.link ?? '';
   });
+  const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     onChange({ title, link: link });
@@ -33,17 +35,24 @@ export const UrlInput = ({
           'font-normal focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
           'bg-[#FAFBFC]',
         )}
-        defaultValue={title}
+        value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
       <div className="absolute top-0 right-2 bottom-0 flex items-center justify-center text-muted-foreground">
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger className="cursor-pointer">
             <Image src="/images/link.svg" alt="link" width={16} height={16} />
           </PopoverTrigger>
-          <PopoverContent>
-            <Input placeholder="Enter URL" defaultValue={link} onChange={(e) => setLink(e.target.value)} />
+          <PopoverContent onClick={(e) => e.stopPropagation()}>
+            <Input
+              autoFocus
+              placeholder="Enter URL"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && setOpen(false)}
+              onClick={(e) => e.stopPropagation()}
+            />
           </PopoverContent>
         </Popover>
       </div>

@@ -71,7 +71,7 @@ export default function DashboardCarousel() {
                         src={template.publicImageUrl}
                         alt={`Template ${template.id}`}
                         fill
-                        className="object-cover rounded-[20px]"
+                        className="rounded-[20px]"
                         unoptimized
                       />
                     </div>

@@ -105,9 +105,9 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        setIsWishlistModalOpen(true);
-      } else {
         toPDF();
+      } else {
+        setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to check community membership:', error);

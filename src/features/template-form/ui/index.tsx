@@ -93,7 +93,7 @@ export function TemplateForm({
       case 'tel': {
         return (
           <PhoneInput
-            defaultValue={typeof data === 'string' ? data : data?.value || ''}
+            value={typeof data === 'string' ? data : data?.value || ''}
             placeholder={section.placeholder}
             onChange={(phoneValue) => {
               onChange(phoneValue || '');

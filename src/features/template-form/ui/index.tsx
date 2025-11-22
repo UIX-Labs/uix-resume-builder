@@ -190,7 +190,7 @@ export function TemplateForm({
           </div>
         ) : (
           currentData.items.map((item, itemIdx) => {
-            const itemId = item.id || `item-${itemIdx}`;
+            const itemId = item.id || item.itemId || `item-${itemIdx}`;
 
             return Object.entries(item).map(([key, value], i) => {
               const section = currentSchema[key];
@@ -229,9 +229,8 @@ export function TemplateForm({
                       onChange({ ...values, [currentStep]: { ...currentData, items } });
                     },
                     currentData.suggestedUpdates,
-                    itemId,
-                    key,
                     currentData.items[itemIdx]?.itemId,
+                    key,
                   )}
                 </label>
               );

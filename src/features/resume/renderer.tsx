@@ -110,7 +110,7 @@ function renderText(node: TextNode, data: any) {
 }
 
 function renderList(node: ListNode, data: any) {
-  const { pathWithFallback, presentation, transform, groupBy } = node;
+  const { pathWithFallback, presentation, transform, groupBy, seperator } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   if (!Array.isArray(resolved) || resolved.length === 0) {
@@ -131,9 +131,15 @@ function renderList(node: ListNode, data: any) {
 
     return (
       <div className={cn('flex flex-wrap', node.className)}>
-        {Object.entries(grouped).map(([_key, value]) =>
-          presentation.map((child) => {
-            return <>{renderNode(child, value)}</>;
+        {Object.entries(grouped).map(([_key, value], groupIndex, groupArray) =>
+          presentation.map((child, childIndex) => {
+            const isLast = groupIndex === groupArray.length - 1 && childIndex === presentation.length - 1;
+            return (
+              <>
+                {renderNode(child, value)}
+                {!isLast && seperator && <span>{seperator}</span>}
+              </>
+            );
           }),
         )}
       </div>
@@ -145,18 +151,30 @@ function renderList(node: ListNode, data: any) {
 
     return (
       <div className={cn('flex flex-wrap', node.className)}>
-        {flattened.map((child) => (
-          <>{renderNode(presentation[0], child)}</>
-        ))}
+        {flattened.map((child, index) => {
+          const isLast = index === flattened.length - 1;
+          return (
+            <>
+              {renderNode(presentation[0], child)}
+              {!isLast && seperator && <span>{seperator}</span>}
+            </>
+          );
+        })}
       </div>
     );
   }
 
   return (
     <div className={cn('flex flex-wrap', node.className)}>
-      {Object.entries(resolved).map(([_key, value]) =>
-        presentation.map((child) => {
-          return <>{renderNode(child, value)}</>;
+      {Object.entries(resolved).map(([_key, value], index, array) =>
+        presentation.map((child, childIndex) => {
+          const isLast = index === array.length - 1 && childIndex === presentation.length - 1;
+          return (
+            <>
+              {renderNode(child, value)}
+              {!isLast && seperator && <span>{seperator}</span>}
+            </>
+          );
         }),
       )}
     </div>

@@ -118,7 +118,7 @@ const aniketTemplate1 = {
                   path: 'data.description',
                   fallback: 'Summary',
                 },
-                className: 'text-xs text-neutral-700 text-justify',
+                className: 'text-xs text-neutral-700 text-justify whitespace-pre-wrap',
               },
             ],
           },
@@ -233,7 +233,7 @@ const aniketTemplate1 = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs text-neutral-700 text-justify',
+                    className: 'text-xs text-neutral-700 text-justify whitespace-pre-wrap',
                   },
                 ],
               },
@@ -322,7 +322,7 @@ const aniketTemplate1 = {
                       {
                         id: 'education-grade',
                         type: 'text',
-                        pathWithFallback: { path: 'data.grade' },
+                        pathWithFallback: { path: 'data.grade.value' },
                         className: 'text-xs text-neutral-700',
                       },
                     ],
@@ -390,7 +390,7 @@ const aniketTemplate1 = {
                       path: 'data.description',
                       fallback: '',
                     },
-                    className: 'text-xs text-neutral-700 text-justify',
+                    className: 'text-xs text-neutral-700 text-justify whitespace-pre-wrap',
                   },
 
                   // Project Link
@@ -523,7 +523,7 @@ const aniketTemplate1 = {
           {
             type: 'list',
             id: 'certifications-list',
-            className: 'flex flex-col gap-4 px-2',
+            className: 'flex flex-col gap-4',
             pathWithFallback: { path: 'data.certifications.items' },
             presentation: [
               {

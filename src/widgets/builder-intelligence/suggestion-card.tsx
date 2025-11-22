@@ -9,10 +9,32 @@ interface HtmlContentProps {
   content: string;
 }
 
+/**
+ * Converts plain text with \n to HTML format
+ */
+const processContentWithNewlines = (content: string): string => {
+  if (!content) return '';
+
+  // Check if content already contains HTML tags
+  const hasHtmlTags = /<[^>]+>/.test(content);
+
+  if (hasHtmlTags) {
+    // If already has HTML, just replace \n with <br>
+    return content.replace(/\n/g, '<br>');
+  } else {
+    // If plain text, wrap each line in <p> tags
+    const lines = content.split('\n').filter(line => line.trim());
+    if (lines.length === 0) return '';
+    if (lines.length === 1) return lines[0];
+    return lines.map(line => `<p>${line}</p>`).join('');
+  }
+};
+
 const HtmlContent = ({ as = 'span', className, content }: HtmlContentProps) => {
   const Tag = as;
+  const processedContent = processContentWithNewlines(content);
   // biome-ignore lint: suggestions include formatted HTML
-  return <Tag className={className} dangerouslySetInnerHTML={{ __html: content }} />;
+  return <Tag className={className} dangerouslySetInnerHTML={{ __html: processedContent }} />;
 };
 
 export const SuggestionCard = ({

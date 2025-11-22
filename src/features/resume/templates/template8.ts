@@ -42,7 +42,7 @@ const template8 = {
               {
                 id: 'contact-section',
                 type: 'container',
-                className: 'flex flex-row flex-wrap items-center justify-center gap-4 text-xs font-[600]',
+                className: 'flex flex-row flex-wrap items-center justify-center gap-4 text-sm font-[600]',
                 children: [
                   {
                     id: 'phone-container',
@@ -58,7 +58,7 @@ const template8 = {
                         id: 'phone-text',
                         type: 'text',
                         pathWithFallback: { path: 'data.phone', fallback: '+91 8595481430' },
-                        className: 'text-xs',
+                        className: 'text-sm',
                       },
                     ],
                   },
@@ -76,7 +76,7 @@ const template8 = {
                         id: 'email-text',
                         type: 'text',
                         pathWithFallback: { path: 'data.email', fallback: 'vivekabhiraj456@gmail.com' },
-                        className: 'text-xs underline',
+                        className: 'text-sm underline',
                       },
                     ],
                   },
@@ -94,14 +94,14 @@ const template8 = {
                         id: 'linkedin-link',
                         type: 'link',
                         pathWithFallback: {
-                          path: 'data.links.LinkedIn.title',
-                          fallback: 'LinkedIn',
+                          path: 'data.links.linkedin.title',
+                          fallback: '',
                         },
                         hrefPathWithFallback: {
-                          path: 'data.links.LinkedIn.link',
+                          path: 'data.links.linkedin.link',
                           fallback: 'https://linkedin.com',
                         },
-                        className: 'text-xs underline',
+                        className: 'text-sm underline',
                       },
                     ],
                   },
@@ -119,64 +119,14 @@ const template8 = {
                         id: 'github-link',
                         type: 'link',
                         pathWithFallback: {
-                          path: 'data.links.Github.title',
+                          path: 'data.links.github.title',
                           fallback: 'Github',
                         },
                         hrefPathWithFallback: {
-                          path: 'data.links.Github.link',
+                          path: 'data.links.github.link',
                           fallback: 'https://github.com',
                         },
-                        className: 'text-xs underline',
-                      },
-                    ],
-                  },
-                  {
-                    id: 'portfolio-container',
-                    type: 'container',
-                    className: 'flex flex-row items-center gap-1',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Globe',
-                        className: 'w-3 h-3',
-                      },
-                      {
-                        id: 'portfolio-link',
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.links.Portfolio.title',
-                          fallback: 'Portfolio',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.links.Portfolio.link',
-                          fallback: 'https://portfolio.com',
-                        },
-                        className: 'text-xs underline',
-                      },
-                    ],
-                  },
-                  {
-                    id: 'leetcode-container',
-                    type: 'container',
-                    className: 'flex flex-row items-center gap-1',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Code',
-                        className: 'w-3 h-3',
-                      },
-                      {
-                        id: 'leetcode-link',
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.links.leetcode.title',
-                          fallback: 'LeetCode',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.links.leetcode.link',
-                          fallback: 'https://leetcode.com',
-                        },
-                        className: 'text-xs underline',
+                        className: 'text-sm underline',
                       },
                     ],
                   },
@@ -239,13 +189,13 @@ const template8 = {
                         id: 'education-degree',
                         type: 'text',
                         pathWithFallback: { path: 'data.degree' },
-                        className: 'text-xs',
+                        className: 'text-sm',
                       },
                       {
                         id: 'education-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
-                        className: 'text-xs italic',
+                        className: 'text-sm italic',
                       },
                     ],
                   },
@@ -309,13 +259,13 @@ const template8 = {
                         id: 'experience-role',
                         type: 'text',
                         pathWithFallback: { path: 'data.position' },
-                        className: 'text-xs italic',
+                        className: 'text-sm italic',
                       },
                       {
                         id: 'experience-period',
                         type: 'duration',
                         pathWithFallback: { path: 'data.duration' },
-                        className: 'text-xs italic',
+                        className: 'text-sm italic',
                       },
                     ],
                   },
@@ -323,7 +273,8 @@ const template8 = {
                     id: 'experience-bullets',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold',
+                    className:
+                      'text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
                   },
                 ],
               },
@@ -383,7 +334,7 @@ const template8 = {
                               path: 'data.link.link',
                               fallback: '',
                             },
-                            className: 'text-xs underline hover:text-blue-600',
+                            className: 'text-sm underline hover:text-blue-600',
                           },
                         ],
                       },
@@ -393,7 +344,8 @@ const template8 = {
                     id: 'project-description',
                     type: 'html',
                     pathWithFallback: { path: 'data.description' },
-                    className: 'text-xs [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold',
+                    className:
+                      'text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
                   },
                 ],
               },
@@ -422,6 +374,7 @@ const template8 = {
             type: 'list',
             pathWithFallback: { path: 'data.skills.items' },
             className: 'flex flex-row gap-1 mt-2',
+            seperator: ',',
             presentation: [
               {
                 type: 'container',
@@ -441,13 +394,6 @@ const template8 = {
                             type: 'text',
                             pathWithFallback: { path: 'data.name' },
                             className: 'text-sm text-black',
-                            suffix: ', ',
-                          },
-                          {
-                            id: 'skill-category',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.category' },
-                            className: 'text-xs text-gray-600',
                           },
                         ],
                       },
@@ -493,7 +439,7 @@ const template8 = {
                       {
                         type: 'text',
                         pathWithFallback: { path: '' },
-                        className: 'text-xs',
+                        className: 'text-sm',
                         prefix: '• ',
                       },
                     ],
@@ -536,7 +482,7 @@ const template8 = {
                       path: 'data.title',
                       fallback: 'Certification Title',
                     },
-                    className: 'text-xs font-bold',
+                    className: 'text-sm font-bold',
                   },
                   {
                     type: 'text',
@@ -544,18 +490,18 @@ const template8 = {
                       path: 'data.issuer',
                       fallback: 'Issuer',
                     },
-                    className: 'text-xs',
+                    className: 'text-sm',
                   },
                   {
                     type: 'duration',
                     pathWithFallback: { path: 'data.duration' },
-                    className: 'text-xs italic',
+                    className: 'text-sm italic',
                   },
                   {
                     type: 'link',
                     pathWithFallback: { path: 'data.link.title', fallback: '' },
                     hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
-                    className: 'text-xs underline hover:text-blue-600',
+                    className: 'text-sm underline hover:text-blue-600',
                   },
                 ],
               },
@@ -587,13 +533,12 @@ const template8 = {
             presentation: [
               {
                 type: 'list',
-                className: 'flex flex-wrap gap-1',
+                className: 'text-sm text-black leading-relaxed space-x-1',
                 pathWithFallback: { path: 'data.items' },
+                seperator: ',',
                 presentation: [
                   {
                     type: 'text',
-                    className: 'text-xs',
-                    suffix: ', ',
                   },
                 ],
               },

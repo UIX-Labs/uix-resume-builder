@@ -5,13 +5,12 @@ import React from 'react'
 const services = [
   {
     id: 1,
-    title: 'AI Resume Analyzer',
-    icon: '/images/epereince.svg'
+    title: 'Practical and clean resume templates',
+    icon: '/images/epereince.svg',
   },
-  { id: 2, title: 'Human Expert Review', icon: '/images/epereince.svg' },
-  { id: 3, title: 'ATS Compatibility Checker', icon: '/images/epereince.svg' },
-  { id: 4, title: 'Job Description Tailor', icon: '/images/epereince.svg' },
-  { id: 5, title: 'Career Growth Dashboard', icon: '/images/epereince.svg' }
+  { id: 2, title: 'AI Builder intelligence for corrections', icon: '/images/epereince.svg' },
+  { id: 3, title: 'Tailored resume for the Job', icon: '/images/epereince.svg' },
+  { id: 4, title: 'Community support for resume review and mentorship', icon: '/images/epereince.svg' },
 ];
 
 // Company logos data array

@@ -37,42 +37,33 @@ export function JourneyTimeline() {
     const updateThread = () => {
       if (!timelineContainerRef.current) return;
 
-      // Get timeline container's position (the visual timeline, not the section)
       const rect = timelineContainerRef.current.getBoundingClientRect();
       const timelineTop = rect.top;
       const timelineHeight = rect.height;
       const windowHeight = window.innerHeight;
 
-      // Calculate scroll progress through the timeline
-      // Start when top of timeline reaches center of viewport
-      // End when bottom of timeline reaches center of viewport
+     
       const viewportCenter = windowHeight / 2;
-      const timelineStart = timelineTop + timelineHeight * 0.1; // Start at 10% into timeline
-      const timelineEnd = timelineTop + timelineHeight * 0.9; // End at 90% through timeline
+      const timelineStart = timelineTop + timelineHeight * 0.1; 
+      const timelineEnd = timelineTop + timelineHeight * 0.9; 
       const scrollProgress = (viewportCenter - timelineStart) / (timelineEnd - timelineStart);
       const scrollPercentage = Math.max(0, Math.min(scrollProgress, 1));
 
-      // Calculate how much of the total thread should be drawn
       const drawTotal = totalLength * scrollPercentage;
 
-      // Animate each path sequentially based on cumulative progress
       threadPathRefs.current.forEach((path, index) => {
         if (path && pathLengths[index]) {
           const pathStart = index === 0 ? 0 : cumulativeLengths[index - 1];
           const pathEnd = cumulativeLengths[index];
 
-          // Calculate how much of this specific path should be drawn
           const pathProgress = Math.max(0, Math.min(drawTotal - pathStart, pathLengths[index]));
 
           path.style.strokeDashoffset = pathLengths[index] - pathProgress;
         }
       });
 
-      // Animate circles based on their position in the thread
       circleRefs.current.forEach((circle, index) => {
         if (circle) {
-          // Show circle when the thread reaches its position
-          // Circles appear at different points along the thread
           const circleThreshold = index / Math.max(1, circleRefs.current.length - 1);
           if (scrollPercentage >= circleThreshold * 0.95) {
             circle.style.opacity = '1';
@@ -108,14 +99,13 @@ export function JourneyTimeline() {
     };
 
     window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
+    handleScroll(); 
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   return (
     <section className="w-full py-16 md:py-24">
-      {/* Introductory Text Section */}
-      {/* <div className="w-full max-w-[1272px] mx-auto px-4 mb-12"> */}
+     
       <div className="max-w-[540px] ml-auto mr-[17%] mb-6">
         <p
           className="text-[18px] text-[#0C1118]"
@@ -124,7 +114,7 @@ export function JourneyTimeline() {
           }}
         >
           Most people don't open a resume builder in a happy mood. They're stressed, uncertain, and looking for a way
-          out — not just better grammar or keywords.
+          out - not just better grammar or keywords.
         </p>
         <p className="text-[18px] text-[#0C1118]">That's where we saw the gap no one was solving.</p>
       </div>
@@ -261,7 +251,6 @@ export function JourneyTimeline() {
             </svg>
           </div>
 
-          {/* Labels and Numbers */}
           <div
             className="absolute left-[69.3%] top-[0%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#309F66] opacity-80"
@@ -269,7 +258,6 @@ export function JourneyTimeline() {
             problem
           </div>
 
-          {/* Section 01 - Why We Started */}
           <div
             className="absolute left-[80.4%] top-[14.6%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#309F66] opacity-80"
@@ -281,7 +269,6 @@ export function JourneyTimeline() {
             <WhyWeStarted />
           </div>
 
-          {/* Section 02 - The Human + AI Approach */}
           <div
             className="absolute left-[36%] top-[30.4%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#57B083] opacity-80"
@@ -293,7 +280,6 @@ export function JourneyTimeline() {
             <HumanAiApproach />
           </div>
 
-          {/* Section 03 - The Community */}
           <div
             className="absolute left-[48.8%] top-[50.8%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#57B083] opacity-80"
@@ -305,7 +291,6 @@ export function JourneyTimeline() {
             <TheCommunity />
           </div>
 
-          {/* Section 04 - Success Stories */}
           <div
             className="absolute left-[88.7%] top-[71.3%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#57B083] opacity-80"
@@ -317,7 +302,6 @@ export function JourneyTimeline() {
             <SuccessStories />
           </div>
 
-          {/* Section 05 - Our Vision */}
           <div
             className="absolute left-[48.8%] top-[95.1%] font-serif text-[44px] font-bold 
                        leading-[1.15em] tracking-[-0.02em] text-[#57B083] opacity-80"

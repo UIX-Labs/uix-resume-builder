@@ -223,21 +223,6 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
                     <Button
                       className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
                       variant="outline"
-                      disabled={optionsLocked && activeAction !== 'tailoredResume'}
-                      onClick={handleOpenTailoredResume}
-                    >
-                      <StarsIcon />
-
-                      <span className="flex items-center gap-2 text-[#656A72] text-base font-normal justify-center">
-                        Tailored Resume
-                        <span className="bg-[#02A44F] text-white text-xs font-medium rounded-full px-2 py-[2px] justify-center">
-                          recommended
-                        </span>
-                      </span>
-                    </Button>
-                    <Button
-                      className="relative border-none w-full flex flex-row items-center justify-center gap-2 bg-white text-black rounded-xl h-11 shadow-none  hover:bg-[#E9F4FF]"
-                      variant="outline"
                       disabled={optionsLocked && activeAction !== 'tailoredJD'}
                       onClick={handleOpenTailoredWithJD}
                     >

@@ -122,6 +122,7 @@ export function Duration({ data, onChange }: DurationProps) {
             </div>
 
             <Calendar
+              captionLayout="dropdown"
               mode="single"
               selected={endDate}
               defaultMonth={endDate}

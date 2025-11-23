@@ -73,13 +73,10 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName 
-    ? fullName.toLowerCase().replace(/\s+/g, '-') 
-    : 'resume';
+  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
-
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
@@ -88,6 +85,9 @@ export function FormPageBuilder() {
   const { toPDF, targetRef } = usePDF({
     filename: resumeFileName,
     resolution: Resolution.HIGH,
+    page: {
+      format: 'A4',
+    },
     overrides: {
       pdf: {
         unit: 'px',
@@ -287,7 +287,6 @@ export function FormPageBuilder() {
   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
-
     if (!analyzerModalData) return;
 
     const { itemId, fieldName } = analyzerModalData;
@@ -357,15 +356,9 @@ export function FormPageBuilder() {
           maxWidth: 794 + 48 + 6,
         }}
       >
-        <div
-          className="bg-white border-[3px] border-blue-800 outline-[3px] 
-                        outline-blue-400 rounded-[18px] overflow-auto  min-w-0 flex-1"
-        >
+        <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer
-              template={selectedTemplate?.json || aniketTemplate}
-              data={getCleanDataForRenderer(formData ?? {})}
-            />
+            <ResumeRenderer template={aniketTemplate} data={getCleanDataForRenderer(formData ?? {})} />
           </div>
 
           <Button

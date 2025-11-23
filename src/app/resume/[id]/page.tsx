@@ -62,7 +62,7 @@ export default function FormPage() {
       <div className="flex pl-4 ">
         <Sidebar />
 
-        <div className="relative flex w-full">
+        <div className="relative flex w-full overflow-hidden">
           {(isAnalyzing || analyzerError) && (
             <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/50 backdrop-blur-sm">
               {analyzerError ? (

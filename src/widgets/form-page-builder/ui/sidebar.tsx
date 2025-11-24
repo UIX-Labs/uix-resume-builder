@@ -135,6 +135,38 @@ export function Sidebar() {
 
     setIsAnalyzing(true);
     setAnalyzerError(false);
+    useFormDataStore.setState({ analyzerProgress: 0 });
+
+    // Variable speed progress simulation
+    const progressInterval = setInterval(() => {
+      useFormDataStore.setState((state) => {
+        const current = state.analyzerProgress;
+        let increment = 0;
+
+        // Slower progress at certain milestones
+        if (current < 30) {
+          increment = Math.random() * 3 + 1; // 1-4% increment
+        } else if (current >= 30 && current < 35) {
+          increment = Math.random() * 1 + 0.5; // 0.5-1.5% increment (slower)
+        } else if (current >= 35 && current < 40) {
+          increment = Math.random() * 2 + 1; // 1-3% increment
+        } else if (current >= 40 && current < 50) {
+          increment = Math.random() * 1 + 0.3; // 0.3-1.3% increment (slower)
+        } else if (current >= 50 && current < 70) {
+          increment = Math.random() * 3 + 1; // 1-4% increment
+        } else if (current >= 70 && current < 90) {
+          increment = Math.random() * 2 + 0.5; // 0.5-2.5% increment
+        } else if (current >= 90 && current < 95) {
+          increment = Math.random() * 0.5 + 0.2; // 0.2-0.7% increment (very slow)
+        } else {
+          increment = 0; // Stop at 95%
+        }
+
+        const newProgress = Math.min(current + increment, 95);
+        return { analyzerProgress: newProgress };
+      });
+    }, 600);
+
     try {
       const response = await updateResumeByAnalyzerWithResumeId(resumeId);
 
@@ -143,12 +175,16 @@ export function Sidebar() {
 
         let processedData = { ...response.resume };
         for (const key of Object.keys(emptyData)) {
-          processedData[key] = deepMerge(processedData[key], emptyData[key]);
+          const k = key as keyof typeof emptyData;
+          (processedData as any)[k] = deepMerge((processedData as any)[k], emptyData[k]);
         }
 
         processedData = normalizeStringsFields(processedData);
 
         setFormData(processedData);
+
+        // Complete progress
+        useFormDataStore.setState({ analyzerProgress: 100 });
 
         toast.success('Builder Intelligence analysis complete!');
       }
@@ -156,7 +192,11 @@ export function Sidebar() {
       console.error('Builder Intelligence error:', error);
       setAnalyzerError(true);
     } finally {
-      setIsAnalyzing(false);
+      clearInterval(progressInterval);
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        useFormDataStore.setState({ analyzerProgress: 0 });
+      }, 500);
     }
   };
 
@@ -176,7 +216,10 @@ export function Sidebar() {
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 
   return (
-    <div className="bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <div className={cn(
+      "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+      isAnalyzing && "opacity-60 pointer-events-none select-none cursor-not-allowed"
+    )}>
       <div className="flex items-center gap-2">
         <button
           type="button"

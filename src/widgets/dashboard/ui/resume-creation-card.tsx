@@ -9,11 +9,7 @@ import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
 import { useCallback, useMemo, useState } from 'react';
 
-interface ResumeCreationCardProps {
-  onBuilderIntelligenceSubmittingChange?: (isSubmitting: boolean) => void;
-}
-
-export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChange }: ResumeCreationCardProps) {
+export default function ResumeCreationCard() {
   const router = useRouter();
   const user = useUserProfile();
   const createResumeMutation = useMutation({
@@ -40,8 +36,10 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
 
   const resumeCreateHandler = async () => {
     lockOptions('create');
+    setShowScanningOverlay(true);
 
     if (!user.data?.id) {
+      setShowScanningOverlay(false);
       releaseOptions();
       return;
     }
@@ -57,6 +55,7 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
       router.push(`/resume/${data.id}`);
     } catch (error) {
       console.error('Failed to create resume:', error);
+      setShowScanningOverlay(false);
       releaseOptions();
     }
   };
@@ -111,16 +110,16 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
 
   const handleBuilderIntelligenceSubmittingChange = useCallback(
     (isSubmitting: boolean) => {
-      onBuilderIntelligenceSubmittingChange?.(isSubmitting);
-
       if (isSubmitting) {
+        setShowScanningOverlay(true);
         closeBuilderIntelligenceModal(false);
         return;
       }
 
+      setShowScanningOverlay(false);
       releaseOptions();
     },
-    [closeBuilderIntelligenceModal, onBuilderIntelligenceSubmittingChange, releaseOptions],
+    [closeBuilderIntelligenceModal, releaseOptions],
   );
 
   const builderIntelligenceModalProps = useMemo(
@@ -157,16 +156,37 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
       return null;
     }
 
+    const overlayConfig = {
+      create: {
+        title: 'Creating Resume...',
+        description: 'Setting up your workspace',
+      },
+      upload: {
+        title: 'Uploading Resume...',
+        description: 'Please wait while we process your file',
+      },
+      tailoredJD: {
+        title: 'Processing...',
+        description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
+      },
+      tailoredResume: {
+        title: 'Processing...',
+        description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
+      },
+    };
+
+    const config = overlayConfig[activeAction as keyof typeof overlayConfig] || overlayConfig.upload;
+
     return (
       <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-[20px]">
         <div className="flex flex-col items-center gap-4">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-lg font-semibold text-gray-800">Uploading Resume...</p>
-          <p className="text-sm text-gray-600">Please wait while we process your file</p>
+          <p className="text-lg font-semibold text-gray-800">{config.title}</p>
+          <p className="text-sm text-gray-600">{config.description}</p>
         </div>
       </div>
-    );
-  }, [shouldShowScanningOverlay]);
+    );  
+  }, [shouldShowScanningOverlay, activeAction]);
 
   return (
     <>
@@ -180,7 +200,11 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               {/* From Scratch */}
               <Button
                 variant="outline"
-                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-gray-200 disabled:hover:bg-white cursor-pointer"
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group disabled:opacity-50 cursor-pointer hover:shadow-md ${
+                  activeAction === 'create'
+                    ? 'bg-blue-50 border-blue-500'
+                    : 'bg-white border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:hover:border-gray-200 disabled:hover:bg-white'
+                }`}
                 disabled={optionsLocked && activeAction !== 'create'}
                 onClick={resumeCreateHandler}
               >
@@ -194,7 +218,13 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               </Button>
 
               {/* Upload Resume */}
-              <div className="relative h-auto p-4 flex flex-col items-center gap-3 bg-white border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 rounded-xl transition-all group cursor-pointer">
+              <div
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group cursor-pointer hover:shadow-md ${
+                  activeAction === 'upload'
+                    ? 'border-purple-600 bg-purple-100'
+                    : 'border-purple-500 bg-purple-50'
+                }`}
+              >
                 <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                   <Upload className="w-5 h-5 text-purple-600" />
                 </div>
@@ -214,7 +244,11 @@ export default function ResumeCreationCard({ onBuilderIntelligenceSubmittingChan
               {/* Tailored with JD - Recommended */}
               <Button
                 variant="outline"
-                className="relative h-auto p-4 flex flex-col items-center gap-3 bg-gradient-to-br from-green-50 to-blue-50 border-2 border-green-500 hover:border-green-600 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 disabled:hover:border-green-500 disabled:hover:shadow-none cursor-pointer"
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 cursor-pointer ${
+                  activeAction === 'tailoredJD'
+                    ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
+                    : 'bg-gradient-to-br from-green-50 to-blue-50 hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
+                }`}
                 disabled={optionsLocked && activeAction !== 'tailoredJD'}
                 onClick={handleOpenTailoredWithJD}
               >

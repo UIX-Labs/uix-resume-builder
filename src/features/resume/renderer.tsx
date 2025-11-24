@@ -15,15 +15,53 @@ import type {
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
 import * as Icons from 'lucide-react';
-import type React from 'react';
+import React from 'react';
 
 type RenderProps = {
   template: any;
   data: any;
   className?: string;
+  currentSection?: string;
+  isGeneratingPdf?: boolean;
+  hasSuggestions?: boolean;
 };
 
-export function ResumeRenderer({ template, data, className }: RenderProps) {
+
+// Match section based on navs array structure
+// navs names: personalDetails, experience, education, skills, projects, certifications, interests, achievements
+function isCurrentSection(nodeId: string | undefined, currentSection: string): boolean {
+  if (!nodeId || !currentSection) return true; // If no ID, don't blur (be safe)
+
+  const lowerNodeId = nodeId.toLowerCase();
+  const lowerCurrentSection = currentSection.toLowerCase();
+
+  // Special case: Professional summary section is only visible when on personalDetails
+  if (lowerNodeId === 'summary-section' || lowerNodeId === 'professionalsummary') {
+    return lowerCurrentSection === 'personaldetails';
+  }
+
+  // Match if section ID contains the current section name from navs
+  // Examples:
+  // - currentSection='experience' matches 'experience-section', 'experience-list', 'experience-item'
+  // - currentSection='skills' matches 'skills-section', 'skills-list'
+  return lowerNodeId.includes(lowerCurrentSection);
+}
+
+// Check if this section should NEVER be blurred (always visible)
+function isAlwaysVisible(nodeId: string | undefined): boolean {
+  if (!nodeId) return false;
+
+  const lowerNodeId = nodeId.toLowerCase();
+
+  // Header section with name, contact, profile picture is always visible
+  return (
+    lowerNodeId === 'header-section' ||
+    lowerNodeId === 'personaldetails' ||
+    lowerNodeId.startsWith('header-')
+  );
+}
+
+export function ResumeRenderer({ template, data, className, currentSection, isGeneratingPdf = false, hasSuggestions = false }: RenderProps) {
   const { page, body } = template;
 
   return (
@@ -36,19 +74,19 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         position: 'relative',
       }}
     >
-      {renderNode(body, data)}
+      {renderNode(body, data, currentSection, isGeneratingPdf, hasSuggestions)}
     </div>
   );
 }
 
-function renderNode(node: Nodes, data: any): React.ReactNode {
+function renderNode(node: Nodes, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean): React.ReactNode {
   switch (node.type) {
     case 'container':
-      return renderContainer(node as ContainerNode, data);
+      return renderContainer(node as ContainerNode, data, currentSection, isGeneratingPdf, hasSuggestions);
     case 'text':
       return renderText(node as TextNode, data);
     case 'list':
-      return renderList(node as ListNode, data);
+      return renderList(node as ListNode, data, currentSection, isGeneratingPdf, hasSuggestions);
     case 'seperator':
       return renderSeperator(node as SeperatorNode);
     case 'link':
@@ -68,17 +106,44 @@ function renderNode(node: Nodes, data: any): React.ReactNode {
   }
 }
 
-function renderContainer(node: ContainerNode, data: any) {
-  const { children, className } = node;
+function renderContainer(node: ContainerNode, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean) {
+  const { children, className, id } = node;
 
   const renderedChildren: React.ReactNode[] = [];
 
   for (const child of children) {
-    const rendered = renderNode(child, data);
+    const rendered = renderNode(child, data, currentSection, isGeneratingPdf, hasSuggestions);
     renderedChildren.push(rendered);
   }
 
-  return <div className={cn(`flex`, className)}>{renderedChildren.map((child) => child)}</div>;
+  const isSectionContainer = id && id.endsWith('-section');
+
+  // Don't blur if: no suggestions, generating PDF, this is always visible section, or it's the current section
+  const shouldBlur =
+    isSectionContainer &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    !isAlwaysVisible(id) &&
+    currentSection &&
+    !isCurrentSection(id, currentSection);
+
+  // Debug logging
+  if (isSectionContainer && hasSuggestions && currentSection) {
+    console.log('🔍', id, '| Current:', currentSection, '| Always Visible:', isAlwaysVisible(id), '| Blur:', shouldBlur);
+  }
+
+  return (
+    <div
+      className={cn(`flex`, className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={id}
+      style={{
+        transition: 'filter 0.3s ease',
+        scrollMarginTop: '20px',
+      }}
+    >
+      {renderedChildren.map((child, index) => <React.Fragment key={index}>{child}</React.Fragment>)}
+    </div>
+  );
 }
 
 function renderSeperator(node: SeperatorNode) {
@@ -109,13 +174,31 @@ function renderText(node: TextNode, data: any) {
   return <p className={cn(className)}>{finalString}</p>;
 }
 
-function renderList(node: ListNode, data: any) {
-  const { pathWithFallback, presentation, transform, groupBy, seperator } = node;
+function renderList(node: ListNode, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean) {
+  const { pathWithFallback, presentation, transform, groupBy, seperator, id } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   if (!Array.isArray(resolved) || resolved.length === 0) {
     return null;
   }
+
+  // Check if this is a top-level list (personalDetails or professionalSummary)
+  const isTopLevelList = id === 'personalDetails' || id === 'professionalSummary';
+
+  // Don't blur if: no suggestions, generating PDF, this is always visible section, or it's the current section
+  const shouldBlur =
+    isTopLevelList &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    !isAlwaysVisible(id) &&
+    currentSection &&
+    !isCurrentSection(id, currentSection);
+
+  // Debug logging
+  if (isTopLevelList && hasSuggestions && currentSection) {
+    console.log('📋', id, '| Current:', currentSection, '| Always Visible:', isAlwaysVisible(id), '| Blur:', shouldBlur);
+  }
+
 
   if (groupBy) {
     const grouped = resolved.reduce((acc, item) => {
@@ -130,15 +213,22 @@ function renderList(node: ListNode, data: any) {
     }, {});
 
     return (
-      <div className={cn('flex flex-wrap', node.className)}>
+      <div
+        className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={id}
+        style={{
+          transition: 'filter 0.3s ease',
+          scrollMarginTop: '20px',
+        }}
+      >
         {Object.entries(grouped).map(([_key, value], groupIndex, groupArray) =>
           presentation.map((child, childIndex) => {
             const isLast = groupIndex === groupArray.length - 1 && childIndex === presentation.length - 1;
             return (
-              <>
-                {renderNode(child, value)}
+              <React.Fragment key={`${groupIndex}-${childIndex}`}>
+                {renderNode(child, value, currentSection, isGeneratingPdf, hasSuggestions)}
                 {!isLast && seperator && <span>{seperator}</span>}
-              </>
+              </React.Fragment>
             );
           }),
         )}
@@ -150,14 +240,21 @@ function renderList(node: ListNode, data: any) {
     const flattened = resolved.flatMap((item) => item[transform.key as keyof typeof item]);
 
     return (
-      <div className={cn('flex flex-wrap', node.className)}>
+      <div
+        className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={id}
+        style={{
+          transition: 'filter 0.3s ease',
+          scrollMarginTop: '20px',
+        }}
+      >
         {flattened.map((child, index) => {
           const isLast = index === flattened.length - 1;
           return (
-            <>
-              {renderNode(presentation[0], child)}
+            <React.Fragment key={index}>
+              {renderNode(presentation[0], child, currentSection, isGeneratingPdf, hasSuggestions)}
               {!isLast && seperator && <span>{seperator}</span>}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
@@ -165,15 +262,22 @@ function renderList(node: ListNode, data: any) {
   }
 
   return (
-    <div className={cn('flex flex-wrap', node.className)}>
+    <div
+      className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={id}
+      style={{
+        transition: 'filter 0.3s ease',
+        scrollMarginTop: '20px',
+      }}
+    >
       {Object.entries(resolved).map(([_key, value], index, array) =>
         presentation.map((child, childIndex) => {
           const isLast = index === array.length - 1 && childIndex === presentation.length - 1;
           return (
-            <>
-              {renderNode(child, value)}
+            <React.Fragment key={`${index}-${childIndex}`}>
+              {renderNode(child, value, currentSection, isGeneratingPdf, hasSuggestions)}
               {!isLast && seperator && <span>{seperator}</span>}
-            </>
+            </React.Fragment>
           );
         }),
       )}
@@ -189,10 +293,10 @@ function renderHtml(node: HtmlNode, data: any) {
 }
 
 function renderLink(node: LinkNode, data: any) {
-  const { pathWithFallback, hrefPathWithFallback, className, prefix = '' } = node;
+  const { pathWithFallback, hrefPathWithFallback, href: staticHref, className, prefix = '' } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
-  const href = resolvePath({ data, ...hrefPathWithFallback });
+  const href = hrefPathWithFallback ? resolvePath({ data, ...hrefPathWithFallback }) : staticHref;
 
   if (!resolved) {
     return null;

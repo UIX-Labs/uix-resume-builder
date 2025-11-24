@@ -43,6 +43,7 @@ export function FormPageBuilder() {
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -111,13 +112,18 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        toPDF();
+        setIsGeneratingPdf(true);
+        // Small delay to let the blur effect clear before capturing
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await toPDF();
+        setIsGeneratingPdf(false);
       } else {
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to check community membership:', error);
       toast.error('Failed to verify community membership');
+      setIsGeneratingPdf(false);
     }
   };
 
@@ -179,6 +185,43 @@ export function FormPageBuilder() {
       } as Template);
     }
   }, [embeddedTemplate, templateId, currentResume]);
+
+  // Auto-scroll to section when currentStep changes
+  useEffect(() => {
+    if (!targetRef.current || !currentStep) return;
+
+    // Find section by matching data-section attribute that contains the current step name
+    const allSections = targetRef.current.querySelectorAll('[data-section]') as NodeListOf<HTMLElement>;
+
+    for (const element of Array.from(allSections)) {
+      const sectionId = element.getAttribute('data-section');
+      if (sectionId) {
+        const lowerSectionId = sectionId.toLowerCase();
+        const lowerCurrentStep = currentStep.toLowerCase();
+
+        // Check if section ID matches or contains current step
+        if (
+          lowerSectionId === lowerCurrentStep ||
+          lowerSectionId.startsWith(lowerCurrentStep + '-') ||
+          lowerSectionId.includes(lowerCurrentStep)
+        ) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          break;
+        }
+      }
+    }
+  }, [currentStep]);
+
+  // Check if there are any suggestions in the form data
+  const hasSuggestions = Boolean(
+    formData && Object.values(formData).some((section) => {
+      if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
+        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      }
+      return false;
+    })
+  );
 
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
@@ -358,24 +401,28 @@ export function FormPageBuilder() {
         }}
       >
         <div
-          className="bg-white border-[3px] border-blue-800 outline-[3px] 
+          className="bg-white border-[3px] border-blue-800 outline-[3px]
                         outline-blue-400 rounded-[18px] overflow-auto  min-w-0 flex-1"
         >
+          <div className="relative">
+            <Button
+              onClick={handleDownloadPDF}
+              className="relative z-10 float-right mt-8 mr-8 cursor-pointer
+                        border border-[#CBE7FF] bg-[#E9F4FF]
+                        font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
+            >
+              Save as PDF
+            </Button>
+          </div>
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
             <ResumeRenderer
               template={selectedTemplate?.json || aniketTemplate}
               data={getCleanDataForRenderer(formData ?? {})}
+              currentSection={currentStep}
+              isGeneratingPdf={isGeneratingPdf}
+              hasSuggestions={hasSuggestions}
             />
           </div>
-
-          <Button
-            onClick={handleDownloadPDF}
-            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] cursor-pointer
-                      -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] 
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
-          >
-            Save as PDF
-          </Button>
         </div>
       </div>
 
@@ -388,47 +435,50 @@ export function FormPageBuilder() {
           }}
         />
 
-        <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <TemplateButton />
-          </TemplatesDialog>
+      <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
+        <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+          <TemplateButton />
+        </TemplatesDialog>
 
-          <div
-            className="mt-6 mb-4"
-            style={{
-              background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
-              height: '1px',
-              width: '100%',
-            }}
-          />
+  <div
+    className="mt-6 mb-4"
+    style={{
+      background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
+      height: '1px',
+      width: '100%',
+    }}
+  />
 
-          <TemplateForm
-            formSchema={formSchema ?? {}}
-            currentStep={currentStep}
-            values={formData ?? {}}
-            onChange={(formData) => setFormData(formData)}
-            onOpenAnalyzerModal={handleOpenAnalyzerModal}
-          />
+  <TemplateForm
+    formSchema={formSchema ?? {}}
+    currentStep={currentStep}
+    values={formData ?? {}}
+    onChange={(formData) => setFormData(formData)}
+    onOpenAnalyzerModal={handleOpenAnalyzerModal}
+  />
 
-          <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
-            {navs[nextStepIndex]?.name && (
-              <Button
-                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
-                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
-                onClick={handleNextStep}
-              >
-                {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
-              </Button>
-            )}
-            <Button
-              className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
-               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
-              onClick={handleSaveResume}
-            >
-              Save
-            </Button>
-          </div>
-        </div>
+
+  <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
+    {navs[nextStepIndex]?.name && (
+      <Button
+        className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
+        text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
+        onClick={handleNextStep}
+      >
+        {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
+      </Button>
+    )}
+    <Button
+      className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
+       text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+      onClick={handleSaveResume}
+    >
+      Save
+    </Button>
+  </div>
+
+</div>
+
       </div>
 
       {/* Analyzer Modal */}

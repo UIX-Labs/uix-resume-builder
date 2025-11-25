@@ -1,5 +1,3 @@
-
-
 import type { SuggestedUpdate } from '@entities/resume';
 import { SuggestionType } from '@entities/resume';
 
@@ -10,10 +8,7 @@ import { SuggestionType } from '@entities/resume';
 export const findItemById = (items: unknown[], itemId: string): number => {
   const itemIndex = items.findIndex((item) => {
     if (typeof item === 'object' && item !== null) {
-      return (
-        (item as Record<string, unknown>).itemId === itemId ||
-        (item as Record<string, unknown>).id === itemId
-      );
+      return (item as Record<string, unknown>).itemId === itemId || (item as Record<string, unknown>).id === itemId;
     }
     return false;
   });
@@ -22,14 +17,27 @@ export const findItemById = (items: unknown[], itemId: string): number => {
 };
 
 /**
- * Normalizes text for comparison: removes HTML tags, bullets, and normalizes whitespace
+ * Normalizes text for comparison: removes HTML tags first, then decodes HTML entities, removes bullets, and normalizes whitespace
  */
 const normalizeText = (str: string): string => {
   return str
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/<[^>]*>/g, '') // Remove HTML tags FIRST (before decoding entities)
     .replace(/[•\-\*◦▪▫►▸]/g, '') // Remove bullet characters
-    .replace(/\s+/g, ' ')     // Normalize multiple spaces to single space
-    .trim();                  // Trim leading/trailing spaces
+    .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
+    .trim() // Trim leading/trailing spaces
+    .replace(/&[#\w]+;/g, (entity) => {
+      // Decode HTML entities AFTER removing tags
+      const entities: Record<string, string> = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        '&#39;': "'",
+        '&apos;': "'",
+        '&nbsp;': ' ',
+      };
+      return entities[entity] || entity;
+    });
 };
 
 /**
@@ -52,51 +60,74 @@ const convertTextToHtml = (text: string): string => {
 
   if (hasHtmlTags) {
     // Has HTML tags but no paragraphs - split by \n and wrap each in <p>
-    const lines = text.split('\n').filter(line => line.trim());
+    const lines = text.split('\n').filter((line) => line.trim());
     if (lines.length === 0) return '';
     if (lines.length === 1) return `<p>${lines[0]}</p>`;
-    return lines.map(line => `<p>${line}</p>`).join('');
+    return lines.map((line) => `<p>${line}</p>`).join('');
   }
 
   // Plain text - split by \n and wrap in <p> tags
-  const lines = text.split('\n').filter(line => line.trim());
+  const lines = text.split('\n').filter((line) => line.trim());
   if (lines.length === 0) return '';
   if (lines.length === 1) return `<p>${lines[0]}</p>`;
-  return lines.map(line => `<p>${line}</p>`).join('');
+  return lines.map((line) => `<p>${line}</p>`).join('');
 };
 
 /**
  * Applies selected suggestions to a field value
- * Simple comparison: normalize both, if equal, replace with new
+ * Supports both full field replacement and partial (per-sentence) replacement
  */
 export const applySuggestionsToFieldValue = (
   currentValue: string,
-  suggestions: Array<{ old?: string; new: string; type: SuggestionType }>
+  suggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
 ): string => {
   let updatedValue = currentValue;
 
-  suggestions.forEach((suggestion) => {
+  suggestions.forEach((suggestion, _index) => {
     if (suggestion.old) {
-      const normalizedCurrent = normalizeText(currentValue);
+      const normalizedCurrent = normalizeText(updatedValue);
       const normalizedOld = normalizeText(suggestion.old);
 
-      console.log('Current (normalized):', normalizedCurrent);
-      console.log('Old (normalized):', normalizedOld);
-      console.log('Match:', normalizedCurrent === normalizedOld);
+      const isHtmlField = /<[^>]+>/.test(updatedValue);
 
       if (normalizedCurrent === normalizedOld) {
-        // Check if current value has HTML (TipTap field) or is plain text (regular input)
-        const isHtmlField = /<[^>]+>/.test(currentValue);
-
+        // Full field match - replace entire field
         if (isHtmlField) {
-          // TipTap field - convert to proper HTML
           updatedValue = convertTextToHtml(suggestion.new);
         } else {
-          // Regular input field - keep as plain text, just replace \n with space
           updatedValue = suggestion.new.replace(/\n/g, ' ');
         }
+      } else if (normalizedCurrent.includes(normalizedOld)) {
+        // Partial match - find and replace only that sentence within the field
 
-        console.log('Replaced with:', updatedValue);
+        if (isHtmlField) {
+          // Try direct replacement first (works if no HTML tags interrupt the text)
+          if (updatedValue.includes(suggestion.old)) {
+            // Direct match found - replace as-is
+            updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
+          } else {
+            // Direct match failed - HTML tags likely interrupt the text
+            // Strip HTML tags, do replacement on plain text, then re-wrap in HTML
+            const plainText = updatedValue.replace(/<[^>]*>/g, '');
+
+            if (plainText.includes(suggestion.old)) {
+              const updatedPlainText = plainText.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
+              // Re-wrap in HTML paragraph tags
+              updatedValue = convertTextToHtml(updatedPlainText);
+            } else {
+              console.log('✗ Could not find old text in plain text either');
+            }
+          }
+        } else {
+          // For plain text, direct replacement
+          if (updatedValue.includes(suggestion.old)) {
+            updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
+          } else {
+            console.log('✗ Could not find old text in plain text content');
+          }
+        }
+      } else {
+        console.log('✗ No match found - skipping this suggestion');
       }
     } else {
       // For new summaries (no old value), always treat as HTML field
@@ -112,18 +143,13 @@ export const applySuggestionsToFieldValue = (
  * Calculates suggestion counts by type
  */
 export const calculateSuggestionCounts = (
-  suggestions: Array<{ type: SuggestionType }>
+  suggestions: Array<{ type: SuggestionType }>,
 ): Record<SuggestionType, number> => {
   return {
-    [SuggestionType.SPELLING_ERROR]: suggestions.filter(
-      (s) => s.type === SuggestionType.SPELLING_ERROR
-    ).length,
-    [SuggestionType.SENTENCE_REFINEMENT]: suggestions.filter(
-      (s) => s.type === SuggestionType.SENTENCE_REFINEMENT
-    ).length,
-    [SuggestionType.NEW_SUMMARY]: suggestions.filter(
-      (s) => s.type === SuggestionType.NEW_SUMMARY
-    ).length,
+    [SuggestionType.SPELLING_ERROR]: suggestions.filter((s) => s.type === SuggestionType.SPELLING_ERROR).length,
+    [SuggestionType.SENTENCE_REFINEMENT]: suggestions.filter((s) => s.type === SuggestionType.SENTENCE_REFINEMENT)
+      .length,
+    [SuggestionType.NEW_SUMMARY]: suggestions.filter((s) => s.type === SuggestionType.NEW_SUMMARY).length,
   };
 };
 
@@ -135,7 +161,7 @@ export const removeAppliedSuggestions = (
   suggestedUpdates: SuggestedUpdate[] | undefined,
   itemId: string,
   fieldName: string,
-  appliedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>
+  appliedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
 ): SuggestedUpdate[] | undefined => {
   if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
     return undefined;
@@ -152,9 +178,8 @@ export const removeAppliedSuggestions = (
         field.suggestedUpdates?.filter(
           (s) =>
             !appliedSuggestions.some(
-              (applied) =>
-                applied.old === s.old && applied.new === s.new && applied.type === s.type
-            )
+              (applied) => applied.old === s.old && applied.new === s.new && applied.type === s.type,
+            ),
         ) || [];
 
       return {
@@ -169,9 +194,7 @@ export const removeAppliedSuggestions = (
       };
     })
     .filter((update: SuggestedUpdate) => {
-      return Object.values(update.fields).some(
-        (field) => field.suggestedUpdates && field.suggestedUpdates.length > 0
-      );
+      return Object.values(update.fields).some((field) => field.suggestedUpdates && field.suggestedUpdates.length > 0);
     });
 };
 
@@ -183,7 +206,7 @@ export const updateItemFieldValue = (
   items: unknown[],
   itemIndex: number,
   fieldName: string,
-  newValue: string
+  newValue: string,
 ): unknown[] => {
   const updatedItems = [...items];
   const currentItem = items[itemIndex] as Record<string, unknown>;
@@ -196,5 +219,3 @@ export const updateItemFieldValue = (
   (updatedItems as Array<Record<string, unknown>>)[itemIndex] = updatedItem;
   return updatedItems;
 };
-
-

@@ -62,8 +62,6 @@ export const ProfilePictureInput = ({
         base64,
       });
 
-      console.log('API Response:', response);
-
       if (response) {
         setImageUrl(response.url);
       } else {

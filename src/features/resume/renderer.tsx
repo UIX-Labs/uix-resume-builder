@@ -127,10 +127,6 @@ function renderContainer(node: ContainerNode, data: any, currentSection?: string
     currentSection &&
     !isCurrentSection(id, currentSection);
 
-  // Debug logging
-  if (isSectionContainer && hasSuggestions && currentSection) {
-    console.log('🔍', id, '| Current:', currentSection, '| Always Visible:', isAlwaysVisible(id), '| Blur:', shouldBlur);
-  }
 
   return (
     <div
@@ -192,13 +188,7 @@ function renderList(node: ListNode, data: any, currentSection?: string, isGenera
     !isGeneratingPdf &&
     !isAlwaysVisible(id) &&
     currentSection &&
-    !isCurrentSection(id, currentSection);
-
-  // Debug logging
-  if (isTopLevelList && hasSuggestions && currentSection) {
-    console.log('📋', id, '| Current:', currentSection, '| Always Visible:', isAlwaysVisible(id), '| Blur:', shouldBlur);
-  }
-
+    !isCurrentSection(id, currentSection); 
 
   if (groupBy) {
     const grouped = resolved.reduce((acc, item) => {

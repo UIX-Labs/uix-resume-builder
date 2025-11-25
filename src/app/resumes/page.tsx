@@ -51,7 +51,7 @@ export default function AllResumePage() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <header className="flex justify-between items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
+          <header className="flex justify-end items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
             
 
             <div className="flex items-center gap-3">

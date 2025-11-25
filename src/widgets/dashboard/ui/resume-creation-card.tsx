@@ -247,7 +247,7 @@ export default function ResumeCreationCard() {
                 className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 cursor-pointer ${
                   activeAction === 'tailoredJD'
                     ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
-                    : 'bg-gradient-to-br from-green-50 to-blue-50 hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
+                    : 'hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
                 }`}
                 disabled={optionsLocked && activeAction !== 'tailoredJD'}
                 onClick={handleOpenTailoredWithJD}

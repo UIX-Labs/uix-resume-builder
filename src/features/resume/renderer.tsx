@@ -15,15 +15,81 @@ import type {
 import { resolvePath } from './utils';
 import { cn } from '@shared/lib/cn';
 import * as Icons from 'lucide-react';
-import type React from 'react';
+import React from 'react';
 
 type RenderProps = {
   template: any;
   data: any;
   className?: string;
+  currentSection?: string;
+  isGeneratingPdf?: boolean;
+  hasSuggestions?: boolean;
 };
 
-export function ResumeRenderer({ template, data, className }: RenderProps) {
+// Reusable sparkle indicator badge for highlighted sections
+function SparkleIndicator() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#02A44F',
+        borderRadius: '50%',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 2px 8px rgba(2, 164, 79, 0.3)',
+        zIndex: 10,
+      }}
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+          fill="white"
+        />
+        <path
+          d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z"
+          fill="white"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function isCurrentSection(nodeId: string | undefined, currentSection: string): boolean {
+  if (!nodeId || !currentSection) return true; // If no ID, don't blur (be safe)
+
+  const lowerNodeId = nodeId.toLowerCase();
+  const lowerCurrentSection = currentSection.toLowerCase();
+
+
+  if (lowerNodeId === 'header-section' || lowerNodeId.startsWith('header-')) {
+    return true;
+  }
+
+  // When on personalDetails: contact info (address, email, phone, links) should be visible
+  if (lowerCurrentSection === 'personaldetails') {
+    const personalDetailsFields = ['address', 'email', 'phone', 'links', 'contact', 'social', 'personaldetails', 'summary'];
+    if (personalDetailsFields.some(field => lowerNodeId.includes(field))) {
+      return true;
+    }
+  }
+
+ 
+  return lowerNodeId.includes(lowerCurrentSection);
+}
+
+export function ResumeRenderer({ template, data, className, currentSection, isGeneratingPdf = false, hasSuggestions = false }: RenderProps) {
   const { page, body } = template;
 
   return (
@@ -36,19 +102,19 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         position: 'relative',
       }}
     >
-      {renderNode(body, data)}
+      {renderNode(body, data, currentSection, isGeneratingPdf, hasSuggestions)}
     </div>
   );
 }
 
-function renderNode(node: Nodes, data: any): React.ReactNode {
+function renderNode(node: Nodes, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean): React.ReactNode {
   switch (node.type) {
     case 'container':
-      return renderContainer(node as ContainerNode, data);
+      return renderContainer(node as ContainerNode, data, currentSection, isGeneratingPdf, hasSuggestions);
     case 'text':
       return renderText(node as TextNode, data);
     case 'list':
-      return renderList(node as ListNode, data);
+      return renderList(node as ListNode, data, currentSection, isGeneratingPdf, hasSuggestions);
     case 'seperator':
       return renderSeperator(node as SeperatorNode);
     case 'link':
@@ -68,17 +134,59 @@ function renderNode(node: Nodes, data: any): React.ReactNode {
   }
 }
 
-function renderContainer(node: ContainerNode, data: any) {
-  const { children, className } = node;
+function renderContainer(node: ContainerNode, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean) {
+  const { children, className, id } = node;
 
   const renderedChildren: React.ReactNode[] = [];
 
   for (const child of children) {
-    const rendered = renderNode(child, data);
+    const rendered = renderNode(child, data, currentSection, isGeneratingPdf, hasSuggestions);
     renderedChildren.push(rendered);
   }
 
-  return <div className={cn(`flex`, className)}>{renderedChildren.map((child) => child)}</div>;
+  const isSectionContainer = id && id.endsWith('-section');
+
+  // Blur sections that are not the current section (when suggestions are active)
+  const shouldBlur =
+    isSectionContainer &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    !isCurrentSection(id, currentSection);
+
+
+  const shouldHighlight =
+    isSectionContainer &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    isCurrentSection(id, currentSection) &&
+    id !== 'header-section' &&
+    id !== 'contact-section' &&
+    !id.startsWith('header-');
+
+  return (
+    <div
+      className={cn(`flex`, className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={id}
+      style={{
+        scrollMarginTop: '20px',
+        ...(hasSuggestions && {
+          transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+        }),
+        ...(shouldHighlight && {
+          backgroundColor: 'rgba(200, 255, 230, 0.35)',
+          border: '2px solid rgba(0, 168, 107, 0.4)',
+          borderRadius: '12px',
+          padding: '16px',
+          position: 'relative',
+        }),
+      }}
+    >
+      {shouldHighlight && <SparkleIndicator />}
+      {renderedChildren.map((child, index) => <React.Fragment key={index}>{child}</React.Fragment>)}
+    </div>
+  );
 }
 
 function renderSeperator(node: SeperatorNode) {
@@ -109,13 +217,32 @@ function renderText(node: TextNode, data: any) {
   return <p className={cn(className)}>{finalString}</p>;
 }
 
-function renderList(node: ListNode, data: any) {
-  const { pathWithFallback, presentation, transform, groupBy, seperator } = node;
+function renderList(node: ListNode, data: any, currentSection?: string, isGeneratingPdf?: boolean, hasSuggestions?: boolean) {
+  const { pathWithFallback, presentation, transform, groupBy, seperator, id } = node;
   const resolved = resolvePath({ data, ...pathWithFallback });
 
   if (!Array.isArray(resolved) || resolved.length === 0) {
     return null;
   }
+
+  // Check if this is a top-level list (personalDetails or professionalSummary)
+  const isTopLevelList = id === 'personalDetails' || id === 'professionalSummary';
+
+  // Blur sections that are not the current section (when suggestions are active)
+  const shouldBlur =
+    isTopLevelList &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    !isCurrentSection(id, currentSection);
+
+  // Highlight current section with green background when suggestions are available
+  const shouldHighlight =
+    isTopLevelList &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    isCurrentSection(id, currentSection); 
 
   if (groupBy) {
     const grouped = resolved.reduce((acc, item) => {
@@ -130,15 +257,32 @@ function renderList(node: ListNode, data: any) {
     }, {});
 
     return (
-      <div className={cn('flex flex-wrap', node.className)}>
+      <div
+        className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={id}
+        style={{
+          scrollMarginTop: '20px',
+          ...(hasSuggestions && {
+            transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+          }),
+          ...(shouldHighlight && {
+            backgroundColor: 'rgba(200, 255, 230, 0.35)',
+            border: '2px solid rgba(0, 168, 107, 0.4)',
+            borderRadius: '12px',
+            padding: '16px',
+            position: 'relative',
+          }),
+        }}
+      >
+        {shouldHighlight && <SparkleIndicator />}
         {Object.entries(grouped).map(([_key, value], groupIndex, groupArray) =>
           presentation.map((child, childIndex) => {
             const isLast = groupIndex === groupArray.length - 1 && childIndex === presentation.length - 1;
             return (
-              <>
-                {renderNode(child, value)}
+              <React.Fragment key={`${groupIndex}-${childIndex}`}>
+                {renderNode(child, value, currentSection, isGeneratingPdf, hasSuggestions)}
                 {!isLast && seperator && <span>{seperator}</span>}
-              </>
+              </React.Fragment>
             );
           }),
         )}
@@ -150,14 +294,31 @@ function renderList(node: ListNode, data: any) {
     const flattened = resolved.flatMap((item) => item[transform.key as keyof typeof item]);
 
     return (
-      <div className={cn('flex flex-wrap', node.className)}>
+      <div
+        className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={id}
+        style={{
+          scrollMarginTop: '20px',
+          ...(hasSuggestions && {
+            transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+          }),
+          ...(shouldHighlight && {
+            backgroundColor: 'rgba(200, 255, 230, 0.35)',
+            border: '2px solid rgba(0, 168, 107, 0.4)',
+            borderRadius: '12px',
+            padding: '16px',
+            position: 'relative',
+          }),
+        }}
+      >
+        {shouldHighlight && <SparkleIndicator />}
         {flattened.map((child, index) => {
           const isLast = index === flattened.length - 1;
           return (
-            <>
-              {renderNode(presentation[0], child)}
+            <React.Fragment key={index}>
+              {renderNode(presentation[0], child, currentSection, isGeneratingPdf, hasSuggestions)}
               {!isLast && seperator && <span>{seperator}</span>}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
@@ -165,15 +326,30 @@ function renderList(node: ListNode, data: any) {
   }
 
   return (
-    <div className={cn('flex flex-wrap', node.className)}>
+    <div
+      className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={id}
+      style={{
+        transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+        scrollMarginTop: '20px',
+        ...(shouldHighlight && {
+          backgroundColor: 'rgba(200, 255, 230, 0.35)',
+          border: '2px solid rgba(0, 168, 107, 0.4)',
+          borderRadius: '12px',
+          padding: '16px',
+          position: 'relative',
+        }),
+      }}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       {Object.entries(resolved).map(([_key, value], index, array) =>
         presentation.map((child, childIndex) => {
           const isLast = index === array.length - 1 && childIndex === presentation.length - 1;
           return (
-            <>
-              {renderNode(child, value)}
+            <React.Fragment key={`${index}-${childIndex}`}>
+              {renderNode(child, value, currentSection, isGeneratingPdf, hasSuggestions)}
               {!isLast && seperator && <span>{seperator}</span>}
-            </>
+            </React.Fragment>
           );
         }),
       )}
@@ -189,10 +365,10 @@ function renderHtml(node: HtmlNode, data: any) {
 }
 
 function renderLink(node: LinkNode, data: any) {
-  const { pathWithFallback, hrefPathWithFallback, className, prefix = '' } = node;
+  const { pathWithFallback, hrefPathWithFallback, href: staticHref, className, prefix = '' } = node;
 
   const resolved = resolvePath({ data, ...pathWithFallback });
-  const href = resolvePath({ data, ...hrefPathWithFallback });
+  const href = hrefPathWithFallback ? resolvePath({ data, ...hrefPathWithFallback }) : staticHref;
 
   if (!resolved) {
     return null;

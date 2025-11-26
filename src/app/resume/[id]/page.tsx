@@ -15,6 +15,7 @@ export default function FormPage() {
 
   const [currentStep, setCurrentStep] = useState<ResumeDataKey>('personalDetails');
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
+  const analyzerProgress = useFormDataStore((state) => state.analyzerProgress);
   const analyzerError = useFormDataStore((state) => state.analyzerError);
   const retryAnalyzer = useFormDataStore((state) => state.retryAnalyzer);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
@@ -83,9 +84,32 @@ export default function FormPage() {
                   </Button>
                 </div>
               ) : (
-                <div className="flex flex-col items-center gap-3">
-                  <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-                  <p className="text-lg font-semibold text-gray-800">Analyzing your resume...</p>
+                <div
+                  className="w-full max-w-2xl px-12 py-8 rounded-2xl shadow-xl"
+                  style={{
+                    background: 'linear-gradient(90deg, #3B82F6 0%, #1F2937 100%)',
+                  }}
+                >
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-white text-2xl font-semibold">Analyzing and Rewriting</h3>
+                      <div className="flex items-center gap-2">
+                        {analyzerProgress >= 95 && analyzerProgress < 100 && (
+                          <Loader2 className="h-5 w-5 animate-spin text-white" />
+                        )}
+                        <span className="text-white text-lg font-medium">{Math.round(analyzerProgress)}%</span>
+                      </div>
+                    </div>
+
+                    <div className="w-full bg-white/30 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="h-full bg-white transition-all duration-300 ease-out"
+                        style={{ width: `${analyzerProgress}%` }}
+                      />
+                    </div>
+
+                    <p className="text-white/90 text-base">Polishing words so recruiters can't look away</p>
+                  </div>
                 </div>
               )}
             </div>

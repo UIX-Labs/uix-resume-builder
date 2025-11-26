@@ -43,6 +43,7 @@ export function FormPageBuilder() {
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -73,13 +74,10 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName 
-    ? fullName.toLowerCase().replace(/\s+/g, '-') 
-    : 'resume';
+  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
-
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
@@ -111,13 +109,18 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        toPDF();
+        setIsGeneratingPdf(true);
+        // Small delay to let the blur effect clear before capturing
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await toPDF();
+        setIsGeneratingPdf(false);
       } else {
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to check community membership:', error);
       toast.error('Failed to verify community membership');
+      setIsGeneratingPdf(false);
     }
   };
 
@@ -179,6 +182,44 @@ export function FormPageBuilder() {
       } as Template);
     }
   }, [embeddedTemplate, templateId, currentResume]);
+
+  // Auto-scroll to section when currentStep changes
+  useEffect(() => {
+    if (!targetRef.current || !currentStep) return;
+
+    // Find section by matching data-section attribute that contains the current step name
+    const allSections = targetRef.current.querySelectorAll('[data-section]') as NodeListOf<HTMLElement>;
+
+    for (const element of Array.from(allSections)) {
+      const sectionId = element.getAttribute('data-section');
+      if (sectionId) {
+        const lowerSectionId = sectionId.toLowerCase();
+        const lowerCurrentStep = currentStep.toLowerCase();
+
+        // Check if section ID matches or contains current step
+        if (
+          lowerSectionId === lowerCurrentStep ||
+          lowerSectionId.startsWith(lowerCurrentStep + '-') ||
+          lowerSectionId.includes(lowerCurrentStep)
+        ) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          break;
+        }
+      }
+    }
+  }, [currentStep]);
+
+  // Check if there are any suggestions in the form data
+  const hasSuggestions = Boolean(
+    formData &&
+      Object.values(formData).some((section) => {
+        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      }),
+  );
 
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
@@ -287,7 +328,6 @@ export function FormPageBuilder() {
   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
-
     if (!analyzerModalData) return;
 
     const { itemId, fieldName } = analyzerModalData;
@@ -314,10 +354,15 @@ export function FormPageBuilder() {
       }
 
       const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
-      console.log('Current field value:', currentFieldValue);
 
       const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
-      console.log('Updated field value:', updatedFieldValue);
+
+      // Check if suggestions were actually applied
+      if (updatedFieldValue === currentFieldValue) {
+        console.warn('⚠️ Suggestions were not applied - field value unchanged');
+        toast.error('Suggestions could not be applied');
+        return;
+      }
 
       const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
 
@@ -358,24 +403,34 @@ export function FormPageBuilder() {
         }}
       >
         <div
-          className="bg-white border-[3px] border-blue-800 outline-[3px] 
+          className="bg-white border-[3px] border-blue-800 outline-[3px]
                         outline-blue-400 rounded-[18px] overflow-auto  min-w-0 flex-1"
         >
-          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer
-              template={selectedTemplate?.json || aniketTemplate}
-              data={getCleanDataForRenderer(formData ?? {})}
-            />
+          <div className="relative">
+            <Button
+              onClick={handleDownloadPDF}
+              className="relative z-10 float-right mt-8 mr-8 cursor-pointer
+                        border border-[#CBE7FF] bg-[#E9F4FF]
+                        font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
+            >
+              Save as PDF
+            </Button>
           </div>
-
-          <Button
-            onClick={handleDownloadPDF}
-            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] cursor-pointer
-                      -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] 
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
-          >
-            Save as PDF
-          </Button>
+          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+            {selectedTemplate ? (
+              <ResumeRenderer
+                template={selectedTemplate.json || aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {})}
+                currentSection={currentStep}
+                isGeneratingPdf={isGeneratingPdf}
+                hasSuggestions={hasSuggestions}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full min-h-[800px]">
+                <div className="text-gray-500">Loading template...</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -413,8 +468,8 @@ export function FormPageBuilder() {
           <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
             {navs[nextStepIndex]?.name && (
               <Button
-                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
-                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
+                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
+        text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
                 onClick={handleNextStep}
               >
                 {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
@@ -422,7 +477,7 @@ export function FormPageBuilder() {
             )}
             <Button
               className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
-               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+       text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleSaveResume}
             >
               Save

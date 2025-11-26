@@ -5,10 +5,14 @@ import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
 import { useCachedUser } from '@shared/hooks/use-user';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
+import { useState } from 'react';
 
 const HeroSection = () => {
   const router = useRouter();
   const user = useCachedUser();
+
+  const [isModalOpen, setIsModalOpen] =  useState(false);
 
   const handleNavigate = () => {
     router.push(user ? '/dashboard' : '/auth');
@@ -103,7 +107,7 @@ const HeroSection = () => {
 
         <div className="mt-10 flex flex-col items-center gap-[16px]">
           <Button
-            onClick={handleNavigate}
+            onClick={() => setIsModalOpen(true)}
             className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >
@@ -138,7 +142,11 @@ const HeroSection = () => {
             {overlay.content}
           </motion.div>
         ))}
+
+
       </div>
+
+        <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 };

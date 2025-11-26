@@ -34,6 +34,7 @@ export interface ListNode extends TemplateNode {
   pathWithFallback: DataBindingPath;
   presentation: Nodes[];
   seperator?: string;
+  groupBy?: string;
   transform?: {
     variant: 'flatten';
     key: string;
@@ -43,7 +44,9 @@ export interface ListNode extends TemplateNode {
 export interface LinkNode extends TemplateNode {
   type: 'link';
   pathWithFallback: DataBindingPath;
-  href: string;
+  href?: string;
+  hrefPathWithFallback?: DataBindingPath;
+  prefix?: string;
 }
 
 export interface HtmlNode extends TemplateNode {

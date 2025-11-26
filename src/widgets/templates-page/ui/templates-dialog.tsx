@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@shared/ui/components/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog';
 import { cn } from '@shared/lib/cn';
-import { Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
 
 interface TemplatesDialogProps {
   children: React.ReactNode;
@@ -40,11 +40,7 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
           <div className="flex-1 overflow-y-auto p-6">
             <div className="flex flex-wrap justify-center gap-8">
               {templates?.map((template) => (
-                <TemplateCard
-                  key={template.id}
-                  template={template}
-                  onClick={() => handleTemplateSelect(template)}
-                />
+                <TemplateCard key={template.id} template={template} onClick={() => handleTemplateSelect(template)} />
               ))}
             </div>
           </div>
@@ -59,9 +55,11 @@ interface TemplateCardProps {
   onClick: () => void;
 }
 
-function TemplateCard({ template, onClick }: TemplateCardProps) {
+export function TemplateCard({ template, onClick }: TemplateCardProps) {
   return (
-    <div className={cn('group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0', ' hover:shadow-lg')}>
+    <div
+      className={cn('group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0', ' hover:shadow-lg')}
+    >
       <div className="relative w-[280px] h-[360px] glass-card2 border-0 p-4 rounded-[20px]">
         <div className="w-full h-full relative">
           <Image

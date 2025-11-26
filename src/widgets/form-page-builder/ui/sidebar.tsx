@@ -42,7 +42,7 @@ function sectionHasPendingSuggestions(sectionData: unknown): boolean {
   const { suggestedUpdates } = sectionData as {
     suggestedUpdates: Array<{
       itemId?: string;
-      fields?: Record<string, { suggestedUpdates?: unknown[] }>;
+      fields?: Record<string, { suggestedUpdates?: Array<{ old?: string; new: string }> }>;
     }>;
     items?: unknown;
   };
@@ -77,22 +77,24 @@ function sectionHasPendingSuggestions(sectionData: unknown): boolean {
         return false;
       }
 
-      const { suggestedUpdates, fieldCounts } = field as {
-        suggestedUpdates?: unknown[];
-        fieldCounts?: Record<string, number>;
+      const { suggestedUpdates } = field as {
+        suggestedUpdates?: Array<{ old?: string; new: string }>;
       };
 
-      const hasCounts =
-        !!fieldCounts &&
-        ((fieldCounts.spelling_error ?? 0) > 0 ||
-          (fieldCounts.sentence_refinement ?? 0) > 0 ||
-          (fieldCounts.new_summary ?? 0) > 0);
-
-      if (hasCounts) {
-        return true;
+      if (!Array.isArray(suggestedUpdates)) {
+        return false;
       }
 
-      return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      // Check if there are any valid suggestions (where old !== new)
+      const hasValidSuggestions = suggestedUpdates.some((s) => {
+        // If there's an old value and it equals the new value, it's invalid
+        if (s.old && s.old === s.new) {
+          return false;
+        }
+        return true;
+      });
+
+      return hasValidSuggestions;
     });
   });
 }

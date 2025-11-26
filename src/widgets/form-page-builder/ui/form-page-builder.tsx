@@ -74,13 +74,10 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase(); 
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName 
-    ? fullName.toLowerCase().replace(/\s+/g, '-') 
-    : 'resume';
+  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
-
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
@@ -114,7 +111,7 @@ export function FormPageBuilder() {
       if (response?.is_uix_member) {
         setIsGeneratingPdf(true);
         // Small delay to let the blur effect clear before capturing
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 100));
         await toPDF();
         setIsGeneratingPdf(false);
       } else {
@@ -214,13 +211,14 @@ export function FormPageBuilder() {
 
   // Check if there are any suggestions in the form data
   const hasSuggestions = Boolean(
-    formData && Object.values(formData).some((section) => {
-      if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-      }
-      return false;
-    })
+    formData &&
+      Object.values(formData).some((section) => {
+        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      }),
   );
 
   async function generateAndSaveThumbnail() {
@@ -330,7 +328,6 @@ export function FormPageBuilder() {
   const handleApplySuggestions = async (
     selectedSuggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
   ) => {
-
     if (!analyzerModalData) return;
 
     const { itemId, fieldName } = analyzerModalData;
@@ -357,10 +354,15 @@ export function FormPageBuilder() {
       }
 
       const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
-      console.log('Current field value:', currentFieldValue);
 
       const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
-      console.log('Updated field value:', updatedFieldValue);
+
+      // Check if suggestions were actually applied
+      if (updatedFieldValue === currentFieldValue) {
+        console.warn('⚠️ Suggestions were not applied - field value unchanged');
+        toast.error('Suggestions could not be applied');
+        return;
+      }
 
       const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
 
@@ -415,13 +417,19 @@ export function FormPageBuilder() {
             </Button>
           </div>
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer
-              template={selectedTemplate?.json || aniketTemplate}
-              data={getCleanDataForRenderer(formData ?? {})}
-              currentSection={currentStep}
-              isGeneratingPdf={isGeneratingPdf}
-              hasSuggestions={hasSuggestions}
-            />
+            {selectedTemplate ? (
+              <ResumeRenderer
+                template={selectedTemplate.json || aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {})}
+                currentSection={currentStep}
+                isGeneratingPdf={isGeneratingPdf}
+                hasSuggestions={hasSuggestions}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full min-h-[800px]">
+                <div className="text-gray-500">Loading template...</div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -435,50 +443,47 @@ export function FormPageBuilder() {
           }}
         />
 
-      <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
-        <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-          <TemplateButton />
-        </TemplatesDialog>
+        <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <TemplateButton />
+          </TemplatesDialog>
 
-  <div
-    className="mt-6 mb-4"
-    style={{
-      background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
-      height: '1px',
-      width: '100%',
-    }}
-  />
+          <div
+            className="mt-6 mb-4"
+            style={{
+              background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
+              height: '1px',
+              width: '100%',
+            }}
+          />
 
-  <TemplateForm
-    formSchema={formSchema ?? {}}
-    currentStep={currentStep}
-    values={formData ?? {}}
-    onChange={(formData) => setFormData(formData)}
-    onOpenAnalyzerModal={handleOpenAnalyzerModal}
-  />
+          <TemplateForm
+            formSchema={formSchema ?? {}}
+            currentStep={currentStep}
+            values={formData ?? {}}
+            onChange={(formData) => setFormData(formData)}
+            onOpenAnalyzerModal={handleOpenAnalyzerModal}
+          />
 
-
-  <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
-    {navs[nextStepIndex]?.name && (
-      <Button
-        className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
+          <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
+            {navs[nextStepIndex]?.name && (
+              <Button
+                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
         text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
-        onClick={handleNextStep}
-      >
-        {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
-      </Button>
-    )}
-    <Button
-      className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
+                onClick={handleNextStep}
+              >
+                {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
+              </Button>
+            )}
+            <Button
+              className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
        text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
-      onClick={handleSaveResume}
-    >
-      Save
-    </Button>
-  </div>
-
-</div>
-
+              onClick={handleSaveResume}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Analyzer Modal */}

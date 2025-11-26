@@ -26,39 +26,67 @@ type RenderProps = {
   hasSuggestions?: boolean;
 };
 
+// Reusable sparkle indicator badge for highlighted sections
+function SparkleIndicator() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#02A44F',
+        borderRadius: '50%',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 2px 8px rgba(2, 164, 79, 0.3)',
+        zIndex: 10,
+      }}
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+          fill="white"
+        />
+        <path
+          d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z"
+          fill="white"
+        />
+      </svg>
+    </div>
+  );
+}
 
-// Match section based on navs array structure
-// navs names: personalDetails, experience, education, skills, projects, certifications, interests, achievements
 function isCurrentSection(nodeId: string | undefined, currentSection: string): boolean {
   if (!nodeId || !currentSection) return true; // If no ID, don't blur (be safe)
 
   const lowerNodeId = nodeId.toLowerCase();
   const lowerCurrentSection = currentSection.toLowerCase();
 
-  // Special case: Professional summary section is only visible when on personalDetails
-  if (lowerNodeId === 'summary-section' || lowerNodeId === 'professionalsummary') {
-    return lowerCurrentSection === 'personaldetails';
+
+  if (lowerNodeId === 'header-section' || lowerNodeId.startsWith('header-')) {
+    return true;
   }
 
-  // Match if section ID contains the current section name from navs
-  // Examples:
-  // - currentSection='experience' matches 'experience-section', 'experience-list', 'experience-item'
-  // - currentSection='skills' matches 'skills-section', 'skills-list'
+  // When on personalDetails: contact info (address, email, phone, links) should be visible
+  if (lowerCurrentSection === 'personaldetails') {
+    const personalDetailsFields = ['address', 'email', 'phone', 'links', 'contact', 'social', 'personaldetails', 'summary'];
+    if (personalDetailsFields.some(field => lowerNodeId.includes(field))) {
+      return true;
+    }
+  }
+
+ 
   return lowerNodeId.includes(lowerCurrentSection);
-}
-
-// Check if this section should NEVER be blurred (always visible)
-function isAlwaysVisible(nodeId: string | undefined): boolean {
-  if (!nodeId) return false;
-
-  const lowerNodeId = nodeId.toLowerCase();
-
-  // Header section with name, contact, profile picture is always visible
-  return (
-    lowerNodeId === 'header-section' ||
-    lowerNodeId === 'personaldetails' ||
-    lowerNodeId.startsWith('header-')
-  );
 }
 
 export function ResumeRenderer({ template, data, className, currentSection, isGeneratingPdf = false, hasSuggestions = false }: RenderProps) {
@@ -118,25 +146,44 @@ function renderContainer(node: ContainerNode, data: any, currentSection?: string
 
   const isSectionContainer = id && id.endsWith('-section');
 
-  // Don't blur if: no suggestions, generating PDF, this is always visible section, or it's the current section
+  // Blur sections that are not the current section (when suggestions are active)
   const shouldBlur =
     isSectionContainer &&
     hasSuggestions &&
     !isGeneratingPdf &&
-    !isAlwaysVisible(id) &&
     currentSection &&
     !isCurrentSection(id, currentSection);
 
+
+  const shouldHighlight =
+    isSectionContainer &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    isCurrentSection(id, currentSection) &&
+    id !== 'header-section' &&
+    id !== 'contact-section' &&
+    !id.startsWith('header-');
 
   return (
     <div
       className={cn(`flex`, className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={id}
       style={{
-        transition: 'filter 0.3s ease',
         scrollMarginTop: '20px',
+        ...(hasSuggestions && {
+          transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+        }),
+        ...(shouldHighlight && {
+          backgroundColor: 'rgba(200, 255, 230, 0.35)',
+          border: '2px solid rgba(0, 168, 107, 0.4)',
+          borderRadius: '12px',
+          padding: '16px',
+          position: 'relative',
+        }),
       }}
     >
+      {shouldHighlight && <SparkleIndicator />}
       {renderedChildren.map((child, index) => <React.Fragment key={index}>{child}</React.Fragment>)}
     </div>
   );
@@ -181,14 +228,21 @@ function renderList(node: ListNode, data: any, currentSection?: string, isGenera
   // Check if this is a top-level list (personalDetails or professionalSummary)
   const isTopLevelList = id === 'personalDetails' || id === 'professionalSummary';
 
-  // Don't blur if: no suggestions, generating PDF, this is always visible section, or it's the current section
+  // Blur sections that are not the current section (when suggestions are active)
   const shouldBlur =
     isTopLevelList &&
     hasSuggestions &&
     !isGeneratingPdf &&
-    !isAlwaysVisible(id) &&
     currentSection &&
-    !isCurrentSection(id, currentSection); 
+    !isCurrentSection(id, currentSection);
+
+  // Highlight current section with green background when suggestions are available
+  const shouldHighlight =
+    isTopLevelList &&
+    hasSuggestions &&
+    !isGeneratingPdf &&
+    currentSection &&
+    isCurrentSection(id, currentSection); 
 
   if (groupBy) {
     const grouped = resolved.reduce((acc, item) => {
@@ -207,10 +261,20 @@ function renderList(node: ListNode, data: any, currentSection?: string, isGenera
         className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
         data-section={id}
         style={{
-          transition: 'filter 0.3s ease',
           scrollMarginTop: '20px',
+          ...(hasSuggestions && {
+            transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+          }),
+          ...(shouldHighlight && {
+            backgroundColor: 'rgba(200, 255, 230, 0.35)',
+            border: '2px solid rgba(0, 168, 107, 0.4)',
+            borderRadius: '12px',
+            padding: '16px',
+            position: 'relative',
+          }),
         }}
       >
+        {shouldHighlight && <SparkleIndicator />}
         {Object.entries(grouped).map(([_key, value], groupIndex, groupArray) =>
           presentation.map((child, childIndex) => {
             const isLast = groupIndex === groupArray.length - 1 && childIndex === presentation.length - 1;
@@ -234,10 +298,20 @@ function renderList(node: ListNode, data: any, currentSection?: string, isGenera
         className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
         data-section={id}
         style={{
-          transition: 'filter 0.3s ease',
           scrollMarginTop: '20px',
+          ...(hasSuggestions && {
+            transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+          }),
+          ...(shouldHighlight && {
+            backgroundColor: 'rgba(200, 255, 230, 0.35)',
+            border: '2px solid rgba(0, 168, 107, 0.4)',
+            borderRadius: '12px',
+            padding: '16px',
+            position: 'relative',
+          }),
         }}
       >
+        {shouldHighlight && <SparkleIndicator />}
         {flattened.map((child, index) => {
           const isLast = index === flattened.length - 1;
           return (
@@ -256,10 +330,18 @@ function renderList(node: ListNode, data: any, currentSection?: string, isGenera
       className={cn('flex flex-wrap', node.className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={id}
       style={{
-        transition: 'filter 0.3s ease',
+        transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
         scrollMarginTop: '20px',
+        ...(shouldHighlight && {
+          backgroundColor: 'rgba(200, 255, 230, 0.35)',
+          border: '2px solid rgba(0, 168, 107, 0.4)',
+          borderRadius: '12px',
+          padding: '16px',
+          position: 'relative',
+        }),
       }}
     >
+      {shouldHighlight && <SparkleIndicator />}
       {Object.entries(resolved).map(([_key, value], index, array) =>
         presentation.map((child, childIndex) => {
           const isLast = index === array.length - 1 && childIndex === presentation.length - 1;

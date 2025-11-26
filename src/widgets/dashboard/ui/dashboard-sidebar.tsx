@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@shared/ui/sidebar';
-import { Home, FileText, Settings, HelpCircle, LogOut, Sparkles } from 'lucide-react';
+import { Home, FileText, LogOut, Sparkles, LayoutGrid } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
@@ -51,6 +51,15 @@ export default function DashboardSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
+               <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/get-all-resumes'}>
+                  <Link href="/get-all-resumes">
+                    <LayoutGrid className="w-5 h-5" />
+                    All Templates
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
@@ -60,7 +69,6 @@ export default function DashboardSidebar() {
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-
               {/* <SidebarMenuItem>
                 <SidebarMenuButton 
                   asChild 

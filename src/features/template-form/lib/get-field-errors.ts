@@ -2,6 +2,7 @@ import type { SuggestedUpdates, SuggestionType } from '@entities/resume';
 
 /**
  * Get error counts for a specific field in a specific item
+ * Excludes suggestions where old === new (no actual change)
  */
 export function getFieldErrors(
   suggestedUpdates: SuggestedUpdates | undefined,
@@ -25,11 +26,34 @@ export function getFieldErrors(
 
   const fieldData = itemUpdate.fields[fieldName];
 
-  return {
-    spellingCount: fieldData.fieldCounts?.spelling_error || 0,
-    sentenceCount: fieldData.fieldCounts?.sentence_refinement || 0,
-    newSummaryCount: fieldData.fieldCounts?.new_summary || 0,
+  // Get actual suggestions and filter out invalid ones (where old === new)
+  const suggestions = fieldData.suggestedUpdates || [];
+  const validSuggestions = suggestions.filter((suggestion) => {
+    // If there's an old value and it equals the new value, it's invalid
+    if (suggestion.old && suggestion.old === suggestion.new) {
+      return false;
+    }
+    return true;
+  });
+
+  // Calculate counts from valid suggestions only
+  const counts = {
+    spellingCount: 0,
+    sentenceCount: 0,
+    newSummaryCount: 0,
   };
+
+  validSuggestions.forEach((suggestion) => {
+    if (suggestion.type === 'spelling_error') {
+      counts.spellingCount++;
+    } else if (suggestion.type === 'sentence_refinement') {
+      counts.sentenceCount++;
+    } else if (suggestion.type === 'new_summary') {
+      counts.newSummaryCount++;
+    }
+  });
+
+  return counts;
 }
 
 /**

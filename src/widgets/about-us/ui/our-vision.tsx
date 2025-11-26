@@ -20,9 +20,9 @@ export function OurVision() {
               <Image src="/images/close.svg" alt="Vision icon" width={50} height={50} />
             </div>
             <p className="text-xl font-normal text-center text-[#0C1118] leading-[1.2em] tracking-[-0.02em] mb-4">
-              Based in Gurgaon
+              Based in India
               <br />
-              operating worldwide
+             built for the world
             </p>
           </div>
 

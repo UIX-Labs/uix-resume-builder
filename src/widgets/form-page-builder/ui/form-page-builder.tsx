@@ -32,6 +32,7 @@ import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
 import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
+import { Download } from 'lucide-react';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -43,6 +44,7 @@ export function FormPageBuilder() {
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -111,13 +113,18 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        toPDF();
+        setIsGeneratingPdf(true);
+        // Small delay to let the blur effect clear before capturing
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await toPDF();
+        setIsGeneratingPdf(false);
       } else {
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to check community membership:', error);
       toast.error('Failed to verify community membership');
+      setIsGeneratingPdf(false);
     }
   };
 
@@ -179,6 +186,57 @@ export function FormPageBuilder() {
       } as Template);
     }
   }, [embeddedTemplate, templateId, currentResume]);
+
+  // Auto-scroll to section when currentStep changes
+  useEffect(() => {
+    if (!targetRef.current || !currentStep) return;
+
+ 
+
+    // Small delay to ensure pages are rendered after pagination
+    const scrollTimer = setTimeout(() => {
+      // Find section by matching data-section attribute that contains the current step name
+      const allSections = targetRef.current!.querySelectorAll('[data-section]') as NodeListOf<HTMLElement>;
+
+      for (const element of Array.from(allSections)) {
+        // Skip hidden elements (like the dummy content used for pagination)
+        const computedStyle = window.getComputedStyle(element);
+        if (computedStyle.visibility === 'hidden' || computedStyle.display === 'none') {
+          continue;
+        }
+
+        const sectionId = element.getAttribute('data-section');
+        if (sectionId) {
+          const lowerSectionId = sectionId.toLowerCase();
+          const lowerCurrentStep = currentStep.toLowerCase();
+
+          // Check if section ID matches or contains current step
+          if (
+            lowerSectionId === lowerCurrentStep ||
+            lowerSectionId.startsWith(lowerCurrentStep + '-') ||
+            lowerSectionId.includes(lowerCurrentStep)
+          ) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            break;
+          }
+        }
+      }
+    }, 100);
+
+    return () => clearTimeout(scrollTimer);
+  }, [currentStep]);
+
+  // Check if there are any suggestions in the form data
+  const hasSuggestions = Boolean(
+    formData &&
+      Object.values(formData).some((section) => {
+        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      }),
+  );
 
   async function generateAndSaveThumbnail() {
     if (!targetRef.current || !resumeId) {
@@ -313,10 +371,15 @@ export function FormPageBuilder() {
       }
 
       const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
-      console.log('Current field value:', currentFieldValue);
 
       const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
-      console.log('Updated field value:', updatedFieldValue);
+
+      // Check if suggestions were actually applied
+      if (updatedFieldValue === currentFieldValue) {
+        console.warn('⚠️ Suggestions were not applied - field value unchanged');
+        toast.error('Suggestions could not be applied');
+        return;
+      }
 
       const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
 
@@ -350,7 +413,7 @@ export function FormPageBuilder() {
   return (
     <>
       <div
-        className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3"
+        className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
         style={{
           minWidth: 794 + 48 + 6,
           maxWidth: 794 + 48 + 6,
@@ -358,20 +421,33 @@ export function FormPageBuilder() {
       >
         <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            <ResumeRenderer template={aniketTemplate} data={getCleanDataForRenderer(formData ?? {})} />
+            {selectedTemplate ? (
+              <ResumeRenderer
+                template={aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {})}
+                currentSection={currentStep}
+                isGeneratingPdf={isGeneratingPdf}
+                hasSuggestions={hasSuggestions}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full min-h-[800px]">
+                <div className="text-gray-500">Loading template...</div>
+              </div>
+            )}
           </div>
+        </div>
 
+        {/* Sticky Save as PDF button */}
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end px-4 pointer-events-none">
           <Button
             onClick={handleDownloadPDF}
-            className="absolute z-1 top-8 left-[calc(16px+12px+794px-12px)] cursor-pointer
-                      -translate-x-full border border-[#CBE7FF] bg-[#E9F4FF] 
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white"
+            className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg"
           >
-            Save as PDF
+            <Download/> PDF
           </Button>
         </div>
       </div>
-
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
           className="absolute inset-0 pointer-events-none"
@@ -381,20 +457,19 @@ export function FormPageBuilder() {
           }}
         />
 
-        <div className="overflow-auto py-5 px-5 gap-3 mt-4 scroll-hidden">
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <TemplateButton />
-          </TemplatesDialog>
+        {/* Sticky Top - Save Button on the right */}
+        <div className="sticky top-0 z-10 bg-white pt-5 px-5 flex justify-end">
+          <Button
+            className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
+             text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+            onClick={handleSaveResume}
+          >
+            Save
+          </Button>
+        </div>
 
-          <div
-            className="mt-6 mb-4"
-            style={{
-              background: 'linear-gradient(90deg, rgba(23, 23, 23, 0) 0%, #B8B8B8 51.09%)',
-              height: '1px',
-              width: '100%',
-            }}
-          />
-
+        {/* Scrollable Content */}
+        <div className="overflow-auto px-5 py-5 scroll-hidden flex-1">
           <TemplateForm
             formSchema={formSchema ?? {}}
             currentStep={currentStep}
@@ -402,28 +477,29 @@ export function FormPageBuilder() {
             onChange={(formData) => setFormData(formData)}
             onOpenAnalyzerModal={handleOpenAnalyzerModal}
           />
+        </div>
 
-          <div className="mt-5 cursor-pointer z-0 relative ml-auto flex justify-end border-0">
-            {navs[nextStepIndex]?.name && (
-              <Button
-                className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold 
-                text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] mr-4 cursor-pointer"
-                onClick={handleNextStep}
-              >
-                {`Next: ${camelToHumanString(navs[nextStepIndex]?.name)}`}
-              </Button>
-            )}
+        {/* Sticky Bottom - Change Template and Next Button */}
+        <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
+          {/* Change Template Button on the left */}
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <div className="cursor-pointer">
+              <TemplateButton />
+            </div>
+          </TemplatesDialog>
+
+          {/* Next Button on the right */}
+          {navs[nextStepIndex]?.name && (
             <Button
-              className="mt-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold
-               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
-              onClick={handleSaveResume}
+              className="ml-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
+              text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+              onClick={handleNextStep}
             >
-              Save
+              {`Next : ${camelToHumanString(navs[nextStepIndex]?.name)}`}
             </Button>
-          </div>
+          )}
         </div>
       </div>
-
       {/* Analyzer Modal */}
       {analyzerModalData && (
         <AnalyzerModal
@@ -434,7 +510,6 @@ export function FormPageBuilder() {
           onApply={handleApplySuggestions}
         />
       )}
-
       {isWishlistModalOpen && (
         <WishlistModal
           isOpen={isWishlistModalOpen}
@@ -442,7 +517,6 @@ export function FormPageBuilder() {
           onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
         />
       )}
-
       {isWishlistSuccessModalOpen && (
         <WishlistSuccessModal
           isOpen={isWishlistSuccessModalOpen}

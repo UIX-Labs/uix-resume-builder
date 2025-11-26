@@ -131,7 +131,7 @@ const aniketTemplate = {
     {
       id: 'experience',
       type: 'list-section',
-      break: true,
+      break: false,
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
@@ -161,6 +161,7 @@ const aniketTemplate = {
             ],
           },
           {
+            className: 'flex flex-col',
             cells: [
               {
                 type: 'html',

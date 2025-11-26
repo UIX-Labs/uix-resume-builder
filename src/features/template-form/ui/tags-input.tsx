@@ -18,7 +18,6 @@ export function TagsInput({ onChange, data, section }: { data: any; section: any
         tags={tags}
         setTags={setTags}
         onTagAdd={(tag) => {
-          console.log(tag);
           onChange([...data, tag]);
         }}
         styleClasses={{

@@ -2,8 +2,8 @@
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
 import { useLayoutEffect, useRef, useState } from 'react';
-import React from 'react';
 import * as LucideIcons from 'lucide-react';
+import React from 'react';
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
@@ -24,9 +24,47 @@ type RenderProps = {
   template: any;
   data: any;
   className?: string;
+  currentSection?: string;
+  isGeneratingPdf?: boolean;
+  hasSuggestions?: boolean;
 };
 
-export function ResumeRenderer({ template, data, className }: RenderProps) {
+// Reusable sparkle indicator badge for highlighted sections
+function SparkleIndicator() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#02A44F',
+        borderRadius: '50%',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 2px 8px rgba(2, 164, 79, 0.3)',
+        zIndex: 10,
+      }}
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" />
+        <path d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z" fill="white" />
+      </svg>
+    </div>
+  );
+}
+
+export function ResumeRenderer({
+  template,
+  data,
+  className,
+  currentSection,
+  isGeneratingPdf = false,
+  hasSuggestions = false,
+}: RenderProps) {
   const [pages, setPages] = useState<React.ReactNode[][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
@@ -75,7 +113,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
             currentPageTop = elTop; // New page starts at this element's top
           }
 
-          currentPage.push(el.cloneNode(true) as React.ReactNode);
+          currentPage.push(el.cloneNode(true) as unknown as React.ReactNode);
         }
       }
     }
@@ -83,7 +121,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
     helper(container);
 
     setPages(newPages);
-  }, [template, data]);
+  }, [template, data, currentSection, isGeneratingPdf, hasSuggestions]);
 
   return (
     <>
@@ -100,7 +138,9 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         }}
       >
         {sections.map((section: any, idx: number) => (
-          <React.Fragment key={idx}>{renderSection(section, data)}</React.Fragment>
+          <React.Fragment key={idx}>
+            {renderSection(section, data, currentSection, isGeneratingPdf, hasSuggestions)}
+          </React.Fragment>
         ))}
       </div>
 
@@ -108,12 +148,13 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         <div
           key={index}
           className={cn(
-            'bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5',
+            'bg-white',
+            !isGeneratingPdf && 'border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5',
             page.className,
             className,
           )}
           style={{
-            padding: PAGE_PADDING,
+            padding:  PAGE_PADDING,
             background: page.background ?? 'white',
             fontFamily: page.fontFamily,
             width: '21cm',
@@ -130,13 +171,25 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
 }
 
 // Main section renderer
-function renderSection(section: any, data: any): React.ReactNode {
-  if (section.type === 'header') return renderHeaderSection(section, data);
-  if (section.type === 'list-section') return renderListSection(section, data);
-  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data);
-  if (section.type === 'content-section') return renderContentSection(section, data);
-  if (section.type === 'inline-list-section') return renderInlineListSection(section, data);
-  if (section.type === 'badge-section') return renderBadgeSection(section, data);
+function renderSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
+  if (section.type === 'header')
+    return renderHeaderSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+  if (section.type === 'list-section')
+    return renderListSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+  if (section.type === 'two-column-layout')
+    return renderTwoColumnLayout(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+  if (section.type === 'content-section')
+    return renderContentSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+  if (section.type === 'inline-list-section')
+    return renderInlineListSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+  if (section.type === 'badge-section')
+    return renderBadgeSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
   return null;
 }
 
@@ -158,16 +211,51 @@ function renderDivider(divider: any): React.ReactNode {
 }
 
 // Header section renderer
-function renderHeaderSection(section: any, data: any): React.ReactNode {
-  const { fields, className } = section;
+function renderHeaderSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
+  const { fields, className, id } = section;
 
   const hasGenericFields = Object.values(fields).some(
     (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
   );
 
+  const sectionId = id || 'header-section';
+  const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  // Highlight header when personalDetails is selected
+  const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
+
+  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive && !isPersonalDetailsActive;
+  const shouldHighlight = hasSuggestions && !isGeneratingPdf && (isActive || isPersonalDetailsActive);
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
   if (hasGenericFields) {
     return (
-      <div className={cn(className)}>
+      <div
+        className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={sectionId}
+        style={wrapperStyle}
+      >
+        {shouldHighlight && <SparkleIndicator />}
         {Object.keys(fields).map((key) => (
           <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
         ))}
@@ -176,7 +264,12 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
   }
 
   return (
-    <div className={cn(className)}>
+    <div
+      className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={sectionId}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       {fields.nameTitle ? (
         <div className={fields.nameTitle.className}>
           {fields.name && (
@@ -271,13 +364,46 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
 }
 
 // List section renderer (education, experience, projects, certifications)
-function renderListSection(section: any, data: any): React.ReactNode {
+function renderListSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
   if (!Array.isArray(items) || items.length === 0) return null;
 
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
   return (
-    <div data-item="list-section" data-canbreak={section.break}>
+    <div
+      data-item="list-section"
+      data-canbreak={section.break}
+      data-section={sectionId}
+      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
@@ -300,7 +426,13 @@ function renderListSection(section: any, data: any): React.ReactNode {
 }
 
 // Two-column layout renderer
-function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
+function renderTwoColumnLayout(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const { leftColumn, rightColumn, className } = section;
 
   return (
@@ -309,7 +441,9 @@ function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+            <React.Fragment key={idx}>
+              {renderSection(subSection, data, currentSection, isGeneratingPdf, hasSuggestions)}
+            </React.Fragment>
           ))}
         </div>
       )}
@@ -318,7 +452,9 @@ function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+            <React.Fragment key={idx}>
+              {renderSection(subSection, data, currentSection, isGeneratingPdf, hasSuggestions)}
+            </React.Fragment>
           ))}
         </div>
       )}
@@ -350,19 +486,23 @@ function renderField(field: any, data: any): React.ReactNode {
         idx,
         element: renderField(subField, data),
       }))
-      .filter(({ element }) => element !== null && element !== undefined && element !== '');
+      .filter(
+        ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
+      );
 
     if (renderedItems.length === 0) return null;
 
     const hasClassName = !!field.className;
     const hasSeparator = !!field.separator;
 
-    const content = renderedItems.map(({ element, idx }, arrayIdx) => (
-      <React.Fragment key={idx}>
-        {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
-        <span>{element}</span>
-      </React.Fragment>
-    ));
+    const content = renderedItems.map(
+      ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+        <React.Fragment key={idx}>
+          {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
+          <span>{element}</span>
+        </React.Fragment>
+      ),
+    );
 
     // Use div wrapper when className is provided
     if (hasClassName) {
@@ -481,12 +621,46 @@ function renderField(field: any, data: any): React.ReactNode {
 }
 
 // Content section renderer (summary)
-function renderContentSection(section: any, data: any): React.ReactNode {
+function renderContentSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
   if (!value) return null;
 
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  // Highlight summary section when personalDetails is selected
+  const isSummaryForPersonalDetails = currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
+
+  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive && !isSummaryForPersonalDetails;
+  const shouldHighlight = hasSuggestions && !isGeneratingPdf && (isActive || isSummaryForPersonalDetails);
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
   return (
-    <div className={cn(section.className)}>
+    <div
+      className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={sectionId}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       {section.heading && (
         <p className={section.heading.className}>{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
       )}
@@ -503,7 +677,13 @@ function renderContentSection(section: any, data: any): React.ReactNode {
 }
 
 // Inline list section renderer (skills)
-function renderInlineListSection(section: any, data: any): React.ReactNode {
+function renderInlineListSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   if (!Array.isArray(items) || items.length === 0) return null;
 
@@ -512,8 +692,34 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
 
   if (validItems.length === 0) return null;
 
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
   return (
-    <div data-break={section.break}>
+    <div
+      data-break={section.break}
+      data-section={sectionId}
+      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
@@ -537,7 +743,13 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
 }
 
 // Badge section renderer (interests, achievements)
-function renderBadgeSection(section: any, data: any): React.ReactNode {
+function renderBadgeSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  isGeneratingPdf?: boolean,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   if (!Array.isArray(items) || items.length === 0) return null;
 
@@ -552,8 +764,35 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
 
   const IconComponent = section.icon ? getIconComponent(section.icon) : null;
 
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
   return (
-    <div data-break={section.break} data-item="section">
+    <div
+      data-break={section.break}
+      data-item="section"
+      data-section={sectionId}
+      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>

@@ -140,6 +140,7 @@ export function TemplateForm({
             value={data}
             onChange={(e) => onChange(e.target.value)}
           />
+          
         );
       }
     }
@@ -185,6 +186,8 @@ export function TemplateForm({
                   onChange({ ...values, [currentStep]: newData });
                 }}
                 section={currentSchema}
+                suggestedUpdates={currentData.suggestedUpdates}
+                onOpenAnalyzerModal={onOpenAnalyzerModal}
               />
             ))}
           </div>

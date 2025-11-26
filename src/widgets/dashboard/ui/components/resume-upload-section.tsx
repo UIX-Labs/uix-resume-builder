@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw } from 'lucide-react';
+import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 import { toast } from 'sonner';
@@ -106,7 +106,7 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
                       onClick={handleReupload}
                       className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
                     >
-                      <RotateCcw className="h-4 w-4 text-gray-600" />
+                      <Edit className="h-4 w-4 text-gray-600" />
                     </button>
                   )}
 

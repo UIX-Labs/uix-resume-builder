@@ -62,8 +62,6 @@ export const ProfilePictureInput = ({
         base64,
       });
 
-      console.log('API Response:', response);
-
       if (response) {
         setImageUrl(response.url);
       } else {
@@ -122,7 +120,7 @@ export const ProfilePictureInput = ({
       >
         {imageUrl ? (
           <div className="relative w-24 h-24 rounded-full overflow-hidden">
-            <Image src={imageUrl} alt="Profile" fill className="object-cover" />
+            <Image src={imageUrl} alt="Profile" fill className="object-cover" unoptimized />
           </div>
         ) : (
           <div className="text-center">

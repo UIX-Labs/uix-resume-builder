@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw } from 'lucide-react';
+import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 
@@ -119,28 +119,32 @@ export function JDUploadSection({
         </button>
       ) : (
         <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[90%] mt-2">
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col flex-1">
-              <span className="font-medium text-gray-900">{file.name}</span>
-              <span className="text-xs text-gray-500">
+          <div className="flex justify-between items-start gap-3">
+            <div className="flex flex-col flex-1 min-w-0">
+              <span className="font-medium text-gray-900 truncate" title={file.name}>
+                {file.name}
+              </span>
+              <span className="text-xs text-gray-500 mt-1">
                 {file.size} MB {file.status === 'success' && <span>• Uploaded Successfully</span>}
               </span>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-shrink-0">
               {file.status === 'success' && (
                 <button
                   type="button"
                   onClick={() => handleReupload(type)}
-                  className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                  title="Change file"
                 >
-                  <RotateCcw className="h-4 w-4 text-gray-600" />
+                  <Edit className="h-4 w-4 text-gray-600" />
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => handleDelete(type)}
-                className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
+                title="Delete file"
               >
                 <Trash2 className="h-4 w-4 text-gray-600" />
               </button>

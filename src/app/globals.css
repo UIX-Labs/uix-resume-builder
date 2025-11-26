@@ -598,3 +598,8 @@
   background-clip: text;
   color: transparent;
 }
+
+page[size="A4"] {
+  display: block;
+  margin: 0 auto;
+}

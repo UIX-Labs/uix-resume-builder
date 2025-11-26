@@ -219,7 +219,7 @@ export function Sidebar() {
 
   return (
     <div className={cn(
-      "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[200px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+      "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
       isAnalyzing && "opacity-60 pointer-events-none select-none cursor-not-allowed"
     )}>
       <div className="flex items-center gap-2">
@@ -300,7 +300,7 @@ export function Sidebar() {
 
       {/* Builder Intelligence Card */}
       <div
-        className="w-[180px] rounded-2xl p-3 mt-4 mx-auto mb-2"
+        className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
         style={{
           background: 'linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)',
         }}

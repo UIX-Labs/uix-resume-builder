@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
 import { useLayoutEffect, useRef, useState } from 'react';
 import React from 'react';
+import * as LucideIcons from 'lucide-react';
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
@@ -88,7 +89,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
         style={{
           position: 'absolute',
           visibility: 'hidden',
@@ -132,6 +133,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
 function renderSection(section: any, data: any): React.ReactNode {
   if (section.type === 'header') return renderHeaderSection(section, data);
   if (section.type === 'list-section') return renderListSection(section, data);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data);
   if (section.type === 'content-section') return renderContentSection(section, data);
   if (section.type === 'inline-list-section') return renderInlineListSection(section, data);
   if (section.type === 'badge-section') return renderBadgeSection(section, data);
@@ -159,14 +161,77 @@ function renderDivider(divider: any): React.ReactNode {
 function renderHeaderSection(section: any, data: any): React.ReactNode {
   const { fields, className } = section;
 
+  const hasGenericFields = Object.values(fields).some(
+    (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
+  );
+
+  if (hasGenericFields) {
+    return (
+      <div className={cn(className)}>
+        {Object.keys(fields).map((key) => (
+          <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className={cn(className)}>
-      {fields.name && (
-        <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
+      {fields.nameTitle ? (
+        <div className={fields.nameTitle.className}>
+          {fields.name && (
+            <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
+          )}
+          {fields.title && fields.title.path && (
+            <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+          )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          {fields.name && (
+            <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
+          )}
+          {fields.title && fields.title.path && (
+            <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+          )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
+          )}
+        </>
       )}
 
-      {fields.title && fields.title.path && (
-        <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+      {fields.contact && fields.contact.type === 'contact-grid' && (
+        <div className={fields.contact.className}>
+          {fields.contact.items.map((item: any, idx: number) => {
+            if (item.type === 'inline-group-with-icon') {
+              return (
+                <div key={idx} className={item.className}>
+                  {item.items.map((subItem: any, subIdx: number) => (
+                    <React.Fragment key={subIdx}>{renderField(subItem, data)}</React.Fragment>
+                  ))}
+                </div>
+              );
+            }
+            return (
+              <div key={idx} className={item.className}>
+                {renderField(item, data)}
+              </div>
+            );
+          })}
+        </div>
       )}
 
       {fields.contact && (
@@ -221,7 +286,7 @@ function renderListSection(section: any, data: any): React.ReactNode {
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-item="content" data-canbreak={section.break}>
+      <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
         {items.map((item: any, idx: number) => (
           <div key={idx} className={section.itemTemplate.className}>
             {section.itemTemplate.rows
@@ -230,6 +295,33 @@ function renderListSection(section: any, data: any): React.ReactNode {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// Two-column layout renderer
+function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
+  const { leftColumn, rightColumn, className } = section;
+
+  return (
+    <div className={cn(className)} data-item="two-column-layout">
+      {/* Left Column */}
+      {leftColumn && (
+        <div className={cn(leftColumn.className)}>
+          {leftColumn.sections?.map((subSection: any, idx: number) => (
+            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+          ))}
+        </div>
+      )}
+
+      {/* Right Column */}
+      {rightColumn && (
+        <div className={cn(rightColumn.className)}>
+          {rightColumn.sections?.map((subSection: any, idx: number) => (
+            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -252,6 +344,88 @@ function renderItemWithFields(template: any, item: any): React.ReactNode {
 
 function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'inline-group') {
+    // Filter out items with no value first
+    const renderedItems = field.items
+      .map((subField: any, idx: number) => ({
+        idx,
+        element: renderField(subField, data),
+      }))
+      .filter(({ element }) => element !== null && element !== undefined && element !== '');
+
+    if (renderedItems.length === 0) return null;
+
+    const hasClassName = !!field.className;
+    const hasSeparator = !!field.separator;
+
+    const content = renderedItems.map(({ element, idx }, arrayIdx) => (
+      <React.Fragment key={idx}>
+        {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
+        <span>{element}</span>
+      </React.Fragment>
+    ));
+
+    // Use div wrapper when className is provided
+    if (hasClassName) {
+      return <div className={field.className}>{content}</div>;
+    }
+
+    // No className, use fragment
+    return <>{content}</>;
+  }
+
+  if (field.type === 'icon') {
+    const IconComponent = (LucideIcons as any)[field.name];
+    if (!IconComponent) return null;
+    return <IconComponent size={field.size || 16} className={field.className} />;
+  }
+
+  if (field.type === 'image') {
+    const src = resolvePath(data, field.path, field.fallback);
+
+    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+  }
+
+  if (field.type === 'group') {
+    return (
+      <div className={field.className}>
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  if (field.type === 'text') {
+    const value = resolvePath(data, field.path, field.fallback);
+    if (!value) return null;
+    return <p className={field.className}>{value}</p>;
+  }
+
+  if (field.type === 'skillLevel') {
+    const value = resolvePath(data, field.path, field.fallback);
+    if (!value) return null;
+
+    const levelMap: Record<string, number> = {
+      Beginner: 2,
+      Intermediate: 3,
+      Expert: 5,
+    };
+
+    const circleCount = levelMap[value] || 3;
+
+    return (
+      <div className={cn('flex gap-1', field.className)}>
+        {Array.from({ length: 5 }, (_, index) => (
+          <div
+            key={index}
+            className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400')}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (field.type === 'inline-group-with-icon') {
     return (
       <>
         {field.items.map((subField: any, idx: number) => (
@@ -333,6 +507,11 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   if (!Array.isArray(items) || items.length === 0) return null;
 
+  // Filter out items with no value
+  const validItems = items.map((item: any) => resolvePath(item, section.itemPath)).filter((value: any) => value);
+
+  if (validItems.length === 0) return null;
+
   return (
     <div data-break={section.break}>
       <div className={cn('flex flex-col', section.heading.className)}>
@@ -344,10 +523,7 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
       </div>
 
       <div data-item="content" data-break={section.break}>
-        {items.map((item: any, idx: number) => {
-          const value = resolvePath(item, section.itemPath);
-          if (!value) return null;
-
+        {validItems.map((value: any, idx: number) => {
           return (
             <span key={idx}>
               <span className={section.itemClassName}>{value}</span>
@@ -364,6 +540,17 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
 function renderBadgeSection(section: any, data: any): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   if (!Array.isArray(items) || items.length === 0) return null;
+
+  // Icon component mapping
+  const getIconComponent = (iconName?: string) => {
+    if (!iconName) return null;
+
+    // @ts-ignore - Dynamic icon access
+    const Icon = LucideIcons[iconName];
+    return Icon || null;
+  };
+
+  const IconComponent = section.icon ? getIconComponent(section.icon) : null;
 
   return (
     <div data-break={section.break} data-item="section">
@@ -383,10 +570,21 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
             return null;
           }
 
+          if (IconComponent) {
+            return (
+              <div key={idx} className={section.itemClassName}>
+                <IconComponent className={section.iconClassName} />
+                <span className={section.badgeClassName}>{value}</span>
+              </div>
+            );
+          }
+
+          // Default rendering without icon
           return (
-            <div key={idx} className={section.badgeClassName}>
-              {value}
-            </div>
+            <span key={idx}>
+              <span className={section.badgeClassName}>{value}</span>
+              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+            </span>
           );
         })}
       </div>

@@ -131,7 +131,7 @@ const aniketTemplate = {
     {
       id: 'experience',
       type: 'list-section',
-      break: false,
+      break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',

@@ -89,7 +89,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
         style={{
           position: 'absolute',
           visibility: 'hidden',
@@ -161,6 +161,20 @@ function renderDivider(divider: any): React.ReactNode {
 function renderHeaderSection(section: any, data: any): React.ReactNode {
   const { fields, className } = section;
 
+  const hasGenericFields = Object.values(fields).some(
+    (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
+  );
+
+  if (hasGenericFields) {
+    return (
+      <div className={cn(className)}>
+        {Object.keys(fields).map((key) => (
+          <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className={cn(className)}>
       {fields.nameTitle ? (
@@ -171,6 +185,14 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
           {fields.title && fields.title.path && (
             <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
           )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
+          )}
         </div>
       ) : (
         <>
@@ -178,7 +200,15 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
             <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
           )}
           {fields.title && fields.title.path && (
-        <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+            <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+          )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
           )}
         </>
       )}
@@ -314,22 +344,33 @@ function renderItemWithFields(template: any, item: any): React.ReactNode {
 
 function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'inline-group') {
-    // If className contains 'flex-col', use div wrapper to respect vertical layout
-    const isVertical = field.className && field.className.includes('flex-col');
-    const WrapperTag = isVertical ? 'div' : React.Fragment;
-    const wrapperProps = isVertical ? { className: field.className } : {};
+    // Filter out items with no value first
+    const renderedItems = field.items
+      .map((subField: any, idx: number) => ({
+        idx,
+        element: renderField(subField, data),
+      }))
+      .filter(({ element }) => element !== null && element !== undefined && element !== '');
 
-    return (
-      <WrapperTag {...wrapperProps}>
-        {field.items.map((subField: any, idx: number) =>
-          isVertical ? (
-            <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
-          ) : (
-            <span key={idx}>{renderField(subField, data)}</span>
-          ),
-        )}
-      </WrapperTag>
-    );
+    if (renderedItems.length === 0) return null;
+
+    const hasClassName = !!field.className;
+    const hasSeparator = !!field.separator;
+
+    const content = renderedItems.map(({ element, idx }, arrayIdx) => (
+      <React.Fragment key={idx}>
+        {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
+        <span>{element}</span>
+      </React.Fragment>
+    ));
+
+    // Use div wrapper when className is provided
+    if (hasClassName) {
+      return <div className={field.className}>{content}</div>;
+    }
+
+    // No className, use fragment
+    return <>{content}</>;
   }
 
   if (field.type === 'icon') {
@@ -338,14 +379,36 @@ function renderField(field: any, data: any): React.ReactNode {
     return <IconComponent size={field.size || 16} className={field.className} />;
   }
 
+  if (field.type === 'image') {
+    const src = resolvePath(data, field.path, field.fallback);
+
+    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+  }
+
+  if (field.type === 'group') {
+    return (
+      <div className={field.className}>
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  if (field.type === 'text') {
+    const value = resolvePath(data, field.path, field.fallback);
+    if (!value) return null;
+    return <p className={field.className}>{value}</p>;
+  }
+
   if (field.type === 'skillLevel') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
 
     const levelMap: Record<string, number> = {
-      'Beginner': 2,
-      'Intermediate': 3,
-      'Expert': 5,
+      Beginner: 2,
+      Intermediate: 3,
+      Expert: 5,
     };
 
     const circleCount = levelMap[value] || 3;
@@ -445,9 +508,7 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
   if (!Array.isArray(items) || items.length === 0) return null;
 
   // Filter out items with no value
-  const validItems = items
-    .map((item: any) => resolvePath(item, section.itemPath))
-    .filter((value: any) => value);
+  const validItems = items.map((item: any) => resolvePath(item, section.itemPath)).filter((value: any) => value);
 
   if (validItems.length === 0) return null;
 
@@ -480,6 +541,17 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   if (!Array.isArray(items) || items.length === 0) return null;
 
+  // Icon component mapping
+  const getIconComponent = (iconName?: string) => {
+    if (!iconName) return null;
+
+    // @ts-ignore - Dynamic icon access
+    const Icon = LucideIcons[iconName];
+    return Icon || null;
+  };
+
+  const IconComponent = section.icon ? getIconComponent(section.icon) : null;
+
   return (
     <div data-break={section.break} data-item="section">
       <div className={cn('flex flex-col', section.heading.className)}>
@@ -498,6 +570,16 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
             return null;
           }
 
+          if (IconComponent) {
+            return (
+              <div key={idx} className={section.itemClassName}>
+                <IconComponent className={section.iconClassName} />
+                <span className={section.badgeClassName}>{value}</span>
+              </div>
+            );
+          }
+
+          // Default rendering without icon
           return (
             <span key={idx}>
               <span className={section.badgeClassName}>{value}</span>

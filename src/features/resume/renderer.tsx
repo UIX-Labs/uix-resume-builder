@@ -181,6 +181,33 @@ function renderSection(
   currentSection?: string,
   hasSuggestions?: boolean,
 ): React.ReactNode {
+  // Check if section is hidden
+  // Get section ID from different possible sources
+  let sectionId = section.id;
+
+  // If no direct ID, try to extract from listPath (e.g., "experience.items" -> "experience")
+  if (!sectionId && section.listPath) {
+    sectionId = section.listPath.split('.')[0];
+  }
+
+  // If still no ID, try to extract from heading path (e.g., "experience.heading" -> "experience")
+  if (!sectionId && section.heading?.path) {
+    sectionId = section.heading.path.split('.')[0];
+  }
+
+  // Map template section IDs to data keys
+  // The header and summary sections both store data under 'personalDetails' key
+  let dataKey = sectionId;
+  if (sectionId === 'header' || sectionId === 'summary') {
+    dataKey = 'personalDetails';
+  }
+
+  // Check if this section is marked as hidden
+  if (dataKey && data[dataKey]?.isHidden === true) {
+   
+    return null;
+  }
+
   if (section.type === 'header')
     return renderHeaderSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'list-section')
@@ -526,8 +553,15 @@ function renderField(field: any, data: any): React.ReactNode {
 
   if (field.type === 'image') {
     const src = resolvePath(data, field.path, field.fallback);
+    if (!src && !field.fallback) return null;
 
-    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+    return (
+      <img
+        src={src || field.fallback}
+        alt={field.alt || 'Image'}
+        className={cn(field.className)}   
+      />
+    );
   }
 
   if (field.type === 'group') {

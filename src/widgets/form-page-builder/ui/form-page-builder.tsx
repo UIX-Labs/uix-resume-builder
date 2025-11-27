@@ -33,6 +33,7 @@ import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/querie
 import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
+import { convertHtmlToPdf } from '@entities/download-pdf/api';
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -44,7 +45,7 @@ export function FormPageBuilder() {
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -113,18 +114,99 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        setIsGeneratingPdf(true);
-        // Small delay to let the blur effect clear before capturing
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        await toPDF();
-        setIsGeneratingPdf(false);
+        setIsGeneratingPDF(true);
+
+        // Wait for React to re-render without highlights
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // Get HTML content from the resume
+        const htmlContent = targetRef.current?.innerHTML;
+
+        if (!htmlContent) {
+          toast.error('Failed to generate PDF');
+          setIsGeneratingPDF(false);
+          return;
+        }
+
+        // Add necessary styles for the PDF
+        const styledHtml = `
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+              <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+                * {
+                  margin: 0;
+                  padding: 0;
+                  box-sizing: border-box;
+                }
+
+                body {
+                  font-family: 'Inter', system-ui, sans-serif;
+                  -webkit-print-color-adjust: exact;
+                  print-color-adjust: exact;
+                }
+
+                /* Remove all highlighting styles */
+                .resume-highlight {
+                  background-color: transparent !important;
+                  border: none !important;
+                  padding: 0 !important;
+                }
+
+                .resume-highlight > div:first-child {
+                  display: none !important;
+                }
+
+                /* Hide blur effects */
+                .blur-\\[2px\\] {
+                  filter: none !important;
+                }
+
+                /* Ensure page breaks work correctly */
+                @media print {
+                  @page {
+                    size: A4;
+                    margin: 0;
+                  }
+
+                  .resume-highlight {
+                    background: none !important;
+                    border: none !important;
+                  }
+                }
+              </style>
+            </head>
+            <body>${htmlContent}</body>
+          </html>
+        `;
+
+        // Call the API to convert HTML to PDF
+        const pdfBlob = await convertHtmlToPdf(styledHtml);
+
+        // Download the PDF
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = resumeFileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        toast.success('PDF downloaded successfully');
+        setIsGeneratingPDF(false);
       } else {
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
-      console.error('Failed to check community membership:', error);
-      toast.error('Failed to verify community membership');
-      setIsGeneratingPdf(false);
+      console.error('Failed to download PDF:', error);
+      toast.error('Failed to download PDF');
+      setIsGeneratingPDF(false);
     }
   };
 
@@ -190,8 +272,6 @@ export function FormPageBuilder() {
   // Auto-scroll to section when currentStep changes
   useEffect(() => {
     if (!targetRef.current || !currentStep) return;
-
- 
 
     // Small delay to ensure pages are rendered after pagination
     const scrollTimer = setTimeout(() => {
@@ -425,9 +505,8 @@ export function FormPageBuilder() {
               <ResumeRenderer
                 template={aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
-                currentSection={currentStep}
-                isGeneratingPdf={isGeneratingPdf}
-                hasSuggestions={hasSuggestions}
+                currentSection={isGeneratingPDF ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -438,13 +517,20 @@ export function FormPageBuilder() {
         </div>
 
         {/* Sticky Save as PDF button */}
-        <div className="sticky bottom-0 left-0 right-0 flex justify-end px-4 pointer-events-none">
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end pr-8 pb-4 pointer-events-none">
           <Button
             onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg"
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Download/> PDF
+            {isGeneratingPDF ? (
+              <>Generating PDF...</>
+            ) : (
+              <>
+                <Download /> PDF
+              </>
+            )}
           </Button>
         </div>
       </div>

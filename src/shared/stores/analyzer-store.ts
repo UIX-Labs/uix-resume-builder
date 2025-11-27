@@ -4,17 +4,19 @@ import type { ResumeData } from '@entities/resume';
 interface AnalyzerStore {
   analyzedData: ResumeData | null;
   resumeId: string | null;
-  setAnalyzedData: (data: ResumeData, resumeId: string) => void;
+  isTailoredWithJD: boolean;
+  setAnalyzedData: (data: ResumeData, resumeId: string, isTailoredWithJD?: boolean) => void;
   clearAnalyzedData: () => void;
 }
 
 export const useAnalyzerStore = create<AnalyzerStore>((set) => ({
   analyzedData: null,
   resumeId: null,
-  setAnalyzedData: (data: ResumeData, resumeId: string) => {
-    set({ analyzedData: data, resumeId });
+  isTailoredWithJD: false,
+  setAnalyzedData: (data: ResumeData, resumeId: string, isTailoredWithJD = false) => {
+    set({ analyzedData: data, resumeId, isTailoredWithJD });
   },
   clearAnalyzedData: () => {
-    set({ analyzedData: null, resumeId: null });
+    set({ analyzedData: null, resumeId: null, isTailoredWithJD: false });
   },
 }));

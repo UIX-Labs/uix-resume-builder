@@ -15,3 +15,5 @@ export async function checkIfCommunityMember(data: {
 
   return res;
 }
+
+export { convertHtmlToPdf } from './html-to-pdf';

@@ -393,6 +393,10 @@ function renderHeaderSection(
           })()}
         </div>
       )}
+
+      {fields.address && (
+        <p className={fields.address.className}>{resolvePath(data, fields.address.path, fields.address.fallback)}</p>
+      )}
     </div>
   );
 }
@@ -618,17 +622,35 @@ function renderField(field: any, data: any): React.ReactNode {
   }
 
   if (field.type === 'duration') {
-    const duration = resolvePath(data, field.path, field.fallback);
+    const duration = resolvePath(data, field.path);
     if (!duration) return null;
 
+    const formatDate = (dateString: string): string => {
+      if (!dateString || dateString.trim() === '') return '';
+
+      const parsed = dayjs(dateString);
+      if (!parsed.isValid()) return '';
+
+      // If year-only, keep as-is
+      if (/^\d{4}$/.test(dateString.trim())) return dateString.trim();
+
+      // If already in YYYY-MM format (month-year only), format as MMM YYYY
+      if (/^\d{4}-\d{2}$/.test(dateString.trim())) {
+        return parsed.format('MMM YYYY');
+      }
+
+      // For full dates YYYY-MM-DD, format as MMM YYYY
+      return parsed.format('MMM YYYY');
+    };
+
     if (duration.startDate && duration.endDate) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
-      const end = dayjs(duration.endDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
+      const end = formatDate(duration.endDate);
       return <span className={field.className}>{`${start} - ${end}`}</span>;
     }
 
     if (duration.startDate && duration.ongoing) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
       return <span className={field.className}>{`${start} - Present`}</span>;
     }
 
@@ -859,7 +881,10 @@ function renderBadgeSection(
           // Default rendering without icon
           return (
             <span key={idx}>
-              <span className={section.badgeClassName}>{value}</span>
+              <span className={section.badgeClassName}>
+                  {section.itemTemplate?.fields?.[0]?.prefix || section.prefix || ''}
+                  {value}
+              </span>
               {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
             </span>
           );

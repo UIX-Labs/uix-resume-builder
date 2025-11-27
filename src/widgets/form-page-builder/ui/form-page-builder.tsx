@@ -3,7 +3,7 @@ import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
@@ -33,6 +33,19 @@ import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/querie
 import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
+
+// Custom debounce function
+function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
+  let timeout: NodeJS.Timeout | null = null;
+  return function executedFunction(...args: Parameters<T>) {
+    const later = () => {
+      timeout = null;
+      func(...args);
+    };
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -114,10 +127,17 @@ export function FormPageBuilder() {
 
       if (response?.is_uix_member) {
         setIsGeneratingPdf(true);
-        // Small delay to let the blur effect clear before capturing
-        await new Promise((resolve) => setTimeout(resolve, 100));
-        await toPDF();
-        setIsGeneratingPdf(false);
+        try {
+          // Small delay to let the blur effect clear before capturing
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          await toPDF();
+          setIsGeneratingPdf(false);
+        } catch (pdfError) {
+          console.error('Failed to generate PDF:', pdfError);
+          setIsGeneratingPdf(false);
+          toast.error('Failed to generate PDF. Please ensure all images in your resume are valid.');
+          return;
+        }
       } else {
         setIsWishlistModalOpen(true);
       }
@@ -292,6 +312,33 @@ export function FormPageBuilder() {
     }
   }
 
+  // Debounced function for hide/unhide
+  const debouncedHideSave = useCallback(
+    debounce(async (sectionId: string, data: any) => {
+      try {
+        await save({
+          type: sectionId,
+          data: data,
+          updatedAt: Date.now(),
+        });
+        
+      } catch (error) {
+        console.error('Failed to save section visibility:', error);
+        toast.error('Failed to update section visibility');
+      }
+    }, 1000),
+    [save]
+  );
+
+  const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
+    const sectionData = formData[sectionId as keyof typeof formData];
+    if (sectionData) {
+     
+      debouncedHideSave(sectionId, { ...sectionData, isHidden });
+      toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+    }
+  }, [formData, debouncedHideSave]);
+
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
   const handleTemplateSelect = async (template: Template) => {
@@ -323,7 +370,7 @@ export function FormPageBuilder() {
     const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
     if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-      console.log('⚠️ No updates found for this field');
+
       return;
     }
 
@@ -376,7 +423,7 @@ export function FormPageBuilder() {
 
       // Check if suggestions were actually applied
       if (updatedFieldValue === currentFieldValue) {
-        console.warn('⚠️ Suggestions were not applied - field value unchanged');
+   
         toast.error('Suggestions could not be applied');
         return;
       }
@@ -476,6 +523,7 @@ export function FormPageBuilder() {
             values={formData ?? {}}
             onChange={(formData) => setFormData(formData)}
             onOpenAnalyzerModal={handleOpenAnalyzerModal}
+            onToggleHideSection={handleToggleHideSection}
           />
         </div>
 

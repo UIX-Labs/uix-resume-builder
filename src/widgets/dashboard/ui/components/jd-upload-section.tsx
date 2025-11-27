@@ -98,12 +98,12 @@ export function JDUploadSection({
   ) => (
     <div
       className={cn(
-        'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center w-full h-[350px] p-4 transition-all',
+        'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center h-[350px] p-6 transition-all gap-3',
         'border-[#D6FFEA] bg-[#0B372E]',
         disabled && 'opacity-50 cursor-not-allowed',
       )}
     >
-      <div className="py-1 px-3 rounded-3xl text-xs font-semibold bg-[#DFC500] text-white mb-3">Mandatory</div>
+      <div className="py-1 px-3 rounded-3xl text-xs font-semibold bg-[#DFC500] text-white">Mandatory</div>
 
       {!file ? (
         <button
@@ -118,7 +118,7 @@ export function JDUploadSection({
           <span className="text-sm text-gray-300">or Select File from your device</span>
         </button>
       ) : (
-        <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[90%] mt-2">
+        <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[85%] mt-2">
           <div className="flex justify-between items-start gap-3">
             <div className="flex flex-col flex-1 min-w-0">
               <span className="font-medium text-gray-900 truncate" title={file.name}>
@@ -164,12 +164,12 @@ export function JDUploadSection({
   );
 
   return (
-    <div className="flex flex-row gap-6 w-full">
+    <>
       {/* Resume Upload Box */}
-      <div className="w-1/2">{renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}</div>
+      <div className="flex-1 min-w-[500px]">{renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}</div>
 
       {/* JD Upload Box - disabled until Resume is uploaded successfully */}
-      <div className="w-1/2">
+      <div className="flex-1 min-w-[500px]">
         {renderUploadBox(
           'Upload Your JD',
           'jd',
@@ -178,6 +178,6 @@ export function JDUploadSection({
           externalDisabled || !(resumeFile && resumeFile.status === 'success'),
         )}
       </div>
-    </div>
+    </>
   );
 }

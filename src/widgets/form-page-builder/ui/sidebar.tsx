@@ -19,6 +19,7 @@ import { getResumeEmptyData } from '@entities/resume';
 import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
 import { toast } from 'sonner';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -128,6 +129,8 @@ export function Sidebar() {
   const router = useRouter();
   const params = useParams();
   const resumeId = params?.id as string;
+
+  const isTailoredWithJD = useAnalyzerStore((state) => state.isTailoredWithJD);
 
   const handleBuilderIntelligence = async () => {
     if (!resumeId) {
@@ -298,33 +301,35 @@ export function Sidebar() {
         })}
       </div>
 
-      {/* Builder Intelligence Card */}
-      <div
-        className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
-        style={{
-          background: 'linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)',
-        }}
-      >
-        <p className="text-sm font-semibold text-white">Switch to Builder Intelligence</p>
-        <p className="text-[11px] font-normal text-white/80 mt-1">
-          Get grammar fixes, stronger verbs, and tailored improvements.
-        </p>
-
-        <Button
-          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] border-none h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
-          onClick={handleBuilderIntelligence}
-          disabled={isAnalyzing}
+      {/* Builder Intelligence Card - Hidden if tailored with JD */}
+      {!isTailoredWithJD && (
+        <div
+          className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
+          style={{
+            background: 'linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)',
+          }}
         >
-          {isAnalyzing ? (
-            'Analyzing...'
-          ) : (
-            <>
-              Builder Intelligence
-              <Sparkles className="w-3.5 h-3.5" />
-            </>
-          )}
-        </Button>
-      </div>
+          <p className="text-sm font-semibold text-white">Switch to Builder Intelligence</p>
+          <p className="text-[11px] font-normal text-white/80 mt-1">
+            Get grammar fixes, stronger verbs, and tailored improvements.
+          </p>
+
+          <Button
+            className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] border-none h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+            onClick={handleBuilderIntelligence}
+            disabled={isAnalyzing}
+          >
+            {isAnalyzing ? (
+              'Analyzing...'
+            ) : (
+              <>
+                Builder Intelligence
+                <Sparkles className="w-3.5 h-3.5" />
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

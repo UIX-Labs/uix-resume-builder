@@ -82,7 +82,7 @@ export default function BuilderIntelligenceModal({
       }
 
       if (response?.resumeId && response?.resume) {
-        setAnalyzedData(response.resume, response.resumeId);
+        setAnalyzedData(response.resume, response.resumeId, !!jdFile);
 
         router.push(`/resume/${response.resumeId}`);
       } else {
@@ -104,13 +104,13 @@ export default function BuilderIntelligenceModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className="!max-w-4xl rounded-[36px] px-6 py-12 bg-cover bg-center text-white"
+        className="!max-w-fit rounded-[36px] p-8 bg-cover bg-center text-white"
         style={{
           backgroundImage: `url("data:image/jpeg;base64,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")`,
         }}
       >
-        <div className={cn('flex flex-col gap-6', isSubmitting && 'pointer-events-none opacity-30')}>
-          <div className="flex flex-row justify-between gap-3 items-center">
+        <div className={cn('flex flex-col gap-8', isSubmitting && 'pointer-events-none opacity-30')}>
+          <div className="flex flex-row gap-6 items-stretch flex-wrap lg:flex-nowrap">
             {showResumeUpload && (
               <ResumeUploadSection onFileStatusChange={setResumeUploadStatus} onFileChange={setResumeFile} />
             )}
@@ -123,14 +123,19 @@ export default function BuilderIntelligenceModal({
             )}
           </div>
         </div>
-        <Button
-          className="bg-[#02A44F] text-white hover:bg-none"
-          variant="outline"
-          onClick={handleInitiateBuilderIntelligence}
-          disabled={isActionDisabled}
-        >
-          {isSubmitting ? 'Analyzing...' : 'Initiate Builder Intelligence'}
-        </Button>
+        <div className="flex flex-col gap-3 mt-4">
+          <Button
+            className="bg-[#02A44F] text-white hover:bg-[#02A44F] w-full py-6 text-lg font-semibold rounded-lg"
+            variant="outline"
+            onClick={handleInitiateBuilderIntelligence}
+            disabled={isActionDisabled}
+          >
+            {isSubmitting ? 'Analyzing...' : 'Initiate Builder Intelligence'}
+          </Button>
+          <p className="text-center text-sm text-gray-200">
+            Bring your details from LinkedIn and reuse
+          </p>
+        </div>
       </DialogContent>
     </Dialog>
   );

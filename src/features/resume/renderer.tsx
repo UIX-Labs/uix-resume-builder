@@ -25,7 +25,6 @@ type RenderProps = {
   data: any;
   className?: string;
   currentSection?: string;
-  isGeneratingPdf?: boolean;
   hasSuggestions?: boolean;
 };
 
@@ -62,7 +61,6 @@ export function ResumeRenderer({
   data,
   className,
   currentSection,
-  isGeneratingPdf = false,
   hasSuggestions = false,
 }: RenderProps) {
   const [pages, setPages] = useState<React.ReactNode[][]>([]);
@@ -121,7 +119,7 @@ export function ResumeRenderer({
     helper(container);
 
     setPages(newPages);
-  }, [template, data, currentSection, isGeneratingPdf, hasSuggestions]);
+  }, [template, data, currentSection, hasSuggestions]);
 
   return (
     <>
@@ -139,7 +137,7 @@ export function ResumeRenderer({
       >
         {sections.map((section: any, idx: number) => (
           <React.Fragment key={idx}>
-            {renderSection(section, data, currentSection, isGeneratingPdf, hasSuggestions)}
+            {renderSection(section, data, currentSection,  hasSuggestions)}
           </React.Fragment>
         ))}
       </div>
@@ -148,22 +146,28 @@ export function ResumeRenderer({
         <div
           key={index}
           className={cn(
-            'bg-white',
-            !isGeneratingPdf && 'border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5',
+            'bg-white mb-5',
+
             page.className,
             className,
           )}
           style={{
-            padding:  PAGE_PADDING,
+            padding: PAGE_PADDING,
             background: page.background ?? 'white',
             fontFamily: page.fontFamily,
             width: '21cm',
             height: '29.7cm',
           }}
         >
-          {blocks.map((node, i) => (
-            <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} />
-          ))}
+          {blocks.map((node, i) => {
+            // Remove top margin from first element on subsequent pages
+            if (index > 0 && i === 0) {
+              const modifiedNode = (node as any).cloneNode(true);
+              modifiedNode.style.marginTop = '0';
+              return <div key={i} dangerouslySetInnerHTML={{ __html: modifiedNode.outerHTML }} />;
+            }
+            return <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} />;
+          })}
         </div>
       ))}
     </>
@@ -175,7 +179,6 @@ function renderSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   // Check if section is hidden
@@ -206,17 +209,17 @@ function renderSection(
   }
 
   if (section.type === 'header')
-    return renderHeaderSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderHeaderSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'list-section')
-    return renderListSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderListSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'two-column-layout')
-    return renderTwoColumnLayout(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderTwoColumnLayout(section, data, currentSection,  hasSuggestions);
   if (section.type === 'content-section')
-    return renderContentSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderContentSection(section, data, currentSection,  hasSuggestions);
   if (section.type === 'inline-list-section')
-    return renderInlineListSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderInlineListSection(section, data, currentSection,  hasSuggestions);
   if (section.type === 'badge-section')
-    return renderBadgeSection(section, data, currentSection, isGeneratingPdf, hasSuggestions);
+    return renderBadgeSection(section, data, currentSection,  hasSuggestions);
   return null;
 }
 
@@ -242,7 +245,6 @@ function renderHeaderSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
@@ -258,8 +260,8 @@ function renderHeaderSection(
   // Highlight header when personalDetails is selected
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
-  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive && !isPersonalDetailsActive;
-  const shouldHighlight = hasSuggestions && !isGeneratingPdf && (isActive || isPersonalDetailsActive);
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
+  const shouldHighlight = hasSuggestions  && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -354,36 +356,41 @@ function renderHeaderSection(
         </div>
       )}
 
-      {fields.contact && (
+     {fields.contact && (
         <div className={fields.contact.className}>
-          {fields.contact.items.map((item: any, idx: number) => {
-            const value = resolvePath(data, item.path, item.fallback);
-            if (!value) return null;
-
-            const showSeparator = idx > 0 && fields.contact.separator;
-
-            if (item.type === 'link') {
-              const href = item.href.startsWith('mailto:')
-                ? item.href.replace('{{value}}', value)
-                : resolvePath(data, item.href);
-
+          {(() => {
+            // Filter out items with no value first
+            const validItems = fields.contact.items
+              .map((item: any, idx: number) => {
+                const value = resolvePath(data, item.path, item.fallback);
+                if (!value) return null;
+                return { item, value, originalIdx: idx };
+              })
+              .filter((entry: any) => entry !== null);
+            return validItems.map((entry: any, arrayIdx: number) => {
+              const { item, value, originalIdx } = entry;
+              const showSeparator = arrayIdx > 0 && fields.contact.separator;
+              if (item.type === 'link') {
+                const href = item.href.startsWith('mailto:')
+                  ? item.href.replace('{{value}}', value)
+                  : resolvePath(data, item.href);
+                return (
+                  <span key={originalIdx}>
+                    {showSeparator && fields.contact.separator}
+                    <a href={href} className={item.className}>
+                      {value}
+                    </a>
+                  </span>
+                );
+              }
               return (
-                <span key={idx}>
+                <span key={originalIdx}>
                   {showSeparator && fields.contact.separator}
-                  <a href={href} className={item.className}>
-                    {value}
-                  </a>
+                  {value}
                 </span>
               );
-            }
-
-            return (
-              <span key={idx}>
-                {showSeparator && fields.contact.separator}
-                {value}
-              </span>
-            );
-          })}
+            });
+          })()}
         </div>
       )}
     </div>
@@ -395,7 +402,6 @@ function renderListSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
@@ -405,8 +411,8 @@ function renderListSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions &&  isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -427,7 +433,7 @@ function renderListSection(
       data-item="list-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
@@ -457,7 +463,6 @@ function renderTwoColumnLayout(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const { leftColumn, rightColumn, className } = section;
@@ -469,7 +474,7 @@ function renderTwoColumnLayout(
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
             <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection, isGeneratingPdf, hasSuggestions)}
+              {renderSection(subSection, data, currentSection,  hasSuggestions)}
             </React.Fragment>
           ))}
         </div>
@@ -480,7 +485,7 @@ function renderTwoColumnLayout(
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
             <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection, isGeneratingPdf, hasSuggestions)}
+              {renderSection(subSection, data, currentSection,  hasSuggestions)}
             </React.Fragment>
           ))}
         </div>
@@ -659,7 +664,6 @@ function renderContentSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
@@ -669,10 +673,11 @@ function renderContentSection(
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   // Highlight summary section when personalDetails is selected
-  const isSummaryForPersonalDetails = currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
+  const isSummaryForPersonalDetails =
+    currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
-  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive && !isSummaryForPersonalDetails;
-  const shouldHighlight = hasSuggestions && !isGeneratingPdf && (isActive || isSummaryForPersonalDetails);
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
+  const shouldHighlight = hasSuggestions &&  (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -715,7 +720,7 @@ function renderInlineListSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
+  
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
@@ -729,8 +734,8 @@ function renderInlineListSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+  const shouldBlur = hasSuggestions &&  currentSection && !isActive;
+  const shouldHighlight = hasSuggestions &&  isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -750,7 +755,7 @@ function renderInlineListSection(
     <div
       data-break={section.break}
       data-section={sectionId}
-      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
@@ -781,7 +786,6 @@ function renderBadgeSection(
   section: any,
   data: any,
   currentSection?: string,
-  isGeneratingPdf?: boolean,
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
@@ -801,8 +805,8 @@ function renderBadgeSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && !isGeneratingPdf && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && !isGeneratingPdf && isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions &&  isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -823,7 +827,7 @@ function renderBadgeSection(
       data-break={section.break}
       data-item="section"
       data-section={sectionId}
-      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}

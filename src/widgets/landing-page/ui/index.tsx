@@ -26,12 +26,12 @@ export function LandingPage() {
         <Testimonials />
       </div>
 
-      <div className="h-[1065px]">
+      <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
         <AITailorSection />
       </div>
 
       <div
-        className="border border-white rounded-md mx-4 overflow-hidden"
+        className="border border-white rounded-[36px] mx-4 overflow-hidden"
         style={{
           background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
           backgroundSize: '20px 20px',

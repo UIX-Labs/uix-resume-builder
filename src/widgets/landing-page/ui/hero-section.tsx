@@ -6,13 +6,17 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
+import { MobileTextView } from './mobile-text-view';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useState } from 'react';
 
 const HeroSection = () => {
   const router = useRouter();
   const user = useCachedUser();
+  const isMobile = useIsMobile();
 
   const [isModalOpen, setIsModalOpen] =  useState(false);
+  const [showMobileView, setShowMobileView] = useState(false);
 
   const handleNavigate = () => {
     router.push(user ? '/dashboard' : '/auth');
@@ -26,7 +30,9 @@ const HeroSection = () => {
           <img src="images/resume-score-img.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
-      position: { top: '-30%', left: '-6%' },
+      desktopPosition: { top: '-30%', left: '-6%' },
+      mobilePosition: { top: '-28%', left: '-38%' },
+      mobileWidth: 320,
       initial: { x: -300, y: -300, opacity: 0 },
     },
 
@@ -37,8 +43,10 @@ const HeroSection = () => {
           <img src="images/templates.svg" alt="Template 1" />
         </div>
       ),
-      position: { top: '80%', left: '-7%' },
+      desktopPosition: { top: '80%', left: '-7%' },
+      mobilePosition: { top: '130%', left: '-45%' },
       width: 420,
+      mobileWidth: 420,
       rotate: 12,
       initial: { rotate: 12, x: -400, y: 200, opacity: 0 },
     },
@@ -50,8 +58,10 @@ const HeroSection = () => {
           <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
-      position: { top: '-22%', right: '-8%' },
+      desktopPosition: { top: '-22%', right: '-8%' },
+      mobilePosition: { top: '-22%', right: '-28%' },
       width: 250,
+      mobileWidth: 250,
       initial: { rotate: 25, x: 400, y: -200, opacity: 0 },
     },
 
@@ -62,91 +72,137 @@ const HeroSection = () => {
           <img src="images/image-hired.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
-      position: { top: '80%', right: '-7%' },
+      desktopPosition: { top: '80%', right: '-7%' },
+      mobilePosition: { top: '100%', right: '-40%' },
       width: 300,
+      mobileWidth: 350,
       rotate: -15,
       initial: { rotate: -15, x: 400, y: 300, opacity: 0 },
     },
   ];
 
+  const handleLinkedInClick = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleUploadClick = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+    } else {
+      handleNavigate();
+    }
+  };
+
   return (
-    <section className="relative w-full h-full">
+    <section className="relative w-full h-full px-4 md:px-0">
       <div className="max-w-7xl mx-auto relative text-center">
-        <div className="flex items-center justify-center gap-3 mt-28">
-          <div className="flex -space-x-2">
-            <Avatar className="w-12 h-12 border-2 border-white">
+        <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 mt-8 md:mt-28">
+          <div className="flex -space-x-2 mt-20 md:mt-0">
+            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
               <AvatarFallback className="text-black">JD</AvatarFallback>
             </Avatar>
 
-            <Avatar className="w-12 h-12 border-2 border-white">
+            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
               <AvatarFallback className="text-black">SM</AvatarFallback>
             </Avatar>
 
-            <Avatar className="w-12 h-12 border-2 border-white">
+            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
               <AvatarImage src="/placeholder.svg" />
               <AvatarFallback className="text-black">AR</AvatarFallback>
             </Avatar>
           </div>
 
-          <span className="font-semibold text-lg ml-3 text-gray-900">Trusted by 500 professionals</span>
+          <span className="font-semibold text-base md:text-lg md:ml-3 text-gray-900">Trusted by 500 professionals</span>
         </div>
 
-        <div>
-          <h1 className="text-[80px] md:text-7xl font-semibold text-foreground mb-4 leading-tight">
+        <div className="mt-3 md:mt-0">
+          <h1 className="text-[30px] md:text-[80px] font-semibold text-foreground mb-4 leading-[0.85] md:leading-tight">
             Build a <span className="text-blue-800 font-[900]">Professional</span>
             <br />
-            <span className="block -mt-8 mx-auto w-fit px-[53px] rounded-full text-[rgba(0,137,65,1)] font-[900] backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
+            <span className="text-[28px] md:text-[80px] block -mt-1 md:-mt-8 mx-auto w-fit px-6 md:px-[53px] rounded-full text-[rgba(0,137,65,1)] font-[900] backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
               Resume
             </span>
           </h1>
 
-          <p className="text-[37px] md:text-4xl font-semibold text-foreground">in under 3 minutes</p>
+          <p className="text-2xl md:text-[37px] font-semibold text-foreground mt-2 md:mt-0">in under 3 minutes</p>
         </div>
 
-        <div className="mt-10 flex flex-col items-center gap-[16px]">
+        <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
           <Button
-            onClick={() => setIsModalOpen(true)}
-            className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
+            onClick={handleLinkedInClick}
+            className="w-full md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >
             Auto-fill via LinkedIn
           </Button>
 
           <Button
-            onClick={handleNavigate}
-            className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleUploadClick}
+            className="w-full md:w-auto py-6 md:py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-xl md:text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Upload existing resume
           </Button>
         </div>
 
-        {overlays.map((overlay, i) => (
-          <motion.div
-            key={overlay.id}
-            className="overlay-item absolute"
-            style={{
-              top: overlay.position.top,
-              left: overlay.position.left,
-              right: overlay.position.right,
-              width: overlay.width ? `${overlay.width}px` : 'auto',
-            }}
-            initial={overlay.initial}
-            animate={{ x: 0, y: 0, opacity: 1 }}
-            transition={{
-              duration: 1,
-              ease: 'easeOut',
-            }}
-          >
-            {overlay.content}
-          </motion.div>
-        ))}
+        {/* Desktop Overlays */}
+        <div className="hidden md:block">
+          {overlays.map((overlay, i) => (
+            <motion.div
+              key={overlay.id}
+              className="overlay-item absolute"
+              style={{
+                top: overlay.desktopPosition.top,
+                left: overlay.desktopPosition.left,
+                right: overlay.desktopPosition.right,
+                width: overlay.width ? `${overlay.width}px` : 'auto',
+              }}
+              initial={overlay.initial}
+              animate={{ x: 0, y: 0, opacity: 1 }}
+              transition={{
+                duration: 1,
+                ease: 'easeOut',
+              }}
+            >
+              {overlay.content}
+            </motion.div>
+          ))}
+        </div>
 
-
+        {/* Mobile Overlays */}
+        <div className="block md:hidden">
+          {overlays.map((overlay, i) => (
+            <motion.div
+              key={`${overlay.id}-mobile`}
+              className="overlay-item absolute scale-[0.4] md:scale-100"
+              style={{
+                top: overlay.mobilePosition.top,
+                left: overlay.mobilePosition.left,
+                right: overlay.mobilePosition.right,
+                width: overlay.mobileWidth ? `${overlay.mobileWidth}px` : overlay.width ? `${overlay.width}px` : 'auto',
+              }}
+              initial={overlay.initial}
+              animate={{ x: 0, y: 0, opacity: 1 }}
+              transition={{
+                duration: 1,
+                ease: 'easeOut',
+              }}
+            >
+              {overlay.content}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
-        <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      {/* Mobile Text View */}
+      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );
 };

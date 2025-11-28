@@ -4,18 +4,25 @@ import { motion } from 'framer-motion';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import FooterNavigation from './navigation-footer';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { MobileTextView } from './mobile-text-view';
 
 const FooterSection = () => {
   const router = useRouter();
     const user = useCachedUser();
+    const isMobile = useIsMobile();
+    const [showMobileView, setShowMobileView] = useState(false);
   
-    const handleNavigate = () => {
+   const handleNavigate = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+    } else {
       router.push(user ? '/dashboard' : '/auth');
-    };
-  
+    }
+  };
   const overlays = [
     {
       id: 'colors',
@@ -24,7 +31,9 @@ const FooterSection = () => {
           <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
-      position: { top: '-1%', left: '2%' },
+      desktopPosition: { top: '-1%', left: '2%' },
+      mobilePosition: { top: '-2%', left: '-2%' },
+      mobileWidth: 115,
       width: 250,
       initial: { rotate: -25, x: 400, y: -200, opacity: 0 },
     },
@@ -44,7 +53,9 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '8%', left: '32%' },
+      desktopPosition: { top: '8%', left: '32%' },
+      mobilePosition: { top: '15%', left: '85%' },
+      mobileWidth: 70,
       width: 140,
       initial: { rotate: 15, x: 200, y: -150, opacity: 0 },
     },
@@ -64,7 +75,9 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '1%', right: '35%' },
+      desktopPosition: { top: '1%', right: '35%' },
+      mobilePosition: { top: '1%', right: '-5%' },
+      mobileWidth: 75,
       width: 150,
       initial: { rotate: -24, x: 300, y: -100, opacity: 0 },
     },
@@ -84,7 +97,9 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '25%', right: '45%' },
+      desktopPosition: { top: '25%', right: '45%' },
+      mobilePosition: { top: '35%', right: '-5%' },
+      mobileWidth: 65,
       width: 120,
       initial: { rotate: 13, x: 250, y: 100, opacity: 0 },
     },
@@ -104,7 +119,9 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '48%', left: '5%' },
+      desktopPosition: { top: '48%', left: '5%' },
+      mobilePosition: { bottom: '40%', left: '-10%' },
+      mobileWidth: 60,
       width: 110,
       initial: { rotate: -10, x: -200, y: 200, opacity: 0 },
     },
@@ -124,7 +141,9 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '42%', right: '5%' },
+      desktopPosition: { top: '42%', right: '5%' },
+      mobilePosition: { bottom: '30%', right: '2%' },
+      mobileWidth: 70,
       width: 130,
       initial: { rotate: 10, x: 300, y: 50, opacity: 0 },
     },
@@ -144,33 +163,35 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      position: { top: '62%', right: '8%' },
+      desktopPosition: { top: '62%', right: '8%' },
+      mobilePosition: { bottom: '-5%', left: '8%' },
+      mobileWidth: 65,
       width: 125,
       initial: { rotate: -10, x: 350, y: 150, opacity: 0 },
     },
   ];
 
   return (
-    <section className="relative w-full h-full flex flex-col">
-      <div className="w-[1408px] mx-auto relative flex-1 flex flex-col px-16">
-        <div className="flex justify-end pb-8 mt-[64px]">
+    <section className="relative w-full h-full flex flex-col min-h-[80vh] md:min-h-0">
+      <div className="w-full max-w-[1408px] mx-auto relative flex-1 flex flex-col px-4 sm:px-8 lg:px-16 py-8 lg:py-0">
+        <div className="flex justify-end pb-4 sm:pb-8 mt-8 sm:mt-12 lg:mt-[64px]">
           <FooterNavigation />
         </div>
 
         <div className="flex-1 flex items-center justify-center relative z-20">
           <div className="text-center">
-            <h1 className="text-[80px] md:text-7xl font-semibold text-foreground mb-4 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight">
               Right <span className="text-blue-800 font-black">Resume</span>
               <br />
-              <span className="block -mt-8 mx-auto w-fit px-[49px] rounded-full text-[rgba(0,137,65,1)] font-black backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
+              <span className="text-[28px] md:text-[80px] block -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8 mx-auto w-fit px-4 sm:px-6 md:px-8 lg:px-[49px] py-1 sm:py-0 rounded-full text-[rgba(0,137,65,1)] font-black backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
                 Right Opportunity
               </span>
             </h1>
 
-            <div className="mt-10 flex flex-col items-center gap-[10px]">
+            <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col items-center gap-[10px]">
               <Button
                 onClick={handleNavigate}
-                className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-[88px]"
+                className="py-3 px-4 sm:py-4 sm:px-5 lg:py-8 lg:px-6 bg-blue-900 border-2 border-white text-white text-base sm:text-xl md:text-2xl lg:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-8 sm:mb-12 lg:mb-[88px]"
               >
                 Create My Resume
               </Button>
@@ -178,12 +199,12 @@ const FooterSection = () => {
           </div>
         </div>
 
-        <div className="pb-8">
-          <div className="w-full h-px bg-[rgb(201,201,201)] mb-9"></div>
+        <div className="pb-4 sm:pb-6 lg:pb-8">
+          <div className="w-full h-px bg-[rgb(201,201,201)] mb-4 sm:mb-6 lg:mb-9"></div>
 
-          <div className="flex flex-row justify-between items-end">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-semibold text-[rgb(11,10,9)]">Resume Builder</h2>
+              <h2 className="text-base sm:text-lg font-semibold text-[rgb(11,10,9)]">Resume Builder</h2>
 
               <div className="flex items-center gap-1 bg-[rgb(2,164,79)] text-white text-xs font-bold px-3 py-1 rounded-full">
                 <span>AI Powered</span>
@@ -191,22 +212,23 @@ const FooterSection = () => {
               </div>
             </div>
 
-            <div className="text-right">
-              <p className="text-[rgb(125,125,125)] text-xl font-normal leading-relaxed">
+            <div className="text-left sm:text-right">
+              <p className="text-[rgb(125,125,125)] text-sm sm:text-base lg:text-xl font-normal leading-relaxed">
                 Made with love by people who care. © 2025. All rights reserved.
               </p>
             </div>
           </div>
         </div>
 
+        {/* Desktop Overlays */}
         {overlays.map((overlay, i) => (
           <motion.div
             key={overlay.id}
-            className="overlay-item absolute z-30"
+            className="overlay-item absolute z-30 hidden lg:block"
             style={{
-              top: overlay.position.top,
-              left: overlay.position.left,
-              right: overlay.position.right,
+              top: overlay.desktopPosition.top,
+              left: overlay.desktopPosition.left,
+              right: overlay.desktopPosition.right,
               width: overlay.width ? `${overlay.width}px` : 'auto',
             }}
             initial={overlay.initial}
@@ -228,6 +250,32 @@ const FooterSection = () => {
             {overlay.content}
           </motion.div>
         ))}
+
+        {/* Mobile Overlays */}
+        {overlays.map((overlay, i) => (
+          <motion.div
+            key={`${overlay.id}-mobile`}
+            className="overlay-item absolute z-30 block lg:hidden"
+            style={{
+              top: overlay.mobilePosition?.top || 'auto',
+              bottom: overlay.mobilePosition?.bottom || 'auto',
+              left: overlay.mobilePosition?.left || 'auto',
+              right: overlay.mobilePosition?.right || 'auto',
+              width: overlay.mobileWidth ? `${overlay.mobileWidth}px` : overlay.width ? `${overlay.width}px` : 'auto',
+            }}
+            initial={overlay.initial}
+            animate={{ x: 0, y: 0, opacity: 1 }}
+            transition={{
+              duration: 1.2,
+              ease: 'easeOut',
+              delay: i * 0.1,
+            }}
+          >
+            {overlay.content}
+          </motion.div>
+        ))}
+
+        {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
       </div>
     </section>
   );

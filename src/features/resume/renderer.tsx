@@ -406,7 +406,28 @@ function renderListSection(
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
+
+  // Filter out items where all values are empty, null, or undefined
+  const validItems = items.filter((item: any) => {
+    if (!item || typeof item !== 'object') return false;
+
+    // Check if at least one field has a non-empty value
+    return Object.values(item).some((value: any) => {
+      if (!value) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (typeof value === 'object') {
+        // For nested objects (like duration), check if they have valid values
+        const nestedValues = Object.values(value);
+        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+      }
+      return true;
+    });
+  });
+
+  // Return null if no valid items after filtering
+  if (validItems.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -446,7 +467,7 @@ function renderListSection(
       </div>
 
       <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
-        {items.map((item: any, idx: number) => (
+        {validItems.map((item: any, idx: number) => (
           <div key={idx} className={section.itemTemplate.className}>
             {section.itemTemplate.rows
               ? renderItemWithRows(section.itemTemplate, item)
@@ -667,7 +688,9 @@ function renderContentSection(
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
-  if (!value) return null;
+
+  // Check for empty values including empty strings
+  if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -720,15 +743,24 @@ function renderInlineListSection(
   section: any,
   data: any,
   currentSection?: string,
-  
+
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items with no value
-  const validItems = items.map((item: any) => resolvePath(item, section.itemPath)).filter((value: any) => value);
+  // Filter out items with no value or empty strings
+  const validItems = items
+    .map((item: any) => resolvePath(item, section.itemPath))
+    .filter((value: any) => {
+      if (!value) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      return true;
+    });
 
+  // Return null if no valid items after filtering
   if (validItems.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
@@ -789,7 +821,20 @@ function renderBadgeSection(
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+    // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
+
+  // Filter out items with no value or empty strings
+  const validItems = items
+    .map((item: any) => resolvePath(item, section.itemPath))
+    .filter((value: any) => {
+      if (!value) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      return true;
+    });
+
+  if (validItems.length === 0) return null;
 
   // Icon component mapping
   const getIconComponent = (iconName?: string) => {
@@ -840,7 +885,7 @@ function renderBadgeSection(
       </div>
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
-        {items.map((item: any, idx: number) => {
+        {validItems.map((item: any, idx: number) => {
           const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
 
           if (!value) {

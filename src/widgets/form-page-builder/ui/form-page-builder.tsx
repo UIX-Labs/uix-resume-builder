@@ -23,6 +23,7 @@ import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resu
 import {
   findItemById,
   applySuggestionsToFieldValue,
+  applySuggestionsToArrayField,
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
@@ -490,13 +491,25 @@ export function FormPageBuilder() {
         return;
       }
 
-      const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
+      const currentFieldValue = (currentItem as Record<string, unknown>)[fieldName];
 
-      const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
+      // Check if field value is an array (for achievements, interests)
+      const isArrayField = Array.isArray(currentFieldValue);
+
+      let updatedFieldValue: string | string[];
+
+      if (isArrayField) {
+        updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
+      } else {
+        updatedFieldValue = applySuggestionsToFieldValue((currentFieldValue as string) , selectedSuggestions);
+      }
 
       // Check if suggestions were actually applied
-      if (updatedFieldValue === currentFieldValue) {
-   
+      const hasChanged = isArrayField
+        ? JSON.stringify(updatedFieldValue) !== JSON.stringify(currentFieldValue)
+        : updatedFieldValue !== currentFieldValue;
+
+      if (!hasChanged) {
         toast.error('Suggestions could not be applied');
         return;
       }

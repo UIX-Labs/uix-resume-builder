@@ -129,6 +129,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
 						<div
 							key={i}
 							dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }}
+							className='h-full'
 						/>
 					))}
 				</div>
@@ -471,18 +472,18 @@ function renderField(field: any, data: any): React.ReactNode {
 	if (field.type === 'badge') {
 		const value = field.pathWithFallback
 			? resolvePath(
-					data,
-					field.pathWithFallback.path,
-					field.pathWithFallback.fallback
-			  )
+				data,
+				field.pathWithFallback.path,
+				field.pathWithFallback.fallback
+			)
 			: resolvePath(data, field.path, field.fallback);
 
 		const href = field.hrefPathWithFallback
 			? resolvePath(
-					data,
-					field.hrefPathWithFallback.path,
-					field.hrefPathWithFallback.fallback
-			  )
+				data,
+				field.hrefPathWithFallback.path,
+				field.hrefPathWithFallback.fallback
+			)
 			: resolvePath(data, field.href);
 
 		if (!value) return null;
@@ -519,15 +520,30 @@ function renderField(field: any, data: any): React.ReactNode {
 	if (field.type === 'text') {
 		const value = field.pathWithFallback
 			? resolvePath(
-					data,
-					field.pathWithFallback.path,
-					field.pathWithFallback.fallback
-			  )
+				data,
+				field.pathWithFallback.path,
+				field.pathWithFallback.fallback
+			)
 			: resolvePath(data, field.path, field.fallback);
 
 		if (!value) return null;
 		const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
 		return <span className={field.className}>{text}</span>;
+	}
+
+	if (field.type === 'horizontal-group') {
+		return (
+			<div className={cn('flex flex-row items-center', field.className)}>
+				{field.items.map((subField: any, idx: number) => (
+					<React.Fragment key={idx}>
+						{idx > 0 && field.separator && (
+							<span>{field.separator}</span>
+						)}
+						{renderField(subField, data)}
+					</React.Fragment>
+				))}
+			</div>
+		);
 	}
 
 	if (field.type === 'inline-group') {
@@ -639,18 +655,18 @@ function renderField(field: any, data: any): React.ReactNode {
 	if (field.type === 'link') {
 		const value = field.pathWithFallback
 			? resolvePath(
-					data,
-					field.pathWithFallback.path,
-					field.pathWithFallback.fallback
-			  )
+				data,
+				field.pathWithFallback.path,
+				field.pathWithFallback.fallback
+			)
 			: resolvePath(data, field.path, field.fallback);
 
 		const href = field.hrefPathWithFallback
 			? resolvePath(
-					data,
-					field.hrefPathWithFallback.path,
-					field.hrefPathWithFallback.fallback
-			  )
+				data,
+				field.hrefPathWithFallback.path,
+				field.hrefPathWithFallback.fallback
+			)
 			: resolvePath(data, field.href);
 
 		if (!value || !href) return null;
@@ -721,6 +737,8 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
 
 	const canBreak = section.break !== false; // Default to true if not specified
 
+	const shouldRenderAsList = section.showBullet || (section.containerClassName.includes('grid') || section.containerClassName.includes('flex'));
+
 	return (
 		<div data-canbreak={canBreak}>
 			<div className={cn('flex flex-col', section.heading.className)}>
@@ -733,21 +751,35 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
 				{section.heading.divider && renderDivider(section.heading.divider)}
 			</div>
 
-			<div
-				data-item="content"
-				data-canbreak={canBreak}
-			>
-				{validItems.map((value: any, idx: number) => {
-					return (
-						<span key={idx}>
-							<span className={section.itemClassName}>{value}</span>
-							{idx < items.length - 1 && section.itemSeparator && (
-								<span>{section.itemSeparator}</span>
-							)}
-						</span>
-					);
-				})}
-			</div>
+			{shouldRenderAsList ? (
+				<ul
+					data-item="content"
+					data-canbreak={canBreak}
+					className={cn(section.containerClassName, 'list-disc list-inside')}
+				>
+					{validItems.map((value: any, idx: number) => (
+						<li key={idx} className={section.itemClassName}>
+							{value}
+						</li>
+					))}
+				</ul>
+			) : (
+				<div
+					data-item="content"
+					data-canbreak={canBreak}
+				>
+					{validItems.map((value: any, idx: number) => {
+						return (
+							<span key={idx}>
+								<span className={section.itemClassName}>{value}</span>
+								{idx < items.length - 1 && section.itemSeparator && (
+									<span>{section.itemSeparator}</span>
+								)}
+							</span>
+						);
+					})}
+				</div>
+			)}
 		</div>
 	);
 }
@@ -836,6 +868,7 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
 			</div>
 
 			<div
+				data-canbreak={canBreak}
 				className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}
 			>
 				{items.map((item: any, idx: number) => {

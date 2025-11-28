@@ -20,6 +20,25 @@ function resolvePath(data: any, path: string, fallback?: any): any {
   return result ?? fallback;
 }
 
+// Utility to flatten and filter items (handles both nested and flat structures)
+function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
+  const flattenedItems: any[] = [];
+
+  items.forEach((item: any) => {
+    const value = itemPath ? resolvePath(item, itemPath) : item;
+
+    if (Array.isArray(value)) {
+      // Nested structure: item has an items array
+      flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
+    } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
+      // Flat structure: item is a direct value
+      flattenedItems.push(value);
+    }
+  });
+
+  return flattenedItems;
+}
+
 type RenderProps = {
   template: any;
   data: any;
@@ -743,7 +762,6 @@ function renderInlineListSection(
   section: any,
   data: any,
   currentSection?: string,
-
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
@@ -751,23 +769,17 @@ function renderInlineListSection(
   // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items with no value or empty strings
-  const validItems = items
-    .map((item: any) => resolvePath(item, section.itemPath))
-    .filter((value: any) => {
-      if (!value) return false;
-      if (typeof value === 'string' && value.trim() === '') return false;
-      return true;
-    });
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
 
-  // Return null if no valid items after filtering
-  if (validItems.length === 0) return null;
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions &&  currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -800,14 +812,12 @@ function renderInlineListSection(
       </div>
 
       <div data-item="content" data-break={section.break}>
-        {validItems.map((value: any, idx: number) => {
-          return (
-            <span key={idx}>
-              <span className={section.itemClassName}>{value}</span>
-              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
-          );
-        })}
+        {flattenedItems.map((value: any, idx: number) => (
+          <span key={idx}>
+            <span className={section.itemClassName}>{value}</span>
+            {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -822,19 +832,14 @@ function renderBadgeSection(
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
-    // Return null if items is not an array or is empty
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items with no value or empty strings
-  const validItems = items
-    .map((item: any) => resolvePath(item, section.itemPath))
-    .filter((value: any) => {
-      if (!value) return false;
-      if (typeof value === 'string' && value.trim() === '') return false;
-      return true;
-    });
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
 
-  if (validItems.length === 0) return null;
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
 
   // Icon component mapping
   const getIconComponent = (iconName?: string) => {
@@ -851,7 +856,7 @@ function renderBadgeSection(
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldHighlight = hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -885,13 +890,7 @@ function renderBadgeSection(
       </div>
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
-        {validItems.map((item: any, idx: number) => {
-          const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
-
-          if (!value) {
-            return null;
-          }
-
+        {flattenedItems.map((value: any, idx: number) => {
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
@@ -905,7 +904,7 @@ function renderBadgeSection(
           return (
             <span key={idx}>
               <span className={section.badgeClassName}>{value}</span>
-              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
             </span>
           );
         })}

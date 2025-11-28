@@ -363,6 +363,17 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail();
   }, [resumeId, resumes]);
 
+  // Auto-save effect - triggers when formData changes
+  useEffect(() => {
+    if (!currentStep || !formData || !formData[currentStep]) {
+      return;
+    }
+
+    // Trigger auto-save after 2 seconds of inactivity
+    debouncedAutoSave(currentStep, formData[currentStep]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, currentStep]);
+
   async function handleNextStep() {
     handleSaveResume();
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
@@ -395,12 +406,35 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-        
+
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
       }
     }, 1000),
+    [save]
+  );
+
+  // Debounced auto-save function
+  const debouncedAutoSave = useCallback(
+    debounce(async (step: string, data: any) => {
+      try {
+        thumbnailGenerated.current = false;
+
+        await save({
+          type: step,
+          data: data,
+          updatedAt: Date.now(),
+        });
+
+        // Generate thumbnail after auto-save
+        await generateAndSaveThumbnail();
+
+        console.log('Auto-saved successfully');
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+      }
+    }, 2000),
     [save]
   );
 

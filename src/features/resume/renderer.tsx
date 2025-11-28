@@ -454,6 +454,18 @@ function renderListSection(
   const shouldBlur = hasSuggestions && currentSection && !isActive;
   const shouldHighlight = hasSuggestions &&  isActive;
 
+  function RenderListSectionHeading() {
+    return (
+      <div className={cn('flex flex-col', section.heading.className)}>
+        {section.heading && (
+          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+        )}
+
+        {section.heading.divider && renderDivider(section.heading.divider)}
+      </div>
+    );
+  }
+
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
     ...(hasSuggestions && {
@@ -468,26 +480,36 @@ function renderListSection(
     }),
   };
 
+  const itemWrapperStyle = section.break ? wrapperStyle : {};
+  const containerWrapperStyle = section.break ? {} : wrapperStyle;
+
   return (
     <div
       data-item="list-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
-      style={wrapperStyle}
+      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      style={containerWrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
-      <div className={cn('flex flex-col', section.heading.className)}>
-        {section.heading && (
-          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
-        )}
-
-        {section.heading.divider && renderDivider(section.heading.divider)}
-      </div>
+      {!section.break && <RenderListSectionHeading />}
 
       <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
         {validItems.map((item: any, idx: number) => (
-          <div key={idx} className={section.itemTemplate.className}>
+          <div
+            key={idx}
+            className={cn(
+              section.itemTemplate.className,
+              section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
+            )}
+            style={itemWrapperStyle}
+          >
+            {section.break && idx === 0 && shouldHighlight && (
+              <div style={{ position: 'relative' }}>
+                <SparkleIndicator />
+              </div>
+            )}
+            {section.break && idx === 0 && <RenderListSectionHeading />}
             {section.itemTemplate.rows
               ? renderItemWithRows(section.itemTemplate, item)
               : renderItemWithFields(section.itemTemplate, item)}

@@ -8,7 +8,7 @@ const laurenChenTemplate = {
         height: 1122,
         padding: 0,
         background: '#ffffff',
-        className: 'text-neutral-900 leading-relaxed',
+        className: 'text-neutral-900 leading-relaxed h-full',
         fontFamily: 'Inter, sans-serif',
     },
 

@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 
@@ -74,132 +74,176 @@ function SparkleIndicator() {
     </div>
   );
 }
-
-export function ResumeRenderer({
-  template,
-  data,
-  className,
-  currentSection,
-  hasSuggestions = false,
-}: RenderProps) {
-  const [pages, setPages] = useState<React.ReactNode[][]>([]);
+export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
+  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
-  const sections = template.sections || [];
 
   const PAGE_HEIGHT = 1122;
   const PAGE_PADDING = page.padding ?? 24;
-  const MAX_HEIGHT = PAGE_HEIGHT - PAGE_PADDING * 2;
 
-  // Paginate content
+  // NEW: dynamic max height per column
+  const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
+  const COLUMN_MAX = {
+    left: DEFAULT_MAX,
+    right: DEFAULT_MAX,
+  };
+
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
 
-    const newPages: React.ReactNode[][] = [];
-    let currentPage: React.ReactNode[] = [];
-    newPages.push(currentPage);
+    const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
+    const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
 
-    const containerTop = container.getBoundingClientRect().top;
-    let currentPageTop = containerTop;
+    const leftPages: React.ReactNode[][] = [];
+    const rightPages: React.ReactNode[][] = [];
 
-    function helper(container: HTMLElement) {
-      const children = Array.from(container.children) as HTMLElement[];
+    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
+      let currentColumnPage: React.ReactNode[] = [];
+      outPages.push(currentColumnPage);
 
-      if (children.length === 0) {
-        return;
-      }
+      const pageMax = COLUMN_MAX[columnName];
+      let pageTop: number | null = null;
 
-      for (let i = 0; i < children.length; i++) {
-        const el = children[i];
-        el.style.display = '';
+      function walk(el: HTMLElement) {
+        const children = Array.from(el.children) as HTMLElement[];
+        if (!children.length) return;
 
-        const elRect = el.getBoundingClientRect();
-        const elTop = elRect.top;
-        const elBottom = elRect.bottom;
-        const canBreak = el.getAttribute('data-canbreak') === 'true';
+        for (const child of children) {
+          child.style.display = '';
 
-        if (canBreak) {
-          helper(el);
-        } else {
-          // Check if element would exceed max height from current page start
-          if (elBottom - currentPageTop > MAX_HEIGHT && currentPage.length > 0) {
-            currentPage = [];
-            newPages.push(currentPage);
-            currentPageTop = elTop; // New page starts at this element's top
+          const rect = child.getBoundingClientRect();
+          const canBreak = child.getAttribute('data-canbreak') === 'true';
+
+          if (pageTop == null) {
+            pageTop = rect.top;
           }
 
-          currentPage.push(el.cloneNode(true) as unknown as React.ReactNode);
+          if (canBreak) {
+            walk(child);
+            continue;
+          }
+
+          const childBottom = rect.bottom;
+          const usedHeight = childBottom - pageTop;
+
+          if (usedHeight > pageMax && currentColumnPage.length > 0) {
+            currentColumnPage = [];
+            outPages.push(currentColumnPage);
+            pageTop = rect.top;
+          }
+
+          currentColumnPage.push(child.cloneNode(true) as React.ReactNode);
         }
       }
+
+      walk(columnEl);
     }
 
-    helper(container);
+    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
+    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
 
-    setPages(newPages);
+    const totalPages = Math.max(leftPages.length, rightPages.length);
+    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      merged.push([leftPages[i] || [], rightPages[i] || []]);
+    }
+
+    setPages(merged);
   }, [template, data, currentSection, hasSuggestions]);
+
+  const { columnConfig, leftItems, rightItems } = useMemo(() => {
+    if (!template.columns) {
+      return {
+        columnConfig: {
+          spacing: '0px',
+          left: {
+            width: '100%',
+          },
+          right: {
+            width: '0%',
+          },
+        },
+
+        leftItems: template.sections,
+        rightItems: [],
+      };
+    }
+
+    const leftItems = template.sections.filter((s: any) => s.column === 'left');
+    const rightItems = template.sections.filter((s: any) => s.column === 'right');
+
+    return {
+      columnConfig: template.columns,
+      leftItems,
+      rightItems,
+    };
+  }, [template]);
+
+  const leftWidth = columnConfig.left.width;
+  const rightWidth = columnConfig.right.width;
+  const spacing = columnConfig.spacing;
+
+  const baseStyle = {
+    width: '21cm',
+    padding: PAGE_PADDING,
+    gridTemplateColumns: `calc(${leftWidth} - ${spacing}) calc(${rightWidth} - ${spacing})`,
+    gap: spacing,
+  };
 
   return (
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="mb-5 grid"
         style={{
+          ...baseStyle,
           position: 'absolute',
           visibility: 'hidden',
-          fontFamily: page.fontFamily,
-          pointerEvents: 'none',
-          width: '21cm',
-          padding: PAGE_PADDING,
         }}
       >
-        {sections.map((section: any, idx: number) => (
-          <React.Fragment key={idx}>
-            {renderSection(section, data, currentSection,  hasSuggestions)}
-          </React.Fragment>
-        ))}
+        <div className="flex flex-col" data-column="left">
+          {leftItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
+        <div className="flex flex-col" data-column="right">
+          {rightItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
       </div>
 
-      {pages.map((blocks, index) => (
-        <div
-          key={index}
-          className={cn(
-            'bg-white mb-5',
-
-            page.className,
-            className,
-          )}
-          style={{
-            padding: PAGE_PADDING,
-            background: page.background ?? 'white',
-            fontFamily: page.fontFamily,
-            width: '21cm',
-            height: '29.7cm',
-          }}
-        >
-          {blocks.map((node, i) => {
-            // Remove top margin from first element on subsequent pages
-            if (index > 0 && i === 0) {
-              const modifiedNode = (node as any).cloneNode(true);
-              modifiedNode.style.marginTop = '0';
-              return <div key={i} dangerouslySetInnerHTML={{ __html: modifiedNode.outerHTML }} />;
-            }
-            return <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} />;
-          })}
-        </div>
-      ))}
+      {pages.map((columns, index) => {
+        const [leftColumn, rightColumn] = columns;
+        return (
+          <div
+            key={index}
+            className={cn('grid bg-white mb-5', page.className, className)}
+            style={{ ...baseStyle, height: '29.7cm' }}
+          >
+            <div className="flex flex-col">
+              {leftColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+              ))}
+            </div>
+            <div className="flex flex-col">
+              {rightColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
 
 // Main section renderer
-function renderSection(
-  section: any,
-  data: any,
-  currentSection?: string,
-  hasSuggestions?: boolean,
-): React.ReactNode {
+function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
   // Check if section is hidden
   // Get section ID from different possible sources
   let sectionId = section.id;
@@ -223,22 +267,16 @@ function renderSection(
 
   // Check if this section is marked as hidden
   if (dataKey && data[dataKey]?.isHidden === true) {
-   
     return null;
   }
 
-  if (section.type === 'header')
-    return renderHeaderSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'list-section')
-    return renderListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'two-column-layout')
-    return renderTwoColumnLayout(section, data, currentSection,  hasSuggestions);
-  if (section.type === 'content-section')
-    return renderContentSection(section, data, currentSection,  hasSuggestions);
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
+  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'inline-list-section')
-    return renderInlineListSection(section, data, currentSection,  hasSuggestions);
-  if (section.type === 'badge-section')
-    return renderBadgeSection(section, data, currentSection,  hasSuggestions);
+    return renderInlineListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
   return null;
 }
 
@@ -280,7 +318,7 @@ function renderHeaderSection(
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
   const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
-  const shouldHighlight = hasSuggestions  && (isActive || isPersonalDetailsActive);
+  const shouldHighlight = hasSuggestions && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -375,7 +413,7 @@ function renderHeaderSection(
         </div>
       )}
 
-     {fields.contact && (
+      {fields.contact && (
         <div className={fields.contact.className}>
           {(() => {
             // Filter out items with no value first
@@ -452,7 +490,7 @@ function renderListSection(
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldHighlight = hasSuggestions && isActive;
 
   function RenderListSectionHeading() {
     return (
@@ -535,9 +573,7 @@ function renderTwoColumnLayout(
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection,  hasSuggestions)}
-            </React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -546,9 +582,7 @@ function renderTwoColumnLayout(
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection,  hasSuggestions)}
-            </React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -617,13 +651,7 @@ function renderField(field: any, data: any): React.ReactNode {
     const src = resolvePath(data, field.path, field.fallback);
     if (!src && !field.fallback) return null;
 
-    return (
-      <img
-        src={src || field.fallback}
-        alt={field.alt || 'Image'}
-        className={cn(field.className)}   
-      />
-    );
+    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
   }
 
   if (field.type === 'group') {
@@ -741,7 +769,7 @@ function renderContentSection(
     currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
   const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
-  const shouldHighlight = hasSuggestions &&  (isActive || isSummaryForPersonalDetails);
+  const shouldHighlight = hasSuggestions && (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',

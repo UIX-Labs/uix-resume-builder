@@ -9,11 +9,22 @@ const aniketTemplate = {
     fontFamily: 'Inter',
   },
 
+  columns: {
+    spacing: '12px',
+    left: {
+      width: '30%',
+    },
+    right: {
+      width: '70%',
+    },
+  },
+
   sections: [
     // Header Section
     {
       id: 'header',
       type: 'header',
+      column: 'left',
       className: 'flex flex-col items-center text-center gap-2',
       fields: {
         name: {
@@ -59,6 +70,7 @@ const aniketTemplate = {
     {
       id: 'education',
       type: 'list-section',
+      column: 'left',
       break: false,
       heading: {
         path: 'education.heading',
@@ -112,6 +124,7 @@ const aniketTemplate = {
     {
       id: 'summary',
       type: 'content-section',
+      column: 'left',
       className: 'flex flex-col mt-4',
       heading: {
         path: 'summary.heading',
@@ -131,11 +144,12 @@ const aniketTemplate = {
     {
       id: 'experience',
       type: 'list-section',
+      column: 'right',
       break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px]' },
       },
       listPath: 'experience.items',
@@ -179,6 +193,7 @@ const aniketTemplate = {
       id: 'skills',
       break: false,
       type: 'inline-list-section',
+      column: 'left',
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
@@ -196,6 +211,7 @@ const aniketTemplate = {
     {
       id: 'projects',
       type: 'list-section',
+      column: 'right',
       className: 'flex flex-col mt-4',
       break: true,
       heading: {
@@ -224,6 +240,7 @@ const aniketTemplate = {
     {
       id: 'interests',
       type: 'badge-section',
+      column: 'right',
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -239,6 +256,7 @@ const aniketTemplate = {
     {
       id: 'achievements',
       type: 'badge-section',
+      column: 'left',
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
@@ -254,6 +272,7 @@ const aniketTemplate = {
     {
       id: 'certifications',
       type: 'list-section',
+      column: 'right',
       break: true,
       heading: {
         path: 'certifications.heading',

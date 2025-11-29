@@ -51,16 +51,8 @@ export default function AllResumePage() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <header className="flex justify-between items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
-            <div className="flex items-center gap-3 bg-white px-4 py-3 rounded-[30px] min-w-[309px] h-12">
-              <Search className="flex-shrink-0 w-6 h-6 text-[rgb(149,157,168)]" />
-
-              <input
-                type="text"
-                placeholder="search template"
-                className="flex-1 border-none outline-none bg-transparent text-base text-[rgb(149,157,168)] leading-[1.375em] tracking-[-1.125%]"
-              />
-            </div>
+          <header className="flex justify-end items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
+            
 
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
@@ -148,7 +140,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
           <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">
             <div>
               <h3 className="font-medium text-sm">{resume.title}</h3>
-              <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)} · A4</p>
+              <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
             </div>
 
             <DropdownMenu>

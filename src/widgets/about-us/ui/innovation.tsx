@@ -92,14 +92,15 @@ function Innovation() {
           {/* Right Column - Services List */}
           <div className="flex flex-col justify-center gap-[43px] w-[355px]">
             {services.map((service) => (
-              <div key={service.id} className="flex items-center gap-[16.75px]">
+              <div key={service.id} className="flex items-start gap-[16.75px]">
                 <div className="w-[44.95px] h-[44.95px] rounded-full flex-shrink-0">
                   <Image
                     src={service.icon}
                     alt={service.title}
                     width={45}
                     height={45}
-                    className="rounded-full"
+                    className="rounded-full mt-2"
+                    unoptimized
                   />
                 </div>
                 <span

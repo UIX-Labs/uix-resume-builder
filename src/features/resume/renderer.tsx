@@ -1,9 +1,9 @@
-/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: needed for rich text content */
+/** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
 import { useLayoutEffect, useRef, useState } from 'react';
-import React from 'react';
 import * as LucideIcons from 'lucide-react';
+import React from 'react';
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
@@ -20,13 +20,62 @@ function resolvePath(data: any, path: string, fallback?: any): any {
   return result ?? fallback;
 }
 
+// Utility to flatten and filter items (handles both nested and flat structures)
+function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
+  const flattenedItems: any[] = [];
+
+  items.forEach((item: any) => {
+    const value = itemPath ? resolvePath(item, itemPath) : item;
+
+    if (Array.isArray(value)) {
+      // Nested structure: item has an items array
+      flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
+    } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
+      // Flat structure: item is a direct value
+      flattenedItems.push(value);
+    }
+  });
+
+  return flattenedItems;
+}
+
 type RenderProps = {
   template: any;
   data: any;
   className?: string;
+  currentSection?: string;
+  hasSuggestions?: boolean;
 };
 
-export function ResumeRenderer({ template, data, className }: RenderProps) {
+// Reusable sparkle indicator badge for highlighted sections
+function SparkleIndicator() {
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: '-25px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#02A44F',
+        borderRadius: '50%',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 2px 8px rgba(2, 164, 79, 0.3)',
+        zIndex: 10,
+      }}
+    >
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" />
+        <path d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z" fill="white" />
+      </svg>
+    </div>
+  );
+}
+
+export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
   const [pages, setPages] = useState<React.ReactNode[][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
@@ -83,13 +132,13 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
     helper(container);
 
     setPages(newPages);
-  }, [template, data]);
+  }, [template, data, currentSection, hasSuggestions]);
 
   return (
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
         style={{
           position: 'absolute',
           visibility: 'hidden',
@@ -100,7 +149,7 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         }}
       >
         {sections.map((section: any, idx: number) => (
-          <React.Fragment key={idx}>{renderSection(section, data)}</React.Fragment>
+          <React.Fragment key={idx}>{renderSection(section, data, currentSection, hasSuggestions)}</React.Fragment>
         ))}
       </div>
 
@@ -108,7 +157,8 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
         <div
           key={index}
           className={cn(
-            'bg-white border-[3px] border-blue-800 outline-[3px] outline-blue-400 rounded-[18px] mb-5',
+            'bg-white mb-5',
+
             page.className,
             className,
           )}
@@ -120,38 +170,76 @@ export function ResumeRenderer({ template, data, className }: RenderProps) {
             height: '29.7cm',
           }}
         >
-          {blocks.map((node, i) => (
-            <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} className={page.className} />
-          ))}
+          {blocks.map((node, i) => {
+            // Remove top margin from first element on subsequent pages
+            if (index > 0 && i === 0) {
+              const modifiedNode = (node as any).cloneNode(true);
+              modifiedNode.style.marginTop = '0';
+              return <div key={i} dangerouslySetInnerHTML={{ __html: modifiedNode.outerHTML }} className={page.className}/>;
+            }
+            return <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} className={page.className}/>;
+          })}
         </div>
       ))}
     </>
   );
 }
 
-// Main section renderer
-function renderSection(section: any, data: any): React.ReactNode {
-  if (section.type === 'header') return renderHeaderSection(section, data);
-  if (section.type === 'list-section') return renderListSection(section, data);
-  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data);
-  if (section.type === 'content-section') return renderContentSection(section, data);
-  if (section.type === 'inline-list-section') return renderInlineListSection(section, data);
-  if (section.type === 'badge-section') return renderBadgeSection(section, data);
-  if (section.type === 'container-wrapper') return renderContainerWrapper(section, data);
-  return null;
-}
-
 // Container wrapper renderer - wraps multiple sections with a className
-function renderContainerWrapper(section: any, data: any): React.ReactNode {
+function renderContainerWrapper(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const { sections, className } = section;
 
   return (
     <div className={cn(className)} data-item="container-wrapper" data-canbreak="true">
       {sections?.map((subSection: any, idx: number) => (
-        <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+        <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
       ))}
     </div>
   );
+}
+
+// Main section renderer
+function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
+  // Check if section is hidden
+  // Get section ID from different possible sources
+  let sectionId = section.id;
+
+  // If no direct ID, try to extract from listPath (e.g., "experience.items" -> "experience")
+  if (!sectionId && section.listPath) {
+    sectionId = section.listPath.split('.')[0];
+  }
+
+  // If still no ID, try to extract from heading path (e.g., "experience.heading" -> "experience")
+  if (!sectionId && section.heading?.path) {
+    sectionId = section.heading.path.split('.')[0];
+  }
+
+  // Map template section IDs to data keys
+  // The header and summary sections both store data under 'personalDetails' key
+  let dataKey = sectionId;
+  if (sectionId === 'header' || sectionId === 'summary') {
+    dataKey = 'personalDetails';
+  }
+
+  // Check if this section is marked as hidden
+  if (dataKey && data[dataKey]?.isHidden === true) {
+    return null;
+  }
+
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
+  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'inline-list-section')
+    return renderInlineListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'container-wrapper') return renderContainerWrapper(section, data);
+  return null;
 }
 
 // Render divider (horizontal line under headings)
@@ -172,11 +260,64 @@ function renderDivider(divider: any): React.ReactNode {
 }
 
 // Header section renderer
-function renderHeaderSection(section: any, data: any): React.ReactNode {
-  const { fields, className, style } = section;
+function renderHeaderSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
+  const { fields, className, style, id } = section;
+
+  const hasGenericFields = Object.values(fields).some(
+    (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
+  );
+
+  const sectionId = id || 'header-section';
+  const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  // Highlight header when personalDetails is selected
+  const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
+  const shouldHighlight = hasSuggestions && (isActive || isPersonalDetailsActive);
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
+
+  if (hasGenericFields) {
+    return (
+      <div
+        className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
+        data-section={sectionId}
+        style={wrapperStyle}
+      >
+        {shouldHighlight && <SparkleIndicator />}
+        {Object.keys(fields).map((key) => (
+          <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className={cn(className)} style={style}>
+    <div
+      className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={sectionId}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       {fields.nameTitle ? (
         <div className={fields.nameTitle.className}>
           {fields.name && (
@@ -184,6 +325,14 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
           )}
           {fields.title && fields.title.path && (
             <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
+          )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
           )}
         </div>
       ) : (
@@ -194,30 +343,16 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
           {fields.title && fields.title.path && (
             <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
           )}
+          {fields.description && fields.description.path && (
+            <div
+              className={fields.description.className}
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
+              }}
+            />
+          )}
         </>
       )}
-
-      {fields.contact && fields.contact.type === 'contact-grid' && (
-        <div className={fields.contact.className}>
-          {fields.contact.items.map((item: any, idx: number) => {
-            if (item.type === 'inline-group-with-icon') {
-              return (
-                <div key={idx} className={item.className}>
-                  {item.items.map((subItem: any, subIdx: number) => (
-                    <React.Fragment key={subIdx}>{renderField(subItem, data)}</React.Fragment>
-                  ))}
-                </div>
-              );
-            }
-            return (
-              <div key={idx} className={item.className}>
-                {renderField(item, data)}
-              </div>
-            );
-          })}
-        </div>
-      )}
-
       {/* Handle inline-group contact structure */}
       {fields.contact && fields.contact.type === 'inline-group' && <>{renderField(fields.contact, data)}</>}
 
@@ -259,12 +394,56 @@ function renderHeaderSection(section: any, data: any): React.ReactNode {
 }
 
 // List section renderer (education, experience, projects, certifications)
-function renderListSection(section: any, data: any): React.ReactNode {
+function renderListSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  const canBreak = section.break !== false; // Default to true if not specified
+  // Filter out items where all values are empty, null, or undefined
+  const validItems = items.filter((item: any) => {
+    if (!item || typeof item !== 'object') return false;
+
+    // Check if at least one field has a non-empty value
+    return Object.values(item).some((value: any) => {
+      if (!value) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (typeof value === 'object') {
+        // For nested objects (like duration), check if they have valid values
+        const nestedValues = Object.values(value);
+        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+      }
+      return true;
+    });
+  });
+
+  // Return null if no valid items after filtering
+  if (validItems.length === 0) return null;
+
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
 
   // Check if this is a two-column layout (heading on left, content on right)
   const isTwoColumnLayout = section.className && section.className.includes('justify-between');
@@ -281,7 +460,7 @@ function renderListSection(section: any, data: any): React.ReactNode {
 
         {/* Right column: Content */}
         <div data-item="content" className={cn('flex-1', section.containerClassName)}>
-          {items.map((item: any, idx: number) => (
+          {validItems.map((item: any, idx: number) => (
             <div key={idx} className={section.itemTemplate.className}>
               {section.itemTemplate.rows
                 ? renderItemWithRows(section.itemTemplate, item)
@@ -293,9 +472,15 @@ function renderListSection(section: any, data: any): React.ReactNode {
     );
   }
 
-  // Default vertical layout
   return (
-    <div data-item="list-section" data-canbreak={canBreak} className={cn(section.className)}>
+    <div
+      data-item="list-section"
+      data-canbreak={section.break}
+      data-section={sectionId}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
@@ -304,8 +489,8 @@ function renderListSection(section: any, data: any): React.ReactNode {
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-item="content" data-canbreak={canBreak} className={section.containerClassName}>
-        {items.map((item: any, idx: number) => (
+      <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
+        {validItems.map((item: any, idx: number) => (
           <div key={idx} className={section.itemTemplate.className}>
             {section.itemTemplate.rows
               ? renderItemWithRows(section.itemTemplate, item)
@@ -318,7 +503,12 @@ function renderListSection(section: any, data: any): React.ReactNode {
 }
 
 // Two-column layout renderer
-function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
+function renderTwoColumnLayout(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const { leftColumn, rightColumn, className } = section;
 
   return (
@@ -327,7 +517,7 @@ function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -336,7 +526,7 @@ function renderTwoColumnLayout(section: any, data: any): React.ReactNode {
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -457,6 +647,29 @@ function renderField(field: any, data: any): React.ReactNode {
     return <IconComponent size={field.size || 16} className={field.className} />;
   }
 
+  if (field.type === 'image') {
+    const src = resolvePath(data, field.path, field.fallback);
+    if (!src && !field.fallback) return null;
+
+    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+  }
+
+  if (field.type === 'group') {
+    return (
+      <div className={field.className}>
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  if (field.type === 'text') {
+    const value = resolvePath(data, field.path, field.fallback);
+    if (!value) return null;
+    return <p className={field.className}>{value}</p>;
+  }
+
   if (field.type === 'skillLevel') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
@@ -543,14 +756,51 @@ function renderField(field: any, data: any): React.ReactNode {
 }
 
 // Content section renderer (summary)
-function renderContentSection(section: any, data: any): React.ReactNode {
+function renderContentSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
-  if (!value) return null;
+
+  // Check for empty values including empty strings
+  if (!value || (typeof value === 'string' && value.trim() === '')) return null;
+
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  // Highlight summary section when personalDetails is selected
+  const isSummaryForPersonalDetails =
+    currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
+  const shouldHighlight = hasSuggestions && (isActive || isSummaryForPersonalDetails);
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
 
   const canBreak = section.break !== false; // Default to true if not specified
 
   return (
-    <div className={cn(section.className)} data-canbreak={canBreak}>
+    <div
+      className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
+      data-section={sectionId}
+      style={wrapperStyle}
+      data-canbreak={canBreak}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       {section.heading && (
         <p className={section.heading.className}>{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
       )}
@@ -567,14 +817,42 @@ function renderContentSection(section: any, data: any): React.ReactNode {
 }
 
 // Inline list section renderer (skills)
-function renderInlineListSection(section: any, data: any): React.ReactNode {
+function renderInlineListSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items with no value
-  const validItems = items.map((item: any) => resolvePath(item, section.itemPath)).filter((value: any) => value);
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
 
-  if (validItems.length === 0) return null;
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
+
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
 
   const canBreak = section.break !== false; // Default to true if not specified
 
@@ -582,7 +860,13 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
     section.showBullet || section.containerClassName.includes('grid') || section.containerClassName.includes('flex');
 
   return (
-    <div data-canbreak={canBreak}>
+    <div
+      data-break={section.break}
+      data-section={sectionId}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
@@ -597,7 +881,7 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
           data-canbreak={canBreak}
           className={cn(section.containerClassName, 'list-disc list-inside')}
         >
-          {validItems.map((value: any, idx: number) => (
+          {flattenedItems.map((value: any, idx: number) => (
             <li key={idx} className={section.itemClassName}>
               {value}
             </li>
@@ -605,32 +889,66 @@ function renderInlineListSection(section: any, data: any): React.ReactNode {
         </ul>
       ) : (
         <div data-item="content" data-canbreak={canBreak}>
-          {validItems.map((value: any, idx: number) => {
-            return (
-              <span key={idx}>
-                <span className={section.itemClassName}>{value}</span>
-                {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-              </span>
-            );
-          })}
+          {flattenedItems.map((value: any, idx: number) => (
+            <span key={idx}>
+              <span className={section.itemClassName}>{value}</span>
+              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+            </span>
+          ))}
         </div>
       )}
     </div>
   );
 }
 
-/**
- * Badge section renderer (interests, achievements)
- *
- * Supports the same two-column layout pattern as list sections.
- * In two-column mode, the outer div does NOT have data-canbreak to preserve flex layout.
- * See renderListSection documentation for details.
- */
-function renderBadgeSection(section: any, data: any): React.ReactNode {
+// Badge section renderer (interests, achievements)
+function renderBadgeSection(
+  section: any,
+  data: any,
+  currentSection?: string,
+  hasSuggestions?: boolean,
+): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  const canBreak = section.break !== false; // Default to true if not specified
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
+
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
+
+  // Icon component mapping
+  const getIconComponent = (iconName?: string) => {
+    if (!iconName) return null;
+
+    // @ts-ignore - Dynamic icon access
+    const Icon = LucideIcons[iconName];
+    return Icon || null;
+  };
+
+  const IconComponent = section.icon ? getIconComponent(section.icon) : null;
+
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && isActive;
+
+  const wrapperStyle: React.CSSProperties = {
+    scrollMarginTop: '20px',
+    ...(hasSuggestions && {
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+    }),
+    ...(shouldHighlight && {
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
+    }),
+  };
 
   // Check if this is a two-column layout (heading on left, content on right)
   const isTwoColumnLayout = section.className && section.className.includes('justify-between');
@@ -666,9 +984,15 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
     );
   }
 
-  // Default vertical layout
   return (
-    <div data-canbreak={canBreak} data-item="section" className={cn(section.className)}>
+    <div
+      data-break={section.break}
+      data-item="section"
+      data-section={sectionId}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
+      style={wrapperStyle}
+    >
+      {shouldHighlight && <SparkleIndicator />}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
           <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
@@ -677,18 +1001,22 @@ function renderBadgeSection(section: any, data: any): React.ReactNode {
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-canbreak={canBreak} className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
-        {items.map((item: any, idx: number) => {
-          const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
-
-          if (!value) {
-            return null;
+      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={canBreak}>
+        {flattenedItems.map((value: any, idx: number) => {
+          if (IconComponent) {
+            return (
+              <div key={idx} className={section.itemClassName}>
+                <IconComponent className={section.iconClassName} />
+                <span className={section.badgeClassName}>{value}</span>
+              </div>
+            );
           }
 
+          // Default rendering without icon
           return (
             <span key={idx}>
               <span className={section.badgeClassName}>{value}</span>
-              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
             </span>
           );
         })}

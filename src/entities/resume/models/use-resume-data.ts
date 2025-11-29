@@ -74,8 +74,7 @@ export function useResumeManager(id: string) {
   useEffect(() => {
     (async () => {
       const [actualData, emptyData] = await Promise.all([getResumeData(id), getResumeEmptyData()]);
-      const localData = JSON.parse(localStorage.getItem(fullKey) ?? '{}');
-      console.log(localData);
+      const localData = JSON.parse(localStorage.getItem(fullKey) ?? '{}');     
 
       let finalData = actualData;
 

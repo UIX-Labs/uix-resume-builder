@@ -6,6 +6,8 @@ export const useFormDataStore = create<{
   setFormData: (formData: Omit<ResumeData, 'templateId'>) => void;
   isAnalyzing: boolean;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
+  analyzerProgress: number;
+  setAnalyzerProgress: (progress: number) => void;
   analyzerError: boolean;
   setAnalyzerError: (error: boolean) => void;
   retryAnalyzer: (() => void) | null;
@@ -15,6 +17,8 @@ export const useFormDataStore = create<{
   setFormData: (formData: Omit<ResumeData, 'templateId'>) => set({ formData }),
   isAnalyzing: false,
   setIsAnalyzing: (isAnalyzing: boolean) => set({ isAnalyzing }),
+  analyzerProgress: 0,
+  setAnalyzerProgress: (progress: number) => set({ analyzerProgress: progress }),
   analyzerError: false,
   setAnalyzerError: (error: boolean) => set({ analyzerError: error }),
   retryAnalyzer: null,

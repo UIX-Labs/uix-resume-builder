@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw } from 'lucide-react';
+import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 
@@ -98,12 +98,12 @@ export function JDUploadSection({
   ) => (
     <div
       className={cn(
-        'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center w-full h-[350px] p-4 transition-all',
+        'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center h-[350px] p-6 transition-all gap-3',
         'border-[#D6FFEA] bg-[#0B372E]',
         disabled && 'opacity-50 cursor-not-allowed',
       )}
     >
-      <div className="py-1 px-3 rounded-3xl text-xs font-semibold bg-[#DFC500] text-white mb-3">Mandatory</div>
+      <div className="py-1 px-3 rounded-3xl text-xs font-semibold bg-[#DFC500] text-white">Mandatory</div>
 
       {!file ? (
         <button
@@ -118,29 +118,33 @@ export function JDUploadSection({
           <span className="text-sm text-gray-300">or Select File from your device</span>
         </button>
       ) : (
-        <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[90%] mt-2">
-          <div className="flex justify-between items-start">
-            <div className="flex flex-col flex-1">
-              <span className="font-medium text-gray-900">{file.name}</span>
-              <span className="text-xs text-gray-500">
+        <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[85%] mt-2">
+          <div className="flex justify-between items-start gap-3">
+            <div className="flex flex-col flex-1 min-w-0">
+              <span className="font-medium text-gray-900 truncate" title={file.name}>
+                {file.name}
+              </span>
+              <span className="text-xs text-gray-500 mt-1">
                 {file.size} MB {file.status === 'success' && <span>• Uploaded Successfully</span>}
               </span>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-shrink-0">
               {file.status === 'success' && (
                 <button
                   type="button"
                   onClick={() => handleReupload(type)}
-                  className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                  title="Change file"
                 >
-                  <RotateCcw className="h-4 w-4 text-gray-600" />
+                  <Edit className="h-4 w-4 text-gray-600" />
                 </button>
               )}
               <button
                 type="button"
                 onClick={() => handleDelete(type)}
-                className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
+                title="Delete file"
               >
                 <Trash2 className="h-4 w-4 text-gray-600" />
               </button>
@@ -160,12 +164,12 @@ export function JDUploadSection({
   );
 
   return (
-    <div className="flex flex-row gap-6 w-full">
+    <>
       {/* Resume Upload Box */}
-      <div className="w-1/2">{renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}</div>
+      <div className="flex-1 min-w-[500px]">{renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}</div>
 
       {/* JD Upload Box - disabled until Resume is uploaded successfully */}
-      <div className="w-1/2">
+      <div className="flex-1 min-w-[500px]">
         {renderUploadBox(
           'Upload Your JD',
           'jd',
@@ -174,6 +178,6 @@ export function JDUploadSection({
           externalDisabled || !(resumeFile && resumeFile.status === 'success'),
         )}
       </div>
-    </div>
+    </>
   );
 }

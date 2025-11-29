@@ -1,6 +1,13 @@
 import Image from 'next/image';
 
+import { useRouter } from 'next/navigation';
+
 export function SuccessStories() {
+  const navigate=useRouter();
+
+  const handleReadTestimonials = () => {
+    navigate.push('/about-us');
+  };
   return (
     <section className="w-full mx-auto px-4 py-16">
       <div className="w-full max-w-[1272px] mx-auto">
@@ -41,7 +48,7 @@ export function SuccessStories() {
           </p>
 
           {/* Button */}
-          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors">
+          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors" onClick={handleReadTestimonials}>
             Read all testimonials
           </button>
         </div>

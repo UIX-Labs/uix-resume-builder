@@ -14,6 +14,8 @@ import { FieldErrorBadges } from './error-badges';
 import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
 import { ProfilePictureInput } from './profile-picture';
 import { PhoneInput } from './phone-input';
+import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@shared/ui/button';
 
 export function TemplateForm({
   formSchema,
@@ -21,14 +23,16 @@ export function TemplateForm({
   onChange,
   currentStep = 'personalDetails',
   onOpenAnalyzerModal,
+  onToggleHideSection,
 }: {
   formSchema: FormSchema | {};
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
+  onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }) {
-  function getItem<T extends string | boolean>(
+  function getItem<T = any>(
     section: any,
     data: T,
     onChange: (data: T) => void,
@@ -124,7 +128,7 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} />;
+        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates}/>;
       }
 
       default: {
@@ -140,6 +144,7 @@ export function TemplateForm({
             value={data}
             onChange={(e) => onChange(e.target.value)}
           />
+       
         );
       }
     }
@@ -152,14 +157,48 @@ export function TemplateForm({
     return null;
   }
 
+  const isHidden = (currentData as any).isHidden || false;
+
+  const handleToggleHide = () => {
+    const newHiddenState = !isHidden;
+    onChange({
+      ...values,
+      [currentStep]: { ...currentData, isHidden: newHiddenState } as any
+    });
+    onToggleHideSection?.(currentStep, newHiddenState);
+  };
+
   return (
     <div className="flex flex-col gap-4 w-full">
-      <div className="text-[20px] font-semibold text-gray-1000">
-        {currentSchema?.label}
-        <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
+      <div className="flex items-center justify-between">
+        <div className="text-[20px] font-semibold text-gray-1000">
+          {currentSchema?.label}
+          <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
+        </div>
+        {currentStep !== 'personalDetails' && (
+          <Button
+            type="button"
+            onClick={handleToggleHide}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-2 text-sm"
+          >
+            {isHidden ? (
+              <>
+                <Eye className="w-4 h-4" />
+                Unhide
+              </>
+            ) : (
+              <>
+                <EyeOff className="w-4 h-4" />
+                Hide
+              </>
+            )}
+          </Button>
+        )}
       </div>
 
-      <form className="grid grid-cols-2 gap-4 w-full">
+      <form className={cn("grid grid-cols-2 gap-4 w-full", isHidden && "opacity-50 pointer-events-none")}>
         {currentSchema.itemsType === 'draggable' ? (
           <div className="col-span-2">
             <Draggable
@@ -185,6 +224,8 @@ export function TemplateForm({
                   onChange({ ...values, [currentStep]: newData });
                 }}
                 section={currentSchema}
+                suggestedUpdates={currentData.suggestedUpdates}
+                onOpenAnalyzerModal={onOpenAnalyzerModal}
               />
             ))}
           </div>

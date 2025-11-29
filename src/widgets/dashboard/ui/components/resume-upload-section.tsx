@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw } from 'lucide-react';
+import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 import { toast } from 'sonner';
@@ -70,27 +70,28 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
   };
 
   return (
-    <div className="flex flex-col border-2 border-white rounded-[20px] w-full h-[400px]">
+    <div className="flex flex-col flex-1 min-w-[500px]">
       <div
         className={cn(
-          'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center h-full gap-2',
+          'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center h-[350px] gap-3 p-6',
           'border-[#D6FFEA] bg-[#0B372E]',
         )}
       >
-        <div className={cn('py-1 px-3 rounded-3xl text-xs font-semibold', 'bg-[#DC2626] text-white')}>Mandatory</div>
+        <div className={cn('py-1 px-3 rounded-3xl text-xs font-semibold', 'bg-[#DFC500] text-white')}>Mandatory</div>
 
         {!file ? (
-          <button onClick={() => fileInputRef.current?.click()} className="flex flex-col items-center gap-4">
-            <h1 className="text-3xl font-semibold">Upload Your Resume</h1>
-            <UploadCloudIcon className="h-16 w-16" />
-            <h3 className="text-2xl font-semibold">Drag & Drop</h3>
-            <span>or Select File from your device</span>
-          </button>
+          <label
+            htmlFor="resume-upload-input"
+            className="flex flex-col items-center gap-4 cursor-pointer"
+          >
+            <h1 className="text-2xl font-semibold text-white">Upload Your Resume</h1>
+            <UploadCloudIcon className="h-16 w-16 text-white" />
+            <h3 className="text-xl font-semibold text-white">Drag & Drop</h3>
+            <span className="text-sm text-gray-300">or Select File from your device</span>
+          </label>
         ) : (
           <>
-            <h1 className="text-3xl font-semibold text-white">Resume Uploaded</h1>
-
-            <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[90%] mt-4">
+            <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[85%] mt-2">
               <div className="flex justify-between items-start">
                 <div className="flex flex-col flex-1">
                   <span className="font-medium text-gray-900">{file.name}</span>
@@ -103,16 +104,18 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
                 <div className="flex gap-2">
                   {file.status === 'success' && (
                     <button
+                      type="button"
                       onClick={handleReupload}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
                     >
-                      <RotateCcw className="h-4 w-4 text-gray-600" />
+                      <Edit className="h-4 w-4 text-gray-600" />
                     </button>
                   )}
 
                   <button
+                    type="button"
                     onClick={handleDelete}
-                    className="flex items-center justify-center w-8 h-8 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors"
+                    className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
                   >
                     <Trash2 className="h-4 w-4 text-gray-600" />
                   </button>
@@ -128,7 +131,14 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
           </>
         )}
 
-        <input ref={fileInputRef} type="file" accept=".pdf" onChange={handleFileChange} className="hidden" />
+        <input
+          id="resume-upload-input"
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf"
+          onChange={handleFileChange}
+          className="hidden"
+        />
       </div>
     </div>
   );

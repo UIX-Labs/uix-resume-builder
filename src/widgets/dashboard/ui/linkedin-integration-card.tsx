@@ -13,7 +13,7 @@ interface LinkedInModalProps {
   onClose: () => void;
 }
 
-function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
+export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router=useRouter();

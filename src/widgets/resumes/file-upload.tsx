@@ -55,7 +55,6 @@ export function FileUpload({
 
     parsePdfResume(file, {
       onSuccess: (data) => {
-        console.log('Resume parsed successfully:', data);
         onSuccess?.(data);
         onPendingChange?.(false);
       },

@@ -13,6 +13,7 @@ const aniketTemplate = {
     spacing: '12px',
     left: {
       width: '30%',
+      className: 'bg-[rgb(56,76,65)] text-black p-8',
     },
     right: {
       width: '70%',
@@ -191,7 +192,7 @@ const aniketTemplate = {
     // Skills Section
     {
       id: 'skills',
-      break: false,
+      break: true,
       type: 'inline-list-section',
       column: 'left',
       heading: {

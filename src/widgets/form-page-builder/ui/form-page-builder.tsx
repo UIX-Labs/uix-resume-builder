@@ -35,6 +35,7 @@ import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
+import brianWayneTemplate from '@features/resume/templates/template4';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {

@@ -81,7 +81,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
   const { page } = template;
 
   const PAGE_HEIGHT = 1122;
-  const PAGE_PADDING = page.padding ?? 24;
+  const PAGE_PADDING = page.padding ?? 0;
 
   // NEW: dynamic max height per column
   const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
@@ -186,6 +186,8 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
   const leftWidth = columnConfig.left.width;
   const rightWidth = columnConfig.right.width;
   const spacing = columnConfig.spacing;
+  const leftColumnClassName = columnConfig.left.className || '';
+  const rightColumnClassName = columnConfig.right.className || '';
 
   const baseStyle = {
     width: '21cm',
@@ -205,12 +207,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           visibility: 'hidden',
         }}
       >
-        <div className="flex flex-col" data-column="left">
+        <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s, i) => (
             <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
-        <div className="flex flex-col" data-column="right">
+        <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s, i) => (
             <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
@@ -225,12 +227,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
             className={cn('grid bg-white mb-5', page.className, className)}
             style={{ ...baseStyle, height: '29.7cm' }}
           >
-            <div className="flex flex-col">
+            <div className={cn('flex flex-col', leftColumnClassName)}>
               {leftColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
               ))}
             </div>
-            <div className="flex flex-col">
+            <div className={cn('flex flex-col', rightColumnClassName)}>
               {rightColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
               ))}

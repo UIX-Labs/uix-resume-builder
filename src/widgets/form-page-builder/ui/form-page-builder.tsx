@@ -583,18 +583,14 @@ export function FormPageBuilder() {
       >
         <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
-            {selectedTemplate ? (
+            {/* {selectedTemplate ? ( */}
               <ResumeRenderer
                 template={aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
               />
-            ) : (
-              <div className="flex items-center justify-center h-full min-h-[800px]">
-                <div className="text-gray-500">Loading template...</div>
-              </div>
-            )}
+       
           </div>
         </div>
 

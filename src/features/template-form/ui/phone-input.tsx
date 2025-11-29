@@ -19,6 +19,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry
           value={value}
+          defaultCountry="IN"
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled}

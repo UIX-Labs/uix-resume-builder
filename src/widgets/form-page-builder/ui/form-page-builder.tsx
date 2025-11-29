@@ -419,16 +419,11 @@ export function FormPageBuilder() {
   const debouncedAutoSave = useCallback(
     debounce(async (step: string, data: any) => {
       try {
-        thumbnailGenerated.current = false;
-
         await save({
           type: step,
           data: data,
           updatedAt: Date.now(),
         });
-
-        // Generate thumbnail after auto-save
-        await generateAndSaveThumbnail();
 
         console.log('Auto-saved successfully');
       } catch (error) {

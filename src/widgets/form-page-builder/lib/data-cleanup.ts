@@ -13,8 +13,6 @@ export const getCleanDataForRenderer = (data: Record<string, unknown>): Record<s
     if (section && typeof section === 'object') {
       const sectionData = { ...(section as Record<string, unknown>) };
 
-      // Remove suggestedUpdates from each section
-      delete sectionData.suggestedUpdates;
 
       if (Array.isArray(sectionData.items)) {
         sectionData.items = sectionData.items.map((item) => {

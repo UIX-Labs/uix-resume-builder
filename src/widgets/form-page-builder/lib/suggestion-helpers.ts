@@ -93,6 +93,43 @@ const convertTextToHtml = (text: string): string => {
 };
 
 /**
+ * Applies suggestions to array fields (like achievements, interests)
+ * Finds matching strings in the array and replaces them
+ */
+export const applySuggestionsToArrayField = (
+  currentValue: string[],
+  suggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
+): string[] => {
+  let updatedArray = [...currentValue];
+
+  console.log('=== applySuggestionsToArrayField ===');
+  console.log('Current Array:', currentValue);
+  console.log('Suggestions:', suggestions);
+
+  suggestions.forEach((suggestion) => {
+    if (suggestion.old) {
+      // Find the index of the string that matches the old value
+      const matchIndex = updatedArray.findIndex(
+        (item) => item.trim() === suggestion.old?.trim()
+      );
+
+      if (matchIndex !== -1) {
+        console.log(`✓ Found match at index ${matchIndex}: "${updatedArray[matchIndex]}"`);
+        console.log(`  Replacing with: "${suggestion.new}"`);
+        updatedArray[matchIndex] = suggestion.new;
+      } else {
+        console.log(`✗ No match found for: "${suggestion.old}"`);
+      }
+    }
+  });
+
+  console.log('=== Final Array ===');
+  console.log('Updated Array:', updatedArray);
+
+  return updatedArray;
+};
+
+/**
  * Applies selected suggestions to a field value
  * Supports both full field replacement and partial (per-sentence) replacement
  */
@@ -273,12 +310,13 @@ export const removeAppliedSuggestions = (
 /**
  * Updates a specific field value in an item
  * Returns a new array with the updated item
+ * Supports both string and array values
  */
 export const updateItemFieldValue = (
   items: unknown[],
   itemIndex: number,
   fieldName: string,
-  newValue: string,
+  newValue: string | string[],
 ): unknown[] => {
   const updatedItems = [...items];
   const currentItem = items[itemIndex] as Record<string, unknown>;

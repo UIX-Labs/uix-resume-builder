@@ -44,7 +44,7 @@ export default function DashboardCarousel() {
           <button
             type="button"
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition"
+            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -52,7 +52,7 @@ export default function DashboardCarousel() {
           <button
             type="button"
             onClick={scrollNext}
-            className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition"
+            className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>

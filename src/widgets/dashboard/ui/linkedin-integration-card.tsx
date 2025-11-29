@@ -62,10 +62,10 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-2 right-2 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-[#0C1118] border-2 border-white hover:bg-[#1a2230] transition-colors"
+          className="absolute top-2 right-2 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-[#0C1118] border-2 border-white hover:bg-[#1a2230] transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <Image src="/images/close.svg" alt="close-icon" width={40} height={40} className='rotate-45'/>
+          <Image src="/images/close.svg" alt="close-icon" width={40} height={40} className="rotate-45" />
         </button>
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-[198px] py-[176px]">
@@ -77,7 +77,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
             <div className="w-[539px] flex flex-col items-center justify-center p-2 bg-[#0C1118] border border-[#959DA8] rounded-[20px] shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
               <div className="w-full h-12 flex items-center">
                 <div className="flex items-center px-0 gap-1 flex-1">
-                   <Image src="/images/linkedin.svg" alt="img" height={25} width={25}/>
+                  <Image src="/images/linkedin.svg" alt="img" height={25} width={25} />
 
                   <input
                     type="text"
@@ -97,7 +97,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isLoading || !linkedinUrl.trim()}
-                  className="flex items-center justify-center gap-2 bg-[#005FF2] text-white rounded-xl px-5 py-3 h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors"
+                  className="flex items-center justify-center gap-2 bg-[#005FF2] text-white rounded-xl px-5 py-3 h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer"
                 >
                   <span className="text-lg font-semibold leading-[1.333em] tracking-tight whitespace-nowrap">
                     {isLoading ? 'Processing...' : 'Convert to Resume'}
@@ -114,11 +114,9 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
               Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
             </p>
 
-            {displayError && (
-              <p className="text-red-400 text-sm text-center">{displayError}</p>
-            )}
+            {displayError && <p className="text-red-400 text-sm text-center">{displayError}</p>}
           </div>
-        </div>        
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -162,7 +160,7 @@ export default function LinkedinIntegrationCard() {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)]"
+              className="flex items-center justify-center bg-[rgb(0,95,242)] text-white rounded-xl px-5 py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)] cursor-pointer"
             >
               <span className="text-lg font-semibold leading-[1.333em] tracking-tight">Auto-fill via Linkedin</span>
             </button>

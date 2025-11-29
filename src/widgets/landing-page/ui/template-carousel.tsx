@@ -89,7 +89,7 @@ export function TemplateCarousel() {
   const { data: templates } = useGetAllTemplates();
 
   return (
-    <div className="relative bg-[rgb(23,23,23)] text-white rounded-[36px] overflow-hidden min-h-[556px] m-4">
+    <div className="relative bg-[rgb(23,23,23)] text-white rounded-[36px] overflow-hidden min-h-[556px] m-4 select-none">
       <div className="absolute -left-[150px] -top-[214px] w-[400px] h-[400px] bg-gradient-to-br from-[rgb(37,122,255)] via-[rgb(37,122,255)] to-[rgb(23,23,23)] blur-[100px]" />
 
       <div className="flex h-[556px] max-w-[1408px] mx-auto z-10">
@@ -115,7 +115,7 @@ export function TemplateCarousel() {
               <Button
                 variant="default"
                 size="lg"
-                className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-7 py-4 h-[68px] text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl"
+                className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-7 py-4 h-[68px] text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl cursor-pointer"
               >
                 Check All Templates
               </Button>

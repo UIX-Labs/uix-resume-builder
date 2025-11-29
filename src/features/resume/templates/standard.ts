@@ -59,6 +59,7 @@ const aniketTemplate = {
     {
       id: 'education',
       type: 'list-section',
+      break: false,
       heading: {
         path: 'education.heading',
         fallback: 'Education',
@@ -130,7 +131,7 @@ const aniketTemplate = {
     {
       id: 'experience',
       type: 'list-section',
-      break: false,
+      break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
@@ -196,7 +197,7 @@ const aniketTemplate = {
       id: 'projects',
       type: 'list-section',
       className: 'flex flex-col mt-4',
-      break: false,
+      break: true,
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
@@ -246,13 +247,14 @@ const aniketTemplate = {
       },
       listPath: 'achievements.items[0].items',
       badgeClassName:
-        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
+        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold break-words',
     },
 
     // Certifications Section
     {
       id: 'certifications',
       type: 'list-section',
+      break: true,
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',

@@ -70,7 +70,7 @@ const HeroSection = () => {
   ];
 
   return (
-    <section className="relative w-full h-full">
+    <section className="relative w-full h-full select-none">
       <div className="max-w-7xl mx-auto relative text-center">
         <div className="flex items-center justify-center gap-3 mt-28">
           <div className="flex -space-x-2">
@@ -142,11 +142,9 @@ const HeroSection = () => {
             {overlay.content}
           </motion.div>
         ))}
-
-
       </div>
 
-        <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 };

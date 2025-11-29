@@ -76,7 +76,7 @@ export default function GetAllResumesPage() {
                   variant="outline"
                   size="icon"
                   onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent"
+                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
                 </Button>

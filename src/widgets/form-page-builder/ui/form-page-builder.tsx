@@ -571,7 +571,7 @@ export function FormPageBuilder() {
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isGeneratingPDF ? (
               <>Generating PDF...</>

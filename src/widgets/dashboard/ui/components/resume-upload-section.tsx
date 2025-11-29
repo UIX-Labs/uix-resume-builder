@@ -70,22 +70,19 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
   };
 
   return (
-    <div className="flex flex-col flex-1 min-w-[500px]">
+    <div className="flex flex-col flex-1 min-w-[500px] cursor-pointer">
       <div
         className={cn(
           'flex flex-col border-2 border-dashed rounded-[20px] items-center justify-center h-[350px] gap-3 p-6',
-          'border-[#D6FFEA] bg-[#0B372E]',
+          'border-[#D6FFEA] bg-[#0B372E] cursor-pointer',
         )}
       >
         <div className={cn('py-1 px-3 rounded-3xl text-xs font-semibold', 'bg-[#DFC500] text-white')}>Mandatory</div>
 
         {!file ? (
-          <label
-            htmlFor="resume-upload-input"
-            className="flex flex-col items-center gap-4 cursor-pointer"
-          >
+          <label htmlFor="resume-upload-input" className="flex flex-col items-center gap-4 cursor-pointer">
             <h1 className="text-2xl font-semibold text-white">Upload Your Resume</h1>
-            <UploadCloudIcon className="h-16 w-16 text-white" />
+            <UploadCloudIcon className="h-16 w-16 text-white cursor-pointer" />
             <h3 className="text-xl font-semibold text-white">Drag & Drop</h3>
             <span className="text-sm text-gray-300">or Select File from your device</span>
           </label>
@@ -106,7 +103,7 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
                     <button
                       type="button"
                       onClick={handleReupload}
-                      className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
                     >
                       <Edit className="h-4 w-4 text-gray-600" />
                     </button>
@@ -115,7 +112,7 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
                   <button
                     type="button"
                     onClick={handleDelete}
-                    className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
+                    className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
                   >
                     <Trash2 className="h-4 w-4 text-gray-600" />
                   </button>

@@ -39,7 +39,7 @@ export default function Testimonials() {
   }, [emblaApi, onSelect]);
 
   return (
-    <section className="relative py-16">
+    <section className="relative py-16 select-none">
       <div className="flex justify-center items-center gap-3 pt-8 pb-8">
         <span className="w-32 h-[1px] bg-gradient-to-r from-transparent to-gray-950 opacity-40"></span>
 
@@ -146,7 +146,7 @@ export default function Testimonials() {
               onClick={scrollPrev}
               type="button"
               className="w-16 h-16 rounded-full flex items-center justify-center text-white z-20 transition-all
-                bg-[rgb(0,95,242)]/20 backdrop-blur-md border-t border-b border-white/40 -rotate-45 disabled:opacity-40 button-glass"
+                bg-[rgb(0,95,242)]/20 backdrop-blur-md border-t border-b border-white/40 -rotate-45 disabled:opacity-40 button-glass cursor-pointer"
             >
               <ChevronLeft className="w-8 h-8 text-white rotate-45" />
             </button>
@@ -160,7 +160,7 @@ export default function Testimonials() {
             <button
               onClick={scrollNext}
               type="button"
-              className="w-16 h-16 rounded-full flex items-center justify-center text-white z-20 transition-all
+              className="w-16 h-16 rounded-full flex items-center justify-center text-white z-20 transition-all cursor-pointer
                 bg-[rgb(0,95,242)]/20 backdrop-blur-md  border-t border-b border-white/40  rotate-45 disabled:opacity-40
 "
             >

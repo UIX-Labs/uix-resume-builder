@@ -1,5 +1,7 @@
 import { fetch } from '@shared/api';
-import type { CheckIfCommunityMemberResponse } from '../types/type';
+import type { CheckIfCommunityMemberResponse, JoinCommunityResponse } from '../types/type';
+
+export type { CheckIfCommunityMemberResponse, JoinCommunityResponse } from '../types/type';
 
 export async function checkIfCommunityMember(data: {
   personal_email?: string;
@@ -10,6 +12,19 @@ export async function checkIfCommunityMember(data: {
     options: {
       method: 'POST',
       body: JSON.stringify(data),
+    },
+  });
+
+  return res;
+}
+
+export async function joinCommunity() {
+  const res = await fetch<JoinCommunityResponse>('auth/join-community', {
+    options: {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     },
   });
 

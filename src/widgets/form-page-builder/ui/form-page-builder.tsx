@@ -604,10 +604,10 @@ export function FormPageBuilder() {
         }}
       >
         <div className="min-w-0 flex-1 flex justify-center">
-          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+          <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={aniketTemplate}
+                template={selectedTemplate?.json || aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}

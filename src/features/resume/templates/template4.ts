@@ -2,20 +2,21 @@ const brianWayneTemplate = {
   name: 'Brian Wayne Professional',
 
   page: {
-    background: 'transparent',
+    background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
     fontFamily: 'Calibri',
+    padding: 0
   },
 
   columns: {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black p-8',
+      className: 'bg-[rgb(56,76,65)] text-black px-6',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'p-8',
+      className: 'px-8 gap-2 pt-4',
     },
   },
 
@@ -25,7 +26,7 @@ const brianWayneTemplate = {
       id: 'header',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col gap-3',
+      className: 'flex flex-col gap-3 mt-4',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
@@ -154,7 +155,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-lg font-bold text-white',
+        className: 'text-lg font-bold text-white mt-4',
         divider: {
           variant: 'line',
           className: 'bg-white w-full h-[1px] mt-1',
@@ -163,7 +164,7 @@ const brianWayneTemplate = {
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-4 mt-2',
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: 'flex flex-col gap-1 leading-none',
         fields: [
           {
             path: 'degree',
@@ -201,7 +202,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'interests.title',
         fallback: 'Interests',
-        className: 'capitalize text-lg font-bold text-white',
+        className: 'capitalize text-lg font-bold text-white mt-4',
         divider: {
           variant: 'line',
           className: 'bg-white w-full h-[1px] mt-1',
@@ -218,11 +219,11 @@ const brianWayneTemplate = {
       id: 'achievements',
       type: 'badge-section',
       column: 'left',
-      break: false,
+      break: true,
       heading: {
         path: 'achievements.title',
         fallback: 'Achievements',
-        className: 'capitalize text-lg font-bold text-white',
+        className: 'capitalize text-lg font-bold text-white mt-4',
         divider: {
           variant: 'line',
           className: 'bg-white w-full h-[1px] mt-1',
@@ -310,7 +311,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'projects.title',
         fallback: 'Projects',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)]',
+        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1',
@@ -352,7 +353,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-xl font-semibold text-[rgb(56,76,65)]',
+        className: 'text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1',
@@ -361,7 +362,7 @@ const brianWayneTemplate = {
       listPath: 'skills.items',
       containerClassName: 'flex flex-col gap-2 mt-1',
       itemTemplate: {
-        className: 'flex items-start gap-2',
+        className: 'flex flex-col items-start gap-2',
         fields: [
           {
             prefix: '• ',
@@ -381,7 +382,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)]',
+        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1',
@@ -390,7 +391,7 @@ const brianWayneTemplate = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3 mt-1',
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: 'flex flex-col',
         fields: [
           {
             path: 'title',
@@ -399,7 +400,7 @@ const brianWayneTemplate = {
           },
           {
             type: 'inline-group',
-            className: 'flex flex-row items-baseline gap-1',
+            className: 'flex flex-row items-baseline gap-1 leading-none',
             items: [
               {
                 path: 'issuer',

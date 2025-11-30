@@ -81,7 +81,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
   const { page } = template;
 
   const PAGE_HEIGHT = 1122;
-  const PAGE_PADDING = page.padding ?? 0;
+  const PAGE_PADDING = page.padding ?? 24;
 
   // NEW: dynamic max height per column
   const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
@@ -188,12 +188,14 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
   const spacing = columnConfig.spacing;
   const leftColumnClassName = columnConfig.left.className || '';
   const rightColumnClassName = columnConfig.right.className || '';
+  const fontFamily = page.fontFamily || undefined;
 
   const baseStyle = {
     width: '21cm',
     padding: PAGE_PADDING,
-    gridTemplateColumns: `calc(${leftWidth} - ${spacing}) calc(${rightWidth} - ${spacing})`,
+    gridTemplateColumns: `calc(${leftWidth}) calc(${rightWidth})`,
     gap: spacing,
+    fontFamily: fontFamily,
   };
 
   return (
@@ -224,8 +226,8 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
         return (
           <div
             key={index}
-            className={cn('grid bg-white mb-5', page.className, className)}
-            style={{ ...baseStyle, height: '29.7cm' }}
+            className={cn('grid mb-5', page.className, className)}
+            style={{ ...baseStyle, height: '29.7cm', backgroundColor: page.background || 'white' }}
           >
             <div className={cn('flex flex-col', leftColumnClassName)}>
               {leftColumn.map((node: any, i) => (
@@ -433,20 +435,25 @@ function renderHeaderSection(
                 const href = item.href.startsWith('mailto:')
                   ? item.href.replace('{{value}}', value)
                   : resolvePath(data, item.href);
+
+              // Don't use target="_blank" for mailto links
+              const linkProps = item.href.startsWith('mailto:')
+                ? {}
+                : { target: '_blank', rel: 'noopener noreferrer' };
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
-                    <a href={href} className={item.className}>
+                    <a href={href} className={item.className} {...linkProps}>
                       {value}
                     </a>
                   </span>
                 );
               }
               return (
-                <span key={originalIdx}>
+                <React.Fragment key={originalIdx}>
                   {showSeparator && fields.contact.separator}
-                  {value}
-                </span>
+                  <span className={item.className}>{value}</span>
+                </React.Fragment>
               );
             });
           })()}
@@ -539,7 +546,9 @@ function renderListSection(
           <div
             key={idx}
             className={cn(
-              section.itemTemplate.className,
+              section.break && idx === 0
+                ? ''
+                : section.itemTemplate.className,
               section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
             )}
             style={itemWrapperStyle}
@@ -549,10 +558,22 @@ function renderListSection(
                 <SparkleIndicator />
               </div>
             )}
-            {section.break && idx === 0 && <RenderListSectionHeading />}
-            {section.itemTemplate.rows
-              ? renderItemWithRows(section.itemTemplate, item)
-              : renderItemWithFields(section.itemTemplate, item)}
+            {section.break && idx === 0 ? (
+              <>
+                <RenderListSectionHeading />
+                <div className={section.itemTemplate.className}>
+                  {section.itemTemplate.rows
+                    ? renderItemWithRows(section.itemTemplate, item)
+                    : renderItemWithFields(section.itemTemplate, item)}
+                </div>
+              </>
+            ) : (
+              <>
+                {section.itemTemplate.rows
+                  ? renderItemWithRows(section.itemTemplate, item)
+                  : renderItemWithFields(section.itemTemplate, item)}
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -738,7 +759,7 @@ function renderField(field: any, data: any): React.ReactNode {
     const href = resolvePath(data, field.href);
     if (!value || !href) return null;
     return (
-      <a href={href} className={field.className}>
+      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );
@@ -943,21 +964,23 @@ function renderBadgeSection(
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
         {flattenedItems.map((value: any, idx: number) => {
+          const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
+
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={section.badgeClassName}>{value}</span>
+                <span className={section.badgeClassName}>{displayValue}</span>
               </div>
             );
           }
 
           // Default rendering without icon
           return (
-            <span key={idx}>
-              <span className={section.badgeClassName}>{value}</span>
+            <React.Fragment key={idx}>
+              <span className={section.badgeClassName}>{displayValue}</span>
               {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
+            </React.Fragment>
           );
         })}
       </div>

@@ -228,7 +228,7 @@ const template7 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
-        className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide mt-4',
+        className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide mt-4 mb-2',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
@@ -271,7 +271,7 @@ const template7 = {
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: 'flex flex-col mt-4',
+        className: 'flex flex-col mt-2',
         rows: [
           {
             className: 'flex flex-col leading-none',

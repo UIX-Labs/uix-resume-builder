@@ -27,7 +27,7 @@ const template13 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Henrietta Mitchell',
-          className: 'text-4xl font-normal text-[#2C5F5F] after:content-[","] after:mr-2',
+          className: 'text-4xl font-normal text-[#2C5F5F] after:content-[","] after:mr-2 whitespace-nowrap',
         },
 
         title: {

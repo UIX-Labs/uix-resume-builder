@@ -36,6 +36,20 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import brianWayneTemplate from '@features/resume/templates/template4';
+import template5 from '@features/resume/templates/template5';
+import template6 from '@features/resume/templates/template6';
+import darkTwoColumnTemplate from '@features/resume/templates/template10';
+import template11 from '@features/resume/templates/template11';
+import template10 from '@features/resume/templates/template10';
+import template12 from '@features/resume/templates/template12';
+import aniketTemplate1 from '@features/resume/templates/aniket';
+import aniketTemplate2 from '@features/resume/templates/template1';
+import andrewTemplate from '@features/resume/templates/template2';
+import annaFieldTemplate from '@features/resume/templates/template3';
+import template7 from '@features/resume/templates/template-7';
+import template8 from '@features/resume/templates/template8';
+import template9 from '@features/resume/templates/template9';
+import template13 from '@features/resume/templates/template13';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -554,7 +568,7 @@ export function FormPageBuilder() {
         }}
       >
         <div className="min-w-0 flex-1 flex justify-center">
-          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+          <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
                 template={aniketTemplate}

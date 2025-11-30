@@ -35,6 +35,7 @@ import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
+import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -115,6 +116,95 @@ export function FormPageBuilder() {
     },
   });
 
+  const generatePDF = async () => {
+    setIsGeneratingPDF(true);
+
+    // Wait for React to re-render without highlights
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Get HTML content from the resume
+    const htmlContent = targetRef.current?.innerHTML;
+
+    if (!htmlContent) {
+      toast.error('Failed to generate PDF');
+      setIsGeneratingPDF(false);
+      return;
+    }
+
+    // Add necessary styles for the PDF
+    const styledHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+
+            body {
+              font-family: 'Inter', system-ui, sans-serif;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+
+            /* Remove all highlighting styles */
+            .resume-highlight {
+              background-color: transparent !important;
+              border: none !important;
+              padding: 0 !important;
+            }
+
+            .resume-highlight > div:first-child {
+              display: none !important;
+            }
+
+            /* Hide blur effects */
+            .blur-\\[2px\\] {
+              filter: none !important;
+            }
+
+            /* Ensure page breaks work correctly */
+            @media print {
+              @page {
+                size: A4;
+                margin: 0;
+              }
+
+              .resume-highlight {
+                background: none !important;
+                border: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>${htmlContent}</body>
+      </html>
+    `;
+
+    // Call the API to convert HTML to PDF
+    const pdfBlob = await convertHtmlToPdf(styledHtml);
+
+    // Download the PDF
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = resumeFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success('PDF downloaded successfully');
+    setIsGeneratingPDF(false);
+  };
+
   const handleDownloadPDF = async () => {
     try {
       if (!user?.email) {
@@ -128,99 +218,31 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        setIsGeneratingPDF(true);
-
-        // Wait for React to re-render without highlights
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Get HTML content from the resume
-        const htmlContent = targetRef.current?.innerHTML;
-
-        if (!htmlContent) {
-          toast.error('Failed to generate PDF');
-          setIsGeneratingPDF(false);
-          return;
-        }
-
-        // Add necessary styles for the PDF
-        const styledHtml = `
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-              <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-                * {
-                  margin: 0;
-                  padding: 0;
-                  box-sizing: border-box;
-                }
-
-                body {
-                  font-family: 'Inter', system-ui, sans-serif;
-                  -webkit-print-color-adjust: exact;
-                  print-color-adjust: exact;
-                }
-
-                /* Remove all highlighting styles */
-                .resume-highlight {
-                  background-color: transparent !important;
-                  border: none !important;
-                  padding: 0 !important;
-                }
-
-                .resume-highlight > div:first-child {
-                  display: none !important;
-                }
-
-                /* Hide blur effects */
-                .blur-\\[2px\\] {
-                  filter: none !important;
-                }
-
-                /* Ensure page breaks work correctly */
-                @media print {
-                  @page {
-                    size: A4;
-                    margin: 0;
-                  }
-
-                  .resume-highlight {
-                    background: none !important;
-                    border: none !important;
-                  }
-                }
-              </style>
-            </head>
-            <body>${htmlContent}</body>
-          </html>
-        `;
-
-        // Call the API to convert HTML to PDF
-        const pdfBlob = await convertHtmlToPdf(styledHtml);
-
-        // Download the PDF
-        const url = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = resumeFileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-
-        toast.success('PDF downloaded successfully');
-        setIsGeneratingPDF(false);
+        await generatePDF();
       } else {
+     
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to download PDF:', error);
       toast.error('Failed to download PDF');
       setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
+   
+    if (response?.joinCommunityRequested) {
+     
+      try {
+        await generatePDF();
+      } catch (error) {
+        console.error('Failed to generate PDF after joining waitlist:', error);
+        toast.error('Failed to download PDF');
+      }
+    } else {
+     
+      setIsWishlistSuccessModalOpen(true);
     }
   };
 
@@ -683,7 +705,7 @@ export function FormPageBuilder() {
         <WishlistModal
           isOpen={isWishlistModalOpen}
           onClose={() => setIsWishlistModalOpen(false)}
-          onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
+          onJoinSuccess={handleWaitlistJoinSuccess}
         />
       )}
       {isWishlistSuccessModalOpen && (

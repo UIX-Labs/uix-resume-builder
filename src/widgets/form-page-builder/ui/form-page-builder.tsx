@@ -571,7 +571,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={aniketTemplate}
+                template={template5}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}

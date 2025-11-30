@@ -304,11 +304,10 @@ const template5 = {
             className: 'flex flex-row justify-between items-baseline',
             cells: [
               {
-                type: 'link',
                 path: 'title',
                 href: 'link.link',
                 fallback: 'Project Title',
-                className: 'text-lg font-bold text-[rgb(0,0,0)] hover:underline',
+                className: 'text-base font-bold text-[rgb(0,0,0)] hover:underline',
               },
               {
                 type: 'duration',
@@ -357,7 +356,7 @@ const template5 = {
             cells: [
               {
                 path: 'institution',
-                className: 'text-base font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[200px]',
+                className: 'text-base font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
               },
               {
                 type: 'inline-group',
@@ -366,7 +365,7 @@ const template5 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-base font-bold text-[rgb(0,0,0)]',
+                    className: 'text-base font-bold text-[rgb(0,0,0)] whitespace-nowrap',
                   },
                   {
                     path: 'degree',
@@ -400,6 +399,7 @@ const template5 = {
       itemPath: '',
       badgeClassName: 'text-base text-black',
       containerClassName: 'flex flex-col gap-2 mt-2',
+      itemPrefix: '• ',
     },
   ],
 };

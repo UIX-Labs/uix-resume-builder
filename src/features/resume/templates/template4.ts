@@ -50,7 +50,7 @@ const brianWayneTemplate = {
             // Email
             {
               type: 'inline-group-with-icon',
-              className: 'flex items-center gap-3',
+              className: 'flex items-center gap-3 mt-2',
               items: [
                 {
                   type: 'icon',
@@ -247,7 +247,7 @@ const brianWayneTemplate = {
         className: 'text-xl font-semibold text-[rgb(56,76,65)]',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: 'experience.items',
@@ -314,7 +314,7 @@ const brianWayneTemplate = {
         className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: 'projects.items',
@@ -356,11 +356,11 @@ const brianWayneTemplate = {
         className: 'text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-2 mt-1',
+      containerClassName: 'flex flex-col gap-2 mt-2',
       itemTemplate: {
         className: 'flex flex-col items-start gap-2',
         fields: [
@@ -385,7 +385,7 @@ const brianWayneTemplate = {
         className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: 'certifications.items',

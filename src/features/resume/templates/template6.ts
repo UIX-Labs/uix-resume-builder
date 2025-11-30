@@ -289,12 +289,12 @@ const template6 = {
       heading: {
         path: 'projects.title',
         fallback: 'PROJECTS',
-        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider px-8 mt-6',
       },
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: 'flex flex-col pt-6 px-8',
+        className: 'flex flex-col pt-4 px-8',
         fields: [
           {
             path: 'title',

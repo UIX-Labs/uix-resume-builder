@@ -4,7 +4,7 @@ const aniketTemplate = {
   page: {
     background: '#ffffff',
     className: 'text-black leading-relaxed',
-    fontFamily: 'Inter',
+    fontFamily: 'Lora',
   },
   sections: [
     // Header Section

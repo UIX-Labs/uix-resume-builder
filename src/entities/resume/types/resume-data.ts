@@ -10,7 +10,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       startDate: string;
       endDate: string;
       ongoing: boolean;
-      link: string;
+      link: { title: string; link: string };
       description: string;
     }>
     suggestedUpdates?: SuggestedUpdates;
@@ -33,11 +33,12 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
     title: string;
     items: Array<{
       id: string;
+      title: string;
       techStack: string[];
       startDate: string;
       endDate: string;
       ongoing: boolean;
-      link: string;
+      link: { title: string; link: string };
       description: string;
     }>;
     suggestedUpdates?: SuggestedUpdates;
@@ -54,8 +55,10 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       email: string;
       phone: string;
       address: string;
-      linkedin: string;
-      github: string;
+      links: {
+        linkedin: { title: string; link: string };
+        github: { title: string; link: string };
+      };
     }>;
     suggestedUpdates?: SuggestedUpdates;
   };
@@ -93,7 +96,10 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       id: string;
       title: string;
       issuer: string;
+      startDate: string;
+      endDate: string;
       ongoing: boolean;
+      link: { title: string; link: string };
     }>;
     suggestedUpdates?: SuggestedUpdates;
   };

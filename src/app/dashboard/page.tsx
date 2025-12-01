@@ -72,7 +72,7 @@ export default function DashboardLayout() {
               </div>
             </div>
 
-            <div className="w-110 bg-[rgb(235,241,244)] p-4 my-[54px] mr-4 rounded-[20px] shadow ">
+            <div className="w-110 bg-[rgb(235,241,244)] p-4 mt-[54px] mr-4 rounded-[20px] shadow ">
               <DashboardCarousel />
             </div>
           </main>

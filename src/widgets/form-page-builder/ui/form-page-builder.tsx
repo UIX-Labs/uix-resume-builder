@@ -18,6 +18,8 @@ import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+import { isSchemaEmpty } from '@shared/lib/check-empty-schema';
+import mockData from '../../../../mock-data.json';
 
 import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
 import {
@@ -267,6 +269,7 @@ export function FormPageBuilder() {
 
       // Fetch empty data for defaults
       const emptyData = await getResumeEmptyData();
+      
 
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData = { ...analyzedData };
@@ -290,7 +293,20 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });
+      console.log('Data loaded for create from scratch flow:', data);
+
+      // Check if all fields are empty strings
+      const isEmpty = isSchemaEmpty(data);
+      console.log('Is schema empty?', isEmpty);
+
+      if (isEmpty) {
+        console.log('hey i am here - all fields are empty strings, using mock data');
+        // Use mock data instead of empty data
+        useFormDataStore.setState({ formData: mockData as Omit<ResumeData, 'templateId'> });
+      } else {
+        // Use actual data
+        useFormDataStore.setState({ formData: data ?? {} });
+      }
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
@@ -393,6 +409,8 @@ export function FormPageBuilder() {
 
     // Trigger auto-save after 2 seconds of inactivity
     debouncedAutoSave(currentStep, formData[currentStep]);
+
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData, currentStep]);
 
@@ -447,7 +465,7 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
 
-        console.log('Auto-saved successfully');
+        // await generateAndSaveThumbnail();
       } catch (error) {
         console.error('Auto-save failed:', error);
       }

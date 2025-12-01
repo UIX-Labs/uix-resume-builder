@@ -29,7 +29,7 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { getCleanDataForRenderer, isSectionModified, syncMockDataWithActualIds } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
@@ -300,9 +300,12 @@ export function FormPageBuilder() {
       console.log('Is schema empty?', isEmpty);
 
       if (isEmpty) {
-        console.log('hey i am here - all fields are empty strings, using mock data');
-        // Use mock data instead of empty data
-        useFormDataStore.setState({ formData: mockData as Omit<ResumeData, 'templateId'> });
+        console.log('hey i am here - all fields are empty strings, using mock data with actual IDs');
+
+        const syncedMockData = syncMockDataWithActualIds(data, mockData);
+
+        console.log('Synced mock data:', syncedMockData);
+        useFormDataStore.setState({ formData: syncedMockData as Omit<ResumeData, 'templateId'> });
       } else {
         // Use actual data
         useFormDataStore.setState({ formData: data ?? {} });
@@ -415,12 +418,32 @@ export function FormPageBuilder() {
   }, [formData, currentStep]);
 
   async function handleNextStep() {
-    handleSaveResume();
+    // Check if current section has been modified compared to mock data
+    const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+    if (hasModifications) {
+      console.log(`Changes detected in ${currentStep}, proceeding to save`);
+      // Only save if there are actual content changes
+      await handleSaveResume();
+    } else {
+      console.log(`No changes detected in ${currentStep}, skipping API call`);
+    }
+
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
   async function handleSaveResume() {
     try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (!hasModifications) {
+        toast.info(`No changes to save in ${currentStep}`);
+        console.log(`Manual save: No changes detected in ${currentStep}, skipping API call`);
+        return;
+      }
+
+      console.log(`Manual save: Changes detected in ${currentStep}, saving...`);
       thumbnailGenerated.current = false;
 
       await save({
@@ -459,6 +482,22 @@ export function FormPageBuilder() {
   const debouncedAutoSave = useCallback(
     debounce(async (step: string, data: any) => {
       try {
+        // Get fresh formData from store instead of using stale closure
+        const currentFormData = useFormDataStore.getState().formData;
+
+        // Check if section has been modified compared to mock data
+        const hasModifications = isSectionModified(step, currentFormData, mockData);
+
+        if (!hasModifications) {
+          console.log(`Auto-save: No changes detected in ${step}, skipping API call`);
+          return;
+        }
+
+        console.log(currentFormData)
+
+        console.log(mockData)
+
+        console.log(`Auto-save: Changes detected in ${step}, saving...`);
         await save({
           type: step,
           data: data,
@@ -474,13 +513,15 @@ export function FormPageBuilder() {
   );
 
   const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    const sectionData = formData[sectionId as keyof typeof formData];
+    // Get fresh formData from store instead of using stale closure
+    const currentFormData = useFormDataStore.getState().formData;
+    const sectionData = currentFormData[sectionId as keyof typeof currentFormData];
     if (sectionData) {
-     
+
       debouncedHideSave(sectionId, { ...sectionData, isHidden });
       toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
     }
-  }, [formData, debouncedHideSave]);
+  }, [debouncedHideSave]);
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 

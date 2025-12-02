@@ -53,14 +53,15 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
 interface TemplateCardProps {
   template: Template;
   onClick: () => void;
+  isDashboard?: boolean;
 }
 
-export function TemplateCard({ template, onClick }: TemplateCardProps) {
+export function TemplateCard({ template, onClick ,isDashboard=false}: TemplateCardProps) {
   return (
     <div
-      className={cn('group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0', ' hover:shadow-lg')}
+      className={cn('group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0 hover:shadow-lg', isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]')}
     >
-      <div className="relative w-[280px] h-[360px] glass-card2 border-0 p-4 rounded-[20px]">
+      <div className={cn("relative glass-card2 border-0 p-4 rounded-[20px]", isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]')}>
         <div className="w-full h-full relative">
           <Image
             src={template.publicImageUrl}

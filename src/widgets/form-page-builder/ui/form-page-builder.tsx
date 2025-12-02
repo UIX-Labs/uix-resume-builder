@@ -36,6 +36,9 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import isEmpty from '@shared/lib/check-empty-data';
+import { mockData } from '@shared/constants/mockData';
+import { isSectionModified } from '@shared/lib/compare-section-data';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -289,8 +292,10 @@ export function FormPageBuilder() {
       return;
     }
 
-    if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });
+    if (isEmpty(data)) {
+
+      console.log('Using saved resume data',data);
+      useFormDataStore.setState({ formData:mockData ?? {} });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
@@ -375,34 +380,21 @@ export function FormPageBuilder() {
     }
   }
 
-  useEffect(() => {
-    const curResume = resumes?.find((resume) => resume.id === resumeId);
-
-    if (!curResume || curResume.publicThumbnail || thumbnailGenerated.current) {
-      return;
-    }
-
-    generateAndSaveThumbnail();
-  }, [resumeId, resumes]);
-
-  // Auto-save effect - triggers when formData changes
-  useEffect(() => {
-    if (!currentStep || !formData || !formData[currentStep]) {
-      return;
-    }
-
-    // Trigger auto-save after 2 seconds of inactivity
-    debouncedAutoSave(currentStep, formData[currentStep]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData, currentStep]);
-
   async function handleNextStep() {
-    handleSaveResume();
-    setCurrentStep(navs[nextStepIndex]?.name ?? '');
-  }
+     const currentSectionData = formData[currentStep];
+      const isModified = isSectionModified(currentStep as any, currentSectionData);
 
-  async function handleSaveResume() {
-    try {
+      if (!isModified) {
+        console.log(`No changes detected in ${currentStep} section, skipping next`);
+         
+      }
+      else{
+ await handleSaveResume();
+      }
+        console.log(`No changes detected in ${currentStep} section, skipping save`);
+        return;
+      }
+
       thumbnailGenerated.current = false;
 
       await save({
@@ -441,6 +433,14 @@ export function FormPageBuilder() {
   const debouncedAutoSave = useCallback(
     debounce(async (step: string, data: any) => {
       try {
+        // Check if section has been modified compared to mockData
+        const isModified = isSectionModified(step as any, data);
+
+        if (!isModified) {
+          console.log(`No changes detected in ${step} section, skipping auto-save`);
+          return;
+        }
+
         await save({
           type: step,
           data: data,

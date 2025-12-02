@@ -16,11 +16,11 @@ const laurenChenTemplate = {
     spacing: '0px',
     left: {
       width: '272px',
-      className: 'bg-[#D58D40] text-white p-8 flex flex-col gap-6',
+      className: 'bg-[#D58D40] text-white p-8 flex flex-col',
     },
     right: {
       width: 'calc(100% - 272px)',
-      className: 'p-8 bg-white flex flex-col gap-5',
+      className: 'p-8 bg-white flex flex-col',
     },
   },
 
@@ -46,7 +46,7 @@ const laurenChenTemplate = {
         },
         contact: {
           type: 'inline-group',
-          className: 'flex flex-col gap-6 mt-6',
+          className: 'flex flex-col mt-6',
           separator: '',
           items: [
             // Contact heading and info
@@ -319,7 +319,7 @@ const laurenChenTemplate = {
           {
             path: 'degree',
             fallback: 'Bachelor of Arts, Communications',
-            className: 'text-sm font-bold text-neutral-900 mt-1',
+            className: 'text-sm font-bold text-neutral-900 mt-1 ml-1',
           },
           {
             type: 'horizontal-group',

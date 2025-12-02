@@ -1118,7 +1118,7 @@ function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={canBreak}>
+      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={section.break}>
         {flattenedItems.map((value: any, idx: number) => {
           const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
 

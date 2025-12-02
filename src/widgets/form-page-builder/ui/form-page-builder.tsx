@@ -765,85 +765,7 @@ export function FormPageBuilder() {
     }
   };
 
-  // Handler for applying suggestions from badge overlay
-  const handleApplyBadgeSuggestions = async (data: {
-    itemId: string;
-    sectionKey: string;
-    suggestions: Array<{ old?: string; new: string; type: SuggestionType; fieldName?: string }>;
-  }) => {
-    const { itemId, sectionKey, suggestions } = data;
-    const currentData = formData?.[sectionKey];
 
-    if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
-      toast.error('Failed to apply suggestions');
-      return;
-    }
-
-    try {
-      const items = currentData.items;
-      const itemIndex = findItemById(items, itemId);
-
-      if (itemIndex === -1) {
-        toast.error('Item not found');
-        return;
-      }
-
-      let updatedItems = [...items];
-      let updatedSuggestedUpdates = currentData.suggestedUpdates ? [...currentData.suggestedUpdates] : [];
-
-      // Group suggestions by field name
-      const suggestionsByField = suggestions.reduce((acc, suggestion) => {
-        const fieldName = suggestion.fieldName || '';
-        if (!acc[fieldName]) {
-          acc[fieldName] = [];
-        }
-        acc[fieldName].push(suggestion);
-        return acc;
-      }, {} as Record<string, Array<{ old?: string; new: string; type: SuggestionType }>>);
-
-      // Apply suggestions field by field
-      for (const [fieldName, fieldSuggestions] of Object.entries(suggestionsByField)) {
-        const currentItem = updatedItems[itemIndex] as Record<string, unknown>;
-        const currentFieldValue = currentItem[fieldName];
-
-        const isArrayField = Array.isArray(currentFieldValue);
-
-        let updatedFieldValue: string | string[];
-
-        if (isArrayField) {
-          updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], fieldSuggestions);
-        } else {
-          updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, fieldSuggestions);
-        }
-
-        updatedItems = updateItemFieldValue(updatedItems, itemIndex, fieldName, updatedFieldValue);
-
-        updatedSuggestedUpdates = removeAppliedSuggestions(
-          updatedSuggestedUpdates,
-          itemId,
-          fieldName,
-          fieldSuggestions,
-        );
-      }
-
-      const updatedData = {
-        ...formData,
-        [sectionKey]: {
-          ...currentData,
-          items: updatedItems,
-          suggestedUpdates:
-            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
-        },
-      };
-
-      setFormData(updatedData as Omit<ResumeData, 'templateId'>);
-
-      toast.success(`Applied ${suggestions.length} suggestion(s) successfully`);
-    } catch (error) {
-      console.error('❌ Failed to apply suggestions:', error);
-      toast.error('Failed to apply suggestions');
-    }
-  };
 
   return (
     <>
@@ -862,7 +784,6 @@ export function FormPageBuilder() {
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
-                onApplyBadgeSuggestions={handleApplyBadgeSuggestions}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">

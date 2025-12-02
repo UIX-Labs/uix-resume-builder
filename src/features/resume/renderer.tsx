@@ -327,7 +327,7 @@ function renderHeaderSection(
   const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
   const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
@@ -501,8 +501,9 @@ function renderListSection(
 
   // Get section-wise suggested updates from data
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
 
   function RenderListSectionHeading() {
     return (
@@ -698,7 +699,7 @@ function renderField(field: any, data: any): React.ReactNode {
 
   if (field.type === 'skillLevel') {
     const value = resolvePath(data, field.path, field.fallback);
-    if (!value) return null;
+
 
     const levelMap: Record<string, number> = {
       Beginner: 2,
@@ -800,7 +801,7 @@ function renderContentSection(
   const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails && hasValidSuggestions;
   const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
@@ -864,7 +865,7 @@ function renderInlineListSection(
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
   const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
@@ -945,7 +946,7 @@ function renderBadgeSection(
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
   const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {

@@ -48,7 +48,7 @@ export function SuccessStories() {
           </p>
 
           {/* Button */}
-          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors" onClick={handleReadTestimonials}>
+          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors cursor-pointer" onClick={handleReadTestimonials}>
             Read all testimonials
           </button>
         </div>

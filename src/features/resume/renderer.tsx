@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 
@@ -18,6 +18,25 @@ function resolvePath(data: any, path: string, fallback?: any): any {
   }
 
   return result ?? fallback;
+}
+
+// Utility to flatten and filter items (handles both nested and flat structures)
+function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
+  const flattenedItems: any[] = [];
+
+  items.forEach((item: any) => {
+    const value = itemPath ? resolvePath(item, itemPath) : item;
+
+    if (Array.isArray(value)) {
+      // Nested structure: item has an items array
+      flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
+    } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
+      // Flat structure: item is a direct value
+      flattenedItems.push(value);
+    }
+  });
+
+  return flattenedItems;
 }
 
 type RenderProps = {
@@ -55,132 +74,180 @@ function SparkleIndicator() {
     </div>
   );
 }
-
-export function ResumeRenderer({
-  template,
-  data,
-  className,
-  currentSection,
-  hasSuggestions = false,
-}: RenderProps) {
-  const [pages, setPages] = useState<React.ReactNode[][]>([]);
+export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
+  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
-  const sections = template.sections || [];
 
   const PAGE_HEIGHT = 1122;
   const PAGE_PADDING = page.padding ?? 24;
-  const MAX_HEIGHT = PAGE_HEIGHT - PAGE_PADDING * 2;
 
-  // Paginate content
+  // NEW: dynamic max height per column
+  const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
+  const COLUMN_MAX = {
+    left: DEFAULT_MAX,
+    right: DEFAULT_MAX,
+  };
+
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
 
-    const newPages: React.ReactNode[][] = [];
-    let currentPage: React.ReactNode[] = [];
-    newPages.push(currentPage);
+    const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
+    const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
 
-    const containerTop = container.getBoundingClientRect().top;
-    let currentPageTop = containerTop;
+    const leftPages: React.ReactNode[][] = [];
+    const rightPages: React.ReactNode[][] = [];
 
-    function helper(container: HTMLElement) {
-      const children = Array.from(container.children) as HTMLElement[];
+    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
+      let currentColumnPage: React.ReactNode[] = [];
+      outPages.push(currentColumnPage);
 
-      if (children.length === 0) {
-        return;
-      }
+      const pageMax = COLUMN_MAX[columnName];
+      let pageTop: number | null = null;
 
-      for (let i = 0; i < children.length; i++) {
-        const el = children[i];
-        el.style.display = '';
+      function walk(el: HTMLElement) {
+        const children = Array.from(el.children) as HTMLElement[];
+        if (!children.length) return;
 
-        const elRect = el.getBoundingClientRect();
-        const elTop = elRect.top;
-        const elBottom = elRect.bottom;
-        const canBreak = el.getAttribute('data-canbreak') === 'true';
+        for (const child of children) {
+          child.style.display = '';
 
-        if (canBreak) {
-          helper(el);
-        } else {
-          // Check if element would exceed max height from current page start
-          if (elBottom - currentPageTop > MAX_HEIGHT && currentPage.length > 0) {
-            currentPage = [];
-            newPages.push(currentPage);
-            currentPageTop = elTop; // New page starts at this element's top
+          const rect = child.getBoundingClientRect();
+          const canBreak = child.getAttribute('data-canbreak') === 'true';
+
+          if (pageTop == null) {
+            pageTop = rect.top;
           }
 
-          currentPage.push(el.cloneNode(true) as unknown as React.ReactNode);
+          if (canBreak) {
+            walk(child);
+            continue;
+          }
+
+          const childBottom = rect.bottom;
+          const usedHeight = childBottom - pageTop;
+
+          if (usedHeight > pageMax && currentColumnPage.length > 0) {
+            currentColumnPage = [];
+            outPages.push(currentColumnPage);
+            pageTop = rect.top;
+          }
+
+          currentColumnPage.push(child.cloneNode(true) as React.ReactNode);
         }
       }
+
+      walk(columnEl);
     }
 
-    helper(container);
+    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
+    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
 
-    setPages(newPages);
+    const totalPages = Math.max(leftPages.length, rightPages.length);
+    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      merged.push([leftPages[i] || [], rightPages[i] || []]);
+    }
+
+    setPages(merged);
   }, [template, data, currentSection, hasSuggestions]);
+
+  const { columnConfig, leftItems, rightItems } = useMemo(() => {
+    if (!template.columns) {
+      return {
+        columnConfig: {
+          spacing: '0px',
+          left: {
+            width: '100%',
+          },
+          right: {
+            width: '0%',
+          },
+        },
+
+        leftItems: template.sections,
+        rightItems: [],
+      };
+    }
+
+    const leftItems = template.sections.filter((s: any) => s.column === 'left');
+    const rightItems = template.sections.filter((s: any) => s.column === 'right');
+
+    return {
+      columnConfig: template.columns,
+      leftItems,
+      rightItems,
+    };
+  }, [template]);
+
+  const leftWidth = columnConfig.left.width;
+  const rightWidth = columnConfig.right.width;
+  const spacing = columnConfig.spacing;
+  const leftColumnClassName = columnConfig.left.className || '';
+  const rightColumnClassName = columnConfig.right.className || '';
+  const fontFamily = page.fontFamily || undefined;
+
+  const baseStyle = {
+    width: '21cm',
+    padding: PAGE_PADDING,
+    gridTemplateColumns: `calc(${leftWidth}) calc(${rightWidth})`,
+    gap: spacing,
+    fontFamily: fontFamily,
+  };
 
   return (
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="mb-5 grid"
         style={{
+          ...baseStyle,
           position: 'absolute',
           visibility: 'hidden',
-          fontFamily: page.fontFamily,
-          pointerEvents: 'none',
-          width: '21cm',
-          padding: PAGE_PADDING,
         }}
       >
-        {sections.map((section: any, idx: number) => (
-          <React.Fragment key={idx}>
-            {renderSection(section, data, currentSection,  hasSuggestions)}
-          </React.Fragment>
-        ))}
+        <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
+          {leftItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
+        <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
+          {rightItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
       </div>
 
-      {pages.map((blocks, index) => (
-        <div
-          key={index}
-          className={cn(
-            'bg-white mb-5',
-
-            page.className,
-            className,
-          )}
-          style={{
-            padding: PAGE_PADDING,
-            background: page.background ?? 'white',
-            fontFamily: page.fontFamily,
-            width: '21cm',
-            height: '29.7cm',
-          }}
-        >
-          {blocks.map((node, i) => {
-            // Remove top margin from first element on subsequent pages
-            if (index > 0 && i === 0) {
-              const modifiedNode = (node as any).cloneNode(true);
-              modifiedNode.style.marginTop = '0';
-              return <div key={i} dangerouslySetInnerHTML={{ __html: modifiedNode.outerHTML }} />;
-            }
-            return <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} />;
-          })}
-        </div>
-      ))}
+      {pages.map((columns, index) => {
+        const [leftColumn, rightColumn] = columns;
+        return (
+          <div
+            key={index}
+            className={cn('grid mb-5', page.className, className)}
+            style={{ ...baseStyle, height: '29.7cm', backgroundColor: page.background || 'white' }}
+          >
+            <div className={cn('flex flex-col', leftColumnClassName)}>
+              {leftColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+              ))}
+            </div>
+            <div className={cn('flex flex-col', rightColumnClassName)}>
+              {rightColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
 
 // Main section renderer
-function renderSection(
-  section: any,
-  data: any,
-  currentSection?: string,
-  hasSuggestions?: boolean,
-): React.ReactNode {
+function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
   // Check if section is hidden
   // Get section ID from different possible sources
   let sectionId = section.id;
@@ -204,22 +271,16 @@ function renderSection(
 
   // Check if this section is marked as hidden
   if (dataKey && data[dataKey]?.isHidden === true) {
-   
     return null;
   }
 
-  if (section.type === 'header')
-    return renderHeaderSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'list-section')
-    return renderListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'two-column-layout')
-    return renderTwoColumnLayout(section, data, currentSection,  hasSuggestions);
-  if (section.type === 'content-section')
-    return renderContentSection(section, data, currentSection,  hasSuggestions);
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
+  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'inline-list-section')
-    return renderInlineListSection(section, data, currentSection,  hasSuggestions);
-  if (section.type === 'badge-section')
-    return renderBadgeSection(section, data, currentSection,  hasSuggestions);
+    return renderInlineListSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
   return null;
 }
 
@@ -261,7 +322,7 @@ function renderHeaderSection(
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
   const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
-  const shouldHighlight = hasSuggestions  && (isActive || isPersonalDetailsActive);
+  const shouldHighlight = hasSuggestions && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -356,7 +417,7 @@ function renderHeaderSection(
         </div>
       )}
 
-     {fields.contact && (
+      {fields.contact && (
         <div className={fields.contact.className}>
           {(() => {
             // Filter out items with no value first
@@ -374,24 +435,33 @@ function renderHeaderSection(
                 const href = item.href.startsWith('mailto:')
                   ? item.href.replace('{{value}}', value)
                   : resolvePath(data, item.href);
+
+              // Don't use target="_blank" for mailto links
+              const linkProps = item.href.startsWith('mailto:')
+                ? {}
+                : { target: '_blank', rel: 'noopener noreferrer' };
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
-                    <a href={href} className={item.className}>
+                    <a href={href} className={item.className} {...linkProps}>
                       {value}
                     </a>
                   </span>
                 );
               }
               return (
-                <span key={originalIdx}>
+                <React.Fragment key={originalIdx}>
                   {showSeparator && fields.contact.separator}
-                  {value}
-                </span>
+                  <span className={item.className}>{value}</span>
+                </React.Fragment>
               );
             });
           })()}
         </div>
+      )}
+
+      {fields.address && (
+        <p className={fields.address.className}>{resolvePath(data, fields.address.path, fields.address.fallback)}</p>
       )}
     </div>
   );
@@ -406,13 +476,46 @@ function renderListSection(
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
+
+  // Filter out items where all values are empty, null, or undefined
+  const validItems = items.filter((item: any) => {
+    if (!item || typeof item !== 'object') return false;
+
+    // Check if at least one field has a non-empty value
+    return Object.values(item).some((value: any) => {
+      if (!value) return false;
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (typeof value === 'object') {
+        // For nested objects (like duration), check if they have valid values
+        const nestedValues = Object.values(value);
+        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+      }
+      return true;
+    });
+  });
+
+  // Return null if no valid items after filtering
+  if (validItems.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldHighlight = hasSuggestions && isActive;
+
+  function RenderListSectionHeading() {
+    return (
+      <div className={cn('flex flex-col', section.heading.className)}>
+        {section.heading && (
+          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+        )}
+
+        {section.heading.divider && renderDivider(section.heading.divider)}
+      </div>
+    );
+  }
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -428,29 +531,53 @@ function renderListSection(
     }),
   };
 
+  const itemWrapperStyle = section.break ? wrapperStyle : {};
+  const containerWrapperStyle = section.break ? {} : wrapperStyle;
+
   return (
     <div
       data-item="list-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
-      style={wrapperStyle}
+      className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
+      style={containerWrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
-      <div className={cn('flex flex-col', section.heading.className)}>
-        {section.heading && (
-          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
-        )}
-
-        {section.heading.divider && renderDivider(section.heading.divider)}
-      </div>
+      {!section.break && <RenderListSectionHeading />}
 
       <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
-        {items.map((item: any, idx: number) => (
-          <div key={idx} className={section.itemTemplate.className}>
-            {section.itemTemplate.rows
-              ? renderItemWithRows(section.itemTemplate, item)
-              : renderItemWithFields(section.itemTemplate, item)}
+        {validItems.map((item: any, idx: number) => (
+          <div
+            key={idx}
+            className={cn(
+              section.break && idx === 0
+                ? ''
+                : section.itemTemplate.className,
+              section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
+            )}
+            style={itemWrapperStyle}
+          >
+            {section.break && idx === 0 && shouldHighlight && (
+              <div style={{ position: 'relative' }}>
+                <SparkleIndicator />
+              </div>
+            )}
+            {section.break && idx === 0 ? (
+              <>
+                <RenderListSectionHeading />
+                <div className={section.itemTemplate.className}>
+                  {section.itemTemplate.rows
+                    ? renderItemWithRows(section.itemTemplate, item)
+                    : renderItemWithFields(section.itemTemplate, item)}
+                </div>
+              </>
+            ) : (
+              <>
+                {section.itemTemplate.rows
+                  ? renderItemWithRows(section.itemTemplate, item)
+                  : renderItemWithFields(section.itemTemplate, item)}
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -473,9 +600,7 @@ function renderTwoColumnLayout(
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection,  hasSuggestions)}
-            </React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -484,9 +609,7 @@ function renderTwoColumnLayout(
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection(subSection, data, currentSection,  hasSuggestions)}
-            </React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
       )}
@@ -555,13 +678,7 @@ function renderField(field: any, data: any): React.ReactNode {
     const src = resolvePath(data, field.path, field.fallback);
     if (!src && !field.fallback) return null;
 
-    return (
-      <img
-        src={src || field.fallback}
-        alt={field.alt || 'Image'}
-        className={cn(field.className)}   
-      />
-    );
+    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
   }
 
   if (field.type === 'group') {
@@ -618,17 +735,35 @@ function renderField(field: any, data: any): React.ReactNode {
   }
 
   if (field.type === 'duration') {
-    const duration = resolvePath(data, field.path, field.fallback);
+    const duration = resolvePath(data, field.path);
     if (!duration) return null;
 
+    const formatDate = (dateString: string): string => {
+      if (!dateString || dateString.trim() === '') return '';
+
+      const parsed = dayjs(dateString);
+      if (!parsed.isValid()) return '';
+
+      // If year-only, keep as-is
+      if (/^\d{4}$/.test(dateString.trim())) return dateString.trim();
+
+      // If already in YYYY-MM format (month-year only), format as MMM YYYY
+      if (/^\d{4}-\d{2}$/.test(dateString.trim())) {
+        return parsed.format('MMM YYYY');
+      }
+
+      // For full dates YYYY-MM-DD, format as MMM YYYY
+      return parsed.format('MMM YYYY');
+    };
+
     if (duration.startDate && duration.endDate) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
-      const end = dayjs(duration.endDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
+      const end = formatDate(duration.endDate);
       return <span className={field.className}>{`${start} - ${end}`}</span>;
     }
 
     if (duration.startDate && duration.ongoing) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
       return <span className={field.className}>{`${start} - Present`}</span>;
     }
 
@@ -646,7 +781,7 @@ function renderField(field: any, data: any): React.ReactNode {
     const href = resolvePath(data, field.href);
     if (!value || !href) return null;
     return (
-      <a href={href} className={field.className}>
+      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );
@@ -667,7 +802,9 @@ function renderContentSection(
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
-  if (!value) return null;
+
+  // Check for empty values including empty strings
+  if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -677,7 +814,7 @@ function renderContentSection(
     currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
   const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
-  const shouldHighlight = hasSuggestions &&  (isActive || isSummaryForPersonalDetails);
+  const shouldHighlight = hasSuggestions && (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -720,22 +857,24 @@ function renderInlineListSection(
   section: any,
   data: any,
   currentSection?: string,
-  
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items with no value
-  const validItems = items.map((item: any) => resolvePath(item, section.itemPath)).filter((value: any) => value);
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
 
-  if (validItems.length === 0) return null;
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions &&  currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldBlur = hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -768,14 +907,12 @@ function renderInlineListSection(
       </div>
 
       <div data-item="content" data-break={section.break}>
-        {validItems.map((value: any, idx: number) => {
-          return (
-            <span key={idx}>
-              <span className={section.itemClassName}>{value}</span>
-              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
-          );
-        })}
+        {flattenedItems.map((value: any, idx: number) => (
+          <span key={idx}>
+            <span className={section.itemClassName}>{value}</span>
+            {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -789,7 +926,15 @@ function renderBadgeSection(
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
+
+  // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
+
+  // Flatten nested items structure if needed
+  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
+
+  // Return null if no valid items after flattening
+  if (flattenedItems.length === 0) return null;
 
   // Icon component mapping
   const getIconComponent = (iconName?: string) => {
@@ -806,7 +951,7 @@ function renderBadgeSection(
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions &&  isActive;
+  const shouldHighlight = hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -840,28 +985,24 @@ function renderBadgeSection(
       </div>
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
-        {items.map((item: any, idx: number) => {
-          const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
-
-          if (!value) {
-            return null;
-          }
+        {flattenedItems.map((value: any, idx: number) => {
+          const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
 
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={section.badgeClassName}>{value}</span>
+                <span className={section.badgeClassName}>{displayValue}</span>
               </div>
             );
           }
 
           // Default rendering without icon
           return (
-            <span key={idx}>
-              <span className={section.badgeClassName}>{value}</span>
-              {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
+            <React.Fragment key={idx}>
+              <span className={section.badgeClassName}>{displayValue}</span>
+              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+            </React.Fragment>
           );
         })}
       </div>

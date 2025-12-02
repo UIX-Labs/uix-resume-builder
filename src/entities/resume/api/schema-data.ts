@@ -151,6 +151,15 @@ export const data = {
       label: 'Description',
       fluid: true,
     },
+
+    link: {
+      name: 'link',
+      type: 'url',
+      placeholder: 'Enter your link',
+      label: 'Link',
+      required: false,
+      fluid: true,
+    },
   },
 
   skills: {
@@ -285,7 +294,7 @@ export const data = {
 
     techStack: {
       name: 'techStack',
-      type: 'chips',
+      type: 'tags',
       placeholder: 'Enter your tech stack',
       label: 'Tech Stack',
       required: true,

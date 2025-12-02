@@ -52,15 +52,13 @@ export default function AllResumePage() {
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
           <header className="flex justify-end items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
-            
-
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent"
+                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
                 </Button>
@@ -145,7 +143,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                <Button variant="ghost" size="icon" className="h-8 w-8 p-0 cursor-pointer">
                   <MoreVertical className="w-4 h-4 text-gray-500" />
                 </Button>
               </DropdownMenuTrigger>
@@ -153,7 +151,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuItem asChild>
                   <Button
-                    className="flex w-full bg-white items-center text-red-600"
+                    className="flex w-full bg-white items-center text-red-600 cursor-pointer"
                     onClick={() => setShowDeleteDialog(true)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />

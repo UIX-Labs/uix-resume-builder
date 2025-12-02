@@ -32,7 +32,7 @@ export function TemplateForm({
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }) {
-  function getItem<T extends string | boolean>(
+  function getItem<T = any>(
     section: any,
     data: T,
     onChange: (data: T) => void,
@@ -128,7 +128,7 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} />;
+        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates}/>;
       }
 
       default: {
@@ -144,7 +144,7 @@ export function TemplateForm({
             value={data}
             onChange={(e) => onChange(e.target.value)}
           />
-          
+       
         );
       }
     }

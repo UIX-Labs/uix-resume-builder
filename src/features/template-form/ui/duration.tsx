@@ -1,4 +1,4 @@
-import { Calendar } from '@shared/ui/calendar';
+import { MonthYearPicker } from '@shared/ui/month-year-picker';
 import { Input } from '@shared/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import { useEffect, useState } from 'react';
@@ -37,8 +37,8 @@ export function Duration({ data, onChange }: DurationProps) {
 
   useEffect(() => {
     const updatedData = {
-      startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : null,
-      endDate: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM-DD') : null,
+      startDate: startDate ? dayjs(startDate).format('YYYY-MM') : null,
+      endDate: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM') : null,
       ongoing: isOngoing,
     };
 
@@ -54,7 +54,7 @@ export function Duration({ data, onChange }: DurationProps) {
       return '';
     }
 
-    return dayjs(date).format('DD MMM YYYY');
+    return dayjs(date).format('MMM YYYY');
   };
 
   return (
@@ -80,9 +80,7 @@ export function Duration({ data, onChange }: DurationProps) {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              captionLayout="dropdown"
-              mode="single"
+            <MonthYearPicker
               defaultMonth={startDate}
               selected={startDate}
               onSelect={(date) => setStartDate(date)}
@@ -121,13 +119,15 @@ export function Duration({ data, onChange }: DurationProps) {
               </label>
             </div>
 
-            <Calendar
-              captionLayout="dropdown"
-              mode="single"
-              selected={endDate}
+            <MonthYearPicker
+              selected={isOngoing ? undefined : endDate}
               defaultMonth={endDate}
-              onSelect={(date) => setEndDate(date)}
-              disabled={(date) => (startDate ? dayjs(date).isBefore(dayjs(startDate), 'day') : false)}
+              onSelect={(date) => {
+                if (!date) return;
+                setIsOngoing(false);
+                setEndDate(date);
+              }}
+              disabled={(date) => (startDate ? dayjs(date).isBefore(dayjs(startDate), 'month') : false)}
             />
           </PopoverContent>
         </Popover>

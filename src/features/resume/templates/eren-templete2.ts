@@ -362,6 +362,144 @@ const laurenChenTemplate = {
       containerClassName: 'grid grid-cols-2 gap-3',
       itemSeparator: '',
     },
+
+    /**
+     * PROJECTS - Right Column
+     */
+    {
+      id: 'projects',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'projects.title',
+        fallback: 'PROJECTS',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+      },
+      divider: {
+        variant: 'line',
+        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+      },
+      listPath: 'projects.items',
+      itemTemplate: {
+        className: 'mb-5 flex flex-col',
+        fields: [
+          {
+            type: 'link',
+            path: 'title',
+            href: 'link.link',
+            fallback: 'Project Title',
+            className: 'text-sm font-bold text-neutral-900 hover:underline',
+          },
+          {
+            type: 'duration',
+            path: 'duration',
+            className: 'text-xs text-neutral-600 font-normal mt-1',
+          },
+          {
+            type: 'html',
+            path: 'description',
+            className:
+              'text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
+          },
+        ],
+      },
+      containerClassName: 'space-y-3',
+    },
+
+    /**
+     * CERTIFICATIONS - Right Column
+     */
+    {
+      id: 'certifications',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'certifications.title',
+        fallback: 'CERTIFICATIONS',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+      },
+      divider: {
+        variant: 'line',
+        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+      },
+      listPath: 'certifications.items',
+      itemTemplate: {
+        className: 'mb-3',
+        fields: [
+          {
+            path: 'title',
+            fallback: 'Certification Title',
+            className: 'text-sm font-bold text-neutral-900',
+          },
+          {
+            type: 'inline-group',
+            className: 'flex flex-row items-baseline gap-1 leading-none mt-0.5',
+            items: [
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-xs text-neutral-900 font-semibold italic',
+                suffix: ', ',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600',
+              },
+            ],
+          },
+        ],
+      },
+      containerClassName: 'space-y-3',
+    },
+
+    /**
+     * INTERESTS - Right Column
+     */
+    {
+      id: 'interests',
+      type: 'badge-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'interests.title',
+        fallback: 'INTERESTS',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+      },
+      divider: {
+        variant: 'line',
+        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+      },
+      listPath: 'interests.items[0].items',
+      itemPath: '',
+      badgeClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'flex flex-wrap gap-2',
+    },
+
+    /**
+     * ACHIEVEMENTS - Right Column
+     */
+    {
+      id: 'achievements',
+      type: 'badge-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'achievements.title',
+        fallback: 'ACHIEVEMENTS',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+      },
+      divider: {
+        variant: 'line',
+        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+      },
+      listPath: 'achievements.items[0].items',
+      itemPath: '',
+      badgeClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'flex flex-wrap gap-2',
+    },
   ],
 };
 

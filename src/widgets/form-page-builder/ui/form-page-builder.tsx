@@ -18,7 +18,6 @@ import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
-import { isSchemaEmpty } from '@shared/lib/check-empty-schema';
 import mockData from '../../../../mock-data.json';
 
 import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
@@ -29,7 +28,7 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { getCleanDataForRenderer, isSectionModified, syncMockDataWithActualIds } from '../lib/data-cleanup';
+import { getCleanDataForRenderer, isSectionModified } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
@@ -50,6 +49,118 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   };
+}
+
+/**
+ * Checks if a single section is empty
+ * Returns true if section has no meaningful data
+ */
+function isSectionEmpty(section: any): boolean {
+  if (!section || typeof section !== 'object') {
+    console.log('  → Section is null/undefined or not an object');
+    return true;
+  }
+
+  if ('items' in section && Array.isArray(section.items)) {
+    const items = section.items;
+
+    if (items.length === 0) {
+      console.log('  → Section has no items');
+      return true;
+    }
+
+    console.log(`  → Section has ${items.length} item(s), checking for non-empty fields...`);
+
+    // Check if items contain any non-empty values
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      console.log(`  → Checking item ${i}:`, item);
+
+      if (typeof item === 'string' && item.trim() !== '') {
+        console.log(`  → Item ${i} is a non-empty string`);
+        return false;
+      } else if (typeof item === 'object' && item !== null) {
+        const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
+          // Skip id, title, itemId, rank, ongoing and metadata fields
+          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank' || key === 'title') {
+            return false;
+          }
+
+          if (typeof value === 'string') {
+            const isNonEmpty = value.trim() !== '';
+            if (isNonEmpty) {
+              console.log(`    → Found non-empty string field "${key}": "${value}"`);
+            }
+            return isNonEmpty;
+          }
+
+          if (typeof value === 'object' && value !== null) {
+            const hasNonEmptyNested = Object.values(value).some(v => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyNested) {
+              console.log(`    → Found non-empty nested object field "${key}":`, value);
+            }
+            return hasNonEmptyNested;
+          }
+
+          if (Array.isArray(value)) {
+            const hasNonEmptyArray = value.some(v => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyArray) {
+              console.log(`    → Found non-empty array field "${key}":`, value);
+            }
+            return hasNonEmptyArray;
+          }
+
+          return false;
+        });
+
+        if (hasNonEmptyField) {
+          console.log(`  → Item ${i} has non-empty fields`);
+          return false;
+        } else {
+          console.log(`  → Item ${i} has only empty fields`);
+        }
+      }
+    }
+
+    console.log('  → All items are empty');
+  }
+
+  return true;
+}
+
+/**
+ * Syncs IDs from actual section to mock section
+ * Preserves actual IDs while using mock data content
+ */
+function syncSectionIds(actualSection: any, mockSection: any): any {
+  if (!actualSection || !mockSection) {
+    return mockSection;
+  }
+
+  const synced = { ...mockSection };
+
+  // Sync section ID
+  if (actualSection.id) {
+    synced.id = actualSection.id;
+  }
+
+  // Sync itemIds in items array
+  if (Array.isArray(synced.items) && Array.isArray(actualSection.items)) {
+    synced.items = synced.items.map((mockItem: any, index: number) => {
+      if (typeof mockItem === 'object' && mockItem !== null) {
+        const actualItem = actualSection.items[index];
+        if (actualItem && typeof actualItem === 'object' && actualItem !== null) {
+          return {
+            ...mockItem,
+            itemId: actualItem.itemId || mockItem.itemId,
+          };
+        }
+      }
+      return mockItem;
+    });
+  }
+
+  return synced;
 }
 
 export function FormPageBuilder() {
@@ -293,23 +404,41 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      console.log('Data loaded for create from scratch flow:', data);
+      console.log('Data loaded for resume:', data);
 
-      // Check if all fields are empty strings
-      const isEmpty = isSchemaEmpty(data);
-      console.log('Is schema empty?', isEmpty);
+      // Check each section individually and merge with mock data as needed
+      const mergedData: Record<string, any> = {};
 
-      if (isEmpty) {
-        console.log('hey i am here - all fields are empty strings, using mock data with actual IDs');
+      // Get all section keys from actual data
+      const sectionKeys = Object.keys(data);
 
-        const syncedMockData = syncMockDataWithActualIds(data, mockData);
+      for (const sectionKey of sectionKeys) {
+        // Handle templateId and updatedAt separately - always use actual values
+        if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+          mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+          continue;
+        }
 
-        console.log('Synced mock data:', syncedMockData);
-        useFormDataStore.setState({ formData: syncedMockData as Omit<ResumeData, 'templateId'> });
-      } else {
-        // Use actual data
-        useFormDataStore.setState({ formData: data ?? {} });
+        const actualSection = data[sectionKey as keyof typeof data];
+        const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+        // Check if this specific section is empty
+        const isEmpty = isSectionEmpty(actualSection);
+
+        if (isEmpty && mockSection) {
+          // Section is empty, use mock data with synced IDs from actual data
+          const syncedSection = syncSectionIds(actualSection, mockSection);
+          mergedData[sectionKey] = syncedSection;
+          console.log(`Section "${sectionKey}": empty, using mock data with synced IDs`);
+        } else {
+          // Section has data, use actual data
+          mergedData[sectionKey] = actualSection;
+          console.log(`Section "${sectionKey}": has data, using actual data`);
+        }
       }
+
+      console.log('Final merged data:', mergedData);
+      useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
@@ -418,17 +547,6 @@ export function FormPageBuilder() {
   }, [formData, currentStep]);
 
   async function handleNextStep() {
-    // Check if current section has been modified compared to mock data
-    const hasModifications = isSectionModified(currentStep, formData, mockData);
-
-    if (hasModifications) {
-      console.log(`Changes detected in ${currentStep}, proceeding to save`);
-      // Only save if there are actual content changes
-      await handleSaveResume();
-    } else {
-      console.log(`No changes detected in ${currentStep}, skipping API call`);
-    }
-
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 

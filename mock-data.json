@@ -9,7 +9,7 @@
         "company": "Tech Solutions Inc",
         "position": "Senior Software Engineer",
         "location": "San Francisco, CA",
-        "description": "<ul><li>Led development of microservices architecture serving 1M+ users</li><li>Implemented CI/CD pipeline reducing deployment time by 60%</li><li>Mentored team of 5 junior developers</li></ul>",
+        "description": "Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers",
         "rank": 0,
         "duration": {
           "startDate": "2021-06",
@@ -47,31 +47,11 @@
     "id": "4b1d87d1-f4e1-4bf0-8dbd-dd00e17dfcdb",
     "title": "projects",
     "items": [
-      {
-        "itemId": "ac30ed90-fbb7-4a46-abe7-81c80ef96b2d",
-        "title": "E-Commerce Platform",
-        "description": "<ul><li>Built full-stack e-commerce platform with 10K+ products</li><li>Integrated payment gateway and inventory management</li><li>Achieved 99.9% uptime with AWS infrastructure</li></ul>",
-        "techStack": [
-          "React",
-          "Node.js",
-          "PostgreSQL",
-          "AWS"
-        ],
-        "link": {
-          "title": "View Project",
-          "link": "https://github.com/username/ecommerce"
-        },
-        "rank": 1,
-        "duration": {
-          "startDate": "2023-01",
-          "endDate": "2023-06",
-          "ongoing": false
-        }
-      },
+   
       {
         "itemId": "695d2079-8869-4178-8a4f-63307af46155",
         "title": "AI Resume Builder",
-        "description": "<ul><li>Developed AI-powered resume builder with 50K+ users</li><li>Implemented real-time PDF generation and preview</li><li>Integrated OpenAI API for content suggestions</li></ul>",
+        "description": "Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers",
         "techStack": [
           "Next.js",
           "TypeScript",
@@ -86,7 +66,7 @@
         "duration": {
           "startDate": "2024-03",
           "endDate": "2024-11",
-          "ongoing": true
+          "ongoing": false
         }
       }
     ]

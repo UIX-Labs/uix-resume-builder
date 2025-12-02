@@ -1,6 +1,6 @@
 import { ResumeDataKey } from './resume-data';
 
-type FieldType = 'text' | 'email' | 'tel' | 'url' | 'textarea' | 'duration' | 'dropdown' | 'chips' | 'tags' | 'data';
+type FieldType = 'text' | 'email' | 'tel' | 'url' | 'textarea' | 'duration' | 'dropdown' | 'tags' | 'data';
 
 interface BaseField {
   name: string;
@@ -29,8 +29,7 @@ export interface FormSchema extends Record<ResumeDataKey, any> {
     email: BaseField;
     phone: BaseField;
     address: BaseField;
-    linkedin: BaseField;
-    github: BaseField;
+    links: BaseField;
     description: BaseField;
   };
 
@@ -46,6 +45,7 @@ export interface FormSchema extends Record<ResumeDataKey, any> {
     location: BaseField;
     startDate: BaseField;
     description: BaseField;
+    link: BaseField;
   };
 
   skills: {

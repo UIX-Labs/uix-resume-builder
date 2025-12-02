@@ -1,11 +1,25 @@
 // Flattened template structure with simplified list rendering
-const aniketTemplate = {
+
+const standard2 = {
   name: 'Aniket Modern Classic',
+
   page: {
     background: '#ffffff',
     className: 'text-black leading-relaxed',
-    fontFamily: 'Lora',
+    fontFamily: 'Inter',
   },
+
+  columns: {
+    spacing: '12px',
+    left: {
+      width: '30%',
+      className: 'bg-[rgb(56,76,65)] text-black p-8',
+    },
+    right: {
+      width: '70%',
+    },
+  },
+
   sections: [
     // Header Section
     {
@@ -52,6 +66,7 @@ const aniketTemplate = {
         },
       },
     },
+
     // Education Section
     {
       id: 'education',
@@ -105,6 +120,7 @@ const aniketTemplate = {
         ],
       },
     },
+
     // Summary Section
     {
       id: 'summary',
@@ -124,6 +140,7 @@ const aniketTemplate = {
         className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap mt-3',
       },
     },
+
     // Experience Section
     {
       id: 'experience',
@@ -133,7 +150,7 @@ const aniketTemplate = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1 mt-4',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px]' },
       },
       listPath: 'experience.items',
@@ -171,6 +188,7 @@ const aniketTemplate = {
         ],
       },
     },
+
     // Skills Section
     {
       id: 'skills',
@@ -189,6 +207,7 @@ const aniketTemplate = {
       containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
       itemSeparator: ', ',
     },
+
     // Projects Section
     {
       id: 'projects',
@@ -217,6 +236,7 @@ const aniketTemplate = {
         ],
       },
     },
+
     // Interests Section (Badge Style)
     {
       id: 'interests',
@@ -232,6 +252,7 @@ const aniketTemplate = {
       badgeClassName:
         'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
     },
+
     // Achievements Section (Badge Style)
     {
       id: 'achievements',
@@ -247,6 +268,7 @@ const aniketTemplate = {
       badgeClassName:
         'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold break-words',
     },
+
     // Certifications Section
     {
       id: 'certifications',
@@ -271,4 +293,5 @@ const aniketTemplate = {
     },
   ],
 };
-export default aniketTemplate;
+
+export default standard2;

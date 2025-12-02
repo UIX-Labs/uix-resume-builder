@@ -2,623 +2,338 @@ const annaFieldTemplate = {
   name: 'Anna Field Modern',
 
   page: {
-    width: 794,
-    height: 1122,
-    padding: 40,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
     fontFamily: 'Arial',
   },
 
-  body: {
-    id: 'body',
-    type: 'container',
-    className: 'flex flex-col gap-6',
-    children: [
-      // Header Section
-      {
-        type: 'list',
-        id: 'personalDetails',
-        pathWithFallback: { path: 'data.personalDetails.items' },
-        className: 'flex flex-col gap-4',
-        presentation: [
-          {
-            id: 'header-section',
-            type: 'container',
-            className: 'flex flex-col gap-4',
-            break: true,
-            children: [
-              // Name and Title
-              {
-                type: 'container',
-                className: 'flex flex-row items-baseline gap-2 mb-3',
-                children: [
-                  {
-                    id: 'name-text',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.fullName',
-                      fallback: 'Anna Field',
-                    },
-                    className: 'text-2xl font-bold text-[rgb(17,9,128)]',
-                  },
-                ],
-              },
-              // Contact Information
-              {
-                id: 'contact-section',
-                type: 'container',
-                className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap',
-                children: [
-                  // Location
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'MapPin',
-                        size: 14,
-                        className: 'text-[rgb(17,9,128)]',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: { path: 'data.address', fallback: '123 Main Street, Paris, France' },
-                        className: 'text-sm text-gray-700',
-                      },
-                    ],
-                  },
-                  // Email
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Mail',
-                        size: 14,
-                        className: 'text-[rgb(17,9,128)]',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: { path: 'data.email', fallback: 'anna@field.com' },
-                        className: 'text-sm text-gray-700',
-                      },
-                    ],
-                  },
-                  // Phone
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Phone',
-                        size: 14,
-                        className: 'text-[rgb(17,9,128)]',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: { path: 'data.phone', fallback: '+11 23434546' },
-                        className: 'text-sm text-gray-700',
-                      },
-                    ],
-                  },
-                  // LinkedIn
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Linkedin',
-                        size: 14,
-                        className: 'text-[rgb(17,9,128)]',
-                      },
-                      {
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.links.linkedin.title',
-                          fallback: 'annafield',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.links.linkedin.link',
-                          fallback: 'https://linkedin.com/in/annafield',
-                        },
-                        className: 'text-sm text-gray-700 hover:text-blue-600',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-
-      // Profile Section
-      {
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
-          {
-            id: 'profile-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
-              {
-                id: 'profile-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.personDetails.title',
-                  fallback: 'Profile',
+  sections: [
+    // Header Section
+    {
+      id: 'header',
+      type: 'header',
+      className: 'flex flex-col gap-4',
+      fields: {
+        name: {
+          path: 'personalDetails.items[0].fullName',
+          fallback: 'Anna Field',
+          className: 'text-2xl font-bold text-[rgb(17,9,128)] mb-3',
+        },
+        contact: {
+          type: 'contact-grid',
+          className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap',
+          items: [
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'MapPin', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  path: 'personalDetails.items[0].address',
+                  fallback: '123 Main Street, Paris, France',
+                  className: 'text-sm text-gray-700',
                 },
-                className: 'text-lg font-bold text-[rgb(17,9,128)]',
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Mail', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  path: 'personalDetails.items[0].email',
+                  fallback: 'anna@field.com',
+                  className: 'text-sm text-gray-700',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Phone', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  path: 'personalDetails.items[0].phone',
+                  fallback: '+11 23434546',
+                  className: 'text-sm text-gray-700',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Linkedin', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.linkedin.title',
+                  href: 'personalDetails.items[0].links.linkedin.link',
+                  fallback: 'annafield',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+
+    // Summary Section (Profile)
+    {
+      id: 'summary',
+      type: 'content-section',
+      className: 'flex flex-col gap-3 mt-6',
+      heading: {
+        path: 'summary.heading',
+        fallback: 'Profile',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)]',
+      },
+      content: {
+        type: 'html',
+        path: 'personalDetails.items[0].description',
+        fallback: 'Summary',
+        className:
+          'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+      },
+    },
+
+    // Experience Section
+    {
+      id: 'experience',
+      type: 'list-section',
+      break: true,
+      heading: {
+        path: 'experience.heading',
+        fallback: 'Work Experience',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+      },
+      listPath: 'experience.items',
+      containerClassName: 'flex flex-col gap-6 px-2',
+      itemTemplate: {
+        className: 'flex flex-col gap-3 mt-3',
+        rows: [
+          {
+            className: 'flex flex-row justify-between items-start',
+            cells: [
+              {
+                type: 'inline-group',
+                className: 'flex flex-col flex-1 leading-none',
+                items: [
+                  { path: 'position', className: 'text-base font-bold text-black' },
+                  { path: 'company', className: 'text-sm text-gray-600 italic' },
+                ],
+              },
+              {
+                type: 'inline-group',
+                className: 'flex flex-col items-end text-right w-[160px] shrink-0 leading-none',
+                items: [
+                  { type: 'duration', path: 'duration', className: 'text-sm text-black' },
+                  { path: 'location', className: 'text-sm text-gray-600' },
+                ],
               },
             ],
           },
           {
-            type: 'list',
-            id: 'professionalSummary',
-            pathWithFallback: { path: 'data.personalDetails.items' },
-            className: 'px-2',
-            presentation: [
+            cells: [
               {
-                id: 'summary-text',
                 type: 'html',
-                pathWithFallback: {
-                  path: 'data.description',
-                  fallback: 'Summary',
-                },
+                path: 'description',
                 className:
-                  'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                  'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
         ],
       },
+    },
 
-      // Work Experience
-      {
-        id: 'experience-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        break: true,
-        children: [
+    // Projects Section
+    {
+      id: 'projects',
+      type: 'list-section',
+      break: true,
+      heading: {
+        path: 'projects.heading',
+        fallback: 'Projects',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+      },
+      listPath: 'projects.items',
+      containerClassName: 'flex flex-col gap-6',
+      itemTemplate: {
+        className: 'flex flex-col gap-3 mt-3',
+        rows: [
           {
-            id: 'experience-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
+            className: 'flex flex-row justify-between items-start',
+            cells: [
               {
-                id: 'experience-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.experience.heading',
-                  fallback: 'Work Experience',
-                },
-                className: 'text-lg font-bold text-[rgb(17,9,128)]',
+                path: 'title',
+                fallback: 'Project Title',
+                className: 'text-base font-bold text-black flex-1',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-sm text-black w-[160px] shrink-0 text-right',
               },
             ],
           },
           {
-            id: 'experience',
-            type: 'list',
-            pathWithFallback: { path: 'data.experience.items' },
-            className: 'flex flex-col gap-6 px-2',
-            presentation: [
+            cells: [
               {
-                type: 'container',
-                id: 'experience-item',
-                className: 'flex flex-col gap-3',
-                children: [
-                  {
-                    type: 'container',
-                    className: 'flex flex-row justify-between items-start',
-                    children: [
-                      {
-                        type: 'container',
-                        className: 'flex flex-col flex-1',
-                        children: [
-                          {
-                            id: 'experience-position',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.position' },
-                            className: 'text-base font-bold text-black',
-                          },
-                          {
-                            id: 'experience-company',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.company' },
-                            className: 'text-sm text-gray-600 italic',
-                          },
-                        ],
-                      },
-                      // Right column: Date + Location
-                      {
-                        type: 'container',
-                        className: 'flex flex-col items-end text-right w-[160px] shrink-0',
-                        children: [
-                          {
-                            id: 'experience-period',
-                            type: 'duration',
-                            pathWithFallback: { path: 'data.duration' },
-                            className: 'text-sm text-black',
-                          },
-                          {
-                            id: 'experience-location',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.location' },
-                            className: 'text-sm text-gray-600',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                  {
-                    id: 'experience-bullets',
-                    type: 'html',
-                    pathWithFallback: { path: 'data.description' },
-                    className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
-                  },
-                ],
+                type: 'html',
+                path: 'description',
+                className:
+                  'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
         ],
       },
+    },
 
-      // Projects
-      {
-        id: 'projects-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
+    // Education Section
+    {
+      id: 'education',
+      type: 'list-section',
+      break: false,
+      heading: {
+        path: 'education.heading',
+        fallback: 'Education',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+      },
+      listPath: 'education.items',
+      containerClassName: 'flex flex-col gap-3',
+      itemTemplate: {
+        className: 'flex flex-row justify-between items-start mt-3',
+        rows: [
           {
-            id: 'projects-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
+            className: 'flex flex-col flex-1 leading-none',
+            cells: [
               {
-                id: 'projects-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.projects.title',
-                  fallback: 'Projects',
-                },
-                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
+                path: 'degree',
+                className: 'text-base font-bold text-black',
+              },
+              {
+                path: 'institution',
+                className: 'text-sm text-gray-600 italic',
               },
             ],
           },
           {
-            id: 'projects',
-            type: 'list',
-            pathWithFallback: { path: 'data.projects.items' },
-            className: 'flex flex-col gap-6 px-2',
-            presentation: [
+            className: 'text-right flex flex-col flex-1 leading-none',
+            cells: [
               {
-                type: 'container',
-                id: 'project-item',
-                className: 'flex flex-col gap-3',
-                children: [
-                  {
-                    type: 'container',
-                    className: 'flex flex-row justify-between items-start',
-                    children: [
-                      {
-                        type: 'container',
-                        className: 'flex flex-col flex-1',
-                        children: [
-                          {
-                            id: 'project-title',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.title' },
-                            className: 'text-base font-bold text-black',
-                          },
-                        ],
-                      },
-                      // Right column: Date
-                      {
-                        type: 'container',
-                        className: 'flex flex-col items-end text-right w-[160px] shrink-0',
-                        children: [
-                          {
-                            id: 'project-period',
-                            type: 'duration',
-                            pathWithFallback: { path: 'data.duration' },
-                            className: 'text-sm text-black',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                  {
-                    id: 'project-description',
-                    type: 'html',
-                    pathWithFallback: { path: 'data.description' },
-                    className:
-                      'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
-                  },
-                ],
+                type: 'duration',
+                path: 'duration',
+                className: 'text-sm text-black',
+              },
+              {
+                path: 'grade.value',
+                className: 'text-sm text-gray-600',
               },
             ],
           },
         ],
       },
+    },
 
-      // Education
-      {
-        id: 'education-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
-          {
-            id: 'education-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
-              {
-                id: 'education-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.education.heading',
-                  fallback: 'Education',
-                },
-                className: 'text-lg font-bold text-[rgb(17,9,128)]',
-              },
-            ],
-          },
-          {
-            id: 'education',
-            type: 'list',
-            pathWithFallback: { path: 'data.education.items' },
-            className: 'flex flex-col gap-4 px-2',
-            presentation: [
-              {
-                type: 'container',
-                id: 'education-item',
-                className: 'flex flex-row justify-between items-start',
-                children: [
-                  {
-                    type: 'container',
-                    className: 'flex flex-col flex-1',
-                    children: [
-                      {
-                        id: 'education-degree',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.degree' },
-                        className: 'text-base font-bold text-black',
-                      },
-                      {
-                        id: 'education-school',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.institution' },
-                        className: 'text-sm text-gray-600 italic',
-                      },
-                    ],
-                  },
-                  {
-                    type: 'container',
-                    className: 'text-right flex flex-col flex-1',
-                    children: [
-                      {
-                        id: 'education-period',
-                        type: 'duration',
-                        pathWithFallback: { path: 'data.duration' },
-                        className: 'text-sm text-black',
-                      },
-                      {
-                        id: 'education-grade',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.grade.value' },
-                        className: 'text-sm text-gray-600',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+    // Skills Section
+    {
+      id: 'skills',
+      type: 'inline-list-section',
+      heading: {
+        path: 'skills.heading',
+        fallback: 'Skills',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
       },
+      listPath: 'skills.items',
+      itemPath: 'name',
+      itemClassName: 'text-sm text-black',
+      containerClassName: 'text-sm text-black leading-relaxed px-2',
+      itemSeparator: ', ',
+    },
 
-      // Skills
-      {
-        id: 'skills-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
+    // Interests Section
+    {
+      id: 'interests',
+      type: 'badge-section',
+      heading: {
+        path: 'interests.heading',
+        fallback: 'Interests',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+      },
+      listPath: 'interests.items[0].items',
+      badgeClassName: 'text-sm text-black',
+      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      itemSeparator: ', ',
+    },
+
+    // Achievements Section
+    {
+      id: 'achievements',
+      type: 'badge-section',
+      heading: {
+        path: 'achievements.heading',
+        fallback: 'Achievements',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+      },
+      listPath: 'achievements.items[0].items',
+      badgeClassName: 'text-sm text-black',
+      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      itemSeparator: ', ',
+    },
+
+    // Certifications Section
+    {
+      id: 'certifications',
+      type: 'list-section',
+      break: true,
+      heading: {
+        path: 'certifications.heading',
+        fallback: 'Certifications',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 w-full basis-full',
+      },
+      listPath: 'certifications.items',
+      containerClassName: 'flex flex-col gap-4 px-3',
+      itemTemplate: {
+        className: 'flex flex-col justify-between items-start mt-3',
+        rows: [
           {
-            id: 'skills-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
+            className: 'flex flex-col flex-1',
+            cells: [
               {
-                id: 'skills-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.skills.heading',
-                  fallback: 'Skills',
-                },
-                className: 'text-lg font-bold text-[rgb(17,9,128)]',
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-sm font-bold text-black',
+              },
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-sm text-gray-600 italic',
               },
             ],
           },
           {
-            id: 'skills-list',
-            type: 'list',
-            pathWithFallback: { path: 'data.skills.items' },
-            className: 'text-sm text-black leading-relaxed space-x-1',
-            seperator: ',',
-            presentation: [
+            cells: [
               {
-                type: 'text',
-                pathWithFallback: { path: 'data.name' },
+                type: 'duration',
+                path: 'duration',
                 className: 'text-sm text-black',
               },
             ],
           },
         ],
       },
-
-      // Interests
-      {
-        id: 'interests-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
-          {
-            id: 'interests-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
-              {
-                id: 'interests-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.interests.title',
-                  fallback: 'Interests',
-                },
-                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
-              },
-            ],
-          },
-          {
-            id: 'interests-list',
-            type: 'list',
-            pathWithFallback: { path: 'data.interests.items' },
-            className: 'px-2',
-            presentation: [
-              {
-                type: 'list',
-                className: 'text-sm text-black leading-relaxed space-x-1',
-                pathWithFallback: { path: 'data.items' },
-                seperator: ',',
-                presentation: [
-                  {
-                    type: 'text',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-
-      // Achievements
-      {
-        id: 'achievements-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
-          {
-            id: 'achievements-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
-              {
-                id: 'achievements-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.achievements.title',
-                  fallback: 'Achievements',
-                },
-                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
-              },
-            ],
-          },
-          {
-            id: 'achievements-list',
-            type: 'list',
-            pathWithFallback: { path: 'data.achievements.items' },
-            className: 'px-2',
-            presentation: [
-              {
-                type: 'list',
-                className: 'text-sm text-black leading-relaxed space-x-1',
-                pathWithFallback: { path: 'data.items' },
-                seperator: ',',
-                presentation: [
-                  {
-                    type: 'text',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-
-      // Certifications
-      {
-        id: 'certifications-section',
-        type: 'container',
-        className: 'flex flex-col gap-3',
-        children: [
-          {
-            id: 'certifications-header',
-            type: 'container',
-            className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center',
-            children: [
-              {
-                id: 'certifications-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.certifications.title',
-                  fallback: 'Certifications',
-                },
-                className: 'capitalize text-lg font-bold text-[rgb(17,9,128)]',
-              },
-            ],
-          },
-          {
-            type: 'list',
-            id: 'certifications-list',
-            pathWithFallback: { path: 'data.certifications.items' },
-            className: 'flex flex-col gap-4 px-2',
-            presentation: [
-              {
-                type: 'container',
-                className: 'flex flex-row justify-between items-start',
-                children: [
-                  // Left: Title and Issuer
-                  {
-                    type: 'container',
-                    className: 'flex flex-col flex-1',
-                    children: [
-                      {
-                        type: 'text',
-                        pathWithFallback: {
-                          path: 'data.title',
-                          fallback: 'Certification Title',
-                        },
-                        className: 'text-sm font-bold text-black',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: {
-                          path: 'data.issuer',
-                          fallback: 'Issuer',
-                        },
-                        className: 'text-sm text-gray-600 italic',
-                      },
-                    ],
-                  },
-                  // Right: Date
-                  {
-                    type: 'duration',
-                    pathWithFallback: { path: 'data.duration' },
-                    className: 'text-sm text-black',
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+    },
+  ],
 };
 
 export default annaFieldTemplate;

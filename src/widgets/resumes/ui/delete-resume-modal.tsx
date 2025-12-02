@@ -51,7 +51,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
             variant="outline"
             onClick={handleCancel}
             disabled={deleteResumeMutation.isPending}
-            className="w-1/2 rounded-4xl"
+            className="w-1/2 rounded-4xl cursor-pointer"
           >
             Cancel
           </Button>
@@ -60,7 +60,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
             variant="destructive"
             onClick={handleConfirmDelete}
             disabled={deleteResumeMutation.isPending}
-            className="w-1/2 rounded-4xl"
+            className="w-1/2 rounded-4xl cursor-pointer"
           >
             {deleteResumeMutation.isPending ? <>Deleting...</> : <>Delete Resume</>}
           </Button>

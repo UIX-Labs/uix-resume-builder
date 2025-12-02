@@ -2,11 +2,13 @@
 import React from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
+import { cn } from '@shared/lib/cn';
 
 function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const user = useCachedUser();
 
   const handleNavigate = () => {
@@ -30,7 +32,10 @@ function Header() {
           variant="ghost"
           size="sm"
           onClick={() => router.push('/')}
-          className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
+          className={cn(
+            'font-semibold text-lg cursor-pointer',
+            pathname === '/' ? 'bg-blue-200 text-blue-900 hover:bg-blue-300' : 'text-blue-900 hover:text-gray-900'
+          )}
         >
           Home
         </Button>
@@ -39,7 +44,12 @@ function Header() {
           variant="ghost"
           size="sm"
           onClick={handleNavigate}
-          className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
+          className={cn(
+            'font-semibold text-lg cursor-pointer',
+            pathname === '/dashboard' || pathname === '/auth'
+              ? 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+              : 'text-blue-900 hover:text-gray-900'
+          )}
         >
           {user ? 'Dashboard' : 'Sign In'}
         </Button>
@@ -48,7 +58,12 @@ function Header() {
           variant="ghost"
           size="sm"
           onClick={() => router.push('/about-us')}
-          className="text-blue-900 hover:text-gray-900 font-semibold text-lg cursor-pointer"
+          className={cn(
+            'font-semibold text-lg cursor-pointer',
+            pathname === '/about-us'
+              ? 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+              : 'text-blue-900 hover:text-gray-900'
+          )}
         >
           About Us
         </Button>

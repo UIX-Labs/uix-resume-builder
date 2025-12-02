@@ -13,6 +13,7 @@ import { useFormDataStore } from '../models/store';
 import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 import { useRouter, useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
+import mockData from '../../../../mock-data.json';
 import { CheckIcon, Sparkles } from 'lucide-react';
 import { Button } from '@shared/ui/button';
 import { getResumeEmptyData } from '@entities/resume';
@@ -212,7 +213,7 @@ export function Sidebar() {
   useEffect(() => {
     if (!resumeData) return;
 
-    const p = calculateResumeCompletion(resumeData as ResumeData);
+    const p = calculateResumeCompletion(resumeData as ResumeData, mockData as Record<string, any>);
 
     const fixed = +p.toFixed(0);
     setProgress(Number.isNaN(fixed) ? 0 : Number(fixed));
@@ -221,16 +222,18 @@ export function Sidebar() {
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 
   return (
-    <div className={cn(
-      "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-      isAnalyzing && "opacity-60 pointer-events-none select-none cursor-not-allowed"
-    )}>
+    <div
+      className={cn(
+        'bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
+        isAnalyzing && 'opacity-60 pointer-events-none select-none cursor-not-allowed',
+      )}
+    >
       <div className="flex items-center gap-2">
         <button
           type="button"
           onClick={() => router.push('/resumes')}
           className="px-1 text-lg text-gray-800 transition-all duration-300 hover:bg-gray-200 rounded-md 
-        flex items-center justify-center w-6 h-6"
+        flex items-center justify-center w-6 h-6 cursor-pointer"
           aria-label="Go back to resumes"
         >
           <span>{'\u2190'}</span>

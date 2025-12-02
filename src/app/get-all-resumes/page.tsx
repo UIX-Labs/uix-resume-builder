@@ -76,7 +76,7 @@ export default function GetAllResumesPage() {
                   variant="outline"
                   size="icon"
                   onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent"
+                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
                 </Button>
@@ -108,7 +108,7 @@ export default function GetAllResumesPage() {
 
               <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
 
-              <div className="flex gap-6 mt-6 mx-4 flex-wrap">
+              <div className="flex gap-6 my-6 mx-4 justify-evenly flex-wrap">
                 {templates?.map((template) => (
                   <TemplateCard
                     key={template.id}

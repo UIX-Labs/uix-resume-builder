@@ -18,6 +18,7 @@ import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
 import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+import mockData from '../../../../mock-data.json';
 
 import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
 import {
@@ -27,7 +28,7 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { getCleanDataForRenderer, isSectionModified } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
@@ -35,6 +36,7 @@ import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
+import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -47,6 +49,118 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   };
+}
+
+/**
+ * Checks if a single section is empty
+ * Returns true if section has no meaningful data
+ */
+function isSectionEmpty(section: any): boolean {
+  if (!section || typeof section !== 'object') {
+    console.log('  → Section is null/undefined or not an object');
+    return true;
+  }
+
+  if ('items' in section && Array.isArray(section.items)) {
+    const items = section.items;
+
+    if (items.length === 0) {
+      console.log('  → Section has no items');
+      return true;
+    }
+
+    console.log(`  → Section has ${items.length} item(s), checking for non-empty fields...`);
+
+    // Check if items contain any non-empty values
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      console.log(`  → Checking item ${i}:`, item);
+
+      if (typeof item === 'string' && item.trim() !== '') {
+        console.log(`  → Item ${i} is a non-empty string`);
+        return false;
+      } else if (typeof item === 'object' && item !== null) {
+        const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
+          // Skip id, title, itemId, rank, ongoing and metadata fields
+          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank' || key === 'title') {
+            return false;
+          }
+
+          if (typeof value === 'string') {
+            const isNonEmpty = value.trim() !== '';
+            if (isNonEmpty) {
+              console.log(`    → Found non-empty string field "${key}": "${value}"`);
+            }
+            return isNonEmpty;
+          }
+
+          if (typeof value === 'object' && value !== null) {
+            const hasNonEmptyNested = Object.values(value).some(v => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyNested) {
+              console.log(`    → Found non-empty nested object field "${key}":`, value);
+            }
+            return hasNonEmptyNested;
+          }
+
+          if (Array.isArray(value)) {
+            const hasNonEmptyArray = value.some(v => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyArray) {
+              console.log(`    → Found non-empty array field "${key}":`, value);
+            }
+            return hasNonEmptyArray;
+          }
+
+          return false;
+        });
+
+        if (hasNonEmptyField) {
+          console.log(`  → Item ${i} has non-empty fields`);
+          return false;
+        } else {
+          console.log(`  → Item ${i} has only empty fields`);
+        }
+      }
+    }
+
+    console.log('  → All items are empty');
+  }
+
+  return true;
+}
+
+/**
+ * Syncs IDs from actual section to mock section
+ * Preserves actual IDs while using mock data content
+ */
+function syncSectionIds(actualSection: any, mockSection: any): any {
+  if (!actualSection || !mockSection) {
+    return mockSection;
+  }
+
+  const synced = { ...mockSection };
+
+  // Sync section ID
+  if (actualSection.id) {
+    synced.id = actualSection.id;
+  }
+
+  // Sync itemIds in items array
+  if (Array.isArray(synced.items) && Array.isArray(actualSection.items)) {
+    synced.items = synced.items.map((mockItem: any, index: number) => {
+      if (typeof mockItem === 'object' && mockItem !== null) {
+        const actualItem = actualSection.items[index];
+        if (actualItem && typeof actualItem === 'object' && actualItem !== null) {
+          return {
+            ...mockItem,
+            itemId: actualItem.itemId || mockItem.itemId,
+          };
+        }
+      }
+      return mockItem;
+    });
+  }
+
+  return synced;
 }
 
 export function FormPageBuilder() {
@@ -115,6 +229,95 @@ export function FormPageBuilder() {
     },
   });
 
+  const generatePDF = async () => {
+    setIsGeneratingPDF(true);
+
+    // Wait for React to re-render without highlights
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Get HTML content from the resume
+    const htmlContent = targetRef.current?.innerHTML;
+
+    if (!htmlContent) {
+      toast.error('Failed to generate PDF');
+      setIsGeneratingPDF(false);
+      return;
+    }
+
+    // Add necessary styles for the PDF
+    const styledHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+
+            body {
+              font-family: 'Inter', system-ui, sans-serif;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+
+            /* Remove all highlighting styles */
+            .resume-highlight {
+              background-color: transparent !important;
+              border: none !important;
+              padding: 0 !important;
+            }
+
+            .resume-highlight > div:first-child {
+              display: none !important;
+            }
+
+            /* Hide blur effects */
+            .blur-\\[2px\\] {
+              filter: none !important;
+            }
+
+            /* Ensure page breaks work correctly */
+            @media print {
+              @page {
+                size: A4;
+                margin: 0;
+              }
+
+              .resume-highlight {
+                background: none !important;
+                border: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>${htmlContent}</body>
+      </html>
+    `;
+
+    // Call the API to convert HTML to PDF
+    const pdfBlob = await convertHtmlToPdf(styledHtml);
+
+    // Download the PDF
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = resumeFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success('PDF downloaded successfully');
+    setIsGeneratingPDF(false);
+  };
+
   const handleDownloadPDF = async () => {
     try {
       if (!user?.email) {
@@ -128,99 +331,31 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        setIsGeneratingPDF(true);
-
-        // Wait for React to re-render without highlights
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Get HTML content from the resume
-        const htmlContent = targetRef.current?.innerHTML;
-
-        if (!htmlContent) {
-          toast.error('Failed to generate PDF');
-          setIsGeneratingPDF(false);
-          return;
-        }
-
-        // Add necessary styles for the PDF
-        const styledHtml = `
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-              <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-                * {
-                  margin: 0;
-                  padding: 0;
-                  box-sizing: border-box;
-                }
-
-                body {
-                  font-family: 'Inter', system-ui, sans-serif;
-                  -webkit-print-color-adjust: exact;
-                  print-color-adjust: exact;
-                }
-
-                /* Remove all highlighting styles */
-                .resume-highlight {
-                  background-color: transparent !important;
-                  border: none !important;
-                  padding: 0 !important;
-                }
-
-                .resume-highlight > div:first-child {
-                  display: none !important;
-                }
-
-                /* Hide blur effects */
-                .blur-\\[2px\\] {
-                  filter: none !important;
-                }
-
-                /* Ensure page breaks work correctly */
-                @media print {
-                  @page {
-                    size: A4;
-                    margin: 0;
-                  }
-
-                  .resume-highlight {
-                    background: none !important;
-                    border: none !important;
-                  }
-                }
-              </style>
-            </head>
-            <body>${htmlContent}</body>
-          </html>
-        `;
-
-        // Call the API to convert HTML to PDF
-        const pdfBlob = await convertHtmlToPdf(styledHtml);
-
-        // Download the PDF
-        const url = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = resumeFileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-
-        toast.success('PDF downloaded successfully');
-        setIsGeneratingPDF(false);
+        await generatePDF();
       } else {
+     
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
       console.error('Failed to download PDF:', error);
       toast.error('Failed to download PDF');
       setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
+   
+    if (response?.joinCommunityRequested) {
+     
+      try {
+        await generatePDF();
+      } catch (error) {
+        console.error('Failed to generate PDF after joining waitlist:', error);
+        toast.error('Failed to download PDF');
+      }
+    } else {
+     
+      setIsWishlistSuccessModalOpen(true);
     }
   };
 
@@ -245,6 +380,7 @@ export function FormPageBuilder() {
 
       // Fetch empty data for defaults
       const emptyData = await getResumeEmptyData();
+      
 
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData = { ...analyzedData };
@@ -268,7 +404,41 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });
+      console.log('Data loaded for resume:', data);
+
+      // Check each section individually and merge with mock data as needed
+      const mergedData: Record<string, any> = {};
+
+      // Get all section keys from actual data
+      const sectionKeys = Object.keys(data);
+
+      for (const sectionKey of sectionKeys) {
+        // Handle templateId and updatedAt separately - always use actual values
+        if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+          mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+          continue;
+        }
+
+        const actualSection = data[sectionKey as keyof typeof data];
+        const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+        // Check if this specific section is empty
+        const isEmpty = isSectionEmpty(actualSection);
+
+        if (isEmpty && mockSection) {
+          // Section is empty, use mock data with synced IDs from actual data
+          const syncedSection = syncSectionIds(actualSection, mockSection);
+          mergedData[sectionKey] = syncedSection;
+          console.log(`Section "${sectionKey}": empty, using mock data with synced IDs`);
+        } else {
+          // Section has data, use actual data
+          mergedData[sectionKey] = actualSection;
+          console.log(`Section "${sectionKey}": has data, using actual data`);
+        }
+      }
+
+      console.log('Final merged data:', mergedData);
+      useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
@@ -363,13 +533,35 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail();
   }, [resumeId, resumes]);
 
+  // Auto-save effect - triggers when formData changes
+  useEffect(() => {
+    if (!currentStep || !formData || !formData[currentStep]) {
+      return;
+    }
+
+    // Trigger auto-save after 2 seconds of inactivity
+    debouncedAutoSave(currentStep, formData[currentStep]);
+
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, currentStep]);
+
   async function handleNextStep() {
-    handleSaveResume();
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
   async function handleSaveResume() {
     try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (!hasModifications) {
+        toast.info(`No changes to save in ${currentStep}`);
+        console.log(`Manual save: No changes detected in ${currentStep}, skipping API call`);
+        return;
+      }
+
+      console.log(`Manual save: Changes detected in ${currentStep}, saving...`);
       thumbnailGenerated.current = false;
 
       await save({
@@ -395,7 +587,7 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-        
+
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
@@ -404,14 +596,50 @@ export function FormPageBuilder() {
     [save]
   );
 
+  // Debounced auto-save function
+  const debouncedAutoSave = useCallback(
+    debounce(async (step: string, data: any) => {
+      try {
+        // Get fresh formData from store instead of using stale closure
+        const currentFormData = useFormDataStore.getState().formData;
+
+        // Check if section has been modified compared to mock data
+        const hasModifications = isSectionModified(step, currentFormData, mockData);
+
+        if (!hasModifications) {
+          console.log(`Auto-save: No changes detected in ${step}, skipping API call`);
+          return;
+        }
+
+        console.log(currentFormData)
+
+        console.log(mockData)
+
+        console.log(`Auto-save: Changes detected in ${step}, saving...`);
+        await save({
+          type: step,
+          data: data,
+          updatedAt: Date.now(),
+        });
+
+        // await generateAndSaveThumbnail();
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+      }
+    }, 2000),
+    [save]
+  );
+
   const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    const sectionData = formData[sectionId as keyof typeof formData];
+    // Get fresh formData from store instead of using stale closure
+    const currentFormData = useFormDataStore.getState().formData;
+    const sectionData = currentFormData[sectionId as keyof typeof currentFormData];
     if (sectionData) {
-     
+
       debouncedHideSave(sectionId, { ...sectionData, isHidden });
       toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
     }
-  }, [formData, debouncedHideSave]);
+  }, [debouncedHideSave]);
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
@@ -553,10 +781,10 @@ export function FormPageBuilder() {
         }}
       >
         <div className="min-w-0 flex-1 flex justify-center">
-          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+          <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={aniketTemplate}
+                template={selectedTemplate?.json || aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
@@ -575,7 +803,7 @@ export function FormPageBuilder() {
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isGeneratingPDF ? (
               <>Generating PDF...</>
@@ -654,7 +882,7 @@ export function FormPageBuilder() {
         <WishlistModal
           isOpen={isWishlistModalOpen}
           onClose={() => setIsWishlistModalOpen(false)}
-          onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
+          onJoinSuccess={handleWaitlistJoinSuccess}
         />
       )}
       {isWishlistSuccessModalOpen && (

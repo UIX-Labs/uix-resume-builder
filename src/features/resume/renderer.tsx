@@ -231,36 +231,18 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           >
             <div className={cn('flex flex-col', leftColumnClassName)}>
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
             <div className={cn('flex flex-col', rightColumnClassName)}>
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
           </div>
         );
       })}
     </>
-  );
-}
-
-// Container wrapper renderer - wraps multiple sections with a className
-function renderContainerWrapper(
-  section: any,
-  data: any,
-  currentSection?: string,
-  hasSuggestions?: boolean,
-): React.ReactNode {
-  const { sections, className } = section;
-
-  return (
-    <div className={cn(className)} data-item="container-wrapper" data-canbreak="true">
-      {sections?.map((subSection: any, idx: number) => (
-        <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
-      ))}
-    </div>
   );
 }
 
@@ -299,7 +281,6 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
   if (section.type === 'inline-list-section')
     return renderInlineListSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'container-wrapper') return renderContainerWrapper(section, data);
   return null;
 }
 

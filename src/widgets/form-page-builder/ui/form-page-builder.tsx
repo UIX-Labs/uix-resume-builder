@@ -120,7 +120,7 @@ export function FormPageBuilder() {
     setIsGeneratingPDF(true);
 
     // Wait for React to re-render without highlights
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Get HTML content from the resume
     const htmlContent = targetRef.current?.innerHTML;
@@ -220,7 +220,6 @@ export function FormPageBuilder() {
       if (response?.is_uix_member) {
         await generatePDF();
       } else {
-     
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
@@ -231,9 +230,7 @@ export function FormPageBuilder() {
   };
 
   const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
-   
     if (response?.joinCommunityRequested) {
-     
       try {
         await generatePDF();
       } catch (error) {
@@ -241,7 +238,6 @@ export function FormPageBuilder() {
         toast.error('Failed to download PDF');
       }
     } else {
-     
       setIsWishlistSuccessModalOpen(true);
     }
   };
@@ -428,13 +424,12 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
       }
     }, 1000),
-    [save]
+    [save],
   );
 
   // Debounced auto-save function
@@ -446,23 +441,23 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-
-        console.log('Auto-saved successfully');
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
     }, 2000),
-    [save]
+    [save],
   );
 
-  const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    const sectionData = formData[sectionId as keyof typeof formData];
-    if (sectionData) {
-     
-      debouncedHideSave(sectionId, { ...sectionData, isHidden });
-      toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
-    }
-  }, [formData, debouncedHideSave]);
+  const handleToggleHideSection = useCallback(
+    (sectionId: string, isHidden: boolean) => {
+      const sectionData = formData[sectionId as keyof typeof formData];
+      if (sectionData) {
+        debouncedHideSave(sectionId, { ...sectionData, isHidden });
+        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+      }
+    },
+    [formData, debouncedHideSave],
+  );
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
@@ -495,7 +490,6 @@ export function FormPageBuilder() {
     const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
     if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-
       return;
     }
 
@@ -552,7 +546,7 @@ export function FormPageBuilder() {
       if (isArrayField) {
         updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
       } else {
-        updatedFieldValue = applySuggestionsToFieldValue((currentFieldValue as string) , selectedSuggestions);
+        updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, selectedSuggestions);
       }
 
       // Check if suggestions were actually applied
@@ -594,6 +588,86 @@ export function FormPageBuilder() {
     }
   };
 
+  // Handler for applying suggestions from badge overlay
+  const handleApplyBadgeSuggestions = async (data: {
+    itemId: string;
+    sectionKey: string;
+    suggestions: Array<{ old?: string; new: string; type: SuggestionType; fieldName?: string }>;
+  }) => {
+    const { itemId, sectionKey, suggestions } = data;
+    const currentData = formData?.[sectionKey];
+
+    if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
+      toast.error('Failed to apply suggestions');
+      return;
+    }
+
+    try {
+      const items = currentData.items;
+      const itemIndex = findItemById(items, itemId);
+
+      if (itemIndex === -1) {
+        toast.error('Item not found');
+        return;
+      }
+
+      let updatedItems = [...items];
+      let updatedSuggestedUpdates = currentData.suggestedUpdates ? [...currentData.suggestedUpdates] : [];
+
+      // Group suggestions by field name
+      const suggestionsByField = suggestions.reduce((acc, suggestion) => {
+        const fieldName = suggestion.fieldName || '';
+        if (!acc[fieldName]) {
+          acc[fieldName] = [];
+        }
+        acc[fieldName].push(suggestion);
+        return acc;
+      }, {} as Record<string, Array<{ old?: string; new: string; type: SuggestionType }>>);
+
+      // Apply suggestions field by field
+      for (const [fieldName, fieldSuggestions] of Object.entries(suggestionsByField)) {
+        const currentItem = updatedItems[itemIndex] as Record<string, unknown>;
+        const currentFieldValue = currentItem[fieldName];
+
+        const isArrayField = Array.isArray(currentFieldValue);
+
+        let updatedFieldValue: string | string[];
+
+        if (isArrayField) {
+          updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], fieldSuggestions);
+        } else {
+          updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, fieldSuggestions);
+        }
+
+        updatedItems = updateItemFieldValue(updatedItems, itemIndex, fieldName, updatedFieldValue);
+
+        updatedSuggestedUpdates = removeAppliedSuggestions(
+          updatedSuggestedUpdates,
+          itemId,
+          fieldName,
+          fieldSuggestions,
+        );
+      }
+
+      const updatedData = {
+        ...formData,
+        [sectionKey]: {
+          ...currentData,
+          items: updatedItems,
+          suggestedUpdates:
+            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
+        },
+      };
+
+      setFormData(updatedData as Omit<ResumeData, 'templateId'>);
+
+      toast.success(`Applied ${suggestions.length} suggestion(s) successfully`);
+    } catch (error) {
+      console.error('❌ Failed to apply suggestions:', error);
+      toast.error('Failed to apply suggestions');
+    }
+  };
+
   return (
     <>
       <div
@@ -611,6 +685,7 @@ export function FormPageBuilder() {
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+                onApplyBadgeSuggestions={handleApplyBadgeSuggestions}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">

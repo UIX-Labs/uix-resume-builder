@@ -4,6 +4,8 @@ import { cn } from '@shared/lib/cn';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
+import { FieldErrorBadges } from '@features/template-form/ui/error-badges';
+import { SuggestionType } from '@entities/resume';
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
@@ -16,11 +18,9 @@ function resolvePath(data: any, path: string, fallback?: any): any {
     if (result === null || result === undefined) return fallback;
     result = result[key];
   }
-
   return result ?? fallback;
 }
 
-// Utility to flatten and filter items (handles both nested and flat structures)
 function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
   const flattenedItems: any[] = [];
 
@@ -28,7 +28,7 @@ function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
     const value = itemPath ? resolvePath(item, itemPath) : item;
 
     if (Array.isArray(value)) {
-      // Nested structure: item has an items array
+      
       flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
     } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
       // Flat structure: item is a direct value
@@ -45,6 +45,11 @@ type RenderProps = {
   className?: string;
   currentSection?: string;
   hasSuggestions?: boolean;
+  onApplyBadgeSuggestions?: (data: {
+    itemId: string;
+    sectionKey: string;
+    suggestions: Array<{ old?: string; new: string; type: SuggestionType; fieldName?: string }>;
+  }) => void;
 };
 
 // Reusable sparkle indicator badge for highlighted sections
@@ -74,9 +79,291 @@ function SparkleIndicator() {
     </div>
   );
 }
-export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
+
+type ItemBadgeData = {
+  itemId: string;
+  sectionKey: string;
+  fieldName: string; // Field this badge belongs to
+  spellingCount: number;
+  sentenceCount: number;
+  newSummaryCount: number;
+  suggestions?: Array<{ old?: string; new: string; type: SuggestionType; fieldName: string }>; // Full suggestion data for this field
+};
+
+// Component to render badges as overlays positioned next to items
+function BadgeOverlay({ badgeData, onApplyBadgeSuggestions }: {
+  badgeData: ItemBadgeData[];
+  onApplyBadgeSuggestions?: (data: {
+    itemId: string;
+    sectionKey: string;
+    suggestions: Array<{ old?: string; new: string; type: SuggestionType; fieldName?: string }>;
+  }) => void;
+}) {
+  const [badgePositions, setBadgePositions] = useState<Map<string, DOMRect>>(new Map());
+  const [activeOverlay, setActiveOverlay] = useState<{ itemId: string; sectionKey: string; fieldName: string; suggestionType: SuggestionType } | null>(null);
+  const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
+
+  useLayoutEffect(() => {
+    const positions = new Map<string, DOMRect>();
+
+    badgeData.forEach((badge) => {
+      // Find the specific field element using itemId and fieldName
+      const badgeKey = `${badge.itemId}-${badge.fieldName}`;
+      const element = document.querySelector(
+        `[data-item-id="${badge.itemId}"][data-field-name="${badge.fieldName}"]`
+      ) as HTMLElement;
+
+      if (element) {
+        // Get position relative to the document
+        const rect = element.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+        // Store absolute position
+        positions.set(badgeKey, {
+          top: rect.top + scrollTop,
+          left: rect.left + scrollLeft,
+          bottom: rect.bottom + scrollTop,
+          right: rect.right + scrollLeft,
+          width: rect.width,
+          height: rect.height,
+        } as DOMRect);
+      }
+    });
+
+    setBadgePositions(positions);
+  }, [badgeData]);
+
+  const handleBadgeClick = (itemId: string, sectionKey: string, fieldName: string, suggestionType: SuggestionType) => {
+    console.log('Badge clicked:', { itemId, sectionKey, fieldName, suggestionType });
+    setActiveOverlay({ itemId, sectionKey, fieldName, suggestionType });
+    setSelectedIndices(new Set()); // Reset selection when opening new overlay
+  };
+
+  const handleCloseOverlay = () => {
+    setActiveOverlay(null);
+    setSelectedIndices(new Set());
+  };
+
+  // Get suggestions for active overlay - match both itemId and fieldName for field-specific suggestions
+  const activeBadge = activeOverlay ? badgeData.find(b => b.itemId === activeOverlay.itemId && b.fieldName === activeOverlay.fieldName) : null;
+
+  console.log(activeBadge,"activeBadge")
+  const filteredSuggestions = activeBadge?.suggestions?.filter(
+    (s) => s.type === activeOverlay?.suggestionType
+  ) || [];
+
+  console.log(filteredSuggestions,"foler")
+
+  const toggleSelection = (index: number) => {
+    const newSelected = new Set(selectedIndices);
+    if (newSelected.has(index)) {
+      newSelected.delete(index);
+    } else {
+      newSelected.add(index);
+    }
+    setSelectedIndices(newSelected);
+  };
+
+  const handleApplySingle = (suggestion: any) => {
+    if (activeOverlay && onApplyBadgeSuggestions) {
+      onApplyBadgeSuggestions({
+        itemId: activeOverlay.itemId,
+        sectionKey: activeOverlay.sectionKey,
+        suggestions: [suggestion],
+      });
+    }
+    handleCloseOverlay();
+  };
+
+  const handleApplySelected = () => {
+    if (activeOverlay && onApplyBadgeSuggestions && selectedIndices.size > 0) {
+      const selectedSuggestions = filteredSuggestions.filter((_, idx) => selectedIndices.has(idx));
+      onApplyBadgeSuggestions({
+        itemId: activeOverlay.itemId,
+        sectionKey: activeOverlay.sectionKey,
+        suggestions: selectedSuggestions,
+      });
+      handleCloseOverlay();
+    }
+  };
+
+  return (
+    <>
+      {badgeData.map((badge) => {
+        const badgeKey = `${badge.itemId}-${badge.fieldName}`;
+        const position = badgePositions.get(badgeKey);
+        if (!position) return null;
+
+        return (
+          <div
+            key={badgeKey}
+            style={{
+              position: 'absolute',
+              top: position.bottom + 4,
+              left: position.left,
+              zIndex: 10,
+            }}
+          >
+            <FieldErrorBadges
+              spellingCount={badge.spellingCount}
+              sentenceCount={badge.sentenceCount}
+              newSummaryCount={badge.newSummaryCount}
+              onBadgeClick={(suggestionType) => handleBadgeClick(badge.itemId, badge.sectionKey, badge.fieldName, suggestionType)}
+            />
+          </div>
+        );
+      })}
+
+      {/* Suggestion Overlay Modal */}
+      {activeOverlay && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+          }}
+          onClick={handleCloseOverlay}
+        >
+          <div
+            style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '24px',
+              maxWidth: '600px',
+              maxHeight: '80vh',
+              overflow: 'auto',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.15)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>
+                Suggestions for {activeOverlay.fieldName}
+              </h3>
+              <button
+                onClick={handleCloseOverlay}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  padding: '0',
+                  width: '32px',
+                  height: '32px',
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <div style={{ marginTop: '16px' }}>
+              <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '8px', textTransform: 'capitalize' }}>
+                {activeOverlay.suggestionType.replace('_', ' ')}
+              </h4>
+
+              {filteredSuggestions.length > 0 ? (
+                <>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {filteredSuggestions.map((suggestion: any, idx: number) => (
+                      <div key={idx} style={{ padding: '12px', backgroundColor: '#f5f5f5', borderRadius: '8px', position: 'relative' }}>
+                        {/* Checkbox for selection */}
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                          <input
+                            type="checkbox"
+                            checked={selectedIndices.has(idx)}
+                            onChange={() => toggleSelection(idx)}
+                            style={{ marginTop: '4px', cursor: 'pointer', width: '16px', height: '16px' }}
+                          />
+                          <div style={{ flex: 1 }}>
+                            {suggestion.old && (
+                              <div style={{ marginBottom: '8px' }}>
+                                <strong style={{ fontSize: '12px', color: '#DC2626' }}>Original:</strong>
+                                <p style={{ margin: '4px 0 0 0', fontSize: '14px' }}>{suggestion.old}</p>
+                              </div>
+                            )}
+                            <div>
+                              <strong style={{ fontSize: '12px', color: '#10B981' }}>Suggested:</strong>
+                              <p style={{ margin: '4px 0 0 0', fontSize: '14px' }}>{suggestion.new}</p>
+                            </div>
+                            {suggestion.reason && (
+                              <div style={{ marginTop: '8px', fontSize: '12px', color: '#6B7280' }}>
+                                <em>Reason: {suggestion.reason}</em>
+                              </div>
+                            )}
+                            {suggestion.fieldName && (
+                              <div style={{ marginTop: '8px', fontSize: '11px', color: '#9CA3AF' }}>
+                                Field: {suggestion.fieldName}
+                              </div>
+                            )}
+                          </div>
+                          {/* Individual Apply button */}
+                          <button
+                            onClick={() => handleApplySingle(suggestion)}
+                            style={{
+                              padding: '6px 12px',
+                              backgroundColor: '#10B981',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              fontSize: '12px',
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                            }}
+                          >
+                            Apply
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Bulk Apply button */}
+                  {selectedIndices.size > 0 && (
+                    <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
+                      <button
+                        onClick={handleApplySelected}
+                        style={{
+                          padding: '10px 20px',
+                          backgroundColor: '#005FF2',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '8px',
+                          fontSize: '14px',
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                        }}
+                      >
+                        Apply Selected ({selectedIndices.size})
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p style={{ color: '#6B7280', fontSize: '14px' }}>No suggestions available.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false, onApplyBadgeSuggestions }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
+  const [badgeData, setBadgeData] = useState<ItemBadgeData[]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
+
+
+  console.log(badgeData,"badgeData")
 
   const { page } = template;
 
@@ -145,14 +432,67 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
     if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
     if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
 
+    // Extract badge data from fields with data-field-name
+    const badges: ItemBadgeData[] = [];
+    const fieldElements = container.querySelectorAll('[data-field-name][data-item-id][data-section-key]');
+
+    fieldElements.forEach((element) => {
+      const itemId = element.getAttribute('data-item-id');
+      const sectionKey = element.getAttribute('data-section-key');
+      const fieldName = element.getAttribute('data-field-name');
+
+      if (!itemId || !sectionKey || !fieldName) return;
+
+      // Get suggestions for this specific field
+      const itemUpdate = data?.[sectionKey]?.suggestedUpdates?.find((update: any) => update.itemId === itemId);
+      const fieldData = itemUpdate?.fields?.[fieldName];
+
+      if (!fieldData?.suggestedUpdates || fieldData.suggestedUpdates.length === 0) return;
+
+      const fieldSuggestions: Array<{ old?: string; new: string; type: SuggestionType; fieldName: string }> =
+        fieldData.suggestedUpdates.map((suggestion: any) => ({
+          ...suggestion,
+          fieldName,
+        }));
+
+      // Count by type
+      let spellingCount = 0;
+      let sentenceCount = 0;
+      let newSummaryCount = 0;
+
+      fieldSuggestions.forEach((suggestion) => {
+        if (suggestion.type === 'spelling_error') {
+          spellingCount++;
+        } else if (suggestion.type === 'sentence_refinement') {
+          sentenceCount++;
+        } else if (suggestion.type === 'new_summary') {
+          newSummaryCount++;
+        }
+      });
+
+      if (spellingCount > 0 || sentenceCount > 0 || newSummaryCount > 0) {
+        badges.push({
+          itemId,
+          sectionKey,
+          fieldName,
+          spellingCount,
+          sentenceCount,
+          newSummaryCount,
+          suggestions: fieldSuggestions,
+        });
+      }
+    });
+
     const totalPages = Math.max(leftPages.length, rightPages.length);
     const merged: [React.ReactNode[], React.ReactNode[]][] = [];
 
     for (let i = 0; i < totalPages; i++) {
       merged.push([leftPages[i] || [], rightPages[i] || []]);
     }
+    console.log(badges,"badges")
 
     setPages(merged);
+    setBadgeData(badges);
   }, [template, data, currentSection, hasSuggestions]);
 
   const { columnConfig, leftItems, rightItems } = useMemo(() => {
@@ -242,34 +582,32 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           </div>
         );
       })}
+
+      {/* Render badges outside pagination as overlays */}
+      {hasSuggestions && <BadgeOverlay badgeData={badgeData} onApplyBadgeSuggestions={onApplyBadgeSuggestions} />}
     </>
   );
 }
 
 // Main section renderer
 function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
-  // Check if section is hidden
-  // Get section ID from different possible sources
+ 
   let sectionId = section.id;
 
-  // If no direct ID, try to extract from listPath (e.g., "experience.items" -> "experience")
   if (!sectionId && section.listPath) {
     sectionId = section.listPath.split('.')[0];
   }
 
-  // If still no ID, try to extract from heading path (e.g., "experience.heading" -> "experience")
   if (!sectionId && section.heading?.path) {
     sectionId = section.heading.path.split('.')[0];
   }
 
-  // Map template section IDs to data keys
-  // The header and summary sections both store data under 'personalDetails' key
+
   let dataKey = sectionId;
   if (sectionId === 'header' || sectionId === 'summary') {
     dataKey = 'personalDetails';
   }
 
-  // Check if this section is marked as hidden
   if (dataKey && data[dataKey]?.isHidden === true) {
     return null;
   }
@@ -284,7 +622,6 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
   return null;
 }
 
-// Render divider (horizontal line under headings)
 function renderDivider(divider: any): React.ReactNode {
   if (!divider) return null;
 
@@ -301,7 +638,6 @@ function renderDivider(divider: any): React.ReactNode {
   return null;
 }
 
-// Header section renderer
 function renderHeaderSection(
   section: any,
   data: any,
@@ -309,6 +645,8 @@ function renderHeaderSection(
   hasSuggestions?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
+
+
 
   const hasGenericFields = Object.values(fields).some(
     (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
@@ -318,7 +656,7 @@ function renderHeaderSection(
   const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  // Highlight header when personalDetails is selected
+
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
   const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
@@ -420,7 +758,7 @@ function renderHeaderSection(
       {fields.contact && (
         <div className={fields.contact.className}>
           {(() => {
-            // Filter out items with no value first
+   
             const validItems = fields.contact.items
               .map((item: any, idx: number) => {
                 const value = resolvePath(data, item.path, item.fallback);
@@ -436,10 +774,10 @@ function renderHeaderSection(
                   ? item.href.replace('{{value}}', value)
                   : resolvePath(data, item.href);
 
-              // Don't use target="_blank" for mailto links
-              const linkProps = item.href.startsWith('mailto:')
-                ? {}
-                : { target: '_blank', rel: 'noopener noreferrer' };
+                // Don't use target="_blank" for mailto links
+                const linkProps = item.href.startsWith('mailto:')
+                  ? {}
+                  : { target: '_blank', rel: 'noopener noreferrer' };
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
@@ -474,21 +812,24 @@ function renderListSection(
   currentSection?: string,
   hasSuggestions?: boolean,
 ): React.ReactNode {
-  const items = resolvePath(data, section.listPath, []);
+  const rawItems = resolvePath(data, section.listPath, []);
 
-  // Return null if items is not an array or is empty
+const items = rawItems.map((item: any) => {
+  return {
+    ...item,
+  };
+});
+
+
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Filter out items where all values are empty, null, or undefined
   const validItems = items.filter((item: any) => {
     if (!item || typeof item !== 'object') return false;
 
-    // Check if at least one field has a non-empty value
     return Object.values(item).some((value: any) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
-        // For nested objects (like duration), check if they have valid values
         const nestedValues = Object.values(value);
         return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
@@ -496,9 +837,9 @@ function renderListSection(
     });
   });
 
-  // Return null if no valid items after filtering
   if (validItems.length === 0) return null;
 
+  
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
@@ -534,6 +875,9 @@ function renderListSection(
   const itemWrapperStyle = section.break ? wrapperStyle : {};
   const containerWrapperStyle = section.break ? {} : wrapperStyle;
 
+  // Get section key from listPath (e.g., "experience.items" -> "experience")
+  const sectionKey = section.listPath?.split('.')[0];
+
   return (
     <div
       data-item="list-section"
@@ -546,40 +890,87 @@ function renderListSection(
       {!section.break && <RenderListSectionHeading />}
 
       <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
-        {validItems.map((item: any, idx: number) => (
-          <div
-            key={idx}
-            className={cn(
-              section.break && idx === 0
-                ? ''
-                : section.itemTemplate.className,
-              section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
-            )}
-            style={itemWrapperStyle}
-          >
-            {section.break && idx === 0 && shouldHighlight && (
-              <div style={{ position: 'relative' }}>
-                <SparkleIndicator />
-              </div>
-            )}
-            {section.break && idx === 0 ? (
-              <>
-                <RenderListSectionHeading />
-                <div className={section.itemTemplate.className}>
-                  {section.itemTemplate.rows
-                    ? renderItemWithRows(section.itemTemplate, item)
-                    : renderItemWithFields(section.itemTemplate, item)}
+        {validItems.map((item: any, idx: number) => {
+       
+          const itemId = item.itemId || item.id;
+
+          // Get error counts across all fields for this item
+          const errorCounts = (() => {
+            const counts = { spellingCount: 0, sentenceCount: 0, newSummaryCount: 0 };
+
+            if (!data?.[sectionKey]?.suggestedUpdates || !itemId) {
+              return counts;
+            }
+
+            // Find the item's suggestions
+            const itemUpdate = data[sectionKey].suggestedUpdates.find((update: any) => update.itemId === itemId);
+
+            if (!itemUpdate?.fields) {
+              return counts;
+            }
+
+            // Count errors across all fields
+            Object.values(itemUpdate.fields).forEach((fieldData: any) => {
+              const suggestions = fieldData?.suggestedUpdates || [];
+              suggestions.forEach((suggestion: any) => {
+                // Skip suggestions where old === new (no actual change)
+                if (suggestion.old && suggestion.old === suggestion.new) {
+                  return;
+                }
+
+                if (suggestion.type === 'spelling_error') {
+                  counts.spellingCount++;
+                } else if (suggestion.type === 'sentence_refinement') {
+                  counts.sentenceCount++;
+                } else if (suggestion.type === 'new_summary') {
+                  counts.newSummaryCount++;
+                }
+              });
+            });
+
+            return counts;
+          })();
+
+ 
+
+          return (
+            <div
+              key={idx}
+              data-item-id={itemId}
+              data-section-key={sectionKey}
+              data-spelling-count={errorCounts.spellingCount}
+              data-sentence-count={errorCounts.sentenceCount}
+              data-new-summary-count={errorCounts.newSummaryCount}
+              className={cn(
+                section.break && idx === 0 ? '' : section.itemTemplate.className,
+                section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
+              )}
+              style={itemWrapperStyle}
+            >
+              {section.break && idx === 0 && shouldHighlight && (
+                <div style={{ position: 'relative' }}>
+                  <SparkleIndicator />
                 </div>
-              </>
-            ) : (
-              <>
-                {section.itemTemplate.rows
-                  ? renderItemWithRows(section.itemTemplate, item)
-                  : renderItemWithFields(section.itemTemplate, item)}
-              </>
-            )}
-          </div>
-        ))}
+              )}
+              {section.break && idx === 0 ? (
+                <>
+                  <RenderListSectionHeading />
+                  <div className={section.itemTemplate.className}>
+                    {section.itemTemplate.rows
+                      ? renderItemWithRows(section.itemTemplate, item, itemId, sectionKey)
+                      : renderItemWithFields(section.itemTemplate, item, itemId, sectionKey)}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {section.itemTemplate.rows
+                    ? renderItemWithRows(section.itemTemplate, item, itemId, sectionKey)
+                    : renderItemWithFields(section.itemTemplate, item, itemId, sectionKey)}
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -617,20 +1008,41 @@ function renderTwoColumnLayout(
   );
 }
 
-function renderItemWithRows(template: any, item: any): React.ReactNode {
+function renderItemWithRows(template: any, item: any, itemId?: string, sectionKey?: string): React.ReactNode {
   return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
-      {row.cells.map((cell: any, cellIdx: number) => (
-        <div key={cellIdx}>{renderField(cell, item)}</div>
-      ))}
+      {row.cells.map((cell: any, cellIdx: number) => {
+        const fieldName = cell.path?.split('.').pop() || cell.type || `cell-${cellIdx}`;
+        return (
+          <div
+            key={cellIdx}
+            data-field-name={fieldName}
+            data-item-id={itemId}
+            data-section-key={sectionKey}
+          >
+            {renderField(cell, item)}
+          </div>
+        );
+      })}
     </div>
   ));
 }
 
-function renderItemWithFields(template: any, item: any): React.ReactNode {
-  return template.fields.map((field: any, idx: number) => (
-    <React.Fragment key={idx}>{renderField(field, item)}</React.Fragment>
-  ));
+function renderItemWithFields(template: any, item: any, itemId?: string, sectionKey?: string): React.ReactNode {
+  return template.fields.map((field: any, idx: number) => {
+    const fieldName = field.path?.split('.').pop() || field.type || `field-${idx}`;
+
+    return (
+      <div
+        key={idx}
+        data-field-name={fieldName}
+        data-item-id={itemId}
+        data-section-key={sectionKey}
+      >
+        {renderField(field, item)}
+      </div>
+    );
+  });
 }
 
 function renderField(field: any, data: any): React.ReactNode {

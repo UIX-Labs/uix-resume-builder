@@ -32,9 +32,29 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
             return {};
           }
 
+          // Map error types to background colors
+          let backgroundColor = '';
+          if (attributes.color === 'yellow' || attributes.color === '#FFD700' || attributes.color.includes('spelling')) {
+            backgroundColor = 'rgba(255, 215, 0, 0.3)'; // Yellow for spelling errors
+          } else if (attributes.color === 'red' || attributes.color === '#FF0000' || attributes.color.includes('sentence')) {
+            backgroundColor = 'rgba(255, 0, 0, 0.15)'; // Light red for weak sentences
+          } else {
+            backgroundColor = attributes.color;
+          }
+
           return {
             'data-error-color': attributes.color,
-            style: `text-decoration: underline; text-decoration-color: ${attributes.color}; text-decoration-thickness: 2px; text-underline-offset: 2px;`,
+            'data-error-type': attributes.color.includes('spelling') ? 'spelling' : 'sentence',
+            style: `background-color: ${backgroundColor}; padding: 2px 0; border-radius: 2px;`,
+          };
+        },
+      },
+      priority: {
+        default: 0,
+        parseHTML: (element) => element.getAttribute('data-priority'),
+        renderHTML: (attributes) => {
+          return {
+            'data-priority': attributes.priority || 0,
           };
         },
       },
@@ -45,6 +65,13 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
     return [
       {
         tag: 'span[data-error-color]',
+        getAttrs: (node) => {
+          if (typeof node === 'string') return false;
+          return {
+            color: node.getAttribute('data-error-color'),
+            priority: node.getAttribute('data-priority') || 0,
+          };
+        },
       },
     ];
   },
@@ -58,9 +85,10 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
       setErrorHighlight:
         (color: string) =>
         ({ commands }) => {
-          // We use CSS text-decoration directly in the style attribute,
-          // so we don't need TipTap's underline mark (which creates <u> tags)
-          return commands.setMark(this.name, { color });
+          // Determine priority: spelling errors (yellow) have higher priority
+          const priority = color.includes('spelling') || color === 'yellow' || color === '#FFD700' ? 1 : 0;
+
+          return commands.setMark(this.name, { color, priority });
         },
       unsetErrorHighlight:
         () =>
@@ -69,4 +97,7 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
         },
     };
   },
+
+  // Add priority to the mark to ensure spelling errors override sentence errors
+  priority: 100,
 });

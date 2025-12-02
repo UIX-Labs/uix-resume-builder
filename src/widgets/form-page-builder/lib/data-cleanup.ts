@@ -13,21 +13,14 @@ export const getCleanDataForRenderer = (data: Record<string, unknown>): Record<s
     if (section && typeof section === 'object') {
       const sectionData = { ...(section as Record<string, unknown>) };
 
-      // Remove suggestedUpdates from each section
-      delete sectionData.suggestedUpdates;
+     
 
       if (Array.isArray(sectionData.items)) {
         sectionData.items = sectionData.items.map((item) => {
           if (typeof item === 'object' && item !== null) {
             const cleanItem = { ...item } as Record<string, unknown>;
 
-            // Remove underline spans from all string fields
-            Object.keys(cleanItem).forEach((fieldKey) => {
-              const fieldValue = cleanItem[fieldKey];
-              if (typeof fieldValue === 'string') {
-                cleanItem[fieldKey] = removeErrorHighlighting(fieldValue);
-              }
-            });
+         
             return cleanItem;
           }
           return item;

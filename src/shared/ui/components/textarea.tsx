@@ -170,6 +170,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         const html = editor.getHTML();
         const value = editor.getText();
 
+        // Keep error highlights in the saved HTML so they render in PDF preview
         onChange?.(value, !value ? '' : html);
       },
       onFocus: () => {
@@ -189,8 +190,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       if (!editor || !errorSuggestions || errorSuggestions.length === 0) return;
 
       const colorMap = {
-        spelling_error: '#D97706',
-        sentence_refinement: '#DC2626',
+        spelling_error: 'spelling-yellow',
+        sentence_refinement: 'sentence-red',
         new_summary: '#10B981',
       };
 
@@ -239,12 +240,15 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       if (!editor || value === undefined) return;
 
       const normalizedValue = normalizeContent(value);
-      // Strip error highlight spans from HTML to prevent marks from being recreated
-      // The marks will be reapplied by the errorSuggestions effect
-      const cleanValue = stripErrorHighlightSpans(normalizedValue);
       const currentContent = editor.getHTML();
-      if (currentContent !== cleanValue) {
-        editor.commands.setContent(cleanValue, { emitUpdate: false });
+
+      // Only strip highlights if we have new suggestions to apply
+      const valueToSet = errorSuggestions && errorSuggestions.length > 0
+        ? stripErrorHighlightSpans(normalizedValue)
+        : normalizedValue;
+
+      if (currentContent !== valueToSet) {
+        editor.commands.setContent(valueToSet, { emitUpdate: false });
         // Reapply error highlights after content is set (with small delay to ensure content is ready)
         if (errorSuggestions && errorSuggestions.length > 0) {
           setTimeout(() => {

@@ -93,30 +93,12 @@ const enjiTemplate = {
                 },
               ],
             },
-            // Badge row: Portfolio, LinkedIn, GitHub, etc.
+            // Badge row: LinkedIn and GitHub
             {
               type: 'inline-group',
               className: 'flex flex-wrap items-center justify-center gap-2',
               separator: '',
               items: [
-                {
-                  type: 'badge',
-                  pathWithFallback: {
-                    path: 'personalDetails.items[0].links.website.title',
-                    fallback: 'enji.dev',
-                  },
-                  hrefPathWithFallback: {
-                    path: 'personalDetails.items[0].links.website.link',
-                    fallback: 'https://enji.dev',
-                  },
-                  icon: {
-                    type: 'icon',
-                    name: 'Globe',
-                    size: 8,
-                    className: 'text-purple-900',
-                  },
-                  badgeClassName: 'bg-[#F6F3FF] text-purple-900 border border-[#7C3AED]',
-                },
                 {
                   type: 'badge',
                   pathWithFallback: {
@@ -134,24 +116,6 @@ const enjiTemplate = {
                     className: 'text-blue-900',
                   },
                   badgeClassName: 'bg-[#F1F8FF] text-blue-900 border border-[#0A66C2]',
-                },
-                {
-                  type: 'badge',
-                  pathWithFallback: {
-                    path: 'personalDetails.items[0].links.portfolio.title',
-                    fallback: '/@enjidev',
-                  },
-                  hrefPathWithFallback: {
-                    path: 'personalDetails.items[0].links.portfolio.link',
-                    fallback: 'https://figma.com/@enjidev',
-                  },
-                  icon: {
-                    type: 'icon',
-                    name: 'Figma',
-                    size: 8,
-                    className: 'text-orange-900',
-                  },
-                  badgeClassName: 'bg-[#FFF4F1] text-orange-900 border border-[#F24E1E]',
                 },
                 {
                   type: 'badge',

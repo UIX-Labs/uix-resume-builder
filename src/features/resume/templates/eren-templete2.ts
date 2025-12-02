@@ -132,30 +132,6 @@ const laurenChenTemplate = {
                   children: [
                     {
                       type: 'icon',
-                      name: 'Globe',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'link',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].links.website.title',
-                        fallback: 'lauren.chen.com',
-                      },
-                      hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.website.link',
-                        fallback: 'https://lauren.chen.com',
-                      },
-                      className: 'text-xs text-white font-normal',
-                    },
-                  ],
-                },
-                {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
-                    {
-                      type: 'icon',
                       name: 'Linkedin',
                       size: 14,
                       className: 'text-white mt-0.5',
@@ -180,19 +156,19 @@ const laurenChenTemplate = {
                   children: [
                     {
                       type: 'icon',
-                      name: 'Twitter',
+                      name: 'Github',
                       size: 14,
                       className: 'text-white mt-0.5',
                     },
                     {
                       type: 'link',
                       pathWithFallback: {
-                        path: 'personalDetails.items[0].links.twitter.title',
-                        fallback: 'twitter.com/lauren-chen',
+                        path: 'personalDetails.items[0].links.github.title',
+                        fallback: 'github.com/lauren-chen',
                       },
                       hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.twitter.link',
-                        fallback: 'https://twitter.com/lauren-chen',
+                        path: 'personalDetails.items[0].links.github.link',
+                        fallback: 'https://github.com/lauren-chen',
                       },
                       className: 'text-xs text-white font-normal',
                     },

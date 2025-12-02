@@ -1,6 +1,6 @@
 import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
-import aniketTemplate from '@features/resume/templates/standard';
+import aniketTemplate from '@features/resume/templates/eren-templete2';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
 import { useEffect, useRef, useState, useCallback } from 'react';
@@ -607,7 +607,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate?.json || aniketTemplate}
+                template={aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}

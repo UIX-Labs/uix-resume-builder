@@ -231,12 +231,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           >
             <div className={cn('flex flex-col', leftColumnClassName)}>
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className}/>
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className} />
               ))}
             </div>
             <div className={cn('flex flex-col', rightColumnClassName)}>
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className}/>
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className} />
               ))}
             </div>
           </div>
@@ -355,6 +355,7 @@ function renderHeaderSection(
       padding: '16px',
       position: 'relative',
     }),
+    ...style,
   };
 
   if (hasGenericFields) {
@@ -567,9 +568,7 @@ function renderListSection(
           <div
             key={idx}
             className={cn(
-              section.break && idx === 0
-                ? ''
-                : section.itemTemplate.className,
+              section.break && idx === 0 ? '' : section.itemTemplate.className,
               section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
             )}
             style={itemWrapperStyle}

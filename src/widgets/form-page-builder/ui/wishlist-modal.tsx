@@ -2,13 +2,13 @@ import { Dialog, DialogContent } from '@shared/ui/dialog';
 import { Button } from '@shared/ui/components/button';
 import { Lock } from 'lucide-react';
 import { useState } from 'react';
-import { fetch } from '@shared/api';
 import { toast } from 'sonner';
+import { joinCommunity, type JoinCommunityResponse } from '@entities/download-pdf/api';
 
 interface WishlistModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onJoinSuccess?: () => void;
+  onJoinSuccess?: (response: JoinCommunityResponse) => void;
 }
 
 const WishlistModal = ({ isOpen, onClose, onJoinSuccess }: WishlistModalProps) => {
@@ -17,21 +17,12 @@ const WishlistModal = ({ isOpen, onClose, onJoinSuccess }: WishlistModalProps) =
   const handleJoinWaitlist = async () => {
     setIsJoining(true);
     try {
+      const response = await joinCommunity();
       onClose();
-      onJoinSuccess?.();
-      await fetch('waitlist/join', {
-        options: {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      });
-
-      toast.success('Successfully joined the waitlist!');
+      onJoinSuccess?.(response);
     } catch (error) {
       console.error('Failed to join waitlist:', error);
-      toast.error('Failed to join waitlist. Please try again.');
+        toast.success('Successfully joined the waitlist!');
     } finally {
       setIsJoining(false);
     }

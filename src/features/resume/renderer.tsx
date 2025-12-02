@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 
@@ -74,113 +74,174 @@ function SparkleIndicator() {
     </div>
   );
 }
-
 export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
-  const [pages, setPages] = useState<React.ReactNode[][]>([]);
+  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
-  const sections = template.sections || [];
 
   const PAGE_HEIGHT = 1122;
   const PAGE_PADDING = page.padding ?? 24;
-  const MAX_HEIGHT = PAGE_HEIGHT - PAGE_PADDING * 2;
 
-  // Paginate content
+  // NEW: dynamic max height per column
+  const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
+  const COLUMN_MAX = {
+    left: DEFAULT_MAX,
+    right: DEFAULT_MAX,
+  };
+
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
 
-    const newPages: React.ReactNode[][] = [];
-    let currentPage: React.ReactNode[] = [];
-    newPages.push(currentPage);
+    const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
+    const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
 
-    const containerTop = container.getBoundingClientRect().top;
-    let currentPageTop = containerTop;
+    const leftPages: React.ReactNode[][] = [];
+    const rightPages: React.ReactNode[][] = [];
 
-    function helper(container: HTMLElement) {
-      const children = Array.from(container.children) as HTMLElement[];
+    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
+      let currentColumnPage: React.ReactNode[] = [];
+      outPages.push(currentColumnPage);
 
-      if (children.length === 0) {
-        return;
-      }
+      const pageMax = COLUMN_MAX[columnName];
+      let pageTop: number | null = null;
 
-      for (let i = 0; i < children.length; i++) {
-        const el = children[i];
-        el.style.display = '';
+      function walk(el: HTMLElement) {
+        const children = Array.from(el.children) as HTMLElement[];
+        if (!children.length) return;
 
-        const elRect = el.getBoundingClientRect();
-        const elTop = elRect.top;
-        const elBottom = elRect.bottom;
-        const canBreak = el.getAttribute('data-canbreak') === 'true';
+        for (const child of children) {
+          child.style.display = '';
 
-        if (canBreak) {
-          helper(el);
-        } else {
-          // Check if element would exceed max height from current page start
-          if (elBottom - currentPageTop > MAX_HEIGHT && currentPage.length > 0) {
-            currentPage = [];
-            newPages.push(currentPage);
-            currentPageTop = elTop; // New page starts at this element's top
+          const rect = child.getBoundingClientRect();
+          const canBreak = child.getAttribute('data-canbreak') === 'true';
+
+          if (pageTop == null) {
+            pageTop = rect.top;
           }
 
-          currentPage.push(el.cloneNode(true) as unknown as React.ReactNode);
+          if (canBreak) {
+            walk(child);
+            continue;
+          }
+
+          const childBottom = rect.bottom;
+          const usedHeight = childBottom - pageTop;
+
+          if (usedHeight > pageMax && currentColumnPage.length > 0) {
+            currentColumnPage = [];
+            outPages.push(currentColumnPage);
+            pageTop = rect.top;
+          }
+
+          currentColumnPage.push(child.cloneNode(true) as React.ReactNode);
         }
       }
+
+      walk(columnEl);
     }
 
-    helper(container);
+    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
+    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
 
-    setPages(newPages);
+    const totalPages = Math.max(leftPages.length, rightPages.length);
+    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+
+    for (let i = 0; i < totalPages; i++) {
+      merged.push([leftPages[i] || [], rightPages[i] || []]);
+    }
+
+    setPages(merged);
   }, [template, data, currentSection, hasSuggestions]);
+
+  const { columnConfig, leftItems, rightItems } = useMemo(() => {
+    if (!template.columns) {
+      return {
+        columnConfig: {
+          spacing: '0px',
+          left: {
+            width: '100%',
+          },
+          right: {
+            width: '0%',
+          },
+        },
+
+        leftItems: template.sections,
+        rightItems: [],
+      };
+    }
+
+    const leftItems = template.sections.filter((s: any) => s.column === 'left');
+    const rightItems = template.sections.filter((s: any) => s.column === 'right');
+
+    return {
+      columnConfig: template.columns,
+      leftItems,
+      rightItems,
+    };
+  }, [template]);
+
+  const leftWidth = columnConfig.left.width;
+  const rightWidth = columnConfig.right.width;
+  const spacing = columnConfig.spacing;
+  const leftColumnClassName = columnConfig.left.className || '';
+  const rightColumnClassName = columnConfig.right.className || '';
+  const fontFamily = page.fontFamily || undefined;
+
+  const baseStyle = {
+    width: '21cm',
+    padding: PAGE_PADDING,
+    gridTemplateColumns: `calc(${leftWidth}) calc(${rightWidth})`,
+    gap: spacing,
+    fontFamily: fontFamily,
+  };
 
   return (
     <>
       <div
         ref={dummyContentRef}
-        className="bg-white border-[3px] outline-[3px] outline-blue-400 rounded-[18px] mb-5"
+        className="mb-5 grid"
         style={{
+          ...baseStyle,
           position: 'absolute',
           visibility: 'hidden',
-          fontFamily: page.fontFamily,
-          pointerEvents: 'none',
-          width: '21cm',
-          padding: PAGE_PADDING,
         }}
       >
-        {sections.map((section: any, idx: number) => (
-          <React.Fragment key={idx}>{renderSection(section, data, currentSection, hasSuggestions)}</React.Fragment>
-        ))}
+        <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
+          {leftItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
+        <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
+          {rightItems.map((s, i) => (
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+          ))}
+        </div>
       </div>
 
-      {pages.map((blocks, index) => (
-        <div
-          key={index}
-          className={cn(
-            'bg-white mb-5',
-
-            page.className,
-            className,
-          )}
-          style={{
-            padding: PAGE_PADDING,
-            background: page.background ?? 'white',
-            fontFamily: page.fontFamily,
-            width: '21cm',
-            height: '29.7cm',
-          }}
-        >
-          {blocks.map((node, i) => {
-            // Remove top margin from first element on subsequent pages
-            if (index > 0 && i === 0) {
-              const modifiedNode = (node as any).cloneNode(true);
-              modifiedNode.style.marginTop = '0';
-              return <div key={i} dangerouslySetInnerHTML={{ __html: modifiedNode.outerHTML }} className={page.className}/>;
-            }
-            return <div key={i} dangerouslySetInnerHTML={{ __html: (node as any).outerHTML }} className={page.className}/>;
-          })}
-        </div>
-      ))}
+      {pages.map((columns, index) => {
+        const [leftColumn, rightColumn] = columns;
+        return (
+          <div
+            key={index}
+            className={cn('grid mb-5', page.className, className)}
+            style={{ ...baseStyle, height: '29.7cm', backgroundColor: page.background || 'white' }}
+          >
+            <div className={cn('flex flex-col', leftColumnClassName)}>
+              {leftColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className}/>
+              ))}
+            </div>
+            <div className={cn('flex flex-col', rightColumnClassName)}>
+              {rightColumn.map((node: any, i) => (
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={page.className}/>
+              ))}
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
@@ -389,6 +450,10 @@ function renderHeaderSection(
           })}
         </div>
       )}
+
+      {fields.address && (
+        <p className={fields.address.className}>{resolvePath(data, fields.address.path, fields.address.fallback)}</p>
+      )}
     </div>
   );
 }
@@ -502,7 +567,9 @@ function renderListSection(
           <div
             key={idx}
             className={cn(
-              section.itemTemplate.className,
+              section.break && idx === 0
+                ? ''
+                : section.itemTemplate.className,
               section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
             )}
             style={itemWrapperStyle}
@@ -512,10 +579,22 @@ function renderListSection(
                 <SparkleIndicator />
               </div>
             )}
-            {section.break && idx === 0 && <RenderListSectionHeading />}
-            {section.itemTemplate.rows
-              ? renderItemWithRows(section.itemTemplate, item)
-              : renderItemWithFields(section.itemTemplate, item)}
+            {section.break && idx === 0 ? (
+              <>
+                <RenderListSectionHeading />
+                <div className={section.itemTemplate.className}>
+                  {section.itemTemplate.rows
+                    ? renderItemWithRows(section.itemTemplate, item)
+                    : renderItemWithFields(section.itemTemplate, item)}
+                </div>
+              </>
+            ) : (
+              <>
+                {section.itemTemplate.rows
+                  ? renderItemWithRows(section.itemTemplate, item)
+                  : renderItemWithFields(section.itemTemplate, item)}
+              </>
+            )}
           </div>
         ))}
       </div>
@@ -729,17 +808,35 @@ function renderField(field: any, data: any): React.ReactNode {
   }
 
   if (field.type === 'duration') {
-    const duration = resolvePath(data, field.path, field.fallback);
+    const duration = resolvePath(data, field.path);
     if (!duration) return null;
 
+    const formatDate = (dateString: string): string => {
+      if (!dateString || dateString.trim() === '') return '';
+
+      const parsed = dayjs(dateString);
+      if (!parsed.isValid()) return '';
+
+      // If year-only, keep as-is
+      if (/^\d{4}$/.test(dateString.trim())) return dateString.trim();
+
+      // If already in YYYY-MM format (month-year only), format as MMM YYYY
+      if (/^\d{4}-\d{2}$/.test(dateString.trim())) {
+        return parsed.format('MMM YYYY');
+      }
+
+      // For full dates YYYY-MM-DD, format as MMM YYYY
+      return parsed.format('MMM YYYY');
+    };
+
     if (duration.startDate && duration.endDate) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
-      const end = dayjs(duration.endDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
+      const end = formatDate(duration.endDate);
       return <span className={field.className}>{`${start} - ${end}`}</span>;
     }
 
     if (duration.startDate && duration.ongoing) {
-      const start = dayjs(duration.startDate).format('MMM YYYY');
+      const start = formatDate(duration.startDate);
       return <span className={field.className}>{`${start} - Present`}</span>;
     }
 
@@ -763,7 +860,7 @@ function renderField(field: any, data: any): React.ReactNode {
 
     if (!value || !href) return null;
     return (
-      <a href={href} className={field.className}>
+      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );
@@ -1024,21 +1121,23 @@ function renderBadgeSection(
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={canBreak}>
         {flattenedItems.map((value: any, idx: number) => {
+          const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
+
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={section.badgeClassName}>{value}</span>
+                <span className={section.badgeClassName}>{displayValue}</span>
               </div>
             );
           }
 
           // Default rendering without icon
           return (
-            <span key={idx}>
-              <span className={section.badgeClassName}>{value}</span>
+            <React.Fragment key={idx}>
+              <span className={section.badgeClassName}>{displayValue}</span>
               {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
+            </React.Fragment>
           );
         })}
       </div>

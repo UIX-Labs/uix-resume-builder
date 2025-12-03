@@ -39,6 +39,49 @@ function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
   return flattenedItems;
 }
 
+// Utility to check if a section has pending suggestions
+// Returns true if there are any suggestions with count > 0
+function hasPendingSuggestions(suggestedUpdates: any[] | undefined): boolean {
+  if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
+    return false;
+  }
+
+  return suggestedUpdates.some((update: any) => {
+    if (!update.fields) return false;
+
+    // Check each field in the update
+    return Object.values(update.fields).some((fieldData: any) => {
+      if (!fieldData.fieldCounts) return false;
+
+      // Check if any count is greater than 0
+      return Object.values(fieldData.fieldCounts).some((count: any) => count > 0);
+    });
+  });
+}
+
+// Utility to check if a specific item has pending suggestions
+// Returns true if the item with given itemId has any suggestions with count > 0
+function hasItemPendingSuggestions(suggestedUpdates: any[] | undefined, itemId: string): boolean {
+  if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
+    return false;
+  }
+
+  // Find the update for this specific item
+  const itemUpdate = suggestedUpdates.find((update: any) => update.itemId === itemId);
+
+  if (!itemUpdate || !itemUpdate.fields) {
+    return false;
+  }
+
+  // Check if any field in this item has suggestions with count > 0
+  return Object.values(itemUpdate.fields).some((fieldData: any) => {
+    if (!fieldData.fieldCounts) return false;
+
+    // Check if any count is greater than 0
+    return Object.values(fieldData.fieldCounts).some((count: any) => count > 0);
+  });
+}
+
 type RenderProps = {
   template: any;
   data: any;
@@ -321,8 +364,13 @@ function renderHeaderSection(
   // Highlight header when personalDetails is selected
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
-  const shouldHighlight = hasSuggestions && (isActive || isPersonalDetailsActive);
+  // Get section-wise suggested updates from data
+  const dataKey = 'personalDetails';
+  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
+  const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -475,8 +523,14 @@ function renderListSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  // Get section-wise suggested updates from data
+  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+
+  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
+ 
 
   function RenderListSectionHeading() {
     return (
@@ -490,7 +544,7 @@ function renderListSection(
     );
   }
 
-  const wrapperStyle: React.CSSProperties = {
+ const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
     ...(hasSuggestions && {
       transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
@@ -531,7 +585,6 @@ function renderListSection(
     );
   }
   const itemWrapperStyle = section.break ? wrapperStyle : {};
-  const containerWrapperStyle = section.break ? {} : wrapperStyle;
 
   return (
     <div
@@ -539,45 +592,56 @@ function renderListSection(
       data-canbreak={section.break}
       data-section={sectionId}
       className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
-      style={containerWrapperStyle}
+      style={{ scrollMarginTop: '20px' }}
     >
-      {shouldHighlight && <SparkleIndicator />}
       {!section.break && <RenderListSectionHeading />}
 
-      <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
-        {validItems.map((item: any, idx: number) => (
-          <div
-            key={idx}
-            className={cn(
-              section.break && idx === 0 ? '' : section.itemTemplate.className,
-              section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
-            )}
-            style={itemWrapperStyle}
-          >
-            {section.break && idx === 0 && shouldHighlight && (
-              <div style={{ position: 'relative' }}>
-                <SparkleIndicator />
-              </div>
-            )}
-            {section.break && idx === 0 ? (
-              <>
-                <RenderListSectionHeading />
-                <div className={section.itemTemplate.className}>
-                  {section.itemTemplate.rows
-                    ? renderItemWithRows(section.itemTemplate, item)
-                    : renderItemWithFields(section.itemTemplate, item)}
-                </div>
-              </>
-            ) : (
-              <>
-                {section.itemTemplate.rows
-                  ? renderItemWithRows(section.itemTemplate, item)
-                  : renderItemWithFields(section.itemTemplate, item)}
-              </>
-            )}
+      <div
+  data-item="content"
+  data-canbreak={section.break}
+  className={section.containerClassName}
+>
+  {validItems.map((item: any, idx: number) => {
+    const itemId = item.id || item.itemId || `item-${idx}`;
+ 
+    return (
+      <div
+        key={itemId}
+        className={cn(
+          section.break && idx === 0 ? '' : section.itemTemplate.className,
+          section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : ''
+        )}
+        style={itemWrapperStyle}
+      >
+        {/* Sparkle Indicator */}
+        {section.break && idx === 0 && shouldHighlight && (
+          <div style={{ position: 'relative' }}>
+            <SparkleIndicator />
           </div>
-        ))}
+        )}
+
+        {/* First item behaves differently when section.break = true */}
+        {section.break && idx === 0 ? (
+          <>
+            <RenderListSectionHeading />
+            <div className={section.itemTemplate.className}>
+              {section.itemTemplate.rows
+                ? renderItemWithRows(section.itemTemplate, item)
+                : renderItemWithFields(section.itemTemplate, item)}
+            </div>
+          </>
+        ) : (
+          <>
+            {section.itemTemplate.rows
+              ? renderItemWithRows(section.itemTemplate, item)
+              : renderItemWithFields(section.itemTemplate, item)}
+          </>
+        )}
       </div>
+    );
+  })}
+</div>
+
     </div>
   );
 }
@@ -752,7 +816,7 @@ function renderField(field: any, data: any): React.ReactNode {
 
   if (field.type === 'skillLevel') {
     const value = resolvePath(data, field.path, field.fallback);
-    if (!value) return null;
+
 
     const levelMap: Record<string, number> = {
       Beginner: 2,
@@ -872,8 +936,14 @@ function renderContentSection(
   const isSummaryForPersonalDetails =
     currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
-  const shouldHighlight = hasSuggestions && (isActive || isSummaryForPersonalDetails);
+  // Get section-wise suggested updates from data
+  // Summary section maps to personalDetails or professionalSummary data
+  const dataKey = sectionId.toLowerCase() === 'summary' ? 'professionalSummary' : sectionId;
+  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails && hasValidSuggestions;
+  const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -935,8 +1005,12 @@ function renderInlineListSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  // Get section-wise suggested updates from data
+  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -1031,8 +1105,12 @@ function renderBadgeSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  // Get section-wise suggested updates from data
+  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',

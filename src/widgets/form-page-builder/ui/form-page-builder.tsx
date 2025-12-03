@@ -204,9 +204,9 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
+  const currentMonthYear = dayjs().format('MMM-YYYY')
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
+  const formattedName = fullName ? fullName.replace(/\s+/g, '-') : 'Resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();

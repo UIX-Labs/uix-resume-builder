@@ -1,0 +1,190 @@
+{
+  "updatedAt": 1764581313934,
+  "experience": {
+    "id": "d197f50a-1a43-4225-8683-2c1a4851bdae",
+    "title": "experience",
+    "items": [
+      {
+        "itemId": "f4c7f21e-2d95-430a-af01-7390b45945e7",
+        "company": "Tech Solutions Inc",
+        "position": "Senior Software Engineer",
+        "location": "San Francisco, CA",
+        "description": "Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers",
+        "rank": 0,
+        "duration": {
+          "startDate": "2021-06",
+          "endDate": "2024-11",
+          "ongoing": false
+        },
+        "link": {
+          "title": "Company Website",
+          "link": "https://techsolutions.com"
+        }
+      }
+    ]
+  },
+  "skills": {
+    "id": "2ba989ef-5579-4457-a72e-94c0fdde7fb6",
+    "title": "skills",
+    "items": [
+      {
+        "itemId": "5eab6df9-83a1-4609-9091-e7478875304e",
+        "name": "JavaScript/TypeScript",
+        "level": "Expert",
+        "category": "Programming Languages",
+        "rank": 0
+      },
+      {
+        "itemId": "c07414df-5e6a-4289-8c07-69197a0dc53e",
+        "name": "React.js & Next.js",
+        "level": "Advanced",
+        "category": "Frontend Frameworks",
+        "rank": 1
+      }
+    ]
+  },
+  "projects": {
+    "id": "4b1d87d1-f4e1-4bf0-8dbd-dd00e17dfcdb",
+    "title": "projects",
+    "items": [
+   
+      {
+        "itemId": "695d2079-8869-4178-8a4f-63307af46155",
+        "title": "AI Resume Builder",
+        "description": "Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers",
+        "techStack": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS",
+          "OpenAI"
+        ],
+        "link": {
+          "title": "Live Demo",
+          "link": "https://resume-builder.com"
+        },
+        "rank": 0,
+        "duration": {
+          "startDate": "2024-03",
+          "endDate": "2024-11",
+          "ongoing": false
+        }
+      }
+    ]
+  },
+  "personalDetails": {
+    "id": "01d25cbd-ced3-45d8-ada5-2c5fe08a2eee",
+    "title": "personal_info",
+    "items": [
+      {
+        "itemId": "ec024f40-68ca-40a5-859e-c8640136ae85",
+        "fullName": "John Doe",
+        "email": "john.doe@email.com",
+        "phone": "+1 (555) 123-4567",
+        "links": {
+          "GitHub": {
+            "link": "https://github.com/johndoe",
+            "title": "johndoe"
+          },
+          "LinkedIn": {
+            "link": "https://linkedin.com/in/johndoe",
+            "title": "John Doe"
+          },
+          "github": {
+            "title": "johndoe",
+            "link": "https://github.com/johndoe"
+          },
+          "linkedin": {
+            "title": "John Doe",
+            "link": "https://linkedin.com/in/johndoe"
+          }
+        },
+        "address": "123 Main Street, San Francisco, CA 94102",
+        "description": "Passionate software engineer with 5+ years of experience",
+        "city": "San Francisco",
+        "state": "California",
+        "country": "United States",
+        "pincode": "94102",
+        "profilePicturePublicUrl": "https://example.com/profile.jpg",
+        "jobTitle": "Senior Software Engineer"
+      }
+    ]
+  },
+  "professionalSummary": {
+    "id": "prof-summary-id",
+    "title": "Professional Summary",
+    "items": [
+      {
+        "id": "summary-item-1",
+        "summary": "Experienced Senior Software Engineer with 5+ years in full-stack development. Specialized in building scalable web applications using modern JavaScript frameworks. Proven track record of leading teams and delivering high-quality software solutions."
+      }
+    ]
+  },
+  "education": {
+    "id": "0c54245b-7886-4d24-ab80-3a76538cb73c",
+    "title": "education",
+    "items": [
+      {
+        "itemId": "d57cb69e-e728-43aa-89ee-460a05f5d6bf",
+        "institution": "Stanford University",
+        "degree": "Bachelor of Science",
+        "fieldOfStudy": "Computer Science",
+        "location": "Stanford, CA",
+        "rank": 0,
+        "duration": {
+          "startDate": "2015-09",
+          "endDate": "2019-06",
+          "ongoing": false
+        },
+        "grade": "3.8 GPA"
+      }
+    ]
+  },
+  "certifications": {
+    "id": "f3cd1cb4-1a06-42cd-b1ef-96418838b1ee",
+    "title": "certifications",
+    "items": [
+      {
+        "itemId": "144c8cd1-d27b-4208-9db1-a8eb455b867a",
+        "title": "AWS Certified Solutions Architect",
+        "issuer": "Amazon Web Services",
+        "link": {
+          "title": "View Certificate",
+          "link": "https://aws.amazon.com/certification"
+        },
+        "rank": 0,
+        "duration": {
+          "startDate": "2023-03",
+          "endDate": "2026-03",
+          "ongoing": false
+        }
+      }
+    ]
+  },
+  "achievements": {
+    "id": "961c4d44-31fa-4e2e-a8e8-5adb22dd60f6",
+    "title": "achievements",
+    "items": [
+      {
+        "itemId": "42d365d2-298e-4bfe-b718-b3c0595dbaf6",
+        "items": [
+          "Winner of Google Cloud Hackathon 2023",
+          "Published 3 research papers on Machine Learning"
+        ]
+      }
+    ]
+  },
+  "interests": {
+    "id": "61f50be9-8b5e-448b-83fc-09ebdf9e6898",
+    "title": "interests",
+    "items": [
+      {
+        "itemId": "8889a519-16aa-486a-8e96-613671ce864c",
+        "items": [
+          "Open Source Contribution",
+          "Tech Blogging"
+        ]
+      }
+    ]
+  },
+  "templateId": "1b6a9b7a-6f13-4faf-a8a9-37e788edfb6d"
+}

@@ -22,7 +22,7 @@ export function TagsInput({ onChange, data, section }: { data: any; section: any
   };
 
   return (
-    <div className="z-[1000] relative w-full">
+    <div className="relative w-full">
       <TagInput
         activeTagIndex={0}
         placeholder={section.placeholder}

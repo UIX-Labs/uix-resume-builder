@@ -233,7 +233,7 @@ export function FormPageBuilder() {
     setIsGeneratingPDF(true);
 
     // Wait for React to re-render without highlights
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     // Get HTML content from the resume
     const htmlContent = targetRef.current?.innerHTML;
@@ -333,7 +333,6 @@ export function FormPageBuilder() {
       if (response?.is_uix_member) {
         await generatePDF();
       } else {
-     
         setIsWishlistModalOpen(true);
       }
     } catch (error) {
@@ -344,9 +343,7 @@ export function FormPageBuilder() {
   };
 
   const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
-   
     if (response?.joinCommunityRequested) {
-     
       try {
         await generatePDF();
       } catch (error) {
@@ -354,7 +351,6 @@ export function FormPageBuilder() {
         toast.error('Failed to download PDF');
       }
     } else {
-     
       setIsWishlistSuccessModalOpen(true);
     }
   };
@@ -587,13 +583,12 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
       }
     }, 1000),
-    [save]
+    [save],
   );
 
   // Debounced auto-save function
@@ -627,7 +622,7 @@ export function FormPageBuilder() {
         console.error('Auto-save failed:', error);
       }
     }, 2000),
-    [save]
+    [save],
   );
 
   const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
@@ -672,7 +667,6 @@ export function FormPageBuilder() {
     const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
     if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-
       return;
     }
 
@@ -729,7 +723,7 @@ export function FormPageBuilder() {
       if (isArrayField) {
         updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
       } else {
-        updatedFieldValue = applySuggestionsToFieldValue((currentFieldValue as string) , selectedSuggestions);
+        updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, selectedSuggestions);
       }
 
       // Check if suggestions were actually applied
@@ -784,7 +778,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate?.json || aniketTemplate}
+                template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {})}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}

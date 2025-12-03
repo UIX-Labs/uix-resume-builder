@@ -274,12 +274,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           >
             <div className={cn('flex flex-col', leftColumnClassName)}>
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
             <div className={cn('flex flex-col', rightColumnClassName)}>
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
           </div>
@@ -351,7 +351,7 @@ function renderHeaderSection(
   currentSection?: string,
   hasSuggestions?: boolean,
 ): React.ReactNode {
-  const { fields, className, id } = section;
+  const { fields, className, style, id } = section;
 
   const hasGenericFields = Object.values(fields).some(
     (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
@@ -384,6 +384,7 @@ function renderHeaderSection(
       padding: '16px',
       position: 'relative',
     }),
+    ...style,
   };
 
   if (hasGenericFields) {
@@ -443,68 +444,40 @@ function renderHeaderSection(
           )}
         </>
       )}
+      {/* Handle inline-group contact structure */}
+      {fields.contact && fields.contact.type === 'inline-group' && <>{renderField(fields.contact, data)}</>}
 
-      {fields.contact && fields.contact.type === 'contact-grid' && (
+      {/* Handle legacy contact structure */}
+      {fields.contact && !fields.contact.type && (
         <div className={fields.contact.className}>
           {fields.contact.items.map((item: any, idx: number) => {
-            if (item.type === 'inline-group-with-icon') {
+            const value = resolvePath(data, item.path, item.fallback);
+            if (!value) return null;
+
+            const showSeparator = idx > 0 && fields.contact.separator;
+
+            if (item.type === 'link') {
+              const href = item.href.startsWith('mailto:')
+                ? item.href.replace('{{value}}', value)
+                : resolvePath(data, item.href);
+
               return (
-                <div key={idx} className={item.className}>
-                  {item.items.map((subItem: any, subIdx: number) => (
-                    <React.Fragment key={subIdx}>{renderField(subItem, data)}</React.Fragment>
-                  ))}
-                </div>
+                <span key={idx}>
+                  {showSeparator && fields.contact.separator}
+                  <a href={href} className={item.className}>
+                    {value}
+                  </a>
+                </span>
               );
             }
+
             return (
-              <div key={idx} className={item.className}>
-                {renderField(item, data)}
-              </div>
+              <span key={idx}>
+                {showSeparator && fields.contact.separator}
+                {value}
+              </span>
             );
           })}
-        </div>
-      )}
-
-      {fields.contact && (
-        <div className={fields.contact.className}>
-          {(() => {
-            // Filter out items with no value first
-            const validItems = fields.contact.items
-              .map((item: any, idx: number) => {
-                const value = resolvePath(data, item.path, item.fallback);
-                if (!value) return null;
-                return { item, value, originalIdx: idx };
-              })
-              .filter((entry: any) => entry !== null);
-            return validItems.map((entry: any, arrayIdx: number) => {
-              const { item, value, originalIdx } = entry;
-              const showSeparator = arrayIdx > 0 && fields.contact.separator;
-              if (item.type === 'link') {
-                const href = item.href.startsWith('mailto:')
-                  ? item.href.replace('{{value}}', value)
-                  : resolvePath(data, item.href);
-
-              // Don't use target="_blank" for mailto links
-              const linkProps = item.href.startsWith('mailto:')
-                ? {}
-                : { target: '_blank', rel: 'noopener noreferrer' };
-                return (
-                  <span key={originalIdx}>
-                    {showSeparator && fields.contact.separator}
-                    <a href={href} className={item.className} {...linkProps}>
-                      {value}
-                    </a>
-                  </span>
-                );
-              }
-              return (
-                <React.Fragment key={originalIdx}>
-                  {showSeparator && fields.contact.separator}
-                  <span className={item.className}>{value}</span>
-                </React.Fragment>
-              );
-            });
-          })()}
         </div>
       )}
 
@@ -585,8 +558,33 @@ function renderListSection(
     }),
   };
 
+  // Check if this is a two-column layout (heading on left, content on right)
+  const isTwoColumnLayout = section.className && section.className.includes('justify-between');
+
+  if (isTwoColumnLayout) {
+    return (
+      <div data-item="list-section" className={cn(section.className)}>
+        {/* Left column: Heading */}
+        <div className={cn('flex-shrink-0', section.heading.className)}>
+          {section.heading && (
+            <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+          )}
+        </div>
+
+        {/* Right column: Content */}
+        <div data-item="content" className={cn('flex-1', section.containerClassName)}>
+          {validItems.map((item: any, idx: number) => (
+            <div key={idx} className={section.itemTemplate.className}>
+              {section.itemTemplate.rows
+                ? renderItemWithRows(section.itemTemplate, item)
+                : renderItemWithFields(section.itemTemplate, item)}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
   const itemWrapperStyle = section.break ? wrapperStyle : {};
-  const containerWrapperStyle = section.break ? {} : wrapperStyle;
 
   return (
     <div
@@ -605,11 +603,7 @@ function renderListSection(
 >
   {validItems.map((item: any, idx: number) => {
     const itemId = item.id || item.itemId || `item-${idx}`;
-    const itemHasSuggestions = hasItemPendingSuggestions(
-      sectionSuggestedUpdates,
-      itemId
-    );
-
+ 
     return (
       <div
         key={itemId}
@@ -688,7 +682,9 @@ function renderItemWithRows(template: any, item: any): React.ReactNode {
   return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
       {row.cells.map((cell: any, cellIdx: number) => (
-        <div key={cellIdx}>{renderField(cell, item)}</div>
+        <div key={cellIdx} className={cell.className}>
+          {renderField(cell, item)}
+        </div>
       ))}
     </div>
   ));
@@ -701,38 +697,92 @@ function renderItemWithFields(template: any, item: any): React.ReactNode {
 }
 
 function renderField(field: any, data: any): React.ReactNode {
-  if (field.type === 'inline-group') {
-    // Filter out items with no value first
-    const renderedItems = field.items
-      .map((subField: any, idx: number) => ({
-        idx,
-        element: renderField(subField, data),
-      }))
-      .filter(
-        ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
-      );
+  // Handle container type
+  if (field.type === 'container') {
+    return (
+      <div className={field.className}>
+        {field.children?.map((child: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(child, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
 
-    if (renderedItems.length === 0) return null;
+  // Handle badge type
+  if (field.type === 'badge') {
+    const value = field.pathWithFallback
+      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
+      : resolvePath(data, field.path, field.fallback);
 
-    const hasClassName = !!field.className;
-    const hasSeparator = !!field.separator;
+    const href = field.hrefPathWithFallback
+      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
+      : resolvePath(data, field.href);
 
-    const content = renderedItems.map(
-      ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
-        <React.Fragment key={idx}>
-          {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
-          <span>{element}</span>
-        </React.Fragment>
-      ),
+    if (!value) return null;
+
+    const iconElement = field.icon ? renderField(field.icon, data) : null;
+
+    const content = (
+      <span className={cn('inline-flex items-center gap-1 rounded-full py-1 px-2', field.badgeClassName)}>
+        {iconElement}
+        {value}
+      </span>
     );
 
-    // Use div wrapper when className is provided
-    if (hasClassName) {
-      return <div className={field.className}>{content}</div>;
+    if (href) {
+      return (
+        <a href={href} className="hover:opacity-80">
+          {content}
+        </a>
+      );
     }
 
-    // No className, use fragment
-    return <>{content}</>;
+    return content;
+  }
+
+  // Handle text type with pathWithFallback
+  if (field.type === 'text') {
+    const value = field.pathWithFallback
+      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
+      : resolvePath(data, field.path, field.fallback);
+
+    if (!value) return null;
+    const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+    return <span className={field.className}>{text}</span>;
+  }
+
+  if (field.type === 'horizontal-group') {
+    return (
+      <div className={cn('flex flex-row items-center', field.className)}>
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {idx > 0 && field.separator && <span>{field.separator}</span>}
+            {renderField(subField, data)}
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
+  if (field.type === 'inline-group') {
+    // If className contains 'flex-col', use div wrapper to respect vertical layout
+    const isVertical = field.className && field.className.includes('flex-col');
+    const WrapperTag = isVertical ? 'div' : React.Fragment;
+    const wrapperProps = isVertical ? { className: field.className } : {};
+
+    return (
+      <WrapperTag {...wrapperProps}>
+        {field.items.map((subField: any, idx: number) =>
+          isVertical ? (
+            <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+          ) : (
+            <span key={idx} className={field.className}>
+              {renderField(subField, data)}
+            </span>
+          ),
+        )}
+      </WrapperTag>
+    );
   }
 
   if (field.type === 'icon') {
@@ -844,8 +894,14 @@ function renderField(field: any, data: any): React.ReactNode {
   }
 
   if (field.type === 'link') {
-    const value = resolvePath(data, field.path, field.fallback);
-    const href = resolvePath(data, field.href);
+    const value = field.pathWithFallback
+      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
+      : resolvePath(data, field.path, field.fallback);
+
+    const href = field.hrefPathWithFallback
+      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
+      : resolvePath(data, field.href);
+
     if (!value || !href) return null;
     return (
       <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
@@ -903,11 +959,14 @@ function renderContentSection(
     }),
   };
 
+  const canBreak = section.break !== false; // Default to true if not specified
+
   return (
     <div
       className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={sectionId}
       style={wrapperStyle}
+      data-canbreak={canBreak}
     >
       {shouldHighlight && <SparkleIndicator />}
       {section.heading && (
@@ -967,6 +1026,11 @@ function renderInlineListSection(
     }),
   };
 
+  const canBreak = section.break !== false; // Default to true if not specified
+
+  const shouldRenderAsList =
+    section.showBullet || section.containerClassName.includes('grid') || section.containerClassName.includes('flex');
+
   return (
     <div
       data-break={section.break}
@@ -983,14 +1047,28 @@ function renderInlineListSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-item="content" data-break={section.break}>
-        {flattenedItems.map((value: any, idx: number) => (
-          <span key={idx}>
-            <span className={section.itemClassName}>{value}</span>
-            {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-          </span>
-        ))}
-      </div>
+      {shouldRenderAsList ? (
+        <ul
+          data-item="content"
+          data-canbreak={canBreak}
+          className={cn(section.containerClassName, 'list-disc list-inside')}
+        >
+          {flattenedItems.map((value: any, idx: number) => (
+            <li key={idx} className={section.itemClassName}>
+              {value}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div data-item="content" data-canbreak={canBreak}>
+          {flattenedItems.map((value: any, idx: number) => (
+            <span key={idx}>
+              <span className={section.itemClassName}>{value}</span>
+              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -1048,6 +1126,40 @@ function renderBadgeSection(
     }),
   };
 
+  // Check if this is a two-column layout (heading on left, content on right)
+  const isTwoColumnLayout = section.className && section.className.includes('justify-between');
+
+  if (isTwoColumnLayout) {
+    return (
+      <div data-item="section" className={cn(section.className)}>
+        {/* Left column: Heading */}
+        <div className={cn('flex-shrink-0', section.heading.className)}>
+          {section.heading && (
+            <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+          )}
+        </div>
+
+        {/* Right column: Badges */}
+        <div className={cn('flex gap-1 flex-wrap flex-1', section.containerClassName)}>
+          {items.map((item: any, idx: number) => {
+            const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
+
+            if (!value) {
+              return null;
+            }
+
+            return (
+              <span key={idx}>
+                <span className={section.badgeClassName}>{value}</span>
+                {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       data-break={section.break}
@@ -1065,7 +1177,7 @@ function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
+      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={section.break}>
         {flattenedItems.map((value: any, idx: number) => {
           const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
 

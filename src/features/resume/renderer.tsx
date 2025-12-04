@@ -4,6 +4,8 @@ import { cn } from '@shared/lib/cn';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
+import type { SuggestedUpdates } from '@entities/resume';
+import { getFieldSuggestions, getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
@@ -19,23 +21,51 @@ function resolvePath(data: any, path: string, fallback?: any): any {
   return result ?? fallback;
 }
 
-function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
-  const flattenedItems: any[] = [];
+// Flattens items and preserves itemId context for suggestion checking
+function flattenAndFilterItemsWithContext(
+  items: any[],
+  itemPath?: string,
+  parentId?: string
+): Array<{ value: any; itemId?: string }> {
+const flattenedItems: Array<{ value: any; itemId?: string }> = [];
 
   items.forEach((item: any) => {
+
+    // Use item's own ID, or fall back to parentId if item is a primitive (string)
+    const itemId = item.itemId || item.id || parentId;
     const value = itemPath ? resolvePath(item, itemPath) : item;
 
-    if (Array.isArray(value)) {
-      
-      flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
-    } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
-      // Flat structure: item is a direct value
-      flattenedItems.push(value);
-    }
+if (Array.isArray(value)) {
+
+
+  const filtered = value.filter(
+    (v: any) => v && (typeof v !== "string" || v.trim() !== "")
+  );
+
+  flattenedItems.push(
+  ...filtered.map((v: any) => {
+
+    return {
+      value: v,
+      itemId,
+    };
+  })
+);
+
+} else if (value && (typeof value !== "string" || value.trim() !== "")) {
+
+
+  flattenedItems.push({ value, itemId });
+}
+
   });
+
+
+  
 
   return flattenedItems;
 }
+
 
 type RenderProps = {
   template: any;
@@ -43,6 +73,7 @@ type RenderProps = {
   className?: string;
   currentSection?: string;
   hasSuggestions?: boolean;
+  isThumbnail?: boolean;
 };
 
 // Reusable sparkle indicator badge for highlighted sections
@@ -73,7 +104,7 @@ function SparkleIndicator() {
   );
 }
 
-export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
+export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false, isThumbnail = false }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
@@ -152,7 +183,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
     }
 
     setPages(merged);
-  }, [template, data, currentSection, hasSuggestions]);
+  }, [template, data, currentSection, hasSuggestions, isThumbnail]);
 
   const { columnConfig, leftItems, rightItems } = useMemo(() => {
     if (!template.columns) {
@@ -210,12 +241,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
       >
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s, i) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s, i) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
       </div>
@@ -246,7 +277,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
 }
 
 // Main section renderer
-function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
+function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean, isThumbnail?: boolean): React.ReactNode {
  
   let sectionId = section.id;
 
@@ -268,13 +299,13 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
     return null;
   }
 
-  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
-  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail);
+  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions, isThumbnail);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions, isThumbnail);
+  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'inline-list-section')
-    return renderInlineListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
+    return renderInlineListSection(section, data, currentSection, hasSuggestions, isThumbnail);
+  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions, isThumbnail);
   return null;
 }
 
@@ -299,6 +330,7 @@ function renderHeaderSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
 
@@ -315,8 +347,8 @@ function renderHeaderSection(
 
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
-  const shouldHighlight = hasSuggestions && (isActive || isPersonalDetailsActive);
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive;
+  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isPersonalDetailsActive);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -341,7 +373,7 @@ function renderHeaderSection(
       >
         {shouldHighlight && <SparkleIndicator />}
         {Object.keys(fields).map((key) => (
-          <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
+          <React.Fragment key={key}>{renderField(fields[key], data, undefined, undefined, isThumbnail)}</React.Fragment>
         ))}
       </div>
     );
@@ -397,14 +429,14 @@ function renderHeaderSection(
               return (
                 <div key={idx} className={item.className}>
                   {item.items.map((subItem: any, subIdx: number) => (
-                    <React.Fragment key={subIdx}>{renderField(subItem, data)}</React.Fragment>
+                    <React.Fragment key={subIdx}>{renderField(subItem, data, undefined, undefined, isThumbnail)}</React.Fragment>
                   ))}
                 </div>
               );
             }
             return (
               <div key={idx} className={item.className}>
-                {renderField(item, data)}
+                {renderField(item, data, undefined, undefined, isThumbnail)}
               </div>
             );
           })}
@@ -467,6 +499,7 @@ function renderListSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const rawItems = resolvePath(data, section.listPath, []);
 
@@ -495,12 +528,12 @@ const items = rawItems.map((item: any) => {
 
   if (validItems.length === 0) return null;
 
-  
+
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive;
 
   function RenderListSectionHeading() {
     return (
@@ -533,6 +566,9 @@ const items = rawItems.map((item: any) => {
 
   // Get section key from listPath (e.g., "experience.items" -> "experience")
   const sectionKey = section.listPath?.split('.')[0];
+
+  // Get suggestedUpdates from the data for this section
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
 
   return (
     <div
@@ -568,15 +604,15 @@ const items = rawItems.map((item: any) => {
                   <RenderListSectionHeading />
                   <div className={section.itemTemplate.className}>
                     {section.itemTemplate.rows
-                      ? renderItemWithRows(section.itemTemplate, item, itemId, sectionKey)
-                      : renderItemWithFields(section.itemTemplate, item, itemId, sectionKey)}
+                      ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+                      : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)}
                   </div>
                 </>
               ) : (
                 <>
                   {section.itemTemplate.rows
-                    ? renderItemWithRows(section.itemTemplate, item, itemId, sectionKey)
-                    : renderItemWithFields(section.itemTemplate, item, itemId, sectionKey)}
+                    ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+                    : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)}
                 </>
               )}
             </div>
@@ -593,6 +629,7 @@ function renderTwoColumnLayout(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const { leftColumn, rightColumn, className } = section;
 
@@ -602,7 +639,7 @@ function renderTwoColumnLayout(
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
       )}
@@ -611,7 +648,7 @@ function renderTwoColumnLayout(
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
       )}
@@ -619,33 +656,50 @@ function renderTwoColumnLayout(
   );
 }
 
-function renderItemWithRows(template: any, item: any, itemId?: string, sectionKey?: string): React.ReactNode {
+function renderItemWithRows(
+  template: any,
+  item: any,
+  itemId?: string,
+  suggestedUpdates?: SuggestedUpdates,
+  isThumbnail?: boolean,
+): React.ReactNode {
   return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
       {row.cells.map((cell: any, cellIdx: number) => (
         <div key={cellIdx}>
-          {renderField(cell, item)}
+          {renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}
         </div>
       ))}
     </div>
   ));
 }
 
-function renderItemWithFields(template: any, item: any, itemId?: string, sectionKey?: string): React.ReactNode {
+function renderItemWithFields(
+  template: any,
+  item: any,
+  itemId?: string,
+  suggestedUpdates?: SuggestedUpdates,
+  isThumbnail?: boolean,
+): React.ReactNode {
   return template.fields.map((field: any, idx: number) => (
     <div key={idx}>
-      {renderField(field, item)}
+      {renderField(field, item, itemId, suggestedUpdates, isThumbnail)}
     </div>
   ));
 }
 
-function renderField(field: any, data: any): React.ReactNode {
+function renderField(field: any, data: any, itemId?: string, suggestedUpdates?: SuggestedUpdates, isThumbnail?: boolean): React.ReactNode {
+  // Get suggestions for this specific field if we have the context
+  const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
+  const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
+  const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
+
   if (field.type === 'inline-group') {
     // Filter out items with no value first
     const renderedItems = field.items
       .map((subField: any, idx: number) => ({
         idx,
-        element: renderField(subField, data),
+        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
       }))
       .filter(
         ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
@@ -691,7 +745,7 @@ function renderField(field: any, data: any): React.ReactNode {
     return (
       <div className={field.className}>
         {field.items.map((subField: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+          <React.Fragment key={idx}>{renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
         ))}
       </div>
     );
@@ -700,7 +754,7 @@ function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'text') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <p className={field.className}>{value}</p>;
+    return <p className={cn(field.className, errorBgColor)}>{value}</p>;
   }
 
   if (field.type === 'skillLevel') {
@@ -733,7 +787,7 @@ function renderField(field: any, data: any): React.ReactNode {
         {field.items.map((subField: any, idx: number) => (
           <span key={idx}>
             {idx > 0 && field.separator}
-            {renderField(subField, data)}
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
           </span>
         ))}
       </>
@@ -779,7 +833,7 @@ function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'html') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <div className={field.className} dangerouslySetInnerHTML={{ __html: value }} />;
+    return <div className={cn(field.className, )} dangerouslySetInnerHTML={{ __html: value }} />;
   }
 
   if (field.type === 'link') {
@@ -787,7 +841,7 @@ function renderField(field: any, data: any): React.ReactNode {
     const href = resolvePath(data, field.href);
     if (!value || !href) return null;
     return (
-      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
+      <a href={href} className={cn(field.className, errorBgColor)} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );
@@ -797,7 +851,7 @@ function renderField(field: any, data: any): React.ReactNode {
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
-  return <span className={field.className}>{text}</span>;
+  return <span className={cn(field.className, errorBgColor)}>{text}</span>;
 }
 
 // Content section renderer (summary)
@@ -806,6 +860,7 @@ function renderContentSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
 
@@ -819,8 +874,8 @@ function renderContentSection(
   const isSummaryForPersonalDetails =
     currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
-  const shouldHighlight = hasSuggestions && (isActive || isSummaryForPersonalDetails);
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails;
+  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isSummaryForPersonalDetails);
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -864,23 +919,32 @@ function renderInlineListSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
   // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Flatten nested items structure if needed
-  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
+  // Extract parent ID if listPath points to nested items (e.g., 'achievements.items[0].items')
+  let parentId: string | undefined;
+  if (section.listPath.includes('[0].items')) {
+    const parentPath = section.listPath.replace(/\[0\]\.items$/, '[0]');
+    const parentObj = resolvePath(data, parentPath);
+    parentId = parentObj?.id || parentObj?.itemId;
+  }
+
+  // Flatten nested items structure with context (itemId) for suggestion checking
+  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
 
   // Return null if no valid items after flattening
-  if (flattenedItems.length === 0) return null;
+  if (flattenedItemsWithContext.length === 0) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -895,6 +959,13 @@ function renderInlineListSection(
       position: 'relative',
     }),
   };
+  const sectionKey = section.listPath?.split('.')[0];
+
+  const fieldName = section.listPath.includes('[0].')
+    ? section.listPath.split('[0].').pop()
+    : section.itemPath;
+
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
 
   return (
     <div
@@ -913,12 +984,21 @@ function renderInlineListSection(
       </div>
 
       <div data-item="content" data-break={section.break}>
-        {flattenedItems.map((value: any, idx: number) => (
-          <span key={idx}>
-            <span className={section.itemClassName}>{value}</span>
-            {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-          </span>
-        ))}
+        {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
+          // Get suggestions for this specific value
+          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, value);
+          const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
+
+
+          return (
+            <span key={idx}>
+              <span className={cn(section.itemClassName, errorBgColor)}>{value}</span>
+              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
+                <span>{section.itemSeparator}</span>
+              )}
+            </span>
+          );
+        })}
       </div>
     </div>
   );
@@ -930,17 +1010,26 @@ function renderBadgeSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
   // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Flatten nested items structure if needed
-  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
+  // Extract parent ID if listPath points to nested items (e.g., 'achievements.items[0].items')
+  let parentId: string | undefined;
+  if (section.listPath.includes('[0].items')) {
+    const parentPath = section.listPath.replace(/\[0\]\.items$/, '[0]');
+    const parentObj = resolvePath(data, parentPath);
+    parentId = parentObj?.id || parentObj?.itemId;
+  }
+
+  // Flatten nested items structure with context (itemId) for suggestion checking
+  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
 
   // Return null if no valid items after flattening
-  if (flattenedItems.length === 0) return null;
+  if (flattenedItemsWithContext.length === 0) return null;
 
   // Icon component mapping
   const getIconComponent = (iconName?: string) => {
@@ -956,8 +1045,8 @@ function renderBadgeSection(
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive;
-  const shouldHighlight = hasSuggestions && isActive;
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -972,6 +1061,18 @@ function renderBadgeSection(
       position: 'relative',
     }),
   };
+
+  const sectionKey = section.listPath?.split('.')[0];
+
+  // Extract the actual field name from listPath
+  // For 'achievements.items[0].items', fieldName should be 'items'
+  // For other cases, use section.itemPath
+  const fieldName = section.listPath.includes('[0].')
+    ? section.listPath.split('[0].').pop()
+    : section.itemPath;
+
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+
 
   return (
     <div
@@ -991,14 +1092,17 @@ function renderBadgeSection(
       </div>
 
       <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
-        {flattenedItems.map((value: any, idx: number) => {
+        {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
+          // Get suggestions for this specific value
+          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, value);
+          const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
           const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
 
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={section.badgeClassName}>{displayValue}</span>
+                <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
               </div>
             );
           }
@@ -1006,8 +1110,8 @@ function renderBadgeSection(
           // Default rendering without icon
           return (
             <React.Fragment key={idx}>
-              <span className={section.badgeClassName}>{displayValue}</span>
-              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
+              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
             </React.Fragment>
           );
         })}

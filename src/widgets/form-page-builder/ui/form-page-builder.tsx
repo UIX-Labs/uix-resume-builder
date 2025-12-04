@@ -37,6 +37,7 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import annaFieldTemplate from '@features/resume/templates/template3';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -57,7 +58,6 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
  */
 function isSectionEmpty(section: any): boolean {
   if (!section || typeof section !== 'object') {
-    console.log('  → Section is null/undefined or not an object');
     return true;
   }
 
@@ -65,19 +65,19 @@ function isSectionEmpty(section: any): boolean {
     const items = section.items;
 
     if (items.length === 0) {
-      console.log('  → Section has no items');
+  
       return true;
     }
 
-    console.log(`  → Section has ${items.length} item(s), checking for non-empty fields...`);
+  
 
     // Check if items contain any non-empty values
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      console.log(`  → Checking item ${i}:`, item);
+
 
       if (typeof item === 'string' && item.trim() !== '') {
-        console.log(`  → Item ${i} is a non-empty string`);
+      
         return false;
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
@@ -121,8 +121,6 @@ function isSectionEmpty(section: any): boolean {
         }
       }
     }
-
-    console.log('  → All items are empty');
   }
 
   return true;
@@ -174,6 +172,7 @@ export function FormPageBuilder() {
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -400,7 +399,7 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      console.log('Data loaded for resume:', data);
+    
 
       // Check each section individually and merge with mock data as needed
       const mergedData: Record<string, any> = {};
@@ -425,15 +424,12 @@ export function FormPageBuilder() {
           // Section is empty, use mock data with synced IDs from actual data
           const syncedSection = syncSectionIds(actualSection, mockSection);
           mergedData[sectionKey] = syncedSection;
-          console.log(`Section "${sectionKey}": empty, using mock data with synced IDs`);
+        
         } else {
           // Section has data, use actual data
-          mergedData[sectionKey] = actualSection;
-          console.log(`Section "${sectionKey}": has data, using actual data`);
+          mergedData[sectionKey] = actualSection
         }
       }
-
-      console.log('Final merged data:', mergedData);
       useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
@@ -504,9 +500,15 @@ export function FormPageBuilder() {
     }
 
     try {
+      setIsGeneratingThumbnail(true);
+
+      // Wait for React to re-render without highlights/sparkles
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
 
       if (!thumbnailDataUrl) {
+        setIsGeneratingThumbnail(false);
         return;
       }
 
@@ -516,6 +518,8 @@ export function FormPageBuilder() {
       refetchResumes();
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
+    } finally {
+      setIsGeneratingThumbnail(false);
     }
   }
 
@@ -553,11 +557,11 @@ export function FormPageBuilder() {
 
       if (!hasModifications) {
         toast.info(`No changes to save in ${currentStep}`);
-        console.log(`Manual save: No changes detected in ${currentStep}, skipping API call`);
+       
         return;
       }
 
-      console.log(`Manual save: Changes detected in ${currentStep}, saving...`);
+    
       thumbnailGenerated.current = false;
 
       await save({
@@ -602,15 +606,9 @@ export function FormPageBuilder() {
         const hasModifications = isSectionModified(step, currentFormData, mockData);
 
         if (!hasModifications) {
-          console.log(`Auto-save: No changes detected in ${step}, skipping API call`);
+      
           return;
         }
-
-        console.log(currentFormData)
-
-        console.log(mockData)
-
-        console.log(`Auto-save: Changes detected in ${step}, saving...`);
         await save({
           type: step,
           data: data,
@@ -780,10 +778,11 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate?.json || aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {})}
-                currentSection={isGeneratingPDF ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+               template={annaFieldTemplate}
+                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
+                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">

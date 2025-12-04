@@ -31,7 +31,7 @@ function UnCollapsedState({
   index: number;
   onChange: (data: any[]) => void;
   data: any[];
-  getItem: (section: any, data: any, onChange: (data: any[]) => void, suggestedUpdates?: SuggestedUpdates, itemId?: string, fieldName?: string) => void;
+  getItem: (section: any, data: any, onChange: (data: any) => void, suggestedUpdates?: SuggestedUpdates, itemId?: string, fieldName?: string) => void;
   suggestedUpdates?: SuggestedUpdates;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
@@ -85,7 +85,7 @@ export function Draggable({
   data: any[];
   section: any;
   onChange: (data: any[]) => void;
-  getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
+  getItem: (section: any, data: any, onChange: (data: any) => void, suggestedUpdates?: SuggestedUpdates, itemId?: string, fieldName?: string) => void;
   suggestedUpdates?: SuggestedUpdates;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {

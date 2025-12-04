@@ -37,7 +37,7 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
           if (attributes.color === 'yellow' || attributes.color === '#FFD700' || attributes.color.includes('spelling')) {
             backgroundColor = 'rgba(255, 215, 0, 0.3)'; // Yellow for spelling errors
           } else if (attributes.color === 'red' || attributes.color === '#FF0000' || attributes.color.includes('sentence')) {
-            backgroundColor = 'rgba(255, 0, 0, 0.15)'; // Light red for weak sentences
+            backgroundColor = 'rgba(255, 0, 0, 0.15)' // Light red for weak sentences
           } else {
             backgroundColor = attributes.color;
           }

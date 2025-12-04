@@ -11,18 +11,18 @@ import { useCallback, useMemo, useState } from 'react';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
-  {
-    title: 'Uploading Resume...',
-    subtitle: 'Please wait while we process your file',
-  },
-  {
-    title: 'Parsing',
-    subtitle: 'Extracting information from your resume',
-  },
-  {
-    title: 'Processing',
-    subtitle: 'Organizing your resume data',
-  }
+{
+  title: 'Pika Upload',
+  subtitle: 'Uploading your resume for curating magic',
+},
+{
+  title: 'Pika Extract',
+  subtitle: 'Extracting information from your resume',
+},
+{
+  title: 'Pika Morph',
+  subtitle: 'Organising your data to PikaResume format',
+}
 ];
 
 export default function ResumeCreationCard() {

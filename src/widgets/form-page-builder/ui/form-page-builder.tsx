@@ -841,7 +841,7 @@ export function FormPageBuilder() {
             <Button
               className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
                         font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
-                        flex items-center gap-1.5"
+                        flex items-center gap-1.5 rounded-xl"
             >
               <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
@@ -859,7 +859,7 @@ export function FormPageBuilder() {
             disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
                       font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
-                      flex items-center gap-1.5"
+                      flex items-center gap-1.5 rounded-xl"
           >
             {isGeneratingPDF ? (
               <>Generating PDF...</>

@@ -16,37 +16,11 @@ interface PhoneInputProps {
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
   ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }) => {
-    // Normalize value to E.164 format or undefined
-    const normalizedValue = React.useMemo(() => {
-      if (!value || value.trim() === '') {
-        return undefined;
-      }
-      
-      // If already in E.164 format, return as is
-      if (value.startsWith('+')) {
-        return value;
-      }
-      
-      // Try to parse and convert to E.164 format
-      try {
-        // If it's a number without country code, try to parse with default country (IN = +91)
-        const phoneNumber = parsePhoneNumber(value, 'IN');
-        if (phoneNumber && isValidPhoneNumber(phoneNumber.number)) {
-          return phoneNumber.number;
-        }
-      } catch (error) {
-        // If parsing fails, return undefined to avoid E.164 format error
-        return undefined;
-      }
-      
-      // If value doesn't start with + and can't be parsed, return undefined
-      return undefined;
-    }, [value]);
 
     return (
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry
-          value={normalizedValue}
+          value={value}
           defaultCountry="IN"
           onChange={onChange}
           placeholder={placeholder}

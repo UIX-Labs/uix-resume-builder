@@ -174,6 +174,7 @@ export function FormPageBuilder() {
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -583,6 +584,8 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
+        // Update last save time when save completes successfully
+        setLastSaveTime(Date.now());
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
@@ -617,6 +620,9 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
 
+        // Update last save time when save completes successfully
+        setLastSaveTime(Date.now());
+
         // await generateAndSaveThumbnail();
       } catch (error) {
         console.error('Auto-save failed:', error);
@@ -637,6 +643,56 @@ export function FormPageBuilder() {
   }, [debouncedHideSave]);
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
+
+  // Update display every 30 seconds to refresh relative time
+  const [refreshKey, setRefreshKey] = useState(0);
+  useEffect(() => {
+    if (!lastSaveTime) return;
+    
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1);
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [lastSaveTime]);
+
+  // Format last save time
+  const formatLastSaveTime = useCallback(() => {
+    if (!lastSaveTime) return null;
+    const diff = Date.now() - lastSaveTime;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    
+    if (seconds < 60) {
+      return 'saved less than a minute ago';
+    } else if (minutes === 1) {
+      return 'saved a minute ago';
+    } else if (minutes < 60) {
+      return `saved ${minutes} minutes ago`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      if (hours === 1) {
+        return 'saved an hour ago';
+      } else if (hours < 24) {
+        return `saved ${hours} hours ago`;
+      } else {
+        const days = Math.floor(hours / 24);
+        if (days === 1) {
+          return 'saved 24 hours ago';
+        } else {
+          return `saved ${days} days ago`;
+        }
+      }
+    }
+  }, [lastSaveTime, refreshKey]);
+
+  // Initialize last save time from resume data
+  useEffect(() => {
+    if (currentResume?.updatedAt) {
+      const updatedAt = new Date(currentResume.updatedAt).getTime();
+      setLastSaveTime(updatedAt);
+    }
+  }, [currentResume?.updatedAt]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {
@@ -850,10 +906,19 @@ export function FormPageBuilder() {
             </div>
           </TemplatesDialog>
 
+          {/* Last Save Time in the center */}
+          <div className="flex-1 flex justify-center">
+            {formatLastSaveTime() && (
+              <p className="text-sm text-gray-500">
+                {formatLastSaveTime()}
+              </p>
+            )}
+          </div>
+
           {/* Next Button on the right */}
           {navs[nextStepIndex]?.name && (
             <Button
-              className="ml-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
+              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleNextStep}
             >

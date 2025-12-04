@@ -37,7 +37,7 @@ const enzoTemplate3 = {
               items: [
                 {
                   type: 'group',
-                  className: 'flex flex-row items-start gap-4',
+                  className: 'flex flex-row items-center gap-4',
                   items: [
                     {
                       type: 'image',
@@ -155,7 +155,7 @@ const enzoTemplate3 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
-        className: 'flex flex-col gap-1 my-2',
+        className: 'flex flex-col gap-1',
         rows: [
           {
             cells: [
@@ -208,7 +208,7 @@ const enzoTemplate3 = {
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
-        className: 'flex flex-col pl-4 pt-2',
+        className: 'flex flex-col gap-1 pl-4 pt-4',
         rows: [
           {
             cells: [
@@ -254,7 +254,7 @@ const enzoTemplate3 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
-        className: 'flex flex-col gap-1 pl-4',
+        className: 'flex flex-col gap-1 pl-4 pt-2',
         rows: [
           {
             cells: [
@@ -284,14 +284,14 @@ const enzoTemplate3 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#3B82F6]',
+        className: 'text-base font-bold text-[#3B82F6] pl-4 mt-4',
       },
       content: {
         type: 'html',
         path: 'skills.description',
         fallback:
           'Business Analysis, UX Research, User Testing and Validation, Customer Journey Mapping, Information Architecture...',
-        className: 'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap',
+        className: 'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap pl-4 pt-2',
       },
     },
   ],

@@ -43,9 +43,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  // if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
-  //   return NextResponse.redirect(new URL('/auth', request.url));
-  // }
+  if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
+    return NextResponse.redirect(new URL('/auth', request.url));
+  }
 
   return NextResponse.next();
 }

@@ -4,284 +4,277 @@ const enzoTemplate2 = {
   page: {
     width: 794,
     height: 1122,
-    padding: 0,
     background: '#ffffff',
     className: 'leading-relaxed break-words whitespace-pre-wrap',
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
 
+  columns: {
+    spacing: '0px',
+    left: {
+      width: '65%',
+    },
+    right: {
+      width: '35%',
+    },
+  },
+
   sections: [
-    // Header Section with Name, Title, Description and Contact Info
+    // --- HEADER LEFT (Photo, Name, Summary) ---
+    // --- HEADER BANNER ---
     {
-      type: 'two-column-layout',
-      className: 'flex flex-row justify-between gap-8 mb-3 pb-3 bg-gray-50 p-6',
-      leftColumn: {
-        className: 'min-w-0',
-        sections: [
-          {
-            id: 'header-left',
-            type: 'header',
-            className: 'flex flex-col gap-1',
-            fields: {
-              name: {
-                path: 'personalDetails.items[0].fullName',
-                fallback: 'Kate Bishop',
-                className: 'text-3xl font-bold',
-              },
-              title: {
-                path: 'personalDetails.items[0].jobTitle',
-                fallback: 'Product Designer',
-                className: 'text-base text-blue-600 font-normal',
-              },
+      id: 'header-banner',
+      type: 'banner',
+      className: 'flex flex-col justify-center bg-[#F0F8FF] px-8 py-8',
+      fields: {
+        container: {
+          type: 'group',
+          className: 'flex flex-row justify-between items-start w-full',
+          items: [
+            // Name and Summary
+            {
+              type: 'group',
+              className: 'flex flex-col gap-3 pt-1 max-w-[60%]',
+              items: [
+                {
+                  type: 'text',
+                  path: 'personalDetails.items[0].fullName',
+                  fallback: 'Bhavya Saggi',
+                  className: 'text-3xl font-bold text-slate-900 leading-none',
+                },
+                {
+                  type: 'text',
+                  path: 'personalDetails.items[0].jobTitle',
+                  fallback: 'Product Designer',
+                  className: 'text-base text-blue-600 font-medium',
+                },
+                {
+                  type: 'html',
+                  path: 'personalDetails.items[0].description',
+                  fallback:
+                    'Strategic thinker with hands-on skills. Passionate about fostering engineering excellence, building inclusive teams, and aligning technology with business goals.',
+                  className: 'text-xs text-slate-700 leading-relaxed',
+                },
+              ],
             },
-          },
-          // Description under name and title
-          {
-            id: 'description',
-            type: 'content-section',
-            className: 'mt-2',
-            content: {
-              type: 'html',
-              path: 'personalDetails.items[0].description',
-              fallback:
-                'Over 5 years of professional experience conducting UX research and designing interactive end-to-end user flows. I enjoy working in close collaboration with teams across technology, business and design.',
-              className: 'text-xs leading-relaxed whitespace-pre-wrap break-words',
+            // Contact Info
+            {
+              type: 'group',
+              className: 'flex flex-col gap-3 items-end',
+              items: [
+                // Email
+                {
+                  type: 'group',
+                  className: 'flex flex-col gap-0.5 items-end',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Email',
+                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                    },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].email',
+                      fallback: 'bhavya.saggi@gmail.com',
+                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2 break-all',
+                    },
+                  ],
+                },
+                // LinkedIn
+                {
+                  type: 'group',
+                  className: 'flex flex-col gap-0.5 items-end',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'LinkedIn',
+                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                    },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].links.linkedin.title',
+                      fallback: 'LinkedIn',
+                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2 break-all',
+                    },
+                  ],
+                },
+                // Phone
+                {
+                  type: 'group',
+                  className: 'flex flex-col gap-0.5 items-end',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Phone',
+                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                    },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].phone',
+                      fallback: '+91 9953439451',
+                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2',
+                    },
+                  ],
+                },
+              ],
             },
-          },
-        ],
+          ],
+        },
       },
-      rightColumn: {
-        className: 'flex-shrink-0',
-        sections: [
+    },
+
+    // --- BODY LEFT (Experience) ---
+    {
+      id: 'experience',
+      type: 'list-section',
+      column: 'left',
+      break: true,
+      className: 'pl-6 pt-8',
+      heading: {
+        path: 'experience.heading',
+        fallback: 'Work experience',
+        className: 'text-base font-bold text-[#3B82F6] pt-4',
+      },
+      listPath: 'experience.items',
+      containerClassName: 'flex flex-col gap-6',
+      itemTemplate: {
+        className: 'flex flex-col gap-1 my-2',
+        rows: [
           {
-            id: 'contact-email',
-            type: 'content-section',
-            className: 'flex flex-col gap-1',
-            content: {
-              type: 'html',
-              path: '',
-              fallback: '<span class="text-xs font-medium text-gray-400">Email</span>',
-              className: '',
-            },
+            cells: [
+              {
+                path: 'position',
+                className: 'text-sm font-bold text-slate-900 pt-4',
+              },
+            ],
           },
           {
-            id: 'contact-email-value',
-            type: 'content-section',
-            className: 'flex flex-col gap-1 mb-2',
-            content: {
-              type: 'html',
-              path: 'personalDetails.items[0].email',
-              fallback: 'kate.bishop@katedesign.com',
-              className: 'text-xs font-bold break-all underline',
-            },
+            className: 'flex flex-row flex-wrap gap-2 items-center text-xs mb-1',
+            cells: [
+              {
+                path: 'company',
+                className: 'font-medium text-slate-700',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-slate-500',
+              },
+            ],
           },
           {
-            id: 'contact-linkedin',
-            type: 'content-section',
-            className: 'flex flex-col gap-1',
-            content: {
-              type: 'html',
-              path: '',
-              fallback: '<span class="text-xs font-medium text-gray-400">LinkedIn</span>',
-              className: '',
-            },
-          },
-          {
-            id: 'contact-linkedin-value',
-            type: 'content-section',
-            className: 'flex flex-col gap-1 mb-2',
-            content: {
-              type: 'html',
-              path: 'personalDetails.items[0].links.linkedin.title',
-              fallback: 'linkedin.com/in/kate-bishop',
-              className: 'text-xs font-bold break-all underline',
-            },
-          },
-          {
-            id: 'contact-phone',
-            type: 'content-section',
-            className: 'flex flex-col gap-1',
-            content: {
-              type: 'html',
-              path: '',
-              fallback: '<span class="text-xs font-medium text-gray-400">Phone</span>',
-              className: '',
-            },
-          },
-          {
-            id: 'contact-phone-value',
-            type: 'content-section',
-            className: 'flex flex-col gap-1',
-            content: {
-              type: 'html',
-              path: 'personalDetails.items[0].phone',
-              fallback: '+46 98-765 43 21',
-              className: 'text-xs font-bold break-all underline',
-            },
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                className:
+                  'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
+              },
+            ],
           },
         ],
       },
     },
 
-    // Two Column Layout for Experience (Left) and Skills + Education (Right)
+    // --- BODY RIGHT (Education, Skills) ---
     {
-      type: 'two-column-layout',
-      className: 'flex flex-row gap-8 px-6',
-      leftColumn: {
-        className: 'flex-1 min-w-0',
-        sections: [
-          // Work Experience Section
+      id: 'education',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      className: 'pl-6 pt-8',
+      heading: {
+        path: 'education.heading',
+        fallback: 'Education & Learning',
+        className: 'text-base font-bold text-[#3B82F6] pt-4 pl-4',
+      },
+      listPath: 'education.items',
+      containerClassName: 'flex flex-col gap-6',
+      itemTemplate: {
+        className: 'flex flex-col pl-4 pt-2',
+        rows: [
           {
-            id: 'experience',
-            type: 'list-section',
-            heading: {
-              path: 'experience.heading',
-              fallback: 'Work experience',
-              className: 'text-base font-semibold text-blue-600 mb-2',
-            },
-            listPath: 'experience.items',
-            containerClassName: 'flex flex-col gap-3',
-            itemTemplate: {
-              className: 'flex flex-col',
-              rows: [
-                {
-                  cells: [
-                    {
-                      path: 'position',
-                      className: 'text-sm font-bold break-words',
-                    },
-                  ],
-                },
-                {
-                  className: 'flex flex-row gap-2 items-center text-xs flex-wrap mb-1',
-                  cells: [
-                    {
-                      path: 'company',
-                      className: 'text-xs',
-                    },
-                    {
-                      type: 'duration',
-                      path: 'duration',
-                      className: 'text-xs',
-                    },
-                  ],
-                },
-                {
-                  cells: [
-                    {
-                      type: 'html',
-                      path: 'description',
-                      className:
-                        'text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5',
-                    },
-                  ],
-                },
-              ],
-            },
+            cells: [
+              {
+                path: 'degree',
+                className: 'text-sm font-bold text-slate-900',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                path: 'institution',
+                className: 'text-xs text-slate-700',
+              },
+            ],
+          },
+          {
+            className: 'flex flex-row items-center',
+            cells: [
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-slate-500 italic',
+              },
+            ],
           },
         ],
       },
-      rightColumn: {
-        className: 'flex-1 min-w-0',
-        sections: [
-          // Education & Learning Section
-          {
-            id: 'education',
-            type: 'list-section',
-            heading: {
-              path: 'education.heading',
-              fallback: 'Education & Learning',
-              className: 'text-base font-semibold text-blue-600 mb-2',
-            },
-            listPath: 'education.items',
-            containerClassName: 'flex flex-col gap-1',
-            itemTemplate: {
-              className: 'flex flex-col',
-              rows: [
-                {
-                  cells: [
-                    {
-                      path: 'degree',
-                      className: 'text-sm font-bold break-words',
-                    },
-                  ],
-                },
-                {
-                  cells: [
-                    {
-                      path: 'institution',
-                      className: 'text-xs break-words',
-                    },
-                  ],
-                },
-                {
-                  className: 'flex flex-row items-center',
-                  cells: [
-                    {
-                      type: 'duration',
-                      path: 'duration',
-                      className: 'text-xs',
-                    },
-                  ],
-                },
-              ],
-            },
-          },
+    },
 
-          // Certifications/Additional Learning
+    {
+      id: 'certifications',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      className: 'pl-6 mt-6',
+      heading: {
+        path: 'certifications.heading',
+        fallback: 'Certifications',
+        className: 'text-base font-bold text-[#3B82F6] pl-4 pt-4',
+      },
+      listPath: 'certifications.items',
+      containerClassName: 'flex flex-col gap-6',
+      itemTemplate: {
+        className: 'flex flex-col gap-1 pl-4',
+        rows: [
           {
-            id: 'certifications',
-            type: 'list-section',
-            className: 'mt-3',
-            heading: {
-              path: 'certifications.heading',
-              fallback: '',
-              className: 'text-sm font-bold mb-1',
-            },
-            listPath: 'certifications.items',
-            containerClassName: 'flex flex-col gap-1',
-            itemTemplate: {
-              className: 'flex flex-col gap-0',
-              rows: [
-                {
-                  cells: [
-                    {
-                      path: 'title',
-                      className: 'text-sm font-bold break-words',
-                    },
-                  ],
-                },
-                {
-                  cells: [
-                    {
-                      path: 'issuer',
-                      className: 'text-xs italic break-words',
-                    },
-                  ],
-                },
-              ],
-            },
+            cells: [
+              {
+                path: 'title',
+                className: 'text-xs text-slate-900',
+              },
+            ],
           },
-
-          // Skills Section
           {
-            id: 'skills',
-            type: 'content-section',
-            className: 'mt-3',
-            heading: {
-              path: 'skills.heading',
-              fallback: 'Skills',
-              className: 'text-base font-semibold text-blue-600 mb-2',
-            },
-            content: {
-              type: 'html',
-              path: 'skills.description',
-              fallback:
-                'Business Analysis, UX Research, User Testing and Validation, Customer Journey Mapping, Information Architecture, Low- and High- Fidelity Wireframing, Prototyping, Interaction Design, Visual Design, Defining Product Specifications, Design System Development, Design Sprints, A/B Testing.',
-              className: 'text-xs leading-relaxed whitespace-pre-wrap break-words',
-            },
+            cells: [
+              {
+                path: 'issuer',
+                className: 'text-xs italic text-slate-700',
+              },
+            ],
           },
         ],
+      },
+    },
+
+    {
+      id: 'skills',
+      type: 'content-section',
+      column: 'right',
+      className: 'pl-4 mt-4',
+      heading: {
+        path: 'skills.heading',
+        fallback: 'Skills',
+        className: 'text-base font-bold text-[#3B82F6]',
+      },
+      content: {
+        type: 'html',
+        path: 'skills.description',
+        fallback:
+          'Business Analysis, UX Research, User Testing and Validation, Customer Journey Mapping, Information Architecture...',
+        className: 'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap',
       },
     },
   ],

@@ -94,17 +94,27 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
     const container = dummyContentRef.current;
     if (!container) return;
 
+    const bannerEl = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
+    const calculatedBannerHeight = bannerEl ? bannerEl.offsetHeight : 0;
+
     const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
     const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
 
     const leftPages: React.ReactNode[][] = [];
     const rightPages: React.ReactNode[][] = [];
 
-    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
+    function paginateOneColumn(
+      columnEl: HTMLElement,
+      columnName: 'left' | 'right',
+      outPages: React.ReactNode[][],
+      bHeight: number,
+    ) {
       let currentColumnPage: React.ReactNode[] = [];
       outPages.push(currentColumnPage);
 
-      const pageMax = COLUMN_MAX[columnName];
+      const pageMaxFull = COLUMN_MAX[columnName];
+      const pageMaxFirst = pageMaxFull - bHeight;
+
       let pageTop: number | null = null;
 
       function walk(el: HTMLElement) {
@@ -129,7 +139,10 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           const childBottom = rect.bottom;
           const usedHeight = childBottom - pageTop;
 
-          if (usedHeight > pageMax && currentColumnPage.length > 0) {
+          const isFirstPage = outPages.length === 1;
+          const currentMax = isFirstPage ? pageMaxFirst : pageMaxFull;
+
+          if (usedHeight > currentMax && currentColumnPage.length > 0) {
             currentColumnPage = [];
             outPages.push(currentColumnPage);
             pageTop = rect.top;
@@ -142,8 +155,8 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
       walk(columnEl);
     }
 
-    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
-    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
+    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages, calculatedBannerHeight);
+    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages, calculatedBannerHeight);
 
     const totalPages = Math.max(leftPages.length, rightPages.length);
     const merged: [React.ReactNode[], React.ReactNode[]][] = [];
@@ -155,7 +168,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
     setPages(merged);
   }, [template, data, currentSection, hasSuggestions]);
 
-  const { columnConfig, leftItems, rightItems } = useMemo(() => {
+  const { columnConfig, leftItems, rightItems, bannerItems } = useMemo(() => {
     if (!template.columns) {
       return {
         columnConfig: {
@@ -170,16 +183,19 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
 
         leftItems: template.sections,
         rightItems: [],
+        bannerItems: [],
       };
     }
 
-    const leftItems = template.sections.filter((s: any) => s.column === 'left');
-    const rightItems = template.sections.filter((s: any) => s.column === 'right');
+    const bannerItems = template.sections.filter((s: any) => s.type === 'banner');
+    const leftItems = template.sections.filter((s: any) => s.column === 'left' && s.type !== 'banner');
+    const rightItems = template.sections.filter((s: any) => s.column === 'right' && s.type !== 'banner');
 
     return {
       columnConfig: template.columns,
       leftItems,
       rightItems,
+      bannerItems,
     };
   }, [template]);
 
@@ -209,13 +225,20 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           visibility: 'hidden',
         }}
       >
+        {bannerItems.length > 0 && (
+          <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
+            {bannerItems.map((s: any, i: number) => (
+              <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+            ))}
+          </div>
+        )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
-          {leftItems.map((s, i) => (
+          {leftItems.map((s: any, i: number) => (
             <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
-          {rightItems.map((s, i) => (
+          {rightItems.map((s: any, i: number) => (
             <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
           ))}
         </div>
@@ -227,14 +250,34 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
           <div
             key={index}
             className={cn('grid mb-5', page.className, className)}
-            style={{ ...baseStyle, height: '29.7cm', backgroundColor: page.background || 'white' }}
+            style={{
+              ...baseStyle,
+              height: '29.7cm',
+              backgroundColor: page.background || 'white',
+              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
+            }}
           >
-            <div className={cn('flex flex-col', leftColumnClassName)}>
+            {index === 0 && bannerItems.length > 0 && (
+              <div
+                style={{
+                  gridColumn: '1 / -1',
+                  gridRow: '1',
+                  marginLeft: `-${PAGE_PADDING}px`,
+                  marginRight: `-${PAGE_PADDING}px`,
+                  marginTop: `-${PAGE_PADDING}px`,
+                }}
+              >
+                {bannerItems.map((s: any, i: number) => (
+                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+                ))}
+              </div>
+            )}
+            <div className={cn('flex flex-col', leftColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
               {leftColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
               ))}
             </div>
-            <div className={cn('flex flex-col', rightColumnClassName)}>
+            <div className={cn('flex flex-col', rightColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
               {rightColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
               ))}
@@ -275,6 +318,7 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
   }
 
   if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
   if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);

@@ -3,7 +3,7 @@
 import { type ResumeDataKey } from '@entities/resume';
 import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
 import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
-import { useFormDataStore } from '@widgets/form-page-builder/models/store';
+import { useFormDataStore, TRANSITION_TEXTS } from '@widgets/form-page-builder/models/store';
 import { useParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Loader2, AlertCircle } from 'lucide-react';
@@ -19,6 +19,18 @@ export default function FormPage() {
   const analyzerError = useFormDataStore((state) => state.analyzerError);
   const retryAnalyzer = useFormDataStore((state) => state.retryAnalyzer);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
+  const currentTextIndex = useFormDataStore((state) => state.currentTextIndex);
+  
+  const currentTransitionText = useMemo(() => {
+    return TRANSITION_TEXTS[Math.min(currentTextIndex, TRANSITION_TEXTS.length - 1)];
+  }, [currentTextIndex]);
+
+  // Calculate step counter (0/3 format)
+  const stepCounter = useMemo(() => {
+    const totalSteps = TRANSITION_TEXTS.length - 1; // Total transitions (3)
+    const currentStep = Math.min(currentTextIndex, totalSteps);
+    return `${currentStep}/${totalSteps}`;
+  }, [currentTextIndex]);
 
   const navs = useMemo(
     () => [
@@ -85,19 +97,22 @@ export default function FormPage() {
                 </div>
               ) : (
                 <div
-                  className="w-full max-w-2xl px-12 py-8 rounded-2xl shadow-xl"
+                  className="w-full max-w-4xl px-12 py-12 rounded-2xl shadow-xl"
                   style={{
                     background: 'linear-gradient(90deg, #3B82F6 0%, #1F2937 100%)',
                   }}
                 >
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-white text-2xl font-semibold">Analyzing and Rewriting</h3>
-                      <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-6 items-center">
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex-1"></div>
+                      <h3 className="text-white text-2xl font-semibold transition-all duration-500 text-center flex-1">
+                        {currentTransitionText.title}
+                      </h3>
+                      <div className="flex items-center gap-2 flex-1 justify-end">
                         {analyzerProgress >= 95 && analyzerProgress < 100 && (
                           <Loader2 className="h-5 w-5 animate-spin text-white" />
                         )}
-                        <span className="text-white text-lg font-medium">{Math.round(analyzerProgress)}%</span>
+                        <span className="text-white text-lg font-medium">{stepCounter}</span>
                       </div>
                     </div>
 
@@ -108,7 +123,9 @@ export default function FormPage() {
                       />
                     </div>
 
-                    <p className="text-white/90 text-base">Polishing words so recruiters can't look away</p>
+                    <p className="text-white/90 text-base transition-all duration-500 text-center">
+                      {currentTransitionText.subtitle}
+                    </p>
                   </div>
                 </div>
               )}

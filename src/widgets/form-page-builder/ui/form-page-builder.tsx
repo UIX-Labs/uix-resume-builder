@@ -399,36 +399,38 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      // Use actual data as-is without merging with mockData
-    const mergedData: Record<string, any> = {};
+      // Determine if this is create flow (all sections empty) or edit flow (has data)
+      const sectionKeys = Object.keys(data).filter((key) => key !== 'templateId' && key !== 'updatedAt');
+      const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
 
-      // Get all section keys from actual data
-      const sectionKeys = Object.keys(data);
+      if (allSectionsEmpty) {
+      
+        const mergedData: Record<string, any> = {};
 
-      for (const sectionKey of sectionKeys) {
-        // Handle templateId and updatedAt separately - always use actual values
-        if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
-          mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-          continue;
+        for (const sectionKey of Object.keys(data)) {
+          if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+            continue;
+          }
+
+          const actualSection = data[sectionKey as keyof typeof data];
+          const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+          if (mockSection) {
+            const syncedSection = syncSectionIds(actualSection, mockSection);
+            mergedData[sectionKey] = syncedSection;
+          } else {
+            mergedData[sectionKey] = actualSection;
+          }
         }
 
-        const actualSection = data[sectionKey as keyof typeof data];
-        const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-        // Check if this specific section is empty
-        const isEmpty = isSectionEmpty(actualSection);
-
-        if (isEmpty && mockSection) {
-          // Section is empty, use mock data with synced IDs from actual data
-          const syncedSection = syncSectionIds(actualSection, mockSection);
-          mergedData[sectionKey] = syncedSection;
-        }
+        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+      } else {
+        useFormDataStore.setState({ formData: data as Omit<ResumeData, 'templateId'> });
       }
-    } else {
-      // If no data exists (creating from scratch), use mockData
-      useFormDataStore.setState({ formData: mockData as any });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
+
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -774,7 +776,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-               template={annaFieldTemplate}
+               template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}

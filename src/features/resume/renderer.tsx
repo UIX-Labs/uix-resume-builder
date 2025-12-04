@@ -635,21 +635,7 @@ const items = rawItems.map((item: any) => {
 
 if (!Array.isArray(items) || items.length === 0) return null;
 
-  const validItems = items.filter((item: any) => {
-    if (!item || typeof item !== 'object') return false;
 
-    return Object.values(item).some((value: any) => {
-      if (!value) return false;
-      if (typeof value === 'string' && value.trim() === '') return false;
-      if (typeof value === 'object') {
-        const nestedValues = Object.values(value);
-        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
-      }
-      return true;
-    });
-  });
-
-  if (validItems.length === 0) return null;
 
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
@@ -702,7 +688,7 @@ if (!Array.isArray(items) || items.length === 0) return null;
 
         {/* Right column: Content */}
         <div data-item="content" className={cn('flex-1', section.containerClassName)}>
-          {validItems.map((item: any, idx: number) => (
+          {items.map((item: any, idx: number) => (
             <div key={idx} className={section.itemTemplate.className}>
               {section.itemTemplate.rows
                 ? renderItemWithRows(section.itemTemplate, item)
@@ -735,7 +721,7 @@ if (!Array.isArray(items) || items.length === 0) return null;
       {!section.break && <RenderListSectionHeading />}
 
       <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
-        {validItems.map((item: any, idx: number) => {
+        {items.map((item: any, idx: number) => {
           const itemId = item.itemId || item.id;
 
           return (

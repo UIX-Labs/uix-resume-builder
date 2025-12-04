@@ -61,9 +61,9 @@ export function NewProgressBar({
     return { title: '', subtitle: '' };
   }, [transitionTexts, currentTextIndex, showSpinner, spinnerTitle, spinnerSubtitle]);
 
-  // Calculate step counter (0/3 format) - only show if not spinner mode
+  // Calculate step counter (0/3 format) - only show if not spinner mode and more than one transition text
   const stepCounter = useMemo(() => {
-    if (showSpinner || transitionTexts.length === 0) {
+    if (showSpinner || transitionTexts.length === 0 || transitionTexts.length === 1) {
       return null;
     }
     const totalSteps = transitionTexts.length - 1;

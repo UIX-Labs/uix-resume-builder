@@ -96,15 +96,15 @@ export function TemplateForm({
 
       case 'tel': {
         return (
-          // <PhoneInput
-          //   value={typeof data === 'string' ? data : data?.value || ''}
-          //   placeholder={section.placeholder}
-          //   onChange={(phoneValue) => {
-          //     onChange(phoneValue || '');
-          //   }}
-          //   className="w-full"
-          // />
-          <></>
+          <PhoneInput
+            value={typeof data === 'string' ? data : data?.value || ''}
+            placeholder={section.placeholder}
+            onChange={(phoneValue) => {
+              onChange(phoneValue || '');
+            }}
+            className="w-full"
+          />
+       
         );
       }
 

@@ -37,6 +37,7 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import annaFieldTemplate from '@features/resume/templates/template3';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -57,7 +58,6 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
  */
 function isSectionEmpty(section: any): boolean {
   if (!section || typeof section !== 'object') {
-    console.log('  → Section is null/undefined or not an object');
     return true;
   }
 
@@ -65,19 +65,19 @@ function isSectionEmpty(section: any): boolean {
     const items = section.items;
 
     if (items.length === 0) {
-      console.log('  → Section has no items');
+  
       return true;
     }
 
-    console.log(`  → Section has ${items.length} item(s), checking for non-empty fields...`);
+  
 
     // Check if items contain any non-empty values
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      console.log(`  → Checking item ${i}:`, item);
+
 
       if (typeof item === 'string' && item.trim() !== '') {
-        console.log(`  → Item ${i} is a non-empty string`);
+      
         return false;
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
@@ -121,8 +121,6 @@ function isSectionEmpty(section: any): boolean {
         }
       }
     }
-
-    console.log('  → All items are empty');
   }
 
   return true;
@@ -175,6 +173,7 @@ export function FormPageBuilder() {
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -205,9 +204,9 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMM-YYYY')
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName ? fullName.replace(/\s+/g, '-') : 'Resume';
+  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
@@ -401,43 +400,38 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      console.log('Data loaded for resume:', data);
+      // Determine if this is create flow (all sections empty) or edit flow (has data)
+      const sectionKeys = Object.keys(data).filter((key) => key !== 'templateId' && key !== 'updatedAt');
+      const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
 
-      // Check each section individually and merge with mock data as needed
-      const mergedData: Record<string, any> = {};
+      if (allSectionsEmpty) {
+      
+        const mergedData: Record<string, any> = {};
 
-      // Get all section keys from actual data
-      const sectionKeys = Object.keys(data);
+        for (const sectionKey of Object.keys(data)) {
+          if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+            continue;
+          }
 
-      for (const sectionKey of sectionKeys) {
-        // Handle templateId and updatedAt separately - always use actual values
-        if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
-          mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-          continue;
+          const actualSection = data[sectionKey as keyof typeof data];
+          const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+          if (mockSection) {
+            const syncedSection = syncSectionIds(actualSection, mockSection);
+            mergedData[sectionKey] = syncedSection;
+          } else {
+            mergedData[sectionKey] = actualSection;
+          }
         }
 
-        const actualSection = data[sectionKey as keyof typeof data];
-        const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-        // Check if this specific section is empty
-        const isEmpty = isSectionEmpty(actualSection);
-
-        if (isEmpty && mockSection) {
-          // Section is empty, use mock data with synced IDs from actual data
-          const syncedSection = syncSectionIds(actualSection, mockSection);
-          mergedData[sectionKey] = syncedSection;
-          console.log(`Section "${sectionKey}": empty, using mock data with synced IDs`);
-        } else {
-          // Section has data, use actual data
-          mergedData[sectionKey] = actualSection;
-          console.log(`Section "${sectionKey}": has data, using actual data`);
-        }
+        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+      } else {
+        useFormDataStore.setState({ formData: data as Omit<ResumeData, 'templateId'> });
       }
-
-      console.log('Final merged data:', mergedData);
-      useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
+
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -505,9 +499,15 @@ export function FormPageBuilder() {
     }
 
     try {
+      setIsGeneratingThumbnail(true);
+
+      // Wait for React to re-render without highlights/sparkles
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
 
       if (!thumbnailDataUrl) {
+        setIsGeneratingThumbnail(false);
         return;
       }
 
@@ -517,6 +517,8 @@ export function FormPageBuilder() {
       refetchResumes();
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
+    } finally {
+      setIsGeneratingThumbnail(false);
     }
   }
 
@@ -554,11 +556,11 @@ export function FormPageBuilder() {
 
       if (!hasModifications) {
         toast.info(`No changes to save in ${currentStep}`);
-        console.log(`Manual save: No changes detected in ${currentStep}, skipping API call`);
+       
         return;
       }
 
-      console.log(`Manual save: Changes detected in ${currentStep}, saving...`);
+    
       thumbnailGenerated.current = false;
 
       await save({
@@ -605,15 +607,9 @@ export function FormPageBuilder() {
         const hasModifications = isSectionModified(step, currentFormData, mockData);
 
         if (!hasModifications) {
-          console.log(`Auto-save: No changes detected in ${step}, skipping API call`);
+      
           return;
         }
-
-        console.log(currentFormData)
-
-        console.log(mockData)
-
-        console.log(`Auto-save: Changes detected in ${step}, saving...`);
         await save({
           type: step,
           data: data,
@@ -631,16 +627,16 @@ export function FormPageBuilder() {
     [save],
   );
 
-  const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    // Get fresh formData from store instead of using stale closure
-    const currentFormData = useFormDataStore.getState().formData;
-    const sectionData = currentFormData[sectionId as keyof typeof currentFormData];
-    if (sectionData) {
-
-      debouncedHideSave(sectionId, { ...sectionData, isHidden });
-      toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
-    }
-  }, [debouncedHideSave]);
+  const handleToggleHideSection = useCallback(
+    (sectionId: string, isHidden: boolean) => {
+      const sectionData = formData[sectionId as keyof typeof formData];
+      if (sectionData) {
+        debouncedHideSave(sectionId, { ...sectionData, isHidden });
+        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+      }
+    },
+    [formData, debouncedHideSave],
+  );
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
@@ -821,6 +817,8 @@ export function FormPageBuilder() {
     }
   };
 
+
+
   return (
     <>
       <div
@@ -834,10 +832,11 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate?.json ?? aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {})}
-                currentSection={isGeneratingPDF ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+               template={selectedTemplate?.json ?? aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
+                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">

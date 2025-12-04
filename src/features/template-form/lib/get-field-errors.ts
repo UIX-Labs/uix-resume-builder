@@ -1,9 +1,5 @@
-import type { SuggestedUpdates, SuggestionType } from '@entities/resume';
+import type { SuggestedUpdates } from '@entities/resume';
 
-/**
- * Get error counts for a specific field in a specific item
- * Excludes suggestions where old === new (no actual change)
- */
 export function getFieldErrors(
   suggestedUpdates: SuggestedUpdates | undefined,
   itemId: string,
@@ -36,7 +32,6 @@ export function getFieldErrors(
     return true;
   });
 
-  // Calculate counts from valid suggestions only
   const counts = {
     spellingCount: 0,
     sentenceCount: 0,
@@ -56,21 +51,90 @@ export function getFieldErrors(
   return counts;
 }
 
-/**
- * Get all suggestions for a specific field in a specific item
- */
 export function getFieldSuggestions(
   suggestedUpdates: SuggestedUpdates | undefined,
-  itemId: string,
+  itemId: string | undefined,
   fieldName: string,
 ) {
-  if (!suggestedUpdates) return [];
 
-  const itemUpdate = suggestedUpdates.find((update) => update.itemId === itemId);
+  if (!suggestedUpdates || !itemId) return [];
 
+const itemUpdate = suggestedUpdates.find((update) => update.itemId === itemId);
   if (!itemUpdate || !itemUpdate.fields[fieldName]) {
+
+    return [];
+  }
+  const fieldData = itemUpdate.fields[fieldName];
+
+
+  // Get actual suggestions and filter out invalid ones (where old === new)
+  const suggestions = fieldData.suggestedUpdates || [];
+  const validSuggestions = suggestions.filter((suggestion) => {
+    // If there's an old value and it equals the new value, it's invalid
+    if (suggestion.old && suggestion.old === suggestion.new) {
+      return false;
+    }
+    return true;
+  });
+
+  
+  return validSuggestions;
+
+  
+}
+
+/**
+ * Get suggestions for a specific value in an array field
+ * Handles both plain strings and objects with name property
+ */
+export function getArrayValueSuggestions(
+  suggestedUpdates: SuggestedUpdates | undefined,
+  itemId: string | undefined,
+  fieldName: string,
+  value: string,
+): any[] {
+ 
+
+  if (!suggestedUpdates || !itemId) {
     return [];
   }
 
-  return itemUpdate.fields[fieldName].suggestedUpdates || [];
+  const suggestions = getFieldSuggestions(suggestedUpdates, itemId, fieldName);
+
+  // Normalize the value for comparison (trim whitespace)
+  const normalizedValue = value?.trim();
+
+  // For array fields, filter suggestions that match this value
+  const matched = suggestions.filter((suggestion) => {
+    if (suggestion.type === 'new_summary') return true;
+
+    // Compare trimmed values for better matching
+    const suggestionOld = suggestion.old?.trim();
+    const isMatch = suggestionOld === normalizedValue;
+
+    if (!isMatch && suggestion.old) {
+    return
+    }
+
+    return isMatch;
+  });
+  return matched;
+}
+
+/**
+ * Get background color class based on suggestion types
+ */
+export function getSuggestionBackgroundColor(suggestions: any[]): string {
+  if (suggestions.length === 0) return '';
+
+  // Check if any suggestion is a spelling error
+  const hasSpellingError = suggestions.some(s => s.type === 'spelling_error');
+  if (hasSpellingError) return 'bg-[#FBDDBB]';
+
+  // Check if any suggestion is a sentence refinement (weak sentence)
+  const hasSentenceRefinement = suggestions.some(s => s.type === 'sentence_refinement');
+  if (hasSentenceRefinement) return 'bg-[#F8BEC2]';
+
+  // Default to sentence refinement color for other error types
+  return 'bg-[#F8BEC2]';
 }

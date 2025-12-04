@@ -23,16 +23,14 @@ export function Duration({ data, onChange }: DurationProps) {
     if (data?.startDate) {
       return dayjs(data.startDate).toDate();
     }
-
-    return dayjs().toDate();
+    return undefined;
   });
 
   const [endDate, setEndDate] = useState<Date | undefined>(() => {
     if (data?.endDate) {
       return dayjs(data.endDate).toDate();
     }
-
-    return dayjs().toDate();
+    return undefined;
   });
 
   useEffect(() => {
@@ -81,7 +79,6 @@ export function Duration({ data, onChange }: DurationProps) {
 
           <PopoverContent className="w-auto p-0" align="start">
             <MonthYearPicker
-              defaultMonth={startDate}
               selected={startDate}
               onSelect={(date) => setStartDate(date)}
             />
@@ -121,7 +118,6 @@ export function Duration({ data, onChange }: DurationProps) {
 
             <MonthYearPicker
               selected={isOngoing ? undefined : endDate}
-              defaultMonth={endDate}
               onSelect={(date) => {
                 if (!date) return;
                 setIsOngoing(false);

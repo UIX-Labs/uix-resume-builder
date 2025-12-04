@@ -1,31 +1,73 @@
 
-export const getCleanDataForRenderer = (data: Record<string, unknown>): Record<string, unknown> => {
+/**
+ * Removes background-color styles from HTML span tags
+ * Used when generating PDFs to remove error highlighting
+ */
+const removeBackgroundColors = (value: string): string => {
+  // Remove background-color from inline styles in span tags
+  let cleanValue = value.replace(
+    /<span([^>]*)\sstyle\s*=\s*"([^"]*)"/gi,
+    (_match, beforeStyle, styleContent) => {
+      // Remove background-color property from style attribute
+      const cleanedStyle = styleContent
+        .split(';')
+        .filter((rule: string) => !rule.trim().toLowerCase().startsWith('background-color'))
+        .join(';');
+
+      // If style is empty after removing background-color, remove the style attribute
+      if (!cleanedStyle.trim()) {
+        return `<span${beforeStyle}`;
+      }
+
+      return `<span${beforeStyle} style="${cleanedStyle}"`;
+    }
+  );
+
+  return cleanValue;
+};
+
+export const getCleanDataForRenderer = (
+  data: Record<string, unknown>,
+  isGeneratingPdf?: boolean
+): Record<string, unknown> => {
   const cleanData: Record<string, unknown> = {};
 
   Object.keys(data).forEach((key) => {
     const section = data[key];
 
-    // Skip suggestedUpdates and other metadata
-    if (key === 'suggestedUpdates' || key === 'templateId') {
+    // Skip templateId metadata
+    if (key === 'templateId') {
       return;
     }
 
     if (section && typeof section === 'object') {
       const sectionData = { ...(section as Record<string, unknown>) };
 
+      // Keep suggestedUpdates only when not generating PDF
+      if (isGeneratingPdf && sectionData.suggestedUpdates) {
+        delete sectionData.suggestedUpdates;
+      }
 
       if (Array.isArray(sectionData.items)) {
         sectionData.items = sectionData.items.map((item) => {
           if (typeof item === 'object' && item !== null) {
             const cleanItem = { ...item } as Record<string, unknown>;
 
-            // Remove underline spans from all string fields
-            Object.keys(cleanItem).forEach((fieldKey) => {
-              const fieldValue = cleanItem[fieldKey];
-              if (typeof fieldValue === 'string') {
-                cleanItem[fieldKey] = removeErrorHighlighting(fieldValue);
-              }
-            });
+            // Remove background colors from all string fields when generating PDF
+            if (isGeneratingPdf) {
+              Object.keys(cleanItem).forEach((itemKey) => {
+                const value = cleanItem[itemKey];
+                if (typeof value === 'string') {
+                  cleanItem[itemKey] = removeBackgroundColors(value);
+                } else if (Array.isArray(value)) {
+                  // Handle array fields (like achievements, interests)
+                  cleanItem[itemKey] = value.map((v) =>
+                    typeof v === 'string' ? removeBackgroundColors(v) : v
+                  );
+                }
+              });
+            }
+
             return cleanItem;
           }
           return item;
@@ -198,5 +240,3 @@ export const syncMockDataWithActualIds = (
 
   return synced;
 };
-
-

@@ -14,13 +14,14 @@ import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 import { useRouter, useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
 import mockData from '../../../../mock-data.json';
-import { CheckIcon, Sparkles } from 'lucide-react';
+import { CheckIcon, X, Sparkles } from 'lucide-react';
 import { Button } from '@shared/ui/button';
 import { getResumeEmptyData } from '@entities/resume';
 import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
 import { toast } from 'sonner';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import { hasPendingSuggestions } from '@features/resume/renderer';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -31,82 +32,15 @@ const icons = {
   achievements: Achievements,
 };
 
-function sectionHasPendingSuggestions(sectionData: unknown): boolean {
-  if (
-    !sectionData ||
-    typeof sectionData !== 'object' ||
-    !('suggestedUpdates' in sectionData) ||
-    !Array.isArray((sectionData as { suggestedUpdates?: unknown[] }).suggestedUpdates)
-  ) {
-    return false;
-  }
-
-  const { suggestedUpdates } = sectionData as {
-    suggestedUpdates: Array<{
-      itemId?: string;
-      fields?: Record<string, { suggestedUpdates?: Array<{ old?: string; new: string }> }>;
-    }>;
-    items?: unknown;
-  };
-
-  const items = Array.isArray((sectionData as { items?: unknown }).items)
-    ? ((sectionData as { items?: unknown }).items as Array<Record<string, unknown>>)
-    : null;
-
-  return suggestedUpdates.some((suggestion) => {
-    if (!suggestion || typeof suggestion !== 'object') {
-      return false;
-    }
-
-    if (items && suggestion.itemId) {
-      const itemExists = items.some((item) => {
-        if (!item || typeof item !== 'object') return false;
-        const candidate = item as Record<string, unknown>;
-        return candidate.id === suggestion.itemId || candidate.itemId === suggestion.itemId;
-      });
-
-      if (!itemExists) {
-        return false;
-      }
-    }
-
-    if (!suggestion.fields || typeof suggestion.fields !== 'object') {
-      return false;
-    }
-
-    return Object.values(suggestion.fields).some((field) => {
-      if (!field || typeof field !== 'object') {
-        return false;
-      }
-
-      const { suggestedUpdates } = field as {
-        suggestedUpdates?: Array<{ old?: string; new: string }>;
-      };
-
-      if (!Array.isArray(suggestedUpdates)) {
-        return false;
-      }
-
-      // Check if there are any valid suggestions (where old !== new)
-      const hasValidSuggestions = suggestedUpdates.some((s) => {
-        // If there's an old value and it equals the new value, it's invalid
-        if (s.old && s.old === s.new) {
-          return false;
-        }
-        return true;
-      });
-
-      return hasValidSuggestions;
-    });
-  });
-}
-
+// Check if a section has content (excluding suggestedUpdates field)
 function sectionHasContent(sectionData: unknown): boolean {
   if (!sectionData || typeof sectionData !== 'object') {
     return false;
   }
 
-  const entries = Object.entries(sectionData as Record<string, unknown>).filter(([key]) => key !== 'suggestedUpdates');
+  const entries = Object.entries(sectionData as Record<string, unknown>).filter(
+    ([key]) => key !== 'suggestedUpdates' && key !== 'isHidden'
+  );
 
   return entries.some(([, value]) => {
     if (value === null || value === undefined) return false;
@@ -297,14 +231,39 @@ export function Sidebar() {
         {navs.map((nav) => {
           const Icon = icons[nav.name as keyof typeof icons] ?? ProfessionalSummary;
           const sectionData = resumeData?.[nav.name as keyof typeof resumeData];
-          const hasSuggestions = sectionHasPendingSuggestions(sectionData);
-          const hasSuggestedUpdatesField =
-            !!sectionData &&
-            typeof sectionData === 'object' &&
-            'suggestedUpdates' in sectionData &&
-            Array.isArray((sectionData as { suggestedUpdates?: unknown[] }).suggestedUpdates);
 
-          const showResolved = hasSuggestedUpdatesField && sectionHasContent(sectionData) && !hasSuggestions;
+          // Get suggestedUpdates array from section data
+          const suggestedUpdatesArray =
+            sectionData &&
+            typeof sectionData === 'object' &&
+            'suggestedUpdates' in sectionData
+              ? (sectionData as { suggestedUpdates?: any[] }).suggestedUpdates
+              : undefined;
+
+          // Check if section has pending suggestions
+          const hasValidPendingSuggestions = hasPendingSuggestions(suggestedUpdatesArray);
+
+          // Check if section has content
+          const hasContent = sectionHasContent(sectionData);
+
+          // Check if Builder Intelligence has been run (any section has suggestedUpdates)
+          const hasBuilderIntelligenceRun = resumeData && Object.values(resumeData).some((section) => {
+            return (
+              section &&
+              typeof section === 'object' &&
+              'suggestedUpdates' in section &&
+              Array.isArray((section as { suggestedUpdates?: unknown[] }).suggestedUpdates) &&
+              (section as { suggestedUpdates?: unknown[] }).suggestedUpdates!.length > 0
+            );
+          });
+
+          // Determine which icon to show (only if Builder Intelligence has been run):
+          // 1. Yellow "!" if there are pending suggestions
+          // 2. Green checkmark if section has content (whether suggestions applied or no suggestions exist)
+          // 3. Red X if section has no content
+          const showPendingIcon = hasBuilderIntelligenceRun && hasValidPendingSuggestions;
+          const showCompletedIcon = hasBuilderIntelligenceRun && !hasValidPendingSuggestions && hasContent;
+          const showEmptyIcon = hasBuilderIntelligenceRun && !hasValidPendingSuggestions && !hasContent;
 
           return (
             <button
@@ -330,14 +289,25 @@ export function Sidebar() {
               >
                 {nav.label}
               </p>
-              {hasSuggestions && (
+
+              {/* Yellow "!" for pending suggestions */}
+              {showPendingIcon && (
                 <span className="ml-2 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C7BC21] text-[10px] font-semibold text-white">
                   !
                 </span>
               )}
-              {!hasSuggestions && showResolved && (
+
+              {/* Green checkmark for completed sections (with content) */}
+              {showCompletedIcon && (
                 <span className="ml-2 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#02A44F] text-[10px] font-semibold text-white">
                   <CheckIcon className="size-3" />
+                </span>
+              )}
+
+              {/* Red X for empty sections (no content) */}
+              {showEmptyIcon && (
+                <span className="ml-2 inline-flex h-[18px] w-[18px] items-center justify-center rounded-full bg-[#E53E3E] text-[10px] font-semibold text-white">
+                  <X className="size-3" />
                 </span>
               )}
             </button>

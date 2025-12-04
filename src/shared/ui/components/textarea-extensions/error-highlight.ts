@@ -23,23 +23,54 @@ export const ErrorHighlight = Mark.create<ErrorHighlightOptions>({
   },
 
   addAttributes() {
-    return {
-      color: {
-        default: null,
-        parseHTML: (element) => element.getAttribute('data-error-color'),
-        renderHTML: (attributes) => {
-          if (!attributes.color) {
-            return {};
-          }
+  return {
+    color: {
+      default: null,
+      parseHTML: (element) => element.getAttribute('data-error-color'),
+      renderHTML: (attributes) => {
+        if (!attributes.color) {
+          return {};
+        }
 
-          return {
-            'data-error-color': attributes.color,
-            style: `text-decoration: underline; text-decoration-color: ${attributes.color}; text-decoration-thickness: 2px; text-underline-offset: 2px;`,
-          };
-        },
+        let backgroundColor = '';
+
+        if (
+          attributes.color === 'yellow' ||
+          attributes.color === '#FFD700' ||
+          attributes.color.includes('spelling')
+        ) {
+          backgroundColor = 'rgba(255, 215, 0, 0.3)'; // Yellow for spelling errors
+        } else if (
+          attributes.color === 'rgba(255, 0, 0, 0.15)' ||
+          attributes.color === 'rgba(255, 0, 0, 0.15)' ||
+          attributes.color.includes('sentence')
+        ) {
+          backgroundColor = 'rgba(255, 0, 0, 0.15)'; // Light red for weak sentences
+        } else {
+          backgroundColor = attributes.color;
+        }
+
+        return {
+          'data-error-type': attributes.color.includes('spelling')
+            ? 'spelling'
+            : 'sentence',
+          style: `background-color: ${backgroundColor}; padding: 2px 0; border-radius: 2px;`,
+        };
       },
-    };
-  },
+    },
+
+    priority: {
+      default: 0,
+      parseHTML: (element) => element.getAttribute('data-priority'),
+      renderHTML: (attributes) => {
+        return {
+          'data-priority': attributes.priority || 0,
+        };
+      },
+    },
+  };
+},
+
 
   parseHTML() {
     return [

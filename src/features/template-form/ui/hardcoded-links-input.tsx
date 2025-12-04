@@ -64,6 +64,20 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
 
   const handleDeleteLink = (key: string) => {
     setLinksData((prev) => {
+      const visibleLinksCount = Object.keys(prev).length;
+      
+      // If there's only one link box left, clear the text instead of deleting
+      if (visibleLinksCount === 1) {
+        return {
+          ...prev,
+          [key]: {
+            ...prev[key],
+            link: '',
+          },
+        };
+      }
+      
+      // Otherwise, delete the link box
       const newData = { ...prev };
       delete newData[key];
       return newData;

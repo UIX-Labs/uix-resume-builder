@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import PhoneInputWithCountry from 'react-phone-number-input';
-import { parsePhoneNumber, isValidPhoneNumber } from 'react-phone-number-input';
 import { cn } from '@shared/lib/cn';
 import 'react-phone-number-input/style.css';
 
@@ -16,7 +15,6 @@ interface PhoneInputProps {
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
   ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }) => {
-
     return (
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry

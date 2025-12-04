@@ -637,6 +637,7 @@ if (!Array.isArray(items) || items.length === 0) return null;
 
 
 
+
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;

@@ -30,7 +30,9 @@ const MONTHS = [
 
 export function MonthYearPicker({ selected, onSelect, className, disabled, defaultMonth }: MonthYearPickerProps) {
   const [currentYear, setCurrentYear] = React.useState(() => {
-    return (selected || defaultMonth || new Date()).getFullYear();
+    if (selected) return selected.getFullYear();
+    if (defaultMonth) return defaultMonth.getFullYear();
+    return new Date().getFullYear();
   });
 
   const selectedMonth = selected ? selected.getMonth() : undefined;

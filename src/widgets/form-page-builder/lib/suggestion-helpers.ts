@@ -105,9 +105,7 @@ export const applySuggestionsToArrayField = (
   suggestions.forEach((suggestion) => {
     if (suggestion.old) {
       // Find the index of the string that matches the old value
-      const matchIndex = updatedArray.findIndex(
-        (item) => item.trim() === suggestion.old?.trim()
-      );
+      const matchIndex = updatedArray.findIndex((item) => item.trim() === suggestion.old?.trim());
 
       if (matchIndex !== -1) {
         updatedArray[matchIndex] = suggestion.new;
@@ -116,7 +114,6 @@ export const applySuggestionsToArrayField = (
       }
     }
   });
-
 
   return updatedArray;
 };
@@ -133,68 +130,55 @@ export const applySuggestionsToFieldValue = (
 
   suggestions.forEach((suggestion, _index) => {
     if (suggestion.old) {
-
-
       const normalizedCurrent = normalizeText(updatedValue);
       const normalizedOld = normalizeText(suggestion.old);
-
 
       const isHtmlField = /<[^>]+>/.test(updatedValue);
 
       if (normalizedCurrent === normalizedOld) {
-        // Full field match - replace entire field
         if (isHtmlField) {
           updatedValue = convertTextToHtml(suggestion.new);
-    
         } else {
           updatedValue = suggestion.new.replace(/\n/g, ' ');
-          
         }
       } else if (normalizedCurrent.includes(normalizedOld)) {
         // Partial match - find and replace only that sentence within the field
-      
 
         if (isHtmlField) {
-      
+          // Try direct replacement first (works if no HTML tags interrupt the text)
 
           if (updatedValue.includes(suggestion.old)) {
             // Direct match found - replace as-is
             updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
-            
           } else {
             // Direct match failed - HTML tags likely interrupt the text
             // Strip HTML tags and decode entities, do replacement on plain text, then re-wrap in HTML
             const plainText = decodeHtmlEntities(updatedValue.replace(/<[^>]*>/g, ''));
-         
 
             if (plainText.includes(suggestion.old)) {
               const updatedPlainText = plainText.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
               // Re-wrap in HTML paragraph tags
               updatedValue = convertTextToHtml(updatedPlainText);
-    
             } else {
               // Last resort: use normalized comparison to find and replace
-              
+
               const normalizedPlainText = normalizeText(plainText);
               const normalizedOldText = normalizeText(suggestion.old);
 
               if (normalizedPlainText.includes(normalizedOldText)) {
-               
                 // Replace the entire plain text with the new suggestion
                 // Since we can't reliably find the exact position, replace the whole field
                 updatedValue = convertTextToHtml(suggestion.new);
-               
               } else {
                 console.log('✗ Could not find old text even with normalization');
               }
             }
           }
         } else {
-         
+          // For plain text, direct replacement
 
           if (updatedValue.includes(suggestion.old)) {
             updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
-
           } else {
             console.log('✗ Could not find old text in plain text content');
           }
@@ -203,12 +187,12 @@ export const applySuggestionsToFieldValue = (
         console.log('✗ No match found - skipping this suggestion');
       }
     } else {
-      
+      // For new summaries (no old value), always treat as HTML field
+
       const newTextHtml = convertTextToHtml(suggestion.new);
       updatedValue = updatedValue + newTextHtml;
     }
   });
-
 
   return updatedValue;
 };

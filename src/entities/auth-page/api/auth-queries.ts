@@ -142,8 +142,9 @@ export const useRegisterUser = () => {
 
   return useMutation({
     mutationFn: registerUserAPI,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+    onSuccess: () => {
+      // Invalidate userProfile query to refetch user data
+      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
   });
 };
@@ -153,8 +154,9 @@ export const useLoginUser = () => {
 
   return useMutation({
     mutationFn: loginUserAPI,
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['user'] });
+    onSuccess: () => {
+      // Invalidate userProfile query to refetch user data
+      queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
   });
 };
@@ -165,14 +167,30 @@ export const useLogoutUser = () => {
 
   return useMutation({
     mutationFn: logoutUserAPI,
-    onSuccess: (data) => {
+    onSuccess: () => {
+      // Clear localStorage
       localStorage.removeItem('linkedin_oauth_state');
+
+      // Remove userProfile from cache specifically
+      queryClient.removeQueries({ queryKey: ['userProfile'] });
+
+      // Clear all other queries
       queryClient.clear();
+
+      // Redirect to auth page
       router.push('/auth');
     },
-    onError: (error) => {
+    onError: () => {
+      // Clear localStorage
       localStorage.removeItem('linkedin_oauth_state');
+
+      // Remove userProfile from cache specifically
+      queryClient.removeQueries({ queryKey: ['userProfile'] });
+
+      // Clear all other queries
       queryClient.clear();
+
+      // Redirect to auth page even on error
       router.push('/auth');
     },
   });

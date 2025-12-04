@@ -1,15 +1,21 @@
 /** biome-ignore-all lint/security/noDangerouslySetInnerHtml: <explanation> */
-import dayjs from 'dayjs';
-import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import * as LucideIcons from 'lucide-react';
-import React from 'react';
+import dayjs from "dayjs";
+import { cn } from "@shared/lib/cn";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import * as LucideIcons from "lucide-react";
+import React from "react";
+import type { SuggestedUpdates } from "@entities/resume";
+import {
+  getFieldSuggestions,
+  getArrayValueSuggestions,
+  getSuggestionBackgroundColor,
+} from "@features/template-form/lib/get-field-errors";
 
 // Utility to resolve data paths
 function resolvePath(data: any, path: string, fallback?: any): any {
   if (!path) return fallback;
 
-  const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  const keys = path.replace(/\[(\d+)\]/g, ".$1").split(".");
   let result = data;
 
   for (const key of keys) {
@@ -21,18 +27,33 @@ function resolvePath(data: any, path: string, fallback?: any): any {
 }
 
 // Utility to flatten and filter items (handles both nested and flat structures)
-function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
-  const flattenedItems: any[] = [];
+function flattenAndFilterItemsWithContext(
+  items: any[],
+  itemPath?: string,
+  parentId?: string
+): Array<{ value: any; itemId?: string }> {
+  const flattenedItems: Array<{ value: any; itemId?: string }> = [];
 
   items.forEach((item: any) => {
+    // Use item's own ID, or fall back to parentId if item is a primitive (string)
+    const itemId = item.itemId || item.id || parentId;
     const value = itemPath ? resolvePath(item, itemPath) : item;
 
     if (Array.isArray(value)) {
-      // Nested structure: item has an items array
-      flattenedItems.push(...value.filter((v: any) => v && (typeof v !== 'string' || v.trim() !== '')));
-    } else if (value && (typeof value !== 'string' || value.trim() !== '')) {
-      // Flat structure: item is a direct value
-      flattenedItems.push(value);
+      const filtered = value.filter(
+        (v: any) => v && (typeof v !== "string" || v.trim() !== "")
+      );
+
+      flattenedItems.push(
+        ...filtered.map((v: any) => {
+          return {
+            value: v,
+            itemId,
+          };
+        })
+      );
+    } else if (value && (typeof value !== "string" || value.trim() !== "")) {
+      flattenedItems.push({ value, itemId });
     }
   });
 
@@ -40,8 +61,8 @@ function flattenAndFilterItems(items: any[], itemPath?: string): any[] {
 }
 
 // Utility to check if a section has pending suggestions
-// Returns true if there are any suggestions with count > 0
-function hasPendingSuggestions(suggestedUpdates: any[] | undefined): boolean {
+// Returns true if there are any valid suggestions (where old !== new)
+export function hasPendingSuggestions(suggestedUpdates: any[] | undefined): boolean {
   if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
     return false;
   }
@@ -51,34 +72,55 @@ function hasPendingSuggestions(suggestedUpdates: any[] | undefined): boolean {
 
     // Check each field in the update
     return Object.values(update.fields).some((fieldData: any) => {
-      if (!fieldData.fieldCounts) return false;
+      if (!fieldData.suggestedUpdates || !Array.isArray(fieldData.suggestedUpdates)) {
+        return false;
+      }
 
-      // Check if any count is greater than 0
-      return Object.values(fieldData.fieldCounts).some((count: any) => count > 0);
+      // Check if there are any valid suggestions (where old !== new)
+      return fieldData.suggestedUpdates.some((suggestion: any) => {
+        // If old equals new, it's not a valid suggestion
+        if (suggestion.old && suggestion.old === suggestion.new) {
+          return false;
+        }
+        return true;
+      });
     });
   });
 }
 
 // Utility to check if a specific item has pending suggestions
-// Returns true if the item with given itemId has any suggestions with count > 0
-function hasItemPendingSuggestions(suggestedUpdates: any[] | undefined, itemId: string): boolean {
+// Returns true if the item with given itemId has any valid suggestions (where old !== new)
+function hasItemPendingSuggestions(
+  suggestedUpdates: any[] | undefined,
+  itemId: string
+): boolean {
   if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
     return false;
   }
 
   // Find the update for this specific item
-  const itemUpdate = suggestedUpdates.find((update: any) => update.itemId === itemId);
+  const itemUpdate = suggestedUpdates.find(
+    (update: any) => update.itemId === itemId
+  );
 
   if (!itemUpdate || !itemUpdate.fields) {
     return false;
   }
 
-  // Check if any field in this item has suggestions with count > 0
+  // Check if any field in this item has valid suggestions
   return Object.values(itemUpdate.fields).some((fieldData: any) => {
-    if (!fieldData.fieldCounts) return false;
+    if (!fieldData.suggestedUpdates || !Array.isArray(fieldData.suggestedUpdates)) {
+      return false;
+    }
 
-    // Check if any count is greater than 0
-    return Object.values(fieldData.fieldCounts).some((count: any) => count > 0);
+    // Check if there are any valid suggestions (where old !== new)
+    return fieldData.suggestedUpdates.some((suggestion: any) => {
+      // If old equals new, it's not a valid suggestion
+      if (suggestion.old && suggestion.old === suggestion.new) {
+        return false;
+      }
+      return true;
+    });
   });
 }
 
@@ -88,6 +130,7 @@ type RenderProps = {
   className?: string;
   currentSection?: string;
   hasSuggestions?: boolean;
+   isThumbnail?: boolean;
 };
 
 // Reusable sparkle indicator badge for highlighted sections
@@ -95,30 +138,51 @@ function SparkleIndicator() {
   return (
     <div
       style={{
-        position: 'absolute',
-        top: '-25px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: '#02A44F',
-        borderRadius: '50%',
-        width: '40px',
-        height: '40px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 2px 8px rgba(2, 164, 79, 0.3)',
+        position: "absolute",
+        top: "-25px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        backgroundColor: "#02A44F",
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 2px 8px rgba(2, 164, 79, 0.3)",
         zIndex: 10,
       }}
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="white" />
-        <path d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z" fill="white" />
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"
+          fill="white"
+        />
+        <path
+          d="M18 4L18.75 6.25L21 7L18.75 7.75L18 10L17.25 7.75L15 7L17.25 6.25L18 4Z"
+          fill="white"
+        />
       </svg>
     </div>
   );
 }
-export function ResumeRenderer({ template, data, className, currentSection, hasSuggestions = false }: RenderProps) {
-  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
+export function ResumeRenderer({
+  template,
+  data,
+  className,
+  currentSection,
+  hasSuggestions = false,
+  isThumbnail = false,
+}: RenderProps) {
+  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>(
+    []
+  );
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
@@ -165,10 +229,10 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
         if (!children.length) return;
 
         for (const child of children) {
-          child.style.display = '';
+          child.style.display = "";
 
           const rect = child.getBoundingClientRect();
-          const canBreak = child.getAttribute('data-canbreak') === 'true';
+          const canBreak = child.getAttribute("data-canbreak") === "true";
 
           if (pageTop == null) {
             pageTop = rect.top;
@@ -191,7 +255,7 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
             pageTop = rect.top;
           }
 
-          currentColumnPage.push(child.cloneNode(true) as React.ReactNode);
+          currentColumnPage.push(child.cloneNode(true) as unknown as React.ReactNode);
         }
       }
 
@@ -209,18 +273,18 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
     }
 
     setPages(merged);
-  }, [template, data, currentSection, hasSuggestions]);
+  }, [template, data, currentSection, hasSuggestions,isThumbnail]);
 
   const { columnConfig, leftItems, rightItems, bannerItems } = useMemo(() => {
     if (!template.columns) {
       return {
         columnConfig: {
-          spacing: '0px',
+          spacing: "0px",
           left: {
-            width: '100%',
+            width: "100%",
           },
           right: {
-            width: '0%',
+            width: "0%",
           },
         },
 
@@ -245,12 +309,12 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
   const leftWidth = columnConfig.left.width;
   const rightWidth = columnConfig.right.width;
   const spacing = columnConfig.spacing;
-  const leftColumnClassName = columnConfig.left.className || '';
-  const rightColumnClassName = columnConfig.right.className || '';
+  const leftColumnClassName = columnConfig.left.className || "";
+  const rightColumnClassName = columnConfig.right.className || "";
   const fontFamily = page.fontFamily || undefined;
 
   const baseStyle = {
-    width: '21cm',
+    width: "21cm",
     padding: PAGE_PADDING,
     gridTemplateColumns: `calc(${leftWidth}) calc(${rightWidth})`,
     gap: spacing,
@@ -264,8 +328,8 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
         className="mb-5 grid"
         style={{
           ...baseStyle,
-          position: 'absolute',
-          visibility: 'hidden',
+          position: "absolute",
+          visibility: "hidden",
         }}
       >
         {bannerItems.length > 0 && (
@@ -317,12 +381,20 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
             )}
             <div className={cn('flex flex-col', leftColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
+                <div
+                  key={i}
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  className={node.containerClassName}
+                />
               ))}
             </div>
             <div className={cn('flex flex-col', rightColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
+                <div
+                  key={i}
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  className={node.containerClassName}
+                />
               ))}
             </div>
           </div>
@@ -333,26 +405,26 @@ export function ResumeRenderer({ template, data, className, currentSection, hasS
 }
 
 // Main section renderer
-function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean): React.ReactNode {
+function renderSection(section: any, data: any, currentSection?: string, hasSuggestions?: boolean, isThumbnail?: boolean): React.ReactNode {
   // Check if section is hidden
   // Get section ID from different possible sources
   let sectionId = section.id;
 
   // If no direct ID, try to extract from listPath (e.g., "experience.items" -> "experience")
   if (!sectionId && section.listPath) {
-    sectionId = section.listPath.split('.')[0];
+    sectionId = section.listPath.split(".")[0];
   }
 
   // If still no ID, try to extract from heading path (e.g., "experience.heading" -> "experience")
   if (!sectionId && section.heading?.path) {
-    sectionId = section.heading.path.split('.')[0];
+    sectionId = section.heading.path.split(".")[0];
   }
 
   // Map template section IDs to data keys
   // The header and summary sections both store data under 'personalDetails' key
   let dataKey = sectionId;
-  if (sectionId === 'header' || sectionId === 'summary') {
-    dataKey = 'personalDetails';
+  if (sectionId === "header" || sectionId === "summary") {
+    dataKey = "personalDetails";
   }
 
   // Check if this section is marked as hidden
@@ -369,16 +441,23 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
     return renderInlineListSection(section, data, currentSection, hasSuggestions);
   if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
   return null;
+
+
 }
 
 // Render divider (horizontal line under headings)
 function renderDivider(divider: any): React.ReactNode {
   if (!divider) return null;
 
-  if (divider.variant === 'line') {
-    return <div data-item="divider" className={cn('w-full bg-zinc-200 h-px', divider.className)} />;
+  if (divider.variant === "line") {
+    return (
+      <div
+        data-item="divider"
+        className={cn("w-full bg-zinc-200 h-px", divider.className)}
+      />
+    );
   }
-  if (divider.variant === 'pipe') {
+  if (divider.variant === "pipe") {
     return (
       <span data-item="divider" className={divider.className}>
         |
@@ -394,27 +473,29 @@ function renderHeaderSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
-  const { fields, className, style, id } = section;
+  const { fields, className, id } = section;
+
+
 
   const hasGenericFields = Object.values(fields).some(
     (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
   );
 
   const sectionId = id || 'header-section';
+
+    const dataKey = 'personalDetails';
+  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
+  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
   const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  // Highlight header when personalDetails is selected
+
   const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
-  // Get section-wise suggested updates from data
-  const dataKey = 'personalDetails';
-  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
-  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
-
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
-  const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isPersonalDetailsActive);
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isPersonalDetailsActive) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -428,7 +509,6 @@ function renderHeaderSection(
       padding: '16px',
       position: 'relative',
     }),
-    ...style,
   };
 
   if (hasGenericFields) {
@@ -440,7 +520,7 @@ function renderHeaderSection(
       >
         {shouldHighlight && <SparkleIndicator />}
         {Object.keys(fields).map((key) => (
-          <React.Fragment key={key}>{renderField(fields[key], data)}</React.Fragment>
+          <React.Fragment key={key}>{renderField(fields[key], data, undefined, undefined, isThumbnail)}</React.Fragment>
         ))}
       </div>
     );
@@ -488,40 +568,68 @@ function renderHeaderSection(
           )}
         </>
       )}
-      {/* Handle inline-group contact structure */}
-      {fields.contact && fields.contact.type === 'inline-group' && <>{renderField(fields.contact, data)}</>}
 
-      {/* Handle legacy contact structure */}
-      {fields.contact && !fields.contact.type && (
+      {fields.contact && fields.contact.type === 'contact-grid' && (
         <div className={fields.contact.className}>
           {fields.contact.items.map((item: any, idx: number) => {
-            const value = resolvePath(data, item.path, item.fallback);
-            if (!value) return null;
-
-            const showSeparator = idx > 0 && fields.contact.separator;
-
-            if (item.type === 'link') {
-              const href = item.href.startsWith('mailto:')
-                ? item.href.replace('{{value}}', value)
-                : resolvePath(data, item.href);
-
+            if (item.type === 'inline-group-with-icon') {
               return (
-                <span key={idx}>
-                  {showSeparator && fields.contact.separator}
-                  <a href={href} className={item.className}>
-                    {value}
-                  </a>
-                </span>
+                <div key={idx} className={item.className}>
+                  {item.items.map((subItem: any, subIdx: number) => (
+                    <React.Fragment key={subIdx}>{renderField(subItem, data, undefined, undefined, isThumbnail)}</React.Fragment>
+                  ))}
+                </div>
               );
             }
-
             return (
-              <span key={idx}>
-                {showSeparator && fields.contact.separator}
-                {value}
-              </span>
+              <div key={idx} className={item.className}>
+                {renderField(item, data, undefined, undefined, isThumbnail)}
+              </div>
             );
           })}
+        </div>
+      )}
+
+      {fields.contact && (
+        <div className={fields.contact.className}>
+          {(() => {
+   
+            const validItems = fields.contact.items
+              .map((item: any, idx: number) => {
+                const value = resolvePath(data, item.path, item.fallback);
+                if (!value) return null;
+                return { item, value, originalIdx: idx };
+              })
+              .filter((entry: any) => entry !== null);
+            return validItems.map((entry: any, arrayIdx: number) => {
+              const { item, value, originalIdx } = entry;
+              const showSeparator = arrayIdx > 0 && fields.contact.separator;
+              if (item.type === 'link') {
+                const href = item.href.startsWith('mailto:')
+                  ? item.href.replace('{{value}}', value)
+                  : resolvePath(data, item.href);
+
+                // Don't use target="_blank" for mailto links
+                const linkProps = item.href.startsWith('mailto:')
+                  ? {}
+                  : { target: '_blank', rel: 'noopener noreferrer' };
+                return (
+                  <span key={originalIdx}>
+                    {showSeparator && fields.contact.separator}
+                    <a href={href} className={item.className} {...linkProps}>
+                      {value}
+                    </a>
+                  </span>
+                );
+              }
+              return (
+                <React.Fragment key={originalIdx}>
+                  {showSeparator && fields.contact.separator}
+                  <span className={item.className}>{value}</span>
+                </React.Fragment>
+              );
+            });
+          })()}
         </div>
       )}
 
@@ -532,28 +640,32 @@ function renderHeaderSection(
   );
 }
 
+
 // List section renderer (education, experience, projects, certifications)
 function renderListSection(
   section: any,
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
-  const items = resolvePath(data, section.listPath, []);
+  const rawItems = resolvePath(data, section.listPath, []);
 
-  // Return null if items is not an array or is empty
-  if (!Array.isArray(items) || items.length === 0) return null;
+const items = rawItems.map((item: any) => {
+  return {
+    ...item,
+  };
+});
 
-  // Filter out items where all values are empty, null, or undefined
+if (!Array.isArray(items) || items.length === 0) return null;
+
   const validItems = items.filter((item: any) => {
     if (!item || typeof item !== 'object') return false;
 
-    // Check if at least one field has a non-empty value
     return Object.values(item).some((value: any) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
-        // For nested objects (like duration), check if they have valid values
         const nestedValues = Object.values(value);
         return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
@@ -561,20 +673,17 @@ function renderListSection(
     });
   });
 
-  // Return null if no valid items after filtering
   if (validItems.length === 0) return null;
+
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
-
-  // Get section-wise suggested updates from data
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
 
-  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
- 
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
 
   function RenderListSectionHeading() {
     return (
@@ -588,7 +697,7 @@ function renderListSection(
     );
   }
 
- const wrapperStyle: React.CSSProperties = {
+  const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
     ...(hasSuggestions && {
       transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
@@ -602,7 +711,7 @@ function renderListSection(
     }),
   };
 
-  // Check if this is a two-column layout (heading on left, content on right)
+
   const isTwoColumnLayout = section.className && section.className.includes('justify-between');
 
   if (isTwoColumnLayout) {
@@ -628,7 +737,15 @@ function renderListSection(
       </div>
     );
   }
+
   const itemWrapperStyle = section.break ? wrapperStyle : {};
+  const containerWrapperStyle = section.break ? {} : wrapperStyle;
+
+  // Get section key from listPath (e.g., "experience.items" -> "experience")
+  const sectionKey = section.listPath?.split('.')[0];
+
+  // Get suggestedUpdates from the data for this section
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
 
   return (
     <div
@@ -636,59 +753,53 @@ function renderListSection(
       data-canbreak={section.break}
       data-section={sectionId}
       className={shouldBlur ? 'blur-[2px] pointer-events-none' : ''}
-      style={{ scrollMarginTop: '20px' }}
+      style={containerWrapperStyle}
     >
+      {shouldHighlight && <SparkleIndicator />}
       {!section.break && <RenderListSectionHeading />}
 
-      <div
-  data-item="content"
-  data-canbreak={section.break}
-  className={section.containerClassName}
->
-  {validItems.map((item: any, idx: number) => {
-    const itemId = item.id || item.itemId || `item-${idx}`;
- 
-    return (
-      <div
-        key={itemId}
-        className={cn(
-          section.break && idx === 0 ? '' : section.itemTemplate.className,
-          section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : ''
-        )}
-        style={itemWrapperStyle}
-      >
-        {/* Sparkle Indicator */}
-        {section.break && idx === 0 && shouldHighlight && (
-          <div style={{ position: 'relative' }}>
-            <SparkleIndicator />
-          </div>
-        )}
+      <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
+        {validItems.map((item: any, idx: number) => {
+          const itemId = item.itemId || item.id;
 
-        {/* First item behaves differently when section.break = true */}
-        {section.break && idx === 0 ? (
-          <>
-            <RenderListSectionHeading />
-            <div className={section.itemTemplate.className}>
-              {section.itemTemplate.rows
-                ? renderItemWithRows(section.itemTemplate, item)
-                : renderItemWithFields(section.itemTemplate, item)}
+          return (
+            <div
+              key={idx}
+              className={cn(
+                section.break && idx === 0 ? '' : section.itemTemplate.className,
+                section.break && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
+              )}
+              style={itemWrapperStyle}
+            >
+              {section.break && idx === 0 && shouldHighlight && (
+                <div style={{ position: 'relative' }}>
+                  <SparkleIndicator />
+                </div>
+              )}
+              {section.break && idx === 0 ? (
+                <>
+                  <RenderListSectionHeading />
+                  <div className={section.itemTemplate.className}>
+                    {section.itemTemplate.rows
+                      ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+                      : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {section.itemTemplate.rows
+                    ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+                    : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)}
+                </>
+              )}
             </div>
-          </>
-        ) : (
-          <>
-            {section.itemTemplate.rows
-              ? renderItemWithRows(section.itemTemplate, item)
-              : renderItemWithFields(section.itemTemplate, item)}
-          </>
-        )}
+          );
+        })}
       </div>
-    );
-  })}
-</div>
-
     </div>
   );
 }
+
 
 // Two-column layout renderer
 function renderTwoColumnLayout(
@@ -696,6 +807,7 @@ function renderTwoColumnLayout(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const { leftColumn, rightColumn, className } = section;
 
@@ -705,7 +817,7 @@ function renderTwoColumnLayout(
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
       )}
@@ -714,7 +826,7 @@ function renderTwoColumnLayout(
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={idx}>{renderSection(subSection, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
           ))}
         </div>
       )}
@@ -722,111 +834,77 @@ function renderTwoColumnLayout(
   );
 }
 
-function renderItemWithRows(template: any, item: any): React.ReactNode {
+
+function renderItemWithRows(
+  template: any,
+  item: any,
+  itemId?: string,
+  suggestedUpdates?: SuggestedUpdates,
+  isThumbnail?: boolean,
+): React.ReactNode {
   return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
       {row.cells.map((cell: any, cellIdx: number) => (
-        <div key={cellIdx} className={cell.className}>
-          {renderField(cell, item)}
+        <div key={cellIdx}>
+          {renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}
         </div>
       ))}
     </div>
   ));
 }
 
-function renderItemWithFields(template: any, item: any): React.ReactNode {
+function renderItemWithFields(
+  template: any,
+  item: any,
+  itemId?: string,
+  suggestedUpdates?: SuggestedUpdates,
+  isThumbnail?: boolean,
+): React.ReactNode {
   return template.fields.map((field: any, idx: number) => (
-    <React.Fragment key={idx}>{renderField(field, item)}</React.Fragment>
+    <div key={idx}>
+      {renderField(field, item, itemId, suggestedUpdates, isThumbnail)}
+    </div>
   ));
 }
 
-function renderField(field: any, data: any): React.ReactNode {
-  // Handle container type
-  if (field.type === 'container') {
-    return (
-      <div className={field.className}>
-        {field.children?.map((child: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(child, data)}</React.Fragment>
-        ))}
-      </div>
-    );
-  }
-
-  // Handle badge type
-  if (field.type === 'badge') {
-    const value = field.pathWithFallback
-      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
-      : resolvePath(data, field.path, field.fallback);
-
-    const href = field.hrefPathWithFallback
-      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
-      : resolvePath(data, field.href);
-
-    if (!value) return null;
-
-    const iconElement = field.icon ? renderField(field.icon, data) : null;
-
-    const content = (
-      <span className={cn('inline-flex items-center gap-1 rounded-full py-1 px-2', field.badgeClassName)}>
-        {iconElement}
-        {value}
-      </span>
-    );
-
-    if (href) {
-      return (
-        <a href={href} className="hover:opacity-80">
-          {content}
-        </a>
-      );
-    }
-
-    return content;
-  }
-
-  // Handle text type with pathWithFallback
-  if (field.type === 'text') {
-    const value = field.pathWithFallback
-      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
-      : resolvePath(data, field.path, field.fallback);
-
-    if (!value) return null;
-    const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
-    return <span className={field.className}>{text}</span>;
-  }
-
-  if (field.type === 'horizontal-group') {
-    return (
-      <div className={cn('flex flex-row items-center', field.className)}>
-        {field.items.map((subField: any, idx: number) => (
-          <React.Fragment key={idx}>
-            {idx > 0 && field.separator && <span>{field.separator}</span>}
-            {renderField(subField, data)}
-          </React.Fragment>
-        ))}
-      </div>
-    );
-  }
+function renderField(field: any, data: any, itemId?: string, suggestedUpdates?: SuggestedUpdates, isThumbnail?: boolean): React.ReactNode {
+  // Get suggestions for this specific field if we have the context
+  const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
+  const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
+  const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
 
   if (field.type === 'inline-group') {
-    // If className contains 'flex-col', use div wrapper to respect vertical layout
-    const isVertical = field.className && field.className.includes('flex-col');
-    const WrapperTag = isVertical ? 'div' : React.Fragment;
-    const wrapperProps = isVertical ? { className: field.className } : {};
+    // Filter out items with no value first
+    const renderedItems = field.items
+      .map((subField: any, idx: number) => ({
+        idx,
+        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+      }))
+      .filter(
+        ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
+      );
 
-    return (
-      <WrapperTag {...wrapperProps}>
-        {field.items.map((subField: any, idx: number) =>
-          isVertical ? (
-            <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
-          ) : (
-            <span key={idx} className={field.className}>
-              {renderField(subField, data)}
-            </span>
-          ),
-        )}
-      </WrapperTag>
+    if (renderedItems.length === 0) return null;
+
+    const hasClassName = !!field.className;
+    const hasSeparator = !!field.separator;
+
+    const content = renderedItems.map(
+      ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+        <React.Fragment key={idx}>
+          {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
+          <span>{element}</span>
+        </React.Fragment>
+      ),
     );
+
+    // Use div wrapper when className is provided
+    if (hasClassName) {
+      return <div className={field.className}>{content}</div>;
+    }
+
+    // No className, use fragment
+    return <>{content}</>;
   }
 
   if (field.type === 'icon') {
@@ -846,7 +924,7 @@ function renderField(field: any, data: any): React.ReactNode {
     return (
       <div className={field.className}>
         {field.items.map((subField: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+          <React.Fragment key={idx}>{renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
         ))}
       </div>
     );
@@ -855,12 +933,12 @@ function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'text') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <p className={field.className}>{value}</p>;
+    return <p className={cn(field.className, errorBgColor)}>{value}</p>;
   }
 
   if (field.type === 'skillLevel') {
     const value = resolvePath(data, field.path, field.fallback);
-
+    if (!value) return null;
 
     const levelMap: Record<string, number> = {
       Beginner: 2,
@@ -888,7 +966,7 @@ function renderField(field: any, data: any): React.ReactNode {
         {field.items.map((subField: any, idx: number) => (
           <span key={idx}>
             {idx > 0 && field.separator}
-            {renderField(subField, data)}
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
           </span>
         ))}
       </>
@@ -934,21 +1012,15 @@ function renderField(field: any, data: any): React.ReactNode {
   if (field.type === 'html') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <div className={field.className} dangerouslySetInnerHTML={{ __html: value }} />;
+    return <div className={cn(field.className, )} dangerouslySetInnerHTML={{ __html: value }} />;
   }
 
   if (field.type === 'link') {
-    const value = field.pathWithFallback
-      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
-      : resolvePath(data, field.path, field.fallback);
-
-    const href = field.hrefPathWithFallback
-      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
-      : resolvePath(data, field.href);
-
+    const value = resolvePath(data, field.path, field.fallback);
+    const href = resolvePath(data, field.href);
     if (!value || !href) return null;
     return (
-      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
+      <a href={href} className={cn(field.className, errorBgColor)} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );
@@ -958,7 +1030,7 @@ function renderField(field: any, data: any): React.ReactNode {
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
-  return <span className={field.className}>{text}</span>;
+  return <span className={cn(field.className, errorBgColor)}>{text}</span>;
 }
 
 // Content section renderer (summary)
@@ -967,11 +1039,11 @@ function renderContentSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
 
-  // Check for empty values including empty strings
-  if (!value || (typeof value === 'string' && value.trim() === '')) return null;
+
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -980,14 +1052,13 @@ function renderContentSection(
   const isSummaryForPersonalDetails =
     currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
 
-  // Get section-wise suggested updates from data
-  // Summary section maps to personalDetails or professionalSummary data
-  const dataKey = sectionId.toLowerCase() === 'summary' ? 'professionalSummary' : sectionId;
+      const dataKey = sectionId.toLowerCase() === 'summary' ? 'professionalSummary' : sectionId;
   const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails && hasValidSuggestions;
-  const shouldHighlight = hasSuggestions && hasValidSuggestions && (isActive || isSummaryForPersonalDetails);
+
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isSummaryForPersonalDetails) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -1003,14 +1074,11 @@ function renderContentSection(
     }),
   };
 
-  const canBreak = section.break !== false; // Default to true if not specified
-
   return (
     <div
       className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={sectionId}
       style={wrapperStyle}
-      data-canbreak={canBreak}
     >
       {shouldHighlight && <SparkleIndicator />}
       {section.heading && (
@@ -1034,27 +1102,35 @@ function renderInlineListSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
-  // Return null if items is not an array or is empty
-  if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Flatten nested items structure if needed
-  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
 
-  // Return null if no valid items after flattening
-  if (flattenedItems.length === 0) return null;
+  // Extract parent ID if listPath points to nested items (e.g., 'achievements.items[0].items')
+  let parentId: string | undefined;
+  if (section.listPath.includes('[0].items')) {
+    const parentPath = section.listPath.replace(/\[0\]\.items$/, '[0]');
+    const parentObj = resolvePath(data, parentPath);
+    parentId = parentObj?.id || parentObj?.itemId;
+  }
+
+  // Flatten nested items structure with context (itemId) for suggestion checking
+  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
+
+
+
+
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  // Get section-wise suggested updates from data
-  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+    const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
-  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -1069,11 +1145,13 @@ function renderInlineListSection(
       position: 'relative',
     }),
   };
+  const sectionKey = section.listPath?.split('.')[0];
 
-  const canBreak = section.break !== false; // Default to true if not specified
+  const fieldName = section.listPath.includes('[0].')
+    ? section.listPath.split('[0].').pop()
+    : section.itemPath;
 
-  const shouldRenderAsList =
-    section.showBullet || section.containerClassName.includes('grid') || section.containerClassName.includes('flex');
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
 
   return (
     <div
@@ -1091,28 +1169,23 @@ function renderInlineListSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      {shouldRenderAsList ? (
-        <ul
-          data-item="content"
-          data-canbreak={canBreak}
-          className={cn(section.containerClassName, 'list-disc list-inside')}
-        >
-          {flattenedItems.map((value: any, idx: number) => (
-            <li key={idx} className={section.itemClassName}>
-              {value}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div data-item="content" data-canbreak={canBreak}>
-          {flattenedItems.map((value: any, idx: number) => (
+      <div data-item="content" data-break={section.break}>
+        {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
+          // Get suggestions for this specific value
+          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, value);
+          const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
+
+
+          return (
             <span key={idx}>
-              <span className={section.itemClassName}>{value}</span>
-              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              <span className={cn(section.itemClassName, errorBgColor)}>{value}</span>
+              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
+                <span>{section.itemSeparator}</span>
+              )}
             </span>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -1123,17 +1196,23 @@ function renderBadgeSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
-  // Return null if items is not an array or is empty
-  if (!Array.isArray(items) || items.length === 0) return null;
 
-  // Flatten nested items structure if needed
-  const flattenedItems = flattenAndFilterItems(items, section.itemPath);
+  // Extract parent ID if listPath points to nested items (e.g., 'achievements.items[0].items')
+  let parentId: string | undefined;
+  if (section.listPath.includes('[0].items')) {
+    const parentPath = section.listPath.replace(/\[0\]\.items$/, '[0]');
+    const parentObj = resolvePath(data, parentPath);
+    parentId = parentObj?.id || parentObj?.itemId;
+  }
 
-  // Return null if no valid items after flattening
-  if (flattenedItems.length === 0) return null;
+  // Flatten nested items structure with context (itemId) for suggestion checking
+  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
+
+
 
   // Icon component mapping
   const getIconComponent = (iconName?: string) => {
@@ -1143,18 +1222,18 @@ function renderBadgeSection(
     const Icon = LucideIcons[iconName];
     return Icon || null;
   };
+   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
 
   const IconComponent = section.icon ? getIconComponent(section.icon) : null;
 
-  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'badge-section';
-  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
-
-  // Get section-wise suggested updates from data
-  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+    const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = hasSuggestions && currentSection && !isActive && hasValidSuggestions;
-  const shouldHighlight = hasSuggestions && hasValidSuggestions && isActive;
+
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -1170,39 +1249,16 @@ function renderBadgeSection(
     }),
   };
 
-  // Check if this is a two-column layout (heading on left, content on right)
-  const isTwoColumnLayout = section.className && section.className.includes('justify-between');
+  const sectionKey = section.listPath?.split('.')[0];
 
-  if (isTwoColumnLayout) {
-    return (
-      <div data-item="section" className={cn(section.className)}>
-        {/* Left column: Heading */}
-        <div className={cn('flex-shrink-0', section.heading.className)}>
-          {section.heading && (
-            <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
-          )}
-        </div>
+  // Extract the actual field name from listPath
+  // For 'achievements.items[0].items', fieldName should be 'items'
+  // For other cases, use section.itemPath
+  const fieldName = section.listPath.includes('[0].')
+    ? section.listPath.split('[0].').pop()
+    : section.itemPath;
 
-        {/* Right column: Badges */}
-        <div className={cn('flex gap-1 flex-wrap flex-1', section.containerClassName)}>
-          {items.map((item: any, idx: number) => {
-            const value = section.itemPath ? resolvePath(item, section.itemPath) : item;
-
-            if (!value) {
-              return null;
-            }
-
-            return (
-              <span key={idx}>
-                <span className={section.badgeClassName}>{value}</span>
-                {idx < items.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
+  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
 
   return (
     <div
@@ -1221,15 +1277,18 @@ function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)} data-canbreak={section.break}>
-        {flattenedItems.map((value: any, idx: number) => {
+      <div className={cn('flex gap-1 flex-wrap mt-2', section.containerClassName)}>
+        {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
+          // Get suggestions for this specific value
+          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, value);
+          const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
           const displayValue = `${section.itemPrefix || ''}${value}${section.itemSuffix || ''}`;
 
           if (IconComponent) {
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={section.badgeClassName}>{displayValue}</span>
+                <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
               </div>
             );
           }
@@ -1237,8 +1296,8 @@ function renderBadgeSection(
           // Default rendering without icon
           return (
             <React.Fragment key={idx}>
-              <span className={section.badgeClassName}>{displayValue}</span>
-              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+              <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
+              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
             </React.Fragment>
           );
         })}
@@ -1248,7 +1307,7 @@ function renderBadgeSection(
 }
 
 // Thumbnail generation
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
 
 export type ThumbnailOptions = {
   width?: number;
@@ -1257,8 +1316,11 @@ export type ThumbnailOptions = {
   backgroundColor?: string;
 };
 
-export async function generateThumbnail(element: HTMLElement, options: ThumbnailOptions = {}): Promise<string | null> {
-  const { backgroundColor = 'white' } = options;
+export async function generateThumbnail(
+  element: HTMLElement,
+  options: ThumbnailOptions = {}
+): Promise<string | null> {
+  const { backgroundColor = "white" } = options;
 
   try {
     const canvasPromise = html2canvas(element, {
@@ -1273,9 +1335,9 @@ export async function generateThumbnail(element: HTMLElement, options: Thumbnail
 
     const canvas = await canvasPromise;
 
-    return canvas.toDataURL('image/png', 1);
+    return canvas.toDataURL("image/png", 1);
   } catch (error) {
-    console.error('Failed to generate thumbnail:', error);
+    console.error("Failed to generate thumbnail:", error);
     return null;
   }
 }

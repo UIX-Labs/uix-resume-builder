@@ -190,7 +190,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
       const colorMap = {
         spelling_error: '#D97706',
-        sentence_refinement: '#DC2626',
+        sentence_refinement: '#F8BEC2',
         new_summary: '#10B981',
       };
 
@@ -241,10 +241,10 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       const normalizedValue = normalizeContent(value);
       // Strip error highlight spans from HTML to prevent marks from being recreated
       // The marks will be reapplied by the errorSuggestions effect
-      const cleanValue = stripErrorHighlightSpans(normalizedValue);
+     const valueToSet = errorSuggestions && errorSuggestions.length > 0?  stripErrorHighlightSpans(normalizedValue): normalizedValue;
       const currentContent = editor.getHTML();
-      if (currentContent !== cleanValue) {
-        editor.commands.setContent(cleanValue, { emitUpdate: false });
+   if (currentContent !== valueToSet) {
+          editor.commands.setContent(valueToSet, { emitUpdate: false });
         // Reapply error highlights after content is set (with small delay to ensure content is ready)
         if (errorSuggestions && errorSuggestions.length > 0) {
           setTimeout(() => {

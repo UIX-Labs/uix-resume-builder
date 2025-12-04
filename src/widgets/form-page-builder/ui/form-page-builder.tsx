@@ -65,19 +65,14 @@ function isSectionEmpty(section: any): boolean {
     const items = section.items;
 
     if (items.length === 0) {
-  
       return true;
     }
-
-  
 
     // Check if items contain any non-empty values
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
 
-
       if (typeof item === 'string' && item.trim() !== '') {
-      
         return false;
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
@@ -95,7 +90,7 @@ function isSectionEmpty(section: any): boolean {
           }
 
           if (typeof value === 'object' && value !== null) {
-            const hasNonEmptyNested = Object.values(value).some(v => typeof v === 'string' && v.trim() !== '');
+            const hasNonEmptyNested = Object.values(value).some((v) => typeof v === 'string' && v.trim() !== '');
             if (hasNonEmptyNested) {
               console.log(`    → Found non-empty nested object field "${key}":`, value);
             }
@@ -103,7 +98,7 @@ function isSectionEmpty(section: any): boolean {
           }
 
           if (Array.isArray(value)) {
-            const hasNonEmptyArray = value.some(v => typeof v === 'string' && v.trim() !== '');
+            const hasNonEmptyArray = value.some((v) => typeof v === 'string' && v.trim() !== '');
             if (hasNonEmptyArray) {
               console.log(`    → Found non-empty array field "${key}":`, value);
             }
@@ -376,7 +371,6 @@ export function FormPageBuilder() {
 
       // Fetch empty data for defaults
       const emptyData = await getResumeEmptyData();
-      
 
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData = { ...analyzedData };
@@ -405,7 +399,6 @@ export function FormPageBuilder() {
       const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
 
       if (allSectionsEmpty) {
-      
         const mergedData: Record<string, any> = {};
 
         for (const sectionKey of Object.keys(data)) {
@@ -541,7 +534,6 @@ export function FormPageBuilder() {
     // Trigger auto-save after 2 seconds of inactivity
     debouncedAutoSave(currentStep, formData[currentStep]);
 
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData, currentStep]);
 
@@ -556,11 +548,10 @@ export function FormPageBuilder() {
 
       if (!hasModifications) {
         toast.info(`No changes to save in ${currentStep}`);
-       
+
         return;
       }
 
-    
       thumbnailGenerated.current = false;
 
       await save({
@@ -607,7 +598,6 @@ export function FormPageBuilder() {
         const hasModifications = isSectionModified(step, currentFormData, mockData);
 
         if (!hasModifications) {
-      
           return;
         }
         await save({
@@ -816,8 +806,6 @@ export function FormPageBuilder() {
       toast.error('Failed to apply suggestions');
     }
   };
-
-
 
   return (
     <>

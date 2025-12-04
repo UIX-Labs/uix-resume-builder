@@ -45,7 +45,7 @@ const laurenChenTemplate = {
           className: 'text-sm font-normal text-white uppercase tracking-wide mt-2',
         },
         contact: {
-          type: 'inline-group',
+          type: 'contact-grid',
           className: 'flex flex-col mt-6',
           separator: '',
           items: [
@@ -67,109 +67,65 @@ const laurenChenTemplate = {
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2 mt-3',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Phone', size: 14, className: 'text-white mt-0.5' },
                     {
-                      type: 'icon',
-                      name: 'Phone',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].phone',
-                        fallback: '(123) 456-7890',
-                      },
+                      path: 'personalDetails.items[0].phone',
+                      fallback: '(123) 456-7890',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Mail', size: 14, className: 'text-white mt-0.5' },
                     {
-                      type: 'icon',
-                      name: 'Mail',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].email',
-                        fallback: 'lauren.chen@mail.com',
-                      },
+                      path: 'personalDetails.items[0].email',
+                      fallback: 'lauren.chen@mail.com',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'MapPin', size: 14, className: 'text-white mt-0.5' },
                     {
-                      type: 'icon',
-                      name: 'MapPin',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].address',
-                        fallback: '47 W 13th St., New York, NY 10011',
-                      },
+                      path: 'personalDetails.items[0].address',
+                      fallback: '47 W 13th St., New York, NY 10011',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
-                    {
-                      type: 'icon',
-                      name: 'Linkedin',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Linkedin', size: 14, className: 'text-white mt-0.5' },
                     {
                       type: 'link',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].links.linkedin.title',
-                        fallback: 'linkedin.com/in/lauren-chen',
-                      },
-                      hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.linkedin.link',
-                        fallback: 'https://linkedin.com/in/lauren-chen',
-                      },
+                      path: 'personalDetails.items[0].links.linkedin.title',
+                      href: 'personalDetails.items[0].links.linkedin.link',
+                      fallback: 'linkedin.com/in/lauren-chen',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
-                    {
-                      type: 'icon',
-                      name: 'Github',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Github', size: 14, className: 'text-white mt-0.5' },
                     {
                       type: 'link',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].links.github.title',
-                        fallback: 'github.com/lauren-chen',
-                      },
-                      hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.github.link',
-                        fallback: 'https://github.com/lauren-chen',
-                      },
+                      path: 'personalDetails.items[0].links.github.title',
+                      href: 'personalDetails.items[0].links.github.link',
+                      fallback: 'github.com/lauren-chen',
                       className: 'text-xs text-white font-normal',
                     },
                   ],

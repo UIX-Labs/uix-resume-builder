@@ -213,7 +213,7 @@ export function ResumeRenderer({
           const currentHeight = testContainer.getBoundingClientRect().height;
 
           // Check if we need a new page
-          if (currentHeight + totalHeight + 20 > currentMax && currentColumnPage.length > 0) {
+          if (currentHeight + totalHeight + 25 > pageMax && currentColumnPage.length > 0) {
             // Adding 20px to account for margin and padding for safer side and not to exceed the page height
             // Start new page
             currentColumnPage = [];

@@ -8,6 +8,22 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
 import { useCallback, useMemo, useState } from 'react';
+import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
+
+const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
+{
+  title: 'Pika Upload',
+  subtitle: 'Uploading your resume for curating magic',
+},
+{
+  title: 'Pika Extract',
+  subtitle: 'Extracting information from your resume',
+},
+{
+  title: 'Pika Morph',
+  subtitle: 'Organising your data to PikaResume format',
+}
+];
 
 export default function ResumeCreationCard() {
   const router = useRouter();
@@ -61,8 +77,10 @@ export default function ResumeCreationCard() {
   };
 
   const handleUploadSuccess = (data: any) => {
-    setShowScanningOverlay(false);
-    router.push(`/resume/${data.resumeId}`);
+    setTimeout(() => {
+      setShowScanningOverlay(false);
+      router.push(`/resume/${data.resumeId}`);
+    }, 300);
   };
 
   const handleUploadError = (error: any) => {
@@ -149,49 +167,49 @@ export default function ResumeCreationCard() {
     return <BuilderIntelligenceModal {...builderIntelligenceModalProps} />;
   }, [builderIntelligenceModalProps, shouldRenderBuilderIntelligenceModal]);
 
-  const shouldShowScanningOverlay = showScanningOverlay;
-
-  const scanningOverlay = useMemo(() => {
-    if (!shouldShowScanningOverlay) {
-      return null;
-    }
-
-    const overlayConfig = {
-      create: {
-        title: 'Creating Resume...',
-        description: 'Setting up your workspace',
-      },
-      upload: {
-        title: 'Uploading Resume...',
-        description: 'Please wait while we process your file',
-      },
-      tailoredJD: {
-        title: 'Processing...',
-        description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
-      },
-      tailoredResume: {
-        title: 'Processing...',
-        description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
-      },
-    };
-
-    const config = overlayConfig[activeAction as keyof typeof overlayConfig] || overlayConfig.upload;
-
-    return (
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm rounded-[20px]">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-lg font-semibold text-gray-800">{config.title}</p>
-          <p className="text-sm text-gray-600">{config.description}</p>
-        </div>
-      </div>
-    );  
-  }, [shouldShowScanningOverlay, activeAction]);
+  // Show NewProgressBar only for upload action
+  const showProgressBar = showScanningOverlay && activeAction === 'upload';
+  
+  // Show spinner overlay for other actions
+  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload';
+  
+  const overlayConfig = {
+    create: {
+      title: 'Creating Resume...',
+      description: 'Setting up your workspace',
+    },
+    tailoredJD: {
+      title: 'Processing...',
+      description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
+    },
+    tailoredResume: {
+      title: 'Processing...',
+      description: 'Parsing your PDF, mapping it with JD, and preparing suggestions',
+    },
+  };
+  
+  const spinnerConfig = activeAction ? overlayConfig[activeAction as keyof typeof overlayConfig] : null;
 
   return (
     <>
+      <NewProgressBar
+        isVisible={showProgressBar}
+        transitionTexts={UPLOAD_TRANSITION_TEXTS}
+        estimatedTime={30000}
+        targetProgress={95}
+        onComplete={() => {
+          // Progress completed, but wait for actual upload to finish
+        }}
+      />
+      
+      <NewProgressBar
+        isVisible={showSpinnerOverlay}
+        showSpinner={true}
+        spinnerTitle={spinnerConfig?.title}
+        spinnerSubtitle={spinnerConfig?.description}
+      />
+      
       <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
-        {scanningOverlay}
 
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
           <div className="w-full">

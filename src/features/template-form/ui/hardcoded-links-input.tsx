@@ -126,7 +126,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
             className={cn(
               'relative flex items-center w-full border border-[#959DA8] rounded-lg',
               'bg-[#FAFBFC] focus-within:border-[#0059ED]',
-              'transition-colors'
+              'transition-colors overflow-hidden'
             )}
           >
             <Popover>
@@ -168,15 +168,16 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
               value={currentLink}
               onChange={(e) => handleLinkChange(linkType.key, e.target.value)}
               className={cn(
-                'flex-1 h-[42px] px-4 pr-10 bg-transparent border-0 outline-none',
-                'placeholder:text-[#DBCFD4] text-base text-[#0C1118]',
+                'flex-1 h-[42px] px-4 pr-14 bg-transparent border-0 outline-none',
+                'placeholder:text-[#DBCFD4] text-sm text-[#0C1118]',
                 'font-normal placeholder:text-[#CFD4DB]',
+                'min-w-0',
               )}
             />
             <button
               type="button"
               onClick={() => handleDeleteLink(linkType.key)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-100 transition-colors cursor-pointer text-gray-500 hover:text-red-500"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md bg-white z-20 hover:bg-gray-100 transition-colors cursor-pointer text-gray-500 hover:text-red-500"
               aria-label="Delete link"
             >
               <Trash2 className="w-4 h-4" />

@@ -118,7 +118,7 @@ export default function FormPage() {
 
                     <div className="w-full bg-white/30 rounded-full h-2 overflow-hidden">
                       <div
-                        className="h-full bg-white transition-all duration-300 ease-out"
+                        className="h-full bg-white transition-all duration-100 ease-linear"
                         style={{ width: `${analyzerProgress}%` }}
                       />
                     </div>

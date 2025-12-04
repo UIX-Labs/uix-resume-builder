@@ -16,7 +16,6 @@ import { toast } from 'sonner';
 import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
-import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import mockData from '../../../../mock-data.json';
 
@@ -37,6 +36,7 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import Image from 'next/image';
 import annaFieldTemplate from '@features/resume/templates/template3';
 
 // Custom debounce function
@@ -835,18 +835,37 @@ export function FormPageBuilder() {
         </div>
 
         {/* Sticky Save as PDF button */}
-        <div className="sticky bottom-0 left-0 right-0 flex justify-end pr-8 pb-4 pointer-events-none">
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+          {/* Change Template Button */}
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <Button
+              className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
+                        font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
+                        flex items-center gap-1.5"
+            >
+              <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
+                <div className="relative w-4 h-4 bg-white rounded-full flex items-center justify-center">
+                  <Image src="/images/Vector.png" alt="change template" width={16} height={16} />
+                </div>
+              </div>
+              <span>Change Template</span>
+            </Button>
+          </TemplatesDialog>
+          
+          {/* Download PDF Button */}
           <Button
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
+                      flex items-center gap-1.5"
           >
             {isGeneratingPDF ? (
               <>Generating PDF...</>
             ) : (
               <>
-                <Download /> PDF
+                <Download className="w-4 h-4" /> PDF
               </>
             )}
           </Button>
@@ -884,17 +903,10 @@ export function FormPageBuilder() {
           />
         </div>
 
-        {/* Sticky Bottom - Change Template and Next Button */}
+        {/* Sticky Bottom - Next Button */}
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
-          {/* Change Template Button on the left */}
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <div className="cursor-pointer">
-              <TemplateButton />
-            </div>
-          </TemplatesDialog>
-
-          {/* Last Save Time in the center */}
-          <div className="flex-1 flex justify-center">
+          {/* Last Save Time on the left */}
+          <div className="flex-1 flex justify-start">
             {formatLastSaveTime() && (
               <p className="text-sm text-gray-500">
                 {formatLastSaveTime()}

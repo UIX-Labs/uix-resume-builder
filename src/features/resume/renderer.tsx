@@ -335,18 +335,18 @@ export function ResumeRenderer({
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
-              <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+              <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
             ))}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
           ))}
         </div>
       </div>
@@ -432,14 +432,14 @@ function renderSection(section: any, data: any, currentSection?: string, hasSugg
     return null;
   }
 
-  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions);
-  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions);
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'list-section') return renderListSection(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'two-column-layout') return renderTwoColumnLayout(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'content-section') return renderContentSection(section, data, currentSection, hasSuggestions,isThumbnail);
   if (section.type === 'inline-list-section')
-    return renderInlineListSection(section, data, currentSection, hasSuggestions);
-  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions);
+    return renderInlineListSection(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'badge-section') return renderBadgeSection(section, data, currentSection, hasSuggestions,isThumbnail);
   return null;
 
 

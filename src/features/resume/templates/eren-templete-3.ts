@@ -101,7 +101,7 @@ const erenTemplate3 = {
       heading: {
         path: 'summary.heading',
         fallback: 'SUMMARY',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       content: {
         type: 'html',
@@ -123,7 +123,7 @@ const erenTemplate3 = {
       heading: {
         path: 'experience.heading',
         fallback: 'EXPERIENCE',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'experience.items',
       itemTemplate: {
@@ -184,7 +184,7 @@ const erenTemplate3 = {
       heading: {
         path: 'achievements.title',
         fallback: 'KEY ACHIEVEMENTS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'achievements.items[0].items',
       itemClassName: 'text-[11px] text-neutral-800 leading-relaxed',
@@ -202,7 +202,7 @@ const erenTemplate3 = {
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'skills.items',
       itemPath: 'name',
@@ -222,7 +222,7 @@ const erenTemplate3 = {
       heading: {
         path: 'education.heading',
         fallback: 'EDUCATION',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'education.items',
       itemTemplate: {
@@ -269,7 +269,7 @@ const erenTemplate3 = {
       heading: {
         path: 'projects.title',
         fallback: 'PROJECTS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'projects.items',
       itemTemplate: {
@@ -309,7 +309,7 @@ const erenTemplate3 = {
       heading: {
         path: 'certifications.title',
         fallback: 'CERTIFICATIONS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'certifications.items',
       itemTemplate: {
@@ -352,7 +352,7 @@ const erenTemplate3 = {
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-3 border-black pb-2 pt-1',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 pt-1',
       },
       listPath: 'interests.items[0].items',
       itemClassName: 'text-[11px] text-neutral-800 leading-relaxed',

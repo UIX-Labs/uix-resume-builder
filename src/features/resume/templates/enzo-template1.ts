@@ -286,7 +286,7 @@ const enzoTemplate1 = {
             cells: [
               {
                 path: 'grade.value',
-                prefix: 'GPA: ',
+                prefix: 'CGPA - ',
                 className: 'text-xs text-neutral-700',
               },
             ],

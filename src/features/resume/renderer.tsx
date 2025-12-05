@@ -218,7 +218,7 @@ export function ResumeRenderer({
           const currentHeight = testContainer.getBoundingClientRect().height;
 
           // Check if we need a new page
-          if (currentHeight + totalHeight + 25 > pageMax && currentColumnPage.length > 0) {
+          if (currentHeight + totalHeight + 25 > currentMax && currentColumnPage.length > 0) {
             // Adding 20px to account for margin and padding for safer side and not to exceed the page height
             // Start new page
             currentColumnPage = [];
@@ -551,24 +551,17 @@ function renderHeaderSection(
 
       {fields.contact && fields.contact.type === 'contact-grid' && (
         <div className={fields.contact.className}>
-          {fields.contact.items.map((item: any, idx: number) => {
-            if (item.type === 'inline-group-with-icon') {
+          {fields.contact.items
+            .map((item: any, idx: number) => {
+              const rendered = renderField(item, data, undefined, undefined, isThumbnail);
+              if (!rendered) return null;
               return (
                 <div key={idx} className={item.className}>
-                  {item.items.map((subItem: any, subIdx: number) => (
-                    <React.Fragment key={subIdx}>
-                      {renderField(subItem, data, undefined, undefined, isThumbnail)}
-                    </React.Fragment>
-                  ))}
+                  {rendered}
                 </div>
               );
-            }
-            return (
-              <div key={idx} className={item.className}>
-                {renderField(item, data, undefined, undefined, isThumbnail)}
-              </div>
-            );
-          })}
+            })
+            .filter((item: any) => item !== null)}
         </div>
       )}
 
@@ -986,8 +979,16 @@ function renderField(
 
   if (field.type === 'link') {
     const value = resolvePath(data, field.path, field.fallback);
-    const href = resolvePath(data, field.href);
-    if (!value || !href) return null;
+    if (!value) return null;
+
+    let href = field.href;
+    if (href && href.includes('{{value}}')) {
+      href = href.replace('{{value}}', value);
+    } else {
+      href = resolvePath(data, field.href);
+    }
+
+    if (!href) return null;
     return (
       <a href={href} className={field.className}>
         {value}
@@ -1054,6 +1055,7 @@ function renderContentSection(
     <div
       className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={sectionId}
+      data-break={section.break}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}

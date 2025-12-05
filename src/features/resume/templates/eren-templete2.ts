@@ -132,35 +132,31 @@ const laurenChenTemplate = {
                 },
               ],
             },
-
-            // Summary section
-            {
-              type: 'inline-group',
-              className: 'flex flex-col gap-3 mt-6',
-              separator: '',
-              items: [
-                {
-                  type: 'container',
-                  className: 'flex flex-col gap-3',
-                  children: [
-                    {
-                      type: 'text',
-                      fallback: 'SUMMARY',
-                      className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
-                    },
-                    {
-                      type: 'html',
-                      path: 'personalDetails.items[0].description',
-                      fallback:
-                        'Digital Marketing Specialist with 6+ years of experience in online marketing, branding, and business strategy across music, media, and entertainment industries.',
-                      className: 'text-xs text-white font-normal leading-relaxed whitespace-pre-wrap mt-3',
-                    },
-                  ],
-                },
-              ],
-            },
           ],
         },
+      },
+    },
+
+    /**
+     * SUMMARY - Left Column (separate section for page breaking)
+     */
+    {
+      id: 'summary',
+      type: 'content-section',
+      column: 'left',
+      break: true,
+      className: 'flex flex-col gap-3 mt-6',
+      heading: {
+        path: 'professionalSummary.heading',
+        fallback: 'SUMMARY',
+        className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
+      },
+      content: {
+        type: 'html',
+        path: 'personalDetails.items[0].description',
+        fallback:
+          'Digital Marketing Specialist with 6+ years of experience in online marketing, branding, and business strategy across music, media, and entertainment industries.',
+        className: 'text-xs text-white font-normal leading-relaxed whitespace-pre-wrap mt-3',
       },
     },
 
@@ -399,7 +395,8 @@ const laurenChenTemplate = {
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
@@ -420,7 +417,8 @@ const laurenChenTemplate = {
       heading: {
         path: 'achievements.title',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',

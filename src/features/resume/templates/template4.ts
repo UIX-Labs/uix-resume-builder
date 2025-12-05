@@ -12,11 +12,11 @@ const brianWayneTemplate = {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black px-6',
+      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-10',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'px-8 gap-2 pt-4',
+      className: 'px-8 gap-2 pt-12',
     },
   },
 
@@ -50,7 +50,7 @@ const brianWayneTemplate = {
             // Email
             {
               type: 'inline-group-with-icon',
-              className: 'flex items-center gap-3 mt-2',
+              className: 'flex items-center gap-3 mt-4',
               items: [
                 {
                   type: 'icon',
@@ -135,14 +135,14 @@ const brianWayneTemplate = {
       heading: {
         path: 'personDetails.title',
         fallback: 'Profile',
-        className: 'text-lg font-bold text-white border-b border-white pb-1',
+        className: 'text-lg font-bold text-white border-b border-white pb-1 mt-4',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-white text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
       },
     },
 
@@ -265,7 +265,7 @@ const brianWayneTemplate = {
               },
               {
                 path: 'company',
-                className: 'text-base text-[rgb(56,76,65)] italic',
+                className: 'text-base text-[rgb(56,76,65)]',
               },
             ],
           },

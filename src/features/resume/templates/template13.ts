@@ -43,7 +43,6 @@ const template13 = {
           items: [
             { path: 'personalDetails.items[0].phone', fallback: '+123-456-7890' },
             {
-              type: 'link',
               path: 'personalDetails.items[0].email',
               href: 'mailto:{{value}}',
               fallback: 'hello@reallygreatsite.com',
@@ -87,7 +86,7 @@ const template13 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Key Skills',
-        className: 'text-[#2C5F5F] text-2xl font-normal mb-1',
+        className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       listPath: 'skills.items',
       containerClassName: 'grid grid-cols-3 w-full border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
@@ -132,7 +131,7 @@ const template13 = {
             className: 'flex leading-none',
             cells: [
               {
-                path: 'position',
+                path: 'company',
                 className: 'text-sm font-bold text-[#2C5F5F]',
               },
             ],
@@ -141,7 +140,7 @@ const template13 = {
             className: 'flex flex-row justify-between items-start',
             cells: [
               {
-                path: 'company',
+                path: 'position',
                 className: 'text-sm text-[#2C5F5F]',
               },
               {
@@ -259,7 +258,7 @@ const template13 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-[#2C5F5F] text-2xl font-normal mb-1',
+        className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       divider: {
         variant: 'line',
@@ -308,7 +307,11 @@ const template13 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-[#2C5F5F] text-2xl font-normal',
+        className: 'text-[#2C5F5F] text-2xl font-normal border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
+      },
+      divider: {
+        variant: 'line',
+        className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',

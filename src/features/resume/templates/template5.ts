@@ -14,11 +14,11 @@ const template5 = {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[#C9D6EC] text-white p-6',
+      className: 'bg-[#C9D6EC] text-white p-10',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'p-6 gap-3',
+      className: 'p-10 gap-3',
     },
   },
 
@@ -124,7 +124,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: 'Divyam Malik',
-                  className: 'text-base text-[#1a1a1a] font-normal underline',
+                  className: 'text-sm text-[#1a1a1a] font-normal underline',
                 },
               ],
             },
@@ -156,7 +156,7 @@ const template5 = {
         fields: [
           {
             path: 'name',
-            className: 'text-lg font-semibold text-[#1a1a1a] mb-1',
+            className: 'text-sm font-regular text-[#1a1a1a] mb-1',
           },
           {
             path: 'level',
@@ -190,12 +190,12 @@ const template5 = {
           {
             path: 'title',
             fallback: 'Certification Title',
-            className: 'text-base font-bold text-[#1a1a1a]',
+            className: 'text-sm font-bold text-[#1a1a1a]',
           },
           {
             path: 'issuer',
             fallback: 'Issuer',
-            className: 'text-base text-[#1a1a1a] font-normal mb-3',
+            className: 'text-sm text-[#1a1a1a] font-normal mb-3',
           },
         ],
       },
@@ -219,7 +219,7 @@ const template5 = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-lg text-[#1a1a1a] leading-none',
+      badgeClassName: 'text-sm text-[#1a1a1a] leading-none',
       containerClassName: 'flex flex-col gap-2 mt-2',
     },
 
@@ -248,12 +248,12 @@ const template5 = {
             cells: [
               {
                 path: 'company',
-                className: 'text-lg font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-base font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
               },
             ],
           },
@@ -261,7 +261,7 @@ const template5 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-base font-normal text-[rgb(0,0,0)]',
+                className: 'text-sm font-normal text-[rgb(0,0,0)]',
               },
             ],
           },
@@ -271,7 +271,7 @@ const template5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -307,12 +307,12 @@ const template5 = {
                 path: 'title',
                 href: 'link.link',
                 fallback: 'Project Title',
-                className: 'text-base font-bold text-[rgb(0,0,0)] hover:underline',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] hover:underline',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-base font-bold text-[rgb(0,0,0)]',
+                className: 'text-sm font-bold text-[rgb(0,0,0)]',
               },
             ],
           },
@@ -322,7 +322,7 @@ const template5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-base text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -356,7 +356,7 @@ const template5 = {
             cells: [
               {
                 path: 'institution',
-                className: 'text-base font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
               },
               {
                 type: 'inline-group',
@@ -365,11 +365,11 @@ const template5 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-base font-bold text-[rgb(0,0,0)] whitespace-nowrap',
+                    className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
                   },
                   {
                     path: 'degree',
-                    className: 'text-sm font-normal text-[rgb(0,0,0)]',
+                    className: 'text-sm font-normal text-[rgb(0,0,0)] text-right',
                   },
                 ],
               },
@@ -397,7 +397,7 @@ const template5 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-base text-black',
+      badgeClassName: 'text-sm text-black',
       containerClassName: 'flex flex-col gap-2 mt-2',
       itemPrefix: '• ',
     },

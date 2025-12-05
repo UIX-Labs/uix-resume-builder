@@ -31,7 +31,6 @@ const aniketTemplate = {
             { path: 'personalDetails.items[0].address', fallback: 'Address' },
             { path: 'personalDetails.items[0].phone', fallback: 'Phone' },
             {
-              type: 'link',
               path: 'personalDetails.items[0].email',
               href: 'mailto:{{value}}',
               fallback: 'Email',
@@ -138,7 +137,7 @@ const aniketTemplate = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2',
+        className: 'flex flex-col mt-3',
         rows: [
           {
             className: 'flex flex-row justify-between items-center text-sm text-black mb-1',
@@ -173,6 +172,14 @@ const aniketTemplate = {
     },
     // Skills Section
     {
+      listPath: 'skills.items',
+      itemPath: 'name',
+      itemClassName: 'text-xs text-neutral-800',
+      containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
+      itemSeparator: ', ',
+    },
+
+    {
       id: 'skills',
       break: true,
       type: 'inline-list-section',
@@ -180,15 +187,16 @@ const aniketTemplate = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1 mb-1',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px] mt-0.5' },
       },
       listPath: 'skills.items',
       itemPath: 'name',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
+      itemClassName: 'text-sm text-black mt-1',
+      containerClassName: 'text-sm text-black leading-relaxed px-2',
       itemSeparator: ', ',
     },
+
     // Projects Section
     {
       id: 'projects',

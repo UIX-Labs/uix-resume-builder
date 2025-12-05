@@ -12,14 +12,13 @@ const template7 = {
     {
       id: 'header',
       type: 'header',
-      className: 'pt-6 pr-8 flex flex-row gap-6 items-start',
+      className: 'pt-6 pr-8 flex flex-row gap-6 item-start mb-2',
       break: true,
       fields: {
         profilePhoto: {
           type: 'image',
           path: 'personalDetails.items[0].profilePicturePublicUrl',
-          fallback: 'https://via.placeholder.com/120',
-          alt: 'Profile Photo',
+          fallback: '/images/google.svg',
           className: 'w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover',
         },
         nameTitleBlock: {
@@ -36,7 +35,7 @@ const template7 = {
               type: 'text',
               path: 'personalDetails.items[0].jobTitle',
               fallback: 'Mobile Developer',
-              className: 'text-base font-semibold text-gray-700 mt-1',
+              className: 'text-base font-medium text-gray-700 mt-1',
             },
             {
               type: 'html',
@@ -59,7 +58,7 @@ const template7 = {
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-5 items-center justify-start flex-wrap text-sm',
+          className: 'flex flex-row gap-12 items-center justify-start flex-wrap text-sm',
           items: [
             {
               type: 'inline-group-with-icon',
@@ -144,10 +143,10 @@ const template7 = {
         className: 'flex flex-col mt-2 leading-none',
         rows: [
           {
-            // className: 'flex flex-col',
+            className: 'flex flex-col',
             cells: [
-              { path: 'position', className: 'text-base font-semibold text-gray-900' },
-              { path: 'company', className: 'text-sm font-medium text-gray-900' },
+              { path: 'company', className: 'text-base font-medium text-gray-900' },
+              { path: 'position', className: 'text-sm font-medium text-gray-900' },
             ],
           },
           {
@@ -216,7 +215,7 @@ const template7 = {
       listPath: 'interests.items[0].items',
       itemPath: '',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'grid grid-cols-2 gap-x-4 gap-y-1 mt-2',
+      containerClassName: 'text-sm grid grid-cols-2 gap-x-4 gap-y-1 mt-2',
       itemPrefix: '• ',
     },
 
@@ -276,8 +275,8 @@ const template7 = {
           {
             className: 'flex flex-col leading-none',
             cells: [
-              { path: 'degree', className: 'text-base font-bold text-gray-900' },
-              { path: 'institution', className: 'text-base text-gray-900' },
+              { path: 'degree', className: 'text-base font-medium text-gray-900' },
+              { path: 'institution', className: 'text-sm text-gray-900' },
               { path: 'grade.value', className: 'text-sm text-gray-700' },
             ],
           },

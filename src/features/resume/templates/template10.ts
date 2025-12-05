@@ -97,7 +97,7 @@ const template10 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-white uppercase tracking-normal mb-4 leading-[1.21]',
+        className: 'text-base font-bold text-white uppercase tracking-normal mb-3 leading-[1.21]',
       },
       listPath: 'skills.items',
       containerClassName: 'flex flex-col gap-1 list-disc marker:text-sm marker:text-white ml-4 break-words min-w-0',
@@ -180,7 +180,7 @@ const template10 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21]',
+        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mb-3',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',

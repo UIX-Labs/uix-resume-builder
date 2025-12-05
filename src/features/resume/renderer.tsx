@@ -447,6 +447,8 @@ function renderHeaderSection(
       {/* Handle inline-group contact structure */}
       {fields.contact && fields.contact.type === 'inline-group' && <>{renderField(fields.contact, data)}</>}
 
+      {fields.contact && fields.contact.type === 'contact-grid' && <>{renderField(fields.contact, data)}</>}
+
       {/* Handle legacy contact structure */}
       {fields.contact && !fields.contact.type && (
         <div className={fields.contact.className}>
@@ -474,7 +476,7 @@ function renderHeaderSection(
             return (
               <span key={idx}>
                 {showSeparator && fields.contact.separator}
-                {value}
+                <span className={item.className}>{value}</span>
               </span>
             );
           })}
@@ -682,9 +684,7 @@ function renderItemWithRows(template: any, item: any): React.ReactNode {
   return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
       {row.cells.map((cell: any, cellIdx: number) => (
-        <div key={cellIdx} className={cell.className}>
-          {renderField(cell, item)}
-        </div>
+        <React.Fragment key={cellIdx}>{renderField(cell, item)}</React.Fragment>
       ))}
     </div>
   ));
@@ -751,6 +751,22 @@ function renderField(field: any, data: any): React.ReactNode {
     return <span className={field.className}>{text}</span>;
   }
 
+  if (field.type === 'contact-grid') {
+    return (
+      <div className={field.className}>
+        {field.heading && (
+          <div className={field.heading.className}>
+            <p>{resolvePath(data, field.heading.path, field.heading.fallback)}</p>
+            {field.heading.divider && renderDivider(field.heading.divider)}
+          </div>
+        )}
+        {field.items?.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
   if (field.type === 'horizontal-group') {
     return (
       <div className={cn('flex flex-row items-center', field.className)}>
@@ -765,23 +781,22 @@ function renderField(field: any, data: any): React.ReactNode {
   }
 
   if (field.type === 'inline-group') {
-    // If className contains 'flex-col', use div wrapper to respect vertical layout
-    const isVertical = field.className && field.className.includes('flex-col');
-    const WrapperTag = isVertical ? 'div' : React.Fragment;
-    const wrapperProps = isVertical ? { className: field.className } : {};
+    // First, render all items and filter out null values
+    const renderedItems = field.items
+      .map((subField: any, idx: number) => ({ field: renderField(subField, data), idx }))
+      .filter((item: any) => item.field !== null);
 
     return (
-      <WrapperTag {...wrapperProps}>
-        {field.items.map((subField: any, idx: number) =>
-          isVertical ? (
-            <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
-          ) : (
-            <span key={idx} className={field.className}>
-              {renderField(subField, data)}
-            </span>
-          ),
-        )}
-      </WrapperTag>
+      <div className={field.className}>
+        {renderedItems.map((item: any, renderedIdx: number) => {
+          return (
+            <React.Fragment key={item.idx}>
+              {renderedIdx > 0 && field.separator && <span>{field.separator}</span>}
+              {item.field}
+            </React.Fragment>
+          );
+        })}
+      </div>
     );
   }
 
@@ -840,14 +855,13 @@ function renderField(field: any, data: any): React.ReactNode {
 
   if (field.type === 'inline-group-with-icon') {
     return (
-      <>
+      <div className={field.className}>
         {field.items.map((subField: any, idx: number) => (
-          <span key={idx}>
-            {idx > 0 && field.separator}
+          <React.Fragment key={idx}>
             {renderField(subField, data)}
-          </span>
+          </React.Fragment>
         ))}
-      </>
+      </div>
     );
   }
 

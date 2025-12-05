@@ -28,7 +28,6 @@ const aniketTemplate2 = {
           items: [
             { path: 'personalDetails.items[0].phone', fallback: 'Phone' },
             {
-              type: 'link',
               path: 'personalDetails.items[0].email',
               href: 'mailto:{{value}}',
               fallback: 'Email',
@@ -55,7 +54,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Summary',
-        className: 'text-lg font-bold text-black',
+        className: 'text-lg font-bold text-black mt-4',
       },
       divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
       content: {

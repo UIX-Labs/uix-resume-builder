@@ -16,8 +16,6 @@ export function renderBadgeSection(
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
-  if (!Array.isArray(items) || items.length === 0) return null;
-
   // Extract parent ID for nested items
   let parentId: string | undefined;
   if (section.listPath.includes('[0].items')) {
@@ -27,7 +25,6 @@ export function renderBadgeSection(
   }
 
   const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
-  if (flattenedItemsWithContext.length === 0) return null;
 
   const getIconComponent = (iconName?: string) => {
     if (!iconName) return null;

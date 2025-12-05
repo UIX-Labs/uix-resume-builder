@@ -17,8 +17,6 @@ export function renderListSection(
 
   const items = rawItems.map((item: any) => ({ ...item }));
 
-  if (!Array.isArray(items) || items.length === 0) return null;
-
   const sectionId =
     section.id ||
     section.heading?.path?.split('.').pop() ||

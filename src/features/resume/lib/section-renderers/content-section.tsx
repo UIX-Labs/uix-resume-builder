@@ -14,7 +14,7 @@ export function renderContentSection(
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
 
-    if (!value || (typeof value === 'string' && value.trim() === '')) return null;
+  if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();

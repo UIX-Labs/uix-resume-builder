@@ -493,13 +493,9 @@ export function FormPageBuilder() {
     try {
       setIsGeneratingThumbnail(true);
 
-      // Wait for React to re-render without highlights/sparkles
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
 
       if (!thumbnailDataUrl) {
-        setIsGeneratingThumbnail(false);
         return;
       }
 
@@ -524,6 +520,22 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail();
   }, [resumeId, resumes]);
 
+  // Auto-generate thumbnail every 20 seconds
+  useEffect(() => {
+    if (!resumeId || !targetRef.current) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      // Only regenerate if there's form data
+      if (formData && Object.keys(formData).length > 0) {
+        generateAndSaveThumbnail();
+      }
+    }, 25000);
+
+    return () => clearInterval(intervalId);
+  }, [resumeId]);
+
   // Auto-save effect - triggers when formData changes
   useEffect(() => {
     if (!currentStep || !formData || !formData[currentStep]) {
@@ -537,6 +549,24 @@ export function FormPageBuilder() {
   }, [formData, currentStep]);
 
   async function handleNextStep() {
+    try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (hasModifications) {
+        thumbnailGenerated.current = false;
+
+        await save({
+          type: currentStep,
+          data: formData[currentStep],
+          updatedAt: Date.now(),
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save before moving to next step:', error);
+      toast.error('Failed to save changes');
+    }
+
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
@@ -604,15 +634,11 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-
-        // Update last save time when save completes successfully
         setLastSaveTime(Date.now());
-
-        // await generateAndSaveThumbnail();
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
-    }, 2000),
+    }, 25000),
     [save],
   );
 
@@ -823,7 +849,7 @@ export function FormPageBuilder() {
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
-                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
+                 isThumbnail={isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">

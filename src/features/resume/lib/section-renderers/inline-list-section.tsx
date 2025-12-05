@@ -21,8 +21,6 @@ export function renderInlineListSection(
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
-  if (!Array.isArray(items) || items.length === 0) return null;
-
   let parentId: string | undefined;
 
   if (section.listPath.includes('[0].items')) {
@@ -36,8 +34,6 @@ export function renderInlineListSection(
     section.itemPath,
     parentId,
   );
-
-  if (flattenedItemsWithContext.length === 0) return null;
 
   const sectionId =
     section.id ||

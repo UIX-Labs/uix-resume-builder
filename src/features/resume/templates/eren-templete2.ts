@@ -70,7 +70,7 @@ const laurenChenTemplate = {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    { type: 'icon', name: 'Phone', size: 14, className: 'text-white mt-0.5' },
+                    { type: 'icon', name: 'Phone', size: 14, className: 'text-white' },
                     {
                       path: 'personalDetails.items[0].phone',
                       fallback: '(123) 456-7890',
@@ -82,7 +82,7 @@ const laurenChenTemplate = {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    { type: 'icon', name: 'Mail', size: 14, className: 'text-white mt-0.5' },
+                    { type: 'icon', name: 'Mail', size: 14, className: 'text-white' },
                     {
                       path: 'personalDetails.items[0].email',
                       fallback: 'lauren.chen@mail.com',
@@ -94,7 +94,7 @@ const laurenChenTemplate = {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    { type: 'icon', name: 'MapPin', size: 14, className: 'text-white mt-0.5' },
+                    { type: 'icon', name: 'MapPin', size: 14, className: 'text-white' },
                     {
                       path: 'personalDetails.items[0].address',
                       fallback: '47 W 13th St., New York, NY 10011',
@@ -106,7 +106,7 @@ const laurenChenTemplate = {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    { type: 'icon', name: 'Linkedin', size: 14, className: 'text-white mt-0.5' },
+                    { type: 'icon', name: 'Linkedin', size: 14, className: 'text-white' },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].links.linkedin.title',
@@ -120,7 +120,7 @@ const laurenChenTemplate = {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    { type: 'icon', name: 'Github', size: 14, className: 'text-white mt-0.5' },
+                    { type: 'icon', name: 'Github', size: 14, className: 'text-white' },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].links.github.title',
@@ -251,7 +251,7 @@ const laurenChenTemplate = {
           {
             path: 'degree',
             fallback: 'Bachelor of Arts, Communications',
-            className: 'text-sm font-bold text-neutral-900 mt-1 ml-1',
+            className: 'text-sm font-bold text-neutral-900 mt-1',
           },
           {
             type: 'horizontal-group',
@@ -392,22 +392,20 @@ const laurenChenTemplate = {
      */
     {
       id: 'interests',
-      type: 'badge-section',
+      type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       break: true,
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
-      },
-      divider: {
-        variant: 'line',
-        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-xs text-neutral-900 inline-block',
-      containerClassName: 'flex flex-wrap gap-2',
+      itemClassName: 'text-xs text-neutral-900 inline-block break-words',
+      containerClassName: 'grid grid-cols-3 gap-3',
+      itemSeparator: '',
     },
 
     /**
@@ -415,22 +413,20 @@ const laurenChenTemplate = {
      */
     {
       id: 'achievements',
-      type: 'badge-section',
+      type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       break: true,
       heading: {
         path: 'achievements.title',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
-      },
-      divider: {
-        variant: 'line',
-        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-xs text-neutral-900 inline-block',
-      containerClassName: 'flex flex-wrap gap-2',
+      itemClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'grid grid-cols-1 gap-3',
+      itemSeparator: '',
     },
   ],
 };

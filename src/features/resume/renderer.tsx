@@ -158,7 +158,12 @@ export function ResumeRenderer({
     const leftPages: React.ReactNode[][] = [];
     const rightPages: React.ReactNode[][] = [];
 
-    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][], bHeight: number) {
+    function paginateOneColumn(
+      columnEl: HTMLElement,
+      columnName: 'left' | 'right',
+      outPages: React.ReactNode[][],
+      bHeight: number,
+    ) {
       const pageMax = COLUMN_MAX[columnName];
       const pageMaxFirst = pageMax - bHeight;
 
@@ -302,18 +307,24 @@ export function ResumeRenderer({
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
-              <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
+              <React.Fragment key={i}>
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              </React.Fragment>
             ))}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
+            <React.Fragment key={i}>
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+            </React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions,isThumbnail)}</React.Fragment>
+            <React.Fragment key={i}>
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -346,12 +357,18 @@ export function ResumeRenderer({
                 ))}
               </div>
             )}
-            <div className={cn('flex flex-col', leftColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
+            <div
+              className={cn('flex flex-col', leftColumnClassName)}
+              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+            >
               {leftColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
-            <div className={cn('flex flex-col', rightColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
+            <div
+              className={cn('flex flex-col', rightColumnClassName)}
+              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+            >
               {rightColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
@@ -398,7 +415,7 @@ function renderSection(
   }
 
   if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail);
-    if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions,isThumbnail);
+  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'list-section')
     return renderListSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'two-column-layout')
@@ -912,12 +929,31 @@ function renderField(
   }
 
   if (field.type === 'inline-group-with-icon') {
+    const renderedItems = field.items.map((subField: any, idx: number) => ({
+      idx,
+      element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+      isIcon: subField.type === 'icon',
+      subField,
+    }));
+
+    const hasValidValues = renderedItems.some(
+      (item: any) => !item.isIcon && item.element !== null && item.element !== undefined && item.element !== '',
+    );
+
+    if (!hasValidValues) return null;
+
+    const itemsToRender = renderedItems.filter(
+      (item: any) => item.isIcon || (item.element !== null && item.element !== undefined && item.element !== ''),
+    );
+
+    if (itemsToRender.length === 0) return null;
+
     return (
       <div className={field.className}>
-        {field.items.map((subField: any, idx: number) => (
-          <span key={idx} className={subField.className}>
-            {idx > 0 && field.separator}
-            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
+        {itemsToRender.map(({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+          <span key={idx} className={field.items[idx].className}>
+            {arrayIdx > 0 && field.separator}
+            {element}
           </span>
         ))}
       </div>
@@ -1096,15 +1132,30 @@ function renderInlineListSection(
       </div>
 
       <div data-item="content" data-break={section.break}>
-        {flattenedItems.map((item: any, idx: number) => {
-          const value = typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
-          return (
-            <span key={idx}>
-              <span className={section.itemClassName}>{value}</span>
-              {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
-            </span>
-          );
-        })}
+        {section.showBullet ? (
+          <ul className={cn('list-disc list-outside pl-6', section.containerClassName)}>
+            {flattenedItems.map((item: any, idx: number) => {
+              const value = typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
+              return (
+                <li key={idx} className={cn(section.itemClassName, 'list-item')}>
+                  {value}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <div className={section.containerClassName}>
+            {flattenedItems.map((item: any, idx: number) => {
+              const value = typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
+              return (
+                <span key={idx}>
+                  <span className={section.itemClassName}>{value}</span>
+                  {idx < flattenedItems.length - 1 && section.itemSeparator && <span>{section.itemSeparator}</span>}
+                </span>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const enjiTemplate = {
       id: 'header',
       type: 'header',
       className:
-        'flex flex-col items-center text-center gap-1 pb-6 pt-8 bg-no-repeat bg-cover bg-center bg-[linear-gradient(to_right,#E9D5FF,#DBEAFE,#F0F9FF)]',
+        'flex flex-col items-center text-center gap-1 pb-6 pt-8 mb-4 bg-no-repeat bg-cover bg-center bg-[linear-gradient(to_right,#E9D5FF,#DBEAFE,#F0F9FF)]',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
@@ -147,7 +147,7 @@ const enjiTemplate = {
             },
             {
               type: 'text',
-              path: 'fieldOfStudy',
+              path: 'degree',
               fallback: 'Teknik Informatika (S1)',
               className: 'text-slate-700',
             },
@@ -163,7 +163,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-8 pb-6',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-baseline gap-4 px-16 py-4',
+      rowClassName: 'items-baseline gap-4 px-16 py-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -231,7 +231,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-6',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -288,7 +288,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-6',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -325,7 +325,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-6',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -382,7 +382,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-6',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -419,7 +419,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-6',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -456,7 +456,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
       // No divider for the last section
     },
   ],

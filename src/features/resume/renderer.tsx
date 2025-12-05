@@ -876,7 +876,17 @@ function renderField(
     const src = resolvePath(data, field.path, field.fallback);
     if (!src && !field.fallback) return null;
 
-    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+    // When generating thumbnails, use proxy to avoid CORS issues
+    const imageSrc = isThumbnail && src ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src || field.fallback;
+
+    return (
+      <img
+        src={imageSrc}
+        alt={field.alt || 'Image'}
+        className={cn(field.className)}
+        crossOrigin={isThumbnail ? 'anonymous' : undefined}
+      />
+    );
   }
 
   if (field.type === 'group') {
@@ -1612,6 +1622,24 @@ function renderTableSection(
   );
 }
 
+/**
+ * ThumbnailRenderer - Separate component for thumbnail generation
+ * This component is isolated from the main renderer to prevent unnecessary re-renders
+ * It always renders without highlights, suggestions, or interactive features
+ */
+export function ThumbnailRenderer({ template, data, className }: Omit<RenderProps, 'currentSection' | 'hasSuggestions' | 'isThumbnail'>) {
+  return (
+    <ResumeRenderer
+      template={template}
+      data={data}
+      className={className}
+      currentSection={undefined}
+      hasSuggestions={false}
+      isThumbnail={true}
+    />
+  );
+}
+
 // Thumbnail generation
 import html2canvas from 'html2canvas';
 
@@ -1622,10 +1650,70 @@ export type ThumbnailOptions = {
   backgroundColor?: string;
 };
 
+/**
+ * Waits for all images in the element to finish loading
+ * Returns a promise that resolves when all images are loaded or timeout occurs
+ */
+async function waitForImagesToLoad(element: HTMLElement, timeoutMs: number = 5000): Promise<void> {
+  const images = Array.from(element.querySelectorAll('img'));
+
+  console.log(`Found ${images.length} images to wait for`);
+
+  if (images.length === 0) {
+    return Promise.resolve();
+  }
+
+  const imagePromises = images.map((img, index) => {
+    // If image is already loaded, resolve immediately
+    if (img.complete && img.naturalHeight !== 0) {
+      console.log(`Image ${index + 1} already loaded:`, img.src);
+      return Promise.resolve();
+    }
+
+    console.log(`Waiting for image ${index + 1} to load:`, img.src);
+
+    // Otherwise wait for load/error event
+    return new Promise<void>((resolve) => {
+      const timeout = setTimeout(() => {
+        console.warn(`Image ${index + 1} load timeout:`, img.src);
+        resolve();
+      }, timeoutMs);
+
+      img.onload = () => {
+        console.log(`Image ${index + 1} loaded successfully:`, img.src);
+        clearTimeout(timeout);
+        resolve();
+      };
+
+      img.onerror = () => {
+        console.warn(`Image ${index + 1} failed to load:`, img.src);
+        clearTimeout(timeout);
+        resolve(); // Resolve anyway to not block thumbnail generation
+      };
+    });
+  });
+
+  await Promise.all(imagePromises);
+  console.log('All images processed');
+}
+
 export async function generateThumbnail(element: HTMLElement, options: ThumbnailOptions = {}): Promise<string | null> {
   const { backgroundColor = 'white' } = options;
 
   try {
+    console.log('generateThumbnail: Element dimensions:', {
+      width: element.clientWidth,
+      height: element.clientHeight,
+      scrollHeight: element.scrollHeight,
+    });
+
+    // Wait for all images to load before capturing
+    await waitForImagesToLoad(element);
+
+    console.log('generateThumbnail: Starting html2canvas capture...');
+
+    // Use CORS to capture images without tainting the canvas
+    // Requires S3 bucket to have CORS configuration allowing the domain
     const canvasPromise = html2canvas(element, {
       useCORS: true,
       allowTaint: false,
@@ -1638,7 +1726,15 @@ export async function generateThumbnail(element: HTMLElement, options: Thumbnail
 
     const canvas = await canvasPromise;
 
-    return canvas.toDataURL('image/png', 1);
+    console.log('generateThumbnail: Canvas created:', {
+      width: canvas.width,
+      height: canvas.height,
+    });
+
+    const dataUrl = canvas.toDataURL('image/png', 1);
+    console.log('generateThumbnail: DataURL generated, length:', dataUrl.length);
+
+    return dataUrl;
   } catch (error) {
     console.error('Failed to generate thumbnail:', error);
     return null;

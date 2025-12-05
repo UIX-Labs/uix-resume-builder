@@ -1,5 +1,5 @@
 import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
-import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
+import { generateThumbnail, ResumeRenderer, ThumbnailRenderer } from '@features/resume/renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
@@ -161,6 +161,7 @@ export function FormPageBuilder() {
   const resumeId = params?.id as string;
 
   const thumbnailGenerated = useRef(false);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
@@ -168,7 +169,6 @@ export function FormPageBuilder() {
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
-  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -487,31 +487,71 @@ export function FormPageBuilder() {
   );
 
   async function generateAndSaveThumbnail() {
-    if (!targetRef.current || !resumeId) {
+    if (!thumbnailRef.current || !resumeId) {
+      console.warn('Thumbnail generation skipped: missing ref or resumeId');
       return;
     }
 
     try {
-      setIsGeneratingThumbnail(true);
+      console.log('Starting thumbnail generation...');
 
-      // Wait for React to re-render without highlights/sparkles
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Get the parent container
+      const container = thumbnailRef.current.parentElement as HTMLElement;
 
-      const thumbnailDataUrl = await generateThumbnail(targetRef.current);
-
-      if (!thumbnailDataUrl) {
-        setIsGeneratingThumbnail(false);
+      if (!container) {
+        console.error('Thumbnail container not found');
         return;
       }
+
+      // Wait for component to render and layout to complete
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Verify the element has content
+      if (!thumbnailRef.current.innerHTML || thumbnailRef.current.innerHTML.trim() === '') {
+        console.error('Thumbnail element is empty!');
+        return;
+      }
+
+      console.log('Thumbnail element ready, generating image...');
+
+      // Temporarily make container visible for capture (but keep it hidden visually)
+      const originalHeight = container.style.height;
+      const originalOverflow = container.style.overflow;
+      const originalPosition = container.style.position;
+
+      container.style.height = 'auto';
+      container.style.overflow = 'visible';
+      container.style.position = 'absolute';
+      container.style.left = '-9999px'; // Move far off-screen instead of clipping
+      container.style.top = '0';
+
+      // Wait a bit for layout to update
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // generateThumbnail now handles image loading internally
+      const thumbnailDataUrl = await generateThumbnail(thumbnailRef.current);
+
+      // Restore original styles
+      container.style.height = originalHeight;
+      container.style.overflow = originalOverflow;
+      container.style.position = originalPosition;
+      container.style.left = '0';
+
+      if (!thumbnailDataUrl) {
+        console.error('Thumbnail generation returned null');
+        return;
+      }
+
+      console.log('Thumbnail generated successfully, uploading...');
 
       await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
 
       thumbnailGenerated.current = true;
       refetchResumes();
+
+      console.log('Thumbnail uploaded successfully');
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
-    } finally {
-      setIsGeneratingThumbnail(false);
     }
   }
 
@@ -822,15 +862,38 @@ export function FormPageBuilder() {
               <ResumeRenderer
                template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
-                currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
-                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
+                currentSection={isGeneratingPDF ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+                isThumbnail={isGeneratingPDF}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
                 <div className="text-gray-500">Loading template...</div>
               </div>
             )}
+          </div>
+
+          {/* Hidden ThumbnailRenderer for thumbnail generation - isolated from main renderer */}
+          <div
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              width: '794px', // A4 width
+              height: '0',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+            aria-hidden="true"
+          >
+            <div ref={thumbnailRef}>
+              {selectedTemplate && (
+                <ThumbnailRenderer
+                  template={selectedTemplate?.json ?? aniketTemplate}
+                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                />
+              )}
+            </div>
           </div>
         </div>
 

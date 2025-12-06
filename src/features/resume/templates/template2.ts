@@ -97,7 +97,7 @@ const andrewTemplate = {
         className: 'text-lg font-bold text-black mt-4',
         divider: { variant: 'line', className: 'bg-black w-full h-[1px] mt-0.5' },
       },
-      
+
       listPath: 'experience.items',
       itemTemplate: {
         className: 'flex flex-row gap-4 items-start w-full mt-4',

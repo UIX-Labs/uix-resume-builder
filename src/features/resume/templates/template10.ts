@@ -39,7 +39,7 @@ const template10 = {
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'UX Designer',
-          className: 'text-[18px] font-semibold text-white leading-[1.2]',
+          className: 'text-[18px] font-semibold text-white leading-[1.2] mt-1',
         },
       },
     },
@@ -99,11 +99,12 @@ const template10 = {
         className: 'text-base font-bold text-white uppercase tracking-normal mb-3 leading-[1.21]',
       },
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-1 list-disc marker:text-sm marker:text-white ml-4 break-words min-w-0',
+      containerClassName: 'flex flex-col gap-1 break-words min-w-0',
       itemTemplate: {
-        className: 'list-item break-words marker:text-xs',
+        className: 'break-words',
         fields: [
           {
+            prefix: '• ',
             path: 'name',
             fallback: 'Skill Name',
             className: 'text-sm leading-[1.6] text-[#D1D5DB] break-words min-w-0',
@@ -221,32 +222,6 @@ const template10 = {
                   'text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
               },
             ],
-          },
-        ],
-      },
-    },
-
-    // Tools Section - Right Column
-    {
-      id: 'tools',
-      type: 'list-section',
-      column: 'right',
-      break: false,
-      className: 'mt-7',
-      heading: {
-        path: 'tools.heading',
-        fallback: 'Tools',
-        className: 'text-sm font-bold text-white uppercase tracking-normal mb-4 leading-[1.21]',
-      },
-      listPath: 'tools.items',
-      containerClassName: 'flex flex-col gap-2 list-disc ml-4',
-      itemTemplate: {
-        className: 'list-item',
-        fields: [
-          {
-            path: 'name',
-            fallback: 'Tool Name',
-            className: 'text-sm leading-[1.6] text-[#D1D5DB]',
           },
         ],
       },

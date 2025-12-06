@@ -289,7 +289,7 @@ export function renderField(
 
     if (!href) return null;
     return (
-      <a href={href} className={field.className}>
+      <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
         {value}
       </a>
     );

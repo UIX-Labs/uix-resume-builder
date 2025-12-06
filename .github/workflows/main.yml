@@ -36,6 +36,7 @@ jobs:
           echo "NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }}" >> $GITHUB_ENV
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -62,6 +63,7 @@ jobs:
             --build-arg NEXT_PUBLIC_BACKEND_URL=${{ env.NEXT_PUBLIC_BACKEND_URL }} \
             --build-arg NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ env.NEXT_PUBLIC_GOOGLE_CLIENT_ID }} \
             --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }} \
+            --build-arg SENTRY_AUTH_TOKEN=${{ env.SENTRY_AUTH_TOKEN }} \
             -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG} .
 
           docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG}

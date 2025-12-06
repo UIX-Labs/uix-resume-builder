@@ -87,14 +87,14 @@ const annaFieldTemplate = {
         path: 'summary.heading',
         fallback: 'Profile',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)]',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] -mt-2',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-3',
+          'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
       },
     },
 
@@ -107,7 +107,7 @@ const annaFieldTemplate = {
         path: 'experience.heading',
         fallback: 'Work Experience',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-4',
       },
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 px-2',
@@ -261,7 +261,7 @@ const annaFieldTemplate = {
     // Interests Section
     {
       id: 'interests',
-      type: 'badge-section',
+      type: 'inline-list-section',
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -269,15 +269,16 @@ const annaFieldTemplate = {
           'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 mb-3',
       },
       listPath: 'interests.items[0].items',
-      badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      itemPath: '',
+      itemClassName: 'text-sm text-black',
+      containerClassName: 'text-sm text-black leading-relaxed',
       itemSeparator: ', ',
     },
 
     // Achievements Section
     {
       id: 'achievements',
-      type: 'badge-section',
+      type: 'inline-list-section',
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
@@ -285,8 +286,9 @@ const annaFieldTemplate = {
           'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
       },
       listPath: 'achievements.items[0].items',
-      badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      itemPath: '',
+      itemClassName: 'text-sm text-black',
+      containerClassName: 'text-sm text-black leading-relaxed mt-2',
       itemSeparator: ', ',
     },
 
@@ -299,7 +301,7 @@ const annaFieldTemplate = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 w-full basis-full',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 w-full basis-full mb-3',
       },
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-4 px-3',

@@ -185,7 +185,6 @@ const template7 = {
         className: 'flex flex-col mt-2',
         fields: [
           {
-            type: 'link',
             path: 'title',
             href: 'link.link',
             fallback: '',
@@ -222,7 +221,7 @@ const template7 = {
     // Achievements Section
     {
       id: 'achievements',
-      type: 'inline-list-section',
+      type: 'badge-section',
       className: 'px-8 pb-4',
       heading: {
         path: 'achievements.heading',
@@ -231,9 +230,9 @@ const template7 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
+      itemPrefix: '• ',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'grid grid-cols-2 gap-x-4 gap-y-1 mt-2',
-      prefix: '• ',
+      containerClassName: 'text-sm flex flex-col gap-2',
     },
 
     // Certifications Section

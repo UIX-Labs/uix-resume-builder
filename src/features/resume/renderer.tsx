@@ -227,6 +227,7 @@ export function ResumeRenderer({
               ...baseStyle,
               height: '29.7cm',
               backgroundColor: page.background || 'white',
+              fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
             }}
           >

@@ -290,7 +290,7 @@ const template5 = {
       heading: {
         path: 'projects.title',
         fallback: 'Projects',
-        className: 'capitalize text-base font-semibold text-[rgb(56,76,65)]',
+        className: 'capitalize text-base font-semibold text-[rgb(56,76,65)] mb-2',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[1px] mt-1',
@@ -341,7 +341,7 @@ const template5 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-semibold text-[rgb(56,76,65)]',
+        className: 'text-base font-semibold text-[rgb(56,76,65)] mb-2',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[1px] mt-1',

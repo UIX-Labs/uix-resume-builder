@@ -210,11 +210,11 @@ const brianWayneTemplate = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
+      itemPrefix: '• ',
       badgeClassName: 'text-sm text-white',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },
 
-    // Achievements Section - Left Column
     {
       id: 'achievements',
       type: 'badge-section',
@@ -231,8 +231,10 @@ const brianWayneTemplate = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-sm text-white list-disc',
-      containerClassName: 'flex flex-col gap-1 mt-2',
+      itemPrefix: '• ',
+      badgeClassName:
+        'block w-full text-sm text-white break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere',
+      containerClassName: 'flex flex-col gap-2 mt-2',
     },
 
     // Experience Section - Right Column

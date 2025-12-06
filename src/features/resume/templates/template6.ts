@@ -179,7 +179,7 @@ const template6 = {
                 {
                   path: 'personalDetails.items[0].email',
                   fallback: 'jay02rustogi@gmail.com',
-                  className: 'text-white text-sm font-normal break-words whitespace-normal max-w-[85%]',
+                  className: 'text-white text-sm font-normal break-words whitespace-wrap max-w-[85%]',
                 },
               ],
             },
@@ -211,7 +211,7 @@ const template6 = {
       id: 'summary',
       type: 'content-section',
       column: 'right',
-      className: 'flex flex-col gap-3 pb-6 pr-8 border-b-4 border-[#E8A87C] pt-8',
+      className: 'flex flex-col gap-3 pb-6 border-b-4 border-[#E8A87C] pt-8',
       heading: {
         path: 'about.heading',
         fallback: 'ABOUT',
@@ -234,12 +234,12 @@ const template6 = {
       heading: {
         path: 'experience.heading',
         fallback: 'WORK EXPERIENCE',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider pt-6',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider pt-6 mb-3',
       },
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: 'flex flex-col pt-2 pl-8',
+        className: 'flex flex-col pt-2 px-8',
         fields: [
           {
             path: 'position',
@@ -336,7 +336,7 @@ const template6 = {
           {
             path: 'title',
             fallback: 'Certification Title',
-            className: 'text-sm text-black',
+            className: 'text-sm text-black font-semibold',
           },
           {
             path: 'issuer',

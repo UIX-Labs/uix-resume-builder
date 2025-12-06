@@ -111,7 +111,7 @@ export function renderListSection(
 
                 <RenderListSectionHeading />
 
-                <div className={section.itemTemplate.className}>
+                <div>
                   {content}
                 </div>
               </div>

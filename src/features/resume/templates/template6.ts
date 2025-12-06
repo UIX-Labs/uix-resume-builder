@@ -234,7 +234,7 @@ const template6 = {
       heading: {
         path: 'experience.heading',
         fallback: 'WORK EXPERIENCE',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider pl-8 pt-6',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider pt-6',
       },
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
@@ -289,7 +289,7 @@ const template6 = {
       heading: {
         path: 'projects.title',
         fallback: 'PROJECTS',
-        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider px-8 mt-6',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mt-6',
       },
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-2',

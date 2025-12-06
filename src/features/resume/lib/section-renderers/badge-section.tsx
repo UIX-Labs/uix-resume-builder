@@ -133,9 +133,9 @@ export function renderBadgeSection(
             actualValue
           );
 
-          const errorBgColor = isThumbnail
-            ? ""
-            : getSuggestionBackgroundColor(valueSuggestions);
+          // const errorBgColor = isThumbnail
+          //   ? ""
+          //   : getSuggestionBackgroundColor(valueSuggestions);
 
           const displayValue = `${section.itemPrefix || ""}${actualValue}${
             section.itemSuffix || ""
@@ -146,7 +146,7 @@ export function renderBadgeSection(
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
+                <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
               </div>
             );
           }
@@ -154,7 +154,7 @@ export function renderBadgeSection(
           // Default rendering without icon
           return (
             <span key={idx}>
-              <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
+              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
 
               {idx < flattenedItemsWithContext.length - 1 &&
                 section.itemSeparator && <span>{section.itemSeparator}</span>}

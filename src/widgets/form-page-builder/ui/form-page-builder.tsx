@@ -254,13 +254,10 @@ export function FormPageBuilder() {
       // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
       // instead of relative URLs like "/api/proxy-image?url=..."
       const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
-      htmlContent = htmlContent.replace(
-        /src="\/api\/proxy-image/g,
-        `src="${currentOrigin}/api/proxy-image`
-      );
+      htmlContent = htmlContent.replace(/src="\/api\/proxy-image/g, `src="${currentOrigin}/api/proxy-image`);
 
-    // Add necessary styles for the PDF
-    const styledHtml = `
+      // Add necessary styles for the PDF
+      const styledHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -316,18 +313,18 @@ export function FormPageBuilder() {
       </html>
     `;
 
-    // Call the API to convert HTML to PDF
-    const pdfBlob = await convertHtmlToPdf(styledHtml);
+      // Call the API to convert HTML to PDF
+      const pdfBlob = await convertHtmlToPdf(styledHtml);
 
-    // Download the PDF
-    const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = resumeFileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      // Download the PDF
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = resumeFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
       toast.success('PDF downloaded successfully');
     } catch (error) {
@@ -449,7 +446,6 @@ export function FormPageBuilder() {
       }
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
-
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -717,7 +713,7 @@ export function FormPageBuilder() {
   const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {
     if (!lastSaveTime) return;
-    
+
     const interval = setInterval(() => {
       setRefreshKey((prev) => prev + 1);
     }, 30000); // Update every 30 seconds
@@ -731,7 +727,7 @@ export function FormPageBuilder() {
     const diff = Date.now() - lastSaveTime;
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
-    
+
     if (seconds < 60) {
       return 'saved less than a minute ago';
     } else if (minutes === 1) {
@@ -903,7 +899,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-               template={selectedTemplate?.json ?? aniketTemplate}
+                template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
@@ -934,7 +930,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(formData ?? {}, true)}
                 />
               )}
             </div>
@@ -942,11 +938,11 @@ export function FormPageBuilder() {
         </div>
 
         {/* Sticky Save as PDF button */}
-      <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-  {/* Change Template Button */}
-  <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-    <div
-      className="
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+          {/* Change Template Button */}
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <div
+              className="
         pointer-events-auto
         border border-[#CBE7FF]
         bg-[#E9F4FF]
@@ -960,17 +956,16 @@ export function FormPageBuilder() {
         hover:bg-[#E9F4FF] hover:text-white
         transition-colors
       "
-    >
-      <TemplateButton />
-    </div>
-  </TemplatesDialog>
+            >
+              <TemplateButton />
+            </div>
+          </TemplatesDialog>
 
-
-  {/* Download PDF Button */}
-  <Button
-    onClick={handleDownloadPDF}
-    disabled={isGeneratingPDF}
-    className="
+          {/* Download PDF Button */}
+          <Button
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+            className="
       pointer-events-auto
       border border-[#CBE7FF]
       bg-[#E9F4FF]
@@ -984,21 +979,21 @@ export function FormPageBuilder() {
       rounded-xl
       p-5.5
     "
-  >
-    {isGeneratingPDF ? (
-      <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Generating PDF...
-      </span>
-    ) : (
-      <>
-        <Download className="w-4 h-4" /><span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Download PDF
-      </span>
-      </>
-    )}
-  </Button>
-</div>
-
+          >
+            {isGeneratingPDF ? (
+              <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                Generating PDF...
+              </span>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                  Download PDF
+                </span>
+              </>
+            )}
+          </Button>
+        </div>
       </div>
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
@@ -1036,11 +1031,7 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {formatLastSaveTime() && (
-              <p className="text-sm text-gray-500">
-                {formatLastSaveTime()}
-              </p>
-            )}
+            {formatLastSaveTime() && <p className="text-sm text-gray-500">{formatLastSaveTime()}</p>}
           </div>
 
           {/* Next Button on the right */}

@@ -20,11 +20,11 @@ export function renderField(
   
    const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
   const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
-  const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
+  // const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
 
   if (field.type === 'container') {
     return (
-  <div className={cn(field.className, errorBgColor)}>
+  <div className={cn(field.className /*, errorBgColor*/)}>
         {field.children?.map((child: any, idx: number) => (
           <React.Fragment key={idx}>{renderField(child, data, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
         ))}
@@ -93,7 +93,7 @@ export function renderField(
 
   if (field.type === 'horizontal-group') {
     return (
- <div className={cn('flex flex-row items-center', field.className, errorBgColor)}>
+ <div className={cn('flex flex-row items-center', field.className /*, errorBgColor*/)}>
         {field.items.map((subField: any, idx: number) => (
           <React.Fragment key={idx}>
             {idx > 0 && field.separator && <span>{field.separator}</span>}
@@ -137,11 +137,11 @@ export function renderField(
 
   // Wrap in a div if a className exists
   if (wrapperClassName) {
-    return <div className={cn(errorBgColor, wrapperClassName)}>{content}</div>; 
+    return <div className={cn(/*errorBgColor,*/ wrapperClassName)}>{content}</div>; 
   }
 
   // Otherwise return just the content
-  return <span className={errorBgColor}>{content}</span>
+  return <span className={/*errorBgColor*/ ''}>{content}</span>
 }
 
   if (field.type === 'icon') {
@@ -193,7 +193,7 @@ export function renderField(
   if (field.type === 'text') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <p className={cn(field.className, errorBgColor)}>{value}</p>;
+    return <p className={cn(field.className /*, errorBgColor*/)}>{value}</p>;
   }
 
   if (field.type === 'skillLevel') {
@@ -213,7 +213,7 @@ export function renderField(
         {Array.from({ length: 5 }, (_, index) => (
           <div
             key={index}
-            className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400',errorBgColor)}
+            className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400' /*, errorBgColor*/)}
           />
         ))}
       </div>
@@ -243,7 +243,7 @@ export function renderField(
     return (
       <div className={field.className}>
         {itemsToRender.map(({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
-          <span key={idx} className={cn(field.items[idx].className,errorBgColor)}>
+          <span key={idx} className={cn(field.items[idx].className /*, errorBgColor*/)}>
             {arrayIdx > 0 && field.separator}
             {element}
           </span>
@@ -259,12 +259,12 @@ export function renderField(
     if (duration.startDate && duration.endDate) {
       const start = dayjs(duration.startDate).format('MMM YYYY');
       const end = dayjs(duration.endDate).format('MMM YYYY');
-       return <span className={cn(field.className, errorBgColor)}>{`${start} - ${end}`}</span>;
+       return <span className={cn(field.className /*, errorBgColor*/)}>{`${start} - ${end}`}</span>;
     }
 
     if (duration.startDate && duration.ongoing) {
       const start = dayjs(duration.startDate).format('MMM YYYY');
-     return <span className={cn(field.className, errorBgColor)}>{`${start} - Present`}</span>;
+     return <span className={cn(field.className /*, errorBgColor*/)}>{`${start} - Present`}</span>;
     }
 
     return null;
@@ -299,7 +299,7 @@ export function renderField(
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
-return <span className={cn(field.className, errorBgColor)}>{text}</span>;
+return <span className={cn(field.className /*, errorBgColor*/)}>{text}</span>;
 }
 
 

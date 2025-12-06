@@ -58,7 +58,7 @@ const template7 = {
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-12 items-center justify-start flex-wrap text-sm',
+          className: 'flex flex-row gap-4 items-center justify-start flex-wrap text-sm',
           items: [
             {
               type: 'inline-group-with-icon',

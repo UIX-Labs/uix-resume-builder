@@ -142,7 +142,7 @@ const brianWayneTemplate = {
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
+          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
       },
     },
 
@@ -164,7 +164,7 @@ const brianWayneTemplate = {
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-4 mt-2',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col gap-1 leading-none mt-1',
         fields: [
           {
             path: 'degree',

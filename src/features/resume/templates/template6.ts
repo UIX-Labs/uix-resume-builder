@@ -70,7 +70,7 @@ const template6 = {
         className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-4 mt-2 mb-12',
+      containerClassName: 'flex flex-col gap-4 mt-2',
       itemTemplate: {
         className: 'flex flex-col',
         fields: [
@@ -101,7 +101,7 @@ const template6 = {
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-10',
       },
       listPath: 'skills.items',
       containerClassName: 'flex flex-col mb-6',
@@ -125,7 +125,7 @@ const template6 = {
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 pt-6',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 mt-10',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
@@ -142,7 +142,7 @@ const template6 = {
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-col gap-2 mt-6',
+          className: 'flex flex-col gap-2 mt-1',
           heading: {
             path: '',
             fallback: 'Contact',

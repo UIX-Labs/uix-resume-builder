@@ -104,7 +104,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].email',
                   fallback: 'divyam.malik@gmail.com',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-sm text-[#1a1a1a] font-normal underline break-all whitespace-normal',
                 },
               ],
             },
@@ -313,7 +313,7 @@ const template5 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)]',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
               },
             ],
           },

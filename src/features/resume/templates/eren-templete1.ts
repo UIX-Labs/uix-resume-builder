@@ -7,7 +7,7 @@ const enjiTemplate = {
     // The actual resume page in the app is already inside a gradient shell,
     // so keep the sheet itself clean and white.
     background: '#ffffff',
-    className: 'text-[11px] text-slate-900 leading-relaxed',
+    className: 'text-[12px] text-slate-900 leading-relaxed',
     fontFamily: 'Inter',
     padding: 0,
   },
@@ -32,7 +32,7 @@ const enjiTemplate = {
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Front-End Developer · UI/UX Designer',
-          className: 'text-[10px] font-medium text-slate-600 leading-none tracking-normal',
+          className: 'text-[12px] font-medium text-slate-600 leading-none tracking-normal',
         },
         contact: {
           type: 'contact-grid',
@@ -42,7 +42,7 @@ const enjiTemplate = {
             // Top line: Location and Email
             {
               type: 'inline-group',
-              className: 'flex items-center gap-3 text-[9px] text-black',
+              className: 'flex items-center gap-3 text-[12px] text-black',
               separator: '',
               items: [
                 {
@@ -53,7 +53,7 @@ const enjiTemplate = {
                     {
                       path: 'personalDetails.items[0].address',
                       fallback: 'Bandung',
-                      className: 'text-[9px] text-black',
+                      className: 'text-[12px] text-black',
                     },
                   ],
                 },
@@ -67,7 +67,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].email',
                       href: 'personalDetails.items[0].email',
                       fallback: 'mail@enji.dev',
-                      className: 'text-[9px] text-black',
+                      className: 'text-[12px] text-black',
                     },
                   ],
                 },
@@ -90,7 +90,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: '/enjidev',
-                      className: 'text-[9px] text-blue-900',
+                      className: 'text-[12px] text-blue-900',
                     },
                   ],
                 },
@@ -105,7 +105,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.github.title',
                       href: 'personalDetails.items[0].links.github.link',
                       fallback: '/enjidev',
-                      className: 'text-[9px] text-gray-900',
+                      className: 'text-[12px] text-gray-900',
                     },
                   ],
                 },
@@ -126,7 +126,7 @@ const enjiTemplate = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'education.items',
       headingColumn: {
@@ -157,11 +157,11 @@ const enjiTemplate = {
           type: 'duration',
           path: 'duration',
           fallback: 'Oct 2018 - Present',
-          className: 'text-[9px] text-slate-500 whitespace-nowrap ml-4',
+          className: 'text-[12px] text-slate-500 whitespace-nowrap ml-4',
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-8 pb-6',
+      className: 'px-16 pt-8 pb-8',
       containerClassName: 'space-y-4',
       rowClassName: 'items-baseline gap-4 px-16 py-2',
       divider: {
@@ -180,7 +180,7 @@ const enjiTemplate = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'experience.items',
       headingColumn: {
@@ -213,25 +213,25 @@ const enjiTemplate = {
               type: 'text',
               path: 'techStack',
               fallback: '',
-              className: 'text-[10px] text-slate-500 italic',
+              className: 'text-[12px] text-slate-500 italic',
             },
             {
               type: 'html',
               path: 'description',
-              className: 'text-[10px] text-slate-700 leading-relaxed',
+              className: 'text-[12px] text-slate-700 leading-relaxed',
             },
           ],
         },
         {
           type: 'duration',
           path: 'duration',
-          className: 'text-[9px] text-slate-500 whitespace-nowrap ml-4',
+          className: 'text-[12px] text-slate-500 whitespace-nowrap ml-4',
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-6 pb-6',
+      className: 'px-16 pt-6 pb-8',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -248,7 +248,7 @@ const enjiTemplate = {
       heading: {
         path: 'projects.heading',
         fallback: 'Featured Project',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'projects.items',
       headingColumn: {
@@ -263,32 +263,32 @@ const enjiTemplate = {
               type: 'text',
               path: 'title',
               fallback: 'SPKJS',
-              className: 'text-[11px] font-semibold text-slate-900',
+              className: 'text-[12px] font-semibold text-slate-900',
             },
             {
               type: 'text',
               path: 'techStack',
               fallback: '',
-              className: 'text-[10px] text-slate-500 italic',
+              className: 'text-[12px] text-slate-500 italic',
             },
             {
               type: 'html',
               path: 'description',
-              className: 'text-[10px] text-slate-700 leading-relaxed',
+              className: 'text-[12px] text-slate-700 leading-relaxed',
             },
             {
               type: 'link',
               path: 'link.title',
               href: 'link.link',
-              className: 'text-[9px] text-blue-600 hover:underline mt-1',
+              className: 'text-[12px] text-blue-600 hover:underline mt-1',
             },
           ],
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-6',
+      className: 'px-16 pt-6 pb-8',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -306,7 +306,7 @@ const enjiTemplate = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills & Tools',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'skills.items',
       headingColumn: {
@@ -317,15 +317,15 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'name',
           badgeClassName:
-            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[9px] text-slate-700 font-medium',
+            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
           className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-6',
+      className: 'px-16 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -342,7 +342,7 @@ const enjiTemplate = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'certifications.items',
       headingColumn: {
@@ -351,38 +351,38 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-0.5',
+          className: 'flex-1 space-y-0.5 flex gap-1',
           items: [
             {
               type: 'text',
               path: 'title',
               fallback: 'Certification Title',
-              className: 'text-[11px] font-semibold text-slate-900',
+              className: 'text-[12px] font-semibold text-slate-900',
             },
             {
               type: 'text',
               path: 'issuer',
               fallback: 'Issuer',
-              className: 'text-[10px] text-slate-600',
+              className: 'text-[12px] text-slate-600',
             },
             {
               type: 'link',
               path: 'link.title',
               href: 'link.link',
-              className: 'text-[9px] text-blue-600 hover:underline',
+              className: 'text-[12px] text-blue-600 hover:underline',
             },
           ],
         },
         {
           type: 'duration',
           path: 'duration',
-          className: 'text-[9px] text-slate-500',
+          className: 'text-[12px] text-slate-500',
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-6 pb-6',
+      className: 'px-16 pt-6 pb-8',
       containerClassName: 'space-y-4',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -400,7 +400,7 @@ const enjiTemplate = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'interests.items',
       headingColumn: {
@@ -411,15 +411,15 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'items',
           badgeClassName:
-            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[9px] text-slate-700 font-medium',
+            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
           className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-6',
+      className: 'px-16 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -437,7 +437,7 @@ const enjiTemplate = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-[10px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'achievements.items',
       headingColumn: {
@@ -448,7 +448,7 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'items',
           badgeClassName:
-            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[9px] text-slate-700 font-medium',
+            'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium line-clamp-2 break-all',
           containerClassName: 'gap-1.5',
           className: 'flex-1',
         },
@@ -456,7 +456,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start gap-4 px-16 pt-4 pb-2',
+      rowClassName: 'items-start gap-4 px-16 pt-4 pb-4',
       // No divider for the last section
     },
   ],

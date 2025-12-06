@@ -207,7 +207,7 @@ const template12 = {
           {
             id: 'about',
             type: 'content-section',
-            className: 'flex flex-col gap-2',
+            className: 'flex flex-col gap-2 px-6',
             heading: {
               path: 'about.heading',
               fallback: 'ABOUT',
@@ -229,10 +229,10 @@ const template12 = {
             heading: {
               path: 'experience.heading',
               fallback: 'WORK EXPERIENCE',
-              className: 'text-[#E8957C] text-base font-bold tracking-wide uppercase',
+              className: 'text-[#E8957C] text-base font-bold tracking-wide uppercase px-6',
             },
             listPath: 'experience.items',
-            containerClassName: 'flex flex-col gap-5 mt-3',
+            containerClassName: 'flex flex-col gap-5 mt-3 px-6',
             itemTemplate: {
               className: 'flex flex-col gap-1',
               fields: [
@@ -277,10 +277,10 @@ const template12 = {
             heading: {
               path: 'projects.title',
               fallback: 'PROJECTS',
-              className: 'text-[#E8957C] uppercase text-base font-bold tracking-wide',
+              className: 'text-[#E8957C] uppercase text-base font-bold tracking-wide px-6',
             },
             listPath: 'projects.items',
-            containerClassName: 'flex flex-col gap-5 mt-3',
+            containerClassName: 'flex flex-col gap-5 mt-3 px-6',
             itemTemplate: {
               className: 'flex flex-col gap-1',
               fields: [

@@ -12,10 +12,12 @@ const enzoTemplate2 = {
   columns: {
     spacing: '0px',
     left: {
-      width: '65%',
+      width: '50%',
+      className: 'flex flex-col gap-2',
     },
     right: {
-      width: '35%',
+      width: '50%',
+      className: 'pl-4 flex flex-col gap-3'
     },
   },
 
@@ -40,7 +42,7 @@ const enzoTemplate2 = {
                   type: 'text',
                   path: 'personalDetails.items[0].fullName',
                   fallback: 'Bhavya Saggi',
-                  className: 'text-3xl font-bold text-slate-900 leading-none',
+                  className: 'text-3xl font-bold leading-none',
                 },
                 {
                   type: 'text',
@@ -53,7 +55,7 @@ const enzoTemplate2 = {
                   path: 'personalDetails.items[0].description',
                   fallback:
                     'Strategic thinker with hands-on skills. Passionate about fostering engineering excellence, building inclusive teams, and aligning technology with business goals.',
-                  className: 'text-xs text-slate-700 leading-relaxed',
+                  className: 'text-xs leading-relaxed',
                 },
               ],
             },
@@ -70,13 +72,13 @@ const enzoTemplate2 = {
                     {
                       type: 'text',
                       fallback: 'Email',
-                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                      className: 'text-[10px] font-medium uppercase tracking-wide text-right text-slate-700',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].email',
                       fallback: 'bhavya.saggi@gmail.com',
-                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2 break-all',
+                      className: 'text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700',
                     },
                   ],
                 },
@@ -88,13 +90,14 @@ const enzoTemplate2 = {
                     {
                       type: 'text',
                       fallback: 'LinkedIn',
-                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                      className: 'text-[10px] font-medium uppercase tracking-wide text-right text-slate-700',
                     },
                     {
-                      type: 'text',
-                      path: 'personalDetails.items[0].links.linkedin.title',
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.linkedin.link',
+                      href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: 'LinkedIn',
-                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2 break-all',
+                      className: 'text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700',
                     },
                   ],
                 },
@@ -106,13 +109,13 @@ const enzoTemplate2 = {
                     {
                       type: 'text',
                       fallback: 'Phone',
-                      className: 'text-[10px] font-medium text-slate-400 uppercase tracking-wide text-right',
+                      className: 'text-[10px] font-medium uppercase tracking-wide text-right text-slate-700',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '+91 9953439451',
-                      className: 'text-xs font-bold text-slate-900 underline decoration-slate-300 underline-offset-2',
+                      className: 'text-xs font-bold underline decoration-slate-300 underline-offset-2 text-slate-700',
                     },
                   ],
                 },
@@ -144,7 +147,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-sm font-bold text-slate-900 pt-4',
+                className: 'text-sm font-bold pt-4',
               },
             ],
           },
@@ -153,12 +156,12 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'company',
-                className: 'font-medium text-slate-700',
+                className: 'font-medium',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-slate-500',
+                className: '',
               },
             ],
           },
@@ -168,7 +171,7 @@ const enzoTemplate2 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
+                  'text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
               },
             ],
           },
@@ -182,22 +185,31 @@ const enzoTemplate2 = {
       type: 'list-section',
       column: 'right',
       break: true,
-      className: 'pl-6 pt-8',
+      className: '',
       heading: {
         path: 'education.heading',
         fallback: 'Education & Learning',
-        className: 'text-base font-bold text-[#3B82F6] pt-4 pl-4',
+        className: 'text-base font-bold text-[#3B82F6] pt-4',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-6',
+      containerClassName: 'flex flex-col',
       itemTemplate: {
-        className: 'flex flex-col gap-1 pl-4 pt-4',
+        className: 'flex flex-col',
         rows: [
           {
             cells: [
               {
                 path: 'degree',
-                className: 'text-sm font-bold text-slate-900',
+                className: 'text-sm font-bold',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                path: 'fieldOfStudy',
+                fallback: '',
+                className: 'text-xs italic',
               },
             ],
           },
@@ -205,7 +217,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'institution',
-                className: 'text-xs text-slate-700',
+                className: 'text-xs',
               },
             ],
           },
@@ -215,7 +227,17 @@ const enzoTemplate2 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-slate-500 italic',
+                className: 'text-xs italic',
+              },
+            ],
+          },
+          {
+            className: 'flex flex-row items-center',
+            cells: [
+              {
+                path: 'grade.value',
+                prefix: 'CGPA - ',
+                className: 'text-xs italic',
               },
             ],
           },
@@ -228,22 +250,22 @@ const enzoTemplate2 = {
       type: 'list-section',
       column: 'right',
       break: true,
-      className: 'pl-6 mt-6',
+      className: '',
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-base font-bold text-[#3B82F6] pl-4 pt-4',
+        className: 'text-base font-bold text-[#3B82F6]',
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-6',
+      containerClassName: 'flex flex-col',
       itemTemplate: {
-        className: 'flex flex-col gap-1 pl-4 pt-2',
+        className: 'flex flex-col',
         rows: [
           {
             cells: [
               {
                 path: 'title',
-                className: 'text-xs text-slate-900',
+                className: 'text-xs font-bold',
               },
             ],
           },
@@ -251,7 +273,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'issuer',
-                className: 'text-xs italic text-slate-700',
+                className: 'text-xs italic',
               },
             ],
           },
@@ -259,23 +281,119 @@ const enzoTemplate2 = {
       },
     },
 
+    // Projects Section - Right Column
+    {
+      id: 'projects',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      className: '',
+      heading: {
+        path: 'projects.heading',
+        fallback: 'Projects',
+        className: 'text-base font-bold text-[#3B82F6]',
+      },
+      listPath: 'projects.items',
+      containerClassName: 'flex flex-col',
+      itemTemplate: {
+        className: 'flex flex-col',
+        rows: [
+          {
+            cells: [
+              {
+                path: 'title',
+                fallback: 'Project Title',
+                className: 'text-sm font-bold',
+              },
+            ],
+          },
+          {
+            className: 'flex flex-row gap-2 items-center',
+            cells: [
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs italic',
+              },
+            ],
+          },
+          {
+            className: 'flex flex-row gap-2 items-center',
+            cells: [
+              {
+                path: 'techStack',
+                fallback: '',
+                className: 'text-xs',
+                itemSeparator: ', ',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                className: 'text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
+              },
+            ],
+          },
+        ],
+      },
+    },
+
+    // Skills Section - Right Column
     {
       id: 'skills',
-      type: 'content-section',
+      break: false,
+      type: 'inline-list-section',
       column: 'right',
-      className: 'pl-4 mt-4',
+      className: '',
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#3B82F6] pl-4 mt-4',
+        className: 'text-base font-bold text-[#3B82F6]',
       },
-      content: {
-        type: 'html',
-        path: 'skills.description',
-        fallback:
-          'Business Analysis, UX Research, User Testing and Validation, Customer Journey Mapping, Information Architecture...',
-        className: 'text-xs text-slate-600 leading-relaxed whitespace-pre-wrap pl-4 pt-2',
+      listPath: 'skills.items',
+      itemPath: 'name',
+      itemClassName: 'text-xs',
+      containerClassName: 'text-xs leading-relaxed',
+      itemSeparator: ', ',
+    },
+
+    // Interests Section - Right Column
+    {
+      id: 'interests',
+      break: false,
+      type: 'inline-list-section',
+      column: 'right',
+      className: '',
+      heading: {
+        path: 'interests.heading',
+        fallback: 'Interests',
+        className: 'text-base font-bold text-[#3B82F6]',
       },
+      listPath: 'interests.items[0].items',
+      itemClassName: 'text-xs',
+      containerClassName: 'text-xs leading-relaxed',
+      itemSeparator: ', ',
+    },
+
+    // Achievements Section - Right Column
+    {
+      id: 'achievements',
+      break: false,
+      type: 'inline-list-section',
+      column: 'right',
+      className: '',
+      heading: {
+        path: 'achievements.heading',
+        fallback: 'Achievements',
+        className: 'text-base font-bold text-[#3B82F6]',
+      },
+      listPath: 'achievements.items[0].items',
+      itemClassName: 'text-xs',
+      containerClassName: 'text-xs leading-relaxed',
+      itemSeparator: ', ',
     },
   ],
 };

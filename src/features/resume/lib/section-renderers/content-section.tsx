@@ -14,6 +14,7 @@ export function renderContentSection(
 ): React.ReactNode {
   const value = resolvePath(data, section.content.path, section.content.fallback);
 
+  // Check for empty values including empty strings
   if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
@@ -27,9 +28,16 @@ export function renderContentSection(
   const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
+  const shouldBlur =
+    !isThumbnail &&
+    hasSuggestions &&
+    currentSection &&
+    !isActive &&
+    !isSummaryForPersonalDetails &&
+    hasValidSuggestions;
 
-  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && !isSummaryForPersonalDetails && hasValidSuggestions;
-  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isSummaryForPersonalDetails) && hasValidSuggestions;
+  const shouldHighlight =
+    !isThumbnail && hasSuggestions && (isActive || isSummaryForPersonalDetails) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -49,6 +57,7 @@ export function renderContentSection(
     <div
       className={cn(section.className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={sectionId}
+      data-break={section.break}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}

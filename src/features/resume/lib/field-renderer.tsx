@@ -8,6 +8,7 @@ import {
   getSuggestionBackgroundColor,
 } from '@features/template-form/lib/get-field-errors';
 import { resolvePath } from './resolve-path';
+import { renderDivider } from './components/Divider';
 
 export function renderField(
   field: any,
@@ -17,13 +18,13 @@ export function renderField(
   isThumbnail?: boolean,
 ): React.ReactNode {
   
-  const fieldPath = field.path?.split('.').pop(); 
+   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
   const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
   const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
 
   if (field.type === 'container') {
     return (
-      <div className={cn(field.className, errorBgColor)}>
+  <div className={cn(field.className, errorBgColor)}>
         {field.children?.map((child: any, idx: number) => (
           <React.Fragment key={idx}>{renderField(child, data, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
         ))}
@@ -31,9 +32,68 @@ export function renderField(
     );
   }
 
+  // Handle badge type
+  if (field.type === 'badge') {
+    const value = field.pathWithFallback
+      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
+      : resolvePath(data, field.path, field.fallback);
+
+    const href = field.hrefPathWithFallback
+      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
+      : resolvePath(data, field.href);
+
+    if (!value) return null;
+
+    const iconElement = field.icon ? renderField(field.icon, data) : null;
+
+    const content = (
+      <span className={cn('inline-flex items-center gap-1 rounded-full py-1 px-2', field.badgeClassName)}>
+        {iconElement}
+        {value}
+      </span>
+    );
+
+    if (href) {
+      return (
+        <a href={href} className="hover:opacity-80">
+          {content}
+        </a>
+      );
+    }
+
+    return content;
+  }
+
+  // Handle text type with pathWithFallback
+  if (field.type === 'text') {
+    const value = field.pathWithFallback
+      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
+      : resolvePath(data, field.path, field.fallback);
+
+    if (!value) return null;
+    const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+    return <span className={field.className}>{text}</span>;
+  }
+
+  if (field.type === 'contact-grid') {
+    return (
+      <div className={field.className}>
+        {field.heading && (
+          <div className={field.heading.className}>
+            <p>{resolvePath(data, field.heading.path, field.heading.fallback)}</p>
+            {field.heading.divider && renderDivider(field.heading.divider)}
+          </div>
+        )}
+        {field.items?.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+        ))}
+      </div>
+    );
+  }
+
   if (field.type === 'horizontal-group') {
     return (
-      <div className={cn('flex flex-row items-center', field.className, errorBgColor)}>
+ <div className={cn('flex flex-row items-center', field.className, errorBgColor)}>
         {field.items.map((subField: any, idx: number) => (
           <React.Fragment key={idx}>
             {idx > 0 && field.separator && <span>{field.separator}</span>}
@@ -45,41 +105,44 @@ export function renderField(
   }
 
   if (field.type === 'inline-group') {
-    // Filter out items with no value first
-    const renderedItems = field.items
-      .map((subField: any, idx: number) => ({
-        idx,
-        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
-      }))
-      .filter(
-        ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
-      );
-
-    if (renderedItems.length === 0) return null;
-
-    const hasContainerClassName = !!field.containerClassName;
-    const hasSeparator = !!field.separator;
-
-    const content = renderedItems.map(
-      ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
-        <React.Fragment key={idx}>
-          {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
-          <span>{element}</span>
-        </React.Fragment>
-      ),
+  // Render all items and filter out null/empty values
+  const renderedItems = field.items
+    .map((subField: any, idx: number) => ({
+      idx,
+      element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+    }))
+    .filter(
+      ({ element }: { element: React.ReactNode }) =>
+        element !== null && element !== undefined && element !== '',
     );
 
-    // Use containerClassName if provided (for flex/inline layouts), otherwise className
-    const wrapperClassName = hasContainerClassName ? field.containerClassName : field.className;
+  // Nothing to show
+  if (renderedItems.length === 0) return null;
 
-    // Use div wrapper when className or containerClassName is provided
-    if (wrapperClassName) {
-      return <div className={cn(errorBgColor, wrapperClassName)}>{content}</div>; 
-    }
+  const hasContainerClassName = !!field.containerClassName;
+  const hasSeparator = !!field.separator;
 
-    // No className, use fragment
-    return <span className={errorBgColor}>{content}</span>;
+  // Build content with optional separators
+  const content = renderedItems.map(
+    ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+      <React.Fragment key={idx}>
+        {arrayIdx > 0 && hasSeparator && <span>{field.separator}</span>}
+        <span>{element}</span>
+      </React.Fragment>
+    ),
+  );
+
+  // Decide wrapper class
+  const wrapperClassName = hasContainerClassName ? field.containerClassName : field.className;
+
+  // Wrap in a div if a className exists
+  if (wrapperClassName) {
+    return <div className={cn(errorBgColor, wrapperClassName)}>{content}</div>; 
   }
+
+  // Otherwise return just the content
+  return <span className={errorBgColor}>{content}</span>
+}
 
   if (field.type === 'icon') {
     const IconComponent = (LucideIcons as any)[field.name];
@@ -137,12 +200,31 @@ export function renderField(
   }
 
   if (field.type === 'inline-group-with-icon') {
+    const renderedItems = field.items.map((subField: any, idx: number) => ({
+      idx,
+      element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+      isIcon: subField.type === 'icon',
+      subField,
+    }));
+
+    const hasValidValues = renderedItems.some(
+      (item: any) => !item.isIcon && item.element !== null && item.element !== undefined && item.element !== '',
+    );
+
+    if (!hasValidValues) return null;
+
+    const itemsToRender = renderedItems.filter(
+      (item: any) => item.isIcon || (item.element !== null && item.element !== undefined && item.element !== ''),
+    );
+
+    if (itemsToRender.length === 0) return null;
+
     return (
       <div className={field.className}>
-        {field.items.map((subField: any, idx: number) => (
-          <span key={idx} className={cn(subField.className, errorBgColor)}>
-            {idx > 0 && field.separator}
-            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
+        {itemsToRender.map(({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+          <span key={idx} className={cn(field.items[idx].className,errorBgColor)}>
+            {arrayIdx > 0 && field.separator}
+            {element}
           </span>
         ))}
       </div>
@@ -156,12 +238,12 @@ export function renderField(
     if (duration.startDate && duration.endDate) {
       const start = dayjs(duration.startDate).format('MMM YYYY');
       const end = dayjs(duration.endDate).format('MMM YYYY');
-      return <span className={cn(field.className, errorBgColor)}>{`${start} - ${end}`}</span>;
+       return <span className={cn(field.className, errorBgColor)}>{`${start} - ${end}`}</span>;
     }
 
     if (duration.startDate && duration.ongoing) {
       const start = dayjs(duration.startDate).format('MMM YYYY');
-      return <span className={cn(field.className, errorBgColor)}>{`${start} - Present`}</span>;
+     return <span className={cn(field.className, errorBgColor)}>{`${start} - Present`}</span>;
     }
 
     return null;
@@ -175,8 +257,16 @@ export function renderField(
 
   if (field.type === 'link') {
     const value = resolvePath(data, field.path, field.fallback);
-    const href = resolvePath(data, field.href);
-    if (!value || !href) return null;
+    if (!value) return null;
+
+    let href = field.href;
+    if (href && href.includes('{{value}}')) {
+      href = href.replace('{{value}}', value);
+    } else {
+      href = resolvePath(data, field.href);
+    }
+
+    if (!href) return null;
     return (
       <a href={href} className={field.className}>
         {value}
@@ -188,8 +278,9 @@ export function renderField(
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
-  return <span className={cn(field.className, errorBgColor)}>{text}</span>;
+return <span className={cn(field.className, errorBgColor)}>{text}</span>;
 }
+
 
 export function renderItemWithRows(
   template: any,
@@ -198,10 +289,10 @@ export function renderItemWithRows(
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
 ): React.ReactNode {
-  return template.rows.map((row: any, rowIdx: number) => (
+ return template.rows.map((row: any, rowIdx: number) => (
     <div key={rowIdx} className={row.className}>
       {row.cells.map((cell: any, cellIdx: number) => (
-        <div key={cellIdx}>{renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}</div>
+        <React.Fragment key={cellIdx}>{renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
       ))}
     </div>
   ));

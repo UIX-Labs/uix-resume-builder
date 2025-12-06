@@ -15,7 +15,7 @@ export function renderTableSection(
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
 ): React.ReactNode {
-  const items = resolvePath(data, section.listPath, []);
+   const items = resolvePath(data, section.listPath, []);
 
   // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;

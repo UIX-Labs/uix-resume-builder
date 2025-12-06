@@ -15,69 +15,48 @@ export function renderHeaderSection(
   const { fields, className, id } = section;
 
   const hasGenericFields = Object.values(fields).some(
-    (field: any) =>
-      field?.type && ["image", "group", "text"].includes(field.type)
+    (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
   );
 
-  const sectionId = id || "header-section";
-
-  const dataKey = "personalDetails";
+  const sectionId = id || 'header-section';
+  const dataKey = 'personalDetails';
   const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+  const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const isHeader =
-    sectionId.toLowerCase() === "header" ||
-    sectionId.toLowerCase() === "header-section";
-
-  const isActive =
-    currentSection &&
-    sectionId.toLowerCase() === currentSection.toLowerCase();
-
-  const isPersonalDetailsActive =
-    currentSection?.toLowerCase() === "personaldetails" && isHeader;
+  // Highlight header when personalDetails is selected
+  const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
 
   const shouldBlur =
-    !isThumbnail &&
-    hasSuggestions &&
-    currentSection &&
-    !isActive &&
-    !isPersonalDetailsActive &&
-    hasValidSuggestions;
-
+    !isThumbnail && hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
   const shouldHighlight =
-    !isThumbnail &&
-    hasSuggestions &&
-    (isActive || isPersonalDetailsActive) &&
-    hasValidSuggestions;
+    !isThumbnail && hasSuggestions && (isActive || isPersonalDetailsActive) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
-    scrollMarginTop: "20px",
+    scrollMarginTop: '20px',
     ...(hasSuggestions && {
-      transition:
-        "filter 0.3s ease, background-color 0.3s ease, border 0.3s ease",
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
     }),
     ...(shouldHighlight && {
-      backgroundColor: "rgba(200, 255, 230, 0.35)",
-      border: "2px solid rgba(0, 168, 107, 0.4)",
-      borderRadius: "12px",
-      padding: "16px",
-      position: "relative",
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
     }),
   };
 
   if (hasGenericFields) {
     return (
       <div
-        className={cn(className, shouldBlur && "blur-[2px] pointer-events-none")}
+        className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
         data-section={sectionId}
         style={wrapperStyle}
       >
         {shouldHighlight && <SparkleIndicator />}
-
         {Object.keys(fields).map((key) => (
-          <React.Fragment key={key}>
-            {renderField(fields[key], data, undefined, undefined, isThumbnail)}
-          </React.Fragment>
+          <React.Fragment key={key}>{renderField(fields[key], data, undefined, undefined, isThumbnail)}</React.Fragment>
         ))}
       </div>
     );
@@ -85,36 +64,24 @@ export function renderHeaderSection(
 
   return (
     <div
-      className={cn(className, shouldBlur && "blur-[2px] pointer-events-none")}
+      className={cn(className, shouldBlur && 'blur-[2px] pointer-events-none')}
       data-section={sectionId}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
-
       {fields.nameTitle ? (
         <div className={fields.nameTitle.className}>
           {fields.name && (
-            <p className={fields.name.className}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
-            </p>
+            <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
           )}
-
           {fields.title && fields.title.path && (
-            <p className={fields.title.className}>
-              {resolvePath(data, fields.title.path)}
-            </p>
+            <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
           )}
-
           {fields.description && fields.description.path && (
             <div
               className={fields.description.className}
               dangerouslySetInnerHTML={{
-                __html:
-                  resolvePath(
-                    data,
-                    fields.description.path,
-                    fields.description.fallback
-                  ) || "",
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
               }}
             />
           )}
@@ -122,62 +89,23 @@ export function renderHeaderSection(
       ) : (
         <>
           {fields.name && (
-            <p className={fields.name.className}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
-            </p>
+            <p className={fields.name.className}>{resolvePath(data, fields.name.path, fields.name.fallback)}</p>
           )}
-
           {fields.title && fields.title.path && (
-            <p className={fields.title.className}>
-              {resolvePath(data, fields.title.path)}
-            </p>
+            <p className={fields.title.className}>{resolvePath(data, fields.title.path)}</p>
           )}
-
           {fields.description && fields.description.path && (
             <div
               className={fields.description.className}
               dangerouslySetInnerHTML={{
-                __html:
-                  resolvePath(
-                    data,
-                    fields.description.path,
-                    fields.description.fallback
-                  ) || "",
+                __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
               }}
             />
           )}
         </>
       )}
 
-      {fields.contact && fields.contact.type === "contact-grid" && (
-        <div className={fields.contact.className}>
-          {fields.contact.items.map((item: any, idx: number) => {
-            if (item.type === "inline-group-with-icon") {
-              return (
-                <div key={idx} className={item.className}>
-                  {item.items.map((subItem: any, subIdx: number) => (
-                    <React.Fragment key={subIdx}>
-                      {renderField(
-                        subItem,
-                        data,
-                        undefined,
-                        undefined,
-                        isThumbnail
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
-              );
-            }
-
-            return (
-              <div key={idx} className={item.className}>
-                {renderField(item, data, undefined, undefined, isThumbnail)}
-              </div>
-            );
-          })}
-        </div>
-      )}
+      {fields.contact && fields.contact.type === 'contact-grid' && <>{renderField(fields.contact, data)}</>}
 
       {fields.contact && (
         <div className={fields.contact.className}>
@@ -189,21 +117,16 @@ export function renderHeaderSection(
                 return { item, value, originalIdx: idx };
               })
               .filter((entry: any) => entry !== null);
-
             return validItems.map((entry: any, arrayIdx: number) => {
               const { item, value, originalIdx } = entry;
-              const showSeparator =
-                arrayIdx > 0 && fields.contact.separator;
-
-              if (item.type === "link") {
-                const href = item.href.startsWith("mailto:")
-                  ? item.href.replace("{{value}}", value)
+              const showSeparator = arrayIdx > 0 && fields.contact.separator;
+              if (item.type === 'link') {
+                const href = item.href.startsWith('mailto:')
+                  ? item.href.replace('{{value}}', value)
                   : resolvePath(data, item.href);
-
-                const linkProps = item.href.startsWith("mailto:")
+                  const linkProps = item.href.startsWith("mailto:")
                   ? {}
                   : { target: "_blank", rel: "noopener noreferrer" };
-
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
@@ -213,12 +136,11 @@ export function renderHeaderSection(
                   </span>
                 );
               }
-
               return (
-                <React.Fragment key={originalIdx}>
+                <span key={originalIdx}>
                   {showSeparator && fields.contact.separator}
                   <span className={item.className}>{value}</span>
-                </React.Fragment>
+                </span>
               );
             });
           })()}

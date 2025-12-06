@@ -9,7 +9,7 @@ export function renderTwoColumnLayout(
   isThumbnail?: boolean,
   renderSection?: (section: any, data: any, currentSection?: string, hasSuggestions?: boolean, isThumbnail?: boolean) => React.ReactNode,
 ): React.ReactNode {
-  const { leftColumn, rightColumn, className } = section;
+    const { leftColumn, rightColumn, className } = section;
 
   return (
     <div className={cn(className)} data-item="two-column-layout">
@@ -28,7 +28,7 @@ export function renderTwoColumnLayout(
       {rightColumn && (
         <div className={cn(rightColumn.className)}>
           {rightColumn.sections?.map((subSection: any, idx: number) => (
-             <React.Fragment key={idx}>
+            <React.Fragment key={idx}>
               {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
             </React.Fragment>
           ))}

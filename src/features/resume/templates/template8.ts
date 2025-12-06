@@ -62,20 +62,6 @@ const template8 = {
                 },
               ],
             },
-            {
-              type: 'inline-group-with-icon',
-              className: 'flex items-center gap-1',
-              items: [
-                { type: 'icon', name: 'Github', size: 12, className: 'w-3 h-3' },
-                {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.github.title',
-                  href: 'personalDetails.items[0].links.github.link',
-                  fallback: 'Github',
-                  className: 'text-sm underline',
-                },
-              ],
-            },
           ],
         },
       },
@@ -89,13 +75,14 @@ const template8 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Professional Summary',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-5',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Professional Summary',
-        className: 'text-sm text-neutral-900 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
+        className:
+          'text-sm text-neutral-900 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
       },
     },
 
@@ -156,7 +143,7 @@ const template8 = {
           {
             className: 'flex flex-row justify-between items-start',
             cells: [
-              { path: 'position', className: 'text-sm italic' },
+              { path: 'position', className: 'text-sm' },
               { type: 'duration', path: 'duration', className: 'text-sm italic' },
             ],
           },
@@ -205,8 +192,7 @@ const template8 = {
           {
             type: 'html',
             path: 'description',
-            className:
-              'text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
+            className: 'text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
           },
         ],
       },
@@ -219,12 +205,12 @@ const template8 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Technical Skills',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4 mb-1.5',
       },
       listPath: 'skills.items',
       itemPath: 'name',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-row flex-wrap gap-1 mt-2',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 
@@ -255,7 +241,7 @@ const template8 = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-0.5 mt-2',
+        className: 'flex flex-col gap-0.5 mt-2 leading-none',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-bold' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-sm' },

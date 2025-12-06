@@ -18,7 +18,7 @@ const enzoTemplate1 = {
     },
     right: {
       width: 'calc(100% - 270px)',
-      className: 'px-10 py-8 flex flex-col gap-6',
+      className: 'px-10 py-8 flex flex-col gap-4',
     },
   },
 
@@ -122,7 +122,7 @@ const enzoTemplate1 = {
       id: 'profile',
       type: 'content-section',
       column: 'left',
-      className: 'flex flex-col gap-1 mb-6 pt-6 border-t border-[#C9A961]',
+      className: 'flex flex-col gap-1 pt-6 border-t border-[#C9A961]',
       heading: {
         path: 'summary.heading',
         fallback: 'PROFESSIONAL PROFILE',
@@ -153,6 +153,7 @@ const enzoTemplate1 = {
       itemPath: 'name',
       itemClassName: 'text-xs text-neutral-800',
       containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
+      itemSeparator: ', ',
     },
 
     // Header Section - Right Column
@@ -285,7 +286,7 @@ const enzoTemplate1 = {
             cells: [
               {
                 path: 'grade.value',
-                prefix: 'GPA: ',
+                prefix: 'CGPA - ',
                 className: 'text-xs text-neutral-700',
               },
             ],
@@ -321,6 +322,42 @@ const enzoTemplate1 = {
           },
         ],
       },
+    },
+
+        // Interests Section - Left Column
+    {
+      id: 'interests',
+      break: false,
+      type: 'inline-list-section',
+      column: 'right',
+      className: 'pt-6 border-t border-[#C9A961]',
+      heading: {
+        path: 'interests.heading',
+        fallback: 'INTERESTS',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
+      },
+      listPath: 'interests.items[0].items',
+      itemClassName: 'text-xs text-neutral-800',
+      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
+      itemSeparator: ', ',
+    },
+
+    // Achievements Section - Left Column
+    {
+      id: 'achievements',
+      break: false,
+      type: 'inline-list-section',
+      column: 'right',
+      className: 'pt-6 border-t border-[#C9A961]',
+      heading: {
+        path: 'achievements.heading',
+        fallback: 'ACHIEVEMENTS',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
+      },
+      listPath: 'achievements.items[0].items',
+      itemClassName: 'text-xs text-neutral-800',
+      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
+      itemSeparator: ', ',
     },
   ],
 };

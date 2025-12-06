@@ -51,7 +51,12 @@ export function ResumeRenderer({
     const leftPages: React.ReactNode[][] = [];
     const rightPages: React.ReactNode[][] = [];
 
-    function paginateOneColumn(columnEl: HTMLElement, columnName: 'left' | 'right', outPages: React.ReactNode[][], bHeight: number) {
+    function paginateOneColumn(
+      columnEl: HTMLElement,
+      columnName: 'left' | 'right',
+      outPages: React.ReactNode[][],
+      bHeight: number,
+    ) {
       const pageMax = COLUMN_MAX[columnName];
       const pageMaxFirst = pageMax - bHeight;
 
@@ -240,12 +245,18 @@ export function ResumeRenderer({
                 ))}
               </div>
             )}
-            <div className={cn('flex flex-col', leftColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
+            <div
+              className={cn('flex flex-col', leftColumnClassName)}
+              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+            >
               {leftColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}
             </div>
-            <div className={cn('flex flex-col', rightColumnClassName)} style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}>
+            <div
+              className={cn('flex flex-col', rightColumnClassName)}
+              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+            >
               {rightColumn.map((node: any, i) => (
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
               ))}

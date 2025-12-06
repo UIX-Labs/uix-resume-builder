@@ -41,6 +41,7 @@ import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
 import TemplateButton from './change-template-button';
+import { trackEvent, startTimedEvent } from '@shared/lib/analytics/percept';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -349,6 +350,8 @@ export function FormPageBuilder() {
         return;
       }
 
+      startTimedEvent('resume_download');
+
       const response = await checkCommunityMember({
         personal_email: user?.email,
         uix_email: user?.email,
@@ -356,13 +359,26 @@ export function FormPageBuilder() {
 
       if (response?.is_uix_member) {
         await generatePDF();
+        trackEvent('resume_download', {
+          status: 'success',
+          format: 'pdf',
+          resumeId
+        });
       } else {
         setIsWishlistModalOpen(true);
+        trackEvent('resume_download_waitlist_prompt', {
+          resumeId
+        });
       }
     } catch (error) {
       console.error('Failed to download PDF:', error);
       toast.error('Failed to download PDF');
       setIsGeneratingPDF(false);
+      trackEvent('resume_download', {
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        resumeId
+      });
     }
   };
 
@@ -653,6 +669,12 @@ export function FormPageBuilder() {
       await generateAndSaveThumbnail();
 
       toast.success(`Resume saved successfully`);
+      
+      trackEvent('resume_saved', {
+        resumeId,
+        section: currentStep,
+        autoSave: false
+      });
     } catch {
       toast.error('Failed to save resume');
     }
@@ -696,6 +718,12 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
         setLastSaveTime(Date.now());
+        
+        trackEvent('resume_saved', {
+          resumeId,
+          section: step,
+          autoSave: true
+        });
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
@@ -777,6 +805,11 @@ export function FormPageBuilder() {
       refetchResumes();
 
       toast.success('Template updated successfully');
+      
+      trackEvent('template_selected', {
+        templateId: template.id,
+        resumeId
+      });
     } catch (error) {
       console.error('Failed to update template:', error);
       toast.error('Failed to update template');
@@ -811,6 +844,14 @@ export function FormPageBuilder() {
       suggestionType,
     });
     setAnalyzerModalOpen(true);
+
+    trackEvent('builder_intelligence_viewed', {
+      resumeId,
+      section: currentStep,
+      field: fieldName,
+      suggestionType,
+      suggestionCount: suggestions.length
+    });
   };
 
   const handleApplySuggestions = async (
@@ -872,6 +913,14 @@ export function FormPageBuilder() {
         fieldName,
         selectedSuggestions,
       );
+
+      trackEvent('builder_intelligence_applied', {
+        resumeId,
+        section: currentStep,
+        field: fieldName,
+        suggestionType: analyzerModalData.suggestionType,
+        count: selectedSuggestions.length
+      });
 
       const updatedData = {
         ...formData,
@@ -1064,6 +1113,7 @@ export function FormPageBuilder() {
           suggestions={analyzerModalData.suggestions}
           suggestionType={analyzerModalData.suggestionType}
           onApply={handleApplySuggestions}
+          resumeId={resumeId}
         />
       )}
       {isWishlistModalOpen && (

@@ -14,6 +14,7 @@ import { Home, FileText, LogOut, Sparkles, LayoutGrid } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -21,6 +22,34 @@ export default function DashboardSidebar() {
 
   const handleLogout = () => {
     logoutMutation.mutate();
+  };
+
+  const handleDashboardClick = () => {
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'dashboard'
+    });
+  };
+
+  const handleAllTemplatesClick = () => {
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'all_templates'
+    });
+  };
+
+  const handleYourResumesClick = () => {
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'your_resumes'
+    });
+  };
+
+  const handleLogoutClick = () => {
+    handleLogout();
+    trackEvent('logout_click', {
+      source: 'dashboard_sidebar'
+    });
   };
 
   return (
@@ -45,7 +74,10 @@ export default function DashboardSidebar() {
             <SidebarMenu className="space-y-1.5">
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === '/dashboard'}>
-                  <Link href="/dashboard">
+                  <Link 
+                    href="/dashboard"
+                    onClick={handleDashboardClick}
+                  >
                     <Home className="w-5 h-5" />
                     Dashboard
                   </Link>
@@ -54,7 +86,10 @@ export default function DashboardSidebar() {
               
                <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === '/get-all-resumes'}>
-                  <Link href="/get-all-resumes">
+                  <Link 
+                    href="/get-all-resumes"
+                    onClick={handleAllTemplatesClick}
+                  >
                     <LayoutGrid className="w-5 h-5" />
                     All Templates
                   </Link>
@@ -63,7 +98,10 @@ export default function DashboardSidebar() {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
-                  <Link href="/resumes">
+                  <Link 
+                    href="/resumes"
+                    onClick={handleYourResumesClick}
+                  >
                     <FileText className="w-5 h-5" />
                     Your Resumes
                   </Link>
@@ -112,7 +150,7 @@ export default function DashboardSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton
                   asChild
-                  onClick={handleLogout}
+                  onClick={handleLogoutClick}
                   disabled={logoutMutation.isPending}
                   className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
                 >

@@ -76,7 +76,10 @@ export function ResumeRenderer({
         const children = Array.from(parentEl.children) as HTMLElement[];
 
         for (const child of children) {
-          const canBreak = child.getAttribute('data-canbreak') === 'true'
+          // Check if element is breakable - either via attribute or by tag name (ul, ol are naturally breakable)
+          const tagName = child.tagName?.toLowerCase();
+          const isListElement = tagName === 'ul' || tagName === 'ol';
+          const canBreak = child.getAttribute('data-canbreak') === 'true' || isListElement;
           const hasBreakableContent =
             child.querySelector('[data-has-breakable-content="true"]') !== null ||
             child.getAttribute('data-has-breakable-content') === 'true';

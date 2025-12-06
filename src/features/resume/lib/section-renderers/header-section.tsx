@@ -1,16 +1,16 @@
-import React from "react";
-import { cn } from "@shared/lib/cn";
-import { resolvePath } from "../resolve-path";
-import { SparkleIndicator } from "../components/SparkleIndicator";
-import { hasPendingSuggestions } from "../section-utils";
-import { renderField } from "../field-renderer";
+import React from 'react';
+import { cn } from '@shared/lib/cn';
+import { resolvePath } from '../resolve-path';
+import { SparkleIndicator } from '../components/SparkleIndicator';
+import { hasPendingSuggestions } from '../section-utils';
+import { renderField } from '../field-renderer';
 
 export function renderHeaderSection(
   section: any,
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
 
@@ -19,19 +19,29 @@ export function renderHeaderSection(
   );
 
   const sectionId = id || 'header-section';
-  const dataKey = 'personalDetails';
-  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
-  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+
+  // Check for suggestions in both personalDetails and professionalSummary (merged logic)
+  const personalDetailsSuggestions = data['personalDetails']?.suggestedUpdates;
+  const professionalSummarySuggestions = data['professionalSummary']?.suggestedUpdates;
+  const hasValidPersonalDetailsSuggestions = hasPendingSuggestions(personalDetailsSuggestions);
+  const hasValidSummarySuggestions = hasPendingSuggestions(professionalSummarySuggestions);
+  const hasValidSuggestions = hasValidPersonalDetailsSuggestions || hasValidSummarySuggestions;
+
   const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  // Highlight header when personalDetails is selected
-  const isPersonalDetailsActive = currentSection?.toLowerCase() === 'personaldetails' && isHeader;
+  // Highlight header when personalDetails OR summary is selected (merged sections)
+  const currentSectionLower = currentSection?.toLowerCase();
+  const isMergedSectionActive =
+    isHeader &&
+    (currentSectionLower === 'personaldetails' ||
+      currentSectionLower === 'summary' ||
+      currentSectionLower === 'header' ||
+      currentSectionLower === 'header-section');
 
   const shouldBlur =
-    !isThumbnail && hasSuggestions && currentSection && !isActive && !isPersonalDetailsActive && hasValidSuggestions;
-  const shouldHighlight =
-    !isThumbnail && hasSuggestions && (isActive || isPersonalDetailsActive) && hasValidSuggestions;
+    !isThumbnail && hasSuggestions && currentSection && !isActive && !isMergedSectionActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && (isActive || isMergedSectionActive) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',
@@ -124,9 +134,9 @@ export function renderHeaderSection(
                 const href = item.href.startsWith('mailto:')
                   ? item.href.replace('{{value}}', value)
                   : resolvePath(data, item.href);
-                  const linkProps = item.href.startsWith("mailto:")
+                const linkProps = item.href.startsWith('mailto:')
                   ? {}
-                  : { target: "_blank", rel: "noopener noreferrer" };
+                  : { target: '_blank', rel: 'noopener noreferrer' };
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
@@ -148,9 +158,7 @@ export function renderHeaderSection(
       )}
 
       {fields.address && (
-        <p className={fields.address.className}>
-          {resolvePath(data, fields.address.path, fields.address.fallback)}
-        </p>
+        <p className={fields.address.className}>{resolvePath(data, fields.address.path, fields.address.fallback)}</p>
       )}
     </div>
   );

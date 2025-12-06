@@ -94,6 +94,7 @@ const template10 = {
       column: 'right',
       showBullet: true,
       break: true,
+      breakable: true,
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',

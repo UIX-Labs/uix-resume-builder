@@ -327,7 +327,7 @@ export function renderItemWithFields(
   return template.fields.map((field: any, idx: number) => (
     <div
       key={idx}
-      data-canbreak={field.type === 'html' ? 'true' : undefined}
+      data-canbreak={field.breakable ? 'true' : undefined}
       data-has-breakable-content={field.breakable ? 'true' : undefined}
     >
       {renderField(field, item, itemId, suggestedUpdates, isThumbnail)}

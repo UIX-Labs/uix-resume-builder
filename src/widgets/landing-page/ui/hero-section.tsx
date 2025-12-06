@@ -31,7 +31,7 @@ const HeroSection = () => {
         </div>
       ),
       desktopPosition: { top: '-30%', left: '-6%' },
-      mobilePosition: { top: '-28%', left: '-38%' },
+      mobilePosition: { top: '-22%', left: '-40%' },
       mobileWidth: 320,
       initial: { x: -300, y: -300, opacity: 0 },
     },
@@ -44,7 +44,7 @@ const HeroSection = () => {
         </div>
       ),
       desktopPosition: { top: '80%', left: '-7%' },
-      mobilePosition: { top: '130%', left: '-45%' },
+      mobilePosition: { top: '110%', left: '-50%' },
       width: 420,
       mobileWidth: 420,
       rotate: 12,
@@ -59,7 +59,7 @@ const HeroSection = () => {
         </div>
       ),
       desktopPosition: { top: '-22%', right: '-8%' },
-      mobilePosition: { top: '-22%', right: '-28%' },
+      mobilePosition: { top: '-18%', right: '-28%' },
       width: 250,
       mobileWidth: 250,
       initial: { rotate: 25, x: 400, y: -200, opacity: 0 },
@@ -73,7 +73,7 @@ const HeroSection = () => {
         </div>
       ),
       desktopPosition: { top: '80%', right: '-7%' },
-      mobilePosition: { top: '100%', right: '-40%' },
+      mobilePosition: { top: '90%', right: '-50%' },
       width: 300,
       mobileWidth: 350,
       rotate: -15,
@@ -130,21 +130,21 @@ function handleLinkedInUnified() {
         </div>
 
         <div className="mt-3 md:mt-0">
-          <h1 className="text-[30px] md:text-[80px] font-semibold text-foreground mb-4 leading-[0.85] md:leading-tight">
+          <h1 className="text-5xl md:text-[80px] font-semibold text-foreground mb-1 md:mb-4 leading-[0.85] md:leading-tight">
             Build a <span className="text-blue-800 font-[900]">Professional</span>
             <br />
-            <span className="text-[28px] md:text-[80px] block -mt-1 md:-mt-8 mx-auto w-fit px-6 md:px-[53px] rounded-full text-[rgba(0,137,65,1)] font-[900] backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
+            <span className="text-5xl md:text-[80px] block -mt-4 md:-mt-8 mx-auto w-fit px-6 md:px-[53px] rounded-full text-[rgba(0,137,65,1)] font-[900] backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
               Resume
             </span>
           </h1>
 
-          <p className="text-2xl md:text-[37px] font-semibold text-foreground mt-2 md:mt-0">in under 3 minutes</p>
+          <p className="text-2xl md:text-[37px] font-semibold text-foreground">in under 3 minutes</p>
         </div>
 
         <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
           <Button
             onClick={handleLinkedInUnified}
-            className="w-full md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
+            className="w-[280px] md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >
             Auto-fill via LinkedIn
@@ -152,7 +152,7 @@ function handleLinkedInUnified() {
 
           <Button
             onClick={handleUploadClick}
-            className="w-full md:w-auto py-6 md:py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-xl md:text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-[240px] md:w-auto py-6 md:py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-xl md:text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Upload existing resume
           </Button>

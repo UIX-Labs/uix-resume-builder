@@ -30,8 +30,8 @@ export const MobileTextView = ({ isOpen, onClose }: MobileTextViewProps) => {
 
         <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 flex items-start gap-4">
           <div>
-            <h2 className="text-xl font-bold mb-2">View on Desktop</h2>
-            <p className="text-base leading-relaxed">
+            <h2 className="text-xl font-bold mb-2 text-black">View on Desktop</h2>
+            <p className="text-base leading-relaxed text-black">
               For the best experience building your resume, please visit this website on a desktop or laptop computer. 
               Our resume builder offers full functionality and advanced features on larger screens.
             </p>

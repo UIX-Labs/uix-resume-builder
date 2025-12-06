@@ -106,6 +106,9 @@ export function TemplateCarousel() {
 
   const { data: templates } = useGetAllTemplates();
 
+  // Limit templates to 3 on mobile, show all on desktop
+  const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
+
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[24px] md:rounded-[36px] overflow-hidden min-h-[556px] m-2 md:m-4">
       <div className="absolute -left-[100px] md:-left-[150px] -top-[150px] md:-top-[214px] w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-gradient-to-br from-[rgb(37,122,255)] via-[rgb(37,122,255)] to-[rgb(23,23,23)] blur-[100px]" />
@@ -147,7 +150,7 @@ export function TemplateCarousel() {
             <div className="w-full lg:pl-[61px]">
               <div className="overflow-hidden w-full lg:w-[900px]" ref={emblaRef}>
                 <div className="flex gap-2 items-center">
-                  {templates?.map((template) => (
+                  {displayTemplates?.map((template) => (
                     <div key={template.id} className="group">
                       <div className="cursor-pointer h-full">
                         <div className="p-4 h-full">
@@ -242,7 +245,7 @@ export function TemplateCarousel() {
           {/* Pagination dots */}
           <div className="flex justify-center lg:justify-end lg:pr-[440px] pb-4 lg:pb-[29px]">
             <div className="flex items-center gap-3">
-              {templates?.map((_, index) => (
+              {displayTemplates?.map((_, index) => (
                 <button
                   type="button"
                   key={index}

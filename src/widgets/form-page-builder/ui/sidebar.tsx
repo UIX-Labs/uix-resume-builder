@@ -22,6 +22,7 @@ import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-
 import { toast } from 'sonner';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { hasPendingSuggestions } from '@features/resume/renderer';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -68,6 +69,11 @@ export function Sidebar() {
   const isTailoredWithJD = useAnalyzerStore((state) => state.isTailoredWithJD);
 
   const handleBuilderIntelligence = async () => {
+    trackEvent('builder_intelligence_click', {
+      source: 'form_builder_sidebar',
+      resumeId: resumeId
+    });
+
     if (!resumeId) {
       toast.error('Resume ID not found');
       return;

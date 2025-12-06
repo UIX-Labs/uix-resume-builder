@@ -5,6 +5,8 @@ import type { SuggestionType } from '@entities/resume';
 import { useEffect, useMemo, useState } from 'react';
 import { RadioGroup } from '@shared/ui/radio-group';
 
+import { trackEvent } from '@/shared/lib/analytics/percept';
+
 interface Suggestion {
   old?: string;
   new: string;
@@ -17,6 +19,7 @@ interface AnalyzerModalProps {
   suggestions: Suggestion[];
   suggestionType: SuggestionType;
   onApply: (selectedSuggestions: Suggestion[]) => void;
+  resumeId: string;
 }
 
 export default function AnalyzerModal({
@@ -25,6 +28,7 @@ export default function AnalyzerModal({
   suggestions,
   suggestionType,
   onApply,
+  resumeId,
 }: AnalyzerModalProps) {
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set());
   const [selectedOptions, setSelectedOptions] = useState<Record<number, 'old' | 'new'>>({});
@@ -65,6 +69,13 @@ export default function AnalyzerModal({
     if (checked) newSelected.add(index);
     else newSelected.delete(index);
     setSelectedIndices(newSelected);
+
+    trackEvent('builder_intelligence_suggestion_selected', {
+      resumeId,
+      suggestionType,
+      state: checked ? 'checked' : 'unchecked',
+      index
+    });
   };
 
   const handleOptionChange = (index: number, value: 'old' | 'new') => {
@@ -72,6 +83,13 @@ export default function AnalyzerModal({
       ...prev,
       [index]: value,
     }));
+
+    trackEvent('builder_intelligence_suggestion_selected', {
+      resumeId,
+      suggestionType,
+      state: value,
+      index
+    });
   };
 
   const handleApply = () => {

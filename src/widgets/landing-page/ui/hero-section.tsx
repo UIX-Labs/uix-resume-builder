@@ -7,6 +7,7 @@ import { Button } from '@/shared/ui/components/button';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import { useState } from 'react';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 const HeroSection = () => {
   const router = useRouter();
@@ -69,6 +70,22 @@ const HeroSection = () => {
     },
   ];
 
+  const handleLinkedInAutofill = () => {
+    setIsModalOpen(true);
+    trackEvent('create_resume_click', {
+      source: 'landing_hero',
+      method: 'linkedin_autofill'
+    });
+  };
+
+  const handleUploadResume = () => {
+    handleNavigate();
+    trackEvent('create_resume_click', {
+      source: 'landing_hero',
+      method: 'upload_existing'
+    });
+  };
+
   return (
     <section className="relative w-full h-full select-none">
       <div className="max-w-7xl mx-auto relative text-center">
@@ -107,7 +124,7 @@ const HeroSection = () => {
 
         <div className="mt-10 flex flex-col items-center gap-[16px]">
           <Button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleLinkedInAutofill}
             className="py-8 px-6 bg-blue-900 border-2 border-white text-white text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >
@@ -115,7 +132,7 @@ const HeroSection = () => {
           </Button>
 
           <Button
-            onClick={handleNavigate}
+            onClick={handleUploadResume}
             className="py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Upload existing resume

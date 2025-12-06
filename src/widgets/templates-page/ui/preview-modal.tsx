@@ -16,7 +16,6 @@ interface PreviewModalProps {
 }
 
 export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewModalProps) {
-  const previewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
@@ -42,7 +41,6 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
   if (!template) return null;
 
   return (
-
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal>
         <DialogOverlay className="backdrop-blur-sm" />
@@ -53,30 +51,34 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
           <div onClick={onClose} className="absolute top-2 right-2 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors">
             <CloseIcon className="h-10 w-10" />
           </div>
-        <div ref={containerRef} className="h-full overflow-y-auto relative pt-0 pb-0 mb-0 bg-white border-0"> 
-         <div 
-            ref={previewRef} 
-            className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0 [&>*]:!mb-0"
-            style={{       
+          <div 
+            ref={containerRef} 
+            className="h-full overflow-y-auto relative pt-6 pb-8 bg-white"
+            style={{
+              paddingLeft: '20px',
+              paddingRight: '20px',
+            }}
+          > 
+            <div 
+              className="flex flex-col items-center [&>div]:border-b-2 [&>div]:border-gray-300 [&>div:last-child]:border-b-0"
+              style={{       
                 transform: `scale(${scale})`,
                 transformOrigin: "top center",
-                marginBottom: 0,
-                paddingBottom: 0,
-            }}
-          >
-            <ResumeRenderer
-              template={template.json}
-              data={resumeData || mockData}
-              currentSection={undefined}
-              hasSuggestions={false}
-              isThumbnail={false}
-            />
+                width: '100%',
+              }}
+            >
+              <ResumeRenderer
+                template={template.json}
+                data={resumeData || mockData}
+                currentSection={undefined}
+                hasSuggestions={false}
+                isThumbnail={false}
+              />
+            </div>
           </div>
-        </div>
         </DialogPrimitive.Content>
       </DialogPortal>
     </Dialog>
-
   );
 }
 

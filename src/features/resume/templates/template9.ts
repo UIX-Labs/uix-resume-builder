@@ -82,6 +82,20 @@ const template9 = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Github', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'github',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
           ],
         },
       },

@@ -61,6 +61,20 @@ const andrewTemplate = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Github', size: 14, className: 'text-black' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
           ],
         },
       },

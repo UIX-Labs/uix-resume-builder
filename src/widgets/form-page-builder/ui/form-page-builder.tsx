@@ -259,8 +259,6 @@ export function FormPageBuilder() {
         `src="${currentOrigin}/api/proxy-image`
       );
 
-      console.log('PDF HTML after URL conversion:', htmlContent.substring(0, 500));
-
     // Add necessary styles for the PDF
     const styledHtml = `
       <!DOCTYPE html>
@@ -515,18 +513,14 @@ export function FormPageBuilder() {
 
   async function generateAndSaveThumbnail() {
     if (!thumbnailRef.current || !resumeId) {
-      console.warn('Thumbnail generation skipped: missing ref or resumeId');
       return;
     }
 
     try {
-      console.log('Starting thumbnail generation...');
-
       // Get the parent container
       const container = thumbnailRef.current.parentElement as HTMLElement;
 
       if (!container) {
-        console.error('Thumbnail container not found');
         return;
       }
 
@@ -535,11 +529,8 @@ export function FormPageBuilder() {
 
       // Verify the element has content
       if (!thumbnailRef.current.innerHTML || thumbnailRef.current.innerHTML.trim() === '') {
-        console.error('Thumbnail element is empty!');
         return;
       }
-
-      console.log('Thumbnail element ready, generating image...');
 
       // Temporarily make container visible for capture (but keep it hidden visually)
       const originalHeight = container.style.height;
@@ -565,18 +556,13 @@ export function FormPageBuilder() {
       container.style.left = '0';
 
       if (!thumbnailDataUrl) {
-        console.error('Thumbnail generation returned null');
         return;
       }
-
-      console.log('Thumbnail generated successfully, uploading...');
 
       await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
 
       thumbnailGenerated.current = true;
       refetchResumes();
-
-      console.log('Thumbnail uploaded successfully');
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
     }

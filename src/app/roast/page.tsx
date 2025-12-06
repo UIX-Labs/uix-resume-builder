@@ -100,7 +100,7 @@ export default function RoastPage() {
           Resume Builder
         </Link>
 
-        <div className='flex flex-col items-center justify-center w-full py-20 px-5'>
+        <div className='flex flex-col items-center justify-center w-full pt-20 pb-20 md:pb-5 px-5'>
           <div className='flex items-center gap-1 px-2 py-1 bg-[#02A44F] text-white rounded-full text-xs font-bold mb-8'>
             <span>AI Powered</span>
 
@@ -113,21 +113,21 @@ export default function RoastPage() {
             />
           </div>
 
-          <h1 className='text-2xl lg:text-[40px] font-bold mb-4 leading-tight w-5/6 md:w-1/2 text-center text-[#005FF2]'>
+          <h1 className='text-2xl lg:text-[40px] font-bold mb-4 leading-tight w-full md:w-1/2 text-center text-[#005FF2]'>
             🔥 Resume Roast 🔥
             <br />
-            <span className='block -mt-2 lg:-mt-3 mx-auto rounded-full text-[#364153] font-medium backdrop-blur-xs bg-[#E3E3E3]/12 border border-white shadow-lg text-base lg:text-xl py-2 px-5'>
+            <span className='block -mt-2 lg:-mt-3 mx-auto rounded-full text-[#364153] font-medium backdrop-blur-xs bg-[#E3E3E3]/12 border border-white shadow-lg text-base lg:text-xl py-2 px-5 w-full'>
               Get your resume roasted (in a good way!) and discover what's
               holding you back from landing your dream job
             </span>
           </h1>
 
           {isPending ? (
-            <div className='w-4/5 md:w-1/2 mt-12'>
+            <div className='w-full md:w-1/2 mt-12'>
               <RoastLoading />
             </div>
           ) : response ? (
-            <div className='w-4/5 md:w-1/2 mt-8 pb-20'>
+            <div className='w-full md:w-1/2 mt-8 pb-20 md:pb-5'>
               <TypewriterRoast
                 content={response || ''}
                 onRoastAnother={() => setResponse(null)}
@@ -137,7 +137,7 @@ export default function RoastPage() {
             <>
               <div
                 className={cn(
-                  'bg-white/40 border-2 border-[#d1d5dc] border-dashed rounded-[16px] px-6 py-10 lg:px-[50px] lg:py-[40px] shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center transition-colors cursor-pointer mt-12 w-4/5 md:w-1/2',
+                  'bg-white/40 border-2 border-[#d1d5dc] border-dashed rounded-[16px] px-6 py-10 lg:px-[50px] lg:py-[40px] shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center transition-colors cursor-pointer mt-12 w-full md:w-1/2',
                   isDragging
                     ? 'border-[#005ff2] bg-blue-50/50'
                     : 'hover:bg-white/60'
@@ -183,13 +183,13 @@ export default function RoastPage() {
           )}
         </div>
 
-        <div className='w-full relative'>
+        <div className='w-full relative lg:-my-5'>
           <Image
             src='/images/template-1.svg'
             alt='Resume Template 1'
             width={300}
             height={400}
-            className='absolute top-[30%] left-[5%] md:left-[30%] w-[100px] md:w-[400px] opacity-70 rotate-[15deg] z-[-1]'
+            className='absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[400px] opacity-70 rotate-[15deg] z-[-1]'
           />
           <Image
             src='/images/template-2.svg'
@@ -203,10 +203,10 @@ export default function RoastPage() {
             alt='Resume Template 3'
             width={280}
             height={350}
-            className='absolute top-[30%] left-[25%] md:left-[30%] w-[100px] md:w-[350px] opacity-70 rotate-[5deg] z-[-1]'
+            className='absolute top-[30%] left-[25%] md:left-[70%] w-[100px] md:w-[350px] opacity-70 rotate-[5deg] z-[-1]'
           />
 
-          <Fire className='w-full' />
+          <Fire className='w-full scale-x-110' />
         </div>
       </main>
     </div>

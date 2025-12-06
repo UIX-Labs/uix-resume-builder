@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion'
 import { AlertCircle, CheckCircle2, Search, Sparkles } from 'lucide-react'
 
+import Fire from './fire'
+
 export function RoastLoading() {
   return (
     <div className='flex flex-col items-center justify-center w-full h-[400px] relative overflow-hidden rounded-2xl bg-slate-50/50 border border-slate-100'>
@@ -15,7 +17,12 @@ export function RoastLoading() {
         }}
       />
 
-      <div className='relative'>
+      {/* Animated Fire Background */}
+      <div className='absolute bottom-0 left-0 right-0 h-48 w-full z-0 opacity-10 pointer-events-none'>
+        <Fire className='w-full h-full' />
+      </div>
+
+      <div className='relative z-10'>
         {/* Resume Paper Representation */}
         <motion.div
           initial={{ y: 0 }}
@@ -40,6 +47,32 @@ export function RoastLoading() {
             <div className='mt-4 h-1.5 bg-slate-100 rounded w-full' />
             <div className='h-1.5 bg-slate-100 rounded w-3/4' />
           </div>
+
+          {/* Floating Fire Emojis (The Roast) */}
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={`fire-${i}`}
+              className='absolute z-10 text-2xl'
+              style={{
+                bottom: -10,
+                left: i === 0 ? '10%' : i === 1 ? '45%' : '80%',
+              }}
+              animate={{
+                y: [0, -120],
+                opacity: [0, 1, 0],
+                scale: [0.8, 1.2, 0.5],
+                rotate: [0, i % 2 === 0 ? 10 : -10],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                delay: i * 0.8,
+                ease: 'easeOut',
+              }}
+            >
+              {/* Removed emoji to avoid double fire effect with the background */}
+            </motion.div>
+          ))}
 
           {/* Floating 'Analysis' Icons appearing */}
           <motion.div
@@ -118,7 +151,9 @@ export function RoastLoading() {
               />
             ))}
           </div>
-          <span className='text-sm font-semibold ml-1'>AI is reading...</span>
+          <span className='text-sm font-semibold ml-1'>
+            Cooking up a roast...
+          </span>
         </div>
 
         <motion.p

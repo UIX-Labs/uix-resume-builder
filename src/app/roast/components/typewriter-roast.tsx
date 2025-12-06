@@ -2,6 +2,8 @@
 
 import { cn } from '@shared/lib/utils'
 import { motion } from 'framer-motion'
+import { Link, RotateCcw, Sparkles } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 // Helper component for individual line typing
@@ -63,8 +65,15 @@ const TypewriterLine = ({
   )
 }
 
-export function TypewriterRoast({ content }: { content: string }) {
+export function TypewriterRoast({
+  content,
+  onRoastAnother,
+}: {
+  content: string
+  onRoastAnother: () => void
+}) {
   const [activeLineIndex, setActiveLineIndex] = useState(0)
+  const router = useRouter()
 
   // Parse content into lines, handling the markdown bullet points
   // Split by newline, but sometimes markdown has soft wraps.
@@ -129,6 +138,26 @@ export function TypewriterRoast({ content }: { content: string }) {
             Roast Served! 🍽️
           </p>
           <p className='text-slate-600 text-sm'>Now go fix that resume!</p>
+
+          <div className='mt-8 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-10'>
+            <button
+              type='button'
+              onClick={onRoastAnother}
+              className='text-sm text-blue-500 hover:text-blue-700 hover:underline transition-colors flex items-center gap-2 font-medium cursor-pointer'
+            >
+              <RotateCcw className='w-4 h-4' />
+              Roast another resume
+            </button>
+
+            <button
+              type='button'
+              onClick={() => router.push('/dashboard')}
+              className='text-sm text-blue-500 hover:text-blue-700 hover:underline transition-colors flex items-center gap-2 font-medium cursor-pointer'
+            >
+              <Sparkles className='w-4 h-4' />
+              <span>Create My Resume</span>
+            </button>
+          </div>
         </motion.div>
       )}
     </div>

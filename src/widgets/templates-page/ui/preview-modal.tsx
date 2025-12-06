@@ -17,26 +17,6 @@ interface PreviewModalProps {
 
 export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
-
-  useEffect(() => {
-    if (!containerRef.current || !isOpen) return;
-
-    const updateScale = () => {
-      const containerWidth = containerRef.current?.clientWidth || 0;
-      // Resume width is 21cm ≈ 794px at 96dpi
-      const resumeWidth = 794;
-      if (containerWidth > 0) {
-        const calculatedScale = containerWidth / resumeWidth;
-        // Apply zoom out factor to fit width while keeping it zoomed out
-        setScale(calculatedScale * 0.7);
-      }
-    };
-
-    updateScale();
-    window.addEventListener('resize', updateScale);
-    return () => window.removeEventListener('resize', updateScale);
-  }, [isOpen]);
 
   if (!template) return null;
 
@@ -58,7 +38,6 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
             <div 
               className="flex flex-col items-center [&>div]:border-b-2 [&>div]:border-gray-300 [&>div:last-child]:border-b-0"
               style={{       
-                transform: `scale(${scale})`,
                 transformOrigin: "top center",
                 width: '100%',
               }}

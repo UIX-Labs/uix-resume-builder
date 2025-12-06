@@ -88,7 +88,6 @@ const template10 = {
       },
     },
 
-    // Skills Section - Right Column (after contact)
     {
       id: 'skills',
       type: 'list-section',
@@ -102,7 +101,7 @@ const template10 = {
       listPath: 'skills.items',
       containerClassName: 'flex flex-col gap-1 list-disc marker:text-sm marker:text-white ml-4 break-words min-w-0',
       itemTemplate: {
-        className: 'list-item break-words marker:text-white marker:text-xs',
+        className: 'list-item break-words marker:text-xs',
         fields: [
           {
             path: 'name',
@@ -180,7 +179,7 @@ const template10 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mb-3',
+        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mt-2',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',
@@ -192,7 +191,7 @@ const template10 = {
             cells: [
               {
                 type: 'inline-group',
-                className: 'flex flex-row gap-2 items-center',
+                className: 'flex flex-col gap-2 whitespace-nowrap',
                 items: [
                   {
                     path: 'institution',

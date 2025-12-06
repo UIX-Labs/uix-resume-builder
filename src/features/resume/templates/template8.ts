@@ -210,7 +210,7 @@ const template8 = {
       listPath: 'skills.items',
       itemPath: 'name',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'text-sm text-black leading-relaxed px-2',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 
@@ -241,7 +241,7 @@ const template8 = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-0.5 mt-2',
+        className: 'flex flex-col gap-0.5 mt-2 leading-none',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-bold' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-sm' },

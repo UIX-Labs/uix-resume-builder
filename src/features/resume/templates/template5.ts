@@ -197,6 +197,7 @@ const template5 = {
             fallback: 'Issuer',
             className: 'text-sm text-[#1a1a1a] font-normal mb-3',
           },
+          { type: 'duration', path: 'duration', className: 'text-sm text-[#1a1a1a]' },
         ],
       },
     },
@@ -360,7 +361,7 @@ const template5 = {
               },
               {
                 type: 'inline-group',
-                className: 'flex flex-col items-end',
+                className: 'flex flex-col items-end text-right',
                 items: [
                   {
                     type: 'duration',

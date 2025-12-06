@@ -45,7 +45,7 @@ const laurenChenTemplate = {
           className: 'text-sm font-normal text-white uppercase tracking-wide mt-2',
         },
         contact: {
-          type: 'inline-group',
+          type: 'contact-grid',
           className: 'flex flex-col mt-6',
           separator: '',
           items: [
@@ -67,137 +67,66 @@ const laurenChenTemplate = {
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2 mt-3',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Phone', size: 14, className: 'text-white' },
                     {
-                      type: 'icon',
-                      name: 'Phone',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].phone',
-                        fallback: '(123) 456-7890',
-                      },
+                      path: 'personalDetails.items[0].phone',
+                      fallback: '(123) 456-7890',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Mail', size: 14, className: 'text-white' },
                     {
-                      type: 'icon',
-                      name: 'Mail',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].email',
-                        fallback: 'lauren.chen@mail.com',
-                      },
+                      path: 'personalDetails.items[0].email',
+                      fallback: 'lauren.chen@mail.com',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'MapPin', size: 14, className: 'text-white' },
                     {
-                      type: 'icon',
-                      name: 'MapPin',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
-                    {
-                      type: 'text',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].address',
-                        fallback: '47 W 13th St., New York, NY 10011',
-                      },
+                      path: 'personalDetails.items[0].address',
+                      fallback: '47 W 13th St., New York, NY 10011',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
-                    {
-                      type: 'icon',
-                      name: 'Linkedin',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Linkedin', size: 14, className: 'text-white' },
                     {
                       type: 'link',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].links.linkedin.title',
-                        fallback: 'linkedin.com/in/lauren-chen',
-                      },
-                      hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.linkedin.link',
-                        fallback: 'https://linkedin.com/in/lauren-chen',
-                      },
+                      path: 'personalDetails.items[0].links.linkedin.title',
+                      href: 'personalDetails.items[0].links.linkedin.link',
+                      fallback: 'linkedin.com/in/lauren-chen',
                       className: 'text-xs text-white font-normal',
                     },
                   ],
                 },
                 {
-                  type: 'container',
-                  className: 'flex items-start gap-2',
-                  children: [
-                    {
-                      type: 'icon',
-                      name: 'Github',
-                      size: 14,
-                      className: 'text-white mt-0.5',
-                    },
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'Github', size: 14, className: 'text-white' },
                     {
                       type: 'link',
-                      pathWithFallback: {
-                        path: 'personalDetails.items[0].links.github.title',
-                        fallback: 'github.com/lauren-chen',
-                      },
-                      hrefPathWithFallback: {
-                        path: 'personalDetails.items[0].links.github.link',
-                        fallback: 'https://github.com/lauren-chen',
-                      },
+                      path: 'personalDetails.items[0].links.github.title',
+                      href: 'personalDetails.items[0].links.github.link',
+                      fallback: 'github.com/lauren-chen',
                       className: 'text-xs text-white font-normal',
-                    },
-                  ],
-                },
-              ],
-            },
-
-            // Summary section
-            {
-              type: 'inline-group',
-              className: 'flex flex-col gap-3 mt-6',
-              separator: '',
-              items: [
-                {
-                  type: 'container',
-                  className: 'flex flex-col gap-3',
-                  children: [
-                    {
-                      type: 'text',
-                      fallback: 'SUMMARY',
-                      className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
-                    },
-                    {
-                      type: 'html',
-                      path: 'personalDetails.items[0].description',
-                      fallback:
-                        'Digital Marketing Specialist with 6+ years of experience in online marketing, branding, and business strategy across music, media, and entertainment industries.',
-                      className: 'text-xs text-white font-normal leading-relaxed whitespace-pre-wrap mt-3',
                     },
                   ],
                 },
@@ -205,6 +134,29 @@ const laurenChenTemplate = {
             },
           ],
         },
+      },
+    },
+
+    /**
+     * SUMMARY - Left Column (separate section for page breaking)
+     */
+    {
+      id: 'summary',
+      type: 'content-section',
+      column: 'left',
+      break: true,
+      className: 'flex flex-col gap-3 mt-6',
+      heading: {
+        path: 'professionalSummary.heading',
+        fallback: 'SUMMARY',
+        className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
+      },
+      content: {
+        type: 'html',
+        path: 'personalDetails.items[0].description',
+        fallback:
+          'Digital Marketing Specialist with 6+ years of experience in online marketing, branding, and business strategy across music, media, and entertainment industries.',
+        className: 'text-xs text-white font-normal leading-relaxed whitespace-pre-wrap mt-3',
       },
     },
 
@@ -295,7 +247,7 @@ const laurenChenTemplate = {
           {
             path: 'degree',
             fallback: 'Bachelor of Arts, Communications',
-            className: 'text-sm font-bold text-neutral-900 mt-1 ml-1',
+            className: 'text-sm font-bold text-neutral-900 mt-1',
           },
           {
             type: 'horizontal-group',
@@ -436,22 +388,21 @@ const laurenChenTemplate = {
      */
     {
       id: 'interests',
-      type: 'badge-section',
+      type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       break: true,
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
-      },
-      divider: {
-        variant: 'line',
-        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-xs text-neutral-900 inline-block',
-      containerClassName: 'flex flex-wrap gap-2',
+      itemClassName: 'text-xs text-neutral-900 inline-block break-words',
+      containerClassName: 'grid grid-cols-3 gap-3',
+      itemSeparator: '',
     },
 
     /**
@@ -459,22 +410,21 @@ const laurenChenTemplate = {
      */
     {
       id: 'achievements',
-      type: 'badge-section',
+      type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       break: true,
       heading: {
         path: 'achievements.title',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
-      },
-      divider: {
-        variant: 'line',
-        className: 'border-t-2 border-[#D58D40] mt-1 mb-4',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-xs text-neutral-900 inline-block',
-      containerClassName: 'flex flex-wrap gap-2',
+      itemClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'grid grid-cols-1 gap-3',
+      itemSeparator: '',
     },
   ],
 };

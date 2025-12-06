@@ -5,7 +5,7 @@ const brianWayneTemplate = {
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
     fontFamily: 'Calibri',
-    padding: 0
+    padding: 0,
   },
 
   columns: {

@@ -211,7 +211,7 @@ const template6 = {
       id: 'summary',
       type: 'content-section',
       column: 'right',
-      className: 'flex flex-col gap-3 pb-6 px-8 border-b-4 border-[#E8A87C] pt-8',
+      className: 'flex flex-col gap-3 pb-6 pr-8 border-b-4 border-[#E8A87C] pt-8',
       heading: {
         path: 'about.heading',
         fallback: 'ABOUT',
@@ -239,7 +239,7 @@ const template6 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: 'flex flex-col pt-2 px-8',
+        className: 'flex flex-col pt-2 pl-8',
         fields: [
           {
             path: 'position',

@@ -16,7 +16,6 @@ import { toast } from 'sonner';
 import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
-import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import mockData from '../../../../mock-data.json';
 
@@ -37,6 +36,8 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import Image from 'next/image';
+import annaFieldTemplate from '@features/resume/templates/template3';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -57,7 +58,6 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
  */
 function isSectionEmpty(section: any): boolean {
   if (!section || typeof section !== 'object') {
-    console.log('  → Section is null/undefined or not an object');
     return true;
   }
 
@@ -65,19 +65,14 @@ function isSectionEmpty(section: any): boolean {
     const items = section.items;
 
     if (items.length === 0) {
-      console.log('  → Section has no items');
       return true;
     }
-
-    console.log(`  → Section has ${items.length} item(s), checking for non-empty fields...`);
 
     // Check if items contain any non-empty values
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      console.log(`  → Checking item ${i}:`, item);
 
       if (typeof item === 'string' && item.trim() !== '') {
-        console.log(`  → Item ${i} is a non-empty string`);
         return false;
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
@@ -95,7 +90,7 @@ function isSectionEmpty(section: any): boolean {
           }
 
           if (typeof value === 'object' && value !== null) {
-            const hasNonEmptyNested = Object.values(value).some(v => typeof v === 'string' && v.trim() !== '');
+            const hasNonEmptyNested = Object.values(value).some((v) => typeof v === 'string' && v.trim() !== '');
             if (hasNonEmptyNested) {
               console.log(`    → Found non-empty nested object field "${key}":`, value);
             }
@@ -103,7 +98,7 @@ function isSectionEmpty(section: any): boolean {
           }
 
           if (Array.isArray(value)) {
-            const hasNonEmptyArray = value.some(v => typeof v === 'string' && v.trim() !== '');
+            const hasNonEmptyArray = value.some((v) => typeof v === 'string' && v.trim() !== '');
             if (hasNonEmptyArray) {
               console.log(`    → Found non-empty array field "${key}":`, value);
             }
@@ -121,8 +116,6 @@ function isSectionEmpty(section: any): boolean {
         }
       }
     }
-
-    console.log('  → All items are empty');
   }
 
   return true;
@@ -174,6 +167,8 @@ export function FormPageBuilder() {
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -204,9 +199,9 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format('MMM-YYYY')
+  const currentMonthYear = dayjs().format('MMMM-YYYY').toLowerCase();
   const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName ? fullName.replace(/\s+/g, '-') : 'Resume';
+  const formattedName = fullName ? fullName.toLowerCase().replace(/\s+/g, '-') : 'resume';
   const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
@@ -376,7 +371,6 @@ export function FormPageBuilder() {
 
       // Fetch empty data for defaults
       const emptyData = await getResumeEmptyData();
-      
 
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData = { ...analyzedData };
@@ -400,43 +394,37 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      console.log('Data loaded for resume:', data);
+      // Determine if this is create flow (all sections empty) or edit flow (has data)
+      const sectionKeys = Object.keys(data).filter((key) => key !== 'templateId' && key !== 'updatedAt');
+      const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
 
-      // Check each section individually and merge with mock data as needed
-      const mergedData: Record<string, any> = {};
+      if (allSectionsEmpty) {
+        const mergedData: Record<string, any> = {};
 
-      // Get all section keys from actual data
-      const sectionKeys = Object.keys(data);
+        for (const sectionKey of Object.keys(data)) {
+          if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+            continue;
+          }
 
-      for (const sectionKey of sectionKeys) {
-        // Handle templateId and updatedAt separately - always use actual values
-        if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
-          mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-          continue;
+          const actualSection = data[sectionKey as keyof typeof data];
+          const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+          if (mockSection) {
+            const syncedSection = syncSectionIds(actualSection, mockSection);
+            mergedData[sectionKey] = syncedSection;
+          } else {
+            mergedData[sectionKey] = actualSection;
+          }
         }
 
-        const actualSection = data[sectionKey as keyof typeof data];
-        const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-        // Check if this specific section is empty
-        const isEmpty = isSectionEmpty(actualSection);
-
-        if (isEmpty && mockSection) {
-          // Section is empty, use mock data with synced IDs from actual data
-          const syncedSection = syncSectionIds(actualSection, mockSection);
-          mergedData[sectionKey] = syncedSection;
-          console.log(`Section "${sectionKey}": empty, using mock data with synced IDs`);
-        } else {
-          // Section has data, use actual data
-          mergedData[sectionKey] = actualSection;
-          console.log(`Section "${sectionKey}": has data, using actual data`);
-        }
+        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+      } else {
+        useFormDataStore.setState({ formData: data as Omit<ResumeData, 'templateId'> });
       }
-
-      console.log('Final merged data:', mergedData);
-      useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
+
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -504,9 +492,15 @@ export function FormPageBuilder() {
     }
 
     try {
+      setIsGeneratingThumbnail(true);
+
+      // Wait for React to re-render without highlights/sparkles
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
 
       if (!thumbnailDataUrl) {
+        setIsGeneratingThumbnail(false);
         return;
       }
 
@@ -516,6 +510,8 @@ export function FormPageBuilder() {
       refetchResumes();
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
+    } finally {
+      setIsGeneratingThumbnail(false);
     }
   }
 
@@ -538,7 +534,6 @@ export function FormPageBuilder() {
     // Trigger auto-save after 2 seconds of inactivity
     debouncedAutoSave(currentStep, formData[currentStep]);
 
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData, currentStep]);
 
@@ -553,11 +548,10 @@ export function FormPageBuilder() {
 
       if (!hasModifications) {
         toast.info(`No changes to save in ${currentStep}`);
-        console.log(`Manual save: No changes detected in ${currentStep}, skipping API call`);
+
         return;
       }
 
-      console.log(`Manual save: Changes detected in ${currentStep}, saving...`);
       thumbnailGenerated.current = false;
 
       await save({
@@ -583,6 +577,8 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
+        // Update last save time when save completes successfully
+        setLastSaveTime(Date.now());
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
@@ -602,20 +598,16 @@ export function FormPageBuilder() {
         const hasModifications = isSectionModified(step, currentFormData, mockData);
 
         if (!hasModifications) {
-          console.log(`Auto-save: No changes detected in ${step}, skipping API call`);
           return;
         }
-
-        console.log(currentFormData)
-
-        console.log(mockData)
-
-        console.log(`Auto-save: Changes detected in ${step}, saving...`);
         await save({
           type: step,
           data: data,
           updatedAt: Date.now(),
         });
+
+        // Update last save time when save completes successfully
+        setLastSaveTime(Date.now());
 
         // await generateAndSaveThumbnail();
       } catch (error) {
@@ -625,18 +617,68 @@ export function FormPageBuilder() {
     [save],
   );
 
-  const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    // Get fresh formData from store instead of using stale closure
-    const currentFormData = useFormDataStore.getState().formData;
-    const sectionData = currentFormData[sectionId as keyof typeof currentFormData];
-    if (sectionData) {
-
-      debouncedHideSave(sectionId, { ...sectionData, isHidden });
-      toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
-    }
-  }, [debouncedHideSave]);
+  const handleToggleHideSection = useCallback(
+    (sectionId: string, isHidden: boolean) => {
+      const sectionData = formData[sectionId as keyof typeof formData];
+      if (sectionData) {
+        debouncedHideSave(sectionId, { ...sectionData, isHidden });
+        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+      }
+    },
+    [formData, debouncedHideSave],
+  );
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
+
+  // Update display every 30 seconds to refresh relative time
+  const [refreshKey, setRefreshKey] = useState(0);
+  useEffect(() => {
+    if (!lastSaveTime) return;
+    
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1);
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [lastSaveTime]);
+
+  // Format last save time
+  const formatLastSaveTime = useCallback(() => {
+    if (!lastSaveTime) return null;
+    const diff = Date.now() - lastSaveTime;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    
+    if (seconds < 60) {
+      return 'saved less than a minute ago';
+    } else if (minutes === 1) {
+      return 'saved a minute ago';
+    } else if (minutes < 60) {
+      return `saved ${minutes} minutes ago`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      if (hours === 1) {
+        return 'saved an hour ago';
+      } else if (hours < 24) {
+        return `saved ${hours} hours ago`;
+      } else {
+        const days = Math.floor(hours / 24);
+        if (days === 1) {
+          return 'saved 24 hours ago';
+        } else {
+          return `saved ${days} days ago`;
+        }
+      }
+    }
+  }, [lastSaveTime, refreshKey]);
+
+  // Initialize last save time from resume data
+  useEffect(() => {
+    if (currentResume?.updatedAt) {
+      const updatedAt = new Date(currentResume.updatedAt).getTime();
+      setLastSaveTime(updatedAt);
+    }
+  }, [currentResume?.updatedAt]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {
@@ -778,10 +820,11 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate?.json ?? aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {})}
-                currentSection={isGeneratingPDF ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+               template={selectedTemplate?.json ?? aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
+                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -792,18 +835,37 @@ export function FormPageBuilder() {
         </div>
 
         {/* Sticky Save as PDF button */}
-        <div className="sticky bottom-0 left-0 right-0 flex justify-end pr-8 pb-4 pointer-events-none">
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+          {/* Change Template Button */}
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <Button
+              className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
+                        font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
+                        flex items-center gap-1.5 rounded-xl"
+            >
+              <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
+                <div className="relative w-4 h-4 bg-white rounded-full flex items-center justify-center">
+                  <Image src="/images/Vector.png" alt="change template" width={16} height={16} />
+                </div>
+              </div>
+              <span>Change Template</span>
+            </Button>
+          </TemplatesDialog>
+          
+          {/* Download PDF Button */}
           <Button
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
             className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
+                      flex items-center gap-1.5 rounded-xl"
           >
             {isGeneratingPDF ? (
               <>Generating PDF...</>
             ) : (
               <>
-                <Download /> PDF
+                <Download className="w-4 h-4" /> PDF
               </>
             )}
           </Button>
@@ -841,19 +903,21 @@ export function FormPageBuilder() {
           />
         </div>
 
-        {/* Sticky Bottom - Change Template and Next Button */}
+        {/* Sticky Bottom - Next Button */}
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
-          {/* Change Template Button on the left */}
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <div className="cursor-pointer">
-              <TemplateButton />
-            </div>
-          </TemplatesDialog>
+          {/* Last Save Time on the left */}
+          <div className="flex-1 flex justify-start">
+            {formatLastSaveTime() && (
+              <p className="text-sm text-gray-500">
+                {formatLastSaveTime()}
+              </p>
+            )}
+          </div>
 
           {/* Next Button on the right */}
           {navs[nextStepIndex]?.name && (
             <Button
-              className="ml-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
+              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleNextStep}
             >

@@ -73,6 +73,7 @@ const aniketTemplate = {
               {
                 type: 'inline-group',
                 separator: ' | ',
+                className: 'flex flex-row gap-1',
                 items: [
                   {
                     path: 'degree',
@@ -145,6 +146,7 @@ const aniketTemplate = {
               {
                 type: 'inline-group',
                 separator: ' | ',
+                className: 'flex flex-row gap-1',
                 items: [
                   { path: 'position', className: 'font-semibold' },
                   { path: 'company', className: 'font-semibold' },
@@ -171,13 +173,13 @@ const aniketTemplate = {
       },
     },
     // Skills Section
-    {
-      listPath: 'skills.items',
-      itemPath: 'name',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
-      itemSeparator: ', ',
-    },
+    // {
+    //   listPath: 'skills.items',
+    //   itemPath: 'name',
+    //   itemClassName: 'text-xs text-neutral-800',
+    //   containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
+    //   itemSeparator: ', ',
+    // },
 
     {
       id: 'skills',
@@ -193,7 +195,7 @@ const aniketTemplate = {
       listPath: 'skills.items',
       itemPath: 'name',
       itemClassName: 'text-sm text-black mt-1',
-      containerClassName: 'text-sm text-black leading-relaxed px-2',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 
@@ -269,7 +271,7 @@ const aniketTemplate = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2',
+        className: 'flex flex-col gap-1 mt-2 leading-none',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-semibold text-neutral-900' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-xs text-neutral-700' },

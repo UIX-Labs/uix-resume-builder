@@ -12,12 +12,12 @@ const annaFieldTemplate = {
     {
       id: 'header',
       type: 'header',
-      className: 'flex flex-col gap-4',
+      className: 'flex flex-col gap-3',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Anna Field',
-          className: 'text-2xl font-bold text-[rgb(17,9,128)] mb-3',
+          className: 'text-2xl font-bold text-[rgb(17,9,128)] mb-2',
         },
         contact: {
           type: 'contact-grid',
@@ -82,7 +82,7 @@ const annaFieldTemplate = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col gap-3 mt-6',
+      className: 'flex flex-col gap-3',
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
@@ -254,7 +254,7 @@ const annaFieldTemplate = {
       listPath: 'skills.items',
       itemPath: 'name',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'text-sm text-black leading-relaxed px-2',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 

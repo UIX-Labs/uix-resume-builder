@@ -82,7 +82,7 @@ const template11 = {
             {
               path: 'personalDetails.items[0].phone',
               fallback: '+91 432 2222 322',
-              className: 'text-[10px] font-medium text-[#2B6CB0] leading-[1.21]',
+              className: 'text-xs font-medium text-[#2B6CB0] leading-[1.21]',
             },
           ],
         },
@@ -181,7 +181,7 @@ const template11 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mb-3',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',

@@ -38,8 +38,7 @@ import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
-import Image from 'next/image';
-import annaFieldTemplate from '@features/resume/templates/template3';
+import TemplateButton from './change-template-button';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -518,13 +517,9 @@ export function FormPageBuilder() {
     try {
       setIsGeneratingThumbnail(true);
 
-      // Wait for React to re-render without highlights/sparkles
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       const thumbnailDataUrl = await generateThumbnail(targetRef.current);
 
       if (!thumbnailDataUrl) {
-        setIsGeneratingThumbnail(false);
         return;
       }
 
@@ -549,6 +544,22 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail();
   }, [resumeId, resumes]);
 
+  // Auto-generate thumbnail every 20 seconds
+  useEffect(() => {
+    if (!resumeId || !targetRef.current) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      // Only regenerate if there's form data
+      if (formData && Object.keys(formData).length > 0) {
+        generateAndSaveThumbnail();
+      }
+    }, 25000);
+
+    return () => clearInterval(intervalId);
+  }, [resumeId]);
+
   // Auto-save effect - triggers when formData changes
   useEffect(() => {
     if (!currentStep || !formData || !formData[currentStep]) {
@@ -562,6 +573,24 @@ export function FormPageBuilder() {
   }, [formData, currentStep]);
 
   async function handleNextStep() {
+    try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (hasModifications) {
+        thumbnailGenerated.current = false;
+
+        await save({
+          type: currentStep,
+          data: formData[currentStep],
+          updatedAt: Date.now(),
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save before moving to next step:', error);
+      toast.error('Failed to save changes');
+    }
+
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
@@ -629,15 +658,11 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-
-        // Update last save time when save completes successfully
         setLastSaveTime(Date.now());
-
-        // await generateAndSaveThumbnail();
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
-    }, 2000),
+    }, 25000),
     [save],
   );
 
@@ -848,7 +873,7 @@ export function FormPageBuilder() {
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
-                isThumbnail={isGeneratingPDF || isGeneratingThumbnail}
+                 isThumbnail={isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -883,6 +908,63 @@ export function FormPageBuilder() {
             )}
           </Button>
         </div>
+      <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+  {/* Change Template Button */}
+  <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+    <div
+      className="
+        pointer-events-auto
+        border border-[#CBE7FF]
+        bg-[#E9F4FF]
+        px-4 py-2
+        rounded-xl
+        shadow-lg
+        flex items-center gap-1.5
+        cursor-pointer
+        font-semibold
+        text-[#005FF2]
+        hover:bg-[#E9F4FF] hover:text-white
+        transition-colors
+      "
+    >
+      <TemplateButton />
+    </div>
+  </TemplatesDialog>
+
+
+  {/* Download PDF Button */}
+  <Button
+    onClick={handleDownloadPDF}
+    disabled={isGeneratingPDF}
+    className="
+      pointer-events-auto
+      border border-[#CBE7FF]
+      bg-[#E9F4FF]
+      font-semibold
+      text-[#005FF2]
+      hover:bg-[#E9F4FF] hover:text-white
+      shadow-lg
+      disabled:opacity-50 disabled:cursor-not-allowed
+      cursor-pointer
+      flex items-center gap-1.5
+      rounded-xl
+      p-5.5
+    "
+  >
+    {isGeneratingPDF ? (
+      <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+        Generating PDF...
+      </span>
+    ) : (
+      <>
+        <Download className="w-4 h-4" /><span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+        Download PDF
+      </span>
+      </>
+    )}
+  </Button>
+</div>
+
       </div>
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
@@ -894,7 +976,7 @@ export function FormPageBuilder() {
         />
 
         {/* Sticky Top - Save Button on the right */}
-        <div className="sticky top-0 z-10 bg-white pt-5 px-5 flex justify-end">
+        <div className="sticky top-0 z-10 bg-white py-5 px-5 flex justify-end">
           <Button
             className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
              text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"

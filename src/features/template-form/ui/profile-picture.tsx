@@ -103,6 +103,20 @@ export const ProfilePictureInput = ({
     }
   };
 
+  const handleDelete = () => {
+    setImageUrl('');
+    onChange({ profilePicturePublicUrl: '' });
+    setError(null);
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleChange = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <button
@@ -113,14 +127,50 @@ export const ProfilePictureInput = ({
           isDragging ? 'border-[#0059ED] bg-[#CBE7FF]' : 'border-[#959DA8] bg-[#FAFBFC]',
           isUploading && 'opacity-50 cursor-not-allowed',
         )}
-        onClick={() => !isUploading && fileInputRef.current?.click()}
+        onClick={() => !isUploading && !imageUrl && fileInputRef.current?.click()}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {imageUrl ? (
-          <div className="relative w-24 h-24 rounded-full overflow-hidden">
-            <Image src={imageUrl} alt="Profile" fill className="object-cover" unoptimized />
+          <div className="flex flex-col items-center gap-3">
+            <div className="relative w-24 h-24 rounded-full overflow-hidden">
+              <Image src={imageUrl} alt="Profile" fill className="object-cover" unoptimized />
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleChange();
+                }}
+                disabled={isUploading}
+                className={cn(
+                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
+                  'bg-[#E9F4FF] text-[#005FF2] border border-[#CBE7FF]',
+                  'hover:bg-[#005FF2] hover:text-white',
+                  isUploading && 'opacity-50 cursor-not-allowed'
+                )}
+              >
+                Change
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                disabled={isUploading}
+                className={cn(
+                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
+                  'bg-red-50 text-red-600 border border-red-200',
+                  'hover:bg-red-600 hover:text-white',
+                  isUploading && 'opacity-50 cursor-not-allowed'
+                )}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ) : (
           <div className="text-center">

@@ -3,10 +3,10 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
 import { renderSection } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
-export { generateThumbnail } from './lib/thumbnail';
-export type { ThumbnailOptions } from './lib/thumbnail';
+export { generateThumbnail } from './lib/thumbnail/thumbnail';
+export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
 
-type RenderProps = {
+export type RenderProps = {
   template: any;
   data: any;
   className?: string;
@@ -227,6 +227,7 @@ export function ResumeRenderer({
               ...baseStyle,
               height: '29.7cm',
               backgroundColor: page.background || 'white',
+              fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
             }}
           >
@@ -241,7 +242,7 @@ export function ResumeRenderer({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
                 ))}
               </div>
             )}
@@ -267,3 +268,4 @@ export function ResumeRenderer({
     </>
   );
 }
+

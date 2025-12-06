@@ -92,7 +92,7 @@ const aniketTemplate2 = {
         path: 'experience.heading',
         fallback: 'Experience',
         className: 'text-lg font-bold text-black mt-1',
-        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
+        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5' },
       },
       listPath: 'experience.items',
       itemTemplate: {
@@ -214,6 +214,7 @@ const aniketTemplate2 = {
         divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
       },
       listPath: 'achievements.items[0].items',
+      itemPrefix: '• ',
       badgeClassName: 'text-sm text-black',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },

@@ -4,6 +4,7 @@ import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
@@ -865,6 +866,11 @@ export function FormPageBuilder() {
           maxWidth: 794 + 48 + 6,
         }}
       >
+        {/* Preview Button at top right */}
+        <div className="absolute top-0 right-3 z-10">
+          <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
+        </div>
+        
         <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef}>
             {selectedTemplate ? (
@@ -885,9 +891,6 @@ export function FormPageBuilder() {
 
         {/* Sticky Save as PDF button */}
         <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-          {/* Preview Button */}
-          <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
-          
           {/* Change Template Button */}
           <ChangeTemplateButton onTemplateSelect={handleTemplateSelect} />
           
@@ -908,63 +911,6 @@ export function FormPageBuilder() {
             )}
           </Button>
         </div>
-      <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-  {/* Change Template Button */}
-  <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-    <div
-      className="
-        pointer-events-auto
-        border border-[#CBE7FF]
-        bg-[#E9F4FF]
-        px-4 py-2
-        rounded-xl
-        shadow-lg
-        flex items-center gap-1.5
-        cursor-pointer
-        font-semibold
-        text-[#005FF2]
-        hover:bg-[#E9F4FF] hover:text-white
-        transition-colors
-      "
-    >
-      <TemplateButton />
-    </div>
-  </TemplatesDialog>
-
-
-  {/* Download PDF Button */}
-  <Button
-    onClick={handleDownloadPDF}
-    disabled={isGeneratingPDF}
-    className="
-      pointer-events-auto
-      border border-[#CBE7FF]
-      bg-[#E9F4FF]
-      font-semibold
-      text-[#005FF2]
-      hover:bg-[#E9F4FF] hover:text-white
-      shadow-lg
-      disabled:opacity-50 disabled:cursor-not-allowed
-      cursor-pointer
-      flex items-center gap-1.5
-      rounded-xl
-      p-5.5
-    "
-  >
-    {isGeneratingPDF ? (
-      <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Generating PDF...
-      </span>
-    ) : (
-      <>
-        <Download className="w-4 h-4" /><span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Download PDF
-      </span>
-      </>
-    )}
-  </Button>
-</div>
-
       </div>
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div

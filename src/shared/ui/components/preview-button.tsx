@@ -5,21 +5,19 @@ import { Button } from '@shared/ui/button';
 
 interface PreviewButtonProps {
   onClick: () => void;
-  className?: string;
-  children?: React.ReactNode;
 }
 
-export function PreviewButton({ onClick, className, children }: PreviewButtonProps) {
+export function PreviewButton({ onClick }: PreviewButtonProps) {
   return (
-    <Button
+    <div className="absolute top-6 right-6 z-10">
+    <button
+      type="button"
       onClick={onClick}
-      className={`pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
-                flex items-center gap-1.5 rounded-xl ${className || ''}`}
+      className="group h-10 w-10 rounded-lg bg-[#CBE7FF] hover:bg-[#005FF2] flex items-center justify-center shadow-lg transition-colors border-0 cursor-pointer p-0"
     >
-      <Eye className="w-4 h-4" />
-      {children || <span>Preview</span>}
-    </Button>
+      <Eye className="h-5 w-5 text-blue-500 hover:text-white transition-colors" />
+    </button>
+  </div>
   );
 }
 

@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { cn } from '@shared/lib/cn';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
 import { PreviewModal } from './preview-modal';
-import { Eye } from 'lucide-react';
+import { PreviewButton } from '@shared/ui/components/preview-button';
 
 interface TemplatesDialogProps {
   children: React.ReactNode;
@@ -48,7 +48,10 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
                   <TemplateCard 
                     key={template.id} 
                     template={template} 
-                    onClick={() => handleTemplateClick(template)}
+                    onClick={() => {
+                      onTemplateSelect?.(template);
+                      setIsOpen(false);
+                    }}
                     onPreviewClick={() => handleTemplateClick(template)}
                   />
                 ))}
@@ -75,14 +78,6 @@ interface TemplateCardProps {
 }
 
 export function TemplateCard({ template, onClick, isDashboard = false, onPreviewClick }: TemplateCardProps) {
-  const handleEyeClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onPreviewClick) {
-      onPreviewClick();
-    } else {
-      onClick();
-    }
-  };
 
   return (
     <div
@@ -100,15 +95,7 @@ export function TemplateCard({ template, onClick, isDashboard = false, onPreview
         </div>
 
         {/* Eye Icon - Preview Button */}
-        <div className="absolute top-6 right-6 z-10">
-          <button
-            type="button"
-            onClick={handleEyeClick}
-            className="group h-10 w-10 rounded-lg bg-[#CBE7FF] hover:bg-[#005FF2] flex items-center justify-center shadow-lg transition-colors border-0 cursor-pointer p-0"
-          >
-            <Eye className="h-5 w-5 text-blue-500 hover:text-white transition-colors" />
-          </button>
-        </div>
+        <PreviewButton onClick={() => onPreviewClick?.()} />
 
         <div className="absolute inset-0 flex items-end justify-center pb-9 gap-2 transition-colors duration-500">
           <Button

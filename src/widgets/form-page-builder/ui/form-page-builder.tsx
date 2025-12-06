@@ -259,13 +259,10 @@ export function FormPageBuilder() {
       // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
       // instead of relative URLs like "/api/proxy-image?url=..."
       const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
-      htmlContent = htmlContent.replace(
-        /src="\/api\/proxy-image/g,
-        `src="${currentOrigin}/api/proxy-image`
-      );
+      htmlContent = htmlContent.replace(/src="\/api\/proxy-image/g, `src="${currentOrigin}/api/proxy-image`);
 
-    // Add necessary styles for the PDF
-    const styledHtml = `
+      // Add necessary styles for the PDF
+      const styledHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -321,18 +318,18 @@ export function FormPageBuilder() {
       </html>
     `;
 
-    // Call the API to convert HTML to PDF
-    const pdfBlob = await convertHtmlToPdf(styledHtml);
+      // Call the API to convert HTML to PDF
+      const pdfBlob = await convertHtmlToPdf(styledHtml);
 
-    // Download the PDF
-    const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = resumeFileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      // Download the PDF
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = resumeFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
       toast.success('PDF downloaded successfully');
     } catch (error) {
@@ -362,12 +359,12 @@ export function FormPageBuilder() {
         trackEvent('resume_download', {
           status: 'success',
           format: 'pdf',
-          resumeId
+          resumeId,
         });
       } else {
         setIsWishlistModalOpen(true);
         trackEvent('resume_download_waitlist_prompt', {
-          resumeId
+          resumeId,
         });
       }
     } catch (error) {
@@ -377,7 +374,7 @@ export function FormPageBuilder() {
       trackEvent('resume_download', {
         status: 'failed',
         error: error instanceof Error ? error.message : 'Unknown error',
-        resumeId
+        resumeId,
       });
     }
   };
@@ -669,11 +666,11 @@ export function FormPageBuilder() {
       await generateAndSaveThumbnail();
 
       toast.success(`Resume saved successfully`);
-      
+
       trackEvent('resume_saved', {
         resumeId,
         section: currentStep,
-        autoSave: false
+        autoSave: false,
       });
     } catch {
       toast.error('Failed to save resume');
@@ -718,11 +715,11 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
         setLastSaveTime(Date.now());
-        
+
         trackEvent('resume_saved', {
           resumeId,
           section: step,
-          autoSave: true
+          autoSave: true,
         });
       } catch (error) {
         console.error('Auto-save failed:', error);
@@ -805,10 +802,10 @@ export function FormPageBuilder() {
       refetchResumes();
 
       toast.success('Template updated successfully');
-      
+
       trackEvent('template_selected', {
         templateId: template.id,
-        resumeId
+        resumeId,
       });
     } catch (error) {
       console.error('Failed to update template:', error);
@@ -850,7 +847,7 @@ export function FormPageBuilder() {
       section: currentStep,
       field: fieldName,
       suggestionType,
-      suggestionCount: suggestions.length
+      suggestionCount: suggestions.length,
     });
   };
 
@@ -919,7 +916,7 @@ export function FormPageBuilder() {
         section: currentStep,
         field: fieldName,
         suggestionType: analyzerModalData.suggestionType,
-        count: selectedSuggestions.length
+        count: selectedSuggestions.length,
       });
 
       const updatedData = {
@@ -991,7 +988,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(formData ?? {}, true)}
                 />
               )}
             </div>

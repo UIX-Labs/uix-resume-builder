@@ -141,9 +141,9 @@ export function ProgressCircle({ currentStep, totalSteps, progress }: ProgressCi
           Your Progress
         </p>
         <p className="text-gray-1000 text-[48px] font-[900] leading-[120%]">{progress}%</p>
-        <p className="text-[#666] text-[13px] font-regular">
+        {/* <p className="text-[#666] text-[13px] font-regular">
           {String(currentStep).padStart(2, '0')}/{String(totalSteps).padStart(2, '0')}
-        </p>
+        </p> */}
       </div>
     </div>
   );

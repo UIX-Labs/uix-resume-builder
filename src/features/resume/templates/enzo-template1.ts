@@ -138,20 +138,19 @@ const enzoTemplate1 = {
 
     // Professional Profile Section - Left Column
     {
-      id: 'profile',
+      id: 'summary',
       type: 'content-section',
       column: 'left',
       className: 'flex flex-col gap-1 pt-6 border-t border-[#C9A961]',
       heading: {
         path: 'summary.heading',
-        fallback: 'PROFESSIONAL PROFILE',
+        fallback: 'Profile',
         className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
-        fallback:
-          'Graphic Design Specialist with 5+ years of experience in the management of the complete design process, from conceptualization to delivery.',
+        fallback: 'Summary',
         className: 'text-xs text-neutral-800 leading-relaxed break-words whitespace-pre-wrap mb-6',
       },
     },
@@ -343,7 +342,7 @@ const enzoTemplate1 = {
       },
     },
 
-        // Interests Section - Left Column
+    // Interests Section - Left Column
     {
       id: 'interests',
       break: false,

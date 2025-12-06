@@ -50,7 +50,7 @@ export default function AnalyzerModal({
 
     setSelectedIndices(new Set());
     const initialOptions = suggestions.reduce<Record<number, 'old' | 'new'>>((acc, _, index) => {
-      acc[index] = 'old';
+      acc[index] = 'new';
       return acc;
     }, {});
     setSelectedOptions(initialOptions);
@@ -98,7 +98,7 @@ export default function AnalyzerModal({
       if (selected.length === 0) return;
       onApply(selected);
     } else {
-      const selected = suggestions.filter((_, index) => (selectedOptions[index] ?? 'old') === 'new');
+      const selected = suggestions.filter((_, index) => (selectedOptions[index] ?? 'new') === 'new');
       if (selected.length === 0) return;
       onApply(selected);
     }
@@ -148,7 +148,7 @@ export default function AnalyzerModal({
           ) : (
             <SuggestionCard label="Original" labelColor="white" bgColor="#FFD8D8" isGroup labelBackgroundColor="red">
               {suggestions.map((suggestion, index) => {
-                const selectedValue = selectedOptions[index] ?? 'old';
+                const selectedValue = selectedOptions[index] ?? 'new';
 
                 return (
                   <RadioGroup

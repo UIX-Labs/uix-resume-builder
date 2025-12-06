@@ -82,17 +82,70 @@ function normalizeContent(content: string | undefined): string {
   }
 
   const lines = content.split(/\r?\n/);
+  const result: string[] = [];
+  let inBulletList = false;
+  let inOrderedList = false;
 
-  return lines
-    .map((line) => {
-      if (!line) {
-        return '<p><br /></p>';
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
+    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+
+    if (bulletMatch) {
+      // Start bullet list if not already in one
+      if (!inBulletList) {
+        // Close ordered list if open
+        if (inOrderedList) {
+          result.push('</ol>');
+          inOrderedList = false;
+        }
+        result.push('<ul>');
+        inBulletList = true;
+      }
+      const escaped = bulletMatch[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      result.push(`<li><p>${escaped}</p></li>`);
+    } else if (orderedMatch) {
+      // Start ordered list if not already in one
+      if (!inOrderedList) {
+        // Close bullet list if open
+        if (inBulletList) {
+          result.push('</ul>');
+          inBulletList = false;
+        }
+        result.push('<ol>');
+        inOrderedList = true;
+      }
+      const escaped = orderedMatch[1].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      result.push(`<li><p>${escaped}</p></li>`);
+    } else {
+      // Close any open lists
+      if (inBulletList) {
+        result.push('</ul>');
+        inBulletList = false;
+      }
+      if (inOrderedList) {
+        result.push('</ol>');
+        inOrderedList = false;
       }
 
-      const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return `<p>${escaped}</p>`;
-    })
-    .join('');
+      if (!line) {
+        result.push('<p><br /></p>');
+      } else {
+        const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        result.push(`<p>${escaped}</p>`);
+      }
+    }
+  }
+
+  // Close any remaining open lists
+  if (inBulletList) {
+    result.push('</ul>');
+  }
+  if (inOrderedList) {
+    result.push('</ol>');
+  }
+
+  return result.join('');
 }
 
 /**
@@ -126,6 +179,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   ) => {
     const [isToolbarVisible, setIsToolbarVisible] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    // Flag to prevent onChange from firing during highlight application
+    const isApplyingHighlightsRef = React.useRef(false);
 
     const normalizedDefaultValue = React.useMemo(() => normalizeContent(defaultValue), [defaultValue]);
 
@@ -133,6 +188,21 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       extensions: [
         StarterKit.configure({
           heading: false,
+          /**
+           * The `bulletList` prop in the StarterKit Tiptap extension configures the behavior and HTML rendering of bulleted lists.
+           *
+           * - `keepMarks: true` and `keepAttributes: true` ensure that formatting and attributes on list text are preserved.
+           * - `HTMLAttributes: { style: 'list-style-type: disc;' }` sets the list style to traditional round bullets when rendered as HTML.
+           *
+           * If your input comes in as a markdown string, such as:
+           *   "- Item 1\n- Item 2"
+           * you need to make sure that:
+           *   1. The editor's `content` prop (here, `normalizedDefaultValue`) is parsed from markdown into Tiptap-compatible HTML,
+           *      otherwise lines starting with "-" will not automatically be interpreted as bullet list items.
+           *   2. Tiptap by default does not convert markdown syntax to lists. You may need to pre-process the markdown string using a parser
+           *      (e.g. `marked`, `remark`, or `markdown-it`) to produce valid HTML, or use an extension that enables markdown parsing.
+           *   3. Once the content is valid HTML (e.g. with <ul><li>... </li></ul>), and this configuration is present, the lists will render and style correctly.
+           */
           bulletList: {
             keepMarks: true,
             keepAttributes: true,
@@ -167,6 +237,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       immediatelyRender: false,
       editable: !disabled,
       onUpdate: ({ editor }) => {
+        // Skip onChange during highlight application to prevent infinite re-renders
+        if (isApplyingHighlightsRef.current) return;
+
         const html = editor.getHTML();
         const value = editor.getText();
 
@@ -188,50 +261,63 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     const applyErrorHighlights = React.useCallback(() => {
       if (!editor || !errorSuggestions || errorSuggestions.length === 0) return;
 
-      const colorMap = {
-        spelling_error: '#D97706',
-        sentence_refinement: '#F8BEC2',
-        new_summary: '#10B981',
-      };
+      // Set flag to prevent onChange during highlight operations
+      isApplyingHighlightsRef.current = true;
 
-      const text = editor.getText();
-      const underlineType = editor.state.schema.marks.underline;
+      try {
+        const colorMap = {
+          spelling_error: '#D97706',
+          sentence_refinement: '#F8BEC2',
+          new_summary: '#10B981',
+        };
 
-      errorSuggestions.forEach((suggestion) => {
-        if (!suggestion.old) return;
+        const text = editor.getText();
+        const underlineType = editor.state.schema.marks.underline;
 
-        const color = colorMap[suggestion.type];
+        errorSuggestions.forEach((suggestion) => {
+          if (!suggestion.old) return;
 
-        const normalizeText = (str: string) =>
-          str
-            .replace(/<[^>]*>/g, '') // Remove HTML tags
-            .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
-            .trim(); // Trim leading/trailing spaces
+          const color = colorMap[suggestion.type];
 
-        const searchText = normalizeText(suggestion.old);
-        const editorText = normalizeText(text);
+          const normalizeText = (str: string) =>
+            str
+              .replace(/<\/(p|li|div)>/gi, ' ') // Replace closing block tags with space to preserve word boundaries
+              .replace(/<br\s*\/?>/gi, ' ') // Replace <br> with space
+              .replace(/<[^>]*>/g, '') // Remove remaining HTML tags
+              .replace(/^[-•*]\s*/gm, '') // Remove bullet markers at start of lines (-, •, *)
+              .replace(/\n[-•*]\s*/g, ' ') // Replace newline + bullet with space
+              .replace(/\n/g, ' ') // Replace remaining newlines with space
+              .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
+              .trim(); // Trim leading/trailing spaces
 
-        if (!searchText) return;
+          const searchText = normalizeText(suggestion.old);
+          const editorText = normalizeText(text);
 
-        const index = editorText.indexOf(searchText);
-        if (index !== -1) {
-          const from = index + 1; // TipTap uses 1-based indexing
-          const to = from + searchText.length;
+          if (!searchText) return;
 
-          // Remove any underline marks first (to avoid <u> tag wrapping)
-          if (underlineType) {
-            editor.chain().setTextSelection({ from, to }).unsetMark('underline').run();
+          const index = editorText.indexOf(searchText);
+          if (index !== -1) {
+            const from = index + 1; // TipTap uses 1-based indexing
+            const to = from + searchText.length;
+
+            // Remove any underline marks first (to avoid <u> tag wrapping)
+            if (underlineType) {
+              editor.chain().setTextSelection({ from, to }).unsetMark('underline').run();
+            }
+
+            // Apply the error highlight mark
+            (editor as any)
+              .chain()
+              .setTextSelection({ from, to })
+              .setErrorHighlight(color)
+              .setTextSelection(editor.state.selection.to) // Reset selection
+              .run();
           }
-
-          // Apply the error highlight mark
-          (editor as any)
-            .chain()
-            .setTextSelection({ from, to })
-            .setErrorHighlight(color)
-            .setTextSelection(editor.state.selection.to) // Reset selection
-            .run();
-        }
-      });
+        });
+      } finally {
+        // Reset flag after all operations complete
+        isApplyingHighlightsRef.current = false;
+      }
     }, [editor, errorSuggestions]);
 
     // Update editor content when value prop changes
@@ -241,10 +327,11 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       const normalizedValue = normalizeContent(value);
       // Strip error highlight spans from HTML to prevent marks from being recreated
       // The marks will be reapplied by the errorSuggestions effect
-     const valueToSet = errorSuggestions && errorSuggestions.length > 0?  stripErrorHighlightSpans(normalizedValue): normalizedValue;
+      const valueToSet =
+        errorSuggestions && errorSuggestions.length > 0 ? stripErrorHighlightSpans(normalizedValue) : normalizedValue;
       const currentContent = editor.getHTML();
-   if (currentContent !== valueToSet) {
-          editor.commands.setContent(valueToSet, { emitUpdate: false });
+      if (currentContent !== valueToSet) {
+        editor.commands.setContent(valueToSet, { emitUpdate: false });
         // Reapply error highlights after content is set (with small delay to ensure content is ready)
         if (errorSuggestions && errorSuggestions.length > 0) {
           setTimeout(() => {
@@ -260,35 +347,43 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
       // Use a small delay to ensure editor content is ready
       const timeoutId = setTimeout(() => {
-        // First, clear all existing error highlight marks from the entire document
-        const clearAllErrorHighlights = () => {
-          const { state } = editor;
-          const { tr } = state;
-          let hasChanges = false;
+        // Set flag to prevent onChange during highlight operations
+        isApplyingHighlightsRef.current = true;
 
-          state.doc.descendants((node, pos) => {
-            if (node.marks) {
-              node.marks.forEach((mark) => {
-                if (mark.type.name === 'errorHighlight') {
-                  const from = pos;
-                  const to = pos + node.nodeSize;
-                  tr.removeMark(from, to, mark.type);
-                  hasChanges = true;
-                }
-              });
+        try {
+          // First, clear all existing error highlight marks from the entire document
+          const clearAllErrorHighlights = () => {
+            const { state } = editor;
+            const { tr } = state;
+            let hasChanges = false;
+
+            state.doc.descendants((node, pos) => {
+              if (node.marks) {
+                node.marks.forEach((mark) => {
+                  if (mark.type.name === 'errorHighlight') {
+                    const from = pos;
+                    const to = pos + node.nodeSize;
+                    tr.removeMark(from, to, mark.type);
+                    hasChanges = true;
+                  }
+                });
+              }
+            });
+
+            if (hasChanges) {
+              editor.view.dispatch(tr);
             }
-          });
+          };
 
-          if (hasChanges) {
-            editor.view.dispatch(tr);
-          }
-        };
+          // Clear all existing marks first
+          clearAllErrorHighlights();
 
-        // Clear all existing marks first
-        clearAllErrorHighlights();
-
-        // Then apply the current error highlights
-        applyErrorHighlights();
+          // Then apply the current error highlights
+          applyErrorHighlights();
+        } finally {
+          // Reset flag after all operations complete
+          isApplyingHighlightsRef.current = false;
+        }
       }, 50); // Small delay to ensure content is ready
 
       return () => clearTimeout(timeoutId);

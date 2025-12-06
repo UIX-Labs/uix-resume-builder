@@ -5,7 +5,6 @@ import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
-import { error } from 'node:console';
 
 export function renderInlineListSection(
   section: any,
@@ -81,10 +80,19 @@ export function renderInlineListSection(
 
               const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
-              const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
+              // const errorBgColor = isThumbnail
+              //   ? ""
+              //   : getSuggestionBackgroundColor(valueSuggestions);
 
               return (
-                <li key={idx} className={cn(section.itemClassName, errorBgColor, 'list-item')}>
+                <li
+                  key={idx}
+                  className={cn(
+                    section.itemClassName,
+                    // errorBgColor,
+                    'list-item',
+                  )}
+                >
                   {actualValue}
                 </li>
               );
@@ -97,11 +105,13 @@ export function renderInlineListSection(
 
               const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
-              const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
+              // const errorBgColor = isThumbnail
+              //   ? ""
+              //   : getSuggestionBackgroundColor(valueSuggestions);
 
               return (
                 <span key={idx}>
-                  <span className={cn(section.itemClassName, errorBgColor)}>{value}</span>
+                  <span className={cn(section.itemClassName)}>{value}</span>
                   {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                     <span>{section.itemSeparator}</span>
                   )}

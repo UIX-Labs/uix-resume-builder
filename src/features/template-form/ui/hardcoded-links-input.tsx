@@ -3,24 +3,25 @@
 import { cn } from '@shared/lib/cn';
 import { Input } from '@shared/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Link2, ChevronDown, Trash2 } from 'lucide-react';
+import { LinkedInIcon, GithubIcon, DribbleIcon, BehanceIcon, YoutubeIcon, WebsiteIcon } from '@shared/icons';
+import type { ComponentType } from 'react';
 
 interface LinkType {
   key: string;
   label: string;
-  icon?: string;
+  Icon?: ComponentType<{ className?: string; width?: number | string; height?: number | string; color?: string }>;
   placeholder: string;
 }
 
 const LINK_TYPES: LinkType[] = [
-  { key: 'linkedin', label: 'LinkedIn', icon: '/images/linkedin.svg', placeholder: 'Paste link' },
-  { key: 'github', label: 'GitHub', icon: '/images/github.svg', placeholder: 'Paste link' },
-  { key: 'dribble', label: 'Dribble', icon: '/images/dribble.svg', placeholder: 'Paste link' },
-  { key: 'behance', label: 'Behance', icon: '/images/behance.svg', placeholder: 'Paste link' },
-  { key: 'youtube', label: 'Youtube', icon: '/images/youtube.svg', placeholder: 'Paste link' },
-  { key: 'website', label: 'Website', icon: '/images/website.svg', placeholder: 'Paste link' },
+  { key: 'linkedin', label: 'LinkedIn', Icon: LinkedInIcon, placeholder: 'Paste link' },
+  { key: 'github', label: 'GitHub', Icon: GithubIcon, placeholder: 'Paste link' },
+  { key: 'dribble', label: 'Dribble', Icon: DribbleIcon, placeholder: 'Paste link' },
+  { key: 'behance', label: 'Behance', Icon: BehanceIcon, placeholder: 'Paste link' },
+  { key: 'youtube', label: 'Youtube', Icon: YoutubeIcon, placeholder: 'Paste link' },
+  { key: 'website', label: 'Website', Icon: WebsiteIcon, placeholder: 'Paste link' },
 ];
 
 interface HardcodedLinksInputProps {
@@ -133,6 +134,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
       {visibleLinks.map((linkType) => {
         const currentLink = linksData[linkType.key]?.link || '';
         const availableTypes = LINK_TYPES.filter((lt) => lt.key !== linkType.key);
+        const IconComponent = linkType.Icon;
         
         return (
           <div
@@ -149,8 +151,8 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
                   type="button"
                   className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[#005FF2] text-white rounded-lg min-w-[100px] justify-center cursor-pointer hover:bg-[#0051d4] transition-colors ml-2"
                 >
-                  {linkType.icon && (
-                    <Image src={linkType.icon} alt={linkType.label} width={16} height={16} className="object-contain" />
+                  {IconComponent && (
+                    <IconComponent width={16} height={16} className="object-contain" color="white" />
                   )}
                   <span className="text-xs font-semibold whitespace-nowrap">{linkType.label}</span>
                   <ChevronDown className="w-3 h-3 text-white" />
@@ -158,21 +160,24 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
               </PopoverTrigger>
               <PopoverContent className="w-56 p-2" align="start">
                 <div className="flex flex-col gap-1">
-                  {availableTypes.map((type) => (
-                    <button
-                      key={type.key}
-                      type="button"
-                      onClick={() => {
-                        handleChangeLinkType(linkType.key, type.key);
-                      }}
-                      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
-                    >
-                      {type.icon && (
-                        <Image src={type.icon} alt={type.label} width={16} height={16} className="object-contain" />
-                      )}
-                      <span className="text-sm text-[#0C1118]">{type.label}</span>
-                    </button>
-                  ))}
+                  {availableTypes.map((type) => {
+                    const TypeIconComponent = type.Icon;
+                    return (
+                      <button
+                        key={type.key}
+                        type="button"
+                        onClick={() => {
+                          handleChangeLinkType(linkType.key, type.key);
+                        }}
+                        className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
+                      >
+                        {TypeIconComponent && (
+                          <TypeIconComponent width={16} height={16} className="object-contain" />
+                        )}
+                        <span className="text-sm text-[#0C1118]">{type.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </PopoverContent>
             </Popover>
@@ -213,21 +218,24 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
           </PopoverTrigger>
           <PopoverContent className="w-56 p-2" align="end">
             <div className="flex flex-col gap-1">
-              {availableLinks.map((linkType) => (
-                <button
-                  key={linkType.key}
-                  type="button"
-                  onClick={() => {
-                    handleAddLink(linkType.key);
-                  }}
-                  className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
-                >
-                  {linkType.icon && (
-                    <Image src={linkType.icon} alt={linkType.label} width={16} height={16} className="object-contain" />
-                  )}
-                  <span className="text-sm text-[#0C1118]">{linkType.label}</span>
-                </button>
-              ))}
+              {availableLinks.map((linkType) => {
+                const LinkIconComponent = linkType.Icon;
+                return (
+                  <button
+                    key={linkType.key}
+                    type="button"
+                    onClick={() => {
+                      handleAddLink(linkType.key);
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
+                  >
+                    {LinkIconComponent && (
+                      <LinkIconComponent width={16} height={16} className="object-contain" />
+                    )}
+                    <span className="text-sm text-[#0C1118]">{linkType.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </PopoverContent>
         </Popover>

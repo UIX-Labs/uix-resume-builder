@@ -239,8 +239,9 @@ const aniketTemplate = {
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px]' },
       },
       listPath: 'interests.items[0].items',
+      containerClassName: 'flex flex-row flex-wrap gap-2 mt-2',
       badgeClassName:
-        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
+        'flex flex-row gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
     },
     // Achievements Section (Badge Style)
     {
@@ -254,6 +255,7 @@ const aniketTemplate = {
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px] mt-0.5' },
       },
       listPath: 'achievements.items[0].items',
+      containerClassName: 'flex flex-row flex-wrap gap-2 mt-2',
       badgeClassName:
         'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold break-words',
     },

@@ -21,7 +21,7 @@ const template13 = {
       className: 'flex flex-col mb-4 text-[#2C5F5F]',
       fields: {
         nameTitle: {
-          className: 'flex flex-row items-baseline gap-1 mb-2',
+          className: 'flex flex-col items-baseline gap-1 mb-2',
         },
 
         name: {
@@ -52,11 +52,6 @@ const template13 = {
               path: 'personalDetails.items[0].links.linkedin.title',
               href: 'personalDetails.items[0].links.linkedin.link',
               fallback: '@reallygreatsite',
-            },
-            {
-              path: 'personalDetails.items[0].address',
-              fallback: '123 Anywhere St., Any City, ST 12345',
-              className: 'text-sm text-[#2C5F5F]',
             },
           ],
         },
@@ -246,8 +241,14 @@ const template13 = {
                 prefix: '• ',
                 path: 'title',
                 fallback: 'Certification Title',
+                className: 'text-sm font-bold text-[#2C5F5F]',
+              },
+              {
+                path: 'issuer',
+                fallback: 'Certification Issuer',
                 className: 'text-sm text-[#2C5F5F]',
               },
+
               {
                 type: 'duration',
                 path: 'duration',
@@ -346,8 +347,9 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'achievements.items[0].items',
-      containerClassName: 'flex flex-col leading-none',
+      containerClassName: 'flex flex-col leading-none gap-1',
       badgeClassName: 'text-sm text-[#2C5F5F] gap-0',
+      itemPrefix: '• ',
       itemTemplate: {
         fields: [
           {

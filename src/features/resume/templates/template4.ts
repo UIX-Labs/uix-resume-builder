@@ -2,21 +2,23 @@ const brianWayneTemplate = {
   name: 'Brian Wayne Professional',
 
   page: {
+    width: 794,
+    height: 1122,
+    padding: 0,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
     fontFamily: 'Calibri',
-    padding: 0,
   },
 
   columns: {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-10',
+      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-10 flex flex-col',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'px-8 gap-2 pt-12',
+      className: 'p-8 flex flex-col min-w-0',
     },
   },
 
@@ -142,7 +144,7 @@ const brianWayneTemplate = {
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
+          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
       },
     },
 
@@ -164,7 +166,7 @@ const brianWayneTemplate = {
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-4 mt-2',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col gap-1 leading-none mt-1',
         fields: [
           {
             path: 'degree',
@@ -210,11 +212,11 @@ const brianWayneTemplate = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
+      itemPrefix: '• ',
       badgeClassName: 'text-sm text-white',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },
 
-    // Achievements Section - Left Column
     {
       id: 'achievements',
       type: 'badge-section',
@@ -231,7 +233,9 @@ const brianWayneTemplate = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-sm text-white list-disc',
+      itemPrefix: '• ',
+      badgeClassName:
+        'block w-full text-sm text-white break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },
 
@@ -254,49 +258,39 @@ const brianWayneTemplate = {
       containerClassName: 'flex flex-col gap-6 mt-1',
       itemTemplate: {
         className: 'flex flex-col',
-        rows: [
+        fields: [
           {
-            className: 'flex flex-row items-baseline gap-1',
-            cells: [
-              {
-                path: 'position',
-                className: 'text-base font-semibold text-[rgb(56,76,65)]',
-                suffix: ', ',
-              },
-              {
-                path: 'company',
-                className: 'text-base text-[rgb(56,76,65)]',
-              },
-            ],
+            path: 'duration',
+            type: 'duration',
+            className: 'text-sm text-[rgb(56,76,65)]',
           },
           {
-            className: 'flex flex-row items-baseline gap-2',
-            cells: [
+            path: 'position',
+            fallback: 'Position Title',
+            className: 'text-base font-semibold text-[rgb(56,76,65)] mt-1',
+          },
+          {
+            type: 'horizontal-group',
+            className: 'flex gap-1 mt-0.5',
+            items: [
               {
-                type: 'duration',
-                path: 'duration',
-                className: 'text-sm text-[rgb(56,76,65)]',
-              },
-              {
-                type: 'text',
-                text: '|',
-                className: 'text-sm text-[rgb(56,76,65)]',
+                path: 'company',
+                fallback: 'Company Name',
+                className: 'text-sm text-[rgb(56,76,65)] font-semibold',
               },
               {
                 path: 'location',
+                fallback: 'Location',
                 className: 'text-sm text-[rgb(56,76,65)]',
               },
             ],
           },
           {
-            cells: [
-              {
-                type: 'html',
-                path: 'description',
-                className:
-                  'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
-              },
-            ],
+            type: 'html',
+            path: 'description',
+            breakable: true,
+            className:
+              'text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
           },
         ],
       },

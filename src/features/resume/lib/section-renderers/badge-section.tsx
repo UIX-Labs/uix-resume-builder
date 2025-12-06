@@ -117,9 +117,8 @@ export function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div
-        className={cn("flex gap-1 flex-wrap mt-2", section.containerClassName)}
-      >
+      <div className={section.containerClassName || "flex flex-col gap-2 mt-2"}>
+      
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           const actualValue =
             typeof value === "object" && value !== null && "value" in value
@@ -156,8 +155,9 @@ export function renderBadgeSection(
             <span key={idx}>
               <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
 
-              {idx < flattenedItemsWithContext.length - 1 &&
-                section.itemSeparator && <span>{section.itemSeparator}</span>}
+              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
+                <span>{section.itemSeparator}</span>
+              )}
             </span>
           );
         })}

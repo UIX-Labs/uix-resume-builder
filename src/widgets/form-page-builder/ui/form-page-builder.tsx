@@ -1,5 +1,6 @@
 import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
+import { ThumbnailRenderer } from '@features/resume/lib/thumbnail/thumbnail-renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
@@ -163,6 +164,7 @@ export function FormPageBuilder() {
   const resumeId = params?.id as string;
 
   const thumbnailGenerated = useRef(false);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
@@ -171,7 +173,6 @@ export function FormPageBuilder() {
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
-  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -230,17 +231,37 @@ export function FormPageBuilder() {
   const generatePDF = async () => {
     setIsGeneratingPDF(true);
 
-    // Wait for React to re-render without highlights
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    try {
+      // Wait for React to re-render
+      await new Promise((resolve) => setTimeout(resolve, 100));
 
-    // Get HTML content from the resume
-    const htmlContent = targetRef.current?.innerHTML;
+      // Use the thumbnail element (which always has isThumbnail=true) for PDF generation
+      // This ensures images are always proxied
+      const pdfSourceElement = thumbnailRef.current;
 
-    if (!htmlContent) {
-      toast.error('Failed to generate PDF');
-      setIsGeneratingPDF(false);
-      return;
-    }
+      if (!pdfSourceElement) {
+        toast.error('Failed to generate PDF: PDF source element not found');
+        setIsGeneratingPDF(false);
+        return;
+      }
+
+      // Get HTML content from the thumbnail renderer (which has proxied images)
+      let htmlContent = pdfSourceElement.innerHTML;
+
+      if (!htmlContent || htmlContent.trim() === '') {
+        toast.error('Failed to generate PDF: No content available');
+        setIsGeneratingPDF(false);
+        return;
+      }
+
+      // Convert relative proxy URLs to absolute URLs for backend PDF generation
+      // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
+      // instead of relative URLs like "/api/proxy-image?url=..."
+      const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
+      htmlContent = htmlContent.replace(
+        /src="\/api\/proxy-image/g,
+        `src="${currentOrigin}/api/proxy-image`
+      );
 
     // Add necessary styles for the PDF
     const styledHtml = `
@@ -312,8 +333,13 @@ export function FormPageBuilder() {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    toast.success('PDF downloaded successfully');
-    setIsGeneratingPDF(false);
+      toast.success('PDF downloaded successfully');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to generate PDF');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   const handleDownloadPDF = async () => {
@@ -489,14 +515,48 @@ export function FormPageBuilder() {
   );
 
   async function generateAndSaveThumbnail() {
-    if (!targetRef.current || !resumeId) {
+    if (!thumbnailRef.current || !resumeId) {
       return;
     }
 
     try {
-      setIsGeneratingThumbnail(true);
+      // Get the parent container
+      const container = thumbnailRef.current.parentElement as HTMLElement;
 
-      const thumbnailDataUrl = await generateThumbnail(targetRef.current);
+      if (!container) {
+        return;
+      }
+
+      // Wait for component to render and layout to complete
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Verify the element has content
+      if (!thumbnailRef.current.innerHTML || thumbnailRef.current.innerHTML.trim() === '') {
+        return;
+      }
+
+      // Temporarily make container visible for capture (but keep it hidden visually)
+      const originalHeight = container.style.height;
+      const originalOverflow = container.style.overflow;
+      const originalPosition = container.style.position;
+
+      container.style.height = 'auto';
+      container.style.overflow = 'visible';
+      container.style.position = 'absolute';
+      container.style.left = '-9999px'; // Move far off-screen instead of clipping
+      container.style.top = '0';
+
+      // Wait a bit for layout to update
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // generateThumbnail now handles image loading internally
+      const thumbnailDataUrl = await generateThumbnail(thumbnailRef.current);
+
+      // Restore original styles
+      container.style.height = originalHeight;
+      container.style.overflow = originalOverflow;
+      container.style.position = originalPosition;
+      container.style.left = '0';
 
       if (!thumbnailDataUrl) {
         return;
@@ -508,8 +568,6 @@ export function FormPageBuilder() {
       refetchResumes();
     } catch (error) {
       console.error('Background thumbnail generation failed:', error);
-    } finally {
-      setIsGeneratingThumbnail(false);
     }
   }
 
@@ -855,15 +913,39 @@ export function FormPageBuilder() {
               <ResumeRenderer
                 template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
-                currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
-                isThumbnail={isGeneratingThumbnail}
+                currentSection={isGeneratingPDF ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+                isThumbnail={false}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
                 <div className="text-gray-500">Loading template...</div>
               </div>
             )}
+          </div>
+
+          {/* Hidden ThumbnailRenderer for thumbnail & PDF generation - isolated from main renderer */}
+          {/* This renderer always has isThumbnail=true, which ensures all images are proxied to avoid CORS issues */}
+          <div
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              width: '794px', // A4 width
+              height: '0',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+            aria-hidden="true"
+          >
+            <div ref={thumbnailRef}>
+              {selectedTemplate && (
+                <ThumbnailRenderer
+                  template={selectedTemplate?.json ?? aniketTemplate}
+                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                />
+              )}
+            </div>
           </div>
         </div>
 

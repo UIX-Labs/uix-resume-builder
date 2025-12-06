@@ -3,10 +3,10 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import React from 'react';
 import { renderSection } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
-export { generateThumbnail } from './lib/thumbnail';
-export type { ThumbnailOptions } from './lib/thumbnail';
+export { generateThumbnail } from './lib/thumbnail/thumbnail';
+export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
 
-type RenderProps = {
+export type RenderProps = {
   template: any;
   data: any;
   className?: string;
@@ -76,13 +76,10 @@ export function ResumeRenderer({
         const children = Array.from(parentEl.children) as HTMLElement[];
 
         for (const child of children) {
-          const canBreak = child.getAttribute('data-canbreak') === 'true';
-
-          if (canBreak) {
-            // For breakable containers, process their children recursively
-            processChildren(child);
-            continue;
-          }
+          const canBreak = child.getAttribute('data-canbreak') === 'true'
+          const hasBreakableContent =
+            child.querySelector('[data-has-breakable-content="true"]') !== null ||
+            child.getAttribute('data-has-breakable-content') === 'true';
 
           // Clone and measure the actual height
           const clone = child.cloneNode(true) as HTMLElement;
@@ -110,16 +107,31 @@ export function ResumeRenderer({
 
           const currentHeight = testContainer.getBoundingClientRect().height;
 
-         
-          
-          if (currentHeight + totalHeight + 25 > currentMax && currentColumnPage.length > 0) {
-            // Adding 25px to account for margin and padding for safer side and not to exceed the page height
-            // Start new page
+          // If element is too tall to fit on remaining space
+          if (currentHeight + totalHeight + 40 > currentMax && currentColumnPage.length > 0) {
+            // If the element is breakable and has children, try to break it
+            if (canBreak && child.children.length > 0) {
+              processChildren(child);
+              continue;
+            }
+
             currentColumnPage = [];
             outPages.push(currentColumnPage);
           }
 
-          // Add element to current page
+          if (totalHeight > pageMax && child.children.length > 0) {
+            // If element itself is breakable, process its children
+            if (canBreak) {
+              processChildren(child);
+              continue;
+            }
+            // If not breakable but has breakable content (via template prop), process children
+            if (hasBreakableContent) {
+              processChildren(child);
+              continue;
+            }
+          }
+
           currentColumnPage.push(child.cloneNode(true) as unknown as React.ReactNode);
         }
       }
@@ -201,18 +213,24 @@ export function ResumeRenderer({
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
-              <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
+              <React.Fragment key={i}>
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              </React.Fragment>
             ))}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
+            <React.Fragment key={i}>
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+            </React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
+            <React.Fragment key={i}>
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -227,6 +245,7 @@ export function ResumeRenderer({
               ...baseStyle,
               height: '29.7cm',
               backgroundColor: page.background || 'white',
+              fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
             }}
           >
@@ -241,7 +260,7 @@ export function ResumeRenderer({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions)}</React.Fragment>
+                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
                 ))}
               </div>
             )}
@@ -267,3 +286,4 @@ export function ResumeRenderer({
     </>
   );
 }
+

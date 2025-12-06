@@ -34,7 +34,7 @@ export async function updateResumeByAnalyzer(file?: File, resumeId?: string): Pr
 
 export async function updateResumeByAnalyzerWithResumeId(resumeId: string): Promise<UpdateResumeAnalyzer> {
   try {
-    const data = await fetch<UpdateResumeAnalyzer>('resume/analyzer2', {
+    const data = await fetch<UpdateResumeAnalyzer>('resume/analyzer', {
       options: {
         method: 'POST',
         body: JSON.stringify({ resumeId }),

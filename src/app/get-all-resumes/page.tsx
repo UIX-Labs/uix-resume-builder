@@ -6,7 +6,7 @@ import { Button } from '@shared/ui/button';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { HomeIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';

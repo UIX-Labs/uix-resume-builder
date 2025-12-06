@@ -2,7 +2,7 @@
 
 import { Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';

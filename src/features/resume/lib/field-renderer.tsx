@@ -154,7 +154,28 @@ export function renderField(
     const src = resolvePath(data, field.path, field.fallback);
     if (!src && !field.fallback) return null;
 
-    return <img src={src || field.fallback} alt={field.alt || 'Image'} className={cn(field.className)} />;
+    // Determine the actual image URL (use src if available, otherwise fallback)
+    const actualImageUrl = src || field.fallback;
+
+    // Helper to check if URL is external (S3, http, https)
+    const isExternalUrl = (url: string) => {
+      return url.startsWith('http://') || url.startsWith('https://');
+    };
+
+    // Use proxy ONLY for thumbnails with external URLs to avoid CORS issues
+    // Local images (like /images/google.svg) don't need proxying
+    const imageSrc = isThumbnail && actualImageUrl && isExternalUrl(actualImageUrl)
+      ? `/api/proxy-image?url=${encodeURIComponent(actualImageUrl)}`
+      : actualImageUrl;
+
+    return (
+      <img
+        src={imageSrc}
+        crossOrigin={isThumbnail && isExternalUrl(actualImageUrl) ? 'anonymous' : undefined}
+        alt={field.alt || 'Image'}
+        className={cn(field.className)}
+      />
+    );
   }
 
   if (field.type === 'group') {

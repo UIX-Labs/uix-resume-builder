@@ -235,11 +235,11 @@ const aniketTemplate2 = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className: 'text-lg font-bold text-black mt-4',
-        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1' },
+        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5' },
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col mt-3',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-semibold text-neutral-900' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-sm text-neutral-700' },

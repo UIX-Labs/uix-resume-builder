@@ -145,7 +145,7 @@ const template8 = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col gap-1 leading-none mt-2',
         rows: [
           {
             className: 'flex flex-row justify-between items-start',
@@ -187,7 +187,7 @@ const template8 = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col mt-1.5',
         fields: [
           {
             type: 'inline-group',

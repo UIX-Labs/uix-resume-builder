@@ -311,7 +311,7 @@ const template6 = {
         className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mt-6',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
         className: 'flex flex-col pt-1 px-8',
         fields: [

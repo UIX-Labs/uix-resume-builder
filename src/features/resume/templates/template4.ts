@@ -144,7 +144,7 @@ const brianWayneTemplate = {
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
+          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
       },
     },
 
@@ -166,7 +166,7 @@ const brianWayneTemplate = {
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-4 mt-2',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col gap-1 leading-none mt-1',
         fields: [
           {
             path: 'degree',
@@ -212,11 +212,11 @@ const brianWayneTemplate = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
+      itemPrefix: '• ',
       badgeClassName: 'text-sm text-white',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },
 
-    // Achievements Section - Left Column
     {
       id: 'achievements',
       type: 'badge-section',
@@ -233,7 +233,9 @@ const brianWayneTemplate = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-sm text-white list-disc break-all',
+      itemPrefix: '• ',
+      badgeClassName:
+        'block w-full text-sm text-white break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere',
       containerClassName: 'flex flex-col gap-1 mt-2',
     },
 

@@ -39,7 +39,7 @@ const template10 = {
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'UX Designer',
-          className: 'text-[18px] font-semibold text-white leading-[1.2]',
+          className: 'text-[18px] font-semibold text-white leading-[1.2] mt-1',
         },
       },
     },

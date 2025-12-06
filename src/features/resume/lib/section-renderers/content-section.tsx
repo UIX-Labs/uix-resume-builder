@@ -18,26 +18,40 @@ export function renderContentSection(
   if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'content-section';
-  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+  const sectionIdLower = sectionId.toLowerCase();
+  const currentSectionLower = currentSection?.toLowerCase();
+  const isActive = currentSection && sectionIdLower === currentSectionLower;
+  const isSummarySection = sectionIdLower === 'summary';
 
-  // Highlight summary section when personalDetails is selected
-  const isSummaryForPersonalDetails =
-    currentSection?.toLowerCase() === 'personaldetails' && sectionId.toLowerCase() === 'summary';
+  // For summary section, check both professionalSummary and personalDetails suggestions (merged logic)
+  let hasValidSuggestions = false;
+  if (isSummarySection) {
+    const professionalSummarySuggestions = data['professionalSummary']?.suggestedUpdates;
+    const personalDetailsSuggestions = data['personalDetails']?.suggestedUpdates;
+    hasValidSuggestions = hasPendingSuggestions(professionalSummarySuggestions) || hasPendingSuggestions(personalDetailsSuggestions);
+  } else {
+    const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+    hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+  }
 
-  const dataKey = sectionId.toLowerCase() === 'summary' ? 'professionalSummary' : sectionId;
-  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
-  const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
+  // Highlight summary section when personalDetails, summary, or header is selected (merged sections)
+  const isMergedSectionActive = isSummarySection && (
+    currentSectionLower === 'personaldetails' ||
+    currentSectionLower === 'summary' ||
+    currentSectionLower === 'header' ||
+    currentSectionLower === 'header-section'
+  );
 
   const shouldBlur =
     !isThumbnail &&
     hasSuggestions &&
     currentSection &&
     !isActive &&
-    !isSummaryForPersonalDetails &&
+    !isMergedSectionActive &&
     hasValidSuggestions;
 
   const shouldHighlight =
-    !isThumbnail && hasSuggestions && (isActive || isSummaryForPersonalDetails) && hasValidSuggestions;
+    !isThumbnail && hasSuggestions && (isActive || isMergedSectionActive) && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
     scrollMarginTop: '20px',

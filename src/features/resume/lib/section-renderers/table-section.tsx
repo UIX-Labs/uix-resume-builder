@@ -75,7 +75,7 @@ export function renderTableSection(
       data-item="table-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={cn(shouldBlur && 'blur-[2px] pointer-events-none', section.className)}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}
@@ -161,7 +161,7 @@ export function renderTableSection(
               let content: React.ReactNode = null;
 
               if (column.type === 'field') {
-                content = renderField({ ...column, path: column.path }, item);
+                content = renderField({ ...column, path: column.path }, item, undefined, undefined, isThumbnail);
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
                   .map((subField: any, subIdx: number) => ({
@@ -257,7 +257,7 @@ export function renderTableSection(
                       return <>{inlineContent}</>;
                     }
                     // For other field types, use renderField normally
-                    return renderField({ ...subField, path: subField.path }, item);
+                    return renderField({ ...subField, path: subField.path }, item, undefined, undefined, isThumbnail);
                   })
                   .filter((element: React.ReactNode) => element !== null && element !== undefined && element !== '');
 
@@ -268,6 +268,9 @@ export function renderTableSection(
                 content = renderField(
                   { type: 'link', path: column.path, href: column.href, className: column.className },
                   item,
+                  undefined,
+                  undefined,
+                  isThumbnail,
                 );
               } else if (column.type === 'badge-list') {
                 // Render badges from item path (flatten if needed)

@@ -302,7 +302,7 @@ const laurenChenTemplate = {
       heading: {
         path: 'projects.title',
         fallback: 'PROJECTS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
       },
       divider: {
         variant: 'line',

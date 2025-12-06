@@ -133,7 +133,7 @@ const aniketTemplate = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1 mt-4',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1 mt-4 mb-2',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px]' },
       },
       listPath: 'experience.items',

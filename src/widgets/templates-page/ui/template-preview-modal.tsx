@@ -8,6 +8,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { type Template } from '@entities/template-page/api/template-data';
 import mockData from '../../../../mock-data.json';
+import { CloseIcon } from './close-icon';
 
 interface TemplatePreviewModalProps {
   template: Template | null;
@@ -54,15 +55,10 @@ export function TemplatePreviewModal({ template, isOpen, onClose }: TemplatePrev
         >
         {/* Main Content */}
         <div ref={containerRef} className="h-full overflow-y-auto relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="absolute top-4 right-4 z-50 h-8 w-8 rounded-full bg-white/90 hover:bg-white border border-gray-200 shadow-sm"
-          >
-            <X className="h-4 w-4 text-gray-700" />
-          </Button>
-          <div 
+          <div onClick={onClose} className="absolute top-0 right-0 z-100 cursor-pointer">
+            <CloseIcon className="h-10 w-10" />
+          </div>    
+         <div 
             ref={previewRef} 
             className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0"
             style={{       

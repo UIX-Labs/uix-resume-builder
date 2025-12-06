@@ -1,11 +1,13 @@
 'use client';
-import { useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useState } from 'react';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { Button } from '@shared/ui/button';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { HomeIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
@@ -15,6 +17,8 @@ export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user } = useUserProfile();
   const { data: templates } = useGetAllTemplates();
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -25,6 +29,11 @@ export default function GetAllResumesPage() {
   });
 
   const isLoading = createResumeMutation.isPending || updateTemplateMutation.isPending;
+
+  const handleTemplateClick = (template: Template) => {
+    setPreviewTemplate(template);
+    setIsPreviewOpen(true);
+  };
 
   const handleTemplateSelect = async (templateId: string) => {
     if (!user?.id) {
@@ -114,6 +123,7 @@ export default function GetAllResumesPage() {
                     key={template.id}
                     template={template}
                     onClick={() => handleTemplateSelect(template.id)}
+                    onPreviewClick={() => handleTemplateClick(template)}
                   />
                 ))}
               </div>
@@ -121,6 +131,12 @@ export default function GetAllResumesPage() {
           </main>
         </div>
       </div>
+
+      <PreviewModal
+        template={previewTemplate}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+      />
     </SidebarProvider>
   );
 }

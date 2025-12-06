@@ -82,7 +82,7 @@ const template11 = {
             {
               path: 'personalDetails.items[0].phone',
               fallback: '+91 432 2222 322',
-              className: 'text-xs font-medium text-[#2B6CB0] leading-[1.21]',
+              className: 'text-sm font-medium text-[#2B6CB0] leading-[1.21]',
             },
           ],
         },
@@ -92,27 +92,19 @@ const template11 = {
     // Skills Section - Right Column (after contact)
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       break: true,
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-3 leading-[1.21]',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal  mb-3 leading-[1.21]',
       },
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-1 break-words min-w-0',
-      itemTemplate: {
-        className: 'break-words',
-        fields: [
-          {
-            prefix: '• ',
-            path: 'name',
-            fallback: 'Skill Name',
-            className: 'text-sm leading-[1.6] text-[#4A4A4A] break-words min-w-0',
-          },
-        ],
-      },
+      itemPath: 'name',
+      itemClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'grid grid-cols-1 gap-3',
     },
 
     // Work Experience Section - Left Column
@@ -227,7 +219,164 @@ const template11 = {
           },
         ],
       },
-    },    
+    },
+
+    // Projects Section - Left Column
+    {
+      id: 'projects',
+      type: 'list-section',
+      column: 'left',
+      break: true,
+      className: 'mt-7',
+      heading: {
+        path: 'projects.heading',
+        fallback: 'Projects',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2',
+      },
+      listPath: 'projects.items',
+      containerClassName: 'flex flex-col gap-3',
+      itemTemplate: {
+        className: 'flex flex-col gap-3',
+        rows: [
+          {
+            className: 'flex flex-col leading-none',
+            cells: [
+              {
+                type: 'inline-group',
+                className: 'flex flex-row gap-2 items-center',
+                items: [
+                  {
+                    path: 'title',
+                    fallback: 'Project Title',
+                    className: 'text-base font-bold text-[#2B6CB0] leading-[1.21]',
+                  },
+                ],
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-[10px] uppercase tracking-[0.02em] italic text-[#6B7280] leading-[1.21]',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                className:
+                  'text-sm leading-[1.6] text-[#4A4A4A] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                className: 'text-xs text-[#2B6CB0] hover:underline mt-1',
+              },
+            ],
+          },
+        ],
+      },
+    },
+
+    // Certifications Section - Left Column
+    {
+      id: 'certifications',
+      type: 'list-section',
+      column: 'left',
+      break: true,
+      className: 'mt-7',
+      heading: {
+        path: 'certifications.heading',
+        fallback: 'Certifications',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-4',
+      },
+      listPath: 'certifications.items',
+      containerClassName: 'flex flex-col gap-3',
+      itemTemplate: {
+        className: 'flex flex-col gap-3',
+        rows: [
+          {
+            className: 'flex flex-col leading-none',
+            cells: [
+              {
+                type: 'inline-group',
+                className: 'flex flex-col',
+                items: [
+                  {
+                    path: 'title',
+                    fallback: 'Certification Title',
+                    className: 'text-base font-semibold text-[#2B6CB0]',
+                  },
+                  {
+                    path: 'issuer',
+                    fallback: 'Issuer',
+                    className: 'text-sm font-normal text-[#1A1A1A]',
+                  },
+                ],
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-[10px] italic uppercase tracking-[0.02em] text-[#6B7280] leading-[1.21]',
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                className: 'text-xs text-[#2B6CB0] hover:underline',
+              },
+            ],
+          },
+        ],
+      },
+    },
+
+    // Interests Section - Right Column
+    {
+      id: 'interests',
+      type: 'inline-list-section',
+      column: 'right',
+      showBullet: true,
+      break: true,
+      className: 'mt-7',
+      heading: {
+        path: 'interests.heading',
+        fallback: 'Interests',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-3 leading-[1.21] mt-4',
+      },
+      listPath: 'interests.items[0].items',
+      itemPath: '',
+      itemClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'grid grid-cols-1 gap-3',
+    },
+
+    // Achievements Section - Right Column
+    {
+      id: 'achievements',
+      type: 'inline-list-section',
+      column: 'right',
+      showBullet: true,
+      break: true,
+      className: 'mt-7',
+      heading: {
+        path: 'achievements.heading',
+        fallback: 'Achievements',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-3 leading-[1.21] mt-4',
+      },
+      listPath: 'achievements.items[0].items',
+      itemPath: '',
+      itemClassName: 'text-xs text-neutral-900 inline-block',
+      containerClassName: 'grid grid-cols-1 gap-3',
+    },
   ],
 };
 

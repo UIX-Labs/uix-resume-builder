@@ -12,7 +12,7 @@ const annaFieldTemplate = {
     {
       id: 'header',
       type: 'header',
-      className: 'flex flex-col gap-3',
+      className: 'flex flex-col gap-1',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',

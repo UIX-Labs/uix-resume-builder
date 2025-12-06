@@ -17,8 +17,6 @@ export function renderListSection(
 
   const items = rawItems.map((item: any) => ({ ...item }));
 
-
-
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
   const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
@@ -78,29 +76,14 @@ export function renderListSection(
           const itemId = item.itemId || item.id;
 
           const content = section.itemTemplate.rows
-            ? renderItemWithRows(
-                section.itemTemplate,
-                item,
-                itemId,
-                suggestedUpdates,
-                isThumbnail,
-              )
-            : renderItemWithFields(
-                section.itemTemplate,
-                item,
-                itemId,
-                suggestedUpdates,
-                isThumbnail,
-              );
+            ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+            : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail);
 
           if (section.break && idx === 0) {
             return (
               <div
                 key={idx}
-                className={cn(
-                  section.itemTemplate.className,
-                  shouldBlur ? 'blur-[2px] pointer-events-none' : '',
-                )}
+                className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
               >
                 {shouldHighlight && (
@@ -111,9 +94,7 @@ export function renderListSection(
 
                 <RenderListSectionHeading />
 
-                <div>
-                  {content}
-                </div>
+                <div>{content}</div>
               </div>
             );
           }
@@ -128,9 +109,9 @@ export function renderListSection(
               style={itemWrapperStyle}
             >
               {content}
-              </div>
+            </div>
           );
-      })}
+        })}
       </div>
     </div>
   );

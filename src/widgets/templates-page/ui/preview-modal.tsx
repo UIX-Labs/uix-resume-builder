@@ -1,22 +1,21 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { X } from 'lucide-react';
-import { Button } from '@shared/ui/components/button';
 import { Dialog, DialogOverlay, DialogPortal } from '@shared/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { type Template } from '@entities/template-page/api/template-data';
 import mockData from '../../../../mock-data.json';
-import { CloseIcon } from './close-icon';
+import { CloseIcon } from '../../../shared/icons/close-icon';
 
-interface TemplatePreviewModalProps {
+interface PreviewModalProps {
   template: Template | null;
   isOpen: boolean;
   onClose: () => void;
+  resumeData?: any; // Optional resume data, defaults to mockData if not provided
 }
 
-export function TemplatePreviewModal({ template, isOpen, onClose }: TemplatePreviewModalProps) {
+export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewModalProps) {
   const previewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
@@ -57,17 +56,20 @@ export function TemplatePreviewModal({ template, isOpen, onClose }: TemplatePrev
             <CloseIcon className="h-10 w-10" />
           </div>
         {/* Main Content */}
-        <div ref={containerRef} className="h-full overflow-y-auto relative">    
+        <div ref={containerRef} className="h-full overflow-y-auto relative pb-0 mb-0">    
          <div 
             ref={previewRef} 
-            className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0"
+            className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0 [&>*]:!mb-0"
             style={{       
                 transform: `scale(${scale})`,
-                transformOrigin: "top center",}}
+                transformOrigin: "top center",
+                marginBottom: 0,
+                paddingBottom: 0,
+            }}
           >
             <ResumeRenderer
               template={template.json}
-              data={mockData as any}
+              data={resumeData || mockData}
               currentSection={undefined}
               hasSuggestions={false}
               isThumbnail={false}

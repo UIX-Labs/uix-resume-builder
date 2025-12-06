@@ -6,7 +6,7 @@ import { Button } from '@shared/ui/components/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog';
 import { cn } from '@shared/lib/cn';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { TemplatePreviewModal } from './template-preview-modal';
+import { PreviewModal } from './preview-modal';
 import { Eye } from 'lucide-react';
 
 interface TemplatesDialogProps {
@@ -58,7 +58,7 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
         </DialogContent>
       </Dialog>
 
-      <TemplatePreviewModal
+      <PreviewModal
         template={previewTemplate}
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}

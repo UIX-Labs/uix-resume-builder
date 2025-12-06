@@ -7,7 +7,7 @@ import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
-import { TemplatePreviewModal } from '@widgets/templates-page/ui/template-preview-modal';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { HomeIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
@@ -132,7 +132,7 @@ export default function GetAllResumesPage() {
         </div>
       </div>
 
-      <TemplatePreviewModal
+      <PreviewModal
         template={previewTemplate}
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}

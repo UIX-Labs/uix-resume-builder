@@ -16,6 +16,8 @@ import { toast } from 'sonner';
 import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { PreviewButton } from '@shared/ui/components/preview-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import mockData from '../../../../mock-data.json';
 
@@ -156,6 +158,27 @@ function syncSectionIds(actualSection: any, mockSection: any): any {
   return synced;
 }
 
+// Change Template Button Component
+function ChangeTemplateButton({ onTemplateSelect }: { onTemplateSelect: (template: Template) => void }) {
+  return (
+    <TemplatesDialog onTemplateSelect={onTemplateSelect}>
+      <Button
+        className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
+                  font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
+                  flex items-center gap-1.5 rounded-xl"
+      >
+        <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
+          <div className="relative w-4 h-4 bg-white rounded-full flex items-center justify-center">
+            <Image src="/images/Vector.png" alt="change template" width={16} height={16} />
+          </div>
+        </div>
+        <span>Change Template</span>
+      </Button>
+    </TemplatesDialog>
+  );
+}
+
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
@@ -163,6 +186,7 @@ export function FormPageBuilder() {
   const thumbnailGenerated = useRef(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
@@ -836,22 +860,11 @@ export function FormPageBuilder() {
 
         {/* Sticky Save as PDF button */}
         <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+          {/* Preview Button */}
+          <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
+          
           {/* Change Template Button */}
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <Button
-              className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                        font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
-                        flex items-center gap-1.5 rounded-xl"
-            >
-              <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
-                <div className="relative w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                  <Image src="/images/Vector.png" alt="change template" width={16} height={16} />
-                </div>
-              </div>
-              <span>Change Template</span>
-            </Button>
-          </TemplatesDialog>
+          <ChangeTemplateButton onTemplateSelect={handleTemplateSelect} />
           
           {/* Download PDF Button */}
           <Button
@@ -947,6 +960,16 @@ export function FormPageBuilder() {
         <WishlistSuccessModal
           isOpen={isWishlistSuccessModalOpen}
           onClose={() => setIsWishlistSuccessModalOpen(false)}
+        />
+      )}
+      
+      {/* Resume Preview Modal */}
+      {selectedTemplate && (
+        <PreviewModal
+          template={selectedTemplate}
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
         />
       )}
     </>

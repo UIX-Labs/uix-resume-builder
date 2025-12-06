@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState } from 'react';
-import { Dialog, DialogOverlay, DialogPortal } from '@shared/ui/dialog';
+import { Dialog, DialogOverlay, DialogPortal, DialogTitle } from '@shared/ui/dialog';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { type Template } from '@entities/template-page/api/template-data';
@@ -52,6 +52,7 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
             document.body.style.pointerEvents = '';
           }}
         >
+          <DialogTitle className="sr-only">Resume Preview</DialogTitle>
           <div onClick={onClose} className="fixed -top-0 right-0 z-[100] cursor-pointer">
             <CloseIcon className="h-10 w-10" />
           </div>

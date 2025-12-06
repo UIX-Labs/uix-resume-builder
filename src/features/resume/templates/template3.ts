@@ -12,16 +12,16 @@ const annaFieldTemplate = {
     {
       id: 'header',
       type: 'header',
-      className: 'flex flex-col gap-4',
+      className: 'flex flex-col gap-3',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Anna Field',
-          className: 'text-2xl font-bold text-[rgb(17,9,128)] mb-3',
+          className: 'text-2xl font-bold text-[rgb(17,9,128)] mb-2',
         },
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap',
+          className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap mb-4',
           items: [
             {
               type: 'inline-group-with-icon',
@@ -82,7 +82,7 @@ const annaFieldTemplate = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col gap-3 mt-6',
+      className: 'flex flex-col gap-3',
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
@@ -94,7 +94,7 @@ const annaFieldTemplate = {
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+          'text-sm text-gray-700 text-justify leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-3',
       },
     },
 
@@ -249,12 +249,12 @@ const annaFieldTemplate = {
         path: 'skills.heading',
         fallback: 'Skills',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 mb-3',
       },
       listPath: 'skills.items',
       itemPath: 'name',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'text-sm text-black leading-relaxed px-2',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 
@@ -266,7 +266,7 @@ const annaFieldTemplate = {
         path: 'interests.heading',
         fallback: 'Interests',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 mb-3',
       },
       listPath: 'interests.items[0].items',
       badgeClassName: 'text-sm text-black',

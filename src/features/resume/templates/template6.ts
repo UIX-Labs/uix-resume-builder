@@ -67,7 +67,7 @@ const template6 = {
       heading: {
         path: 'education.heading',
         fallback: 'EDUCATION',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-4',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-4 mt-2 mb-12',
@@ -76,7 +76,7 @@ const template6 = {
         fields: [
           {
             path: 'degree',
-            className: 'text-[#F2936F] uppercase text-sm font-bold',
+            className: 'text-[#F2936F] text-sm font-bold',
           },
           {
             path: 'institution',
@@ -101,7 +101,7 @@ const template6 = {
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-4',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
       },
       listPath: 'skills.items',
       containerClassName: 'flex flex-col mb-6',
@@ -125,7 +125,7 @@ const template6 = {
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-4 pt-6',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 pt-6',
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
@@ -146,7 +146,7 @@ const template6 = {
           heading: {
             path: '',
             fallback: 'Contact',
-            className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-4',
+            className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
           },
           items: [
             {
@@ -211,17 +211,17 @@ const template6 = {
       id: 'summary',
       type: 'content-section',
       column: 'right',
-      className: 'flex flex-col gap-3 pb-6 px-8 border-b-4 border-[#E8A87C] pt-8',
+      className: 'flex flex-col gap-3 pb-6 pr-8 border-b-4 border-[#E8A87C] pt-8',
       heading: {
         path: 'about.heading',
         fallback: 'ABOUT',
-        className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-5',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'About text',
-        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap',
+        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap px-8 mt-1',
       },
     },
 
@@ -239,19 +239,19 @@ const template6 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: 'flex flex-col pt-6 px-8',
+        className: 'flex flex-col pt-2 pl-8',
         fields: [
           {
             path: 'position',
-            className: 'text-[#F2936F] text-xs font-bold uppercase',
+            className: 'text-[#F2936F] text-xs font-bold uppercase mt-1',
           },
           {
             type: 'inline-group',
-            className: 'flex flex-row gap-2 items-baseline',
+            className: 'flex gap-2 items-baseline mt-1',
             items: [
               {
                 path: 'company',
-                className: 'text-black text-sm font-normal italic',
+                className: 'text-black text-sm font-semibold',
               },
               {
                 path: 'separator',
@@ -294,13 +294,13 @@ const template6 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: 'flex flex-col pt-4 px-8',
+        className: 'flex flex-col pt-1 px-8',
         fields: [
           {
             path: 'title',
             href: 'link.link',
             fallback: 'Project Title',
-            className: 'text-black text-xs uppercase hover:underline',
+            className: 'text-black text-sm font-semibold hover:underline',
           },
           {
             type: 'duration',
@@ -329,7 +329,7 @@ const template6 = {
         className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-6',
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-3 mt-3 pb-6 px-8',
+      containerClassName: 'flex flex-col gap-3 mt-1 pb-6 px-8',
       itemTemplate: {
         className: 'flex flex-col',
         fields: [
@@ -361,12 +361,12 @@ const template6 = {
       heading: {
         path: 'achievements.title',
         fallback: 'ACHIEVEMENTS',
-        className: 'uppercase text-[#F2936F] text-base font-[900] tracking-wider px-8 mt-6',
+        className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-1',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
       badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-col mt-3 px-8',
+      containerClassName: 'flex flex-col mt-1 px-8',
       itemPrefix: '• ',
     },
   ],

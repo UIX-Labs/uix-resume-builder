@@ -28,7 +28,6 @@ const template11 = {
       type: 'header',
       column: 'left',
       break: false,
-      className: 'mb-4',
       fields: {
         nameTitle: {
           className: 'flex flex-col items-baseline',
@@ -83,7 +82,7 @@ const template11 = {
             {
               path: 'personalDetails.items[0].phone',
               fallback: '+91 432 2222 322',
-              className: 'text-[10px] font-medium text-[#2B6CB0] leading-[1.21]',
+              className: 'text-xs font-medium text-[#2B6CB0] leading-[1.21]',
             },
           ],
         },
@@ -99,7 +98,7 @@ const template11 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal -ml-4 mb-4 leading-[1.21]',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal -ml-4 mb-3 leading-[1.21]',
       },
       listPath: 'skills.items',
       containerClassName: 'flex flex-col gap-1 list-disc marker:text-sm ml-4 break-words min-w-0',
@@ -182,7 +181,7 @@ const template11 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21]',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',
@@ -194,17 +193,17 @@ const template11 = {
             cells: [
               {
                 type: 'inline-group',
-                className: 'flex flex-row gap-2 items-center',
+                className: 'flex flex-col',
                 items: [
                   {
                     path: 'institution',
                     fallback: 'University of Design',
-                    className: 'text-base font-semibold text-[#2B6CB0] leading-[1.21]',
+                    className: 'text-base font-semibold text-[#2B6CB0]',
                   },
                   {
                     path: 'degree',
                     fallback: 'BSc(HCI)',
-                    className: 'text-sm font-normal text-[#1A1A1A] leading-[1.21]',
+                    className: 'text-sm font-normal text-[#1A1A1A]',
                   },
                 ],
               },

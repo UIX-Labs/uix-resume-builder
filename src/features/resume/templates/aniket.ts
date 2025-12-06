@@ -278,12 +278,12 @@ const aniketTemplate1 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-3',
+        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-3 mb-2',
         divider: { variant: 'line', className: 'border-neutral-300' },
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-4',
+        className: 'flex flex-col gap-1 leading-none',
         fields: [
           {
             path: 'title',

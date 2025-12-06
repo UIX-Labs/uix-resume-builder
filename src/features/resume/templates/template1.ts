@@ -28,7 +28,6 @@ const aniketTemplate2 = {
           items: [
             { path: 'personalDetails.items[0].phone', fallback: 'Phone' },
             {
-              type: 'link',
               path: 'personalDetails.items[0].email',
               href: 'mailto:{{value}}',
               fallback: 'Email',
@@ -51,11 +50,11 @@ const aniketTemplate2 = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col mt-4',
+      className: 'flex flex-col mt-1',
       heading: {
         path: 'summary.heading',
         fallback: 'Summary',
-        className: 'text-lg font-bold text-black',
+        className: 'text-lg font-bold text-black mt-4',
       },
       divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
       content: {
@@ -92,7 +91,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-lg font-bold text-black mt-1',
         divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
       },
       listPath: 'experience.items',
@@ -228,11 +227,11 @@ const aniketTemplate2 = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className: 'text-lg font-bold text-black mt-4',
-        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5' },
+        divider: { variant: 'line', className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1' },
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-3',
+        className: 'flex flex-col gap-1 leading-none',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-semibold text-neutral-900' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-sm text-neutral-700' },
@@ -242,7 +241,7 @@ const aniketTemplate2 = {
             path: 'link.title',
             href: 'link.link',
             fallback: '',
-            className: 'text-sm text-blue-600 hover:underline mt-1',
+            className: 'text-sm text-blue-600 hover:underline',
           },
         ],
       },

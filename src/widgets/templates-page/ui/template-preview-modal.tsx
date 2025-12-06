@@ -53,11 +53,11 @@ export function TemplatePreviewModal({ template, isOpen, onClose }: TemplatePrev
             document.body.style.pointerEvents = '';
           }}
         >
-        {/* Main Content */}
-        <div ref={containerRef} className="h-full overflow-y-auto relative">
-          <div onClick={onClose} className="absolute top-0 right-0 z-100 cursor-pointer">
+          <div onClick={onClose} className="fixed -top-0 right-0 z-[100] cursor-pointer">
             <CloseIcon className="h-10 w-10" />
-          </div>    
+          </div>
+        {/* Main Content */}
+        <div ref={containerRef} className="h-full overflow-y-auto relative">    
          <div 
             ref={previewRef} 
             className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0"

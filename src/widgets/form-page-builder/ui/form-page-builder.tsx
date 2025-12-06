@@ -158,27 +158,6 @@ function syncSectionIds(actualSection: any, mockSection: any): any {
   return synced;
 }
 
-// Change Template Button Component
-function ChangeTemplateButton({ onTemplateSelect }: { onTemplateSelect: (template: Template) => void }) {
-  return (
-    <TemplatesDialog onTemplateSelect={onTemplateSelect}>
-      <Button
-        className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                  font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg cursor-pointer
-                  flex items-center gap-1.5 rounded-xl"
-      >
-        <div className="w-5 h-5 rounded-full flex items-center justify-center relative">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-b from-[#2472EB] to-[#1B345A]"></div>
-          <div className="relative w-4 h-4 bg-white rounded-full flex items-center justify-center">
-            <Image src="/images/Vector.png" alt="change template" width={16} height={16} />
-          </div>
-        </div>
-        <span>Change Template</span>
-      </Button>
-    </TemplatesDialog>
-  );
-}
-
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
@@ -449,7 +428,6 @@ export function FormPageBuilder() {
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
-
   useEffect(() => {
     if (embeddedTemplate) {
       setSelectedTemplate(embeddedTemplate);
@@ -684,7 +662,7 @@ export function FormPageBuilder() {
   const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {
     if (!lastSaveTime) return;
-    
+
     const interval = setInterval(() => {
       setRefreshKey((prev) => prev + 1);
     }, 30000); // Update every 30 seconds
@@ -698,7 +676,7 @@ export function FormPageBuilder() {
     const diff = Date.now() - lastSaveTime;
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
-    
+
     if (seconds < 60) {
       return 'saved less than a minute ago';
     } else if (minutes === 1) {
@@ -870,16 +848,16 @@ export function FormPageBuilder() {
         <div className="absolute top-0 right-3 z-10">
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
-        
+
         <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-               template={selectedTemplate?.json ?? aniketTemplate}
+                template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF || isGeneratingThumbnail ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF || isGeneratingThumbnail ? false : hasSuggestions}
-                 isThumbnail={isGeneratingThumbnail}
+                isThumbnail={isGeneratingThumbnail}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -892,21 +870,56 @@ export function FormPageBuilder() {
         {/* Sticky Save as PDF button */}
         <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
           {/* Change Template Button */}
-          <ChangeTemplateButton onTemplateSelect={handleTemplateSelect} />
-          
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <div
+              className="
+                pointer-events-auto
+                border border-[#CBE7FF]
+                bg-[#E9F4FF]
+                px-4 py-2
+                rounded-xl
+                shadow-lg
+                flex items-center gap-1.5
+                cursor-pointer
+                font-semibold
+                text-[#005FF2]
+                hover:bg-[#E9F4FF] hover:text-white
+                transition-colors
+              "
+            >
+              <TemplateButton />
+            </div>
+          </TemplatesDialog>
+
           {/* Download PDF Button */}
           <Button
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
-            className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer
-                      flex items-center gap-1.5 rounded-xl"
+            className="
+              pointer-events-auto
+              border border-[#CBE7FF]
+              bg-[#E9F4FF]
+              font-semibold
+              text-[#005FF2]
+              hover:bg-[#E9F4FF] hover:text-white
+              shadow-lg
+              disabled:opacity-50 disabled:cursor-not-allowed
+              cursor-pointer
+              flex items-center gap-1.5
+              rounded-xl
+              p-5.5
+            "
           >
             {isGeneratingPDF ? (
-              <>Generating PDF...</>
+              <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                Generating PDF...
+              </span>
             ) : (
               <>
-                <Download className="w-4 h-4" /> PDF
+                <Download className="w-4 h-4" />
+                <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                  Download PDF
+                </span>
               </>
             )}
           </Button>
@@ -924,8 +937,7 @@ export function FormPageBuilder() {
         {/* Sticky Top - Save Button on the right */}
         <div className="sticky top-0 z-10 bg-white py-5 px-5 flex justify-end">
           <Button
-            className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
-             text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+            className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
             onClick={handleSaveResume}
           >
             Save
@@ -948,18 +960,13 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {formatLastSaveTime() && (
-              <p className="text-sm text-gray-500">
-                {formatLastSaveTime()}
-              </p>
-            )}
+            {formatLastSaveTime() && <p className="text-sm text-gray-500">{formatLastSaveTime()}</p>}
           </div>
 
           {/* Next Button on the right */}
           {navs[nextStepIndex]?.name && (
             <Button
-              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
-              text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleNextStep}
             >
               {`Next : ${camelToHumanString(navs[nextStepIndex]?.name)}`}
@@ -990,7 +997,7 @@ export function FormPageBuilder() {
           onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
       )}
-      
+
       {/* Resume Preview Modal */}
       {selectedTemplate && (
         <PreviewModal

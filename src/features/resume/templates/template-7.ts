@@ -18,7 +18,7 @@ const template7 = {
         profilePhoto: {
           type: 'image',
           path: 'personalDetails.items[0].profilePicturePublicUrl',
-          fallback: '/images/google.svg',
+          fallback: 'https://avatar.iran.liara.run/public',
           className: 'w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover',
         },
         nameTitleBlock: {

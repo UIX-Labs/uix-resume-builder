@@ -43,6 +43,13 @@ const aniketTemplate1 = {
               fallback: 'LinkedIn',
               className: 'hover:text-blue-600',
             },
+            {
+              type: 'link',
+              path: 'personalDetails.items[0].links.github.title',
+              href: 'personalDetails.items[0].links.github.link',
+              fallback: 'GitHub',
+              className: 'hover:text-blue-600',
+            },
           ],
         },
       },
@@ -91,7 +98,7 @@ const aniketTemplate1 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-4',
+        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-4 mb-2',
         divider: { variant: 'line', className: 'border-neutral-300' },
       },
       listPath: 'experience.items',
@@ -151,7 +158,7 @@ const aniketTemplate1 = {
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: 'flex flex-col mt-3 leading-tight',
+        className: 'flex flex-col mt-2 leading-tight',
         rows: [
           {
             className: 'flex flex-row justify-between items-center',
@@ -278,7 +285,7 @@ const aniketTemplate1 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-3 mb-2',
+        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-3 mb-1',
         divider: { variant: 'line', className: 'border-neutral-300' },
       },
       listPath: 'certifications.items',

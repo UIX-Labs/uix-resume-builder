@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { cn } from '@shared/lib/cn';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 function Header() {
   const router = useRouter();
@@ -13,6 +14,39 @@ function Header() {
 
   const handleNavigate = () => {
     router.push(user ? '/dashboard' : '/auth');
+  };
+
+  const handleHomeClick = () => {
+    router.push('/');
+    trackEvent('navigation_click', {
+      source: 'landing_header',
+      destination: 'home'
+    });
+  };
+
+  const handleDashboardClick = () => {
+    handleNavigate();
+    trackEvent('navigation_click', {
+      source: 'landing_header',
+      destination: user ? 'dashboard' : 'auth',
+      action: user ? 'dashboard' : 'sign_in'
+    });
+  };
+
+  const handleAboutUsClick = () => {
+    router.push('/about-us');
+    trackEvent('navigation_click', {
+      source: 'landing_header',
+      destination: 'about_us'
+    });
+  };
+
+  const handleCreateResumeClick = () => {
+    handleNavigate();
+    trackEvent('create_resume_click', {
+      source: 'landing_header',
+      method: 'create_my_resume'
+    });
   };
 
   return (
@@ -31,7 +65,7 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push('/')}
+          onClick={handleHomeClick}
           className={cn(
             'font-semibold text-lg cursor-pointer',
             pathname === '/' ? 'bg-blue-200 text-blue-900 hover:bg-blue-300' : 'text-blue-900 hover:text-gray-900'
@@ -43,7 +77,7 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={handleNavigate}
+          onClick={handleDashboardClick}
           className={cn(
             'font-semibold text-lg cursor-pointer',
             pathname === '/dashboard' || pathname === '/auth'
@@ -57,7 +91,7 @@ function Header() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push('/about-us')}
+          onClick={handleAboutUsClick}
           className={cn(
             'font-semibold text-lg cursor-pointer',
             pathname === '/about-us'
@@ -71,7 +105,7 @@ function Header() {
         <Button
           variant="default"
           size="default"
-          onClick={handleNavigate}
+          onClick={handleCreateResumeClick}
           className="bg-blue-900 hover:bg-blue-700 text-white font-medium p-3 rounded-lg shadow-sm cursor-pointer"
         >
           Create My Resume

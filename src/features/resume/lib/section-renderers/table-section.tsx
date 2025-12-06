@@ -75,7 +75,7 @@ export function renderTableSection(
       data-item="table-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={cn(shouldBlur && 'blur-[2px] pointer-events-none', section.className)}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {shouldHighlight && <SparkleIndicator />}

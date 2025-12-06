@@ -15,6 +15,7 @@ import { useGetAllTemplates, Template } from '@entities/template-page/api/templa
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -62,6 +63,12 @@ export function TemplateCarousel() {
   });
 
   const handleTemplateSelect = async (template: Template) => {
+    trackEvent('create_resume_click', {
+      source: 'landing_carousel',
+      method: 'use_template',
+      templateId: template.id
+    });
+
     if (!user) {
       router.push('/auth');
       return;
@@ -115,6 +122,12 @@ export function TemplateCarousel() {
               <Button
                 variant="default"
                 size="lg"
+                onClick={() => {
+                  trackEvent('navigation_click', {
+                    source: 'landing_carousel',
+                    destination: 'all_templates'
+                  });
+                }}
                 className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-7 py-4 h-[68px] text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl cursor-pointer"
               >
                 Check All Templates

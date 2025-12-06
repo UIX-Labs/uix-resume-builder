@@ -176,6 +176,25 @@ const template12 = {
                       },
                     ],
                   },
+                  {
+                    type: 'inline-group-with-icon',
+                    className: 'flex items-start gap-2',
+                    items: [
+                      {
+                        type: 'icon',
+                        name: 'Github',
+                        size: 16,
+                        className: 'text-[#E8957C] mt-0.5 flex-shrink-0',
+                      },
+                      {
+                        type: 'link',
+                        path: 'personalDetails.items[0].links.github.title',
+                        href: 'personalDetails.items[0].links.github.link',
+                        fallback: 'GitHub',
+                        className: 'text-white text-sm font-normal underline break-words',
+                      },
+                    ],
+                  },
                 ],
               },
             },
@@ -207,7 +226,7 @@ const template12 = {
           {
             id: 'about',
             type: 'content-section',
-            className: 'flex flex-col gap-2',
+            className: 'flex flex-col gap-2 px-6',
             heading: {
               path: 'about.heading',
               fallback: 'ABOUT',
@@ -229,10 +248,10 @@ const template12 = {
             heading: {
               path: 'experience.heading',
               fallback: 'WORK EXPERIENCE',
-              className: 'text-[#E8957C] text-base font-bold tracking-wide uppercase',
+              className: 'text-[#E8957C] text-base font-bold tracking-wide uppercase px-6',
             },
             listPath: 'experience.items',
-            containerClassName: 'flex flex-col gap-5 mt-3',
+            containerClassName: 'flex flex-col gap-5 mt-3 px-6',
             itemTemplate: {
               className: 'flex flex-col gap-1',
               fields: [
@@ -277,10 +296,10 @@ const template12 = {
             heading: {
               path: 'projects.title',
               fallback: 'PROJECTS',
-              className: 'text-[#E8957C] uppercase text-base font-bold tracking-wide',
+              className: 'text-[#E8957C] uppercase text-base font-bold tracking-wide px-6',
             },
             listPath: 'projects.items',
-            containerClassName: 'flex flex-col gap-5 mt-3',
+            containerClassName: 'flex flex-col gap-5 mt-3 px-6',
             itemTemplate: {
               className: 'flex flex-col gap-1',
               fields: [

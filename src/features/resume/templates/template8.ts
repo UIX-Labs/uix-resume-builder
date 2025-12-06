@@ -62,6 +62,20 @@ const template8 = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-1',
+              items: [
+                { type: 'icon', name: 'Github', size: 12, className: 'w-3 h-3' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: '',
+                  className: 'text-sm underline',
+                },
+              ],
+            },
           ],
         },
       },
@@ -75,14 +89,14 @@ const template8 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Professional Summary',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-5',
+        className: 'text-base font-bold border-b border-neutral-900 mb-1.5 mt-5',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Professional Summary',
         className:
-          'text-sm text-neutral-900 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
+          'text-sm text-neutral-900 leading-relaxed  [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
       },
     },
 
@@ -127,11 +141,11 @@ const template8 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Work Experience',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4 mb-1',
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-3 leading-none',
+        className: 'flex flex-col gap-1 leading-none',
         rows: [
           {
             className: 'flex flex-row justify-between items-start',
@@ -169,11 +183,11 @@ const template8 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4 mb-1',
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col mt-3',
+        className: 'flex flex-col',
         fields: [
           {
             type: 'inline-group',
@@ -221,11 +235,11 @@ const template8 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4 mb-1',
       },
       listPath: 'achievements.items[0].items',
       badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      containerClassName: 'flex flex-wrap gap-1',
       itemSeparator: ', ',
     },
 
@@ -264,11 +278,11 @@ const template8 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4 mb-1',
       },
       listPath: 'interests.items[0].items',
       badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-wrap gap-1 mt-2',
+      containerClassName: 'flex flex-wrap gap-1',
       itemSeparator: ', ',
     },
   ],

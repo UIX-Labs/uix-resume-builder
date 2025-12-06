@@ -18,7 +18,7 @@ const template7 = {
         profilePhoto: {
           type: 'image',
           path: 'personalDetails.items[0].profilePicturePublicUrl',
-          fallback: '/images/google.svg',
+          fallback: 'https://avatar.iran.liara.run/public',
           className: 'w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover',
         },
         nameTitleBlock: {
@@ -58,7 +58,7 @@ const template7 = {
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-12 items-center justify-start flex-wrap text-sm',
+          className: 'flex flex-row gap-4 items-center justify-start flex-wrap text-sm',
           items: [
             {
               type: 'inline-group-with-icon',
@@ -102,6 +102,20 @@ const template7 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: 'linkedin.com/in/simran-malhotra-65760053',
+                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Github', size: 16, className: 'text-[#4178B4]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'github.com/username',
                   className: 'text-sm text-gray-800 hover:text-blue-600',
                 },
               ],
@@ -185,7 +199,6 @@ const template7 = {
         className: 'flex flex-col mt-2',
         fields: [
           {
-            type: 'link',
             path: 'title',
             href: 'link.link',
             fallback: '',
@@ -222,7 +235,7 @@ const template7 = {
     // Achievements Section
     {
       id: 'achievements',
-      type: 'inline-list-section',
+      type: 'badge-section',
       className: 'px-8 pb-4',
       heading: {
         path: 'achievements.heading',
@@ -231,9 +244,9 @@ const template7 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
+      itemPrefix: '• ',
       itemClassName: 'text-sm text-black',
-      containerClassName: 'grid grid-cols-2 gap-x-4 gap-y-1 mt-2',
-      prefix: '• ',
+      containerClassName: 'text-sm flex flex-col gap-2',
     },
 
     // Certifications Section

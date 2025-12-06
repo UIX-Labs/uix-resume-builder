@@ -61,6 +61,20 @@ const andrewTemplate = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Github', size: 14, className: 'text-black' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
           ],
         },
       },
@@ -97,7 +111,7 @@ const andrewTemplate = {
         className: 'text-lg font-bold text-black mt-4',
         divider: { variant: 'line', className: 'bg-black w-full h-[1px] mt-0.5' },
       },
-      
+
       listPath: 'experience.items',
       itemTemplate: {
         className: 'flex flex-row gap-4 items-start w-full mt-4',

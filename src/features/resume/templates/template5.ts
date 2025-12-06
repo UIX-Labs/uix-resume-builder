@@ -104,7 +104,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].email',
                   fallback: 'divyam.malik@gmail.com',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-sm text-[#1a1a1a] font-normal underline break-all whitespace-normal',
                 },
               ],
             },
@@ -124,6 +124,25 @@ const template5 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: 'Divyam Malik',
+                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 20,
+                  className: 'text-[#5b7fc7]',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
                   className: 'text-sm text-[#1a1a1a] font-normal underline',
                 },
               ],
@@ -290,7 +309,7 @@ const template5 = {
       heading: {
         path: 'projects.title',
         fallback: 'Projects',
-        className: 'capitalize text-base font-semibold text-[rgb(56,76,65)]',
+        className: 'capitalize text-base font-semibold text-[rgb(56,76,65)] mb-2',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[1px] mt-1',
@@ -313,7 +332,7 @@ const template5 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)]',
+                className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
               },
             ],
           },
@@ -341,7 +360,7 @@ const template5 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-semibold text-[rgb(56,76,65)]',
+        className: 'text-base font-semibold text-[rgb(56,76,65)] mb-2',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[1px] mt-1',

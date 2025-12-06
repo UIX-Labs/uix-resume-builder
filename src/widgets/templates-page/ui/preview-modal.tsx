@@ -53,11 +53,7 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
           </div>
           <div 
             ref={containerRef} 
-            className="h-full overflow-y-auto relative pt-6 pb-8 bg-white"
-            style={{
-              paddingLeft: '20px',
-              paddingRight: '20px',
-            }}
+            className="h-full overflow-y-auto relative pt-0 pb-0 bg-white"
           > 
             <div 
               className="flex flex-col items-center [&>div]:border-b-2 [&>div]:border-gray-300 [&>div:last-child]:border-b-0"

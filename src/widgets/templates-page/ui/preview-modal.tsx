@@ -45,19 +45,15 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
 
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogPortal>
-        <DialogOverlay className="backdrop-blur-sm bg-red" />
+        <DialogOverlay className="backdrop-blur-sm" />
         <DialogPrimitive.Content 
-          className="max-w-[60vw] max-h-[95vh] h-full p-0 bg-white border-none overflow-hidden flex flex-col fixed top-[50%] left-[50%] z-50 translate-x-[-50%] translate-y-[-50%] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 duration-200"
-          onCloseAutoFocus={(event) => {
-            document.body.style.pointerEvents = '';
-          }}
+          className="max-w-[60vw] h-full p-4 mt-6 bg-transparent border-0 shadow-none overflow-visible flex flex-col fixed top-[50%] left-[50%] z-50 translate-x-[-50%] translate-y-[-50%] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 duration-200"
         >
           <DialogTitle className="sr-only">Resume Preview</DialogTitle>
-          <div onClick={onClose} className="fixed -top-0 right-0 z-[100] cursor-pointer">
+          <div onClick={onClose} className="absolute top-2 right-2 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors">
             <CloseIcon className="h-10 w-10" />
           </div>
-        {/* Main Content */}
-        <div ref={containerRef} className="h-full overflow-y-auto relative pb-0 mb-0">    
+        <div ref={containerRef} className="h-full overflow-y-auto relative pt-0 pb-0 mb-0 bg-white border-0"> 
          <div 
             ref={previewRef} 
             className="w-full bg-white flex justify-center [&_div.mb-5]:!mb-0 [&>*]:!mb-0"

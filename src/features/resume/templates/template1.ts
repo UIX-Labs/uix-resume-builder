@@ -41,6 +41,13 @@ const aniketTemplate2 = {
               fallback: 'LinkedIn',
               className: 'hover:text-blue-600',
             },
+            {
+              type: 'link',
+              path: 'personalDetails.items[0].links.github.title',
+              href: 'personalDetails.items[0].links.github.link',
+              fallback: 'GitHub',
+              className: 'hover:text-blue-600',
+            },
           ],
         },
       },

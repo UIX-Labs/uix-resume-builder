@@ -123,6 +123,26 @@ const brianWayneTemplate = {
                 },
               ],
             },
+            // GitHub
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
+                  className: 'text-sm text-white hover:text-green-200',
+                },
+              ],
+            },
           ],
         },
       },

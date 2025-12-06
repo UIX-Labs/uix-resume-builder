@@ -112,6 +112,25 @@ const enzoTemplate1 = {
                 },
               ],
             },
+            {
+              type: 'group',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 14,
+                  className: 'text-neutral-800 flex-shrink-0',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: '',
+                  className: 'text-xs text-neutral-800 break-all',
+                },
+              ],
+            },
           ],
         },
       },

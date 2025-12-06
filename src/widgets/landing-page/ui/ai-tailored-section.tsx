@@ -10,7 +10,7 @@ export function AITailorSection() {
   const [activeCompany, setActiveCompany] = useState<string | null>(null);
 
   return (
-    <section className="relative w-full flex flex-col">
+    <section className="relative w-full flex flex-col select-none">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}

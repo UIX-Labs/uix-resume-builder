@@ -19,6 +19,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry
           value={value}
+          defaultCountry="IN"
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled}
@@ -27,7 +28,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             'ring-3 ring-[#f6f6f6] placeholder:text-[#CFD4DB] text-[#0C1118] font-normal',
             'focus-within:ring-[#d3d6db]',
             'disabled:cursor-not-allowed disabled:opacity-50',
-          )}a
+          )}
           {...props}
         />
       </div>

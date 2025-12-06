@@ -81,14 +81,6 @@ const HeroSection = () => {
     },
   ];
 
-  const handleLinkedInClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-    } else {
-      setIsModalOpen(true);
-    }
-  };
-
   const handleUploadClick = () => {
     if (isMobile) {
       setShowMobileView(true);
@@ -96,6 +88,22 @@ const HeroSection = () => {
       handleNavigate();
     }
   };
+
+function handleLinkedInUnified() {
+  if (isMobile) {
+    setShowMobileView(true);
+    return;
+  }
+
+  // Desktop behaviour
+  if (!user) {
+    router.push('/auth'); // Redirect only on desktop
+    return;
+  }
+
+  setIsModalOpen(true);
+}
+
 
   return (
     <section className="relative w-full h-full px-4 md:px-0">
@@ -135,7 +143,7 @@ const HeroSection = () => {
 
         <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
           <Button
-            onClick={handleLinkedInClick}
+            onClick={handleLinkedInUnified}
             className="w-full md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
 "
           >

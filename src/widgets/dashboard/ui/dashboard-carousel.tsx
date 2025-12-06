@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -30,7 +31,7 @@ export default function DashboardCarousel() {
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative max-w-5xl mx-auto h-[594px]">
+    <div className="relative max-w-5xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <div>
           <h2 className="font-normal text-base">Choose ATS friendly templates</h2>
@@ -44,7 +45,7 @@ export default function DashboardCarousel() {
           <button
             type="button"
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition"
+            className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-gray-700 hover:bg-gray-100 transition cursor-pointer"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -52,7 +53,7 @@ export default function DashboardCarousel() {
           <button
             type="button"
             onClick={scrollNext}
-            className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition"
+            className="w-10 h-10 rounded-full bg-blue-500 shadow-md flex items-center justify-center text-white hover:bg-blue-600 transition cursor-pointer"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -60,27 +61,16 @@ export default function DashboardCarousel() {
       </div>
 
       <div className="overflow-hidden rounded-xl" ref={emblaRef}>
-        <div className="flex">
-          {templates?.map((template) => (
-            <div key={template.id} className="group">
-              <div className="cursor-pointer">
-                <div className="p-4 ">
-                  <div className="relative min-w-[350px] h-[548px] glass-card1 p-4 rounded-[20px] border-2 border-white overflow-hidden">
-                    <div className="w-full h-full relative">
-                      <Image
-                        src={template.publicImageUrl}
-                        alt={`Template ${template.id}`}
-                        fill
-                        className="rounded-[20px] object-contain"
-                        unoptimized
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+ <div className="flex my-6 gap-4">
+                       {templates?.map((template) => (
+                         <TemplateCard
+                           key={template.id}
+                           template={template}
+                           onClick={() => {}}
+                           isDashboard={true}
+                         />
+                       ))}
+                     </div>
       </div>
     </div>
   );

@@ -68,7 +68,6 @@ function AboutPage() {
       </div>
       <OurVision />
       <JourneyTimeline />
-      <People />
       <Innovation />
       <div
         className="border border-white rounded-md mx-4 overflow-hidden mt-12 bg-[radial-gradient(circle,#ccc_1px,transparent_1px)] bg-[length:20px_20px]"

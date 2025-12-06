@@ -1,5 +1,6 @@
 import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
 import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
+import { ThumbnailRenderer } from '@features/resume/lib/thumbnail/thumbnail-renderer';
 import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
@@ -16,17 +17,18 @@ import { toast } from 'sonner';
 import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
-import TemplateButton from './change-template-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+import mockData from '../../../../mock-data.json';
 
 import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
 import {
   findItemById,
   applySuggestionsToFieldValue,
+  applySuggestionsToArrayField,
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { getCleanDataForRenderer, isSectionModified } from '../lib/data-cleanup';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import dayjs from 'dayjs';
 import { useCheckIfCommunityMember } from '@entities/download-pdf/queries/queries';
@@ -34,6 +36,8 @@ import WishlistModal from './wishlist-modal';
 import WishlistSuccessModal from './waitlist-success-modal';
 import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
+import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
+import TemplateButton from './change-template-button';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -48,17 +52,123 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
   };
 }
 
+/**
+ * Checks if a single section is empty
+ * Returns true if section has no meaningful data
+ */
+function isSectionEmpty(section: any): boolean {
+  if (!section || typeof section !== 'object') {
+    return true;
+  }
+
+  if ('items' in section && Array.isArray(section.items)) {
+    const items = section.items;
+
+    if (items.length === 0) {
+      return true;
+    }
+
+    // Check if items contain any non-empty values
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (typeof item === 'string' && item.trim() !== '') {
+        return false;
+      } else if (typeof item === 'object' && item !== null) {
+        const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
+          // Skip id, title, itemId, rank, ongoing and metadata fields
+          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank' || key === 'title') {
+            return false;
+          }
+
+          if (typeof value === 'string') {
+            const isNonEmpty = value.trim() !== '';
+            if (isNonEmpty) {
+              console.log(`    → Found non-empty string field "${key}": "${value}"`);
+            }
+            return isNonEmpty;
+          }
+
+          if (typeof value === 'object' && value !== null) {
+            const hasNonEmptyNested = Object.values(value).some((v) => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyNested) {
+              console.log(`    → Found non-empty nested object field "${key}":`, value);
+            }
+            return hasNonEmptyNested;
+          }
+
+          if (Array.isArray(value)) {
+            const hasNonEmptyArray = value.some((v) => typeof v === 'string' && v.trim() !== '');
+            if (hasNonEmptyArray) {
+              console.log(`    → Found non-empty array field "${key}":`, value);
+            }
+            return hasNonEmptyArray;
+          }
+
+          return false;
+        });
+
+        if (hasNonEmptyField) {
+          console.log(`  → Item ${i} has non-empty fields`);
+          return false;
+        } else {
+          console.log(`  → Item ${i} has only empty fields`);
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
+ * Syncs IDs from actual section to mock section
+ * Preserves actual IDs while using mock data content
+ */
+function syncSectionIds(actualSection: any, mockSection: any): any {
+  if (!actualSection || !mockSection) {
+    return mockSection;
+  }
+
+  const synced = { ...mockSection };
+
+  // Sync section ID
+  if (actualSection.id) {
+    synced.id = actualSection.id;
+  }
+
+  // Sync itemIds in items array
+  if (Array.isArray(synced.items) && Array.isArray(actualSection.items)) {
+    synced.items = synced.items.map((mockItem: any, index: number) => {
+      if (typeof mockItem === 'object' && mockItem !== null) {
+        const actualItem = actualSection.items[index];
+        if (actualItem && typeof actualItem === 'object' && actualItem !== null) {
+          return {
+            ...mockItem,
+            itemId: actualItem.itemId || mockItem.itemId,
+          };
+        }
+      }
+      return mockItem;
+    });
+  }
+
+  return synced;
+}
+
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
 
   const thumbnailGenerated = useRef(false);
+  const thumbnailRef = useRef<HTMLDivElement>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -114,6 +224,120 @@ export function FormPageBuilder() {
     },
   });
 
+  const generatePDF = async () => {
+    setIsGeneratingPDF(true);
+
+    try {
+      // Wait for React to re-render
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Use the thumbnail element (which always has isThumbnail=true) for PDF generation
+      // This ensures images are always proxied
+      const pdfSourceElement = thumbnailRef.current;
+
+      if (!pdfSourceElement) {
+        toast.error('Failed to generate PDF: PDF source element not found');
+        setIsGeneratingPDF(false);
+        return;
+      }
+
+      // Get HTML content from the thumbnail renderer (which has proxied images)
+      let htmlContent = pdfSourceElement.innerHTML;
+
+      if (!htmlContent || htmlContent.trim() === '') {
+        toast.error('Failed to generate PDF: No content available');
+        setIsGeneratingPDF(false);
+        return;
+      }
+
+      // Convert relative proxy URLs to absolute URLs for backend PDF generation
+      // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
+      // instead of relative URLs like "/api/proxy-image?url=..."
+      const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
+      htmlContent = htmlContent.replace(
+        /src="\/api\/proxy-image/g,
+        `src="${currentOrigin}/api/proxy-image`
+      );
+
+    // Add necessary styles for the PDF
+    const styledHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+            * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+            }
+
+            body {
+              font-family: 'Inter', system-ui, sans-serif;
+              -webkit-print-color-adjust: exact;
+              print-color-adjust: exact;
+            }
+
+            /* Remove all highlighting styles */
+            .resume-highlight {
+              background-color: transparent !important;
+              border: none !important;
+              padding: 0 !important;
+            }
+
+            .resume-highlight > div:first-child {
+              display: none !important;
+            }
+
+            /* Hide blur effects */
+            .blur-\\[2px\\] {
+              filter: none !important;
+            }
+
+            /* Ensure page breaks work correctly */
+            @media print {
+              @page {
+                size: A4;
+                margin: 0;
+              }
+
+              .resume-highlight {
+                background: none !important;
+                border: none !important;
+              }
+            }
+          </style>
+        </head>
+        <body>${htmlContent}</body>
+      </html>
+    `;
+
+    // Call the API to convert HTML to PDF
+    const pdfBlob = await convertHtmlToPdf(styledHtml);
+
+    // Download the PDF
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = resumeFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+      toast.success('PDF downloaded successfully');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to generate PDF');
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   const handleDownloadPDF = async () => {
     try {
       if (!user?.email) {
@@ -127,92 +351,7 @@ export function FormPageBuilder() {
       });
 
       if (response?.is_uix_member) {
-        setIsGeneratingPDF(true);
-
-        // Wait for React to re-render without highlights
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // Get HTML content from the resume
-        const htmlContent = targetRef.current?.innerHTML;
-
-        if (!htmlContent) {
-          toast.error('Failed to generate PDF');
-          setIsGeneratingPDF(false);
-          return;
-        }
-
-        // Add necessary styles for the PDF
-        const styledHtml = `
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-              <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-                * {
-                  margin: 0;
-                  padding: 0;
-                  box-sizing: border-box;
-                }
-
-                body {
-                  font-family: 'Inter', system-ui, sans-serif;
-                  -webkit-print-color-adjust: exact;
-                  print-color-adjust: exact;
-                }
-
-                /* Remove all highlighting styles */
-                .resume-highlight {
-                  background-color: transparent !important;
-                  border: none !important;
-                  padding: 0 !important;
-                }
-
-                .resume-highlight > div:first-child {
-                  display: none !important;
-                }
-
-                /* Hide blur effects */
-                .blur-\\[2px\\] {
-                  filter: none !important;
-                }
-
-                /* Ensure page breaks work correctly */
-                @media print {
-                  @page {
-                    size: A4;
-                    margin: 0;
-                  }
-
-                  .resume-highlight {
-                    background: none !important;
-                    border: none !important;
-                  }
-                }
-              </style>
-            </head>
-            <body>${htmlContent}</body>
-          </html>
-        `;
-
-        // Call the API to convert HTML to PDF
-        const pdfBlob = await convertHtmlToPdf(styledHtml);
-
-        // Download the PDF
-        const url = URL.createObjectURL(pdfBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = resumeFileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-
-        toast.success('PDF downloaded successfully');
-        setIsGeneratingPDF(false);
+        await generatePDF();
       } else {
         setIsWishlistModalOpen(true);
       }
@@ -220,6 +359,19 @@ export function FormPageBuilder() {
       console.error('Failed to download PDF:', error);
       toast.error('Failed to download PDF');
       setIsGeneratingPDF(false);
+    }
+  };
+
+  const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
+    if (response?.joinCommunityRequested) {
+      try {
+        await generatePDF();
+      } catch (error) {
+        console.error('Failed to generate PDF after joining waitlist:', error);
+        toast.error('Failed to download PDF');
+      }
+    } else {
+      setIsWishlistSuccessModalOpen(true);
     }
   };
 
@@ -267,9 +419,37 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      useFormDataStore.setState({ formData: data ?? {} });
+      // Determine if this is create flow (all sections empty) or edit flow (has data)
+      const sectionKeys = Object.keys(data).filter((key) => key !== 'templateId' && key !== 'updatedAt');
+      const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
+
+      if (allSectionsEmpty) {
+        const mergedData: Record<string, any> = {};
+
+        for (const sectionKey of Object.keys(data)) {
+          if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
+            continue;
+          }
+
+          const actualSection = data[sectionKey as keyof typeof data];
+          const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+          if (mockSection) {
+            const syncedSection = syncSectionIds(actualSection, mockSection);
+            mergedData[sectionKey] = syncedSection;
+          } else {
+            mergedData[sectionKey] = actualSection;
+          }
+        }
+
+        useFormDataStore.setState({ formData: mergedData as Omit<ResumeData, 'templateId'> });
+      } else {
+        useFormDataStore.setState({ formData: data as Omit<ResumeData, 'templateId'> });
+      }
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
+
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -332,12 +512,48 @@ export function FormPageBuilder() {
   );
 
   async function generateAndSaveThumbnail() {
-    if (!targetRef.current || !resumeId) {
+    if (!thumbnailRef.current || !resumeId) {
       return;
     }
 
     try {
-      const thumbnailDataUrl = await generateThumbnail(targetRef.current);
+      // Get the parent container
+      const container = thumbnailRef.current.parentElement as HTMLElement;
+
+      if (!container) {
+        return;
+      }
+
+      // Wait for component to render and layout to complete
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Verify the element has content
+      if (!thumbnailRef.current.innerHTML || thumbnailRef.current.innerHTML.trim() === '') {
+        return;
+      }
+
+      // Temporarily make container visible for capture (but keep it hidden visually)
+      const originalHeight = container.style.height;
+      const originalOverflow = container.style.overflow;
+      const originalPosition = container.style.position;
+
+      container.style.height = 'auto';
+      container.style.overflow = 'visible';
+      container.style.position = 'absolute';
+      container.style.left = '-9999px'; // Move far off-screen instead of clipping
+      container.style.top = '0';
+
+      // Wait a bit for layout to update
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // generateThumbnail now handles image loading internally
+      const thumbnailDataUrl = await generateThumbnail(thumbnailRef.current);
+
+      // Restore original styles
+      container.style.height = originalHeight;
+      container.style.overflow = originalOverflow;
+      container.style.position = originalPosition;
+      container.style.left = '0';
 
       if (!thumbnailDataUrl) {
         return;
@@ -362,13 +578,67 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail();
   }, [resumeId, resumes]);
 
+  // Auto-generate thumbnail every 20 seconds
+  useEffect(() => {
+    if (!resumeId || !targetRef.current) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      // Only regenerate if there's form data
+      if (formData && Object.keys(formData).length > 0) {
+        generateAndSaveThumbnail();
+      }
+    }, 25000);
+
+    return () => clearInterval(intervalId);
+  }, [resumeId]);
+
+  // Auto-save effect - triggers when formData changes
+  useEffect(() => {
+    if (!currentStep || !formData || !formData[currentStep]) {
+      return;
+    }
+
+    // Trigger auto-save after 2 seconds of inactivity
+    debouncedAutoSave(currentStep, formData[currentStep]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, currentStep]);
+
   async function handleNextStep() {
-    handleSaveResume();
+    try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (hasModifications) {
+        thumbnailGenerated.current = false;
+
+        await save({
+          type: currentStep,
+          data: formData[currentStep],
+          updatedAt: Date.now(),
+        });
+      }
+    } catch (error) {
+      console.error('Failed to save before moving to next step:', error);
+      toast.error('Failed to save changes');
+    }
+
     setCurrentStep(navs[nextStepIndex]?.name ?? '');
   }
 
   async function handleSaveResume() {
     try {
+      // Check if current section has been modified compared to mock data
+      const hasModifications = isSectionModified(currentStep, formData, mockData);
+
+      if (!hasModifications) {
+        toast.info(`No changes to save in ${currentStep}`);
+
+        return;
+      }
+
       thumbnailGenerated.current = false;
 
       await save({
@@ -394,25 +664,104 @@ export function FormPageBuilder() {
           data: data,
           updatedAt: Date.now(),
         });
-        
+        // Update last save time when save completes successfully
+        setLastSaveTime(Date.now());
       } catch (error) {
         console.error('Failed to save section visibility:', error);
         toast.error('Failed to update section visibility');
       }
     }, 1000),
-    [save]
+    [save],
   );
 
-  const handleToggleHideSection = useCallback((sectionId: string, isHidden: boolean) => {
-    const sectionData = formData[sectionId as keyof typeof formData];
-    if (sectionData) {
-     
-      debouncedHideSave(sectionId, { ...sectionData, isHidden });
-      toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
-    }
-  }, [formData, debouncedHideSave]);
+  // Debounced auto-save function
+  const debouncedAutoSave = useCallback(
+    debounce(async (step: string, data: any) => {
+      try {
+        // Get fresh formData from store instead of using stale closure
+        const currentFormData = useFormDataStore.getState().formData;
+
+        // Check if section has been modified compared to mock data
+        const hasModifications = isSectionModified(step, currentFormData, mockData);
+
+        if (!hasModifications) {
+          return;
+        }
+        await save({
+          type: step,
+          data: data,
+          updatedAt: Date.now(),
+        });
+        setLastSaveTime(Date.now());
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+      }
+    }, 25000),
+    [save],
+  );
+
+  const handleToggleHideSection = useCallback(
+    (sectionId: string, isHidden: boolean) => {
+      const sectionData = formData[sectionId as keyof typeof formData];
+      if (sectionData) {
+        debouncedHideSave(sectionId, { ...sectionData, isHidden });
+        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+      }
+    },
+    [formData, debouncedHideSave],
+  );
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
+
+  // Update display every 30 seconds to refresh relative time
+  const [refreshKey, setRefreshKey] = useState(0);
+  useEffect(() => {
+    if (!lastSaveTime) return;
+    
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1);
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [lastSaveTime]);
+
+  // Format last save time
+  const formatLastSaveTime = useCallback(() => {
+    if (!lastSaveTime) return null;
+    const diff = Date.now() - lastSaveTime;
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    
+    if (seconds < 60) {
+      return 'saved less than a minute ago';
+    } else if (minutes === 1) {
+      return 'saved a minute ago';
+    } else if (minutes < 60) {
+      return `saved ${minutes} minutes ago`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      if (hours === 1) {
+        return 'saved an hour ago';
+      } else if (hours < 24) {
+        return `saved ${hours} hours ago`;
+      } else {
+        const days = Math.floor(hours / 24);
+        if (days === 1) {
+          return 'saved 24 hours ago';
+        } else {
+          return `saved ${days} days ago`;
+        }
+      }
+    }
+  }, [lastSaveTime, refreshKey]);
+
+  // Initialize last save time from resume data
+  useEffect(() => {
+    if (currentResume?.updatedAt) {
+      const updatedAt = new Date(currentResume.updatedAt).getTime();
+      setLastSaveTime(updatedAt);
+    }
+  }, [currentResume?.updatedAt]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {
@@ -443,7 +792,6 @@ export function FormPageBuilder() {
     const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
     if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-
       return;
     }
 
@@ -490,13 +838,25 @@ export function FormPageBuilder() {
         return;
       }
 
-      const currentFieldValue = ((currentItem as Record<string, unknown>)[fieldName] as string) || '';
+      const currentFieldValue = (currentItem as Record<string, unknown>)[fieldName];
 
-      const updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue, selectedSuggestions);
+      // Check if field value is an array (for achievements, interests)
+      const isArrayField = Array.isArray(currentFieldValue);
+
+      let updatedFieldValue: string | string[];
+
+      if (isArrayField) {
+        updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
+      } else {
+        updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, selectedSuggestions);
+      }
 
       // Check if suggestions were actually applied
-      if (updatedFieldValue === currentFieldValue) {
-   
+      const hasChanged = isArrayField
+        ? JSON.stringify(updatedFieldValue) !== JSON.stringify(currentFieldValue)
+        : updatedFieldValue !== currentFieldValue;
+
+      if (!hasChanged) {
         toast.error('Suggestions could not be applied');
         return;
       }
@@ -540,13 +900,14 @@ export function FormPageBuilder() {
         }}
       >
         <div className="min-w-0 flex-1 flex justify-center">
-          <div ref={targetRef} style={{ fontFamily: 'fangsong' }}>
+          <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-                template={aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {})}
+               template={selectedTemplate?.json ?? aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+                isThumbnail={false}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -554,25 +915,90 @@ export function FormPageBuilder() {
               </div>
             )}
           </div>
+
+          {/* Hidden ThumbnailRenderer for thumbnail & PDF generation - isolated from main renderer */}
+          {/* This renderer always has isThumbnail=true, which ensures all images are proxied to avoid CORS issues */}
+          <div
+            style={{
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              width: '794px', // A4 width
+              height: '0',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+            }}
+            aria-hidden="true"
+          >
+            <div ref={thumbnailRef}>
+              {selectedTemplate && (
+                <ThumbnailRenderer
+                  template={selectedTemplate?.json ?? aniketTemplate}
+                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                />
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Sticky Save as PDF button */}
-        <div className="sticky bottom-0 left-0 right-0 flex justify-end pr-8 pb-4 pointer-events-none">
-          <Button
-            onClick={handleDownloadPDF}
-            disabled={isGeneratingPDF}
-            className="pointer-events-auto border border-[#CBE7FF] bg-[#E9F4FF]
-                      font-semibold text-[#005FF2] hover:bg-blue-700 hover:text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isGeneratingPDF ? (
-              <>Generating PDF...</>
-            ) : (
-              <>
-                <Download /> PDF
-              </>
-            )}
-          </Button>
-        </div>
+      <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+  {/* Change Template Button */}
+  <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+    <div
+      className="
+        pointer-events-auto
+        border border-[#CBE7FF]
+        bg-[#E9F4FF]
+        px-4 py-2
+        rounded-xl
+        shadow-lg
+        flex items-center gap-1.5
+        cursor-pointer
+        font-semibold
+        text-[#005FF2]
+        hover:bg-[#E9F4FF] hover:text-white
+        transition-colors
+      "
+    >
+      <TemplateButton />
+    </div>
+  </TemplatesDialog>
+
+
+  {/* Download PDF Button */}
+  <Button
+    onClick={handleDownloadPDF}
+    disabled={isGeneratingPDF}
+    className="
+      pointer-events-auto
+      border border-[#CBE7FF]
+      bg-[#E9F4FF]
+      font-semibold
+      text-[#005FF2]
+      hover:bg-[#E9F4FF] hover:text-white
+      shadow-lg
+      disabled:opacity-50 disabled:cursor-not-allowed
+      cursor-pointer
+      flex items-center gap-1.5
+      rounded-xl
+      p-5.5
+    "
+  >
+    {isGeneratingPDF ? (
+      <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+        Generating PDF...
+      </span>
+    ) : (
+      <>
+        <Download className="w-4 h-4" /><span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+        Download PDF
+      </span>
+      </>
+    )}
+  </Button>
+</div>
+
       </div>
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
@@ -584,7 +1010,7 @@ export function FormPageBuilder() {
         />
 
         {/* Sticky Top - Save Button on the right */}
-        <div className="sticky top-0 z-10 bg-white pt-5 px-5 flex justify-end">
+        <div className="sticky top-0 z-10 bg-white py-5 px-5 flex justify-end">
           <Button
             className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
              text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
@@ -606,19 +1032,21 @@ export function FormPageBuilder() {
           />
         </div>
 
-        {/* Sticky Bottom - Change Template and Next Button */}
+        {/* Sticky Bottom - Next Button */}
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
-          {/* Change Template Button on the left */}
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <div className="cursor-pointer">
-              <TemplateButton />
-            </div>
-          </TemplatesDialog>
+          {/* Last Save Time on the left */}
+          <div className="flex-1 flex justify-start">
+            {formatLastSaveTime() && (
+              <p className="text-sm text-gray-500">
+                {formatLastSaveTime()}
+              </p>
+            )}
+          </div>
 
           {/* Next Button on the right */}
           {navs[nextStepIndex]?.name && (
             <Button
-              className="ml-auto bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
+              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
               text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleNextStep}
             >
@@ -641,7 +1069,7 @@ export function FormPageBuilder() {
         <WishlistModal
           isOpen={isWishlistModalOpen}
           onClose={() => setIsWishlistModalOpen(false)}
-          onJoinSuccess={() => setIsWishlistSuccessModalOpen(true)}
+          onJoinSuccess={handleWaitlistJoinSuccess}
         />
       )}
       {isWishlistSuccessModalOpen && (

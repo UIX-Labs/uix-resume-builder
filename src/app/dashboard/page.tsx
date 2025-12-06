@@ -31,7 +31,7 @@ export default function DashboardLayout() {
                   variant="outline"
                   size="icon"
                   onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent"
+                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
                 </Button>
@@ -72,7 +72,7 @@ export default function DashboardLayout() {
               </div>
             </div>
 
-            <div className="w-110 bg-[rgb(235,241,244)] p-4 mt-[54px] mr-4 rounded-[20px] shadow overflow-hidden">
+            <div className="w-110 bg-[rgb(235,241,244)] p-4 mt-[54px] mr-4 rounded-[20px] shadow ">
               <DashboardCarousel />
             </div>
           </main>

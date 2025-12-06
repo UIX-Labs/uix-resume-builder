@@ -1,12 +1,14 @@
-import Image from 'next/image';
+'use client';
 
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { useState } from 'react';
+import { TestimonialsModal } from '@widgets/landing-page/ui/testimonials-modal';
 
 export function SuccessStories() {
-  const navigate=useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleReadTestimonials = () => {
-    navigate.push('/about-us');
+    setIsModalOpen(true);
   };
   return (
     <section className="w-full mx-auto px-4 py-16">
@@ -48,11 +50,12 @@ export function SuccessStories() {
           </p>
 
           {/* Button */}
-          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors" onClick={handleReadTestimonials}>
+          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors cursor-pointer" onClick={handleReadTestimonials}>
             Read all testimonials
           </button>
         </div>
       </div>
+      <TestimonialsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </section>
   );
 }

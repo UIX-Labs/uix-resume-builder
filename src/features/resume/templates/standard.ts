@@ -1,19 +1,17 @@
 // Flattened template structure with simplified list rendering
-
 const aniketTemplate = {
   name: 'Aniket Modern Classic',
-
   page: {
     background: '#ffffff',
     className: 'text-black leading-relaxed',
-    fontFamily: 'Inter',
+    fontFamily: 'Lora',
   },
-
   sections: [
     // Header Section
     {
       id: 'header',
       type: 'header',
+      column: 'left',
       className: 'flex flex-col items-center text-center gap-2',
       fields: {
         name: {
@@ -33,7 +31,6 @@ const aniketTemplate = {
             { path: 'personalDetails.items[0].address', fallback: 'Address' },
             { path: 'personalDetails.items[0].phone', fallback: 'Phone' },
             {
-              type: 'link',
               path: 'personalDetails.items[0].email',
               href: 'mailto:{{value}}',
               fallback: 'Email',
@@ -54,11 +51,12 @@ const aniketTemplate = {
         },
       },
     },
-
     // Education Section
     {
       id: 'education',
       type: 'list-section',
+      column: 'left',
+      break: false,
       heading: {
         path: 'education.heading',
         fallback: 'Education',
@@ -73,22 +71,22 @@ const aniketTemplate = {
             className: 'flex flex-row items-center text-sm',
             cells: [
               {
-                 type: 'inline-group',
+                type: 'inline-group',
                 separator: ' | ',
-                items:[
-                   {
-                path: 'degree',
-                className: 'font-semibold',
+                className: 'flex flex-row gap-1',
+                items: [
+                  {
+                    path: 'degree',
+                    className: 'font-semibold',
+                  },
+                  {
+                    type: 'duration',
+                    path: 'duration',
+                    fallback: 'Start Date',
+                    className: 'italic font-medium text-xs ml-auto',
+                  },
+                ],
               },
-              {
-                type: 'duration',
-                path: 'duration',
-                fallback: 'Start Date',
-                className: 'italic font-medium text-xs ml-auto',
-              },
-                ]
-              }
-             
             ],
           },
           {
@@ -107,11 +105,11 @@ const aniketTemplate = {
         ],
       },
     },
-
     // Summary Section
     {
       id: 'summary',
       type: 'content-section',
+      column: 'left',
       className: 'flex flex-col mt-4',
       heading: {
         path: 'summary.heading',
@@ -126,21 +124,21 @@ const aniketTemplate = {
         className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap mt-3',
       },
     },
-
     // Experience Section
     {
       id: 'experience',
       type: 'list-section',
-      break: false,
+      column: 'right',
+      break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black gap-1 mt-4 mb-2',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px]' },
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2',
+        className: 'flex flex-col mt-3',
         rows: [
           {
             className: 'flex flex-row justify-between items-center text-sm text-black mb-1',
@@ -148,6 +146,7 @@ const aniketTemplate = {
               {
                 type: 'inline-group',
                 separator: ' | ',
+                className: 'flex flex-row gap-1',
                 items: [
                   { path: 'position', className: 'font-semibold' },
                   { path: 'company', className: 'font-semibold' },
@@ -173,22 +172,30 @@ const aniketTemplate = {
         ],
       },
     },
-
     // Skills Section
+    // {
+    //   listPath: 'skills.items',
+    //   itemPath: 'name',
+    //   itemClassName: 'text-xs text-neutral-800',
+    //   containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
+    //   itemSeparator: ', ',
+    // },
+
     {
       id: 'skills',
-      break: false,
+      break: true,
       type: 'inline-list-section',
+      column: 'left',
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1',
+        className: 'uppercase tracking-wide text-sm font-semibold text-black mt-4 gap-1 mb-1',
         divider: { variant: 'line', className: 'bg-black w-full h-[1.5px] mt-0.5' },
       },
       listPath: 'skills.items',
       itemPath: 'name',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-wrap gap-1 mt-3 text-xs',
+      itemClassName: 'text-sm text-black mt-1',
+      containerClassName: 'text-sm text-black leading-relaxed pr-2',
       itemSeparator: ', ',
     },
 
@@ -196,8 +203,9 @@ const aniketTemplate = {
     {
       id: 'projects',
       type: 'list-section',
+      column: 'right',
       className: 'flex flex-col mt-4',
-      break: false,
+      break: true,
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
@@ -219,11 +227,11 @@ const aniketTemplate = {
         ],
       },
     },
-
     // Interests Section (Badge Style)
     {
       id: 'interests',
       type: 'badge-section',
+      column: 'right',
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -234,11 +242,11 @@ const aniketTemplate = {
       badgeClassName:
         'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
     },
-
     // Achievements Section (Badge Style)
     {
       id: 'achievements',
       type: 'badge-section',
+      column: 'left',
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
@@ -247,13 +255,14 @@ const aniketTemplate = {
       },
       listPath: 'achievements.items[0].items',
       badgeClassName:
-        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold whitespace-nowrap',
+        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-black rounded-md text-xs text-white font-semibold break-words',
     },
-
     // Certifications Section
     {
       id: 'certifications',
       type: 'list-section',
+      column: 'right',
+      break: true,
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
@@ -262,7 +271,7 @@ const aniketTemplate = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2',
+        className: 'flex flex-col gap-1 mt-2 leading-none',
         fields: [
           { path: 'title', fallback: 'Certification Title', className: 'text-sm font-semibold text-neutral-900' },
           { path: 'issuer', fallback: 'Issuer', className: 'text-xs text-neutral-700' },
@@ -272,5 +281,4 @@ const aniketTemplate = {
     },
   ],
 };
-
 export default aniketTemplate;

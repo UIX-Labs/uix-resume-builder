@@ -3,23 +3,32 @@ import { type Tag, TagInput } from 'emblor';
 import { useEffect, useState } from 'react';
 
 export function TagsInput({ onChange, data, section }: { data: any; section: any; onChange: (data: any) => void }) {
-  const [tags, setTags] = useState<Tag[]>(data);
+  const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    setTags(data.map((tag: string) => ({ id: tag, text: tag })));
-  }, []);
+    // Initialize tags from data (array of strings)
+    if (Array.isArray(data)) {
+      setTags(data.map((tag: string) => ({ id: tag, text: tag })));
+    } else {
+      setTags([]);
+    }
+  }, [data]);
+
+  const handleTagsChange = (newTags: Tag[] | ((prevState: Tag[]) => Tag[])) => {
+    const updatedTags = typeof newTags === 'function' ? newTags(tags) : newTags;
+    setTags(updatedTags);
+    // Convert tags back to array of strings
+    onChange(updatedTags.map((tag) => tag.text));
+  };
 
   return (
-    <div className="z-[1000] relative w-full">
+    <div className="relative w-full">
       <TagInput
         activeTagIndex={0}
         placeholder={section.placeholder}
         setActiveTagIndex={() => {}}
         tags={tags}
-        setTags={setTags}
-        onTagAdd={(tag) => {
-          onChange([...data, tag]);
-        }}
+        setTags={handleTagsChange}
         styleClasses={{
           input: cn(
             'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',

@@ -7,571 +7,369 @@ const template6 = {
     padding: 0,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontFamily: 'Inter',
   },
 
-  body: {
-    id: 'body',
-    type: 'container',
-    className: 'flex flex-row',
-    children: [
-      // Left Column - Dark Navy Sidebar
-      {
-        type: 'container',
-        className: 'w-[270px] bg-[#1F3447] text-white flex flex-col pt-[232px] pb-8 pr-4',
-        children: [
-          // Education Section
+  columns: {
+    spacing: '0px',
+    left: {
+      width: '30%',
+      className: 'bg-[rgb(24,37,58)] text-black px-8 pt-6',
+    },
+    right: {
+      width: '70%',
+    },
+  },
+
+  sections: [
+    // Header Section with Peach Background (spans full width)
+    {
+      id: 'header',
+      type: 'header',
+      column: 'right',
+      className: 'bg-[#F2936F] px-8 py-20 flex flex-col justify-center gap-4',
+      fields: {
+        name: {
+          path: 'personalDetails.items[0].fullName',
+          fallback: 'JAY RUSTOGI',
+          className: 'text-4xl font-extrabold text-black tracking-wider',
+        },
+        title: {
+          path: 'personalDetails.items[0].jobTitle',
+          fallback: 'PRODUCT | GROWTH | STRATEGY',
+          className: 'text-sm font-normal text-black tracking-widest',
+        },
+      },
+    },
+
+    // Left Column Mock Header Section
+    {
+      id: 'header',
+      type: 'header',
+      column: 'left',
+      className: 'h-[203.99px] flex flex-col justify-center gap-4',
+      fields: {
+        name: {
+          path: '',
+          fallback: '',
+          className: 'text-4xl font-extrabold text-black tracking-wider',
+        },
+      },
+    },
+
+    // Education Section
+    {
+      id: 'education',
+      type: 'list-section',
+      column: 'left',
+      break: false,
+      className: 'pl-6 mb-8',
+      heading: {
+        path: 'education.heading',
+        fallback: 'EDUCATION',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
+      },
+      listPath: 'education.items',
+      containerClassName: 'flex flex-col gap-4 mt-2',
+      itemTemplate: {
+        className: 'flex flex-col',
+        fields: [
           {
-            id: 'education-section',
-            type: 'container',
-            className: 'flex flex-col gap-3 pl-6 mb-8',
-            children: [
-              {
-                id: 'education-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.education.heading',
-                  fallback: 'EDUCATION',
-                },
-                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-2',
-              },
-              {
-                id: 'education',
-                type: 'list',
-                pathWithFallback: { path: 'data.education.items' },
-                className: 'flex flex-col gap-4',
-                presentation: [
-                  {
-                    type: 'container',
-                    id: 'education-item',
-                    className: 'flex flex-col',
-                    children: [
-                      {
-                        id: 'education-degree',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.degree' },
-                        className: 'text-[#F2936F] uppercase text-sm font-bold',
-                      },
-                      {
-                        id: 'education-school',
-                        type: 'text',
-                        pathWithFallback: { path: 'data.institution' },
-                        className: 'text-white text-sm font-normal break-words whitespace-normal',
-                      },
-                      {
-                        id: 'education-period',
-                        type: 'duration',
-                        pathWithFallback: { path: 'data.duration' },
-                        className: 'text-white text-sm font-normal break-words whitespace-normal',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
+            path: 'degree',
+            className: 'text-[#F2936F] text-sm font-bold',
           },
-
-          //  Skills Section
-
           {
-            id: 'skills-section',
-            type: 'container',
-            className: 'flex flex-col gap-3 pl-6 mb-8',
-            children: [
-              {
-                id: 'skills-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.skills.heading',
-                  fallback: 'SKILLS',
-                },
-                className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
-              },
-              {
-                id: 'skills-list',
-                type: 'list',
-                pathWithFallback: { path: 'data.skills.items' },
-                className: 'flex flex-col',
-                presentation: [
-                  {
-                    type: 'text',
-                    pathWithFallback: { path: 'data.name' },
-                    className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
-                  },
-                ],
-              },
-            ],
+            path: 'institution',
+            className: 'text-white text-sm font-normal break-words whitespace-normal',
           },
-
-          // Interests Section
           {
-            id: 'interests-section',
-            type: 'container',
-            className: 'flex flex-col gap-3 pl-6 mb-8',
-            children: [
-              {
-                id: 'interests-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.interests.title',
-                  fallback: 'INTERESTS',
-                },
-                className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
-              },
-              {
-                id: 'interests-list',
-                type: 'list',
-                pathWithFallback: { path: 'data.interests.items' },
-                className: 'flex flex-col',
-                presentation: [
-                  {
-                    type: 'list',
-                    pathWithFallback: { path: 'data.items' },
-                    className: 'flex flex-col',
-                    presentation: [
-                      {
-                        type: 'text',
-                        className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-
-          // Contact Section
-          {
-            type: 'container',
-            className: 'flex flex-col gap-3 pl-6 mb-8',
-            children: [
-              {
-                id: 'contact-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.contact.heading',
-                  fallback: 'CONTACT',
-                },
-                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-1',
-              },
-              {
-                type: 'container',
-                className: 'flex flex-col gap-2',
-                children: [
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Phone',
-                        size: 16,
-                        className: 'text-[#F2936F]',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: {
-                          path: 'data.personalDetails.items.0.phone',
-                          fallback: '+91 9999999999',
-                        },
-                        className: 'text-white text-sm font-normal break-words whitespace-normal',
-                      },
-                    ],
-                  },
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Mail',
-                        size: 16,
-                        className: 'text-[#F2936F]',
-                      },
-                      {
-                        type: 'text',
-                        pathWithFallback: {
-                          path: 'data.personalDetails.items.0.email',
-                          fallback: 'jay02rustogi@gmail.com',
-                        },
-                        className: 'text-white text-sm font-normal break-words whitespace-normal',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-
-          // Social Section
-          {
-            type: 'container',
-            className: 'flex flex-col gap-3 pl-6',
-            children: [
-              {
-                id: 'social-heading',
-                type: 'text',
-                pathWithFallback: {
-                  path: 'data.social.heading',
-                  fallback: 'SOCIAL',
-                },
-                className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-2',
-              },
-              {
-                type: 'container',
-                className: 'flex flex-col gap-3',
-                children: [
-                  {
-                    type: 'container',
-                    className: 'flex items-center gap-2',
-                    children: [
-                      {
-                        type: 'icon',
-                        name: 'Linkedin',
-                        size: 18,
-                        className: 'text-[#F2936F]',
-                      },
-                      {
-                        id: 'linkedin-link',
-                        type: 'link',
-                        pathWithFallback: {
-                          path: 'data.personalDetails.items.0.links.linkedin.title',
-                          fallback: 'linkedin.com/in/jay-rustogi',
-                        },
-                        hrefPathWithFallback: {
-                          path: 'data.personalDetails.items.0.links.linkedin.link',
-                          fallback: 'https://linkedin.com/in/jay-rustogi',
-                        },
-                        className: 'text-white text-sm font-normal underline break-words',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
+            type: 'duration',
+            path: 'duration',
+            className: 'text-white text-sm font-normal break-words whitespace-normal',
           },
         ],
       },
+    },
 
-      // Right Column
-      {
-        type: 'container',
-        className: 'flex-1 flex flex-col',
-        children: [
-          // Header Section with Peach Background
+    // Skills Section
+    {
+      id: 'skills',
+      type: 'list-section',
+      column: 'left',
+      break: true,
+      className: 'pl-6 mb-8',
+      heading: {
+        path: 'skills.heading',
+        fallback: 'SKILLS',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-10',
+      },
+      listPath: 'skills.items',
+      containerClassName: 'flex flex-col mb-6',
+      itemTemplate: {
+        className: 'flex flex-col',
+        fields: [
           {
-            type: 'list',
-            id: 'personalDetails',
-            pathWithFallback: { path: 'data.personalDetails.items' },
-            className: 'bg-[#F2936F] px-8 py-20 flex flex-col justify-center',
-            presentation: [
-              {
-                id: 'header-section',
-                type: 'container',
-                className: 'flex flex-col gap-4',
-                children: [
-                  {
-                    id: 'name-text',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.fullName',
-                      fallback: 'JAY RUSTOGI',
-                    },
-                    className: 'text-4xl font-extrabold text-black tracking-wider',
-                  },
-                  {
-                    id: 'title-text',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.jobTitle',
-                      fallback: 'PRODUCT | GROWTH | STRATEGY',
-                    },
-                    className: 'text-sm font-normal text-black tracking-widest',
-                  },
-                ],
-              },
-            ],
-          },
-
-          // Content Area
-          {
-            type: 'container',
-            className: 'flex-1 px-8 py-8 flex flex-col gap-6',
-            children: [
-              // About Section
-              {
-                type: 'container',
-                className: 'flex flex-col gap-3 pb-6 -mx-8 px-8 border-b-4 border-[#E8A87C]',
-                children: [
-                  {
-                    id: 'about-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.about.heading',
-                      fallback: 'ABOUT',
-                    },
-                    className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
-                  },
-                  {
-                    type: 'list',
-                    id: 'about-summary',
-                    pathWithFallback: { path: 'data.personalDetails.items' },
-                    className: 'flex flex-col',
-                    presentation: [
-                      {
-                        id: 'about-text',
-                        type: 'html',
-                        pathWithFallback: {
-                          path: 'data.description',
-                          fallback: 'About text',
-                        },
-                        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap',
-                      },
-                    ],
-                  },
-                ],
-              },
-
-              // Work Experience Section
-              {
-                id: 'experience-section',
-                type: 'container',
-                className: 'flex flex-col gap-4',
-                children: [
-                  {
-                    id: 'experience-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.experience.heading',
-                      fallback: 'WORK EXPERIENCE',
-                    },
-                    className: 'text-[#F2936F] text-base font-extrabold tracking-wider',
-                  },
-                  {
-                    id: 'experience',
-                    type: 'list',
-                    pathWithFallback: { path: 'data.experience.items' },
-                    className: 'flex flex-col gap-6',
-                    presentation: [
-                      {
-                        type: 'container',
-                        id: 'experience-item',
-                        className: 'flex flex-col gap-1',
-                        children: [
-                          // Position Title
-                          {
-                            id: 'experience-position',
-                            type: 'text',
-                            pathWithFallback: { path: 'data.position' },
-                            className: 'text-[#F2936F] text-xs font-bold uppercase',
-                          },
-                          // Company and Duration
-                          {
-                            type: 'container',
-                            className: 'flex flex-row gap-2 items-baseline',
-                            children: [
-                              {
-                                id: 'experience-company',
-                                type: 'text',
-                                pathWithFallback: { path: 'data.company' },
-                                className: 'text-black text-sm font-normal italic',
-                              },
-                              {
-                                type: 'text',
-                                pathWithFallback: { path: 'data.separator', fallback: '|' },
-                                className: 'text-black text-sm font-normal',
-                              },
-                              {
-                                id: 'experience-period',
-                                type: 'duration',
-                                pathWithFallback: { path: 'data.duration' },
-                                className: 'text-black text-sm font-normal italic',
-                              },
-                            ],
-                          },
-                          // Company Type/Description (if applicable)
-                          {
-                            id: 'experience-type',
-                            type: 'text',
-                            pathWithFallback: {
-                              path: 'data.companyType',
-                              fallback: '',
-                            },
-                            className: 'text-black text-sm font-normal',
-                          },
-                          // Responsibilities/Achievements
-                          {
-                            id: 'experience-bullets',
-                            type: 'html',
-                            pathWithFallback: { path: 'data.description' },
-                            className:
-                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-
-              // Projects Section
-              {
-                id: 'projects-section',
-                type: 'container',
-                className: 'flex flex-col gap-4',
-                children: [
-                  {
-                    id: 'projects-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.projects.title',
-                      fallback: 'PROJECTS',
-                    },
-                    className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider',
-                  },
-                  {
-                    id: 'projects',
-                    type: 'list',
-                    pathWithFallback: { path: 'data.projects.items' },
-                    className: 'flex flex-col gap-6',
-                    presentation: [
-                      {
-                        type: 'container',
-                        id: 'project-item',
-                        className: 'flex flex-col gap-1',
-                        children: [
-                          // Project Title (as link)
-                          {
-                            id: 'project-title',
-                            type: 'link',
-                            pathWithFallback: { path: 'data.title' },
-                            hrefPathWithFallback: { path: 'data.link.link', fallback: '' },
-                            className: 'text-black text-xs uppercase hover:underline',
-                          },
-                          // Duration
-                          {
-                            type: 'container',
-                            className: 'flex flex-row gap-2 items-baseline',
-                            children: [
-                              {
-                                id: 'project-period',
-                                type: 'duration',
-                                pathWithFallback: { path: 'data.duration' },
-                                className: 'text-black text-sm font-normal italic',
-                              },
-                            ],
-                          },
-                          // Description
-                          {
-                            id: 'project-description',
-                            type: 'html',
-                            pathWithFallback: { path: 'data.description' },
-                            className:
-                              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-
-              // Certifications Section
-              {
-                id: 'certifications-section',
-                type: 'container',
-                className: 'flex flex-col gap-3',
-                children: [
-                  {
-                    id: 'certifications-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.certifications.title',
-                      fallback: 'CERTIFICATIONS',
-                    },
-                    className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider',
-                  },
-                  {
-                    type: 'list',
-                    id: 'certifications-list',
-                    pathWithFallback: { path: 'data.certifications.items' },
-                    className: 'flex flex-col gap-3',
-                    presentation: [
-                      {
-                        type: 'container',
-                        className: 'flex flex-col',
-                        children: [
-                          {
-                            type: 'text',
-                            pathWithFallback: {
-                              path: 'data.title',
-                              fallback: 'Certification Title',
-                            },
-                            className: 'text-sm text-black',
-                          },
-                          {
-                            type: 'text',
-                            pathWithFallback: {
-                              path: 'data.issuer',
-                              fallback: 'Issuer',
-                            },
-                            className: 'text-sm text-black',
-                          },
-                          {
-                            type: 'duration',
-                            pathWithFallback: { path: 'data.duration' },
-                            className: 'text-sm text-black italic',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-
-              // Achievements Section
-              {
-                id: 'achievements-section',
-                type: 'container',
-                className: 'flex flex-col gap-3',
-                children: [
-                  {
-                    id: 'achievements-heading',
-                    type: 'text',
-                    pathWithFallback: {
-                      path: 'data.achievements.title',
-                      fallback: 'ACHIEVEMENTS',
-                    },
-                    className: 'uppercase text-[#F2936F] text-base font-[900] tracking-wider',
-                  },
-                  {
-                    id: 'achievements-list',
-                    type: 'list',
-                    pathWithFallback: { path: 'data.achievements.items' },
-                    presentation: [
-                      {
-                        type: 'list',
-                        className: 'flex flex-col',
-                        pathWithFallback: { path: 'data.items' },
-                        presentation: [
-                          {
-                            type: 'text',
-                            className: 'text-sm text-black',
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-
-              // Skills Section (if needed in right column)
-            ],
+            path: 'name',
+            className: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
           },
         ],
       },
-    ],
-  },
+    },
+
+    // Interests Section
+    {
+      id: 'interests',
+      type: 'badge-section',
+      column: 'left',
+      break: false,
+      heading: {
+        path: 'interests.title',
+        fallback: 'INTERESTS',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 mt-10',
+      },
+      listPath: 'interests.items[0].items',
+      itemPath: '',
+      badgeClassName: 'text-white text-sm font-normal leading-relaxed break-words whitespace-normal',
+      containerClassName: 'flex flex-col gap-0 mb-8',
+    },
+
+    // Contact Section
+    {
+      id: 'contact',
+      type: 'header',
+      column: 'left',
+      className: 'flex flex-col gap-3 mb-8',
+      fields: {
+        contact: {
+          type: 'contact-grid',
+          className: 'flex flex-col gap-2 mt-1',
+          heading: {
+            path: '',
+            fallback: 'Contact',
+            className: 'text-[#F2936F] text-base font-extrabold tracking-wider mb-3',
+          },
+          items: [
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Phone',
+                  size: 16,
+                  className: 'text-[#F2936F]',
+                },
+                {
+                  path: 'personalDetails.items[0].phone',
+                  fallback: '+91 9999999999',
+                  className: 'text-white text-sm font-normal break-words whitespace-normal',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Mail',
+                  size: 16,
+                  className: 'text-[#F2936F]',
+                },
+                {
+                  path: 'personalDetails.items[0].email',
+                  fallback: 'jay02rustogi@gmail.com',
+                  className: 'text-white text-sm font-normal break-words whitespace-wrap max-w-[85%]',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Linkedin',
+                  size: 18,
+                  className: 'text-[#F2936F]',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.linkedin.title',
+                  href: 'personalDetails.items[0].links.linkedin.link',
+                  fallback: 'linkedin.com/in/jay-rustogi',
+                  className: 'text-white text-sm font-normal underline break-words',
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+
+    {
+      id: 'summary',
+      type: 'content-section',
+      column: 'right',
+      className: 'flex flex-col gap-3 pb-6 border-b-4 border-[#E8A87C] pt-8',
+      heading: {
+        path: 'about.heading',
+        fallback: 'ABOUT',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-5',
+      },
+      content: {
+        type: 'html',
+        path: 'personalDetails.items[0].description',
+        fallback: 'About text',
+        className: 'text-sm text-black leading-relaxed break-words whitespace-pre-wrap px-8 mt-1',
+      },
+    },
+
+    // Work Experience Section
+    {
+      id: 'experience',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'experience.heading',
+        fallback: 'WORK EXPERIENCE',
+        className: 'text-[#F2936F] text-base font-extrabold tracking-wider pt-6 mb-3',
+      },
+      listPath: 'experience.items',
+      containerClassName: 'flex flex-col gap-6 mt-2',
+      itemTemplate: {
+        className: 'flex flex-col pt-2 px-8',
+        fields: [
+          {
+            path: 'position',
+            className: 'text-[#F2936F] text-xs font-bold uppercase mt-1',
+          },
+          {
+            type: 'inline-group',
+            className: 'flex gap-2 items-baseline mt-1',
+            items: [
+              {
+                path: 'company',
+                className: 'text-black text-sm font-semibold',
+              },
+              {
+                path: 'separator',
+                fallback: '|',
+                className: 'text-black text-sm font-normal',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-black text-sm font-normal italic',
+              },
+            ],
+          },
+          {
+            path: 'companyType',
+            fallback: '',
+            className: 'text-black text-sm font-normal',
+          },
+          {
+            type: 'html',
+            path: 'description',
+            className:
+              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
+          },
+        ],
+      },
+    },
+
+    // Projects Section
+    {
+      id: 'projects',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'projects.title',
+        fallback: 'PROJECTS',
+        className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mt-6',
+      },
+      listPath: 'projects.items',
+      containerClassName: 'flex flex-col gap-6 mt-2',
+      itemTemplate: {
+        className: 'flex flex-col pt-1 px-8',
+        fields: [
+          {
+            path: 'title',
+            href: 'link.link',
+            fallback: 'Project Title',
+            className: 'text-black text-sm font-semibold hover:underline',
+          },
+          {
+            type: 'duration',
+            path: 'duration',
+            className: 'text-black text-sm font-normal italic',
+          },
+          {
+            type: 'html',
+            path: 'description',
+            className:
+              'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',
+          },
+        ],
+      },
+    },
+
+    // Certifications Section
+    {
+      id: 'certifications',
+      type: 'list-section',
+      column: 'right',
+      break: false,
+      heading: {
+        path: 'certifications.title',
+        fallback: 'CERTIFICATIONS',
+        className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-6',
+      },
+      listPath: 'certifications.items',
+      containerClassName: 'flex flex-col gap-3 mt-1 pb-6 px-8',
+      itemTemplate: {
+        className: 'flex flex-col',
+        fields: [
+          {
+            path: 'title',
+            fallback: 'Certification Title',
+            className: 'text-sm text-black font-semibold',
+          },
+          {
+            path: 'issuer',
+            fallback: 'Issuer',
+            className: 'text-sm text-black',
+          },
+          {
+            type: 'duration',
+            path: 'duration',
+            className: 'text-sm text-black italic',
+          },
+        ],
+      },
+    },
+
+    // Achievements Section
+    {
+      id: 'achievements',
+      type: 'badge-section',
+      column: 'right',
+      break: false,
+      heading: {
+        path: 'achievements.title',
+        fallback: 'ACHIEVEMENTS',
+        className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-1',
+      },
+      listPath: 'achievements.items[0].items',
+      itemPath: '',
+      badgeClassName: 'text-sm text-black',
+      containerClassName: 'flex flex-col mt-1 px-8',
+      itemPrefix: '• ',
+    },
+  ],
 };
 
 export default template6;

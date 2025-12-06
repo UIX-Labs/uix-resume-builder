@@ -132,9 +132,7 @@ export default function BuilderIntelligenceModal({
           >
             {isSubmitting ? 'Analyzing...' : 'Initiate Builder Intelligence'}
           </Button>
-          <p className="text-center text-sm text-gray-200">
-            Bring your details from LinkedIn and reuse
-          </p>
+        
         </div>
       </DialogContent>
     </Dialog>

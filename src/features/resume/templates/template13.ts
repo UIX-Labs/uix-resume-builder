@@ -53,6 +53,17 @@ const template13 = {
               href: 'personalDetails.items[0].links.linkedin.link',
               fallback: '@reallygreatsite',
             },
+            {
+              type: 'link',
+              path: 'personalDetails.items[0].links.github.title',
+              href: 'personalDetails.items[0].links.github.link',
+              fallback: 'GitHub',
+            },
+            {
+              path: 'personalDetails.items[0].address',
+              fallback: '123 Anywhere St., Any City, ST 12345',
+              className: 'text-sm text-[#2C5F5F]',
+            },
           ],
         },
 

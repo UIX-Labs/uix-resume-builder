@@ -128,6 +128,25 @@ const template5 = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 20,
+                  className: 'text-[#5b7fc7]',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
+                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                },
+              ],
+            },
           ],
         },
       },

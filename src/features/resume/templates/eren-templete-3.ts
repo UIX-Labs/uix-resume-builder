@@ -77,6 +77,20 @@ const erenTemplate3 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-1',
               items: [
+                { type: 'icon', name: 'Github', size: 12, className: 'text-[#1F91FF]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
+                  className: 'decoration-neutral-400 font-semibold',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-1',
+              items: [
                 { type: 'icon', name: 'MapPin', size: 12, className: 'text-[#1F91FF]' },
                 {
                   path: 'personalDetails.items[0].address',

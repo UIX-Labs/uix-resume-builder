@@ -9,6 +9,7 @@ import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
 import { useCallback, useMemo, useState } from 'react';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
 {
@@ -53,6 +54,11 @@ export default function ResumeCreationCard() {
   const resumeCreateHandler = async () => {
     lockOptions('create');
     setShowScanningOverlay(true);
+    
+    trackEvent('create_resume_click', {
+      source: 'dashboard_card',
+      method: 'from_scratch'
+    });
 
     if (!user.data?.id) {
       setShowScanningOverlay(false);
@@ -77,6 +83,11 @@ export default function ResumeCreationCard() {
   };
 
   const handleUploadSuccess = (data: any) => {
+    trackEvent('resume_uploaded', {
+      source: 'dashboard_card',
+      resumeId: data.resumeId
+    });
+
     setTimeout(() => {
       setShowScanningOverlay(false);
       router.push(`/resume/${data.resumeId}`);
@@ -103,6 +114,11 @@ export default function ResumeCreationCard() {
   };
 
   const handleOpenTailoredWithJD = () => {
+    trackEvent('create_resume_click', {
+      source: 'dashboard_card',
+      method: 'tailored_with_jd'
+    });
+
     lockOptions('tailoredJD');
     setShowResumeUpload(false);
     setShowJDUpload(true);

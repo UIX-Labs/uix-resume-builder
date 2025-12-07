@@ -5,6 +5,7 @@ import aniketTemplate from '@features/resume/templates/standard';
 import { TemplateForm } from '@features/template-form';
 import { Button } from '@shared/ui/button';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import { camelToHumanString } from '@shared/lib/string';
@@ -17,6 +18,8 @@ import { toast } from 'sonner';
 import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { Template } from '@entities/template-page/api/template-data';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { PreviewButton } from '@shared/ui/components/preview-button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import mockData from '../../../../mock-data.json';
 
@@ -38,6 +41,7 @@ import { Download } from 'lucide-react';
 import { convertHtmlToPdf } from '@entities/download-pdf/api';
 import type { JoinCommunityResponse } from '@entities/download-pdf/types/type';
 import TemplateButton from './change-template-button';
+import { trackEvent, startTimedEvent } from '@shared/lib/analytics/percept';
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -164,6 +168,7 @@ export function FormPageBuilder() {
   const thumbnailRef = useRef<HTMLDivElement>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] = useState(false);
@@ -254,13 +259,10 @@ export function FormPageBuilder() {
       // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
       // instead of relative URLs like "/api/proxy-image?url=..."
       const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
-      htmlContent = htmlContent.replace(
-        /src="\/api\/proxy-image/g,
-        `src="${currentOrigin}/api/proxy-image`
-      );
+      htmlContent = htmlContent.replace(/src="\/api\/proxy-image/g, `src="${currentOrigin}/api/proxy-image`);
 
-    // Add necessary styles for the PDF
-    const styledHtml = `
+      // Add necessary styles for the PDF
+      const styledHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -316,18 +318,18 @@ export function FormPageBuilder() {
       </html>
     `;
 
-    // Call the API to convert HTML to PDF
-    const pdfBlob = await convertHtmlToPdf(styledHtml);
+      // Call the API to convert HTML to PDF
+      const pdfBlob = await convertHtmlToPdf(styledHtml);
 
-    // Download the PDF
-    const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = resumeFileName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+      // Download the PDF
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = resumeFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
       toast.success('PDF downloaded successfully');
     } catch (error) {
@@ -345,6 +347,8 @@ export function FormPageBuilder() {
         return;
       }
 
+      startTimedEvent('resume_download');
+
       const response = await checkCommunityMember({
         personal_email: user?.email,
         uix_email: user?.email,
@@ -352,13 +356,26 @@ export function FormPageBuilder() {
 
       if (response?.is_uix_member) {
         await generatePDF();
+        trackEvent('resume_download', {
+          status: 'success',
+          format: 'pdf',
+          resumeId,
+        });
       } else {
         setIsWishlistModalOpen(true);
+        trackEvent('resume_download_waitlist_prompt', {
+          resumeId,
+        });
       }
     } catch (error) {
       console.error('Failed to download PDF:', error);
       toast.error('Failed to download PDF');
       setIsGeneratingPDF(false);
+      trackEvent('resume_download', {
+        status: 'failed',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        resumeId,
+      });
     }
   };
 
@@ -449,7 +466,6 @@ export function FormPageBuilder() {
       }
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
-
 
   useEffect(() => {
     if (embeddedTemplate) {
@@ -650,6 +666,12 @@ export function FormPageBuilder() {
       await generateAndSaveThumbnail();
 
       toast.success(`Resume saved successfully`);
+
+      trackEvent('resume_saved', {
+        resumeId,
+        section: currentStep,
+        autoSave: false,
+      });
     } catch {
       toast.error('Failed to save resume');
     }
@@ -693,6 +715,12 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
         setLastSaveTime(Date.now());
+
+        trackEvent('resume_saved', {
+          resumeId,
+          section: step,
+          autoSave: true,
+        });
       } catch (error) {
         console.error('Auto-save failed:', error);
       }
@@ -717,7 +745,7 @@ export function FormPageBuilder() {
   const [refreshKey, setRefreshKey] = useState(0);
   useEffect(() => {
     if (!lastSaveTime) return;
-    
+
     const interval = setInterval(() => {
       setRefreshKey((prev) => prev + 1);
     }, 30000); // Update every 30 seconds
@@ -731,7 +759,7 @@ export function FormPageBuilder() {
     const diff = Date.now() - lastSaveTime;
     const seconds = Math.floor(diff / 1000);
     const minutes = Math.floor(seconds / 60);
-    
+
     if (seconds < 60) {
       return 'saved less than a minute ago';
     } else if (minutes === 1) {
@@ -774,6 +802,11 @@ export function FormPageBuilder() {
       refetchResumes();
 
       toast.success('Template updated successfully');
+
+      trackEvent('template_selected', {
+        templateId: template.id,
+        resumeId,
+      });
     } catch (error) {
       console.error('Failed to update template:', error);
       toast.error('Failed to update template');
@@ -808,6 +841,14 @@ export function FormPageBuilder() {
       suggestionType,
     });
     setAnalyzerModalOpen(true);
+
+    trackEvent('builder_intelligence_viewed', {
+      resumeId,
+      section: currentStep,
+      field: fieldName,
+      suggestionType,
+      suggestionCount: suggestions.length,
+    });
   };
 
   const handleApplySuggestions = async (
@@ -870,6 +911,14 @@ export function FormPageBuilder() {
         selectedSuggestions,
       );
 
+      trackEvent('builder_intelligence_applied', {
+        resumeId,
+        section: currentStep,
+        field: fieldName,
+        suggestionType: analyzerModalData.suggestionType,
+        count: selectedSuggestions.length,
+      });
+
       const updatedData = {
         ...formData,
         [currentStep]: {
@@ -899,11 +948,16 @@ export function FormPageBuilder() {
           maxWidth: 794 + 48 + 6,
         }}
       >
+        {/* Preview Button at top right */}
+        <div className="absolute top-0 right-3 z-10">
+          <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
+        </div>
+
         <div className="min-w-0 flex-1 flex justify-center">
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
-               template={selectedTemplate?.json ?? aniketTemplate}
+                template={selectedTemplate?.json ?? aniketTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
@@ -934,7 +988,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(formData ?? {}, true)}
                 />
               )}
             </div>
@@ -942,63 +996,62 @@ export function FormPageBuilder() {
         </div>
 
         {/* Sticky Save as PDF button */}
-      <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-  {/* Change Template Button */}
-  <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-    <div
-      className="
-        pointer-events-auto
-        border border-[#CBE7FF]
-        bg-[#E9F4FF]
-        px-4 py-2
-        rounded-xl
-        shadow-lg
-        flex items-center gap-1.5
-        cursor-pointer
-        font-semibold
-        text-[#005FF2]
-        hover:bg-[#E9F4FF] hover:text-white
-        transition-colors
-      "
-    >
-      <TemplateButton />
-    </div>
-  </TemplatesDialog>
+        <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
+          {/* Change Template Button */}
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <div
+              className="
+                pointer-events-auto
+                border border-[#CBE7FF]
+                bg-[#E9F4FF]
+                px-4 py-2
+                rounded-xl
+                shadow-lg
+                flex items-center gap-1.5
+                cursor-pointer
+                font-semibold
+                text-[#005FF2]
+                hover:bg-[#E9F4FF] hover:text-white
+                transition-colors
+              "
+            >
+              <TemplateButton />
+            </div>
+          </TemplatesDialog>
 
-
-  {/* Download PDF Button */}
-  <Button
-    onClick={handleDownloadPDF}
-    disabled={isGeneratingPDF}
-    className="
-      pointer-events-auto
-      border border-[#CBE7FF]
-      bg-[#E9F4FF]
-      font-semibold
-      text-[#005FF2]
-      hover:bg-[#E9F4FF] hover:text-white
-      shadow-lg
-      disabled:opacity-50 disabled:cursor-not-allowed
-      cursor-pointer
-      flex items-center gap-1.5
-      rounded-xl
-      p-5.5
-    "
-  >
-    {isGeneratingPDF ? (
-      <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Generating PDF...
-      </span>
-    ) : (
-      <>
-        <Download className="w-4 h-4" /><span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-        Download PDF
-      </span>
-      </>
-    )}
-  </Button>
-</div>
-
+          {/* Download PDF Button */}
+          <Button
+            onClick={handleDownloadPDF}
+            disabled={isGeneratingPDF}
+            className="
+              pointer-events-auto
+              border border-[#CBE7FF]
+              bg-[#E9F4FF]
+              font-semibold
+              text-[#005FF2]
+              hover:bg-[#E9F4FF] hover:text-white
+              shadow-lg
+              disabled:opacity-50 disabled:cursor-not-allowed
+              cursor-pointer
+              flex items-center gap-1.5
+              rounded-xl
+              p-5.5
+            "
+          >
+            {isGeneratingPDF ? (
+              <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                Generating PDF...
+              </span>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
+                  Download PDF
+                </span>
+              </>
+            )}
+          </Button>
+        </div>
       </div>
       <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
@@ -1012,8 +1065,7 @@ export function FormPageBuilder() {
         {/* Sticky Top - Save Button on the right */}
         <div className="sticky top-0 z-10 bg-white py-5 px-5 flex justify-end">
           <Button
-            className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
-             text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+            className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
             onClick={handleSaveResume}
           >
             Save
@@ -1036,18 +1088,13 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {formatLastSaveTime() && (
-              <p className="text-sm text-gray-500">
-                {formatLastSaveTime()}
-              </p>
-            )}
+            {formatLastSaveTime() && <p className="text-sm text-gray-500">{formatLastSaveTime()}</p>}
           </div>
 
           {/* Next Button on the right */}
           {navs[nextStepIndex]?.name && (
             <Button
-              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6
-              text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
+              className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
               onClick={handleNextStep}
             >
               {`Next : ${camelToHumanString(navs[nextStepIndex]?.name)}`}
@@ -1063,6 +1110,7 @@ export function FormPageBuilder() {
           suggestions={analyzerModalData.suggestions}
           suggestionType={analyzerModalData.suggestionType}
           onApply={handleApplySuggestions}
+          resumeId={resumeId}
         />
       )}
       {isWishlistModalOpen && (
@@ -1076,6 +1124,16 @@ export function FormPageBuilder() {
         <WishlistSuccessModal
           isOpen={isWishlistSuccessModalOpen}
           onClose={() => setIsWishlistSuccessModalOpen(false)}
+        />
+      )}
+
+      {/* Resume Preview Modal */}
+      {selectedTemplate && (
+        <PreviewModal
+          template={selectedTemplate}
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
         />
       )}
     </>

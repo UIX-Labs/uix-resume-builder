@@ -14,11 +14,11 @@ const brianWayneTemplate = {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-10 flex flex-col',
+      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-8 flex flex-col',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'p-8 flex flex-col min-w-0',
+      className: 'px-8 pl-8 pt-10 flex flex-col min-w-0',
     },
   },
 
@@ -119,6 +119,26 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: 'LinkedIn',
+                  className: 'text-sm text-white hover:text-green-200',
+                },
+              ],
+            },
+            // GitHub
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'GitHub',
                   className: 'text-sm text-white hover:text-green-200',
                 },
               ],
@@ -257,7 +277,7 @@ const brianWayneTemplate = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-1',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col mb-3',
         fields: [
           {
             path: 'duration',
@@ -314,10 +334,9 @@ const brianWayneTemplate = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-1',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col mb-2',
         fields: [
           {
-            type: 'link',
             path: 'title',
             href: 'link.link',
             fallback: 'Project Title',

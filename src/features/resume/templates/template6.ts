@@ -202,6 +202,25 @@ const template6 = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 18,
+                  className: 'text-[#F2936F]',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'github.com/username',
+                  className: 'text-white text-sm font-normal underline break-words',
+                },
+              ],
+            },
           ],
         },
       },
@@ -292,7 +311,7 @@ const template6 = {
         className: 'text-[#F2936F] uppercase text-base font-extrabold tracking-wider mt-6',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
         className: 'flex flex-col pt-1 px-8',
         fields: [

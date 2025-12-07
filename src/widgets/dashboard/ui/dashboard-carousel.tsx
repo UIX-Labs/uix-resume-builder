@@ -1,7 +1,8 @@
 'use client';
 
-import { useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { TemplateCard } from '@widgets/templates-page/ui/templates-dialog';
+import { Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -23,7 +24,8 @@ export default function DashboardCarousel() {
   }, []);
 
   const { data: templates } = useGetAllTemplates();
-
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   useEffect(() => {
     if (!emblaApi) return;
     onSelect(emblaApi);
@@ -31,6 +33,7 @@ export default function DashboardCarousel() {
   }, [emblaApi, onSelect]);
 
   return (
+    <> 
     <div className="relative max-w-5xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <div>
@@ -68,10 +71,22 @@ export default function DashboardCarousel() {
                            template={template}
                            onClick={() => {}}
                            isDashboard={true}
+                           onPreviewClick={
+                            () => {
+                              setPreviewTemplate(template);
+                              setIsPreviewOpen(true);
+                            }
+                           }
                          />
                        ))}
                      </div>
       </div>
     </div>
+    <PreviewModal
+       template={previewTemplate}
+       isOpen={isPreviewOpen}
+       onClose={() => setIsPreviewOpen(false)}
+     />
+    </>
   );
 }

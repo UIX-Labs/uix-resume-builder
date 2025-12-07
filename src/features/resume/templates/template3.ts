@@ -73,6 +73,20 @@ const annaFieldTemplate = {
                 },
               ],
             },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Github', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.github.title',
+                  href: 'personalDetails.items[0].links.github.link',
+                  fallback: 'github',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
           ],
         },
       },
@@ -158,12 +172,12 @@ const annaFieldTemplate = {
         path: 'projects.heading',
         fallback: 'Projects',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6 mb-3',
       },
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
-        className: 'flex flex-col gap-3 mt-3',
+        className: 'flex flex-col mt-3',
         rows: [
           {
             className: 'flex flex-row justify-between items-start',

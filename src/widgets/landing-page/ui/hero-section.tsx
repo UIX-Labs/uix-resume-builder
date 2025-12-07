@@ -9,6 +9,7 @@ import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import { MobileTextView } from './mobile-text-view';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useState } from 'react';
+import { trackEvent } from '@/shared/lib/analytics/percept';
 
 const HeroSection = () => {
   const router = useRouter();
@@ -81,28 +82,41 @@ const HeroSection = () => {
     },
   ];
 
+// Unified LinkedIn Autofill handler (MOBILE -> MobileView | DESKTOP -> Modal/Login)
+  const handleLinkedInUnified = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+      return;
+    }
+
+    if (!user) {
+      router.push('/auth');
+      return;
+    }
+
+    setIsModalOpen(true);
+
+    trackEvent('create_resume_click', {
+      source: 'landing_hero',
+      method: 'linkedin_autofill',
+    });
+  };
+
+  // Upload resume handler (mobile & desktop logic preserved)
   const handleUploadClick = () => {
     if (isMobile) {
       setShowMobileView(true);
-    } else {
-      handleNavigate();
+      return;
     }
+
+    handleNavigate();
+
+    trackEvent('create_resume_click', {
+      source: 'landing_hero',
+      method: 'upload_existing',
+    });
   };
 
-function handleLinkedInUnified() {
-  if (isMobile) {
-    setShowMobileView(true);
-    return;
-  }
-
-  // Desktop behaviour
-  if (!user) {
-    router.push('/auth'); // Redirect only on desktop
-    return;
-  }
-
-  setIsModalOpen(true);
-}
 
 
   return (

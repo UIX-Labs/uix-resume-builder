@@ -101,6 +101,25 @@ const enzoTemplate2 = {
                     },
                   ],
                 },
+                // GitHub
+                {
+                  type: 'group',
+                  className: 'flex flex-col gap-0.5 items-end',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'GitHub',
+                      className: 'text-[10px] font-medium uppercase tracking-wide text-right text-slate-700',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.github.link',
+                      href: 'personalDetails.items[0].links.github.link',
+                      fallback: 'GitHub',
+                      className: 'text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700',
+                    },
+                  ],
+                },
                 // Phone
                 {
                   type: 'group',

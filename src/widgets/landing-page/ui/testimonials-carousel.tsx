@@ -48,7 +48,7 @@ export function TestimonialsCarousel({ className = '', roundedClassName = 'round
             <div className={`overflow-hidden ${roundedClassName}`} ref={emblaRef}>
                 <div className="flex">
                     {testimonials.map((testimonial, index) => (
-                        <div key={index} className="flex-[0_0_100%] min-w-0 relative h-[450px] sm:h-[550px] lg:h-[679px]">
+                        <div key={index} className="flex-[0_0_100%] min-w-0 relative h-[550px] sm:h-[550px] lg:h-[679px]">
                             <div
                                 className={`absolute inset-0 bg-cover bg-center ${roundedClassName}`}
                                 style={{
@@ -59,9 +59,9 @@ export function TestimonialsCarousel({ className = '', roundedClassName = 'round
                                 }}
                             ></div>
 
-                            <div className="relative z-10 flex flex-col justify-end h-full px-5 pb-6 sm:px-8 sm:pb-10 lg:px-10 lg:pb-12">
+                            <div className="relative z-10 flex flex-col justify-end h-full px-5 pb-16 sm:px-8 sm:pb-10 lg:px-10 lg:pb-12">
                                 <div className="flex flex-col gap-6 sm:gap-8 lg:gap-12">
-                                    <p className="text-lg sm:text-2xl lg:text-4xl font-semibold leading-tight tracking-tight text-white">
+                                    <p className="text-base sm:text-2xl lg:text-3xl font-semibold leading-tight tracking-tight text-white">
                                         {testimonial.text}
                                     </p>
 
@@ -83,7 +83,7 @@ export function TestimonialsCarousel({ className = '', roundedClassName = 'round
                 </div>
             </div>
 
-            <div className="absolute bottom-6 right-5 sm:bottom-10 sm:right-8 lg:bottom-12 lg:right-10 flex items-center gap-3 sm:gap-5 lg:gap-8 z-20">
+            <div className="absolute bottom-2 right-5 sm:right-8 lg:bottom-12 lg:right-10 flex items-center gap-3 sm:gap-5 lg:gap-8 z-20">
                 <button
                     onClick={scrollPrev}
                     type="button"

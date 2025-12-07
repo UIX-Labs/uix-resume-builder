@@ -172,7 +172,7 @@ const FooterSection = () => {
   ];
 
   return (
-    <section className="relative w-full h-full flex flex-col min-h-[80vh] md:min-h-0">
+    <section className="relative w-full h-full flex flex-col min-h-[100vh] md:min-h-0">
       <div className="w-full max-w-[1408px] mx-auto relative flex-1 flex flex-col px-4 sm:px-8 lg:px-16 py-8 lg:py-0">
         <div className="flex justify-end pb-4 sm:pb-8 mt-8 sm:mt-12 lg:mt-[64px]">
           <FooterNavigation />
@@ -180,7 +180,7 @@ const FooterSection = () => {
 
         <div className="flex-1 flex items-center justify-center relative z-20">
           <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight">
+            <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight whitespace-nowrap">
               Right <span className="text-blue-800 font-black">Resume</span>
               <br />
               <span className="text-[28px] md:text-[80px] block -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8 mx-auto w-fit px-4 sm:px-6 md:px-8 lg:px-[49px] py-1 sm:py-0 rounded-full text-[rgba(0,137,65,1)] font-black backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
@@ -191,7 +191,7 @@ const FooterSection = () => {
             <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col items-center gap-[10px]">
               <Button
                 onClick={handleNavigate}
-                className="py-3 px-4 sm:py-4 sm:px-5 lg:py-8 lg:px-6 bg-blue-900 border-2 border-white text-white text-base sm:text-xl md:text-2xl lg:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-8 sm:mb-12 lg:mb-[88px]"
+                className="py-5 px-4 sm:py-4 sm:px-5 lg:py-8 lg:px-6 bg-blue-900 border-2 border-white text-white text-base sm:text-xl md:text-2xl lg:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] mb-8 sm:mb-12 lg:mb-[88px]"
               >
                 Create My Resume
               </Button>

@@ -341,16 +341,16 @@ const template6 = {
       id: 'certifications',
       type: 'list-section',
       column: 'right',
-      break: false,
+      break: true,
       heading: {
         path: 'certifications.title',
         fallback: 'CERTIFICATIONS',
-        className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-6',
+        className: 'uppercase text-[#F2936F] text-base font-extrabold tracking-wider  mt-6',
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-3 mt-1 pb-6 px-8',
+      containerClassName: 'flex flex-col gap-3 mt-1 pb-6',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col px-8',
         fields: [
           {
             path: 'title',

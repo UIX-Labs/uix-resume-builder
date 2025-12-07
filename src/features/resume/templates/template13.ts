@@ -100,7 +100,7 @@ const template13 = {
         className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       listPath: 'skills.items',
-      containerClassName: 'grid grid-cols-3 w-full border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'grid grid-cols-3 w-full',
 
       itemTemplate: {
         className: 'flex items-start',
@@ -127,14 +127,14 @@ const template13 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Professional Experience',
-        className: 'text-[#2C5F5F] text-2xl font-normal mb-1',
+        className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       divider: {
         variant: 'line',
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-4 border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
         className: 'flex flex-col mb-4',
         rows: [
@@ -191,7 +191,7 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-2 border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'flex flex-col gap-2',
       itemTemplate: {
         className: 'flex flex-col',
         rows: [
@@ -231,14 +231,14 @@ const template13 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-[#2C5F5F] text-2xl font-normal mb-1',
+        className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       divider: {
         variant: 'line',
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'flex flex-col ',
       itemTemplate: {
         className: 'flex flex-col',
         fields: [
@@ -287,7 +287,7 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-4 border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
         className: 'flex flex-col',
         rows: [
@@ -338,7 +338,7 @@ const template13 = {
       listPath: 'interests.items[0].items',
       itemPath: '',
       badgeClassName: 'text-sm text-[#2C5F5F]',
-      containerClassName: 'flex flex-wrap gap-1 border-b-2 border-dotted border-[#1a3c34] pb-6 mb-5',
+      containerClassName: 'flex flex-wrap gap-1',
       itemSeparator: ', ',
     },
 
@@ -351,7 +351,7 @@ const template13 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-[#2C5F5F] text-2xl font-normal mb-1',
+        className: 'text-[#2C5F5F] text-2xl font-normal mb-1  border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
       divider: {
         variant: 'line',

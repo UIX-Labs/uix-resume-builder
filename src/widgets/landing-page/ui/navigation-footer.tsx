@@ -72,12 +72,12 @@ const FooterNavigation = () => {
         <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
           <button
             type="button"
-            className="flex items-center gap-3 group hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+            className="flex items-center gap-2 sm:gap-3 group hover:opacity-80 transition-opacity duration-200 cursor-pointer"
           >
-            <div className="w-6 h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
+            <div className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
               <ArrowRight />
             </div>
-            <span className="group-hover:text-blue-600 text-gray-1000 text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
+            <span className="group-hover:text-blue-600 text-gray-1000 text-sm sm:text-base lg:text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
               {label}
             </span>
           </button>
@@ -88,12 +88,12 @@ const FooterNavigation = () => {
     return (
     <a
       href={href}
-      className="flex items-center gap-3 group hover:opacity-80 transition-opacity duration-200"
+      className="flex items-center gap-2 sm:gap-3 group hover:opacity-80 transition-opacity duration-200"
     >
-      <div className="w-6 h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
+      <div className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
         <ArrowRight />
       </div>
-      <span className="group-hover:text-blue-600 text-gray-1000 text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
+      <span className="group-hover:text-blue-600 text-gray-1000 text-sm sm:text-base lg:text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
         {label}
       </span>
     </a>
@@ -101,14 +101,14 @@ const FooterNavigation = () => {
   };
 
   return (
-    <nav className="flex flex-row items-start gap-14">
-      <div className="flex flex-col justify-center gap-4">
+    <nav className="flex flex-row items-start gap-6 sm:gap-10 lg:gap-14">
+      <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
         {leftColumnLinks.map((link) => (
           <NavigationLinkItem key={link.label} {...link} />
         ))}
       </div>
 
-      <div className="flex flex-col justify-center gap-4">
+      <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
         {rightColumnLinks.map((link) => (
           <NavigationLinkItem key={link.label} {...link} />
         ))}

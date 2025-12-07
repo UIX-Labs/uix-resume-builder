@@ -247,6 +247,7 @@ const template8 = {
     {
       id: 'certifications',
       type: 'list-section',
+      break:true,
       className: 'flex flex-col mt-4',
       heading: {
         path: 'certifications.heading',

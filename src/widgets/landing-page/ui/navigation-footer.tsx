@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCachedUser } from "@shared/hooks/use-user";
 import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
+import { TestimonialsModal } from "@widgets/landing-page/ui/testimonials-modal";
 import { useMutation } from "@tanstack/react-query";
 import { createResume, updateResumeTemplate } from "@entities/resume";
 import type { Template } from "@entities/template-page/api/template-data";
@@ -13,11 +14,13 @@ interface NavigationLink {
   label: string;
   href?: string;
   isTemplateDialog?: boolean;
+  isTestimonialsModal?: boolean;
 }
 
 const FooterNavigation = () => {
   const router = useRouter();
   const user = useCachedUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -58,7 +61,7 @@ const FooterNavigation = () => {
   ];
 
   const rightColumnLinks: NavigationLink[] = [
-    { label: "Reviews", href: "/reviews" },
+    { label: "Reviews", isTestimonialsModal: true },
     { label: "Terms of Service", href: "https://uixlabs.co/" },
   ];
 
@@ -66,6 +69,7 @@ const FooterNavigation = () => {
     label,
     href,
     isTemplateDialog,
+    isTestimonialsModal,
   }: NavigationLink) => {
     if (isTemplateDialog) {
       return (
@@ -85,6 +89,23 @@ const FooterNavigation = () => {
       );
     }
 
+    if (isTestimonialsModal) {
+      return (
+        <button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 sm:gap-3 group hover:opacity-80 transition-opacity duration-200 cursor-pointer"
+        >
+          <div className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
+            <ArrowRight />
+          </div>
+          <span className="group-hover:text-blue-600 text-gray-1000 text-sm sm:text-base lg:text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
+            {label}
+          </span>
+        </button>
+      );
+    }
+
     return (
       <a
         href={href}
@@ -101,19 +122,22 @@ const FooterNavigation = () => {
   };
 
   return (
-    <nav className="flex flex-row items-start gap-6 sm:gap-10 lg:gap-14">
-      <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
-        {leftColumnLinks.map((link) => (
-          <NavigationLinkItem key={link.label} {...link} />
-        ))}
-      </div>
+    <>
+      <nav className="flex flex-row items-start gap-6 sm:gap-10 lg:gap-14">
+        <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
+          {leftColumnLinks.map((link) => (
+            <NavigationLinkItem key={link.label} {...link} />
+          ))}
+        </div>
 
-      <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
-        {rightColumnLinks.map((link) => (
-          <NavigationLinkItem key={link.label} {...link} />
-        ))}
-      </div>
-    </nav>
+        <div className="flex flex-col justify-center gap-2 sm:gap-3 lg:gap-4">
+          {rightColumnLinks.map((link) => (
+            <NavigationLinkItem key={link.label} {...link} />
+          ))}
+        </div>
+      </nav>
+      <TestimonialsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   );
 };
 

@@ -174,12 +174,12 @@ export function AITailorSection() {
           >
             <div className="flex flex-col gap-8 sm:gap-10 lg:gap-12 w-full lg:w-[334px]">
               <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 lg:gap-8">
-                <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[116px] lg:h-[116px] bg-[#E5B89C] border border-white rounded-full relative overflow-hidden flex-shrink-0">
+                <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[116px] lg:h-[116px] bg-black border border-white rounded-full relative overflow-hidden flex-shrink-0">
                   <Image
-                    src="images/profile.svg"
+                    src="images/uix-logo.svg"
                     alt="Akshat Agrawal"
                     fill
-                    className="object-cover"
+                    className="object-contain !left-2"
                   />
                 </div>
 

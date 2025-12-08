@@ -35,9 +35,9 @@ const FooterSection = () => {
           />
         </div>
       ),
-      desktopPosition: { top: "-1%", left: "2%" },
-      mobilePosition: { top: "-2%", left: "-2%" },
-      mobileWidth: 115,
+      desktopPosition: { top: '-1%', left: '2%' },
+      mobilePosition: { top: '2%', left: '2%' },
+      mobileWidth: 90,
       width: 250,
       initial: { rotate: -25, x: 400, y: -200, opacity: 0 },
     },
@@ -62,8 +62,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "8%", left: "32%" },
-      mobilePosition: { top: "15%", left: "85%" },
+      desktopPosition: { top: '8%', left: '32%' },
+      mobilePosition: { top: '12%', right: '2%' },
       mobileWidth: 70,
       width: 140,
       initial: { rotate: 15, x: 200, y: -150, opacity: 0 },
@@ -89,8 +89,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "1%", right: "35%" },
-      mobilePosition: { top: "1%", right: "-5%" },
+      desktopPosition: { top: '1%', right: '35%' },
+      mobilePosition: { top: '5%', right: '5%' },
       mobileWidth: 75,
       width: 150,
       initial: { rotate: -24, x: 300, y: -100, opacity: 0 },
@@ -116,8 +116,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "25%", right: "45%" },
-      mobilePosition: { top: "35%", right: "-5%" },
+      desktopPosition: { top: '25%', right: '45%' },
+      mobilePosition: { top: '30%', right: '2%' },
       mobileWidth: 65,
       width: 120,
       initial: { rotate: 13, x: 250, y: 100, opacity: 0 },
@@ -143,8 +143,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "48%", left: "5%" },
-      mobilePosition: { bottom: "40%", left: "-10%" },
+      desktopPosition: { top: '48%', left: '5%' },
+      mobilePosition: { bottom: '35%', left: '2%' },
       mobileWidth: 60,
       width: 110,
       initial: { rotate: -10, x: -200, y: 200, opacity: 0 },
@@ -170,8 +170,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "42%", right: "5%" },
-      mobilePosition: { bottom: "30%", right: "2%" },
+      desktopPosition: { top: '42%', right: '5%' },
+      mobilePosition: { bottom: '25%', right: '5%' },
       mobileWidth: 70,
       width: 130,
       initial: { rotate: 10, x: 300, y: 50, opacity: 0 },
@@ -197,8 +197,8 @@ const FooterSection = () => {
           </div>
         </div>
       ),
-      desktopPosition: { top: "62%", right: "8%" },
-      mobilePosition: { bottom: "-5%", left: "8%" },
+      desktopPosition: { top: '62%', right: '8%' },
+      mobilePosition: { bottom: '12%', left: '5%' },
       mobileWidth: 65,
       width: 125,
       initial: { rotate: -10, x: 350, y: 150, opacity: 0 },

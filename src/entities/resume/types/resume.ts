@@ -1,4 +1,4 @@
-import type { ResumeDataKey } from './resume-data';
+import type { ResumeDataKey } from "./resume-data";
 
 export interface ResumeItem {
   id: string;
@@ -22,4 +22,5 @@ export interface Resume {
   publicThumbnail?: { url: string; expiresAt: string } | null;
   items: ResumeItem[];
   template: any | null;
+  isAnalyzed?: boolean;
 }

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import type { Template } from '@entities/template-page/api/template-data';
+import React from "react";
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCachedUser } from "@shared/hooks/use-user";
+import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { createResume, updateResumeTemplate } from "@entities/resume";
+import type { Template } from "@entities/template-page/api/template-data";
 
 interface NavigationLink {
   label: string;
@@ -29,13 +29,13 @@ const FooterNavigation = () => {
 
   const handleTemplateSelect = async (template: Template) => {
     if (!user) {
-      router.push('/auth');
+      router.push("/auth");
       return;
     }
 
     try {
       const data = await createResumeMutation.mutateAsync({
-        title: 'New Resume',
+        title: "New Resume",
         userInfo: {
           userId: user.id,
         },
@@ -48,25 +48,25 @@ const FooterNavigation = () => {
 
       router.push(`/resume/${data.id}`);
     } catch (error) {
-      console.error('Failed to create resume:', error);
+      console.error("Failed to create resume:", error);
     }
   };
 
   const leftColumnLinks: NavigationLink[] = [
-    { label: 'About Us', href: '/about-us' },
-    { label: 'Help', href: '/help' },
-    { label: "What's New", href: '/whats-new' },
-    { label: 'Check Templates', isTemplateDialog: true },
+    { label: "About Us", href: "/about-us" },
+    { label: "Check Templates", isTemplateDialog: true },
   ];
 
   const rightColumnLinks: NavigationLink[] = [
-    { label: 'Price', href: '/pricing' },
-    { label: 'Reviews', href: '/reviews' },
-    { label: 'Career', href: '/career' },
-    { label: 'Terms of Service', href: 'https://uixlabs.co/' },
+    { label: "Reviews", href: "/reviews" },
+    { label: "Terms of Service", href: "https://uixlabs.co/" },
   ];
 
-  const NavigationLinkItem = ({ label, href, isTemplateDialog }: NavigationLink) => {
+  const NavigationLinkItem = ({
+    label,
+    href,
+    isTemplateDialog,
+  }: NavigationLink) => {
     if (isTemplateDialog) {
       return (
         <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
@@ -86,18 +86,18 @@ const FooterNavigation = () => {
     }
 
     return (
-    <a
-      href={href}
-      className="flex items-center gap-2 sm:gap-3 group hover:opacity-80 transition-opacity duration-200"
-    >
-      <div className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
-        <ArrowRight />
-      </div>
-      <span className="group-hover:text-blue-600 text-gray-1000 text-sm sm:text-base lg:text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
-        {label}
-      </span>
-    </a>
-  );
+      <a
+        href={href}
+        className="flex items-center gap-2 sm:gap-3 group hover:opacity-80 transition-opacity duration-200"
+      >
+        <div className="w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center text-gray-600 group-hover:text-blue-600 transition-colors duration-200">
+          <ArrowRight />
+        </div>
+        <span className="group-hover:text-blue-600 text-gray-1000 text-sm sm:text-base lg:text-lg font-normal leading-6 tracking-[-0.26px] group-hover:underline decoration-blue-600">
+          {label}
+        </span>
+      </a>
+    );
   };
 
   return (

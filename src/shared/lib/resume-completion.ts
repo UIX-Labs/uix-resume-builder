@@ -159,7 +159,6 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
 
       // If section is not modified (identical to mockData or empty), skip it
       if (!isModified) {
-        console.log(`[Progress] Section "${key}": not modified, weight = 0`);
         return acc;
       }
 
@@ -169,7 +168,6 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
       const mockItems = mockSection?.items || [];
 
       if (actualItems.length === 0) {
-        console.log(`[Progress] Section "${key}": modified but has no items`);
         return acc;
       }
 
@@ -196,8 +194,6 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
       acc.total += sectionWeight;
       acc.filled += modifiedFieldsCount;
 
-      console.log(`[Progress] Section "${key}": ${modifiedFieldsCount}/${sectionWeight} fields modified`);
-
       return acc;
     },
     { total: 0, filled: 0 },
@@ -205,12 +201,10 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
 
   // If no sections have been modified, return 0%
   if (total === 0) {
-    console.log('[Progress] No sections modified, progress = 0%');
     return 0;
   }
 
   const percentage = (filled / total) * 100;
-  console.log(`[Progress] Total progress: ${filled}/${total} = ${percentage.toFixed(1)}%`);
 
   return percentage;
 }

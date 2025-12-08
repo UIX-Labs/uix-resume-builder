@@ -1,8 +1,15 @@
 "use client";
 
+import CountUp from "@shared/ui/count-up";
 import { TestimonialsCarousel } from "./testimonials-carousel";
+import getCurrentStatsQuery from "../api/query";
+import type { CurrentStats } from "../api/stats";
 
 export default function Testimonials() {
+  const { data: currentStats } = getCurrentStatsQuery() as {
+    data: CurrentStats | undefined;
+  };
+
   return (
     <section className="relative py-4 md:py-16">
       <div className="flex justify-center items-center gap-2 md:gap-3 pt-8 pb-8 px-4">
@@ -54,7 +61,14 @@ export default function Testimonials() {
           <div className="relative z-10 flex flex-col justify-center gap-8 sm:gap-12 lg:gap-18 px-6 sm:px-10 md:px-12 lg:px-[69px] h-full">
             <div className="flex flex-col gap-2">
               <h3 className="text-[40px] sm:text-[52px] md:text-[60px] lg:text-[68px] font-semibold leading-tight tracking-tight text-[rgb(240,247,255)]">
-                10K+
+                <CountUp
+                  from={10}
+                  to={currentStats?.totalResumes ?? 0}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
               </h3>
 
               <p className="text-[18px] sm:text-[22px] md:text-[28px] lg:text-[32px] font-normal leading-tight tracking-tight text-[rgb(242,242,242)]">

@@ -82,21 +82,17 @@ export function JourneyTimeline() {
                 });
             }
 
-            // Mobile animation
-            if (mobileThreadRef.current) {
-                const mobileContainer = mobileThreadRef.current.closest('.mobile-timeline-container');
+            // Mobile animation - Fixed
+            if (mobileThreadRef.current && window.innerWidth < 1024) {
+                const mobileContainer = document.querySelector('.mobile-timeline-container');
                 if (mobileContainer) {
                     const rect = mobileContainer.getBoundingClientRect();
-                    const containerTop = rect.top;
-                    const containerHeight = rect.height;
                     const windowHeight = window.innerHeight;
 
-                    const viewportCenter = windowHeight / 2;
-                    const containerStart = containerTop + containerHeight * 0.05;
-                    const containerEnd = containerTop + containerHeight * 0.95;
-                    const scrollProgress =
-                        (viewportCenter - containerStart) / (containerEnd - containerStart);
-                    const scrollPercentage = Math.max(0, Math.min(scrollProgress, 1));
+                    // Simple calculation: how much of the container has scrolled past the top
+                    const scrolled = Math.max(0, -rect.top);
+                    const totalScrollable = rect.height - windowHeight;
+                    const scrollPercentage = Math.max(0, Math.min(scrolled / Math.max(totalScrollable, 1), 1));
 
                     const mobileLength = mobileThreadRef.current.getTotalLength();
                     const drawAmount = mobileLength * scrollPercentage;
@@ -105,8 +101,8 @@ export function JourneyTimeline() {
                     // Animate mobile circles
                     mobileCircleRefs.current.forEach((circle, index) => {
                         if (circle) {
-                            const circleThreshold = (index + 1) / 5;
-                            if (scrollPercentage >= circleThreshold * 0.9) {
+                            const circleThreshold = index / 5; // 0, 0.2, 0.4, 0.6, 0.8
+                            if (scrollPercentage >= circleThreshold) {
                                 circle.style.opacity = '1';
                                 circle.style.transform = 'scale(1)';
                             } else {
@@ -207,17 +203,20 @@ export function JourneyTimeline() {
                         {/* Green animated line */}
                         <svg
                             className="absolute inset-0 w-full h-full"
+                            viewBox="0 0 2 1000"
                             preserveAspectRatio="none"
                             aria-label="Journey progress indicator"
                         >
                             <title>Journey Progress</title>
                             <path
                                 ref={mobileThreadRef}
-                                d="M1 0 L1 100%"
+                                d="M1 0 L1 1000"
                                 stroke="#309F66"
                                 strokeWidth="2"
                                 fill="none"
-                                vectorEffect="non-scaling-stroke"
+                                style={{
+                                    transition: 'stroke-dashoffset 0.1s linear'
+                                }}
                             />
                         </svg>
                     </div>

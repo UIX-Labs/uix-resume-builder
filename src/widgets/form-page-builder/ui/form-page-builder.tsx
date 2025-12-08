@@ -87,37 +87,21 @@ function isSectionEmpty(section: any): boolean {
 
           if (typeof value === 'string') {
             const isNonEmpty = value.trim() !== '';
-            if (isNonEmpty) {
-              console.log(`    → Found non-empty string field "${key}": "${value}"`);
-            }
             return isNonEmpty;
           }
 
           if (typeof value === 'object' && value !== null) {
             const hasNonEmptyNested = Object.values(value).some((v) => typeof v === 'string' && v.trim() !== '');
-            if (hasNonEmptyNested) {
-              console.log(`    → Found non-empty nested object field "${key}":`, value);
-            }
             return hasNonEmptyNested;
           }
 
           if (Array.isArray(value)) {
             const hasNonEmptyArray = value.some((v) => typeof v === 'string' && v.trim() !== '');
-            if (hasNonEmptyArray) {
-              console.log(`    → Found non-empty array field "${key}":`, value);
-            }
             return hasNonEmptyArray;
           }
 
           return false;
         });
-
-        if (hasNonEmptyField) {
-          console.log(`  → Item ${i} has non-empty fields`);
-          return false;
-        } else {
-          console.log(`  → Item ${i} has only empty fields`);
-        }
       }
     }
   }

@@ -174,14 +174,31 @@ export function AITailorSection() {
           >
             <div className="flex flex-col gap-8 sm:gap-10 lg:gap-12 w-full lg:w-[334px]">
               <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 lg:gap-8">
-                <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[116px] lg:h-[116px] bg-black border border-white rounded-full relative overflow-hidden flex-shrink-0">
-                  <Image
-                    src="images/uix-logo.svg"
-                    alt="Akshat Agrawal"
-                    fill
-                    className="object-contain !left-2"
-                  />
-                </div>
+                <motion.div
+                  className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[116px] lg:h-[116px] rounded-full border border-white relative overflow-hidden flex-shrink-0 flex items-center justify-center"
+                  style={{
+                    backgroundColor: activeCompany
+                      ? [...companiesLeft, ...companiesRight].find(c => c.role === activeCompany)?.bgColor || 'black'
+                      : 'black'
+                  }}
+                  animate={{
+                    scale: activeCompany ? [1, 1.05, 1] : 1,
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div className="relative w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] lg:w-[70px] lg:h-[70px]">
+                    <Image
+                      src={
+                        activeCompany
+                          ? [...companiesLeft, ...companiesRight].find(c => c.role === activeCompany)?.logo || "images/uix-logo.svg"
+                          : "images/uix-logo.svg"
+                      }
+                      alt={activeCompany || "UIX Labs"}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                </motion.div>
 
                 <div className="flex flex-col justify-center gap-0.5 text-center sm:text-left">
                   <h3 className="text-lg sm:text-xl font-normal text-[rgb(23,23,23)] tracking-[-2%] leading-[1.4em]">

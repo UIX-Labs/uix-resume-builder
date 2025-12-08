@@ -11,6 +11,7 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState } from "react";
 import { trackEvent } from "@/shared/lib/analytics/percept";
 import getCurrentStatsQuery from "../api/query";
+import CountUp from "@shared/ui/count-up";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -153,7 +154,17 @@ const HeroSection = () => {
           </div>
 
           <span className="font-semibold text-base md:text-lg md:ml-3 text-gray-900">
-            Trusted by {currentStats?.totalUsers ?? 0} professionals
+            Trusted by{" "}
+            <CountUp
+              from={10}
+              to={currentStats?.totalResumes ?? 0}
+              separator=","
+              duration={1}
+              className="count-up-text"
+              onStart={undefined}
+              onEnd={undefined}
+            />{" "}
+            professionals
           </span>
         </div>
 
@@ -226,8 +237,8 @@ const HeroSection = () => {
                 width: overlay.mobileWidth
                   ? `${overlay.mobileWidth}px`
                   : overlay.width
-                  ? `${overlay.width}px`
-                  : "auto",
+                    ? `${overlay.width}px`
+                    : "auto",
               }}
               initial={overlay.initial}
               animate={{ x: 0, y: 0, opacity: 1 }}

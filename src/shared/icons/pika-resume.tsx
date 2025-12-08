@@ -48,8 +48,8 @@ const PikaResume = ({
           y2="15.9273"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color={stopColor} />
-          <stop offset="1" stop-color={offsetColor} />
+          <stop stopColor={stopColor} />
+          <stop offset="1" stopColor={offsetColor} />
         </linearGradient>
       </defs>
     </svg>

@@ -1,16 +1,15 @@
-'use client';
+"use client";
 
-import { TestimonialsCarousel } from './testimonials-carousel';
+import { TestimonialsCarousel } from "./testimonials-carousel";
 
 export default function Testimonials() {
-
   return (
     <section className="relative py-4 md:py-16">
       <div className="flex justify-center items-center gap-2 md:gap-3 pt-8 pb-8 px-4">
         <span className="w-8 sm:w-16 md:w-32 h-[1px] bg-gradient-to-r from-transparent to-gray-950 opacity-40"></span>
 
         <p className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-gray-900 text-center md:whitespace-nowrap tracking-wide">
-          Why.....people like you.....looooooove resume builder
+          Why....professionals.....are stuck on PikaResume
         </p>
 
         <span className="w-8 sm:w-16 md:w-32 h-[1px] bg-gradient-to-l from-transparent to-gray-950 opacity-40"></span>
@@ -20,11 +19,12 @@ export default function Testimonials() {
         <h2
           className="text-center font-black leading-none tracking-tight h-[40px] sm:h-[80px] md:h-[100px] lg:h-[120px] overflow-hidden md:[font-size:clamp(64px,12vw,168px)]"
           style={{
-            fontSize: 'clamp(50px, 10vw, 168px)', // Mobile clamp
-            background: 'linear-gradient(180deg, rgba(179, 179, 179, 1) 28%, rgba(255, 255, 255, 0) 94%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            fontSize: "clamp(50px, 10vw, 168px)", // Mobile clamp
+            background:
+              "linear-gradient(180deg, rgba(179, 179, 179, 1) 28%, rgba(255, 255, 255, 0) 94%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
           }}
         >
           Testimonials
@@ -38,7 +38,8 @@ export default function Testimonials() {
           <div
             className="absolute -left-[80px] sm:-left-[100px] lg:-left-[150px] -top-[120px] sm:-top-[160px] lg:-top-[214px] w-[300px] sm:w-[400px] lg:w-[604px] h-[300px] sm:h-[400px] lg:h-[604px] rounded-full blur-[80px] lg:blur-[100px]"
             style={{
-              background: 'linear-gradient(124deg, rgba(37, 122, 255, 1) 40%, rgba(23, 23, 23, 1) 55%)',
+              background:
+                "linear-gradient(124deg, rgba(37, 122, 255, 1) 40%, rgba(23, 23, 23, 1) 55%)",
             }}
           ></div>
 

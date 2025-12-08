@@ -11,12 +11,13 @@ import { Achievements } from "@shared/icons/achievements";
 import { useEffect, useState } from "react";
 import { useFormDataStore, TRANSITION_TEXTS } from "../models/store";
 import { calculateResumeCompletion } from "@shared/lib/resume-completion";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import type { ResumeData } from "@entities/resume";
 import mockData from "../../../../mock-data.json";
 import { CheckIcon, X, Sparkles } from "lucide-react";
 import { Button } from "@shared/ui/button";
-import { getResumeEmptyData, useGetAllResumes } from "@entities/resume";
+import { getResumeEmptyData, useResumeData } from "@entities/resume";
+import { useQueryClient } from "@tanstack/react-query";
 import {
   deepMerge,
   normalizeStringsFields,
@@ -27,7 +28,6 @@ import { useAnalyzerStore } from "@shared/stores/analyzer-store";
 import { hasPendingSuggestions } from "@features/resume/renderer";
 import { trackEvent } from "@/shared/lib/analytics/percept";
 import PikaResume from "@shared/icons/pika-resume";
-import { useUserProfile } from "@shared/hooks/use-user";
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -61,6 +61,7 @@ function sectionHasContent(sectionData: unknown): boolean {
 export function Sidebar() {
   const [progress, setProgress] = useState(0);
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
+  const queryClient = useQueryClient();
 
   const resumeData = useFormDataStore((state) => state.formData);
   const setFormData = useFormDataStore((state) => state.setFormData);
@@ -68,17 +69,14 @@ export function Sidebar() {
   const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
   const setRetryAnalyzer = useFormDataStore((state) => state.setRetryAnalyzer);
-  const router = useRouter();
   const params = useParams();
   const resumeId = params?.id as string;
 
   const isTailoredWithJD = useAnalyzerStore((state) => state.isTailoredWithJD);
 
-  // Fetch current resume to check isAnalyzed flag
-  const { data: user } = useUserProfile();
-  const { data: resumes } = useGetAllResumes({ userId: user?.id as string });
-  const currentResume = resumes?.find((resume) => resume.id === resumeId);
-  const isAnalyzed = currentResume?.isAnalyzed ?? false;
+  // Fetch current resume to check isAnalyzed flag from the API response
+  const { data: resumeDataFromApi } = useResumeData(resumeId);
+  const isAnalyzed = resumeDataFromApi?.isAnalyzed ?? false;
 
   const handleBuilderIntelligence = async () => {
     trackEvent("builder_intelligence_click", {
@@ -174,6 +172,9 @@ export function Sidebar() {
 
         // Complete progress to 100%
         useFormDataStore.setState({ analyzerProgress: 100 });
+
+        // Invalidate resume data query to refetch and update isAnalyzed flag
+        queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
 
         toast.success("Builder Intelligence analysis complete!");
       }
@@ -351,37 +352,58 @@ export function Sidebar() {
         })}
       </div>
 
-      {/* Builder Intelligence Card - Hidden if tailored with JD or already analyzed */}
+      {/* Builder Intelligence Card - Show card if not analyzed, show SVG if analyzed */}
       {!isTailoredWithJD && (
-        <div
-          className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
-          style={{
-            background:
-              "linear-gradient(136.27deg, #257AFF 30.51%, #171717 65.75%)",
-          }}
-        >
-          <p className="text-sm font-semibold text-white">
-            Switch to Pika Intelligence
-          </p>
-          <p className="text-[11px] font-normal text-white/80 mt-1">
-            Get grammar fixes, stronger verbs, and tailored improvements.
-          </p>
+        <>
+          {!isAnalyzed ? (
+            <div
+              className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
+              style={{
+                backgroundImage: "url('/images/bg-gradient.svg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+              }}
+            >
+              <p className="text-sm font-semibold text-white">
+                Switch to Pika Intelligence
+              </p>
+              <p className="text-[11px] font-normal text-white/80 mt-1">
+                Get grammar fixes, stronger verbs, and tailored improvements.
+              </p>
 
-          <Button
-            className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer border-2 border-white"
-            onClick={handleBuilderIntelligence}
-            disabled={isAnalyzing}
-          >
-            {isAnalyzing ? (
-              "Analyzing..."
-            ) : (
-              <>
-                Pika Intelligence
-                <Sparkles className="w-3.5 h-3.5" />
-              </>
-            )}
-          </Button>
-        </div>
+              <Button
+                className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer border-2 border-white"
+                onClick={handleBuilderIntelligence}
+                disabled={isAnalyzing}
+              >
+                {isAnalyzing ? (
+                  "Analyzing..."
+                ) : (
+                  <>
+                    Pika Intelligence
+                    <Image
+                      src="/images/rat.png"
+                      alt="Pika Intelligence"
+                      width={40}
+                      height={40}
+                    />
+                  </>
+                )}
+              </Button>
+            </div>
+          ) : (
+            <div className="w-[200px] mt-4 mx-auto mb-2">
+              <Image
+                src="/images/pika-intelligence.svg"
+                alt="Pika Intelligence"
+                width={217}
+                height={72}
+                className="w-full h-auto"
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   );

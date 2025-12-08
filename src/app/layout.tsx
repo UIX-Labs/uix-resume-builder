@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono, Inter } from 'next/font/google';
-import '../app/globals.css';
+import './globals.css';
 
 import { Providers } from './providers';
-import { Toaster } from 'sonner';
 import { PerceptProvider } from '@/shared/lib/analytics/percept-provider';
 import { UserTracker } from '@/shared/lib/analytics/user-tracker';
 
@@ -41,7 +40,6 @@ export default function RootLayout({
           <UserTracker />
           {children}
         </Providers>
-        <Toaster />
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { AITailorSection } from './ai-tailored-section';
 import FooterSection from './footer-section';
 import Header from './header-section';

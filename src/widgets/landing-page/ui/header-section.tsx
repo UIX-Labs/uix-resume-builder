@@ -74,6 +74,7 @@ function Header() {
             width={60}
             height={60}
             className="inline-block "
+            onClick={handleHomeClick}
           />
           <div className="flex flex-col">
             <div className="flex flex-row">

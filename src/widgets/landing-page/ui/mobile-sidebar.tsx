@@ -54,12 +54,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   };
 
   const handleAboutUsClick = () => {
-    setShowMobileTextView(true);
-    trackEvent("navigation_click", {
-      source: "mobile_sidebar",
-      destination: "about_us",
-      blocked: "mobile_device",
-    });
+    handleNavigation("/about-us", "navigation_click", "about_us");
   };
 
   const handleDashboardClick = () => {
@@ -105,6 +100,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     },
   ];
 
+  const handleLogoClick = () => {
+    handleNavigation("/", "navigation_click", "home");
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -137,6 +136,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
                       alt="Pika Resume"
                       width={40}
                       height={40}
+                      onClick={handleLogoClick}
                     />
                     <div className="flex flex-col">
                       <div className="flex flex-row">

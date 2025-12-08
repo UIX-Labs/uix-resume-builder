@@ -67,14 +67,13 @@ function Header() {
   return (
     <>
       <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
-        <div className="flex items-center gap-2 md:gap-4">
-          <Image
+        <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
+          <Image  
             src="/images/Pika-Resume.png"
             alt="AI"
             width={60}
             height={60}
             className="inline-block "
-            onClick={handleHomeClick}
           />
           <div className="flex flex-col">
             <div className="flex flex-row">
@@ -94,7 +93,7 @@ function Header() {
               </span>
             </div>
           </div>
-        </div>
+        </button>
 
         <div className="hidden md:flex items-center gap-7">
           <Button

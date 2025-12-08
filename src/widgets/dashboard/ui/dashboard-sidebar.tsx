@@ -16,10 +16,12 @@ import { usePathname } from "next/navigation";
 import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
 import { trackEvent } from "@/shared/lib/analytics/percept";
 import PikaResume from "@shared/icons/pika-resume";
+import { useRouter } from "next/navigation";
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const logoutMutation = useLogoutUser();
+  const router = useRouter();
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -53,16 +55,22 @@ export default function DashboardSidebar() {
     });
   };
 
+  const handleLogoClick = () => {
+    router.push("/");
+  };
+
   return (
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
       <SidebarHeader className="p-6">
         <div className="flex flex-row gap-2">
-          <PikaResume
-            stopColor="black"
-            offsetColor="black"
-            width={50}
-            height={50}
-          />
+          <button onClick={handleLogoClick} className="cursor-pointer" type="button">
+            <PikaResume
+              stopColor="black"
+              offsetColor="black"
+              width={50}
+              height={50}
+            />
+          </button>
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-row">
               <span className="font-bold text-black bg-clip-text text-2xl">

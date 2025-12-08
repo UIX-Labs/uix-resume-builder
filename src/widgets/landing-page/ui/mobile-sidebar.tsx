@@ -130,13 +130,12 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                  <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-2" onClick={handleLogoClick} type="button">
                     <Image
                       src="/images/Pika-Resume.png"
                       alt="Pika Resume"
                       width={40}
                       height={40}
-                      onClick={handleLogoClick}
                     />
                     <div className="flex flex-col">
                       <div className="flex flex-row">
@@ -148,7 +147,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </button>
                   <button
                     type="button"
                     onClick={onClose}

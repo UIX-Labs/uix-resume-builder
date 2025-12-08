@@ -75,12 +75,22 @@ export default function GetAllResumesPage() {
             </div>
           </div>
         )}
-        <DashboardSidebar />
+        <div className="hidden lg:block">
+          <DashboardSidebar />
+        </div>
 
-        <div className="flex-1 flex flex-col min-w-0 m-3">
-          <header className="flex justify-end items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
+        <div className="flex-1 flex flex-col min-w-0 m-2 sm:m-3">
+          <header className="flex justify-between sm:justify-end items-center p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-[rgba(245,248,250,1)]">
+            <button
+              type="button"
+              onClick={() => router.push('/')}
+              className="lg:hidden flex items-center justify-center bg-blue-200 rounded-full h-[45px] w-[45px] sm:h-[53px] sm:w-[53px]"
+            >
+              <HomeIcon className="w-6 h-6 sm:w-7 sm:h-7" />
+            </button>
+
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="hidden sm:flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
                 <Button
                   variant="outline"
                   size="icon"
@@ -91,33 +101,33 @@ export default function GetAllResumesPage() {
                 </Button>
               </div>
 
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
+              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[45px] w-[45px] sm:h-[53px] sm:w-[53px]">
+                <span className="text-lg sm:text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
               </div>
 
               <div className="flex flex-col">
-                <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
+                <span className="text-black leading-[1.375em] tracking-[-1.125%] text-sm sm:text-base font-normal">
                   {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
                 </span>
 
-                <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
+                <span className="text-[11px] sm:text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
                   {user?.email ?? 'Loading...'}
                 </span>
               </div>
             </div>
           </header>
 
-          <main className="flex bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4 h-full">
+          <main className="flex bg-[rgb(245,248,250)] mt-2 sm:mt-3 rounded-2xl sm:rounded-[36px] overflow-hidden pb-4 h-full">
             <div className="flex-1">
-              <div className="flex text-start w-full">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-25px] ml-[-10px]">
+              <div className="flex text-start w-full px-2 sm:px-0">
+                <h1 className="text-[rgb(231,238,243)] font-semibold text-[40px] sm:text-[60px] md:text-[70px] lg:text-[90px] leading-tight -tracking-[3%] h-auto sm:h-[77px] truncate mt-[-10px] sm:mt-[-25px] ml-[-5px] sm:ml-[-10px]">
                   YOUR RESUMES
                 </h1>
               </div>
 
               <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
 
-              <div className="flex gap-6 my-6 mx-4 justify-evenly flex-wrap">
+              <div className="flex gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
                 {templates?.map((template) => (
                   <TemplateCard
                     key={template.id}

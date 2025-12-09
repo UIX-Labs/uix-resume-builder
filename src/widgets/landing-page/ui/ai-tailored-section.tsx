@@ -178,8 +178,10 @@ export function AITailorSection() {
                   className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[116px] lg:h-[116px] rounded-full border border-white relative overflow-hidden flex-shrink-0 flex items-center justify-center"
                   style={{
                     backgroundColor: activeCompany
-                      ? [...companiesLeft, ...companiesRight].find(c => c.role === activeCompany)?.bgColor || 'black'
-                      : 'black'
+                      ? [...companiesLeft, ...companiesRight].find(
+                          (c) => c.role === activeCompany
+                        )?.bgColor || "rgb(227, 227, 227)"
+                      : "rgb(227, 227, 227)",
                   }}
                   animate={{
                     scale: activeCompany ? [1, 1.05, 1] : 1,
@@ -190,8 +192,10 @@ export function AITailorSection() {
                     <Image
                       src={
                         activeCompany
-                          ? [...companiesLeft, ...companiesRight].find(c => c.role === activeCompany)?.logo || "images/uix-logo.svg"
-                          : "images/uix-logo.svg"
+                          ? [...companiesLeft, ...companiesRight].find(
+                              (c) => c.role === activeCompany
+                            )?.logo || "/images/Pika-Resume.png"
+                          : "/images/Pika-Resume.png"
                       }
                       alt={activeCompany || "UIX Labs"}
                       fill

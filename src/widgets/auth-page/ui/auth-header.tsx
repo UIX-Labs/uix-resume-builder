@@ -1,5 +1,6 @@
 "use client";
 
+import PikaResume from "@shared/icons/pika-resume";
 import { Button } from "@shared/ui";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -13,12 +14,28 @@ export function AuthHeader() {
       transition={{ duration: 0.6 }}
       className="flex justify-between mr-[28px]"
     >
-      <div className="flex items-center gap-2">
-        <h1 className="text-xl font-bold text-slate-800">Resume Builder</h1>
+      <div className="flex flex-row gap-2">
+        <button
+          className="flex items-center gap-2"
+          onClick={() => router.push("/")}
+          type="button"
+        >
+          <PikaResume
+            stopColor="black"
+            offsetColor="black"
+            width={50}
+            height={50}
+          />
+          <div className="flex flex-row items-center justify-center">
+            <span className="font-bold text-black bg-clip-text text-2xl">
+              Pika
+            </span>
 
-        <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-medium">
-          AI Powered ✨
-        </span>
+            <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
+              Resume
+            </span>
+          </div>
+        </button>
       </div>
 
       <nav className="hidden md:flex items-center gap-6 text-base text-slate-600">

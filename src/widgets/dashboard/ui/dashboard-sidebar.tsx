@@ -63,24 +63,29 @@ export default function DashboardSidebar() {
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
       <SidebarHeader className="p-6">
         <div className="flex flex-row gap-2">
-          <button onClick={handleLogoClick} className="cursor-pointer" type="button">
+          <button
+            onClick={handleLogoClick}
+            className="cursor-pointer"
+            type="button"
+          >
             <PikaResume
               stopColor="black"
               offsetColor="black"
               width={50}
               height={50}
             />
-          </button>
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-row">
-              <span className="font-bold text-black bg-clip-text text-2xl">
-                Pika
-              </span>
-              <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
-                Resume
-              </span>
+
+            <div className="flex flex-col items-center justify-center">
+              <div className="flex flex-row">
+                <span className="font-bold text-black bg-clip-text text-2xl">
+                  Pika
+                </span>
+                <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
+                  Resume
+                </span>
+              </div>
             </div>
-          </div>
+          </button>
         </div>
       </SidebarHeader>
 

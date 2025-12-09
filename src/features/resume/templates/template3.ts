@@ -41,7 +41,9 @@ const annaFieldTemplate = {
               items: [
                 { type: 'icon', name: 'Mail', size: 14, className: 'text-[rgb(17,9,128)]' },
                 {
+                  type: 'link',
                   path: 'personalDetails.items[0].email',
+                  href: 'mailto:{{value}}',
                   fallback: 'anna@field.com',
                   className: 'text-sm text-gray-700',
                 },

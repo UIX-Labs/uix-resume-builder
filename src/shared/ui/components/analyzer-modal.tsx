@@ -14,7 +14,7 @@ import type { SuggestionType } from "@entities/resume";
 import { useEffect, useMemo, useState } from "react";
 import { RadioGroup } from "@shared/ui/radio-group";
 
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface Suggestion {
   old?: string;

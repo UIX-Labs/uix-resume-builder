@@ -9,7 +9,7 @@ import { LinkedInModal } from "@widgets/dashboard/ui/linkedin-integration-card";
 import { MobileTextView } from "./mobile-text-view";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState, useMemo } from "react";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
 import CountUp from "@shared/ui/count-up";
 
@@ -253,8 +253,8 @@ const HeroSection = () => {
                 width: overlay.mobileWidth
                   ? `${overlay.mobileWidth}px`
                   : overlay.width
-                  ? `${overlay.width}px`
-                  : "auto",
+                    ? `${overlay.width}px`
+                    : "auto",
               }}
               initial={overlay.initial}
               animate={{ x: 0, y: 0, opacity: 1 }}

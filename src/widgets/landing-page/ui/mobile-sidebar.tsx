@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useCachedUser } from "@shared/hooks/use-user";
 import { cn } from "@shared/lib/cn";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { useState } from "react";
 import { MobileTextView } from "./mobile-text-view";
 

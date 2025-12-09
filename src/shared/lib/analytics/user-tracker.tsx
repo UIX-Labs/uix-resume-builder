@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useUserProfile } from "@shared/hooks/use-user";
-import { setUserId, setUserProperties } from "./percept";
+import { setUserId, setUserProperties } from "./Mixpanel";
 
 export function UserTracker() {
   const { data: user } = useUserProfile();

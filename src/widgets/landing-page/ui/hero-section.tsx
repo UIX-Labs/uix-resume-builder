@@ -8,7 +8,7 @@ import { useCachedUser } from "@shared/hooks/use-user";
 import { LinkedInModal } from "@widgets/dashboard/ui/linkedin-integration-card";
 import { MobileTextView } from "./mobile-text-view";
 import { useIsMobile } from "@shared/hooks/use-mobile";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
 import CountUp from "@shared/ui/count-up";
@@ -21,6 +21,17 @@ const HeroSection = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showMobileView, setShowMobileView] = useState(false);
+
+  // Calculate minimum width for count based on target number to prevent layout shift
+  const countMinWidth = useMemo(() => {
+    const targetNumber = currentStats?.totalUsers ?? 0;
+    const formatted = new Intl.NumberFormat("en-US").format(targetNumber);
+    // Use character width units (ch) for precise control - each ch is roughly the width of "0"
+    // Use max of formatted length or initial value (10) to ensure smooth transition
+    const maxChars = Math.max(formatted.length, "10".length);
+    // Use ch units for tighter, more accurate spacing (add 0.5ch for slight padding)
+    return `${maxChars + 0.5}ch`;
+  }, [currentStats?.totalUsers]);
 
   const handleNavigate = () => {
     router.push(user ? "/dashboard" : "/auth");
@@ -155,15 +166,20 @@ const HeroSection = () => {
 
           <span className="font-semibold text-base md:text-lg md:ml-3 text-gray-900">
             Trusted by{" "}
-            <CountUp
-              from={10}
-              to={currentStats?.totalResumes ?? 0}
-              separator=","
-              duration={1}
-              className="count-up-text"
-              onStart={undefined}
-              onEnd={undefined}
-            />{" "}
+            <span
+              className="inline-block tabular-nums"
+              style={{ minWidth: countMinWidth, textAlign: "center" }}
+            >
+              <CountUp
+                from={10}
+                to={currentStats?.totalUsers ?? 0}
+                separator=","
+                duration={1}
+                className="count-up-text"
+                onStart={undefined}
+                onEnd={undefined}
+              />
+            </span>{" "}
             professionals
           </span>
         </div>

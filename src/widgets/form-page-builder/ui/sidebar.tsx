@@ -235,10 +235,14 @@ export function Sidebar() {
       )}
     >
       <div className="flex items-center gap-2 ">
-        <div className="flex flex-row gap-1 items-center">
-          <button onClick={handleLogoClick} className="cursor-pointer" type="button">
+        <button
+          className="flex flex-row  items-center cursor-pointer"
+          type="button"
+          onClick={handleLogoClick}
+        >
+          <div>
             <PikaResume stopColor="black" offsetColor="black" />
-          </button>
+          </div>
           <div className="flex flex-col">
             <div className="flex flex-row">
               <span className="font-bold text-black bg-clip-text text-3xl">
@@ -249,7 +253,7 @@ export function Sidebar() {
               </span>
             </div>
           </div>
-        </div>
+        </button>
       </div>
 
       {/* Progress Circle */}

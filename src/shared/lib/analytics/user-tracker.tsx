@@ -10,13 +10,14 @@ export function UserTracker() {
   useEffect(() => {
     if (user?.id) {
       setUserId(user.id);
-      
+
       setUserProperties({
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         isVerified: user.isVerified,
-        isLoggedIn: user.isLoggedIn
+        isLoggedIn: user.isLoggedIn,
+        isVerifiedAccount: true
       });
     }
   }, [user]);

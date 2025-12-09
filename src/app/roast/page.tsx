@@ -27,8 +27,8 @@ function FireBackdrop({ variant }: FireBackdropProps) {
 
 	const wrapperClass =
 		variant === 'fixed'
-			? 'relative w-full h-[240px] md:h-[320px] lg:h-[480px]'
-			: 'relative w-full h-[240px] md:h-[320px] lg:h-[480px] -z-10';
+			? 'relative w-full md:h-[320px] lg:h-[480px]'
+			: 'relative w-full md:h-[320px] lg:h-[480px] -z-10';
 
 	return (
 		<div
@@ -148,7 +148,7 @@ export default function RoastPage() {
 	return (
 		<div
 			className={cn(
-				'relative min-h-screen bg-white w-full font-sans',
+				'relative min-h-screen bg-white w-full font-sans overflow-x-hidden',
 				shouldHideOverflow && 'overflow-hidden'
 			)}
 		>

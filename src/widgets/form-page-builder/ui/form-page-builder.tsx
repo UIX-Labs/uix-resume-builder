@@ -10,14 +10,13 @@ import aniketTemplate from "@features/resume/templates/standard";
 import { TemplateForm } from "@features/template-form";
 import { Button } from "@shared/ui/button";
 import { useEffect, useRef, useState, useCallback } from "react";
-import Image from "next/image";
 import { useFormPageBuilder } from "../models/ctx";
 import { useFormDataStore } from "../models/store";
 import { camelToHumanString } from "@shared/lib/string";
 import { Resolution, usePDF } from "react-to-pdf";
 import { useParams } from "next/navigation";
 import { uploadThumbnail } from "@entities/resume/api/upload-resume";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserProfile } from "@shared/hooks/use-user";
 import { toast } from "sonner";
 import {
@@ -49,15 +48,18 @@ import {
   isSectionModified,
 } from "../lib/data-cleanup";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import dayjs from "dayjs";
 import { useCheckIfCommunityMember } from "@entities/download-pdf/queries/queries";
 import WishlistModal from "./wishlist-modal";
 import WishlistSuccessModal from "./waitlist-success-modal";
 import { Download } from "lucide-react";
-import { convertHtmlToPdf } from "@entities/download-pdf/api";
 import type { JoinCommunityResponse } from "@entities/download-pdf/types/type";
 import TemplateButton from "./change-template-button";
 import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
+import { saveSectionWithSuggestions } from "../lib/save-helpers";
+import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
+import { usePdfGeneration } from "../hooks/use-pdf-generation";
+import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
+import { formatTimeAgo } from "../lib/time-helpers";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -199,7 +201,6 @@ export function FormPageBuilder() {
   const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
     useState(false);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
@@ -215,6 +216,7 @@ export function FormPageBuilder() {
 
   const { data, save } = useResumeManager(resumeId);
   const { data: formSchema } = useTemplateFormSchema();
+  const queryClient = useQueryClient();
 
   const { data: user } = useUserProfile();
 
@@ -233,20 +235,13 @@ export function FormPageBuilder() {
     mutationFn: uploadThumbnail,
   });
 
-  const currentMonthYear = dayjs().format("MMMM-YYYY").toLowerCase();
-  const fullName = formData?.personalDetails?.items?.[0]?.fullName;
-  const formattedName = fullName
-    ? fullName.toLowerCase().replace(/\s+/g, "-")
-    : "resume";
-  const resumeFileName = `${formattedName}-${currentMonthYear}.pdf`;
-
   const { mutateAsync: updateResumeTemplateMutation } =
     useUpdateResumeTemplate();
 
   const { mutateAsync: checkCommunityMember } = useCheckIfCommunityMember();
 
-  const { toPDF, targetRef } = usePDF({
-    filename: resumeFileName,
+  const { targetRef } = usePDF({
+    filename: "resume.pdf",
     resolution: Resolution.HIGH,
     page: {
       format: "A4",
@@ -261,119 +256,10 @@ export function FormPageBuilder() {
     },
   });
 
-  const generatePDF = async () => {
-    setIsGeneratingPDF(true);
-
-    try {
-      // Wait for React to re-render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Use the thumbnail element (which always has isThumbnail=true) for PDF generation
-      // This ensures images are always proxied
-      const pdfSourceElement = thumbnailRef.current;
-
-      if (!pdfSourceElement) {
-        toast.error("Failed to generate PDF: PDF source element not found");
-        setIsGeneratingPDF(false);
-        return;
-      }
-
-      // Get HTML content from the thumbnail renderer (which has proxied images)
-      let htmlContent = pdfSourceElement.innerHTML;
-
-      if (!htmlContent || htmlContent.trim() === "") {
-        toast.error("Failed to generate PDF: No content available");
-        setIsGeneratingPDF(false);
-        return;
-      }
-
-      // Convert relative proxy URLs to absolute URLs for backend PDF generation
-      // The backend needs full URLs like "http://localhost:3000/api/proxy-image?url=..."
-      // instead of relative URLs like "/api/proxy-image?url=..."
-      const currentOrigin = window.location.origin; // e.g., "http://localhost:3000"
-      htmlContent = htmlContent.replace(
-        /src="\/api\/proxy-image/g,
-        `src="${currentOrigin}/api/proxy-image`
-      );
-
-      // Add necessary styles for the PDF
-      const styledHtml = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-          <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
-
-            * {
-              margin: 0;
-              padding: 0;
-              box-sizing: border-box;
-            }
-
-            body {
-              font-family: 'Inter', system-ui, sans-serif;
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-
-            /* Remove all highlighting styles */
-            .resume-highlight {
-              background-color: transparent !important;
-              border: none !important;
-              padding: 0 !important;
-            }
-
-            .resume-highlight > div:first-child {
-              display: none !important;
-            }
-
-            /* Hide blur effects */
-            .blur-\\[2px\\] {
-              filter: none !important;
-            }
-
-            /* Ensure page breaks work correctly */
-            @media print {
-              @page {
-                size: A4;
-                margin: 0;
-              }
-
-              .resume-highlight {
-                background: none !important;
-                border: none !important;
-              }
-            }
-          </style>
-        </head>
-        <body>${htmlContent}</body>
-      </html>
-    `;
-
-      // Call the API to convert HTML to PDF
-      const pdfBlob = await convertHtmlToPdf(styledHtml);
-
-      // Download the PDF
-      const url = URL.createObjectURL(pdfBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = resumeFileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      toast.success("PDF downloaded successfully");
-    } catch (error) {
-      console.error("PDF generation error:", error);
-      toast.error("Failed to generate PDF");
-    } finally {
-      setIsGeneratingPDF(false);
-    }
-  };
+  const { isGeneratingPDF, generatePDF } = usePdfGeneration({
+    thumbnailRef,
+    formData,
+  });
 
   const handleDownloadPDF = async () => {
     try {
@@ -405,7 +291,6 @@ export function FormPageBuilder() {
     } catch (error) {
       console.error("Failed to download PDF:", error);
       toast.error("Failed to download PDF");
-      setIsGeneratingPDF(false);
       trackEvent("resume_download", {
         status: "failed",
         error: error instanceof Error ? error.message : "Unknown error",
@@ -441,6 +326,9 @@ export function FormPageBuilder() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  // Handle query invalidation on navigation
+  useQueryInvalidationOnNavigation(resumeId);
 
   useEffect(() => {
     async function processAnalyzerData() {
@@ -694,15 +582,21 @@ export function FormPageBuilder() {
       if (hasModifications) {
         thumbnailGenerated.current = false;
 
-        await save({
-          type: currentStep,
-          data: formData[currentStep],
-          updatedAt: Date.now(),
-        });
+        // Save current section and all sections with suggestions
+        await saveSectionWithSuggestions(currentStep, formData, save);
+
+        // Get fresh formData after save to check suggestion state
+        const updatedFormData = useFormDataStore.getState().formData;
+        invalidateQueriesIfAllSuggestionsApplied(
+          queryClient,
+          updatedFormData,
+          resumeId
+        );
       }
     } catch (error) {
       console.error("Failed to save before moving to next step:", error);
       toast.error("Failed to save changes");
+      // Don't invalidate on error
     }
 
     setCurrentStep(navs[nextStepIndex]?.name ?? "");
@@ -725,13 +619,18 @@ export function FormPageBuilder() {
 
       thumbnailGenerated.current = false;
 
-      await save({
-        type: currentStep,
-        data: formData[currentStep],
-        updatedAt: Date.now(),
-      });
+      // Save current section and all sections with suggestions
+      await saveSectionWithSuggestions(currentStep, formData, save);
 
       await generateAndSaveThumbnail();
+
+      // Get fresh formData after save to check suggestion state
+      const updatedFormData = useFormDataStore.getState().formData;
+      invalidateQueriesIfAllSuggestionsApplied(
+        queryClient,
+        updatedFormData,
+        resumeId
+      );
 
       toast.success(`Resume saved successfully`);
 
@@ -788,6 +687,14 @@ export function FormPageBuilder() {
         });
         setLastSaveTime(Date.now());
 
+        // Get fresh formData to check suggestion state
+        const updatedFormData = useFormDataStore.getState().formData;
+        invalidateQueriesIfAllSuggestionsApplied(
+          queryClient,
+          updatedFormData,
+          resumeId
+        );
+
         trackEvent("resume_saved", {
           resumeId,
           section: step,
@@ -797,7 +704,7 @@ export function FormPageBuilder() {
         console.error("Auto-save failed:", error);
       }
     }, 25000),
-    [save]
+    [save, queryClient]
   );
 
   const handleToggleHideSection = useCallback(
@@ -829,32 +736,7 @@ export function FormPageBuilder() {
 
   // Format last save time
   const formatLastSaveTime = useCallback(() => {
-    if (!lastSaveTime) return null;
-    const diff = Date.now() - lastSaveTime;
-    const seconds = Math.floor(diff / 1000);
-    const minutes = Math.floor(seconds / 60);
-
-    if (seconds < 60) {
-      return "saved less than a minute ago";
-    } else if (minutes === 1) {
-      return "saved a minute ago";
-    } else if (minutes < 60) {
-      return `saved ${minutes} minutes ago`;
-    } else {
-      const hours = Math.floor(minutes / 60);
-      if (hours === 1) {
-        return "saved an hour ago";
-      } else if (hours < 24) {
-        return `saved ${hours} hours ago`;
-      } else {
-        const days = Math.floor(hours / 24);
-        if (days === 1) {
-          return "saved 24 hours ago";
-        } else {
-          return `saved ${days} days ago`;
-        }
-      }
-    }
+    return formatTimeAgo(lastSaveTime);
   }, [lastSaveTime, refreshKey]);
 
   // Initialize last save time from resume data
@@ -1035,6 +917,13 @@ export function FormPageBuilder() {
       };
 
       setFormData(updatedData as Omit<ResumeData, "templateId">);
+
+      // Check if all suggestions are applied and invalidate queries if needed
+      invalidateQueriesIfAllSuggestionsApplied(
+        queryClient,
+        updatedData,
+        resumeId
+      );
 
       toast.success("Suggestions applied successfully.");
       setAnalyzerModalOpen(false);

@@ -14,7 +14,7 @@ import { Home, FileText, LogOut, Sparkles, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import PikaResume from "@shared/icons/pika-resume";
 import { useRouter } from "next/navigation";
 

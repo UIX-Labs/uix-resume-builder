@@ -4,8 +4,9 @@ import "../app/globals.css";
 
 import { Providers } from "./providers";
 import { Toaster } from "sonner";
-import { PerceptProvider } from "@/shared/lib/analytics/percept-provider";
+
 import { UserTracker } from "@/shared/lib/analytics/user-tracker";
+import { AnalyticsProvider } from '@shared/lib/analytics/mixpnel-provider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,10 +59,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
-      >
-        <PerceptProvider />
+      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+        <AnalyticsProvider />
         <Providers>
           <UserTracker />
           {children}

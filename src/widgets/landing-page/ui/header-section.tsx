@@ -8,7 +8,7 @@ import { Menu } from "lucide-react";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileSidebar } from "./mobile-sidebar";
 import { cn } from "@shared/lib/cn";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 function Header() {
   const router = useRouter();
@@ -62,13 +62,17 @@ function Header() {
 
   const handleRoastClick = () => {
     router.push("/roast");
+    trackEvent("navigation_click", {
+      source: "landing_header",
+      destination: "roast",
+    });
   };
 
   return (
     <>
       <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
         <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
-          <Image  
+          <Image
             src="/images/Pika-Resume.png"
             alt="AI"
             width={60}

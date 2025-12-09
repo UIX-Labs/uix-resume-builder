@@ -13,6 +13,7 @@ import { RoastLoading } from './components/roast-loading';
 import { TypewriterRoast } from './components/typewriter-roast';
 import Fire from './components/fire';
 import Header from '@widgets/landing-page/ui/header-section';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface FireBackdropProps {
 	variant: 'fixed' | 'flow';
@@ -26,8 +27,8 @@ function FireBackdrop({ variant }: FireBackdropProps) {
 
 	const wrapperClass =
 		variant === 'fixed'
-			? 'relative w-full h-[240px] md:h-[320px] lg:h-[480px]'
-			: 'relative w-full h-[240px] md:h-[320px] lg:h-[480px] -z-10';
+			? 'relative w-full md:h-[320px] lg:h-[480px]'
+			: 'relative w-full md:h-[320px] lg:h-[480px] -z-10';
 
 	return (
 		<div
@@ -91,6 +92,9 @@ export default function RoastPage() {
 		onSuccess: (data) => {
 			toast.success('Resume roasted successfully');
 			setResponse(data.roast);
+			trackEvent('roast_resume_success', {
+				timestamp: new Date().toISOString(),
+			});
 		},
 		onError: () => {
 			toast.error('Failed to roast resume');
@@ -144,7 +148,7 @@ export default function RoastPage() {
 	return (
 		<div
 			className={cn(
-				'relative min-h-screen bg-white w-full font-sans',
+				'relative min-h-screen bg-white w-full font-sans overflow-x-hidden',
 				shouldHideOverflow && 'overflow-hidden'
 			)}
 		>

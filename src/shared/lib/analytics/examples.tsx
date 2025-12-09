@@ -7,7 +7,7 @@
 
 "use client";
 
-import { trackEvent, startTimedEvent } from '@/shared/lib/analytics/percept';
+import { trackEvent, startTimedEvent } from '@shared/lib/analytics/Mixpanel';
 import { useState } from 'react';
 
 // ============================================

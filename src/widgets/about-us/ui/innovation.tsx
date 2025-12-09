@@ -1,5 +1,7 @@
+import CountUp from '@shared/ui/count-up';
+import getCurrentStatsQuery from '@widgets/landing-page/api/query';
 import Image from 'next/image';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 // Services data array
 const services = [
@@ -35,6 +37,18 @@ const companyLogos = [
 ];
 
 function Innovation() {
+	const { data: currentStats } = getCurrentStatsQuery();
+	// Calculate minimum width for count based on target number to prevent layout shift
+	const countMinWidth = useMemo(() => {
+		const targetNumber = currentStats?.totalUsers ?? 0;
+		const formatted = new Intl.NumberFormat('en-US').format(targetNumber);
+		// Use character width units (ch) for precise control - each ch is roughly the width of "0"
+		// Use max of formatted length or initial value (10) to ensure smooth transition
+		const maxChars = Math.max(formatted.length, '10'.length);
+		// Use ch units for tighter, more accurate spacing (add 0.5ch for slight padding)
+		return `${maxChars + 0.5}ch`;
+	}, [currentStats?.totalUsers]);
+
 	return (
 		<div className="w-full max-w-[1408px] min-h-[600px] lg:h-[793px] rounded-[20px] md:rounded-[36px] relative overflow-hidden mx-auto bg-[#171717] px-4 sm:px-6 md:px-8 lg:px-19.5 py-8 md:py-[58px]">
 			{/* Left gradient - reduced visibility on mobile */}
@@ -92,7 +106,22 @@ function Innovation() {
 									))}
 								</div>
 								<p className="text-[#F1F7FF] font-semibold mt-1 font-[Geist,sans-serif] text-sm md:text-[18px] leading-[1.33em] tracking-[-0.0144em]">
-									99+ Happy Users
+									<span
+										className="inline-block tabular-nums"
+										style={{ minWidth: countMinWidth, textAlign: 'center' }}
+									>
+										<CountUp
+											from={10}
+											to={currentStats?.totalUsers ?? 0}
+											separator=","
+											duration={1}
+											className="count-up-text"
+											onStart={undefined}
+											onEnd={undefined}
+										/>
+										+
+									</span>{' '}
+									Happy Users
 								</p>
 							</div>
 						</div>

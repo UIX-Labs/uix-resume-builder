@@ -16,7 +16,7 @@ export function AuthHeader() {
     >
       <div className="flex flex-row gap-2">
         <button
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 cursor-pointer"
           onClick={() => router.push("/")}
           type="button"
         >

@@ -24,7 +24,7 @@ const enzoTemplate3 = {
   sections: [
     // --- HEADER BANNER ---
     {
-      id: 'header-banner',
+      id: 'header',
       type: 'banner',
       className: 'flex flex-col justify-center bg-[#F0F8FF] px-8 py-8',
       fields: {
@@ -78,6 +78,7 @@ const enzoTemplate3 = {
             },
             // Contact Info
             {
+              id:'header',
               type: 'group',
               className: 'flex flex-col gap-3 items-end',
               items: [

@@ -103,6 +103,7 @@ export function renderBadgeSection(
       data-break={section.break}
       data-item="section"
       data-section={sectionId}
+      data-has-breakable-content={section.breakable ? "true" : "false"}
       className={cn(shouldBlur && "blur-[2px] pointer-events-none")}
       style={wrapperStyle}
     >
@@ -117,7 +118,10 @@ export function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={section.containerClassName || "flex flex-col gap-2 mt-2"}>
+      <div 
+        className={section.containerClassName || "flex flex-col gap-2 mt-2"}
+        data-canbreak={section.breakable ? "true" : "false"}
+      >
       
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           const actualValue =

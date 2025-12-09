@@ -57,7 +57,7 @@ import { Download } from "lucide-react";
 import { convertHtmlToPdf } from "@entities/download-pdf/api";
 import type { JoinCommunityResponse } from "@entities/download-pdf/types/type";
 import TemplateButton from "./change-template-button";
-import { trackEvent, startTimedEvent } from "@shared/lib/analytics/percept";
+import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -570,18 +570,18 @@ export function FormPageBuilder() {
   // Check if there are any suggestions in the form data
   const hasSuggestions = Boolean(
     formData &&
-      Object.values(formData).some((section) => {
-        if (
-          section &&
-          typeof section === "object" &&
-          "suggestedUpdates" in section
-        ) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-            .suggestedUpdates;
-          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-        }
-        return false;
-      })
+    Object.values(formData).some((section) => {
+      if (
+        section &&
+        typeof section === "object" &&
+        "suggestedUpdates" in section
+      ) {
+        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+          .suggestedUpdates;
+        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      }
+      return false;
+    })
   );
 
   async function generateAndSaveThumbnail() {
@@ -992,7 +992,7 @@ export function FormPageBuilder() {
       // Check if suggestions were actually applied
       const hasChanged = isArrayField
         ? JSON.stringify(updatedFieldValue) !==
-          JSON.stringify(currentFieldValue)
+        JSON.stringify(currentFieldValue)
         : updatedFieldValue !== currentFieldValue;
 
       if (!hasChanged) {

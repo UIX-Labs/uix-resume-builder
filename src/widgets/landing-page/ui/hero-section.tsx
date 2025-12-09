@@ -9,7 +9,7 @@ import { LinkedInModal } from "@widgets/dashboard/ui/linkedin-integration-card";
 import { MobileTextView } from "./mobile-text-view";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState } from "react";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
 import CountUp from "@shared/ui/count-up";
 

@@ -13,6 +13,7 @@ import { RoastLoading } from './components/roast-loading';
 import { TypewriterRoast } from './components/typewriter-roast';
 import Fire from './components/fire';
 import Header from '@widgets/landing-page/ui/header-section';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface FireBackdropProps {
 	variant: 'fixed' | 'flow';
@@ -91,6 +92,9 @@ export default function RoastPage() {
 		onSuccess: (data) => {
 			toast.success('Resume roasted successfully');
 			setResponse(data.roast);
+			trackEvent('roast_resume_success', {
+				timestamp: new Date().toISOString(),
+			});
 		},
 		onError: () => {
 			toast.error('Failed to roast resume');

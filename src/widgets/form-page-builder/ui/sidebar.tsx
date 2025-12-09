@@ -26,7 +26,7 @@ import { updateResumeByAnalyzerWithResumeId } from "@entities/resume/api/update-
 import { toast } from "sonner";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
 import { hasPendingSuggestions } from "@features/resume/renderer";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import PikaResume from "@shared/icons/pika-resume";
 import { useRouter } from "next/navigation";
 
@@ -231,13 +231,13 @@ export function Sidebar() {
       className={cn(
         "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
         isAnalyzing &&
-          "opacity-60 pointer-events-none select-none cursor-not-allowed"
+        "opacity-60 pointer-events-none select-none cursor-not-allowed"
       )}
     >
       <div className="flex items-center gap-2 ">
         <div className="flex flex-row gap-1 items-center">
           <button onClick={handleLogoClick} className="cursor-pointer" type="button">
-          <PikaResume stopColor="black" offsetColor="black" />
+            <PikaResume stopColor="black" offsetColor="black" />
           </button>
           <div className="flex flex-col">
             <div className="flex flex-row">
@@ -270,8 +270,8 @@ export function Sidebar() {
           // Get suggestedUpdates array from section data
           const suggestedUpdatesArray =
             sectionData &&
-            typeof sectionData === "object" &&
-            "suggestedUpdates" in sectionData
+              typeof sectionData === "object" &&
+              "suggestedUpdates" in sectionData
               ? (sectionData as { suggestedUpdates?: any[] }).suggestedUpdates
               : undefined;
 

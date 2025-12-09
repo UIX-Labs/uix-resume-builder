@@ -14,92 +14,154 @@ import { TypewriterRoast } from './components/typewriter-roast';
 import Fire from './components/fire';
 import Header from '@widgets/landing-page/ui/header-section';
 
+interface FireBackdropProps {
+	variant: 'fixed' | 'flow';
+}
+
+function FireBackdrop({ variant }: FireBackdropProps) {
+	const containerClass =
+		variant === 'fixed'
+			? 'pointer-events-none select-none fixed inset-x-0 bottom-0 -z-10'
+			: 'pointer-events-none select-none relative w-full mt-10 md:mt-12 lg:mt-16';
+
+	const wrapperClass =
+		variant === 'fixed'
+			? 'relative w-full h-[240px] md:h-[320px] lg:h-[480px]'
+			: 'relative w-full h-[240px] md:h-[320px] lg:h-[480px] -z-10';
+
+	return (
+		<div
+			aria-hidden
+			className={containerClass}
+		>
+			<div className={wrapperClass}>
+				<Image
+					src="/images/template-1.svg"
+					alt="Resume Template 1"
+					width={300}
+					height={400}
+					className="absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[300px] opacity-70 rotate-[15deg] z-0"
+				/>
+				<Image
+					src="/images/template-2.svg"
+					alt="Resume Template 2"
+					width={300}
+					height={400}
+					className="absolute top-[30%] right-[25%] md:right-[30%] w-[100px] md:w-[300px] opacity-70 rotate-[-15deg] z-0"
+				/>
+				<Image
+					src="/images/template-3.svg"
+					alt="Resume Template 3"
+					width={280}
+					height={350}
+					className="absolute top-[35%] left-[25%] md:left-[70%] w-[100px] md:w-[280px] opacity-70 rotate-[5deg] z-0"
+				/>
+
+				<Fire className="w-full scale-x-110" />
+			</div>
+		</div>
+	);
+}
+
 export default function RoastPage() {
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [response, setResponse] = useState<string | null>(null);
+	const [isDragging, setIsDragging] = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
+	const [response, setResponse] = useState<string | null>(null);
 
-  const roastResume = async (file: File) => {
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
+	const roastResume = async (file: File) => {
+		try {
+			const formData = new FormData();
+			formData.append('file', file);
 
-      const response = await fetch<{ roast: string }>('resume/roast', {
-        options: {
-          method: 'POST',
-          body: formData,
-        },
-      });
-      return response;
-    } catch (error) {
-      console.error('Error roasting resume:', error);
-      throw new Error('Failed to roast resume');
-    }
-  };
+			const response = await fetch<{ roast: string }>('resume/roast', {
+				options: {
+					method: 'POST',
+					body: formData,
+				},
+			});
+			return response;
+		} catch (error) {
+			console.error('Error roasting resume:', error);
+			throw new Error('Failed to roast resume');
+		}
+	};
 
-  const { mutate: roastResumeMutation, isPending } = useMutation({
-    mutationFn: roastResume,
-    onSuccess: (data) => {
-      toast.success('Resume roasted successfully');
-      setResponse(data.roast);
-    },
-    onError: () => {
-      toast.error('Failed to roast resume');
-    },
-  });
-  const shouldHideOverflow = !response && !isPending;
+	const { mutate: roastResumeMutation, isPending } = useMutation({
+		mutationFn: roastResume,
+		onSuccess: (data) => {
+			toast.success('Resume roasted successfully');
+			setResponse(data.roast);
+		},
+		onError: () => {
+			toast.error('Failed to roast resume');
+		},
+	});
+	const shouldHideOverflow = !response || isPending;
+	const isFireFixed = !response || isPending;
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+	const handleDragOver = (e: React.DragEvent) => {
+		e.preventDefault();
+		setIsDragging(true);
+	};
 
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
+	const handleDragLeave = (e: React.DragEvent) => {
+		e.preventDefault();
+		setIsDragging(false);
+	};
 
-  function handleFileUpload(file: File) {
-    roastResumeMutation(file);
-  }
+	function handleFileUpload(file: File) {
+		roastResumeMutation(file);
+	}
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files?.[0];
+	const handleDrop = (e: React.DragEvent) => {
+		e.preventDefault();
+		setIsDragging(false);
+		const file = e.dataTransfer.files?.[0];
 
-    if (file) {
-      handleFileUpload(file);
-    }
-  };
+		if (file) {
+			handleFileUpload(file);
+		}
+	};
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      handleFileUpload(file);
-    }
-  };
+	const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (file) {
+			handleFileUpload(file);
+		}
+	};
 
-  const onUploadClick = () => {
-    fileInputRef.current?.click();
-  };
+	const onUploadClick = () => {
+		fileInputRef.current?.click();
+	};
 
-  return (
-    <div className={cn("relative min-h-screen bg-white w-full font-sans", shouldHideOverflow && "overflow-hidden")}>
-      <div
-        className={cn(
-          'absolute inset-0',
-          '[background-size:20px_20px]',
-          '[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]',
-          'dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]'
-        )}
-      />
+	const handleUploadKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			onUploadClick();
+		}
+	};
 
-      <Spotlight className="absolute inset-0" />
+	return (
+		<div
+			className={cn(
+				'relative min-h-screen bg-white w-full font-sans',
+				shouldHideOverflow && 'overflow-hidden'
+			)}
+		>
+			<div
+				className={cn(
+					'absolute inset-0',
+					'[background-size:20px_20px]',
+					'[background-image:radial-gradient(#d4d4d4_1px,transparent_1px)]',
+					'dark:[background-image:radial-gradient(#404040_1px,transparent_1px)]'
+				)}
+			/>
 
-      			<main className="relative z-10 w-full min-h-screen flex flex-col">
+			<Spotlight className="absolute inset-0" />
+
+			<main className="relative z-10 w-full min-h-screen flex flex-col">
 				<Header />
-				<div className="flex flex-col items-center justify-center w-full pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-8 lg:pb-4 px-5 flex-1">
+				<div className="flex flex-col items-center w-full pt-12 pb-8 md:pt-16 md:pb-12 lg:pt-8 lg:pb-4 px-5 flex-1">
 					<div className="flex items-center gap-1 px-2 py-1 bg-[#02A44F] text-white rounded-full text-xs font-bold mb-4 lg:mb-2">
 						<span>AI Powered</span>
 
@@ -145,6 +207,9 @@ export default function RoastPage() {
 								onDragLeave={handleDragLeave}
 								onDrop={handleDrop}
 								onClick={onUploadClick}
+								onKeyDown={handleUploadKeyDown}
+								role="button"
+								tabIndex={0}
 							>
 								<input
 									type="file"
@@ -181,35 +246,8 @@ export default function RoastPage() {
 					)}
 				</div>
 
-				{/* Fire section - at bottom of page */}
-				<div className="relative w-full">
-					<div className="relative w-full md:h-[280px] lg:h-[320px]">
-						<Image
-							src="/images/template-1.svg"
-							alt="Resume Template 1"
-							width={300}
-							height={400}
-							className="absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[300px] opacity-70 rotate-[15deg] z-[-1]"
-						/>
-						<Image
-							src="/images/template-2.svg"
-							alt="Resume Template 2"
-							width={300}
-							height={400}
-							className="absolute top-[30%] right-[25%] md:right-[30%] w-[100px] md:w-[300px] opacity-70 rotate-[-15deg] z-[-1]"
-						/>
-						<Image
-							src="/images/template-3.svg"
-							alt="Resume Template 3"
-							width={280}
-							height={350}
-							className="absolute top-[35%] left-[25%] md:left-[70%] w-[100px] md:w-[280px] opacity-70 rotate-[5deg] z-[-1]"
-						/>
-
-						<Fire className="w-full scale-x-110 scale-y-120" />
-					</div>
-				</div>
+				<FireBackdrop variant={isFireFixed ? 'fixed' : 'flow'} />
 			</main>
-    </div>
-  );
+		</div>
+	);
 }

@@ -12,12 +12,12 @@ export function UserTracker() {
       setUserId(user.id);
 
       setUserProperties({
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isVerified: user.isVerified,
-        isLoggedIn: user.isLoggedIn,
-        isVerifiedAccount: true
+        $email: user.email,
+        $first_name: user.firstName,
+        $last_name: user.lastName,
+        $is_verified: user.isVerified,
+        $is_logged_in: user.isLoggedIn,
+        $is_verified_account: true
       });
     }
   }, [user]);

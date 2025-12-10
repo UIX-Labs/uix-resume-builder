@@ -109,8 +109,6 @@ export const applySuggestionsToArrayField = (
 
       if (matchIndex !== -1) {
         updatedArray[matchIndex] = suggestion.new;
-      } else {
-        console.log(`✗ No match found for: "${suggestion.old}"`);
       }
     }
   });
@@ -160,18 +158,8 @@ export const applySuggestionsToFieldValue = (
               // Re-wrap in HTML paragraph tags
               updatedValue = convertTextToHtml(updatedPlainText);
             } else {
-              // Last resort: use normalized comparison to find and replace
-
-              const normalizedPlainText = normalizeText(plainText);
-              const normalizedOldText = normalizeText(suggestion.old);
-
-              if (normalizedPlainText.includes(normalizedOldText)) {
-                // Replace the entire plain text with the new suggestion
-                // Since we can't reliably find the exact position, replace the whole field
-                updatedValue = convertTextToHtml(suggestion.new);
-              } else {
-                console.log('✗ Could not find old text even with normalization');
-              }
+              // Since we can't reliably find the exact position, replace the whole field
+              updatedValue = convertTextToHtml(suggestion.new);
             }
           }
         } else {
@@ -179,12 +167,8 @@ export const applySuggestionsToFieldValue = (
 
           if (updatedValue.includes(suggestion.old)) {
             updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
-          } else {
-            console.log('✗ Could not find old text in plain text content');
           }
         }
-      } else {
-        console.log('✗ No match found - skipping this suggestion');
       }
     } else {
       // For new summaries (no old value), always treat as HTML field

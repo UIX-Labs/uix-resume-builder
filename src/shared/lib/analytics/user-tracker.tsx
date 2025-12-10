@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useUserProfile } from "@shared/hooks/use-user";
-import { setUserId, setUserProperties } from "./percept";
+import { setUserId, setUserProperties } from "./Mixpanel";
 
 export function UserTracker() {
   const { data: user } = useUserProfile();
@@ -10,13 +10,14 @@ export function UserTracker() {
   useEffect(() => {
     if (user?.id) {
       setUserId(user.id);
-      
+
       setUserProperties({
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        isVerified: user.isVerified,
-        isLoggedIn: user.isLoggedIn
+        $email: user.email,
+        $first_name: user.firstName,
+        $last_name: user.lastName,
+        $is_verified: user.isVerified,
+        $is_logged_in: user.isLoggedIn,
+        $is_verified_account: true
       });
     }
   }, [user]);

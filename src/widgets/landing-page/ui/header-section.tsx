@@ -8,8 +8,8 @@ import { Menu } from "lucide-react";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileSidebar } from "./mobile-sidebar";
 import { cn } from "@shared/lib/cn";
-import { trackEvent } from "@/shared/lib/analytics/percept";
 import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 function Header() {
   const router = useRouter();
@@ -63,12 +63,16 @@ function Header() {
 
   const handleRoastClick = () => {
     router.push("/roast");
+    trackEvent("navigation_click", {
+      source: "landing_header",
+      destination: "roast",
+    });
   };
 
   return (
     <>
       <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
-        <div className="flex items-center gap-2 md:gap-4">
+        <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
           <Image
             src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"}
             alt="AI"
@@ -94,7 +98,7 @@ function Header() {
               </span>
             </div>
           </div>
-        </div>
+        </button>
 
         <div className="hidden md:flex items-center gap-7">
           <Button

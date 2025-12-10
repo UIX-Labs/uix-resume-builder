@@ -100,9 +100,10 @@ export function renderBadgeSection(
     : undefined;
   return (
     <div
-      data-break={section.break}
+      data-canbreak={section.break}
       data-item="section"
       data-section={sectionId}
+      data-has-breakable-content={section.breakable ? "true" : "false"}
       className={cn(shouldBlur && "blur-[2px] pointer-events-none")}
       style={wrapperStyle}
     >
@@ -117,8 +118,10 @@ export function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={section.containerClassName || "flex flex-col gap-2 mt-2"}>
-      
+      <div
+        className={section.containerClassName || "flex flex-col gap-2 mt-2"}
+        data-canbreak={section.break}
+      >
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           const actualValue =
             typeof value === "object" && value !== null && "value" in value
@@ -145,7 +148,9 @@ export function renderBadgeSection(
             return (
               <div key={idx} className={section.itemClassName}>
                 <IconComponent className={section.iconClassName} />
-                <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
+                <span className={cn(section.badgeClassName /*, errorBgColor*/)}>
+                  {displayValue}
+                </span>
               </div>
             );
           }
@@ -153,11 +158,12 @@ export function renderBadgeSection(
           // Default rendering without icon
           return (
             <span key={idx}>
-              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
+              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>
+                {displayValue}
+              </span>
 
-              {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
-                <span>{section.itemSeparator}</span>
-              )}
+              {idx < flattenedItemsWithContext.length - 1 &&
+                section.itemSeparator && <span>{section.itemSeparator}</span>}
             </span>
           );
         })}

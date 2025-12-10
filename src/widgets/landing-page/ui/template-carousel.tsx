@@ -17,7 +17,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { MobileTextView } from './mobile-text-view';
-import { trackEvent } from '@/shared/lib/analytics/percept';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -150,7 +150,7 @@ export function TemplateCarousel() {
                     destination: 'all_templates'
                   });
                 }}
-                 className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto"
+                className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto"
               >
                 Check All Templates
               </Button>

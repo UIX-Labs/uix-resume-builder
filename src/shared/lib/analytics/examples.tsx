@@ -7,7 +7,7 @@
 
 "use client";
 
-import { trackEvent, startTimedEvent } from '@/shared/lib/analytics/percept';
+import { trackEvent, startTimedEvent } from '@shared/lib/analytics/Mixpanel';
 import { useState } from 'react';
 
 // ============================================
@@ -32,12 +32,12 @@ export function AnalyticsButton() {
 // ============================================
 // Example 2: Track Template Selection
 // ============================================
-export function TemplateCard({ 
-  templateId, 
-  templateName 
-}: { 
-  templateId: string; 
-  templateName: string; 
+export function TemplateCard({
+  templateId,
+  templateName
+}: {
+  templateId: string;
+  templateName: string;
 }) {
   const handleSelect = () => {
     trackEvent('template_selected', {
@@ -93,7 +93,7 @@ export function DownloadResumeButton() {
 
   const handleDownload = async () => {
     setIsDownloading(true);
-    
+
     // Start timing the download process
     startTimedEvent('resume_download');
 
@@ -108,7 +108,7 @@ export function DownloadResumeButton() {
         pageCount: 2
       });
 
-      console.log('Download completed successfully');
+
     } catch (error) {
       // Track failed download
       trackEvent('resume_download', {
@@ -150,12 +150,12 @@ export function AddSectionButton({ sectionType }: { sectionType: string }) {
 // ============================================
 // Example 6: Track AI Suggestion Acceptance
 // ============================================
-export function AISuggestion({ 
-  suggestion, 
-  section 
-}: { 
-  suggestion: string; 
-  section: string; 
+export function AISuggestion({
+  suggestion,
+  section
+}: {
+  suggestion: string;
+  section: string;
 }) {
   const handleAccept = () => {
     trackEvent('ai_suggestion_accepted', {
@@ -214,7 +214,7 @@ export function ErrorBoundaryExample() {
     try {
       // Some operation that might fail
       await riskyOperation();
-      
+
       trackEvent('operation_success', {
         operation: 'data_sync'
       });

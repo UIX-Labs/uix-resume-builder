@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useCachedUser } from "@shared/hooks/use-user";
 import { cn } from "@shared/lib/cn";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { useState } from "react";
 import { MobileTextView } from "./mobile-text-view";
 import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
@@ -55,12 +55,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   };
 
   const handleAboutUsClick = () => {
-    setShowMobileTextView(true);
-    trackEvent("navigation_click", {
-      source: "mobile_sidebar",
-      destination: "about_us",
-      blocked: "mobile_device",
-    });
+    handleNavigation("/about-us", "navigation_click", "about_us");
   };
 
   const handleDashboardClick = () => {
@@ -106,6 +101,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     },
   ];
 
+  const handleLogoClick = () => {
+    handleNavigation("/", "navigation_click", "home");
+  };
+
   return (
     <>
       <AnimatePresence>
@@ -132,7 +131,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                  <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-2" onClick={handleLogoClick} type="button">
                     <Image
                       src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"}
                       alt="Pika Resume"
@@ -149,7 +148,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
                         </span>
                       </div>
                     </div>
-                  </div>
+                  </button>
                   <button
                     type="button"
                     onClick={onClose}

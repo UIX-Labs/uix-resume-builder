@@ -8,10 +8,12 @@ import { useCachedUser } from "@shared/hooks/use-user";
 import { LinkedInModal } from "@widgets/dashboard/ui/linkedin-integration-card";
 import { MobileTextView } from "./mobile-text-view";
 import { useIsMobile } from "@shared/hooks/use-mobile";
-import { useState } from "react";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { useState, useMemo } from "react";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
 import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
+import CountUp from "@shared/ui/count-up";
+import { getUserInitials } from "../lib/user-initials";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -21,6 +23,40 @@ const HeroSection = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showMobileView, setShowMobileView] = useState(false);
+
+  // Calculate minimum width for count based on target number to prevent layout shift
+  const countMinWidth = useMemo(() => {
+    const targetNumber = currentStats?.totalUsers ?? 0;
+    const formatted = new Intl.NumberFormat("en-US").format(targetNumber);
+    // Use character width units (ch) for precise control - each ch is roughly the width of "0"
+    // Use max of formatted length or initial value (10) to ensure smooth transition
+    const maxChars = Math.max(formatted.length, "10".length);
+    // Use ch units for tighter, more accurate spacing (add 0.5ch for slight padding)
+    return `${maxChars + 0.5}ch`;
+  }, [currentStats?.totalUsers]);
+
+  // Get latest users and generate initials
+  const userAvatars = useMemo(() => {
+    const latestUsers = currentStats?.latestUsers || [];
+    // Take first 3 users or use default initials if not enough users
+    const defaultInitials = ["JD", "SM", "AR"];
+
+    return Array.from({ length: 3 }, (_, i) => {
+      if (i < latestUsers.length) {
+        const user = latestUsers[i];
+        const initials = getUserInitials(user.firstName, user.lastName);
+        return {
+          initials: initials || defaultInitials[i] || "U",
+          key: `${user.firstName || ""}-${user.lastName || ""}-${i}`,
+        };
+      }
+      // Use default initials if not enough users
+      return {
+        initials: defaultInitials[i] || "U",
+        key: `default-${i}`,
+      };
+    });
+  }, [currentStats?.latestUsers]);
 
   const handleNavigate = () => {
     router.push(user ? "/dashboard" : "/auth");
@@ -137,24 +173,36 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto relative text-center">
         <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3 mt-8 md:mt-28">
           <div className="flex -space-x-2 mt-20 md:mt-0">
-            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
-              <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className="text-black">JD</AvatarFallback>
-            </Avatar>
-
-            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
-              <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className="text-black">SM</AvatarFallback>
-            </Avatar>
-
-            <Avatar className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
-              <AvatarImage src="/placeholder.svg" />
-              <AvatarFallback className="text-black">AR</AvatarFallback>
-            </Avatar>
+            {userAvatars.map((avatar) => (
+              <Avatar
+                key={avatar.key}
+                className="w-9 h-9 md:w-12 md:h-12 border-2 border-white"
+              >
+                <AvatarImage src="/placeholder.svg" />
+                <AvatarFallback className="text-black">
+                  {avatar.initials}
+                </AvatarFallback>
+              </Avatar>
+            ))}
           </div>
 
           <span className="font-semibold text-base md:text-lg md:ml-3 text-gray-900">
-            Trusted by {currentStats?.totalUsers ?? 0} professionals
+            Trusted by{" "}
+            <span
+              className="inline-block tabular-nums"
+              style={{ minWidth: countMinWidth, textAlign: "center" }}
+            >
+              <CountUp
+                from={10}
+                to={currentStats?.totalUsers ?? 0}
+                separator=","
+                duration={1}
+                className="count-up-text"
+                onStart={undefined}
+                onEnd={undefined}
+              />+
+            </span>{" "}
+            professionals
           </span>
         </div>
 

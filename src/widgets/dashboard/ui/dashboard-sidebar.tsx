@@ -14,12 +14,14 @@ import { Home, FileText, LogOut, Sparkles, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
-import { trackEvent } from "@/shared/lib/analytics/percept";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import PikaResume from "@shared/icons/pika-resume";
+import { useRouter } from "next/navigation";
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const logoutMutation = useLogoutUser();
+  const router = useRouter();
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -53,27 +55,35 @@ export default function DashboardSidebar() {
     });
   };
 
+  const handleLogoClick = () => {
+    router.push("/");
+  };
+
   return (
     <Sidebar className="bg-[rgba(245,248,250,1)] rounded-3xl m-3 w-[249px]">
-      <SidebarHeader className="p-6">
-        <div className="flex flex-row gap-2">
-          <PikaResume
-            stopColor="black"
-            offsetColor="black"
-            width={50}
-            height={50}
-          />
-          <div className="flex flex-col items-center justify-center">
-            <div className="flex flex-row">
-              <span className="font-bold text-black bg-clip-text text-2xl">
-                Pika
-              </span>
-              <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
-                Resume
-              </span>
-            </div>
+      <SidebarHeader className="w-full">
+        <button
+          className="flex flex-row items-center justify-center p-4 gap-2 cursor-pointer"
+          onClick={handleLogoClick}
+          type="button"
+        >
+          <div className="flex flex-row items-center justify-center">
+            <PikaResume
+              stopColor="black"
+              offsetColor="black"
+              width={40}
+              height={40}
+            />
           </div>
-        </div>
+          <div className="flex flex-row items-center justify-center">
+            <span className="font-bold text-black bg-clip-text text-2xl">
+              Pika
+            </span>
+            <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
+              Resume
+            </span>
+          </div>
+        </button>
       </SidebarHeader>
 
       <SidebarContent className="px-4">

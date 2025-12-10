@@ -1,133 +1,138 @@
 const enzoTemplate1 = {
-  name: 'Enzo Professional',
+  name: "Enzo Professional",
 
   page: {
     width: 794,
     height: 1122,
     padding: 0,
-    background: '#ffffff',
-    className: 'text-neutral-900 leading-relaxed break-words whitespace-pre-wrap',
-    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    background: "#ffffff",
+    className:
+      "text-neutral-900 leading-relaxed break-words whitespace-pre-wrap",
+    fontFamily:
+      'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
   },
 
   columns: {
-    spacing: '0px',
+    spacing: "0px",
     left: {
-      width: '270px',
-      className: 'bg-[#E8DCC8] tracking-wide text-neutral-800 px-6 py-8',
+      width: "270px",
+      className: "bg-[#E8DCC8] tracking-wide text-neutral-800 px-6 py-8",
     },
     right: {
-      width: 'calc(100% - 270px)',
-      className: 'px-10 py-8 flex flex-col gap-4',
+      width: "calc(100% - 270px)",
+      className: "px-10 py-8 flex flex-col gap-4",
     },
   },
 
   sections: [
     // Profile Picture Section - Left Column
     {
-      id: 'profile-picture',
-      type: 'header',
-      column: 'left',
-      className: 'flex flex-col items-center mb-6',
+      id: "profile-picture",
+      type: "header",
+      column: "left",
+      className: "flex flex-col items-center mb-6",
       fields: {
         profileImage: {
-          type: 'image',
-          path: 'personalDetails.items[0].profilePicturePublicUrl',
-          fallback: '',
-          className: 'w-32 h-32 rounded-full object-cover bg-neutral-300',
-          alt: 'Profile Picture',
+          type: "image",
+          path: "personalDetails.items[0].profilePicturePublicUrl",
+          fallback: "/images/profile.svg",
+          className: "w-32 h-32 rounded-full object-cover bg-neutral-300",
+          alt: "Profile img",
         },
       },
     },
 
     // Contact Section - Left Column
     {
-      id: 'contact',
-      type: 'header',
-      column: 'left',
-      className: 'mb-6',
+      id: "header",
+      type: "header",
+      column: "left",
+      className: "mb-6",
       fields: {
         contact: {
-          type: 'group',
-          className: 'flex flex-col gap-2',
+          type: "group",
+          className: "flex flex-col gap-2",
           items: [
             // Heading
             {
-              type: 'text',
-              path: '',
-              fallback: 'CONTACT',
-              className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
+              type: "text",
+              path: "",
+              fallback: "CONTACT",
+              className:
+                "text-sm font-bold text-[#C9A961] tracking-wide uppercase",
             },
             // Phone
             {
-              type: 'group',
-              className: 'flex flex-row items-center gap-2',
+              type: "inline-group-with-icon",
+              className: "flex flex-row items-center gap-2",
               items: [
                 {
-                  type: 'icon',
-                  name: 'Phone',
+                  type: "icon",
+                  name: "Phone",
                   size: 14,
-                  className: 'text-neutral-800 flex-shrink-0',
+                  className: "text-neutral-800 flex-shrink-0",
                 },
                 {
-                  path: 'personalDetails.items[0].phone',
-                  fallback: '',
-                  className: 'text-xs text-neutral-800 break-all',
+                  path: "personalDetails.items[0].phone",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
                 },
               ],
             },
             // Email
             {
-              type: 'group',
-              className: 'flex items-center gap-2',
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
               items: [
                 {
-                  type: 'icon',
-                  name: 'Mail',
+                  type: "icon",
+                  name: "Mail",
                   size: 14,
-                  className: 'text-neutral-800 flex-shrink-0',
+                  className: "text-neutral-800 flex-shrink-0",
                 },
                 {
-                  path: 'personalDetails.items[0].email',
-                  fallback: '',
-                  className: 'text-xs text-neutral-800 break-all',
+                  type: "link",
+                  path: "personalDetails.items[0].email",
+                  href: "mailto:{{value}}",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
                 },
               ],
             },
             // LinkedIn
             {
-              type: 'group',
-              className: 'flex items-center gap-2',
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
               items: [
                 {
-                  type: 'icon',
-                  name: 'Linkedin',
+                  type: "icon",
+                  name: "Linkedin",
                   size: 14,
-                  className: 'text-neutral-800 flex-shrink-0',
+                  className: "text-neutral-800 flex-shrink-0",
                 },
                 {
-                  path: 'personalDetails.items[0].links.linkedin.title',
-                  fallback: '',
-                  className: 'text-xs text-neutral-800 break-all',
+                  path: "personalDetails.items[0].links.linkedin.title",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
                 },
               ],
             },
             {
-              type: 'group',
-              className: 'flex items-center gap-2',
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
               items: [
                 {
-                  type: 'icon',
-                  name: 'Github',
+                  type: "icon",
+                  name: "Github",
                   size: 14,
-                  className: 'text-neutral-800 flex-shrink-0',
+                  className: "text-neutral-800 flex-shrink-0",
                 },
                 {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.github.title',
-                  href: 'personalDetails.items[0].links.github.link',
-                  fallback: '',
-                  className: 'text-xs text-neutral-800 break-all',
+                  type: "link",
+                  path: "personalDetails.items[0].links.github.title",
+                  href: "personalDetails.items[0].links.github.link",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
                 },
               ],
             },
@@ -138,117 +143,126 @@ const enzoTemplate1 = {
 
     // Professional Profile Section - Left Column
     {
-      id: 'summary',
-      type: 'content-section',
-      column: 'left',
-      className: 'flex flex-col gap-1 pt-6 border-t border-[#C9A961]',
+      id: "summary",
+      type: "content-section",
+      column: "left",
+      className: "flex flex-col gap-1 pt-6 border-t border-[#C9A961]",
       heading: {
-        path: 'summary.heading',
-        fallback: 'Profile',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2',
+        path: "summary.heading",
+        fallback: "Profile",
+        className:
+          "text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2",
       },
       content: {
-        type: 'html',
-        path: 'personalDetails.items[0].description',
-        fallback: 'Summary',
-        className: 'text-xs text-neutral-800 leading-relaxed break-words whitespace-pre-wrap mb-6',
+        type: "html",
+        path: "personalDetails.items[0].description",
+        fallback: "Summary",
+        className:
+          "text-xs text-neutral-800 leading-relaxed break-words whitespace-pre-wrap mb-6",
       },
     },
 
     // Skills Section - Left Column
     {
-      id: 'skills',
+      id: "skills",
       break: false,
-      type: 'inline-list-section',
-      column: 'left',
-      className: 'pt-6 border-t border-[#C9A961]',
+      type: "inline-list-section",
+      column: "left",
+      className: "pt-6 border-t border-[#C9A961]",
       heading: {
-        path: 'skills.heading',
-        fallback: 'SKILLS',
-        className: 'text-sm font-bold text-[#C9A961] mb-2 tracking-wide uppercase',
+        path: "skills.heading",
+        fallback: "SKILLS",
+        className:
+          "text-sm font-bold text-[#C9A961] mb-2 tracking-wide uppercase",
       },
-      listPath: 'skills.items',
-      itemPath: 'name',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
-      itemSeparator: ', ',
+      listPath: "skills.items",
+      itemPath: "name",
+      itemClassName: "text-xs text-neutral-800",
+      containerClassName: "flex flex-col gap-1 mt-2 text-xs",
+      itemSeparator: ", ",
     },
 
     // Header Section - Right Column
     {
-      id: 'header',
-      type: 'header',
-      column: 'right',
-      className: 'flex flex-col mb-4',
+      id: "header",
+      type: "header",
+      column: "right",
+      className: "flex flex-col mb-4",
       fields: {
         nameTitle: {
-          className: 'flex flex-col gap-1',
+          className: "flex flex-col gap-1",
         },
         name: {
-          path: 'personalDetails.items[0].fullName',
-          fallback: 'NELLY SMITH',
-          className: 'text-4xl font-bold text-[#C9A961] tracking-wide uppercase',
+          path: "personalDetails.items[0].fullName",
+          fallback: "NELLY SMITH",
+          className:
+            "text-4xl font-bold text-[#C9A961] tracking-wide uppercase",
         },
         title: {
-          path: 'personalDetails.items[0].jobTitle',
-          fallback: 'GRAPHIC DESIGNER',
-          className: 'text-lg font-semibold text-neutral-800 tracking-wide uppercase',
+          path: "personalDetails.items[0].jobTitle",
+          fallback: "GRAPHIC DESIGNER",
+          className:
+            "text-lg font-semibold text-neutral-800 tracking-wide uppercase",
         },
       },
     },
 
     // Experience Section - Right Column
     {
-      id: 'experience',
-      type: 'list-section',
-      column: 'right',
+      id: "experience",
+      type: "list-section",
+      column: "right",
       break: true,
       heading: {
-        path: 'experience.heading',
-        fallback: 'EXPERIENCE',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3',
+        path: "experience.heading",
+        fallback: "EXPERIENCE",
+        className:
+          "text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3",
       },
-      listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-5',
+      listPath: "experience.items",
+      containerClassName: "flex flex-col gap-5",
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: "flex flex-col gap-1",
         rows: [
           {
-            className: 'flex flex-row justify-between items-baseline gap-2',
+            className: "flex flex-row justify-between items-baseline gap-2",
             cells: [
               {
-                path: 'position',
-                className: 'text-sm font-bold text-neutral-900 break-words flex-1 min-w-0',
-              },
-              {
-                path: 'company',
-                className: 'text-xs font-normal text-neutral-600 italic break-words flex-shrink-0',
-              },
-            ],
-          },
-          {
-            className: 'flex flex-row gap-2 items-center text-xs text-neutral-600 flex-wrap',
-            cells: [
-              {
-                type: 'duration',
-                path: 'duration',
-                className: 'text-xs text-neutral-600',
-              },
-              {
-                path: 'location',
-                fallback: '',
-                prefix: '• ',
-                className: 'text-xs text-neutral-600 break-words',
-              },
-            ],
-          },
-          {
-            cells: [
-              {
-                type: 'html',
-                path: 'description',
+                path: "position",
                 className:
-                  'text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words',
+                  "text-sm font-bold text-neutral-900 break-words flex-1 min-w-0",
+              },
+              {
+                path: "company",
+                className:
+                  "text-xs font-normal text-neutral-600 italic break-words flex-shrink-0",
+              },
+            ],
+          },
+          {
+            className:
+              "flex flex-row gap-2 items-center text-xs text-neutral-600 flex-wrap",
+            cells: [
+              {
+                type: "duration",
+                path: "duration",
+                className: "text-xs text-neutral-600",
+              },
+              {
+                path: "location",
+                fallback: "",
+                prefix: "• ",
+                className: "text-xs text-neutral-600 break-words",
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: "html",
+                path: "description",
+                className:
+                  "text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words",
               },
             ],
           },
@@ -258,54 +272,56 @@ const enzoTemplate1 = {
 
     // Education Section - Right Column
     {
-      id: 'education',
-      type: 'list-section',
-      column: 'right',
+      id: "education",
+      type: "list-section",
+      column: "right",
       heading: {
-        path: 'education.heading',
-        fallback: 'EDUCATION',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3',
+        path: "education.heading",
+        fallback: "EDUCATION",
+        className:
+          "text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3",
       },
-      listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-4',
+      listPath: "education.items",
+      containerClassName: "flex flex-col gap-4",
       itemTemplate: {
-        className: 'flex flex-col',
+        className: "flex flex-col",
         rows: [
           {
-            className: 'flex flex-row justify-between items-baseline gap-2',
+            className: "flex flex-row justify-between items-baseline gap-2",
             cells: [
               {
-                path: 'degree',
-                className: 'text-sm font-bold text-neutral-900 break-words flex-1 min-w-0',
+                path: "degree",
+                className:
+                  "text-sm font-bold text-neutral-900 break-words flex-1 min-w-0",
               },
               {
-                type: 'duration',
-                path: 'duration',
-                className: 'text-xs text-neutral-600 flex-shrink-0',
+                type: "duration",
+                path: "duration",
+                className: "text-xs text-neutral-600 flex-shrink-0",
               },
             ],
           },
           {
-            className: 'flex flex-row gap-1 items-center text-xs text-neutral-600 flex-wrap',
+            className:
+              "flex flex-row gap-1 items-center text-xs text-neutral-600 flex-wrap",
             cells: [
               {
-                path: 'institution',
-                className: 'text-xs text-neutral-600 break-words',
+                path: "institution",
+                className: "text-xs text-neutral-600 break-words",
               },
               {
-                path: 'location',
-                fallback: '',
-                prefix: '• ',
-                className: 'text-xs text-neutral-600 break-words',
+                path: "location",
+                fallback: "",
+                prefix: "• ",
+                className: "text-xs text-neutral-600 break-words",
               },
             ],
           },
           {
             cells: [
               {
-                path: 'grade.value',
-                prefix: 'CGPA - ',
-                className: 'text-xs text-neutral-700',
+                path: "grade.value",
+                className: "text-xs text-neutral-700",
               },
             ],
           },
@@ -315,28 +331,30 @@ const enzoTemplate1 = {
 
     // Certifications Section - Right Column
     {
-      id: 'certifications',
-      type: 'list-section',
-      column: 'right',
+      id: "certifications",
+      type: "list-section",
+      break:true,
+      column: "right",
       heading: {
-        path: 'certifications.heading',
-        fallback: 'CERTIFICATIONS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3',
+        path: "certifications.heading",
+        fallback: "CERTIFICATIONS",
+        className:
+          "text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3",
       },
-      listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-3',
+      listPath: "certifications.items",
+      containerClassName: "flex flex-col gap-3",
       itemTemplate: {
-        className: 'flex flex-col gap-0.5',
+        className: "flex flex-col gap-0.5",
         fields: [
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-bold text-neutral-900 break-words',
+            path: "title",
+            fallback: "Certification Title",
+            className: "text-sm font-bold text-neutral-900 break-words",
           },
           {
-            path: 'issuer',
-            fallback: 'Issuer',
-            className: 'text-xs text-neutral-600 break-words',
+            path: "issuer",
+            fallback: "Issuer",
+            className: "text-xs text-neutral-600 break-words",
           },
         ],
       },
@@ -344,38 +362,38 @@ const enzoTemplate1 = {
 
     // Interests Section - Left Column
     {
-      id: 'interests',
+      id: "interests",
       break: false,
-      type: 'inline-list-section',
-      column: 'right',
-      className: 'pt-6 border-t border-[#C9A961]',
+      type: "inline-list-section",
+      column: "right",
+      className: "pt-6 border-t border-[#C9A961]",
       heading: {
-        path: 'interests.heading',
-        fallback: 'INTERESTS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
+        path: "interests.heading",
+        fallback: "INTERESTS",
+        className: "text-sm font-bold text-[#C9A961] tracking-wide uppercase",
       },
-      listPath: 'interests.items[0].items',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
-      itemSeparator: ', ',
+      listPath: "interests.items[0].items",
+      itemClassName: "text-xs text-neutral-800",
+      containerClassName: "flex flex-col gap-1 mt-2 text-xs",
+      itemSeparator: ", ",
     },
 
     // Achievements Section - Left Column
     {
-      id: 'achievements',
-      break: false,
-      type: 'inline-list-section',
-      column: 'right',
-      className: 'pt-6 border-t border-[#C9A961]',
+      id: "achievements",
+      breakable: true,
+      type: "inline-list-section",
+      column: "right",
+      className: "pt-6 border-t border-[#C9A961]",
       heading: {
-        path: 'achievements.heading',
-        fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
+        path: "achievements.heading",
+        fallback: "ACHIEVEMENTS",
+        className: "text-sm font-bold text-[#C9A961] tracking-wide uppercase",
       },
-      listPath: 'achievements.items[0].items',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
-      itemSeparator: ', ',
+      listPath: "achievements.items[0].items",
+      itemClassName: "text-xs text-neutral-800",
+      containerClassName: "flex flex-col gap-1 mt-2 text-xs",
+      itemSeparator: ", ",
     },
   ],
 };

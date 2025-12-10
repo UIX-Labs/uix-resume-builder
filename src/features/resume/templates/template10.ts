@@ -22,7 +22,7 @@ const template10 = {
   sections: [
     // Header Section - Name and Title on one line
     {
-      id: 'header-name-title',
+      id: 'header',
       type: 'header',
       column: 'left',
       break: false,
@@ -46,7 +46,7 @@ const template10 = {
 
     // Description Section - Left Column
     {
-      id: 'header-description',
+      id: 'header',
       type: 'header',
       column: 'left',
       break: false,
@@ -62,7 +62,7 @@ const template10 = {
 
     // Contact Section - Right Column (at top)
     {
-      id: 'header-contact',
+      id: 'header',
       type: 'header',
       column: 'right',
       break: false,
@@ -83,6 +83,19 @@ const template10 = {
               fallback: '+91 432 2222 322',
               className: 'text-sm font-medium text-white leading-[1.21]',
             },
+            {
+              type: 'link',
+              path: 'personalDetails.items[0].links.linkedin.title',
+              href: 'personalDetails.items[0].links.linkedin.link',
+              className: 'text-sm font-medium text-white leading-[1.21] hover:underline',
+            },
+            {
+              type: 'link',
+              path: 'personalDetails.items[0].links.github.title',
+              href: 'personalDetails.items[0].links.github.link',
+              className: 'text-sm font-medium text-white leading-[1.21] hover:underline',
+            },
+          
           ],
         },
       },
@@ -355,7 +368,7 @@ const template10 = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
-      itemClassName: 'text-sm text-[#D1D5DB] inline-block ml-4.5',
+      itemClassName: 'text-sm text-[#D1D5DB] inline-block -ml-5',
       containerClassName: 'grid grid-cols-1 gap-3',
     },
 
@@ -365,7 +378,6 @@ const template10 = {
       type: 'inline-list-section',
       column: 'right',
       showBullet: true,
-      break: true,
       breakable: true,
       className: 'mt-7',
       heading: {

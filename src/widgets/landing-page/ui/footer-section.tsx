@@ -208,7 +208,7 @@ const FooterSection = () => {
   return (
     <section className="relative w-full h-full flex flex-col min-h-[100vh] md:min-h-0">
       <div className="w-full max-w-[1408px] mx-auto relative flex-1 flex flex-col px-4 sm:px-8 lg:px-16 py-8 lg:py-0">
-        <div className="flex justify-end pb-4 sm:pb-8 mt-8 sm:mt-12 lg:mt-[64px]">
+        <div className="flex justify-center md:justify-end pb-4 sm:pb-8 mt-8 sm:mt-12 lg:mt-[64px]">
           <FooterNavigation />
         </div>
 
@@ -292,7 +292,7 @@ const FooterSection = () => {
           </motion.div>
         ))}
 
-        {/* Mobile Overlays */}
+        {/* Mobile Overlays
         {overlays.map((overlay, i) => (
           <motion.div
             key={`${overlay.id}-mobile`}
@@ -318,7 +318,7 @@ const FooterSection = () => {
           >
             {overlay.content}
           </motion.div>
-        ))}
+        ))} */}
 
         {isMobile && (
           <MobileTextView

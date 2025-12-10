@@ -41,7 +41,7 @@ const template13 = {
           type: "inline-group",
           className:
             "text-sm text-[#2C5F5F] flex flex-row flex-wrap gap-1 mb-1",
-          separator: " · ",
+          separator: "• ",
           items: [
             {
               path: "personalDetails.items[0].phone",
@@ -62,11 +62,6 @@ const template13 = {
               type: "link",
               path: "personalDetails.items[0].links.github.title",
               href: "personalDetails.items[0].links.github.link",
-            },
-            {
-              path: "personalDetails.items[0].address",
-              fallback: "123 Anywhere St., Any City, ST 12345",
-              className: "text-sm text-[#2C5F5F]",
             },
           ],
         },
@@ -359,7 +354,7 @@ const template13 = {
     {
       id: "achievements",
       type: "badge-section",
-      break: false,
+      break: true,
       className: "flex flex-col mt-6",
       heading: {
         path: "achievements.heading",

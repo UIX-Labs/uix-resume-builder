@@ -113,12 +113,12 @@ const template6 = {
       id: "interests",
       type: "badge-section",
       column: "left",
-      break: false,
+      break: true,
       heading: {
         path: "interests.title",
         fallback: "INTERESTS",
         className:
-          "text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3",
+          "text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 mt-6",
       },
       listPath: "interests.items[0].items",
       itemPath: "",
@@ -141,7 +141,7 @@ const template6 = {
             path: "",
             fallback: "Contact",
             className:
-              "text-[#F2936F] text-base font-extrabold tracking-wider mb-3",
+              "text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-10",
           },
           items: [
             {
@@ -387,7 +387,7 @@ const template6 = {
         path: "achievements.title",
         fallback: "ACHIEVEMENTS",
         className:
-          "uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-1",
+          "uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-6",
       },
       listPath: "achievements.items[0].items",
       itemPath: "",

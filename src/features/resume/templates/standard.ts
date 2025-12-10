@@ -278,6 +278,7 @@ const aniketTemplate = {
     {
       id: "achievements",
       type: "badge-section",
+      break:true,
       column: "left",
       heading: {
         path: "achievements.heading",

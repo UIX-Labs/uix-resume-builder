@@ -35,16 +35,16 @@ const enzoTemplate1 = {
         profileImage: {
           type: "image",
           path: "personalDetails.items[0].profilePicturePublicUrl",
-          fallback: "https://avatar.iran.liara.run/public",
+          fallback: "/images/profile.svg",
           className: "w-32 h-32 rounded-full object-cover bg-neutral-300",
-          alt: "Profile Picture",
+          alt: "Profile img",
         },
       },
     },
 
     // Contact Section - Left Column
     {
-      id: "contact",
+      id: "header",
       type: "header",
       column: "left",
       className: "mb-6",
@@ -333,6 +333,7 @@ const enzoTemplate1 = {
     {
       id: "certifications",
       type: "list-section",
+      break:true,
       column: "right",
       heading: {
         path: "certifications.heading",

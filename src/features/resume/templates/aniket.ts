@@ -277,6 +277,7 @@ const aniketTemplate1 = {
     {
       id: "achievements",
       type: "badge-section",
+      break: true,
       heading: {
         path: "achievements.heading",
         fallback: "Achievements",
@@ -285,8 +286,10 @@ const aniketTemplate1 = {
         divider: { variant: "line", className: "border-neutral-300" },
       },
       listPath: "achievements.items[0].items",
+      containerClassName: "flex flex-col gap-2",
+
       badgeClassName:
-        "flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium",
+        "flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs mt-2 font-medium",
     },
 
     // Certifications Section

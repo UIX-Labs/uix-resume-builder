@@ -199,7 +199,7 @@ const HeroSection = () => {
                 className="count-up-text"
                 onStart={undefined}
                 onEnd={undefined}
-              />
+              />+
             </span>{" "}
             professionals
           </span>

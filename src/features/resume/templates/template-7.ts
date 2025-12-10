@@ -19,7 +19,7 @@ const template7 = {
         profilePhoto: {
           type: "image",
           path: "personalDetails.items[0].profilePicturePublicUrl",
-          fallback: "https://avatar.iran.liara.run/public",
+          fallback: "/images/profile.svg",
           className:
             "w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover",
         },
@@ -54,7 +54,7 @@ const template7 = {
 
     // Contact Information Bar
     {
-      id: "contact-bar",
+      id: "header",
       type: "header",
       className:
         "border-b border-t border-black py-3 pl-14 -mx-6 bg-gray-50 mt-2",
@@ -287,6 +287,7 @@ const template7 = {
     {
       id: "achievements",
       type: "badge-section",
+      break:true,
       className: "px-8 pb-4",
       heading: {
         path: "achievements.heading",

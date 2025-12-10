@@ -244,7 +244,7 @@ const brianWayneTemplate = {
       id: "achievements",
       type: "badge-section",
       column: "left",
-      breakable: true,
+      break: true,
       heading: {
         path: "achievements.title",
         fallback: "Achievements",

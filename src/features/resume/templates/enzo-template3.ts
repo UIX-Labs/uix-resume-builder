@@ -44,7 +44,7 @@ const enzoTemplate3 = {
                     {
                       type: 'image',
                       path: 'personalDetails.items[0].profilePicturePublicUrl',
-                      fallback: 'https://avatar.iran.liara.run/public',
+                      fallback: '/images/profile.svg',
                       className: 'w-24 h-24 rounded-full object-cover bg-white flex-shrink-0',
                     },
                     {

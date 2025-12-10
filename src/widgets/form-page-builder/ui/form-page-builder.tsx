@@ -60,6 +60,11 @@ import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidat
 import { usePdfGeneration } from "../hooks/use-pdf-generation";
 import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
 import { formatTimeAgo } from "../lib/time-helpers";
+import enzoTemplate1 from "@features/resume/templates/enzo-template1";
+import template6 from "@features/resume/templates/template6";
+import laurenChenTemplate from "@features/resume/templates/eren-templete2";
+import template11 from "@features/resume/templates/template11";
+import template10 from "@features/resume/templates/template10";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -947,7 +952,7 @@ export function FormPageBuilder() {
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
 
-        <div className="min-w-0 flex-1 flex justify-center">
+        <div className="min-w-0 flex-1 flex justify-center relative">
           <div ref={targetRef}>
             {selectedTemplate ? (
               <ResumeRenderer
@@ -969,11 +974,14 @@ export function FormPageBuilder() {
           <div
             style={{
               position: "absolute",
-              left: "0",
-              top: "0",
+              left: "-9999px",
+              top: "-9999px",
               width: "794px", // A4 width
               height: "0",
               overflow: "hidden",
+              visibility: "hidden",
+              opacity: 0,
+              zIndex: -9999,
               pointerEvents: "none",
             }}
             aria-hidden="true"

@@ -104,7 +104,7 @@
         "state": "California",
         "country": "United States",
         "pincode": "94102",
-        "profilePicturePublicUrl": "https://example.com/profile.jpg",
+        "profilePicturePublicUrl": "/images/profile.svg",
         "jobTitle": "Senior Software Engineer"
       }
     ]

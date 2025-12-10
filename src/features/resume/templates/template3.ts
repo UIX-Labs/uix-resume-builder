@@ -296,6 +296,7 @@ const annaFieldTemplate = {
     {
       id: 'achievements',
       type: 'badge-section',
+      break:true,
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',

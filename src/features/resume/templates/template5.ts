@@ -420,7 +420,7 @@ const template5 = {
       id: "achievements",
       type: "badge-section",
       column: "right",
-      break: false,
+      break: true,
       className: "mt-6",
       heading: {
         path: "achievements.title",

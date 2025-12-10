@@ -10,6 +10,7 @@ import { cn } from "@shared/lib/cn";
 import { trackEvent } from "@/shared/lib/analytics/percept";
 import { useState } from "react";
 import { MobileTextView } from "./mobile-text-view";
+import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
 
 export interface MobileSidebarProps {
   isOpen: boolean;
@@ -133,7 +134,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
                   <div className="flex items-center gap-2">
                     <Image
-                      src="/images/Pika-Resume.png"
+                      src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"}
                       alt="Pika Resume"
                       width={40}
                       height={40}

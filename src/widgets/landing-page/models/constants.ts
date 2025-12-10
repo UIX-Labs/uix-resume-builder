@@ -1,3 +1,5 @@
+import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
+
 export const templates = Array.from({ length: 5 }, (_, i) => ({
   id: i + 1,
   image: "/images/template-dashboard.png",
@@ -6,7 +8,7 @@ export const templates = Array.from({ length: 5 }, (_, i) => ({
 
 export const testimonials = [
   {
-    img: "images/testinomials-1.png",
+    img: CLOUDINARY_IMAGE_BASE_URL + "/v1765386528/testinomials-1_vsbyto.png",
     text: `"Pika Resume made my work easier with LinkedIn import. My resume was ready in 3 minutes with good formatting and clear structure."`,
     name: "Akash Agrawal",
     role: "Zepto",
@@ -14,15 +16,15 @@ export const testimonials = [
   },
 
   {
-    img: "images/testinomials-2.png",
-    text: `"If you want to grab a recruiter’s attention, Pika Resume is the way to go."`,
+    img: CLOUDINARY_IMAGE_BASE_URL + "/v1765386530/testinomials-2_k9mlpp.png",
+    text: `"If you want to grab a recruiter's attention, Pika Resume is the way to go."`,
     name: "Parul",
     role: "ServiceNow",
     position: "Staff Software Engineer",
   },
 
   {
-    img: "images/testinomials-3.png",
+    img: CLOUDINARY_IMAGE_BASE_URL + "/v1765386533/testinomials-3_naru9m.png",
     text: `"Pika intelligence helped me build my resume according to the JD. It was ready very quickly and presented my skills clearly."`,
     name: "Akshat Bhargav",
     role: "TikTok",
@@ -30,8 +32,8 @@ export const testimonials = [
   },
 
   {
-    img: "images/testinomials-4.png",
-    text: `"Pika Resume suggests improvements and turns the boring points in your experience into interesting ones. It helps present your work in a way that catches recruiters’ attention."`,
+    img: CLOUDINARY_IMAGE_BASE_URL + "/v1765386530/testinomials-4_qhphut.png",
+    text: `"Pika Resume suggests improvements and turns the boring points in your experience into interesting ones. It helps present your work in a way that catches recruiters' attention."`,
     name: "Shivam Sharma",
     role: "Uber",
     position: "Engineering Manager",

@@ -7,6 +7,7 @@ import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { CLOUDINARY_IMAGE_BASE_URL } from '@shared/lib/constants';
 
 interface LinkedInModalProps {
   isOpen: boolean;
@@ -132,7 +133,7 @@ export default function LinkedinIntegrationCard() {
           <div className="absolute -left-[150px] -top-[214px] w-[550px] h-[500px] rounded-full opacity-100 bg-[linear-gradient(136deg,rgba(37,122,255,1)_30%,rgba(23,23,23,1)_68%)] blur-[100px]" />
 
           <div className="absolute right-[-29px] -top-[7px] w-[344px] h-[266px] opacity-10 rotate-45">
-            <Image src="/images/image-14.svg" alt="Background decoration" fill className="object-cover" />
+            <Image src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386527/image-14_uckcwl.svg"} alt="Background decoration" fill className="object-cover" />
           </div>
 
           <div className="absolute -left-[21px] top-[150px] w-[238px] h-[246px] opacity-25 rounded-[12px]">

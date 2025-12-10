@@ -13,6 +13,7 @@ import { RoastLoading } from './components/roast-loading';
 import { TypewriterRoast } from './components/typewriter-roast';
 import Fire from './components/fire';
 import Header from '@widgets/landing-page/ui/header-section';
+import { CLOUDINARY_IMAGE_BASE_URL } from '@shared/lib/constants';
 
 export default function RoastPage() {
   const [isDragging, setIsDragging] = useState(false);
@@ -185,21 +186,21 @@ export default function RoastPage() {
 				<div className="relative w-full">
 					<div className="relative w-full md:h-[280px] lg:h-[320px]">
 						<Image
-							src="/images/template-1.svg"
+							src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386542/template-1_fjrdnu.svg"}
 							alt="Resume Template 1"
 							width={300}
 							height={400}
 							className="absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[300px] opacity-70 rotate-[15deg] z-[-1]"
 						/>
 						<Image
-							src="/images/template-2.svg"
+							src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386540/template-2_zbdojf.svg"}
 							alt="Resume Template 2"
 							width={300}
 							height={400}
 							className="absolute top-[30%] right-[25%] md:right-[30%] w-[100px] md:w-[300px] opacity-70 rotate-[-15deg] z-[-1]"
 						/>
 						<Image
-							src="/images/template-3.svg"
+							src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386537/template-3_skituu.svg"}
 							alt="Resume Template 3"
 							width={280}
 							height={350}

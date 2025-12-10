@@ -9,6 +9,7 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileSidebar } from "./mobile-sidebar";
 import { cn } from "@shared/lib/cn";
 import { trackEvent } from "@/shared/lib/analytics/percept";
+import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
 
 function Header() {
   const router = useRouter();
@@ -69,7 +70,7 @@ function Header() {
       <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
         <div className="flex items-center gap-2 md:gap-4">
           <Image
-            src="/images/Pika-Resume.png"
+            src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"}
             alt="AI"
             width={60}
             height={60}

@@ -11,6 +11,7 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState } from "react";
 import { trackEvent } from "@/shared/lib/analytics/percept";
 import getCurrentStatsQuery from "../api/query";
+import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -47,7 +48,7 @@ const HeroSection = () => {
       id: "custom-templates",
       content: (
         <div className="overlay-item overflow-hidden z-10 rounded-3xl glass-card1">
-          <img src="images/templates.svg" alt="Template 1" />
+          <img src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386543/templates_yifags.svg"} alt="Template 1" />
         </div>
       ),
       desktopPosition: { top: "80%", left: "-7%" },
@@ -81,7 +82,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item">
           <img
-            src="images/image-hired.svg"
+            src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386539/image-hired_ic0slp.svg"}
             alt="Hired at Meta"
             className="w-full h-auto"
           />

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { CLOUDINARY_IMAGE_BASE_URL } from '@shared/lib/constants';
 
 export function OurVision() {
 	return (
@@ -6,7 +7,7 @@ export function OurVision() {
 			<div className="relative flex flex-col items-center justify-center">
 				<div className="absolute top-[118px] right-[250px] w-[206px] h-[206px] hidden lg:block">
 					<Image
-						src="/images/sphere-dynamic-color.svg"
+						src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386525/sphere-dynamic-color_sxtipd.svg"}
 						alt="Decorative sphere"
 						width={206}
 						height={206}

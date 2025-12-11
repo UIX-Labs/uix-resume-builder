@@ -208,7 +208,7 @@ export function Sidebar() {
     // Always invalidate when user explicitly navigates away via logo click
     queryClient.invalidateQueries({ queryKey: ["resumes"] });
     queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
-    router.push("/dashboard");
+    router.push("/resumes");
   };
 
   useEffect(() => {

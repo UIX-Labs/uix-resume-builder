@@ -174,8 +174,7 @@ const enjiTemplate = {
       columns: [
         {
           type: "inline-group",
-          separator: " — ",
-          containerClassName: "flex items-center gap-1",
+          containerClassName: "flex items-center gap-5",
           className: "flex-1",
           items: [
             {
@@ -196,13 +195,13 @@ const enjiTemplate = {
           type: "duration",
           path: "duration",
           fallback: "Oct 2018 - Present",
-          className: "text-[12px] text-slate-500 whitespace-nowrap ml-4",
+          className: "text-[12px] text-slate-500 whitespace-nowrap ml-auto",
         },
       ],
       gridTemplateColumns: "128px 1fr auto",
       className: "px-16 pt-8 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-baseline gap-4 px-16 py-2",
+      rowClassName: "items-baseline px-16 py-2",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -233,19 +232,30 @@ const enjiTemplate = {
           items: [
             {
               type: "inline-group",
-              separator: " — ",
-              containerClassName: "flex items-center gap-1",
+              containerClassName: "flex items-center justify-between gap-1",
               className: "",
               items: [
                 {
-                  type: "text",
-                  path: "company",
-                  className: "text-[12px] font-semibold text-slate-900",
+                  type: "inline-group",
+                  containerClassName: "flex items-center gap-1",
+                  className: "",
+                  items: [
+                    {
+                      type: "text",
+                      path: "company",
+                      className: "text-[12px] font-semibold text-slate-900",
+                    },
+                    {
+                      type: "text",
+                      path: "position",
+                      className: "text-slate-700",
+                    },
+                  ],
                 },
                 {
-                  type: "text",
-                  path: "position",
-                  className: "text-slate-700",
+                  type: "duration",
+                  path: "duration",
+                  className: "text-[12px] text-slate-500 whitespace-nowrap ml-auto",
                 },
               ],
             },
@@ -262,16 +272,16 @@ const enjiTemplate = {
             },
           ],
         },
-        {
-          type: "duration",
-          path: "duration",
-          className: "text-[12px] text-slate-500 whitespace-nowrap ml-4",
-        },
+        // {
+        //   type: "duration",
+        //   path: "duration",
+        //   className: "text-[12px] text-slate-500 whitespace-nowrap ml-4",
+        // },
       ],
       gridTemplateColumns: "128px 1fr auto",
       className: "px-16 pt-6 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -329,7 +339,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -367,7 +377,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -425,7 +435,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr auto",
       className: "px-16 pt-6 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -463,7 +473,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -501,7 +511,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start gap-4 px-16 pt-4 pb-4",
+      rowClassName: "items-start px-16 pt-4 pb-4",
       // No divider for the last section
     },
   ],

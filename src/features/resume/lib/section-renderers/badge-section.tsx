@@ -107,7 +107,7 @@ export function renderBadgeSection(
       className={cn(shouldBlur && "blur-[2px] pointer-events-none")}
       style={wrapperStyle}
     >
-      {shouldHighlight && <SparkleIndicator />}
+      {/* {shouldHighlight && <SparkleIndicator />} */}
       <div className={cn("flex flex-col", section.heading.className)}>
         {section.heading && (
           <p data-item="heading">

@@ -463,18 +463,18 @@ export function FormPageBuilder() {
   // Check if there are any suggestions in the form data
   const hasSuggestions = Boolean(
     formData &&
-    Object.values(formData).some((section) => {
-      if (
-        section &&
-        typeof section === "object" &&
-        "suggestedUpdates" in section
-      ) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-          .suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-      }
-      return false;
-    })
+      Object.values(formData).some((section) => {
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      })
   );
 
   async function generateAndSaveThumbnail() {
@@ -879,7 +879,7 @@ export function FormPageBuilder() {
       // Check if suggestions were actually applied
       const hasChanged = isArrayField
         ? JSON.stringify(updatedFieldValue) !==
-        JSON.stringify(currentFieldValue)
+          JSON.stringify(currentFieldValue)
         : updatedFieldValue !== currentFieldValue;
 
       if (!hasChanged) {

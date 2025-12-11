@@ -974,13 +974,11 @@ export function FormPageBuilder() {
           <div
             style={{
               position: "absolute",
-              left: "-9999px",
-              top: "-9999px",
+              left: "0",
+              top: "0",
               width: "794px", // A4 width
               height: "0",
               overflow: "hidden",
-              opacity: 0,
-              zIndex: -9999,
               pointerEvents: "none",
             }}
             aria-hidden="true"
@@ -989,7 +987,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, true)}
+                  data={getCleanDataForRenderer(formData ?? {}, false)}
                 />
               )}
             </div>

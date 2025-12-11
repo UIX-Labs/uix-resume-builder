@@ -32,7 +32,7 @@ function AboutPage() {
 				<div className="hidden lg:block relative w-full max-w-[995px] mx-auto px-4 -mt-36 min-h-[700px]">
 					<div className="absolute w-[364px] h-[664px] left-[315px] top-0 z-10">
 						<Image
-							src="/images/Group-35.png"
+							src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473849/Group-35_igkhhr.png"
 							alt="Group 35"
 							fill
 							className="object-cover"
@@ -58,7 +58,7 @@ function AboutPage() {
 							Meet <span className="font-black">Resume Builder</span>
 						</h2>
 						<img
-							src="/images/Group-35.png"
+							src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473849/Group-35_igkhhr.png"
 							alt="Group 35"
 							fill
 							className="object-cover"

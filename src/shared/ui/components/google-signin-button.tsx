@@ -16,7 +16,7 @@ export default function GoogleSignInButton() {
       className="py-8 w-[280px] bg-[rgba(12,17,24,1)] text-white text-lg font-semibold rounded-xl border-2 border-white hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer"
     >
       <div className="flex items-center justify-center gap-3">
-        <Image src="/images/google.svg" alt="Google logo" width={24} height={24} />
+        <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/google-logo_c1xk5c.svg" alt="Google logo" width={24} height={24} />
         Continue with Google
       </div>
     </Button>

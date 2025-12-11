@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { companiesLeft, companiesRight } from "../models/constants";
+import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
 
 export function AITailorSection() {
   const [highlightColor, setHighlightColor] = useState("rgb(227, 227, 227)");
@@ -194,8 +195,8 @@ export function AITailorSection() {
                         activeCompany
                           ? [...companiesLeft, ...companiesRight].find(
                               (c) => c.role === activeCompany
-                            )?.logo || "/images/Pika-Resume.png"
-                          : "/images/Pika-Resume.png"
+                            )?.logo || CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"
+                          : CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"
                       }
                       alt={activeCompany || "UIX Labs"}
                       fill

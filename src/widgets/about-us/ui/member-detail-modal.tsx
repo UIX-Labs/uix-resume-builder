@@ -138,7 +138,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
               </div>
             </div>
             <div className="absolute bottom-0 right-0 pointer-events-none overflow-hidden hidden md:block">
-              <Image src="/images/star-decoration.svg" alt="" width={120} height={120} />
+              <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473867/star-decoration_liglaw.svg" alt="" width={120} height={120} />
             </div>
             {/* </div> */}
           </div>

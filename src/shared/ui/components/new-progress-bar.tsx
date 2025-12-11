@@ -129,7 +129,7 @@ export function NewProgressBar({
       <div
         className="w-full max-w-3xl px-12 py-8 rounded-[36px] shadow-xl bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: 'url(/images/progress-bar-bg.svg)',
+          backgroundImage: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/progress-bar-bg_mbl4zb.svg',
         }}
       >
         <div className="flex flex-col gap-4 items-center">

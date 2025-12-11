@@ -133,6 +133,9 @@ export default function RoastPage() {
 
   const onUploadClick = () => {
     fileInputRef.current?.click()
+    trackEvent('roast_resume_upload_click', {
+      timestamp: new Date().toISOString(),
+    })
   }
 
   const handleUploadKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

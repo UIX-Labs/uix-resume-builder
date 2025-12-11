@@ -16,6 +16,7 @@ interface FileUploadProps {
   maxFileSize?: number;
   onPendingChange?: (pending: boolean) => void;
   renderAsOverlay?: boolean;
+  onUploadClick?: () => void;
 }
 
 export function FileUpload({
@@ -28,6 +29,7 @@ export function FileUpload({
   maxFileSize = 10,
   onPendingChange,
   renderAsOverlay = false,
+  onUploadClick,
 }: FileUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
@@ -69,6 +71,7 @@ export function FileUpload({
   };
 
   const handleButtonClick = () => {
+    onUploadClick?.();
     fileInputRef.current?.click();
   };
 

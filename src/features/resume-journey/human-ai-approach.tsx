@@ -7,7 +7,7 @@ export function HumanAiApproach() {
       <div className="lg:hidden flex flex-col items-center text-center">
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
           <Image
-            src="/images/Union.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/Union_sgfml5.svg"
             alt="Union icon"
             width={92}
             height={97}
@@ -55,7 +55,7 @@ export function HumanAiApproach() {
         {/* Union Icon - Right Side */}
         <div className="absolute left-[587px] top-8 w-[92px] h-[97px]">
           <Image
-            src="/images/Union.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/Union_sgfml5.svg"
             alt="Union icon"
             width={92}
             height={97}

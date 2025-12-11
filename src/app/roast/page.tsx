@@ -168,7 +168,7 @@ export default function RoastPage() {
             <span>AI Powered</span>
 
             <Image
-              src='/images/auto_awesome.svg'
+              src='https://res.cloudinary.com/dkxocdrky/image/upload/v1765473863/auto_awesome_fi5kfd.svg'
               alt='AI'
               width={14}
               height={14}

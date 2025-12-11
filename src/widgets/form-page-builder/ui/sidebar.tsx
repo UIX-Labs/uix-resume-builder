@@ -374,7 +374,7 @@ export function Sidebar() {
             <div
               className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
               style={{
-                backgroundImage: "url('/images/bg-gradient.svg')",
+                backgroundImage: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473844/bg-gradient_ivodis.svg",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -398,7 +398,7 @@ export function Sidebar() {
                   <>
                     Pika Intelligence
                     <Image
-                      src="/images/rat.png"
+                      src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/rat_q2bkol.png"
                       alt="Pika Intelligence"
                       width={40}
                       height={40}
@@ -410,7 +410,7 @@ export function Sidebar() {
           ) : (
             <div className="w-[200px] mt-4 mx-auto mb-2">
               <Image
-                src="/images/pika-intelligence.svg"
+                src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473838/pika-intelligence_yai0zt.svg"
                 alt="Pika Intelligence"
                 width={217}
                 height={72}

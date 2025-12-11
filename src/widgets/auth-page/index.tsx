@@ -355,8 +355,8 @@ export default function AuthPageWidget() {
                     <Image
                       src={
                         showPassword.password
-                          ? "/images/eye-off.svg"
-                          : "/images/eye-open.svg"
+                          ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
+                          : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
                       }
                       alt={
                         showPassword.password
@@ -575,8 +575,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.password
-                            ? "/images/eye-off.svg"
-                            : "/images/eye-open.svg"
+                            ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
+                            : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
                         }
                         alt={
                           showPassword.password
@@ -624,8 +624,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.confirmPassword
-                            ? "/images/eye-off.svg"
-                            : "/images/eye-open.svg"
+                            ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
+                            : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
                         }
                         alt={
                           showPassword.confirmPassword

@@ -8,32 +8,32 @@ const services = [
 	{
 		id: 1,
 		title: 'Practical and clean resume templates',
-		icon: '/images/epereince.svg',
+		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
 	},
 	{
 		id: 2,
 		title: 'AI Builder intelligence for corrections',
-		icon: '/images/epereince.svg',
+		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
 	},
 	{
 		id: 3,
 		title: 'Tailored resume for the Job',
-		icon: '/images/epereince.svg',
+		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
 	},
 	{
 		id: 4,
 		title: 'Community support for resume review and mentorship',
-		icon: '/images/epereince.svg',
+		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
 	},
 ];
 
 // Company logos data array
 const companyLogos = [
-	{ id: 1, src: '/images/meta-logo.svg', alt: 'Meta' },
-	{ id: 2, src: '/images/google.svg', alt: 'Google' },
-	{ id: 3, src: '/images/apple-logo.svg', alt: 'Apple' },
-	{ id: 4, src: '/images/linkedin.svg', alt: 'LinkedIn' },
-	{ id: 5, src: '/images/amazon-logo.svg', alt: 'Amazon' },
+	{ id: 1, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473845/meta-logo_cm0zv5.svg', alt: 'Meta' },
+	{ id: 2, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/google_jsze6m.svg', alt: 'Google' },
+	{ id: 3, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/apple-logo_v7tcjv.svg', alt: 'Apple' },
+	{ id: 4, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/linkedin_tihsl7.svg', alt: 'LinkedIn' },
+	{ id: 5, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473839/amazon-logo_ezflww.svg', alt: 'Amazon' },
 ];
 
 function Innovation() {
@@ -96,7 +96,7 @@ function Innovation() {
 								<div className="flex items-center gap-1">
 									{[...Array(5)].map((_, i) => (
 										<Image
-											src="/images/Star.svg"
+											src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/Star_adbmig.svg"
 											width={18}
 											height={18}
 											alt=""

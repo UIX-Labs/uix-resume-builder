@@ -142,7 +142,7 @@ export function StringsInput({
                     )}
                     onClick={() => handlePlusClick(index)}
                   >
-                    <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
+                    <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/plus_yeqxin.svg" alt="plus" width={16} height={16} />
                   </button>
                 </SortableItem>
               );

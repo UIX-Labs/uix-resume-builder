@@ -17,7 +17,7 @@ export function SuccessStories() {
         <div className="lg:hidden flex flex-col items-center text-center">
           <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
             <Image
-              src="/images/moon.svg"
+              src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473876/moon_xgvfph.svg"
               alt="Moon icon"
               width={80}
               height={80}
@@ -62,7 +62,7 @@ export function SuccessStories() {
           {/* Moon Icon - Top */}
           <div className="absolute left-[126px] top-0 w-20 h-20">
             <Image
-              src="/images/moon.svg"
+              src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473876/moon_xgvfph.svg"
               alt="Moon icon"
               width={80}
               height={80}

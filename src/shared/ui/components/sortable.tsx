@@ -25,7 +25,7 @@ export function SortableItem({ children, id, className }: PropsWithChildren<{ id
         {...listeners}
         className={cn('absolute cursor-grab top-0 left-0 -translate-x-full')}
       >
-        <Image src="/images/drag.svg" alt="drag" width={24} height={24} />
+        <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473869/drag_msxj9a.svg" alt="drag" width={24} height={24} />
       </button>
 
       {children}

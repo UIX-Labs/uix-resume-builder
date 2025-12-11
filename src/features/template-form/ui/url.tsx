@@ -42,7 +42,7 @@ export const UrlInput = ({
       <div className="absolute top-0 right-2 bottom-0 flex items-center justify-center text-muted-foreground">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger className="cursor-pointer">
-            <Image src="/images/link.svg" alt="link" width={16} height={16} />
+            <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473855/link_lmjmp5.svg" alt="link" width={16} height={16} />
           </PopoverTrigger>
           <PopoverContent onClick={(e) => e.stopPropagation()}>
             <Input

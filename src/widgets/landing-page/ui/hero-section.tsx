@@ -68,7 +68,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item z-10 opacity-[100%]">
           <img
-            src="images/resume-score-img.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/resume-score-img_jusb9j.svg"
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -100,7 +100,7 @@ const HeroSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           <img
-            src="images/color-palete.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473838/color-palete_iwyzvj.svg"
             alt="Hired at Meta"
             className="w-full h-auto"
           />

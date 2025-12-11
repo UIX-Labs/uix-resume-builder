@@ -66,7 +66,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
           className="absolute top-2 right-2 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-[#0C1118] border-2 border-white hover:bg-[#1a2230] transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <Image src="/images/close.svg" alt="close-icon" width={40} height={40} className="rotate-45" />
+          <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/close_uvqeek.svg" alt="close-icon" width={40} height={40} className="rotate-45" />
         </button>
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-[198px] py-[176px]">
@@ -78,7 +78,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
             <div className="w-[539px] flex flex-col items-center justify-center p-2 bg-[#0C1118] border border-[#959DA8] rounded-[20px] shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
               <div className="w-full h-12 flex items-center">
                 <div className="flex items-center px-0 gap-1 flex-1">
-                  <Image src="/images/linkedin.svg" alt="img" height={25} width={25} />
+                  <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/linkedin_tihsl7.svg" alt="img" height={25} width={25} />
 
                   <input
                     type="text"
@@ -138,7 +138,7 @@ export default function LinkedinIntegrationCard() {
 
           <div className="absolute -left-[21px] top-[150px] w-[238px] h-[246px] opacity-25 rounded-[12px]">
             <Image
-              src="/images/resume-score-img.svg"
+              src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/resume-score-img_jusb9j.svg"
               alt="LinkedIn decoration"
               fill
               className="object-cover rounded-[12px]"

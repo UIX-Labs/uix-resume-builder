@@ -20,7 +20,7 @@ const WishlistSuccessModal = ({ isOpen, onClose }: WishlistSuccessModalProps) =>
       <DialogContent
         className="!max-w-3xl  max-h-[80vh] overflow-y-auto rounded-[36px] !p-0 flex flex-col [&_[data-slot=dialog-close]]:text-white [&_[data-slot=dialog-close]_svg]:size-6 [&_[data-slot=dialog-close]_svg]:w-6 [&_[data-slot=dialog-close]_svg]:h-6"
         style={{
-          backgroundImage: 'url(/images/waitlist-success.svg)',
+          backgroundImage: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473849/waitlist-success_ucgu2m.svg',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

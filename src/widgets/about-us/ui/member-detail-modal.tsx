@@ -44,9 +44,9 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
 
   // Mock data for work history and style tags
   const workHistory = [
-    { company: 'Google', logo: '/images/google-logo.svg' },
-    { company: 'Microsoft', logo: '/images/microsoft-logo.svg' },
-    { company: 'Apple', logo: '/images/apple-logo.svg' },
+    { company: 'Google', logo: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/google-logo_c1xk5c.svg' },
+    { company: 'Microsoft', logo: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/microsoft-logo_ir83qh.svg' },
+    { company: 'Apple', logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/apple-logo_v7tcjv.svg" },
   ];
 
   const styleTags = [
@@ -89,7 +89,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     {/* LinkedIn Icon */}
                     <div className="flex-shrink-0 w-6 h-6 md:w-8 md:h-8 ml-3 md:ml-4">
                       <Image
-                        src="/images/linkedin.svg"
+                        src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/linkedin_tihsl7.svg"
                         alt="LinkedIn"
                         width={32}
                         height={32}

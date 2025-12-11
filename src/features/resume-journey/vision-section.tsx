@@ -7,7 +7,7 @@ export function VisionSection() {
       <div className="lg:hidden flex flex-col items-center text-center">
         <div className="w-[120px] h-[60px] sm:w-[160px] sm:h-[80px] mb-4">
           <Image
-            src="/images/vision.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473869/vision_bm5rhj.svg"
             alt="Decorative geometric shape"
             width={160}
             height={80}
@@ -40,7 +40,7 @@ export function VisionSection() {
         {/* Decorative Geometric Shape - Left Side */}
         <div className="absolute left-0 top-[73px] w-[160px] h-[80px]">
           <Image
-            src="/images/vision.svg"
+            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473869/vision_bm5rhj.svg"
             alt="Decorative geometric shape"
             width={160}
             height={80}

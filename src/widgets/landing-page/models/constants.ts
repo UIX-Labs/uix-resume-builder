@@ -2,7 +2,7 @@ import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
 
 export const templates = Array.from({ length: 5 }, (_, i) => ({
   id: i + 1,
-  image: "/images/template-dashboard.png",
+  image: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473839/template-dashboard_walckp.png",
   name: `Template ${i + 1}`,
 }));
 
@@ -43,21 +43,21 @@ export const testimonials = [
 export const companiesLeft = [
   {
     name: "Google",
-    logo: "images/google-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/google-logo_c1xk5c.svg",
     bgColor: "rgba(255, 241, 200, 1)",
     position: { x: 0, y: 0 },
     role: "UX Designer",
   },
   {
     name: "Meta",
-    logo: "images/meta-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473845/meta-logo_cm0zv5.svg",
     bgColor: "rgba(214, 235, 255, 1)",
     position: { x: 44, y: 96 },
     role: "Software Engineer",
   },
   {
     name: "Microsoft",
-    logo: "images/microsoft-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/microsoft-logo_ir83qh.svg",
     bgColor: "rgba(225, 255, 190, 1)",
     position: { x: 88, y: 192 },
     role: "Product Manager",
@@ -67,21 +67,21 @@ export const companiesLeft = [
 export const companiesRight = [
   {
     name: "Apple",
-    logo: "images/apple-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/apple-logo_v7tcjv.svg",
     bgColor: "rgb(0,0,0)",
     position: { x: 106, y: 0 },
     role: "HR, Marketing",
   },
   {
     name: "NVIDIA",
-    logo: "images/nvidia-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473846/nvidia-logo_ohdrwd.svg",
     bgColor: "rgba(206, 255, 120, 1)",
     position: { x: 53, y: 96 },
     role: "Data Scientist",
   },
   {
     name: "Amazon",
-    logo: "images/amazon-logo.svg",
+    logo: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473839/amazon-logo_ezflww.svg",
     bgColor: "rgb(255, 227, 190)",
     position: { x: 0, y: 192 },
     role: "Sales Engineer",

@@ -138,7 +138,7 @@ export default function AnalyzerModal({
       <DialogContent
         className="!max-w-3xl max-h-[80vh] overflow-y-auto rounded-[36px]"
         style={{
-          backgroundImage: "url(/images/background.svg)",
+          backgroundImage: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/background_zbjgtc.svg",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -148,7 +148,7 @@ export default function AnalyzerModal({
           <DialogTitle className="flex items-center justify-center">
             <span className="flex items-center gap-2 text-2xl font-semibold text-white">
               <img
-                src="/images/auto_awesome.svg"
+                src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473863/auto_awesome_fi5kfd.svg"
                 alt="Stars"
                 className="w-6 h-6"
               />

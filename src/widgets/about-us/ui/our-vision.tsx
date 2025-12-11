@@ -19,7 +19,7 @@ export function OurVision() {
 					<div className="flex flex-col items-center gap-2">
 						<div className="w-[50px] h-[50px] md:w-[66px] md:h-[66px] rounded-[16px] md:rounded-[24px] overflow-hidden bg-black flex items-center justify-center">
 							<Image
-								src="/images/close.svg"
+								src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/close_uvqeek.svg"
 								alt="Vision icon"
 								width={50}
 								height={50}

@@ -143,7 +143,7 @@ export function Draggable({
                 className={cn('absolute cursor-pointer top-0 right-0 translate-x-full flex')}
                 onClick={() => handleDeleteClick(index)}
               >
-                <Image src="/images/delete.svg" alt="delete" width={24} height={24} />
+                <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473876/delete_lmavgn.svg" alt="delete" width={24} height={24} />
               </button>
 
               <div
@@ -159,7 +159,7 @@ export function Draggable({
                   onClick={() => handleCollapseClick(index)}
                 >
                   <Image
-                    src="/images/cheveron-up.svg"
+                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473877/cheveron-up_qfqjz5.svg"
                     alt="cheveron-up"
                     className={cn('transition-all duration-300', collapsed[index] && 'rotate-180')}
                     width={24}
@@ -175,7 +175,7 @@ export function Draggable({
                   )}
                   onClick={() => handlePlusClick(index)}
                 >
-                  <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
+                  <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/plus_yeqxin.svg" alt="plus" width={16} height={16} />
                 </button>
 
                 {!collapsed[index] ? (

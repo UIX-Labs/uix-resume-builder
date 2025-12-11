@@ -979,7 +979,6 @@ export function FormPageBuilder() {
               width: "794px", // A4 width
               height: "0",
               overflow: "hidden",
-              visibility: "hidden",
               opacity: 0,
               zIndex: -9999,
               pointerEvents: "none",

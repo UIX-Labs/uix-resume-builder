@@ -13,9 +13,9 @@ export function UserTracker() {
 
       setUserProperties({
         $email: user.email,
-        $name: user.firstName + " " + user?.lastName,
+        $name: user.firstName + " " + (user.lastName ? user.lastName : ""),
         $first_name: user.firstName,
-        $last_name: user?.lastName,
+        $last_name: user.lastName ? user.lastName : "",
         $is_verified: user.isVerified,
         $is_logged_in: user.isLoggedIn,
         $is_verified_account: user.isVerified

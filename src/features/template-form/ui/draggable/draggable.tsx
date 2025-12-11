@@ -59,7 +59,7 @@ function UnCollapsedState({
   const itemId = item.itemId;
 
   return (
-    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-y-1.5 gap-x-8 relative group">
+    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-y-1.5 gap-x-8 relative group mt-4">
       {Object.entries(item).map(([key, value]) => {
         if (!section[key]) return null;
 

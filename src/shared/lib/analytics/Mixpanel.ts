@@ -1,16 +1,20 @@
 "use client";
 
+import Percept from "@perceptinsight/percept-js";
 import mixpanel from "mixpanel-browser";
 
-let initialized = false;
+interface AnalyticsProps {
+  [key: string]: unknown;
+}
 
 const isProduction = process.env.NODE_ENV === "production";
 
-export function initAnalytics() {
-  if (initialized) return;
+let mixpanelInitialized = false;
+let perceptInitialized = false;
 
-  if (!isProduction) {
-    initialized = true;
+function initMixpanel(): void {
+  if (mixpanelInitialized || !isProduction) {
+    mixpanelInitialized = mixpanelInitialized || !isProduction;
     return;
   }
 
@@ -24,58 +28,102 @@ export function initAnalytics() {
     debug: !isProduction,
     track_pageview: true,
     persistence: "localStorage",
+    record_sessions_percent: 100,
+    record_heatmap_data: true,
   });
 
-  initialized = true;
+  mixpanelInitialized = true;
 }
 
-export function trackEvent(eventName: string, props: Record<string, any> = {}) {
+function initPercept(): void {
+  if (perceptInitialized || !isProduction) {
+    perceptInitialized = perceptInitialized || !isProduction;
+    return;
+  }
+
+  const projectToken = process.env.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN;
+  if (!projectToken) {
+    console.error("❌ Missing NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN");
+    return;
+  }
+
+  Percept.init(projectToken, {
+    autoTrackPageviews: true,
+    autoTrackRuntimeErrors: true,
+    autoTrackWebvitals: true,
+    autoTrackApiCalls: false,
+    autoCaptureClicks: true,
+    enableLogs: false,
+  });
+
+  perceptInitialized = true;
+}
+
+function ensureInitialized(): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.track(eventName, props);
+  if (!mixpanelInitialized) initMixpanel();
+  if (!perceptInitialized) initPercept();
 }
 
-export function startTimedEvent(eventName: string) {
+export function initAnalytics(): void {
+  ensureInitialized();
+}
+
+export function trackEvent(
+  eventName: string,
+  props: AnalyticsProps = {}
+): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.time_event(eventName);
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.track(eventName, props);
+  if (perceptInitialized) Percept.capture(eventName, props);
 }
 
-export function setUserId(userId: string) {
+export function startTimedEvent(eventName: string): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.identify(userId);
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.time_event(eventName);
+  if (perceptInitialized) Percept.timeEvent(eventName);
 }
 
-export function setUserProperties(props: Record<string, any>) {
+export function setUserId(userId: string): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.people.set(props);
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.identify(userId);
+  if (perceptInitialized) Percept.setUserId(userId);
 }
 
-export function setGlobalProperty(key: string, value: any) {
+export function setUserProperties(props: AnalyticsProps): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.register({ [key]: value });
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.people.set(props);
+  if (perceptInitialized) Percept.setUserProperties(props);
 }
 
-export function removeGlobalProperty(key: string) {
+export function setGlobalProperty(key: string, value: unknown): void {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.unregister(key);
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.register({ [key]: value });
+  if (perceptInitialized) Percept.setGlobalProperty(key, value);
 }
 
-export function getAllGlobalProperties() {
+export function removeGlobalProperty(key: string): void {
+  if (!isProduction) return;
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.unregister(key);
+  if (perceptInitialized) Percept.removeGlobalProperty(key);
+}
+
+export function getAllGlobalProperties(): Record<string, unknown> {
   if (!isProduction) return {};
-  if (!initialized) initAnalytics();
-  // Mixpanel doesn't expose a direct method to get all registered super properties synchronously in the same way,
-  // but we can try to get them if needed, or return empty.
-  // mixpanel.get_property() can get a specific one.
-  return {};
+  ensureInitialized();
+  if (!perceptInitialized) return {};
+  return Percept.getAllGlobalProperties();
 }
 
-export function clearAnalyticsData() {
+export async function clearAnalyticsData(): Promise<void> {
   if (!isProduction) return;
-  if (!initialized) initAnalytics();
-  mixpanel.reset();
+  ensureInitialized();
+  if (mixpanelInitialized) mixpanel.reset();
+  if (perceptInitialized) await Percept.clear();
 }

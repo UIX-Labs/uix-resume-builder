@@ -1,5 +1,6 @@
 import { convertHtmlToPdf } from "@entities/download-pdf/api";
 import { toast } from "sonner";
+import * as Sentry from "@sentry/nextjs";
 
 const PDF_STYLES = `
   <!DOCTYPE html>
@@ -99,8 +100,8 @@ export async function generatePdfFromHtml(
     toast.success("PDF downloaded successfully");
   } catch (error) {
     console.error("PDF generation error:", error);
+    Sentry.captureException(error);
     toast.error("Failed to generate PDF");
     throw error;
   }
 }
-

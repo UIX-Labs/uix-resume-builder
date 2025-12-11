@@ -1,32 +1,38 @@
-'use client';
+"use client";
 
-import { cn } from '@shared/lib/cn';
-import { Button } from '@shared/ui/components/button';
+import { cn } from "@shared/lib/cn";
+import { Button } from "@shared/ui/components/button";
 
-import type { EmblaOptionsType } from 'embla-carousel';
-import Autoplay from 'embla-carousel-autoplay';
-import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, Template } from '@entities/template-page/api/template-data';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileTextView } from './mobile-text-view';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import type { EmblaOptionsType } from "embla-carousel";
+import Autoplay from "embla-carousel-autoplay";
+import useEmblaCarousel from "embla-carousel-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
+import React, { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCachedUser } from "@shared/hooks/use-user";
+import {
+  useGetAllTemplates,
+  Template,
+} from "@entities/template-page/api/template-data";
+import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
+import { useMutation } from "@tanstack/react-query";
+import { createResume, updateResumeTemplate } from "@entities/resume";
+import { useIsMobile } from "@shared/hooks/use-mobile";
+import { MobileTextView } from "./mobile-text-view";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+import * as Sentry from "@sentry/nextjs";
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
     loop: true,
-    align: 'center',
+    align: "center",
     duration: 30,
   };
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 2000, stopOnInteraction: false })]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
+    Autoplay({ delay: 2000, stopOnInteraction: false }),
+  ]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -48,11 +54,14 @@ export function TemplateCarousel() {
 
     onSelect(emblaApi);
 
-    emblaApi.on('select', onSelect);
-    emblaApi.on('reInit', onSelect);
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
   }, [emblaApi, onSelect]);
 
-  const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+  const scrollTo = useCallback(
+    (index: number) => emblaApi?.scrollTo(index),
+    [emblaApi]
+  );
   const user = useCachedUser();
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -67,20 +76,20 @@ export function TemplateCarousel() {
   });
 
   const handleTemplateSelect = async (template: Template) => {
-    trackEvent('create_resume_click', {
-      source: 'landing_carousel',
-      method: 'use_template',
-      templateId: template.id
+    trackEvent("create_resume_click", {
+      source: "landing_carousel",
+      method: "use_template",
+      templateId: template.id,
     });
 
     if (!user) {
-      router.push('/auth');
+      router.push("/auth");
       return;
     }
 
     try {
       const data = await createResumeMutation.mutateAsync({
-        title: 'New Resume',
+        title: "New Resume",
         userInfo: {
           userId: user.id,
         },
@@ -93,7 +102,8 @@ export function TemplateCarousel() {
 
       router.push(`/resume/${data.id}`);
     } catch (error) {
-      console.error('Failed to create resume:', error);
+      console.error("Failed to create resume:", error);
+      Sentry.captureException(error);
     }
   };
 
@@ -114,7 +124,8 @@ export function TemplateCarousel() {
   const { data: templates } = useGetAllTemplates();
 
   // Limit templates to 3 on mobile, show all on desktop
-  const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
+  const displayTemplates =
+    isMobile && templates ? templates.slice(0, 3) : templates;
 
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[24px] md:rounded-[36px] overflow-hidden min-h-[556px] m-2 md:m-4">
@@ -145,9 +156,9 @@ export function TemplateCarousel() {
                 variant="default"
                 size="lg"
                 onClick={() => {
-                  trackEvent('navigation_click', {
-                    source: 'landing_carousel',
-                    destination: 'all_templates'
+                  trackEvent("navigation_click", {
+                    source: "landing_carousel",
+                    destination: "all_templates",
                   });
                 }}
                 className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto"
@@ -161,7 +172,10 @@ export function TemplateCarousel() {
         <div className="relative flex-1 flex flex-col pb-8 lg:pb-0">
           <div className="flex-1 flex items-center">
             <div className="w-full lg:pl-[61px]">
-              <div className="overflow-hidden w-full lg:w-[900px]" ref={emblaRef}>
+              <div
+                className="overflow-hidden w-full lg:w-[900px]"
+                ref={emblaRef}
+              >
                 <div className="flex gap-2 items-center">
                   {displayTemplates?.map((template) => (
                     <div key={template.id} className="group">
@@ -182,10 +196,12 @@ export function TemplateCarousel() {
                               <Button
                                 variant="secondary"
                                 size="lg"
-                                onClick={() => handleMobileTemplateClick(template)}
+                                onClick={() =>
+                                  handleMobileTemplateClick(template)
+                                }
                                 className={cn(
-                                  'cursor-pointer transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
-                                  'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl',
+                                  "cursor-pointer transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100",
+                                  "bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl"
                                 )}
                               >
                                 Use This Template
@@ -264,10 +280,10 @@ export function TemplateCarousel() {
                   key={index}
                   onClick={() => scrollTo(index)}
                   className={cn(
-                    'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',
+                    "h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b",
                     index === selectedIndex
-                      ? 'scale-110 bg-white/60 border-white/60 shadow-lg'
-                      : 'bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70',
+                      ? "scale-110 bg-white/60 border-white/60 shadow-lg"
+                      : "bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70"
                   )}
                 />
               ))}
@@ -289,7 +305,12 @@ export function TemplateCarousel() {
       </div>
 
       {/* Mobile Text View */}
-      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
+      {isMobile && (
+        <MobileTextView
+          isOpen={showMobileView}
+          onClose={() => setShowMobileView(false)}
+        />
+      )}
     </div>
   );
 }

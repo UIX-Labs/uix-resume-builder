@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
-import { sendAuthCodeToBackend } from '@/shared/lib/google-auth';
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { sendAuthCodeToBackend } from "@/shared/lib/google-auth";
+import * as Sentry from "@sentry/nextjs";
 
 export default function GoogleCallbackClient() {
   const searchParams = useSearchParams();
@@ -15,44 +16,49 @@ export default function GoogleCallbackClient() {
 
   useEffect(() => {
     const handleCallback = async () => {
-      const code = searchParams?.get('code');
-      const error = searchParams?.get('error');
+      const code = searchParams?.get("code");
+      const error = searchParams?.get("error");
 
       if (error) {
         setError(`Google authentication failed: ${error}`);
 
-        queryClient.removeQueries({ queryKey: ['user'] });
-        queryClient.removeQueries({ queryKey: ['userProfile'] });
+        queryClient.removeQueries({ queryKey: ["user"] });
+        queryClient.removeQueries({ queryKey: ["userProfile"] });
         setLoading(false);
         return;
       }
 
       if (!code) {
-        setError('No authorization code received from Google');
-        queryClient.removeQueries({ queryKey: ['user'] });
+        setError("No authorization code received from Google");
+        queryClient.removeQueries({ queryKey: ["user"] });
         setLoading(false);
         return;
       }
 
       try {
-        setSuccess('Authenticating...');
+        setSuccess("Authenticating...");
 
         const authResponse = (await sendAuthCodeToBackend(code)) as any;
-        if (authResponse.status === 'success') {
-          setSuccess('Authentication successful! Redirecting...');
-          queryClient.invalidateQueries({ queryKey: ['user'] });
-          queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+        if (authResponse.status === "success") {
+          setSuccess("Authentication successful! Redirecting...");
+          queryClient.invalidateQueries({ queryKey: ["user"] });
+          queryClient.invalidateQueries({ queryKey: ["userProfile"] });
           setTimeout(() => {
-            router.push('/dashboard');
+            router.push("/dashboard");
           }, 1000);
         } else {
-          setError(authResponse.message || 'Authentication failed');
-          queryClient.removeQueries({ queryKey: ['user'] });
+          setError(authResponse.message || "Authentication failed");
+          queryClient.removeQueries({ queryKey: ["user"] });
           setLoading(false);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to authenticate with backend');
-        queryClient.removeQueries({ queryKey: ['user'] });
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Failed to authenticate with backend"
+        );
+        Sentry.captureException(err);
+        queryClient.removeQueries({ queryKey: ["user"] });
         setLoading(false);
       }
     };
@@ -91,14 +97,14 @@ export default function GoogleCallbackClient() {
 
           <button
             type="button"
-            onClick={() => router.push('/auth')}
+            onClick={() => router.push("/auth")}
             className="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mr-2"
           >
             Try Again
           </button>
           <button
             type="button"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Go Back to Home

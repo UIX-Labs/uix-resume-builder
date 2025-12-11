@@ -8,6 +8,7 @@ import {
   type JoinCommunityResponse,
 } from "@entities/download-pdf/api";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+import * as Sentry from "@sentry/nextjs";
 
 interface WishlistModalProps {
   isOpen: boolean;
@@ -24,13 +25,14 @@ const WishlistModal = ({
 
   const handleJoinWaitlist = async () => {
     setIsJoining(true);
-    trackEvent('join_waitlist_click');
+    trackEvent("join_waitlist_click");
     try {
       const response = await joinCommunity();
       onClose();
       onJoinSuccess?.(response);
     } catch (error) {
       console.error("Failed to join waitlist:", error);
+      Sentry.captureException(error);
       toast.success("Successfully joined the waitlist!");
     } finally {
       setIsJoining(false);

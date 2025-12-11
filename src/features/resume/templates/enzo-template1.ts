@@ -111,7 +111,9 @@ const enzoTemplate1 = {
                   className: "text-neutral-800 flex-shrink-0",
                 },
                 {
+                  type: "link",
                   path: "personalDetails.items[0].links.linkedin.title",
+                  href: "personalDetails.items[0].links.linkedin.link",
                   fallback: "",
                   className: "text-xs text-neutral-800 break-all",
                 },

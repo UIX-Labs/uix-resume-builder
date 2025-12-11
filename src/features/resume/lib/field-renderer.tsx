@@ -146,14 +146,14 @@ export function renderField(
   }
 
   if (field.type === 'image') {
-    const src = resolvePath(data, field.path, field.fallback)?.replace(
-      /&amp;/g,
-      "&"
-    );
-    if (!src && !field.fallback) return null;
+  const src = resolvePath(data, field.path, field.fallback)?.replace(
+    /&amp;/g,
+    "&"
+  );    
+  if (!src && !field.fallback) return null;
 
     // Determine the actual image URL (use src if available, otherwise fallback)
-    const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
+ const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {
@@ -170,10 +170,8 @@ export function renderField(
     return (
       <img
         src={imageSrc}
-        crossOrigin={
-          isThumbnail && isExternalUrl(actualImageUrl) ? "anonymous" : undefined
-        }
-        alt={field.alt || "Image"}
+        crossOrigin={isThumbnail && isExternalUrl(actualImageUrl) ? 'anonymous' : undefined}
+        alt={field.alt || 'Image'}
         className={cn(field.className)}
       />
     );
@@ -278,8 +276,13 @@ export function renderField(
   }
 
   if (field.type === 'link') {
+    // First, check if the href path exists in the data (without fallback)
+    const hrefValue = resolvePath(data, field.href);
+
+    // If no href data exists at all, don't render the link field
+    if (!hrefValue || (typeof hrefValue === 'string' && hrefValue.trim() === '')) return null;
+
     const value = resolvePath(data, field.path, field.fallback);
-    if (!value) return null;
 
     let href = field.href;
     if (href && href.includes('{{value}}')) {
@@ -288,7 +291,15 @@ export function renderField(
       href = resolvePath(data, field.href);
     }
 
-    if (!href) return null;
+    // Check if href is actually a URL (starts with http://, https://, or mailto:)
+    const isValidUrl = href && typeof href === 'string' && 
+                      (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
+
+    // If link exists but is invalid, create a data URL that shows "Link not valid" message
+    if (!isValidUrl) {
+      href = '/error/invalid-link';
+    }
+
     return (
       <a href={href} className={field.className} target="_blank" rel="noopener noreferrer">
         {value}

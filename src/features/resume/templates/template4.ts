@@ -47,7 +47,7 @@ const brianWayneTemplate = {
       fields: {
         contact: {
           type: "contact-grid",
-          className: "flex flex-col gap-3",
+          className: "flex flex-col gap-1 mt-4",
           items: [
             // Email
             {
@@ -121,7 +121,7 @@ const brianWayneTemplate = {
                   type: "link",
                   path: "personalDetails.items[0].links.linkedin.title",
                   href: "personalDetails.items[0].links.linkedin.link",
-                  fallback: "LinkedIn",
+                  fallback: "",
                   className: "text-sm text-white hover:text-green-200",
                 },
               ],
@@ -141,7 +141,85 @@ const brianWayneTemplate = {
                   type: "link",
                   path: "personalDetails.items[0].links.github.title",
                   href: "personalDetails.items[0].links.github.link",
-                  fallback: "GitHub",
+                  fallback: "",
+                  className: "text-sm text-white hover:text-green-200",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-3",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 16,
+                  className: "text-white",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className: "text-sm text-white hover:text-green-200",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-3",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 16,
+                  className: "text-white",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className: "text-sm text-white hover:text-green-200",
+                },
+              ],
+            },
+            // Dribble
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-3",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 16,
+                  className: "text-white",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className: "text-sm text-white hover:text-green-200",
+                },
+              ],
+            },
+            // Behance
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-3",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 16,
+                  className: "text-white",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
                   className: "text-sm text-white hover:text-green-200",
                 },
               ],
@@ -156,7 +234,7 @@ const brianWayneTemplate = {
       id: "summary",
       type: "content-section",
       column: "left",
-      className: "flex flex-col gap-3 mt-2",
+      className: "flex flex-col gap-3",
       heading: {
         path: "personDetails.title",
         fallback: "Profile",
@@ -430,7 +508,7 @@ const brianWayneTemplate = {
                 className: "text-sm text-[rgb(56,76,65)]",
               },
             ],
-          },
+          },         
         ],
       },
     },

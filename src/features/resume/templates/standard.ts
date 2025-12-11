@@ -42,11 +42,37 @@ const aniketTemplate = {
               type: "link",
               path: "personalDetails.items[0].links.linkedin.title",
               href: "personalDetails.items[0].links.linkedin.link",
+              fallback: "",
             },
             {
               type: "link",
               path: "personalDetails.items[0].links.github.title",
               href: "personalDetails.items[0].links.github.link",
+              fallback: "",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.website.title",
+              href: "personalDetails.items[0].links.website.link",
+              fallback: "",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.youtube.title",
+              href: "personalDetails.items[0].links.youtube.link",
+              fallback: "",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.dribble.title",
+              href: "personalDetails.items[0].links.dribble.link",
+              fallback: "",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.behance.title",
+              href: "personalDetails.items[0].links.behance.link",
+              fallback: "",
             },
           ],
         },
@@ -278,7 +304,7 @@ const aniketTemplate = {
     {
       id: "achievements",
       type: "badge-section",
-      break:true,
+      break: true,
       column: "left",
       heading: {
         path: "achievements.heading",

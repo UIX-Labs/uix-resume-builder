@@ -127,7 +127,7 @@ const template5 = {
                   type: "link",
                   path: "personalDetails.items[0].links.linkedin.title",
                   href: "personalDetails.items[0].links.linkedin.link",
-                  fallback: "Divyam Malik",
+                  fallback: "",
                   className: "text-sm text-[#1a1a1a] font-normal underline",
                 },
               ],
@@ -146,7 +146,83 @@ const template5 = {
                   type: "link",
                   path: "personalDetails.items[0].links.github.title",
                   href: "personalDetails.items[0].links.github.link",
-                  fallback: "GitHub",
+                  fallback: "",
+                  className: "text-sm text-[#1a1a1a] font-normal underline mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 20,
+                  className: "text-[#5b7fc7]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className: "text-sm text-[#1a1a1a] font-normal underline mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 20,
+                  className: "text-[#5b7fc7]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className: "text-sm text-[#1a1a1a] font-normal underline mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 20,
+                  className: "text-[#5b7fc7]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className: "text-sm text-[#1a1a1a] font-normal underline mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 20,
+                  className: "text-[#5b7fc7]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
                   className: "text-sm text-[#1a1a1a] font-normal underline mt-1",
                 },
               ],

@@ -58,6 +58,10 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       links: {
         linkedin: { title: string; link: string };
         github: { title: string; link: string };
+        behance: { title: string; link: string };
+        dribble: { title: string; link: string };
+        website: { title: string; link: string };
+        youtube: { title: string; link: string };
       };
     }>;
     suggestedUpdates?: SuggestedUpdates;

@@ -136,7 +136,7 @@ const laurenChenTemplate = {
                       type: "link",
                       path: "personalDetails.items[0].links.linkedin.title",
                       href: "personalDetails.items[0].links.linkedin.link",
-                      fallback: "linkedin.com/in/lauren-chen",
+                      fallback: "",
                       className: "text-xs text-white font-normal",
                     },
                   ],
@@ -155,7 +155,83 @@ const laurenChenTemplate = {
                       type: "link",
                       path: "personalDetails.items[0].links.github.title",
                       href: "personalDetails.items[0].links.github.link",
-                      fallback: "github.com/lauren-chen",
+                      fallback: "",
+                      className: "text-xs text-white font-normal",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className: "flex items-center gap-2",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Globe",
+                      size: 14,
+                      className: "text-white",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.website.title",
+                      href: "personalDetails.items[0].links.website.link",
+                      fallback: "",
+                      className: "text-xs text-white font-normal",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className: "flex items-center gap-2",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Youtube",
+                      size: 14,
+                      className: "text-white",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.youtube.title",
+                      href: "personalDetails.items[0].links.youtube.link",
+                      fallback: "",
+                      className: "text-xs text-white font-normal",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className: "flex items-center gap-2",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Dribbble",
+                      size: 14,
+                      className: "text-white",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.dribble.title",
+                      href: "personalDetails.items[0].links.dribble.link",
+                      fallback: "",
+                      className: "text-xs text-white font-normal",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className: "flex items-center gap-2",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Palette",
+                      size: 14,
+                      className: "text-white",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.behance.title",
+                      href: "personalDetails.items[0].links.behance.link",
+                      fallback: "",
                       className: "text-xs text-white font-normal",
                     },
                   ],
@@ -313,6 +389,7 @@ const laurenChenTemplate = {
       column: "right",
       showBullet: true,
       break: true,
+      breakable:true,
       heading: {
         path: "skills.heading",
         fallback: "SKILLS",

@@ -278,22 +278,31 @@ export function renderField(
   if (field.type === 'link') {
     // First, check if the href path exists in the data (without fallback)
     const hrefValue = resolvePath(data, field.href);
-
-    // If no href data exists at all, don't render the link field
-    if (!hrefValue || (typeof hrefValue === 'string' && hrefValue.trim() === '')) return null;
-
     const value = resolvePath(data, field.path, field.fallback);
 
+    // If the value itself doesn't exist, don't render
+    if (!value || (typeof value === 'string' && value.trim() === '')) return null;
+
     let href = field.href;
+
+    // Handle template placeholders like mailto:{{value}}
     if (href && href.includes('{{value}}')) {
       href = href.replace('{{value}}', value);
     } else {
+      // Otherwise, resolve href as a path in the data
       href = resolvePath(data, field.href);
+
+      // If no href data exists at all, don't render the link field
+      if (!href || (typeof href === 'string' && href.trim() === '')) return null;
     }
 
     // Check if href is actually a URL (starts with http://, https://, or mailto:)
-    const isValidUrl = href && typeof href === 'string' && 
+    const isValidUrl =
+      href &&
+      typeof href === 'string' &&
                       (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
+
+    // If link exists but is invalid, create a data URL that shows \"Link not valid\" message
 
     // If link exists but is invalid, create a data URL that shows "Link not valid" message
     if (!isValidUrl) {

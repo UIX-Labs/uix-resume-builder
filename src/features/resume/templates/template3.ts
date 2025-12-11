@@ -21,7 +21,7 @@ const annaFieldTemplate = {
         },
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap mb-4',
+          className: 'flex flex-row gap-x-6 text-sm text-gray-700 flex-wrap',
           items: [
             {
               type: 'inline-group-with-icon',
@@ -70,7 +70,7 @@ const annaFieldTemplate = {
                   type: 'link',
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
-                  fallback: 'annafield',
+                  fallback: '',
                   className: 'text-sm text-gray-700 hover:text-blue-600',
                 },
               ],
@@ -84,7 +84,63 @@ const annaFieldTemplate = {
                   type: 'link',
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
-                  fallback: 'github',
+                  fallback: '',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Globe', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.website.title',
+                  href: 'personalDetails.items[0].links.website.link',
+                  fallback: '',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Youtube', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.youtube.title',
+                  href: 'personalDetails.items[0].links.youtube.link',
+                  fallback: '',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Dribbble', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.dribble.title',
+                  href: 'personalDetails.items[0].links.dribble.link',
+                  fallback: '',
+                  className: 'text-sm text-gray-700 hover:text-blue-600',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Palette', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.behance.title',
+                  href: 'personalDetails.items[0].links.behance.link',
+                  fallback: '',
                   className: 'text-sm text-gray-700 hover:text-blue-600',
                 },
               ],
@@ -103,7 +159,7 @@ const annaFieldTemplate = {
         path: 'summary.heading',
         fallback: 'Profile',
         className:
-          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] -mt-2',
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-8 ',
       },
       content: {
         type: 'html',

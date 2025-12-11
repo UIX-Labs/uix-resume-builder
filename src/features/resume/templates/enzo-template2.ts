@@ -65,90 +65,63 @@ const enzoTemplate2 = {
             {
               id: "header",
               type: "group",
-              className: "flex flex-col gap-3 items-end",
-              items: [
-                // Email
+              className: "flex flex-col gap-3 items-end pt-1",
+              items: [                
                 {
-                  type: "group",
-                  className: "flex flex-col gap-0.5 items-end",
-                  items: [
-                    {
-                      type: "text",
-                      fallback: "Email",
-                      className:
-                        "text-[10px] font-medium uppercase tracking-wide text-right text-slate-700",
-                    },
-                    {
-                      type: "link",
-                      path: "personalDetails.items[0].email",
-                      href: "mailto:{{value}}",
-                      fallback: "bhavya.saggi@gmail.com",
-                      className:
-                        "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
-                    },
-                  ],
+                  type: "link",
+                  path: "personalDetails.items[0].email",
+                  href: "mailto:{{value}}",
+                  fallback: "ninapatel@gmail.com",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
                 },
-                // LinkedIn
                 {
-                  type: "group",
-                  className: "flex flex-col gap-0.5 items-end",
-                  items: [
-                    {
-                      type: "text",
-                      fallback: "LinkedIn",
-                      className:
-                        "text-[10px] font-medium uppercase tracking-wide text-right text-slate-700",
-                    },
-                    {
-                      type: "link",
-                      path: "personalDetails.items[0].links.linkedin.link",
-                      href: "personalDetails.items[0].links.linkedin.link",
-                      fallback: "LinkedIn",
-                      className:
-                        "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
-                    },
-                  ],
+                  path: "personalDetails.items[0].phone",
+                  fallback: "+91 432 2222 322",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
                 },
-                // GitHub
                 {
-                  type: "group",
-                  className: "flex flex-col gap-0.5 items-end",
-                  items: [
-                    {
-                      type: "text",
-                      fallback: "GitHub",
-                      className:
-                        "text-[10px] font-medium uppercase tracking-wide text-right text-slate-700",
-                    },
-                    {
-                      type: "link",
-                      path: "personalDetails.items[0].links.github.link",
-                      href: "personalDetails.items[0].links.github.link",
-                      fallback: "GitHub",
-                      className:
-                        "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
-                    },
-                  ],
+                  type: "link",
+                  path: "personalDetails.items[0].links.linkedin.title",
+                  href: "personalDetails.items[0].links.linkedin.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
                 },
-                // Phone
                 {
-                  type: "group",
-                  className: "flex flex-col gap-0.5 items-end",
-                  items: [
-                    {
-                      type: "text",
-                      fallback: "Phone",
-                      className:
-                        "text-[10px] font-medium uppercase tracking-wide text-right text-slate-700",
-                    },
-                    {
-                      type: "text",
-                      path: "personalDetails.items[0].phone",
-                      fallback: "+91 9953439451",
-                      className:
-                        "text-xs font-bold underline decoration-slate-300 underline-offset-2 text-slate-700",
-                    },
-                  ],
+                  type: "link",
+                  path: "personalDetails.items[0].links.github.title",
+                  href: "personalDetails.items[0].links.github.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  className:
+                    "text-xs font-bold underline decoration-slate-300 underline-offset-2 break-all text-slate-700",
                 },
               ],
             },

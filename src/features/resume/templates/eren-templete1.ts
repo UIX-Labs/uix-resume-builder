@@ -1,8 +1,5 @@
-// Enji Kusnadi style template adapted to the app resume structure
-
 const enjiTemplate = {
   name: "Enji Kusnadi",
-
   page: {
     // The actual resume page in the app is already inside a gradient shell,
     // so keep the sheet itself clean and white.
@@ -11,7 +8,6 @@ const enjiTemplate = {
     fontFamily: "Inter",
     padding: 0,
   },
-
   sections: [
     /**
      * HEADER
@@ -122,7 +118,7 @@ const enjiTemplate = {
                       type: "link",
                       path: "personalDetails.items[0].links.linkedin.title",
                       href: "personalDetails.items[0].links.linkedin.link",
-                      fallback: "",
+                      fallback: "/enjidev",
                       className: "text-[12px] text-blue-900",
                     },
                   ],
@@ -142,7 +138,7 @@ const enjiTemplate = {
                       type: "link",
                       path: "personalDetails.items[0].links.github.title",
                       href: "personalDetails.items[0].links.github.link",
-                      fallback: "",
+                      fallback: "/enjidev",
                       className: "text-[12px] text-gray-900",
                     },
                   ],
@@ -233,7 +229,6 @@ const enjiTemplate = {
         },
       },
     },
-
     /**
      * EDUCATION
      */
@@ -287,7 +282,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * EXPERIENCE
      */
@@ -367,7 +361,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * PROJECTS
      */
@@ -425,7 +418,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * SKILLS & TOOLS
      */
@@ -463,7 +455,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * CERTIFICATIONS
      */
@@ -521,7 +512,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * INTERESTS
      */
@@ -559,7 +549,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * ACHIEVEMENTS
      */
@@ -596,5 +585,4 @@ const enjiTemplate = {
     },
   ],
 };
-
 export default enjiTemplate;

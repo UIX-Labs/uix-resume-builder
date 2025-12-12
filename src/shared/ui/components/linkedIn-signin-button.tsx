@@ -4,8 +4,11 @@ import { getLinkedInAuthUrl } from '@/shared/lib/linkedin-auth';
 import Image from 'next/image';
 import { Button } from './button';
 
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+
 export default function LinkedInSignInButton() {
   const handleLinkedInSignIn = () => {
+    trackEvent('login_click', { method: 'linkedin' });
     const authUrl = getLinkedInAuthUrl();
     window.location.href = authUrl;
   };

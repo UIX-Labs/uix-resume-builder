@@ -14,7 +14,7 @@ import { calculateResumeCompletion } from "@shared/lib/resume-completion";
 import { useParams } from "next/navigation";
 import type { ResumeData } from "@entities/resume";
 import mockData from "../../../../mock-data.json";
-import { CheckIcon, X, Sparkles } from "lucide-react";
+import { CheckIcon, X, Sparkles, ArrowLeftIcon } from "lucide-react";
 import { Button } from "@shared/ui/button";
 import { getResumeEmptyData, useResumeData } from "@entities/resume";
 import { useQueryClient } from "@tanstack/react-query";
@@ -208,7 +208,7 @@ export function Sidebar() {
     // Always invalidate when user explicitly navigates away via logo click
     queryClient.invalidateQueries({ queryKey: ["resumes"] });
     queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
-    router.push("/");
+    router.push("/resumes");
   };
 
   useEffect(() => {
@@ -234,28 +234,20 @@ export function Sidebar() {
       className={cn(
         "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
         isAnalyzing &&
-        "opacity-60 pointer-events-none select-none cursor-not-allowed"
+          "opacity-60 pointer-events-none select-none cursor-not-allowed"
       )}
     >
-      <div className="flex items-center gap-2 ">
+      <div className="flex flex-col gap-4 mt-4 w-full pl-6 pr-2">
         <button
-          className="flex flex-row  items-center cursor-pointer"
+          className="flex flex-row items-center cursor-pointer gap-2"
           type="button"
           onClick={handleLogoClick}
         >
-          <div>
-            <PikaResume stopColor="black" offsetColor="black" />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex flex-row">
-              <span className="font-bold text-black bg-clip-text text-3xl">
-                Pika
-              </span>
-              <span className="font-normal text-[#21344F] bg-clip-text text-3xl">
-                Resume
-              </span>
-            </div>
-          </div>
+          <ArrowLeftIcon className="w-5 h-5" />
+
+          <span className="font-normal text-black bg-clip-text text-xl text-left">
+            Back
+          </span>
         </button>
       </div>
 
@@ -277,8 +269,8 @@ export function Sidebar() {
           // Get suggestedUpdates array from section data
           const suggestedUpdatesArray =
             sectionData &&
-              typeof sectionData === "object" &&
-              "suggestedUpdates" in sectionData
+            typeof sectionData === "object" &&
+            "suggestedUpdates" in sectionData
               ? (sectionData as { suggestedUpdates?: any[] }).suggestedUpdates
               : undefined;
 

@@ -19,7 +19,7 @@ const template7 = {
         profilePhoto: {
           type: "image",
           path: "personalDetails.items[0].profilePicturePublicUrl",
-          fallback: "/images/profile.svg",
+          fallback: "/images/profileimg.jpeg",
           className:
             "w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover",
         },
@@ -131,7 +131,7 @@ const template7 = {
                   type: "link",
                   path: "personalDetails.items[0].links.linkedin.title",
                   href: "personalDetails.items[0].links.linkedin.link",
-                  fallback: "linkedin.com/in/simran-malhotra-65760053",
+                  fallback: "",
                   className: "text-sm text-gray-800 hover:text-blue-600",
                 },
               ],
@@ -150,7 +150,83 @@ const template7 = {
                   type: "link",
                   path: "personalDetails.items[0].links.github.title",
                   href: "personalDetails.items[0].links.github.link",
-                  fallback: "github.com/username",
+                  fallback: "",
+                  className: "text-sm text-gray-800 hover:text-blue-600",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 16,
+                  className: "text-[#4178B4]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className: "text-sm text-gray-800 hover:text-blue-600",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 16,
+                  className: "text-[#4178B4]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className: "text-sm text-gray-800 hover:text-blue-600",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 16,
+                  className: "text-[#4178B4]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className: "text-sm text-gray-800 hover:text-blue-600",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 16,
+                  className: "text-[#4178B4]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
                   className: "text-sm text-gray-800 hover:text-blue-600",
                 },
               ],
@@ -287,7 +363,7 @@ const template7 = {
     {
       id: "achievements",
       type: "badge-section",
-      break:true,
+      break: true,
       className: "px-8 pb-4",
       heading: {
         path: "achievements.heading",
@@ -298,7 +374,7 @@ const template7 = {
       listPath: "achievements.items[0].items",
       itemPath: "",
       itemPrefix: "• ",
-      itemClassName: "text-sm text-black",
+      badgeClassName: "text-sm text-black",
       containerClassName: "text-sm flex flex-col gap-2",
     },
 

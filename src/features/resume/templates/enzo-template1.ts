@@ -35,7 +35,7 @@ const enzoTemplate1 = {
         profileImage: {
           type: "image",
           path: "personalDetails.items[0].profilePicturePublicUrl",
-          fallback: "/images/profile.svg",
+          fallback: "/images/profileimg.jpeg",
           className: "w-32 h-32 rounded-full object-cover bg-neutral-300",
           alt: "Profile img",
         },
@@ -138,6 +138,86 @@ const enzoTemplate1 = {
                 },
               ],
             },
+            // Website
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 14,
+                  className: "text-neutral-800 flex-shrink-0",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
+                },
+              ],
+            },
+            // Youtube
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 14,
+                  className: "text-neutral-800 flex-shrink-0",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
+                },
+              ],
+            },
+            // Dribbble
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 14,
+                  className: "text-neutral-800 flex-shrink-0",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
+                },
+              ],
+            },
+            // Behance
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 14,
+                  className: "text-neutral-800 flex-shrink-0",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
+                  className: "text-xs text-neutral-800 break-all",
+                },
+              ],
+            },
           ],
         },
       },
@@ -164,25 +244,50 @@ const enzoTemplate1 = {
       },
     },
 
-    // Skills Section - Left Column
     {
       id: "skills",
-      break: false,
-      type: "inline-list-section",
+      type: "list-section",
       column: "left",
-      className: "pt-6 border-t border-[#C9A961]",
+      break: true,
+      className: "pl-6 mb-8 ",
       heading: {
         path: "skills.heading",
         fallback: "SKILLS",
         className:
-          "text-sm font-bold text-[#C9A961] mb-2 tracking-wide uppercase",
+          "text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-6 border-t border-[#C9A961]",
       },
       listPath: "skills.items",
-      itemPath: "name",
-      itemClassName: "text-xs text-neutral-800",
-      containerClassName: "flex flex-col gap-1 mt-2 text-xs",
-      itemSeparator: ", ",
+      containerClassName: "flex flex-col gap-1 text-xs",
+      itemTemplate: {
+        fields: [
+          {
+            prefix: "• ",
+            path: "name",
+            className: "text-xs text-neutral-800 leading-none",
+          },
+        ],
+      },
     },
+
+    // {
+    //   id: "skills",
+    //   break: true,
+    //   breakable: true,
+    //   type: "inline-list-section",
+    //   column: "left",
+    //   className: "pt-6 border-t border-[#C9A961]",
+    //   heading: {
+    //     path: "skills.heading",
+    //     fallback: "SKILLS",
+    //     className:
+    //       "text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-6 border-t border-[#C9A961]",
+    //   },
+    //   listPath: "skills.items",
+    //   itemPath: "name",
+    //   itemClassName: "text-xs text-neutral-800",
+    //   containerClassName: "flex flex-col text-xs",
+    //   itemSeparator: ", ",
+    // },
 
     // Header Section - Right Column
     {
@@ -335,7 +440,7 @@ const enzoTemplate1 = {
     {
       id: "certifications",
       type: "list-section",
-      break:true,
+      break: true,
       column: "right",
       heading: {
         path: "certifications.heading",

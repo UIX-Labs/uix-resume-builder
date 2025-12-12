@@ -1,8 +1,5 @@
-// Enji Kusnadi style template adapted to the app resume structure
-
 const enjiTemplate = {
   name: "Enji Kusnadi",
-
   page: {
     // The actual resume page in the app is already inside a gradient shell,
     // so keep the sheet itself clean and white.
@@ -11,7 +8,6 @@ const enjiTemplate = {
     fontFamily: "Inter",
     padding: 0,
   },
-
   sections: [
     /**
      * HEADER
@@ -147,13 +143,92 @@ const enjiTemplate = {
                     },
                   ],
                 },
+                {
+                  type: "inline-group-with-icon",
+                  className:
+                    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F5F5F5] text-gray-900 border border-[#555555]",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Globe",
+                      size: 8,
+                      className: "text-gray-900",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.website.title",
+                      href: "personalDetails.items[0].links.website.link",
+                      fallback: "",
+                      className: "text-[12px] text-gray-900",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className:
+                    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFF0F0] text-red-900 border border-[#FF0000]",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Youtube",
+                      size: 8,
+                      className: "text-red-900",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.youtube.title",
+                      href: "personalDetails.items[0].links.youtube.link",
+                      fallback: "",
+                      className: "text-[12px] text-red-900",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className:
+                    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FFF0F5] text-pink-900 border border-[#EA4C89]",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Dribbble",
+                      size: 8,
+                      className: "text-pink-900",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.dribble.title",
+                      href: "personalDetails.items[0].links.dribble.link",
+                      fallback: "",
+                      className: "text-[12px] text-pink-900",
+                    },
+                  ],
+                },
+                {
+                  type: "inline-group-with-icon",
+                  className:
+                    "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F0F0FF] text-blue-900 border border-[#053EFF]",
+                  items: [
+                    {
+                      type: "icon",
+                      name: "Palette",
+                      size: 8,
+                      className: "text-blue-900",
+                    },
+                    {
+                      type: "link",
+                      path: "personalDetails.items[0].links.behance.title",
+                      href: "personalDetails.items[0].links.behance.link",
+                      fallback: "",
+                      className: "text-[12px] text-blue-900",
+                    },
+                  ],
+                },
               ],
             },
           ],
         },
       },
     },
-
     /**
      * EDUCATION
      */
@@ -207,7 +282,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * EXPERIENCE
      */
@@ -287,7 +361,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * PROJECTS
      */
@@ -345,7 +418,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * SKILLS & TOOLS
      */
@@ -383,7 +455,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * CERTIFICATIONS
      */
@@ -441,7 +512,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * INTERESTS
      */
@@ -479,7 +549,6 @@ const enjiTemplate = {
         className: "border-b border-slate-200",
       },
     },
-
     /**
      * ACHIEVEMENTS
      */
@@ -516,5 +585,4 @@ const enjiTemplate = {
     },
   ],
 };
-
 export default enjiTemplate;

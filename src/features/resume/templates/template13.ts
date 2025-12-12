@@ -63,6 +63,26 @@ const template13 = {
               path: "personalDetails.items[0].links.github.title",
               href: "personalDetails.items[0].links.github.link",
             },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.website.title",
+              href: "personalDetails.items[0].links.website.link",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.youtube.title",
+              href: "personalDetails.items[0].links.youtube.link",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.dribble.title",
+              href: "personalDetails.items[0].links.dribble.link",
+            },
+            {
+              type: "link",
+              path: "personalDetails.items[0].links.behance.title",
+              href: "personalDetails.items[0].links.behance.link",
+            },
           ],
         },
 

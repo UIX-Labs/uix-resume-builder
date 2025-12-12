@@ -1,32 +1,29 @@
 /**
  * Example Analytics Integration Components
- * 
+ *
  * This file demonstrates how to integrate Percept analytics
  * into various components of the resume builder application.
  */
 
 "use client";
 
-import { trackEvent, startTimedEvent } from '@shared/lib/analytics/Mixpanel';
-import { useState } from 'react';
+import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
+import { useState } from "react";
+import * as Sentry from "@sentry/nextjs";
 
 // ============================================
 // Example 1: Track Button Clicks
 // ============================================
 export function AnalyticsButton() {
   const handleClick = () => {
-    trackEvent('button_clicked', {
-      buttonId: 'cta-button',
-      section: 'hero',
-      timestamp: new Date().toISOString()
+    trackEvent("button_clicked", {
+      buttonId: "cta-button",
+      section: "hero",
+      timestamp: new Date().toISOString(),
     });
   };
 
-  return (
-    <button onClick={handleClick}>
-      Click Me (Tracked)
-    </button>
-  );
+  return <button onClick={handleClick}>Click Me (Tracked)</button>;
 }
 
 // ============================================
@@ -34,17 +31,17 @@ export function AnalyticsButton() {
 // ============================================
 export function TemplateCard({
   templateId,
-  templateName
+  templateName,
 }: {
   templateId: string;
   templateName: string;
 }) {
   const handleSelect = () => {
-    trackEvent('template_selected', {
+    trackEvent("template_selected", {
       templateId,
       templateName,
-      category: 'professional',
-      timestamp: new Date().toISOString()
+      category: "professional",
+      timestamp: new Date().toISOString(),
     });
   };
 
@@ -61,28 +58,24 @@ export function TemplateCard({
 // ============================================
 export function ContactForm() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    name: "",
+    email: "",
+    message: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    trackEvent('form_submitted', {
-      formType: 'contact',
+    trackEvent("form_submitted", {
+      formType: "contact",
       fields: Object.keys(formData),
-      hasAllFields: Object.values(formData).every(v => v.length > 0)
+      hasAllFields: Object.values(formData).every((v) => v.length > 0),
     });
 
     // Submit form...
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* Form fields */}
-    </form>
-  );
+  return <form onSubmit={handleSubmit}>{/* Form fields */}</form>;
 }
 
 // ============================================
@@ -95,25 +88,23 @@ export function DownloadResumeButton() {
     setIsDownloading(true);
 
     // Start timing the download process
-    startTimedEvent('resume_download');
+    startTimedEvent("resume_download");
 
     try {
       // Simulate download process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Track successful download (duration is automatically included)
-      trackEvent('resume_download', {
-        status: 'success',
-        format: 'pdf',
-        pageCount: 2
+      trackEvent("resume_download", {
+        status: "success",
+        format: "pdf",
+        pageCount: 2,
       });
-
-
     } catch (error) {
       // Track failed download
-      trackEvent('resume_download', {
-        status: 'failed',
-        error: error instanceof Error ? error.message : 'Unknown error'
+      trackEvent("resume_download", {
+        status: "failed",
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     } finally {
       setIsDownloading(false);
@@ -122,7 +113,7 @@ export function DownloadResumeButton() {
 
   return (
     <button onClick={handleDownload} disabled={isDownloading}>
-      {isDownloading ? 'Downloading...' : 'Download Resume'}
+      {isDownloading ? "Downloading..." : "Download Resume"}
     </button>
   );
 }
@@ -132,19 +123,15 @@ export function DownloadResumeButton() {
 // ============================================
 export function AddSectionButton({ sectionType }: { sectionType: string }) {
   const handleAddSection = () => {
-    trackEvent('section_added', {
+    trackEvent("section_added", {
       sectionType,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Add section logic...
   };
 
-  return (
-    <button onClick={handleAddSection}>
-      Add {sectionType} Section
-    </button>
-  );
+  return <button onClick={handleAddSection}>Add {sectionType} Section</button>;
 }
 
 // ============================================
@@ -152,25 +139,25 @@ export function AddSectionButton({ sectionType }: { sectionType: string }) {
 // ============================================
 export function AISuggestion({
   suggestion,
-  section
+  section,
 }: {
   suggestion: string;
   section: string;
 }) {
   const handleAccept = () => {
-    trackEvent('ai_suggestion_accepted', {
-      suggestionType: 'content',
+    trackEvent("ai_suggestion_accepted", {
+      suggestionType: "content",
       section,
-      suggestionLength: suggestion.length
+      suggestionLength: suggestion.length,
     });
 
     // Apply suggestion...
   };
 
   const handleReject = () => {
-    trackEvent('ai_suggestion_rejected', {
-      suggestionType: 'content',
-      section
+    trackEvent("ai_suggestion_rejected", {
+      suggestionType: "content",
+      section,
     });
   };
 
@@ -187,11 +174,11 @@ export function AISuggestion({
 // Example 7: Track Resume Export
 // ============================================
 export function ExportButton() {
-  const handleExport = (format: 'pdf' | 'docx' | 'txt') => {
-    trackEvent('resume_exported', {
+  const handleExport = (format: "pdf" | "docx" | "txt") => {
+    trackEvent("resume_exported", {
       format,
       timestamp: new Date().toISOString(),
-      source: 'export_menu'
+      source: "export_menu",
     });
 
     // Export logic...
@@ -199,9 +186,9 @@ export function ExportButton() {
 
   return (
     <div>
-      <button onClick={() => handleExport('pdf')}>Export as PDF</button>
-      <button onClick={() => handleExport('docx')}>Export as DOCX</button>
-      <button onClick={() => handleExport('txt')}>Export as TXT</button>
+      <button onClick={() => handleExport("pdf")}>Export as PDF</button>
+      <button onClick={() => handleExport("docx")}>Export as DOCX</button>
+      <button onClick={() => handleExport("txt")}>Export as TXT</button>
     </div>
   );
 }
@@ -215,23 +202,20 @@ export function ErrorBoundaryExample() {
       // Some operation that might fail
       await riskyOperation();
 
-      trackEvent('operation_success', {
-        operation: 'data_sync'
+      trackEvent("operation_success", {
+        operation: "data_sync",
       });
     } catch (error) {
-      trackEvent('operation_error', {
-        operation: 'data_sync',
-        errorMessage: error instanceof Error ? error.message : 'Unknown error',
-        errorType: error instanceof Error ? error.constructor.name : 'Unknown'
+      Sentry.captureException(error);
+      trackEvent("operation_error", {
+        operation: "data_sync",
+        errorMessage: error instanceof Error ? error.message : "Unknown error",
+        errorType: error instanceof Error ? error.constructor.name : "Unknown",
       });
     }
   };
 
-  return (
-    <button onClick={handleOperation}>
-      Perform Operation
-    </button>
-  );
+  return <button onClick={handleOperation}>Perform Operation</button>;
 }
 
 // Dummy function for example

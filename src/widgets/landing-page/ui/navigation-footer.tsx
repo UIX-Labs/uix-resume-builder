@@ -9,6 +9,7 @@ import { TestimonialsModal } from "@widgets/landing-page/ui/testimonials-modal";
 import { useMutation } from "@tanstack/react-query";
 import { createResume, updateResumeTemplate } from "@entities/resume";
 import type { Template } from "@entities/template-page/api/template-data";
+import * as Sentry from "@sentry/nextjs";
 
 interface NavigationLink {
   label: string;
@@ -52,6 +53,7 @@ const FooterNavigation = () => {
       router.push(`/resume/${data.id}`);
     } catch (error) {
       console.error("Failed to create resume:", error);
+      Sentry.captureException(error);
     }
   };
 
@@ -136,7 +138,10 @@ const FooterNavigation = () => {
           ))}
         </div>
       </nav>
-      <TestimonialsModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <TestimonialsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </>
   );
 };

@@ -1,14 +1,24 @@
-import { fetch } from '@shared/api';
-import { useMutation } from '@tanstack/react-query';
-import type { ParseLinkedInResponse } from '../types';
+import { fetch } from "@shared/api";
+import { useMutation } from "@tanstack/react-query";
+import type { ParseLinkedInResponse } from "../types";
+import * as Sentry from "@sentry/nextjs";
 
-export async function parseLinkedInProfile(url: string): Promise<ParseLinkedInResponse> {
+export async function parseLinkedInProfile(
+  url: string
+): Promise<ParseLinkedInResponse> {
   try {
     const encodedUrl = encodeURIComponent(url);
-    const response = await fetch<ParseLinkedInResponse>(`resume/parse-linkedin?url=${encodedUrl}`);
+    const response = await fetch<ParseLinkedInResponse>(
+      `resume/parse-linkedin?url=${encodedUrl}`
+    );
     return response;
   } catch (error) {
-    console.error('Error parsing LinkedIn profile:', error);
-    throw new Error(error instanceof Error ? error.message : 'Failed to parse LinkedIn profile. Please try again.');
+    console.error("Error parsing LinkedIn profile:", error);
+    Sentry.captureException(error);
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : "Failed to parse LinkedIn profile. Please try again."
+    );
   }
 }

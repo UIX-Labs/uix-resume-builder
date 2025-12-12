@@ -1,17 +1,21 @@
-'use client';
-import { useState } from 'react';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { Button } from '@shared/ui/button';
-import { SidebarProvider } from '@shared/ui/sidebar';
-import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
-import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { TemplateCard } from '@widgets/templates-page/ui/template-card';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { HomeIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
+"use client";
+import { useState } from "react";
+import {
+  useGetAllTemplates,
+  type Template,
+} from "@entities/template-page/api/template-data";
+import { useUserProfile } from "@shared/hooks/use-user";
+import { Button } from "@shared/ui/button";
+import { SidebarProvider } from "@shared/ui/sidebar";
+import DashboardSidebar from "@widgets/dashboard/ui/dashboard-sidebar";
+import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
+import { TemplateCard } from "@widgets/templates-page/ui/template-card";
+import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
+import { HomeIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { createResume, updateResumeTemplate } from "@entities/resume";
+import * as Sentry from "@sentry/nextjs";
 
 export default function GetAllResumesPage() {
   const router = useRouter();
@@ -28,7 +32,8 @@ export default function GetAllResumesPage() {
     mutationFn: updateResumeTemplate,
   });
 
-  const isLoading = createResumeMutation.isPending || updateTemplateMutation.isPending;
+  const isLoading =
+    createResumeMutation.isPending || updateTemplateMutation.isPending;
 
   const handleTemplateClick = (template: Template) => {
     setPreviewTemplate(template);
@@ -41,8 +46,11 @@ export default function GetAllResumesPage() {
     }
 
     try {
-      const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      const userName = `${user.firstName} ${user.lastName || ''}`.trim();
+      const currentDate = new Date().toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric",
+      });
+      const userName = `${user.firstName} ${user.lastName || ""}`.trim();
       const title = `${userName}-Resume-${currentDate}`;
 
       const data = await createResumeMutation.mutateAsync({
@@ -59,7 +67,8 @@ export default function GetAllResumesPage() {
 
       router.push(`/resume/${data.id}`);
     } catch (error) {
-      console.error('Failed to create resume:', error);
+      console.error("Failed to create resume:", error);
+      Sentry.captureException(error);
     }
   };
 
@@ -70,7 +79,9 @@ export default function GetAllResumesPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-4">
               <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
-              <p className="text-lg font-semibold text-gray-800">Creating Resume...</p>
+              <p className="text-lg font-semibold text-gray-800">
+                Creating Resume...
+              </p>
               <p className="text-sm text-gray-600">Setting up your workspace</p>
             </div>
           </div>
@@ -83,7 +94,7 @@ export default function GetAllResumesPage() {
           <header className="flex justify-between sm:justify-end items-center p-3 sm:p-4 rounded-2xl sm:rounded-3xl bg-[rgba(245,248,250,1)]">
             <button
               type="button"
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
               className="lg:hidden flex items-center justify-center bg-blue-200 rounded-full h-[45px] w-[45px] sm:h-[53px] sm:w-[53px]"
             >
               <HomeIcon className="w-6 h-6 sm:w-7 sm:h-7" />
@@ -94,7 +105,7 @@ export default function GetAllResumesPage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push("/")}
                   className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
@@ -102,16 +113,20 @@ export default function GetAllResumesPage() {
               </div>
 
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[45px] w-[45px] sm:h-[53px] sm:w-[53px]">
-                <span className="text-lg sm:text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
+                <span className="text-lg sm:text-xl font-bold text-gray-600">
+                  {user?.firstName?.charAt(0)}
+                </span>
               </div>
 
               <div className="flex flex-col">
                 <span className="text-black leading-[1.375em] tracking-[-1.125%] text-sm sm:text-base font-normal">
-                  {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
+                  {user
+                    ? `${user.firstName} ${user.lastName ?? ""}`
+                    : "Loading..."}
                 </span>
 
                 <span className="text-[11px] sm:text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {user?.email ?? 'Loading...'}
+                  {user?.email ?? "Loading..."}
                 </span>
               </div>
             </div>
@@ -125,7 +140,11 @@ export default function GetAllResumesPage() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
+              <WelcomeHeader
+                userName={
+                  (user?.firstName ?? "") + " " + (user?.lastName ?? "")
+                }
+              />
 
               <div className="flex gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
                 {templates?.map((template) => (

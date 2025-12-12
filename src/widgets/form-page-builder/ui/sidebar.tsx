@@ -18,6 +18,7 @@ import { CheckIcon, X, Sparkles, ArrowLeftIcon } from "lucide-react";
 import { Button } from "@shared/ui/button";
 import { getResumeEmptyData, useResumeData } from "@entities/resume";
 import { useQueryClient } from "@tanstack/react-query";
+import * as Sentry from "@sentry/nextjs";
 import {
   deepMerge,
   normalizeStringsFields,
@@ -182,6 +183,7 @@ export function Sidebar() {
       }
     } catch (error) {
       console.error("Builder Intelligence error:", error);
+      Sentry.captureException(error);
       isCompleted = true;
 
       // Clear progress interval on error

@@ -1,9 +1,16 @@
-'use client';
+"use client";
 
-import { useDeleteResume } from '@entities/resume';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@shared/ui/dialog';
-import { Button } from '@shared/ui/button';
-import { toast } from 'sonner';
+import { useDeleteResume } from "@entities/resume";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@shared/ui/dialog";
+import { Button } from "@shared/ui/button";
+import { toast } from "sonner";
+import * as Sentry from "@sentry/nextjs";
 
 interface DeleteResumeModalProps {
   isOpen: boolean;
@@ -15,7 +22,12 @@ interface DeleteResumeModalProps {
   onDeleteSuccess?: () => void;
 }
 
-export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: DeleteResumeModalProps) {
+export function DeleteResumeModal({
+  isOpen,
+  onClose,
+  resume,
+  onDeleteSuccess,
+}: DeleteResumeModalProps) {
   const deleteResumeMutation = useDeleteResume();
 
   const handleConfirmDelete = async () => {
@@ -23,12 +35,13 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
 
     try {
       await deleteResumeMutation.mutateAsync(resume.id);
-      toast.success('Resume Deleted Successfully');
+      toast.success("Resume Deleted Successfully");
       onDeleteSuccess?.();
       onClose();
     } catch (error) {
-      toast.error('Error deleting Resume');
-      console.error('Delete failed:', error);
+      toast.error("Error deleting Resume");
+      console.error("Delete failed:", error);
+      Sentry.captureException(error);
     }
   };
 
@@ -42,7 +55,8 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
         <DialogHeader>
           <DialogTitle className="text-center">Delete Resume</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{resume.title}"? This action cannot be undone.
+            Are you sure you want to delete "{resume.title}"? This action cannot
+            be undone.
           </DialogDescription>
         </DialogHeader>
 
@@ -62,7 +76,11 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
             disabled={deleteResumeMutation.isPending}
             className="w-1/2 rounded-4xl cursor-pointer"
           >
-            {deleteResumeMutation.isPending ? <>Deleting...</> : <>Delete Resume</>}
+            {deleteResumeMutation.isPending ? (
+              <>Deleting...</>
+            ) : (
+              <>Delete Resume</>
+            )}
           </Button>
         </div>
       </DialogContent>

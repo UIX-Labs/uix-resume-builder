@@ -1,7 +1,8 @@
-import { cn } from '@shared/lib/cn';
-import { uploadProfilePicture } from '@entities/resume/api/upload-profile-picture';
-import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
+import { cn } from "@shared/lib/cn";
+import { uploadProfilePicture } from "@entities/resume/api/upload-profile-picture";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import * as Sentry from "@sentry/nextjs";
 
 export const ProfilePictureInput = ({
   data,
@@ -13,7 +14,9 @@ export const ProfilePictureInput = ({
   personalDetailItemId: string;
   section: any;
 }) => {
-  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl ?? '');
+  const [imageUrl, setImageUrl] = useState<string>(
+    data?.profilePicturePublicUrl ?? ""
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -31,7 +34,7 @@ export const ProfilePictureInput = ({
       reader.readAsDataURL(file);
       reader.onload = () => {
         const result = reader.result as string;
-        const base64 = result.split(',')[1];
+        const base64 = result.split(",")[1];
         resolve(base64);
       };
       reader.onerror = (error) => reject(error);
@@ -42,14 +45,14 @@ export const ProfilePictureInput = ({
     setError(null);
 
     // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setError('Please upload an image file');
+    if (!file.type.startsWith("image/")) {
+      setError("Please upload an image file");
       return;
     }
 
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setError('Image size should be less than 5MB');
+      setError("Image size should be less than 5MB");
       return;
     }
 
@@ -65,12 +68,13 @@ export const ProfilePictureInput = ({
       if (response) {
         setImageUrl(response.url);
       } else {
-        const errorMsg = 'Failed to upload image - API returned success: false';
+        const errorMsg = "Failed to upload image - API returned success: false";
         console.error(errorMsg, response);
         setError(errorMsg);
       }
     } catch (err) {
       console.log(err);
+      Sentry.captureException(err);
     } finally {
       setIsUploading(false);
     }
@@ -104,12 +108,12 @@ export const ProfilePictureInput = ({
   };
 
   const handleDelete = () => {
-    setImageUrl('');
-    onChange({ profilePicturePublicUrl: '' });
+    setImageUrl("");
+    onChange({ profilePicturePublicUrl: "" });
     setError(null);
     // Reset file input
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -122,12 +126,16 @@ export const ProfilePictureInput = ({
       <button
         type="button"
         className={cn(
-          'relative border-2 border-dashed rounded-[8px] p-4 transition-colors',
-          'flex flex-col items-center justify-center cursor-pointer',
-          isDragging ? 'border-[#0059ED] bg-[#CBE7FF]' : 'border-[#959DA8] bg-[#FAFBFC]',
-          isUploading && 'opacity-50 cursor-not-allowed',
+          "relative border-2 border-dashed rounded-[8px] p-4 transition-colors",
+          "flex flex-col items-center justify-center cursor-pointer",
+          isDragging
+            ? "border-[#0059ED] bg-[#CBE7FF]"
+            : "border-[#959DA8] bg-[#FAFBFC]",
+          isUploading && "opacity-50 cursor-not-allowed"
         )}
-        onClick={() => !isUploading && !imageUrl && fileInputRef.current?.click()}
+        onClick={() =>
+          !isUploading && !imageUrl && fileInputRef.current?.click()
+        }
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -135,7 +143,13 @@ export const ProfilePictureInput = ({
         {imageUrl ? (
           <div className="flex flex-col items-center gap-3">
             <div className="relative w-24 h-24 rounded-full overflow-hidden">
-              <Image src={imageUrl} alt="Profile" fill className="object-cover" unoptimized />
+              <Image
+                src={imageUrl}
+                alt="Profile"
+                fill
+                className="object-cover"
+                unoptimized
+              />
             </div>
             <div className="flex gap-2">
               <button
@@ -146,10 +160,10 @@ export const ProfilePictureInput = ({
                 }}
                 disabled={isUploading}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                  'bg-[#E9F4FF] text-[#005FF2] border border-[#CBE7FF]',
-                  'hover:bg-[#005FF2] hover:text-white',
-                  isUploading && 'opacity-50 cursor-not-allowed'
+                  "px-4 py-2 rounded-lg text-sm font-semibold transition-colors",
+                  "bg-[#E9F4FF] text-[#005FF2] border border-[#CBE7FF]",
+                  "hover:bg-[#005FF2] hover:text-white",
+                  isUploading && "opacity-50 cursor-not-allowed"
                 )}
               >
                 Change
@@ -162,10 +176,10 @@ export const ProfilePictureInput = ({
                 }}
                 disabled={isUploading}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                  'bg-red-50 text-red-600 border border-red-200',
-                  'hover:bg-red-600 hover:text-white',
-                  isUploading && 'opacity-50 cursor-not-allowed'
+                  "px-4 py-2 rounded-lg text-sm font-semibold transition-colors",
+                  "bg-red-50 text-red-600 border border-red-200",
+                  "hover:bg-red-600 hover:text-white",
+                  isUploading && "opacity-50 cursor-not-allowed"
                 )}
               >
                 Delete
@@ -175,9 +189,11 @@ export const ProfilePictureInput = ({
         ) : (
           <div className="text-center">
             <div className="text-[#0C1118] font-semibold mb-1">
-              {isUploading ? 'Uploading...' : 'Upload Profile Picture'}
+              {isUploading ? "Uploading..." : "Upload Profile Picture"}
             </div>
-            <div className="text-sm text-[#959DA8]">Click or drag and drop an image here</div>
+            <div className="text-sm text-[#959DA8]">
+              Click or drag and drop an image here
+            </div>
             <div className="text-xs text-[#959DA8] mt-1">Max size: 5MB</div>
           </div>
         )}

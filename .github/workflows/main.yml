@@ -39,6 +39,7 @@ jobs:
           echo "NEXT_PUBLIC_ENV=${{ secrets.NEXT_PUBLIC_ENV || 'production' }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ secrets.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }}" >> $GITHUB_ENV
           echo "NEXT_PUBLIC_MIXPANEL_TOKEN=${{ secrets.NEXT_PUBLIC_MIXPANEL_TOKEN }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_DOMAIN_URL=${{ secrets.NEXT_PUBLIC_DOMAIN_URL }}" >> $GITHUB_ENV
           echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
 
       - name: Configure AWS Credentials
@@ -69,6 +70,7 @@ jobs:
             --build-arg NEXT_PUBLIC_ENV=${{ env.NEXT_PUBLIC_ENV }} \
             --build-arg NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ env.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }} \
             --build-arg NEXT_PUBLIC_MIXPANEL_TOKEN=${{ env.NEXT_PUBLIC_MIXPANEL_TOKEN }} \
+            --build-arg NEXT_PUBLIC_DOMAIN_URL=${{ env.NEXT_PUBLIC_DOMAIN_URL }} \
             --build-arg SENTRY_AUTH_TOKEN=${{ env.SENTRY_AUTH_TOKEN }} \
             -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG} .
 

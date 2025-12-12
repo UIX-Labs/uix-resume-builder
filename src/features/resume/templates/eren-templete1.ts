@@ -276,7 +276,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr auto",
       className: "px-16 pt-8 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-baseline px-16 py-2",
+      rowClassName: "items-baseline  px-16 py-2",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -329,7 +329,8 @@ const enjiTemplate = {
                 {
                   type: "duration",
                   path: "duration",
-                  className: "text-[12px] text-slate-500 whitespace-nowrap ml-auto",
+                  className:
+                    "text-[12px] text-slate-500 whitespace-nowrap ml-auto",
                 },
               ],
             },
@@ -355,7 +356,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr auto",
       className: "px-16 pt-6 pb-8",
       containerClassName: "space-y-4",
-      rowClassName: "items-start px-16 pt-4 pb-4",
+      rowClassName: "items-start  px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -449,7 +450,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start px-16 pt-4 pb-4",
+      rowClassName: "items-start  px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -543,7 +544,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start px-16 pt-4 pb-4",
+      rowClassName: "items-start  px-16 pt-4 pb-4",
       divider: {
         variant: "line",
         className: "border-b border-slate-200",
@@ -580,7 +581,7 @@ const enjiTemplate = {
       gridTemplateColumns: "128px 1fr",
       className: "px-16 pt-6 pb-8",
       containerClassName: "",
-      rowClassName: "items-start px-16 pt-4 pb-4",
+      rowClassName: "items-start  px-16 pt-4 pb-4",
       // No divider for the last section
     },
   ],

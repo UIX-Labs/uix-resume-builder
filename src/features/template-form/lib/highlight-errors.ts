@@ -1,5 +1,6 @@
 import type { SuggestedUpdates, SuggestionType } from '@entities/resume';
 import { getFieldSuggestions } from './get-field-errors';
+import { stripHtmlTags, normalizeWhitespace, normalizeText, escapeRegex } from '@shared/lib/text-utils';
 
 function getUnderlineColor(type: SuggestionType): string {
   const colors = {
@@ -8,10 +9,6 @@ function getUnderlineColor(type: SuggestionType): string {
     new_summary: '#10B981', // Green
   };
   return colors[type];
-}
-
-function escapeRegex(str: string): string {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 export function highlightErrorsInHTML(
@@ -26,45 +23,67 @@ export function highlightErrorsInHTML(
 
   if (!suggestions || suggestions.length === 0) return htmlContent;
 
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = htmlContent;
-  const plainText = tempDiv.textContent || tempDiv.innerText || '';
+  // Extract plain text for comparison
+  const plainText = stripHtmlTags(htmlContent);
+  const normalizedPlainText = normalizeText(plainText);
 
   let highlightedContent = htmlContent;
 
   suggestions.forEach((suggestion) => {
-    if (!suggestion.old) return; 
+    // Skip if no old value or empty
+    if (!suggestion.old || !suggestion.old.trim()) return;
 
     const color = getUnderlineColor(suggestion.type);
-    
-    const plainOldText = suggestion.old.replace(/<[^>]*>/g, '').trim();
 
-    if (!plainText.includes(plainOldText)) {
-     
+    // Normalize old text for comparison
+    const normalizedOld = normalizeText(suggestion.old);
+
+    // Check if the old value exists in the content (case and whitespace insensitive)
+    if (!normalizedPlainText.includes(normalizedOld)) {
+      return; // Skip this suggestion if not found
+    }
+
+    // OPTIMIZATION: If the entire content matches, wrap everything
+    if (normalizedOld === normalizedPlainText) {
+      highlightedContent = `<span style="text-decoration: underline; text-decoration-color: ${color}; text-decoration-thickness: 2px; text-underline-offset: 2px;">${highlightedContent}</span>`;
       return;
     }
 
-    const escapedText = escapeRegex(plainOldText);
+    // Create a flexible regex pattern that handles:
+    // 1. Case-insensitive matching
+    // 2. Whitespace variations (multiple spaces, tabs, newlines)
+    // 3. Multiple HTML tags between words (e.g., </p><p> for paragraph breaks)
+    const normalizedOldValue = normalizeWhitespace(suggestion.old);
+    const words = normalizedOldValue.split(/\s+/).map(escapeRegex);
 
-    const words = escapedText.split(/\s+/);
-    const pattern = words
-      .map((word) => `${word}`)
-      .join('(?:\\s*(?:<[^>]*>)?\\s*)');
+    // For very long texts (>50 words), use a simpler approach
+    if (words.length > 50) {
+      // Just try to find and highlight the plain text within HTML
+      // This avoids regex complexity issues with very long patterns
+      const plainOldText = stripHtmlTags(suggestion.old);
+      if (plainText.toLowerCase().includes(plainOldText.toLowerCase())) {
+        highlightedContent = `<span style="text-decoration: underline; text-decoration-color: ${color}; text-decoration-thickness: 2px; text-underline-offset: 2px;">${highlightedContent}</span>`;
+        return;
+      }
+    }
 
-    const regex = new RegExp(pattern, 'i');
+    // Pattern allows multiple HTML tags and flexible whitespace between words
+    // Changed from ? (0 or 1) to * (0 or more) to handle </p><p> paragraph breaks
+    const pattern = words.join('(?:\\s*(?:<[^>]*>)*\\s*)');
+
+    const regex = new RegExp(pattern, 'gi'); // global and case-insensitive
 
     const match = highlightedContent.match(regex);
 
     if (match) {
-
+      // Replace only the first occurrence to avoid nested spans
       highlightedContent = highlightedContent.replace(
         regex,
         `<span style="text-decoration: underline; text-decoration-color: ${color}; text-decoration-thickness: 2px; text-underline-offset: 2px;">$&</span>`
       );
-    } else {
-      console.log('⚠️ No regex match found for:', plainOldText.substring(0, 50));
     }
   });
+
   return highlightedContent;
 }
 

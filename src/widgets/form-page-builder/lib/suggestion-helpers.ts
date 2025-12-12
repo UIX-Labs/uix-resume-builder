@@ -1,5 +1,13 @@
 import type { SuggestedUpdate } from '@entities/resume';
 import { SuggestionType } from '@entities/resume';
+import {
+  decodeHtmlEntities,
+  stripHtmlTags,
+  normalizeWhitespace,
+  normalizeText,
+  escapeRegex,
+  findTextIgnoreCase,
+} from '@shared/lib/text-utils';
 
 /**
  * Finds an item in the array by its ID
@@ -14,64 +22,6 @@ export const findItemById = (items: unknown[], itemId: string): number => {
   });
 
   return itemIndex;
-};
-
-/**
- * Decodes HTML entities in a string
- */
-const decodeHtmlEntities = (str: string): string => {
-  if (!str) return '';
-  return str.replace(/&[#\w]+;/g, (entity) => {
-    const entities: Record<string, string> = {
-      '&amp;': '&',
-      '&lt;': '<',
-      '&gt;': '>',
-      '&quot;': '"',
-      '&#39;': "'",
-      '&apos;': "'",
-      '&nbsp;': ' ',
-    };
-    return entities[entity] || entity;
-  });
-};
-
-/**
- * Strips HTML tags from a string and converts to plain text
- * Properly handles <br> tags by converting them to spaces
- */
-const stripHtmlTags = (str: string): string => {
-  if (!str) return '';
-  return str
-    .replace(/<br\s*\/?>/gi, ' ') // Convert <br> tags to spaces FIRST
-    .replace(/<\/p>\s*<p[^>]*>/gi, ' ') // Convert paragraph breaks to spaces
-    .replace(/<[^>]*>/g, ''); // Remove all remaining HTML tags
-};
-
-/**
- * Normalizes text for comparison: removes HTML tags, entities, bullets, spaces, and hyphens for accurate matching
- */
-const normalizeText = (str: string): string => {
-  if (!str) return '';
-  return (
-    stripHtmlTags(str) // Remove HTML tags using proper function
-      .replace(/&[#\w]+;/g, (entity) => {
-        // Decode HTML entities
-        const entities: Record<string, string> = {
-          '&amp;': '&',
-          '&lt;': '<',
-          '&gt;': '>',
-          '&quot;': '"',
-          '&#39;': "'",
-          '&apos;': "'",
-          '&nbsp;': ' ',
-        };
-        return entities[entity] || entity;
-      })
-      .replace(/[•\-\*◦▪▫►▸]/g, '') // Remove bullet characters and hyphens
-      .replace(/\s+/g, '') // Remove ALL spaces for comparison
-      .toLowerCase() // Convert to lowercase for case-insensitive comparison
-      .trim()
-  );
 };
 
 /**
@@ -100,48 +50,6 @@ const splitIntoSentences = (text: string): string[] => {
     .split(/(?<=[.!?])(?=\s+[A-Z])|(?<=[.!?])$/)
     .filter((s) => s.trim())
     .map((s) => s.trim());
-};
-
-/**
- * Escapes special regex characters in a string
- */
-const escapeRegex = (str: string): string => {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-};
-
-/**
- * Normalizes whitespace: converts multiple spaces, tabs, newlines to single space
- */
-const normalizeWhitespace = (str: string): string => {
-  if (!str) return '';
-  return str.replace(/\s+/g, ' ').trim();
-};
-
-/**
- * Finds text in a case-insensitive and whitespace-insensitive manner
- * Returns the actual matched text from the source, or null if not found
- */
-const findTextIgnoreCase = (source: string, search: string): { match: string; index: number } | null => {
-  if (!source || !search) return null;
-
-  // Normalize both for comparison
-  const normalizedSource = normalizeWhitespace(source);
-  const normalizedSearch = normalizeWhitespace(search);
-
-  // Create case-insensitive regex with flexible whitespace
-  const searchPattern = normalizedSearch
-    .split(/\s+/)
-    .map(escapeRegex)
-    .join('\\s+');
-
-  const regex = new RegExp(searchPattern, 'i');
-  const match = normalizedSource.match(regex);
-
-  if (match && match.index !== undefined) {
-    return { match: match[0], index: match.index };
-  }
-
-  return null;
 };
 
 /**

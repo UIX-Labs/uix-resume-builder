@@ -5,25 +5,39 @@ const PDF_STYLES = `
   <!DOCTYPE html>
   <html>
     <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+      <meta charset="utf-8" />
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+      />
 
+      <!-- Tailwind CDN -->
+      <script src="https://cdn.tailwindcss.com"></script>
+
+      <!-- Inter Font -->
+      <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+      />
+
+      <style>
+        /* Global reset */
         * {
           margin: 0;
           padding: 0;
           box-sizing: border-box;
+          transform: translateZ(0); /* keep from second template */
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-          font-family: 'Inter', system-ui, sans-serif;
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
+          font-family: "Inter", system-ui, sans-serif;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
         }
 
-        /* Remove all highlighting styles */
+        /* From first template */
         .resume-highlight {
           background-color: transparent !important;
           border: none !important;
@@ -34,12 +48,12 @@ const PDF_STYLES = `
           display: none !important;
         }
 
-        /* Hide blur effects */
-        .blur-\\[2px\\] {
+        /* Disable blur effects */
+        .blur-\[2px\] {
           filter: none !important;
         }
 
-        /* Ensure page breaks work correctly */
+        /* Print rules */
         @media print {
           @page {
             size: A4;
@@ -53,7 +67,10 @@ const PDF_STYLES = `
         }
       </style>
     </head>
-    <body>{content}</body>
+
+    <body>
+      {content}
+    </body>
   </html>
 `;
 

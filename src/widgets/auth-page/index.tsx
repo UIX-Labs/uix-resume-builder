@@ -20,6 +20,7 @@ import GoogleSignInButton from "@shared/ui/components/google-signin-button";
 import { cn } from "@shared/lib/utils";
 import { ICONS } from "@shared/lib/image-assets";
 import LinkedInSignInButton from "@shared/ui/components/linkedIn-signin-button";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 export default function AuthPageWidget() {
   const router = useRouter();
@@ -127,6 +128,7 @@ export default function AuthPageWidget() {
       { email, password },
       {
         onSuccess: (data) => {
+          trackEvent('login_success', { method: 'email' });
           router.push("/dashboard");
         },
         onError: (error) => {
@@ -197,6 +199,7 @@ export default function AuthPageWidget() {
       },
       {
         onSuccess: (data) => {
+          trackEvent('registration_success', { method: 'email' });
           router.push("/dashboard");
         },
         onError: (error) => {

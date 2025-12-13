@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
+import Script from "next/script";
 import "../app/globals.css";
 
 import { Providers } from "./providers";
@@ -24,10 +25,18 @@ const inter = Inter({
   style: ["normal", "italic"],
 });
 
+const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "https://pikaresume.com";
+
 export const metadata: Metadata = {
   title: "Build AI Powered Resume in Minutes",
   description:
-    "Choose from practical resume templates and power it with smart resume builder suggestions",
+    "Choose from practical resume templates and power it with smart resume builder suggestions.",
+  metadataBase: new URL(DOMAIN_URL),
+
+  alternates: {
+    canonical: DOMAIN_URL,
+  },
+
   icons: {
     icon: [
       {
@@ -50,6 +59,41 @@ export const metadata: Metadata = {
       },
     ],
   },
+
+  // Open Graph SEO 
+  openGraph: {
+    title: "Build AI Powered Resume in Minutes",
+    description:
+      "Choose from practical resume templates and power it with smart resume builder suggestions.",
+    url: DOMAIN_URL,
+    siteName: "Your Resume Builder",
+    images: [
+      {
+        url: `https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp`,
+        width: 1200,
+        height: 630,
+        alt: "AI Powered Resume Builder",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // Twitter Card
+  twitter: {
+    card: "summary_large_image",
+    title: "Build AI Powered Resume in Minutes",
+    description:
+      "Choose from practical resume templates and power it with smart resume builder suggestions.",
+    images: ["https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"],
+  },
+
+  // LLM Metadata for AI previews
+  other: {
+    "ai-content":
+      "Create professional AI-powered resumes in minutes using modern templates and smart suggestions.",
+    "ai:generate": "true",
+  },
 };
 
 export default function RootLayout({
@@ -60,6 +104,23 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+        <Script
+          id="structured-data"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Your Resume Builder",
+              url: DOMAIN_URL,
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${DOMAIN_URL}/?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
         <AnalyticsProvider />
         <Providers>
           <UserTracker />

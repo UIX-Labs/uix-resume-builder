@@ -5,8 +5,11 @@ import Image from 'next/image';
 import { Button } from './button';
 import { LOGOS } from '@shared/lib/image-assets';
 
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+
 export default function LinkedInSignInButton() {
   const handleLinkedInSignIn = () => {
+    trackEvent('login_click', { method: 'linkedin' });
     const authUrl = getLinkedInAuthUrl();
     window.location.href = authUrl;
   };

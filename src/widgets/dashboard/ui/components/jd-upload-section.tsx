@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface UploadedFile {
   name: string;
@@ -37,6 +38,11 @@ export function JDUploadSection({
       };
       setFile(newFile);
 
+      trackEvent(`tailored_${type}_upload_start`, {
+        fileName: selectedFile.name,
+        fileSize: selectedFile.size
+      });
+
       let progress = 0;
       const interval = setInterval(() => {
         progress += 10;
@@ -47,6 +53,10 @@ export function JDUploadSection({
             setFile((prev) => (prev ? { ...prev, status: 'success', progress: 100 } : null));
             if (type === 'jd') onJDFileChange?.(selectedFile);
             if (type === 'resume') onResumeFileChange?.(selectedFile);
+
+            trackEvent(`tailored_${type}_upload_success`, {
+              fileName: selectedFile.name
+            });
           }, 300);
         }
       }, 150);
@@ -108,7 +118,12 @@ export function JDUploadSection({
       {!file ? (
         <button
           type="button"
-          onClick={() => !disabled && inputRef.current?.click()}
+          onClick={() => {
+            if (!disabled) {
+              trackEvent(`tailored_${type}_upload_click`);
+              inputRef.current?.click();
+            }
+          }}
           disabled={disabled}
           className="flex flex-col items-center gap-4 disabled:cursor-not-allowed"
         >

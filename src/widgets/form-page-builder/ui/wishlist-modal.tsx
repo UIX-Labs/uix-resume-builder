@@ -8,6 +8,7 @@ import {
   type JoinCommunityResponse,
 } from "@entities/download-pdf/api";
 import { BACKGROUNDS } from "@shared/lib/image-assets";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 interface WishlistModalProps {
   isOpen: boolean;
@@ -24,6 +25,7 @@ const WishlistModal = ({
 
   const handleJoinWaitlist = async () => {
     setIsJoining(true);
+    trackEvent('join_waitlist_click');
     try {
       const response = await joinCommunity();
       onClose();

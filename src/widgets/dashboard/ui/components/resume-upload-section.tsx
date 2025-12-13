@@ -3,6 +3,7 @@ import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 import { toast } from 'sonner';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface UploadedFile {
   name: string;
@@ -34,6 +35,11 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
       setFile(newFile);
       onFileStatusChange?.('uploading');
 
+      trackEvent('tailored_resume_upload_start', {
+        fileName: selectedFile.name,
+        fileSize: selectedFile.size
+      });
+
       let progress = 0;
       const interval = setInterval(() => {
         progress += 10;
@@ -45,6 +51,9 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
             setFile((prev) => (prev ? { ...prev, status: 'success', progress: 100 } : null));
             onFileStatusChange?.('success');
             onFileChange?.(selectedFile);
+            trackEvent('tailored_resume_upload_success', {
+              fileName: selectedFile.name
+            });
           }, 300);
         }
       }, 150);
@@ -80,7 +89,13 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
         <div className={cn('py-1 px-3 rounded-3xl text-xs font-semibold', 'bg-[#DFC500] text-white')}>Mandatory</div>
 
         {!file ? (
-          <label htmlFor="resume-upload-input" className="flex flex-col items-center gap-4 cursor-pointer">
+          <label
+            htmlFor="resume-upload-input"
+            className="flex flex-col items-center gap-4 cursor-pointer"
+            onClick={() => {
+              trackEvent('tailored_resume_upload_click');
+            }}
+          >
             <h1 className="text-2xl font-semibold text-white">Upload Your Resume</h1>
             <UploadCloudIcon className="h-16 w-16 text-white cursor-pointer" />
             <h3 className="text-xl font-semibold text-white">Drag & Drop</h3>

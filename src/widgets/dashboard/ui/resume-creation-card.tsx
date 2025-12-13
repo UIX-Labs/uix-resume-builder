@@ -235,8 +235,8 @@ export default function ResumeCreationCard() {
               <Button
                 variant="outline"
                 className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group disabled:opacity-50 cursor-pointer hover:shadow-md ${activeAction === 'create'
-                    ? 'bg-blue-50 border-blue-500'
-                    : 'bg-white border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:hover:border-gray-200 disabled:hover:bg-white'
+                  ? 'bg-blue-50 border-blue-500'
+                  : 'bg-white border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:hover:border-gray-200 disabled:hover:bg-white'
                   }`}
                 disabled={optionsLocked && activeAction !== 'create'}
                 onClick={resumeCreateHandler}
@@ -253,8 +253,8 @@ export default function ResumeCreationCard() {
               {/* Upload Resume */}
               <div
                 className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group cursor-pointer hover:shadow-md ${activeAction === 'upload'
-                    ? 'border-purple-600 bg-purple-100'
-                    : 'border-purple-500 bg-purple-50'
+                  ? 'border-purple-600 bg-purple-100'
+                  : 'border-purple-500 bg-purple-50'
                   }`}
               >
                 <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
@@ -270,6 +270,11 @@ export default function ResumeCreationCard() {
                   onPendingChange={handleUploadPendingChange}
                   disabled={optionsLocked && activeAction !== 'upload'}
                   renderAsOverlay={true}
+                  onUploadClick={() => {
+                    trackEvent('upload_resume_click', {
+                      source: 'dashboard_card'
+                    });
+                  }}
                 />
               </div>
 
@@ -277,8 +282,8 @@ export default function ResumeCreationCard() {
               <Button
                 variant="outline"
                 className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 cursor-pointer ${activeAction === 'tailoredJD'
-                    ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
-                    : 'hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
+                  ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
+                  : 'hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
                   }`}
                 disabled={optionsLocked && activeAction !== 'tailoredJD'}
                 onClick={handleOpenTailoredWithJD}

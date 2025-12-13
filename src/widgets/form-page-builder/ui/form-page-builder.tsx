@@ -463,18 +463,18 @@ export function FormPageBuilder() {
   // Check if there are any suggestions in the form data
   const hasSuggestions = Boolean(
     formData &&
-    Object.values(formData).some((section) => {
-      if (
-        section &&
-        typeof section === "object" &&
-        "suggestedUpdates" in section
-      ) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-          .suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-      }
-      return false;
-    })
+      Object.values(formData).some((section) => {
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      })
   );
 
   async function generateAndSaveThumbnail() {
@@ -879,7 +879,7 @@ export function FormPageBuilder() {
       // Check if suggestions were actually applied
       const hasChanged = isArrayField
         ? JSON.stringify(updatedFieldValue) !==
-        JSON.stringify(currentFieldValue)
+          JSON.stringify(currentFieldValue)
         : updatedFieldValue !== currentFieldValue;
 
       if (!hasChanged) {
@@ -974,14 +974,11 @@ export function FormPageBuilder() {
           <div
             style={{
               position: "absolute",
-              left: "-9999px",
-              top: "-9999px",
+              left: "0",
+              top: "0",
               width: "794px", // A4 width
               height: "0",
               overflow: "hidden",
-              visibility: "hidden",
-              opacity: 0,
-              zIndex: -9999,
               pointerEvents: "none",
             }}
             aria-hidden="true"
@@ -990,7 +987,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, true)}
+                  data={getCleanDataForRenderer(formData ?? {}, false)}
                 />
               )}
             </div>

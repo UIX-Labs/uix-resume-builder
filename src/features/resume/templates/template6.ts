@@ -44,6 +44,20 @@ const template6 = {
       },
     },
 
+    {
+      id: "contact",
+      type: "header",
+      column: "left",
+      className: "h-50 flex flex-col justify-center gap-4",
+      fields: {
+        name: {
+          path: "",
+          fallback: "",
+          className: "text-4xl font-extrabold text-black tracking-wider",
+        },
+      },
+    },
+
     // Education Section
     {
       id: "education",
@@ -55,7 +69,7 @@ const template6 = {
         path: "education.heading",
         fallback: "EDUCATION",
         className:
-          "text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-50",
+          "text-[#F2936F] text-base font-extrabold tracking-wider mb-3",
       },
       listPath: "education.items",
       containerClassName: "flex flex-col gap-4 mt-2",
@@ -92,7 +106,7 @@ const template6 = {
         path: "skills.heading",
         fallback: "SKILLS",
         className:
-          "text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-10",
+          "text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-8",
       },
       listPath: "skills.items",
       containerClassName: "flex flex-col mb-6",
@@ -100,6 +114,7 @@ const template6 = {
         className: "flex flex-col",
         fields: [
           {
+            prefix: ". ",
             path: "name",
             className:
               "text-white text-sm font-normal leading-relaxed break-words whitespace-normal",
@@ -118,7 +133,7 @@ const template6 = {
         path: "interests.title",
         fallback: "INTERESTS",
         className:
-          "text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 mt-6",
+          "text-[#F2936F] uppercase text-base font-extrabold tracking-wider mb-3 mt-8",
       },
       listPath: "interests.items[0].items",
       itemPath: "",
@@ -141,7 +156,7 @@ const template6 = {
             path: "",
             fallback: "Contact",
             className:
-              "text-[#F2936F] text-base font-extrabold tracking-wider mb-3 mt-10",
+              "text-[#F2936F] text-base font-extrabold tracking-wider mb-3",
           },
           items: [
             {
@@ -196,7 +211,7 @@ const template6 = {
                   type: "link",
                   path: "personalDetails.items[0].links.linkedin.title",
                   href: "personalDetails.items[0].links.linkedin.link",
-                  fallback: "linkedin.com/in/jay-rustogi",
+                  fallback: "",
                   className:
                     "text-white text-sm font-normal underline break-words",
                 },
@@ -216,7 +231,87 @@ const template6 = {
                   type: "link",
                   path: "personalDetails.items[0].links.github.title",
                   href: "personalDetails.items[0].links.github.link",
-                  fallback: "github.com/username",
+                  fallback: "",
+                  className:
+                    "text-white text-sm font-normal underline break-words mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 18,
+                  className: "text-[#F2936F]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className:
+                    "text-white text-sm font-normal underline break-words mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 18,
+                  className: "text-[#F2936F]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className:
+                    "text-white text-sm font-normal underline break-words mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 18,
+                  className: "text-[#F2936F]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className:
+                    "text-white text-sm font-normal underline break-words mt-1",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-2",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 18,
+                  className: "text-[#F2936F]",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
                   className:
                     "text-white text-sm font-normal underline break-words mt-1",
                 },
@@ -387,7 +482,7 @@ const template6 = {
         path: "achievements.title",
         fallback: "ACHIEVEMENTS",
         className:
-          "uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-6",
+          "uppercase text-[#F2936F] text-base font-extrabold tracking-wider px-8 mt-1",
       },
       listPath: "achievements.items[0].items",
       itemPath: "",

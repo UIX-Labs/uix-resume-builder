@@ -89,6 +89,82 @@ const template8 = {
                 },
               ],
             },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-1",
+              items: [
+                {
+                  type: "icon",
+                  name: "Globe",
+                  size: 12,
+                  className: "w-3 h-3",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.website.title",
+                  href: "personalDetails.items[0].links.website.link",
+                  fallback: "",
+                  className: "text-sm underline",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-1",
+              items: [
+                {
+                  type: "icon",
+                  name: "Youtube",
+                  size: 12,
+                  className: "w-3 h-3",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.youtube.title",
+                  href: "personalDetails.items[0].links.youtube.link",
+                  fallback: "",
+                  className: "text-sm underline",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-1",
+              items: [
+                {
+                  type: "icon",
+                  name: "Dribbble",
+                  size: 12,
+                  className: "w-3 h-3",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.dribble.title",
+                  href: "personalDetails.items[0].links.dribble.link",
+                  fallback: "",
+                  className: "text-sm underline",
+                },
+              ],
+            },
+            {
+              type: "inline-group-with-icon",
+              className: "flex items-center gap-1",
+              items: [
+                {
+                  type: "icon",
+                  name: "Palette",
+                  size: 12,
+                  className: "w-3 h-3",
+                },
+                {
+                  type: "link",
+                  path: "personalDetails.items[0].links.behance.title",
+                  href: "personalDetails.items[0].links.behance.link",
+                  fallback: "",
+                  className: "text-sm underline",
+                },
+              ],
+            },
           ],
         },
       },
@@ -259,7 +335,6 @@ const template8 = {
     {
       id: "achievements",
       type: "badge-section",
-      break:true,
       heading: {
         path: "achievements.heading",
         fallback: "Achievements",

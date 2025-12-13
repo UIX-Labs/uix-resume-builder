@@ -264,6 +264,7 @@ export function FormPageBuilder() {
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
     thumbnailRef,
     formData,
+    resumeId,
   });
 
   const handleDownloadPDF = async () => {

@@ -6,6 +6,7 @@ import type { ResumeData } from "@entities/resume";
 interface UsePdfGenerationParams {
   thumbnailRef: React.RefObject<HTMLDivElement | null>;
   formData: Omit<ResumeData, "templateId"> | null | undefined;
+  resumeId?: string;
 }
 
 /**
@@ -14,6 +15,7 @@ interface UsePdfGenerationParams {
 export function usePdfGeneration({
   thumbnailRef,
   formData,
+  resumeId,
 }: UsePdfGenerationParams) {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
@@ -46,14 +48,14 @@ export function usePdfGeneration({
       }
 
       const filename = getResumeFileName();
-      await generatePdfFromHtml(htmlContent, filename);
+      await generatePdfFromHtml(htmlContent, filename, resumeId);
     } catch (error) {
       console.error("PDF generation error:", error);
       throw error;
     } finally {
       setIsGeneratingPDF(false);
     }
-  }, [thumbnailRef, getResumeFileName]);
+  }, [thumbnailRef, getResumeFileName, resumeId]);
 
   return {
     isGeneratingPDF,

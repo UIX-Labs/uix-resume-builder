@@ -143,8 +143,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
     .filter((lt): lt is LinkType => lt !== undefined && linksData[lt.key] !== undefined);
 
   const availableLinks = LINK_TYPES.filter((lt) => !linksData[lt.key]);
-  const hasRoomForMore = Object.values(linksData).some((d) => d.link.trim()) && availableLinks.length > 0;
-
+  const canAddMore = availableLinks.length > 0;
   return (
     <div className="flex flex-col gap-4">
       {visibleLinks.map((linkType) => (
@@ -183,7 +182,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
         </div>
       ))}
 
-      {hasRoomForMore && (
+      {canAddMore && (
         <Popover>
           <PopoverTrigger asChild>
             <button

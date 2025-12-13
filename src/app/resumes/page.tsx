@@ -135,7 +135,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
             )}
           </div>
 
-          <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">
+          <div className="absolute bottom-0 px-4 py-3 flex justify-between items-center bg-white w-full">
             <div>
               <h3 className="font-medium text-sm">{resume.title}</h3>
               <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
@@ -165,7 +165,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
 
         <button
           type="button"
-          className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>

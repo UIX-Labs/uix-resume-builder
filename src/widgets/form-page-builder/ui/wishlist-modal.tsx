@@ -7,6 +7,7 @@ import {
   joinCommunity,
   type JoinCommunityResponse,
 } from "@entities/download-pdf/api";
+import { BACKGROUNDS } from "@shared/lib/image-assets";
 
 interface WishlistModalProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ const WishlistModal = ({
       <DialogContent
         className="!max-w-3xl  max-h-[80vh] overflow-y-auto rounded-[36px] !p-0 flex flex-col [&_[data-slot=dialog-close]]:text-white [&_[data-slot=dialog-close]_svg]:size-6 [&_[data-slot=dialog-close]_svg]:w-6 [&_[data-slot=dialog-close]_svg]:h-6"
         style={{
-          backgroundImage: "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473838/waitlist_rf3zs1.svg",
+          backgroundImage: `url(${BACKGROUNDS.WAITLIST})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

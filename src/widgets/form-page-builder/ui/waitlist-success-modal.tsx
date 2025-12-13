@@ -1,6 +1,7 @@
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import { Button } from '@shared/ui/components/button';
 import { useRouter } from 'next/navigation';
+import { BACKGROUNDS } from '@shared/lib/image-assets';
 
 interface WishlistSuccessModalProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ const WishlistSuccessModal = ({ isOpen, onClose }: WishlistSuccessModalProps) =>
       <DialogContent
         className="!max-w-3xl  max-h-[80vh] overflow-y-auto rounded-[36px] !p-0 flex flex-col [&_[data-slot=dialog-close]]:text-white [&_[data-slot=dialog-close]_svg]:size-6 [&_[data-slot=dialog-close]_svg]:w-6 [&_[data-slot=dialog-close]_svg]:h-6"
         style={{
-          backgroundImage: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473849/waitlist-success_ucgu2m.svg',
+          backgroundImage: `url(${BACKGROUNDS.WAITLIST_SUCCESS})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',

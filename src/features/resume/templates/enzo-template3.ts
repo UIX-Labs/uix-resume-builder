@@ -1,3 +1,5 @@
+import { FALLBACKS } from '@shared/lib/image-assets';
+
 const enzoTemplate3 = {
   name: 'Kate Creative',
 
@@ -44,7 +46,7 @@ const enzoTemplate3 = {
                     {
                       type: 'image',
                       path: 'personalDetails.items[0].profilePicturePublicUrl',
-                      fallback: '/images/profile.svg',
+                      fallback: FALLBACKS.PROFILE,
                       className: 'w-24 h-24 rounded-full object-cover bg-white flex-shrink-0',
                     },
                     {

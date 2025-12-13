@@ -3,6 +3,7 @@
 import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
 import { useSortable } from '@dnd-kit/sortable';
+import { ICONS } from '@shared/lib/image-assets';
 import React, { type PropsWithChildren, useState, useEffect } from 'react';
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext as SortableContextOriginal, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -25,7 +26,7 @@ export function SortableItem({ children, id, className }: PropsWithChildren<{ id
         {...listeners}
         className={cn('absolute cursor-grab top-0 left-0 -translate-x-full')}
       >
-        <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473869/drag_msxj9a.svg" alt="drag" width={24} height={24} />
+        <Image src={ICONS.DRAG} alt="drag" width={24} height={24} />
       </button>
 
       {children}

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Input } from '@shared/ui/components/input';
 import Image from 'next/image';
 import { FieldErrorBadges } from './error-badges';
+import { ICONS } from '@shared/lib/image-assets';
 
 export function StringInput({
   data,
@@ -142,7 +143,7 @@ export function StringsInput({
                     )}
                     onClick={() => handlePlusClick(index)}
                   >
-                    <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/plus_yeqxin.svg" alt="plus" width={16} height={16} />
+                    <Image src={ICONS.PLUS} alt="plus" width={16} height={16} />
                   </button>
                 </SortableItem>
               );

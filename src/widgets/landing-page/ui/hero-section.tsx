@@ -11,7 +11,7 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState, useMemo } from "react";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
-import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
+import { IMAGES, ICONS } from "@shared/lib/image-assets";
 import CountUp from "@shared/ui/count-up";
 import { getUserInitials } from "../lib/user-initials";
 
@@ -68,7 +68,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item z-10 opacity-[100%]">
           <img
-            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/resume-score-img_jusb9j.svg"
+            src={IMAGES.RESUME_SCORE}
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -84,7 +84,7 @@ const HeroSection = () => {
       id: "custom-templates",
       content: (
         <div className="overlay-item overflow-hidden z-10 rounded-3xl glass-card1">
-          <img src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386543/templates_yifags.svg"} alt="Template 1" />
+          <img src={IMAGES.TEMPLATES} alt="Template 1" />
         </div>
       ),
       desktopPosition: { top: "80%", left: "-7%" },
@@ -100,7 +100,7 @@ const HeroSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           <img
-            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473838/color-palete_iwyzvj.svg"
+            src={ICONS.COLOR_PALETTE}
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -118,7 +118,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item">
           <img
-            src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386539/image-hired_ic0slp.svg"}
+            src={IMAGES.HIRED}
             alt="Hired at Meta"
             className="w-full h-auto"
           />

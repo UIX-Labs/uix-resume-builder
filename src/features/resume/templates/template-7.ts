@@ -1,3 +1,5 @@
+import { FALLBACKS } from '@shared/lib/image-assets';
+
 const template7 = {
   name: "Simran Professional",
 
@@ -19,7 +21,7 @@ const template7 = {
         profilePhoto: {
           type: "image",
           path: "personalDetails.items[0].profilePicturePublicUrl",
-          fallback: "/images/profile.svg",
+          fallback: FALLBACKS.PROFILE,
           className:
             "w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover",
         },

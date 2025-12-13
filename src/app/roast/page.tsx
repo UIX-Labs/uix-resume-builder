@@ -14,7 +14,7 @@ import { TypewriterRoast } from './components/typewriter-roast'
 import Fire from './components/fire'
 import Header from '@widgets/landing-page/ui/header-section'
 import { trackEvent } from '@shared/lib/analytics/Mixpanel'
-import { CLOUDINARY_IMAGE_BASE_URL } from '@shared/lib/constants';
+import { IMAGES, ICONS } from '@shared/lib/image-assets';
 
 interface FireBackdropProps {
   variant: 'fixed' | 'flow'
@@ -35,21 +35,21 @@ function FireBackdrop({ variant }: FireBackdropProps) {
     <div aria-hidden className={containerClass}>
       <div className={wrapperClass}>
         <Image
-          src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386542/template-1_fjrdnu.svg"}    
+          src={IMAGES.ROAST_TEMPLATE_1}    
 		  alt='Resume Template 1'
           width={300}
           height={400}
           className='absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[300px] opacity-70 rotate-[15deg] z-0'
         />
         <Image
-          src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386540/template-2_zbdojf.svg"}    
+          src={IMAGES.ROAST_TEMPLATE_2}    
           alt='Resume Template 2'
           width={300}
           height={400}
           className='absolute top-[30%] right-[25%] md:right-[30%] w-[100px] md:w-[300px] opacity-70 rotate-[-15deg] z-0'
         />
         <Image
-          src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386537/template-3_skituu.svg"}    
+          src={IMAGES.ROAST_TEMPLATE_3}    
           alt='Resume Template 3'
           width={280}
           height={350}
@@ -168,7 +168,7 @@ export default function RoastPage() {
             <span>AI Powered</span>
 
             <Image
-              src='https://res.cloudinary.com/dkxocdrky/image/upload/v1765473863/auto_awesome_fi5kfd.svg'
+              src={ICONS.AUTO_AWESOME}
               alt='AI'
               width={14}
               height={14}

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCachedUser } from "@shared/hooks/use-user";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileTextView } from "./mobile-text-view";
+import { LOGOS, ICONS } from "@shared/lib/image-assets";
 
 const FooterSection = () => {
   const router = useRouter();
@@ -29,7 +30,7 @@ const FooterSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           <img
-            src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473838/color-palete_iwyzvj.svg"
+            src={ICONS.COLOR_PALETTE}
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -50,7 +51,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/google-logo_c1xk5c.svg"
+                    src={LOGOS.GOOGLE}
                     alt="google"
                     fill
                     className="object-contain"
@@ -77,7 +78,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473837/microsoft-logo_ir83qh.svg"
+                    src={LOGOS.MICROSOFT}
                     alt="microsoft"
                     fill
                     className="object-contain"
@@ -104,7 +105,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-black">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/apple-logo_v7tcjv.svg"
+                    src={LOGOS.APPLE}
                     alt="apple"
                     fill
                     className="object-contain"
@@ -131,7 +132,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(214,235,255,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473845/meta-logo_cm0zv5.svg"
+                    src={LOGOS.META}
                     alt="meta"
                     fill
                     className="object-contain"
@@ -158,7 +159,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473839/amazon-logo_ezflww.svg"
+                    src={LOGOS.AMAZON}
                     alt="amazon"
                     fill
                     className="object-contain"
@@ -185,7 +186,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473846/nvidia-logo_ohdrwd.svg"
+                    src={LOGOS.NVIDIA}
                     alt="nvidia"
                     fill
                     className="object-contain"
@@ -245,7 +246,7 @@ const FooterSection = () => {
               <div className="flex items-center gap-1 bg-[rgb(2,164,79)] text-white text-xs font-bold px-3 py-1 rounded-full">
                 <span>AI Powered</span>
                 <Image
-                  src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473863/auto_awesome_fi5kfd.svg"
+                  src={ICONS.AUTO_AWESOME}
                   alt="AI Powered"
                   width={17}
                   height={17}

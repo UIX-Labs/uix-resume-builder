@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FieldErrorBadges } from '../error-badges';
 import { getFieldErrors } from '../../lib/get-field-errors';
 import type { SuggestedUpdates } from '@entities/resume';
+import { ICONS } from '@shared/lib/image-assets';
 
 function CollapsedState({ value, subValue }: { value: string; subValue: string }) {
   return (
@@ -143,7 +144,7 @@ export function Draggable({
                 className={cn('absolute cursor-pointer top-0 right-0 translate-x-full flex')}
                 onClick={() => handleDeleteClick(index)}
               >
-                <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473876/delete_lmavgn.svg" alt="delete" width={24} height={24} />
+                <Image src={ICONS.DELETE} alt="delete" width={24} height={24} />
               </button>
 
               <div
@@ -159,7 +160,7 @@ export function Draggable({
                   onClick={() => handleCollapseClick(index)}
                 >
                   <Image
-                    src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473877/cheveron-up_qfqjz5.svg"
+                    src={ICONS.CHEVRON_UP}
                     alt="cheveron-up"
                     className={cn('transition-all duration-300', collapsed[index] && 'rotate-180')}
                     width={24}
@@ -175,7 +176,7 @@ export function Draggable({
                   )}
                   onClick={() => handlePlusClick(index)}
                 >
-                  <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/plus_yeqxin.svg" alt="plus" width={16} height={16} />
+                  <Image src={ICONS.PLUS} alt="plus" width={16} height={16} />
                 </button>
 
                 {!collapsed[index] ? (

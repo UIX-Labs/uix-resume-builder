@@ -10,7 +10,7 @@ import { cn } from "@shared/lib/cn";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { useState } from "react";
 import { MobileTextView } from "./mobile-text-view";
-import { CLOUDINARY_IMAGE_BASE_URL } from "@shared/lib/constants";
+import { LOGOS } from "@shared/lib/image-assets";
 
 export interface MobileSidebarProps {
   isOpen: boolean;
@@ -133,7 +133,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
                 <div className="flex items-center justify-between p-4 border-b border-gray-100">
                   <button className="flex items-center gap-2" onClick={handleLogoClick} type="button">
                     <Image
-                      src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386526/Pika-Resume_rroar1.png"}
+                      src={LOGOS.PIKA_RESUME}
                       alt="Pika Resume"
                       width={40}
                       height={40}

@@ -3,6 +3,7 @@
 import { getLinkedInAuthUrl } from '@/shared/lib/linkedin-auth';
 import Image from 'next/image';
 import { Button } from './button';
+import { LOGOS } from '@shared/lib/image-assets';
 
 export default function LinkedInSignInButton() {
   const handleLinkedInSignIn = () => {
@@ -17,7 +18,7 @@ export default function LinkedInSignInButton() {
     "
     >
       <div className="flex items-center justify-center gap-3">
-        <Image src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/linkedin_tihsl7.svg" alt="LinkedIn logo" width={32} height={32} />
+        <Image src={LOGOS.LINKEDIN} alt="LinkedIn logo" width={32} height={32} />
         Continue with LinkedIn
       </div>
     </Button>

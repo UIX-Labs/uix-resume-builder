@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
-import { CLOUDINARY_IMAGE_BASE_URL } from '@shared/lib/constants';
+import { IMAGES } from '@shared/lib/image-assets';
 
 export default function AllResumePage() {
   const { data: user } = useUserProfile();
@@ -132,7 +132,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
             {resume.publicThumbnail?.url ? (
               <Image src={resume.publicThumbnail.url} width={260} height={320} alt={resume.title} unoptimized />
             ) : (
-              <Image src={CLOUDINARY_IMAGE_BASE_URL + "/v1765386527/image-14_uckcwl.svg"} alt={resume.title} className="w-full h-full object-contain" fill />
+              <Image src={IMAGES.LINKEDIN_INTEGRATION_BG} alt={resume.title} className="w-full h-full object-contain" fill />
             )}
           </div>
 

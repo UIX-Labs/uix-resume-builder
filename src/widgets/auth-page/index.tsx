@@ -18,6 +18,7 @@ import { VideoBackground } from "./ui/video-background";
 import Image from "next/image";
 import GoogleSignInButton from "@shared/ui/components/google-signin-button";
 import { cn } from "@shared/lib/utils";
+import { ICONS } from "@shared/lib/image-assets";
 import LinkedInSignInButton from "@shared/ui/components/linkedIn-signin-button";
 
 export default function AuthPageWidget() {
@@ -355,8 +356,8 @@ export default function AuthPageWidget() {
                     <Image
                       src={
                         showPassword.password
-                          ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
-                          : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
+                          ? ICONS.EYE_OFF
+                          : ICONS.EYE_OPEN
                       }
                       alt={
                         showPassword.password
@@ -575,8 +576,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.password
-                            ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
-                            : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
+                            ? ICONS.EYE_OFF
+                            : ICONS.EYE_OPEN
                         }
                         alt={
                           showPassword.password
@@ -624,8 +625,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.confirmPassword
-                            ? "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473853/eye-off_wa8bis.svg"
-                            : "https://res.cloudinary.com/dkxocdrky/image/upload/v1765473854/eye-open_suzduo.svg"
+                            ? ICONS.EYE_OFF
+                            : ICONS.EYE_OPEN
                         }
                         alt={
                           showPassword.confirmPassword

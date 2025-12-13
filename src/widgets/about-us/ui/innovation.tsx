@@ -2,38 +2,39 @@ import CountUp from '@shared/ui/count-up';
 import getCurrentStatsQuery from '@widgets/landing-page/api/query';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
+import { LOGOS, ICONS } from '@shared/lib/image-assets';
 
 // Services data array
 const services = [
 	{
 		id: 1,
 		title: 'Practical and clean resume templates',
-		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
+		icon: ICONS.EXPERIENCE,
 	},
 	{
 		id: 2,
 		title: 'AI Builder intelligence for corrections',
-		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
+		icon: ICONS.EXPERIENCE,
 	},
 	{
 		id: 3,
 		title: 'Tailored resume for the Job',
-		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
+		icon: ICONS.EXPERIENCE,
 	},
 	{
 		id: 4,
 		title: 'Community support for resume review and mentorship',
-		icon: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/epereince_u4alve.svg',
+		icon: ICONS.EXPERIENCE,
 	},
 ];
 
 // Company logos data array
 const companyLogos = [
-	{ id: 1, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473845/meta-logo_cm0zv5.svg', alt: 'Meta' },
-	{ id: 2, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473861/google_jsze6m.svg', alt: 'Google' },
-	{ id: 3, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473847/apple-logo_v7tcjv.svg', alt: 'Apple' },
-	{ id: 4, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473862/linkedin_tihsl7.svg', alt: 'LinkedIn' },
-	{ id: 5, src: 'https://res.cloudinary.com/dkxocdrky/image/upload/v1765473839/amazon-logo_ezflww.svg', alt: 'Amazon' },
+	{ id: 1, src: LOGOS.META, alt: 'Meta' },
+	{ id: 2, src: LOGOS.GOOGLE_COLORED, alt: 'Google' },
+	{ id: 3, src: LOGOS.APPLE, alt: 'Apple' },
+	{ id: 4, src: LOGOS.LINKEDIN, alt: 'LinkedIn' },
+	{ id: 5, src: LOGOS.AMAZON, alt: 'Amazon' },
 ];
 
 function Innovation() {
@@ -96,7 +97,7 @@ function Innovation() {
 								<div className="flex items-center gap-1">
 									{[...Array(5)].map((_, i) => (
 										<Image
-											src="https://res.cloudinary.com/dkxocdrky/image/upload/v1765473868/Star_adbmig.svg"
+											src={ICONS.STAR}
 											width={18}
 											height={18}
 											alt=""

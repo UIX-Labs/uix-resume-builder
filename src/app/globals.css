@@ -422,7 +422,8 @@
 
   body {
     background-color: #ffffff; /* Fallback color */
-    background-image: url('../../public/images/landing-page-bg.svg');
+    /* Note: This URL uses CLOUDINARY_BASE_URL constant from @shared/lib/constants */
+    background-image: url("https://res.cloudinary.com/dkxocdrky/image/upload/v1765386532/landing-page-bg_jgjrgv.svg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

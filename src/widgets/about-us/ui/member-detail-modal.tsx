@@ -5,6 +5,7 @@ import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import React, { useState } from 'react';
+import { LOGOS, ICONS } from '@shared/lib/image-assets';
 
 interface TeamMember {
   id: number;
@@ -44,9 +45,9 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
 
   // Mock data for work history and style tags
   const workHistory = [
-    { company: 'Google', logo: '/images/google-logo.svg' },
-    { company: 'Microsoft', logo: '/images/microsoft-logo.svg' },
-    { company: 'Apple', logo: '/images/apple-logo.svg' },
+    { company: 'Google', logo: LOGOS.GOOGLE },
+    { company: 'Microsoft', logo: LOGOS.MICROSOFT },
+    { company: 'Apple', logo: LOGOS.APPLE },
   ];
 
   const styleTags = [
@@ -89,7 +90,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     {/* LinkedIn Icon */}
                     <div className="flex-shrink-0 w-6 h-6 md:w-8 md:h-8 ml-3 md:ml-4">
                       <Image
-                        src="/images/linkedin.svg"
+                        src={LOGOS.LINKEDIN}
                         alt="LinkedIn"
                         width={32}
                         height={32}
@@ -138,7 +139,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
               </div>
             </div>
             <div className="absolute bottom-0 right-0 pointer-events-none overflow-hidden hidden md:block">
-              <Image src="/images/star-decoration.svg" alt="" width={120} height={120} />
+              <Image src={ICONS.STAR_DECORATION} alt="" width={120} height={120} />
             </div>
             {/* </div> */}
           </div>

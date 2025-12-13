@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { ICONS } from '@shared/lib/image-assets';
 
 export function WhyWeStarted() {
   return (
@@ -7,7 +8,7 @@ export function WhyWeStarted() {
       <div className="lg:hidden flex flex-col items-center text-center">
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
           <Image
-            src="/images/flash.svg"
+            src={ICONS.FLASH}
             alt="Flash icon"
             width={80}
             height={80}
@@ -43,7 +44,7 @@ export function WhyWeStarted() {
       <div className="hidden lg:block relative min-h-[237px]">
         <div className="absolute left-[432px] top-0 w-20 h-20">
           <Image
-            src="/images/flash.svg"
+            src={ICONS.FLASH}
             alt="Flash icon"
             width={80}
             height={80}

@@ -5,6 +5,7 @@ import { OurVision } from '@widgets/about-us/ui/our-vision';
 import { JourneyTimeline } from '@widgets/about-us/ui/journey-timeline';
 import Innovation from '@widgets/about-us/ui/innovation';
 import FooterSection from '@widgets/landing-page/ui/footer-section';
+import { IMAGES } from '@shared/lib/image-assets';
 
 
 export default function AboutUs() {
@@ -32,7 +33,7 @@ function AboutPage() {
 				<div className="hidden lg:block relative w-full max-w-[995px] mx-auto px-4 -mt-36 min-h-[700px]">
 					<div className="absolute w-[364px] h-[664px] left-[315px] top-0 z-10">
 						<Image
-							src="/images/Group-35.png"
+							src={IMAGES.GROUP_35}
 							alt="Group 35"
 							fill
 							className="object-cover"
@@ -58,9 +59,8 @@ function AboutPage() {
 							Meet <span className="font-black">Resume Builder</span>
 						</h2>
 						<img
-							src="/images/Group-35.png"
+							src={IMAGES.GROUP_35}
 							alt="Group 35"
-							fill
 							className="object-cover"
 						/>
 						<p className="text-[20px] sm:text-[24px] md:text-[28px] font-normal leading-[1.4] text-[#0C1118] font-[Geist,sans-serif] tracking-[-0.03em] mb-2">

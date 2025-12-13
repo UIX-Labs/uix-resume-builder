@@ -7,7 +7,7 @@ import { FileUpload } from '@widgets/resumes/file-upload';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
@@ -126,7 +126,7 @@ export default function ResumeCreationCard() {
   };
 
   const closeBuilderIntelligenceModal = useCallback(
-    (shouldRelease = true) => {
+    (shouldRelease = false) => {
       setIsBuilderIntelligenceModalOpen(false);
       setShowResumeUpload(false);
       setShowJDUpload(false);
@@ -151,7 +151,6 @@ export default function ResumeCreationCard() {
       }
 
       setShowScanningOverlay(false);
-      releaseOptions();
     },
     [closeBuilderIntelligenceModal, releaseOptions],
   );
@@ -184,10 +183,10 @@ export default function ResumeCreationCard() {
   }, [builderIntelligenceModalProps, shouldRenderBuilderIntelligenceModal]);
 
   // Show NewProgressBar only for upload action
-  const showProgressBar = showScanningOverlay && activeAction === 'upload';
+  const showProgressBar = showScanningOverlay && (activeAction === 'upload' || activeAction === 'tailoredJD');
 
   // Show spinner overlay for other actions
-  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload';
+  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload' && activeAction !== 'tailoredJD';
 
   const overlayConfig = {
     create: {

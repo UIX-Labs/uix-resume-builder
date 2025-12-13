@@ -136,14 +136,14 @@ function ResumeCard({ resume }: ResumeCardProps) {
           </div>
 
           <div className="absolute bottom-0 px-4 py-3 flex justify-between items-center bg-white w-full">
-            <div>
-              <h3 className="font-medium text-sm">{resume.title}</h3>
+            <div className="flex-1 min-w-0 mr-2">
+              <h3 className="font-medium text-sm truncate">{resume.title}</h3>
               <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 p-0 cursor-pointer">
+                <Button variant="ghost" size="icon" className="h-8 w-8 p-0 cursor-pointer bg-white z-20 flex-shrink-0">
                   <MoreVertical className="w-4 h-4 text-gray-500" />
                 </Button>
               </DropdownMenuTrigger>

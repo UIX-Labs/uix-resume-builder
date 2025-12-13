@@ -126,7 +126,7 @@ export default function ResumeCreationCard() {
   };
 
   const closeBuilderIntelligenceModal = useCallback(
-    (shouldRelease = false) => {
+    (shouldRelease = true) => {
       setIsBuilderIntelligenceModalOpen(false);
       setShowResumeUpload(false);
       setShowJDUpload(false);
@@ -139,7 +139,7 @@ export default function ResumeCreationCard() {
   );
 
   const handleCloseBuilderIntelligence = useCallback(() => {
-    closeBuilderIntelligenceModal();
+    closeBuilderIntelligenceModal(false);
   }, [closeBuilderIntelligenceModal]);
 
   const handleBuilderIntelligenceSubmittingChange = useCallback(

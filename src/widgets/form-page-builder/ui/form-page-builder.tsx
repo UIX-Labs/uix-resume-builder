@@ -55,7 +55,10 @@ import type { JoinCommunityResponse } from "@entities/download-pdf/types/type";
 import TemplateButton from "./change-template-button";
 import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
 import { saveSectionWithSuggestions } from "../lib/save-helpers";
-import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
+import {
+  invalidateQueriesIfAllSuggestionsApplied,
+  updateResumeDataCacheOptimistically,
+} from "../lib/query-invalidation";
 import { usePdfGeneration } from "../hooks/use-pdf-generation";
 import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
 import { formatTimeAgo } from "../lib/time-helpers";
@@ -191,6 +194,7 @@ export function FormPageBuilder() {
 
   const thumbnailGenerated = useRef(false);
   const thumbnailRef = useRef<HTMLDivElement>(null);
+  const lastThumbnailHash = useRef<string | null>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     null
@@ -472,6 +476,12 @@ export function FormPageBuilder() {
     }
 
     try {
+      // Check if formData has changed since last thumbnail
+      const currentHash = JSON.stringify(formData);
+      if (lastThumbnailHash.current === currentHash) {
+        return; // Skip if nothing changed
+      }
+
       // Get the parent container
       const container = thumbnailRef.current.parentElement as HTMLElement;
 
@@ -520,12 +530,27 @@ export function FormPageBuilder() {
       await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
 
       thumbnailGenerated.current = true;
+      lastThumbnailHash.current = currentHash; // Store hash after successful upload
     } catch (error) {
       console.error("Background thumbnail generation failed:", error);
     }
   }
 
-  // Auto-generate thumbnail every 20 seconds
+  // Auto-generate thumbnail on formData changes (debounced)
+  useEffect(() => {
+    if (!formData || Object.keys(formData).length === 0 || !resumeId) {
+      return;
+    }
+
+    // Debounce: Generate thumbnail 5s after last change
+    const timeoutId = setTimeout(() => {
+      generateAndSaveThumbnail();
+    }, 5000);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData, resumeId]);
+
+  // Backup: Auto-generate thumbnail every 60 seconds (reduced from 25s)
   useEffect(() => {
     if (!resumeId || !targetRef.current) {
       return;
@@ -536,7 +561,7 @@ export function FormPageBuilder() {
       if (formData && Object.keys(formData).length > 0) {
         generateAndSaveThumbnail();
       }
-    }, 25000);
+    }, 60000); // Increased from 25000ms to 60000ms since we trigger on changes
 
     return () => clearInterval(intervalId);
   }, [resumeId]);
@@ -567,6 +592,14 @@ export function FormPageBuilder() {
 
         // Save current section and all sections with suggestions
         await saveSectionWithSuggestions(currentStep, formData, save);
+
+        // Update cache optimistically for current section (NO API CALL)
+        updateResumeDataCacheOptimistically(
+          queryClient,
+          resumeId,
+          currentStep as any,
+          formData[currentStep]
+        );
 
         // Get fresh formData after save to check suggestion state
         const updatedFormData = useFormDataStore.getState().formData;
@@ -604,6 +637,14 @@ export function FormPageBuilder() {
 
       // Save current section and all sections with suggestions
       await saveSectionWithSuggestions(currentStep, formData, save);
+
+      // Update cache optimistically for current section (NO API CALL)
+      updateResumeDataCacheOptimistically(
+        queryClient,
+        resumeId,
+        currentStep as any,
+        formData[currentStep]
+      );
 
       await generateAndSaveThumbnail();
 
@@ -663,12 +704,22 @@ export function FormPageBuilder() {
         if (!hasModifications) {
           return;
         }
+
+        // Save to backend
         await save({
           type: step,
           data: data,
           updatedAt: Date.now(),
         });
         setLastSaveTime(Date.now());
+
+        // Update cache optimistically (NO API CALL - prevents getById)
+        updateResumeDataCacheOptimistically(
+          queryClient,
+          resumeId,
+          step as any,
+          data
+        );
 
         // Get fresh formData to check suggestion state
         const updatedFormData = useFormDataStore.getState().formData;
@@ -686,8 +737,8 @@ export function FormPageBuilder() {
       } catch (error) {
         console.error("Auto-save failed:", error);
       }
-    }, 25000),
-    [save, queryClient]
+    }, 5000), // Reduced from 25000ms to 5000ms (5 seconds)
+    [save, queryClient, resumeId]
   );
 
   const handleToggleHideSection = useCallback(

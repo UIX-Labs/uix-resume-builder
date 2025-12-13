@@ -19,6 +19,7 @@ export function useTemplateFormSchema() {
   return useFetch({
     queryKey: ["resume-schema"],
     queryFn: getResumeSchema,
+    staleTime: Infinity, // Cache forever since schema is static data
   });
 }
 
@@ -109,6 +110,9 @@ export function useResumeData(id: string) {
 
       return mergedRes;
     },
+    staleTime: 30000, // Cache for 30s
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    refetchOnMount: false, // Don't refetch on remount (only refetch if data is stale)
   });
 }
 

@@ -1,5 +1,4 @@
 import {
-  useGetAllResumes,
   useTemplateFormSchema,
   useUpdateResumeTemplate,
   getResumeEmptyData,
@@ -60,11 +59,6 @@ import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidat
 import { usePdfGeneration } from "../hooks/use-pdf-generation";
 import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
 import { formatTimeAgo } from "../lib/time-helpers";
-import enzoTemplate1 from "@features/resume/templates/enzo-template1";
-import template6 from "@features/resume/templates/template6";
-import laurenChenTemplate from "@features/resume/templates/eren-templete2";
-import template11 from "@features/resume/templates/template11";
-import template10 from "@features/resume/templates/template10";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -225,13 +219,8 @@ export function FormPageBuilder() {
 
   const { data: user } = useUserProfile();
 
-  const { data: resumes, refetch: refetchResumes } = useGetAllResumes({
-    userId: user?.id as string,
-  });
-
-  const currentResume = resumes?.find((resume) => resume.id === resumeId);
-  const templateId = currentResume?.templateId || null;
-  const embeddedTemplate = currentResume?.template;
+  const templateId = data?.templateId || null;
+  const embeddedTemplate = data?.template;
 
   const { formData, setFormData } = useFormDataStore();
 
@@ -410,13 +399,13 @@ export function FormPageBuilder() {
   useEffect(() => {
     if (embeddedTemplate) {
       setSelectedTemplate(embeddedTemplate);
-    } else if (templateId === null && currentResume) {
+    } else if (templateId === null && data) {
       setSelectedTemplate({
         id: "default",
         json: aniketTemplate,
       } as Template);
     }
-  }, [embeddedTemplate, templateId, currentResume]);
+  }, [embeddedTemplate, templateId, data]);
 
   // Auto-scroll to section when currentStep changes
   useEffect(() => {
@@ -531,21 +520,10 @@ export function FormPageBuilder() {
       await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
 
       thumbnailGenerated.current = true;
-      refetchResumes();
     } catch (error) {
       console.error("Background thumbnail generation failed:", error);
     }
   }
-
-  useEffect(() => {
-    const curResume = resumes?.find((resume) => resume.id === resumeId);
-
-    if (!curResume || curResume.publicThumbnail || thumbnailGenerated.current) {
-      return;
-    }
-
-    generateAndSaveThumbnail();
-  }, [resumeId, resumes]);
 
   // Auto-generate thumbnail every 20 seconds
   useEffect(() => {
@@ -746,11 +724,11 @@ export function FormPageBuilder() {
 
   // Initialize last save time from resume data
   useEffect(() => {
-    if (currentResume?.updatedAt) {
-      const updatedAt = new Date(currentResume.updatedAt).getTime();
+    if (data?.updatedAt) {
+      const updatedAt = new Date(data.updatedAt).getTime();
       setLastSaveTime(updatedAt);
     }
-  }, [currentResume?.updatedAt]);
+  }, [data?.updatedAt]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {
@@ -760,7 +738,6 @@ export function FormPageBuilder() {
       });
 
       setSelectedTemplate(template);
-      refetchResumes();
 
       toast.success("Template updated successfully");
 

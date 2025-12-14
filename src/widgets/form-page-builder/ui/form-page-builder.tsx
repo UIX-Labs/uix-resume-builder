@@ -30,6 +30,7 @@ import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
 import { PreviewButton } from "@shared/ui/components/preview-button";
 import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 import mockData from "../../../../mock-data.json";
+import * as Sentry from "@sentry/nextjs";
 
 import type {
   SuggestedUpdate,
@@ -296,6 +297,7 @@ export function FormPageBuilder() {
       }
     } catch (error) {
       console.error("Failed to download PDF:", error);
+      Sentry.captureException(error);
       toast.error("Failed to download PDF");
       trackEvent("resume_download", {
         status: "failed",
@@ -311,6 +313,7 @@ export function FormPageBuilder() {
         await generatePDF();
       } catch (error) {
         console.error("Failed to generate PDF after joining waitlist:", error);
+        Sentry.captureException(error);
         toast.error("Failed to download PDF");
       }
     } else {
@@ -535,6 +538,7 @@ export function FormPageBuilder() {
       refetchResumes();
     } catch (error) {
       console.error("Background thumbnail generation failed:", error);
+      Sentry.captureException(error);
     }
   }
 
@@ -601,6 +605,7 @@ export function FormPageBuilder() {
       }
     } catch (error) {
       console.error("Failed to save before moving to next step:", error);
+      Sentry.captureException(error);
       toast.error("Failed to save changes");
       // Don't invalidate on error
     }
@@ -663,6 +668,7 @@ export function FormPageBuilder() {
         setLastSaveTime(Date.now());
       } catch (error) {
         console.error("Failed to save section visibility:", error);
+        Sentry.captureException(error);
         toast.error("Failed to update section visibility");
       }
     }, 1000),
@@ -708,6 +714,7 @@ export function FormPageBuilder() {
         });
       } catch (error) {
         console.error("Auto-save failed:", error);
+        Sentry.captureException(error);
       }
     }, 25000),
     [save, queryClient]
@@ -771,6 +778,7 @@ export function FormPageBuilder() {
       });
     } catch (error) {
       console.error("Failed to update template:", error);
+      Sentry.captureException(error);
       toast.error("Failed to update template");
     }
   };
@@ -935,6 +943,7 @@ export function FormPageBuilder() {
       setAnalyzerModalOpen(false);
     } catch (error) {
       console.error("❌ Failed to apply suggestions:", error);
+      Sentry.captureException(error);
       toast.error("Failed to apply suggestions");
     }
   };

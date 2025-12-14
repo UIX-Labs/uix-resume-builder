@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import { generatePdfFromHtml } from "../lib/pdf-helpers";
 import dayjs from "dayjs";
 import type { ResumeData } from "@entities/resume";
+import * as Sentry from "@sentry/nextjs";
 
 interface UsePdfGenerationParams {
   thumbnailRef: React.RefObject<HTMLDivElement | null>;
@@ -51,6 +52,7 @@ export function usePdfGeneration({
       await generatePdfFromHtml(htmlContent, filename, resumeId);
     } catch (error) {
       console.error("PDF generation error:", error);
+      Sentry.captureException(error);
       throw error;
     } finally {
       setIsGeneratingPDF(false);
@@ -63,4 +65,3 @@ export function usePdfGeneration({
     resumeFileName: getResumeFileName(),
   };
 }
-

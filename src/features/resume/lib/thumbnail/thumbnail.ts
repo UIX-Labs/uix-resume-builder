@@ -1,4 +1,5 @@
-import html2canvas from 'html2canvas';
+import html2canvas from "html2canvas";
+import * as Sentry from "@sentry/nextjs";
 
 export type ThumbnailOptions = {
   width?: number;
@@ -11,8 +12,11 @@ export type ThumbnailOptions = {
  * Waits for all images in the element to finish loading
  * Returns a promise that resolves when all images are loaded or timeout occurs
  */
-async function waitForImagesToLoad(element: HTMLElement, timeoutMs: number = 5000): Promise<void> {
-  const images = Array.from(element.querySelectorAll('img'));
+async function waitForImagesToLoad(
+  element: HTMLElement,
+  timeoutMs: number = 5000
+): Promise<void> {
+  const images = Array.from(element.querySelectorAll("img"));
 
   if (images.length === 0) {
     return Promise.resolve();
@@ -45,8 +49,11 @@ async function waitForImagesToLoad(element: HTMLElement, timeoutMs: number = 500
   await Promise.all(imagePromises);
 }
 
-export async function generateThumbnail(element: HTMLElement, options: ThumbnailOptions = {}): Promise<string | null> {
-  const { backgroundColor = 'white' } = options;
+export async function generateThumbnail(
+  element: HTMLElement,
+  options: ThumbnailOptions = {}
+): Promise<string | null> {
+  const { backgroundColor = "white" } = options;
 
   try {
     // Wait for all images to load before capturing
@@ -64,11 +71,12 @@ export async function generateThumbnail(element: HTMLElement, options: Thumbnail
     });
 
     const canvas = await canvasPromise;
-    const dataUrl = canvas.toDataURL('image/png', 1);
+    const dataUrl = canvas.toDataURL("image/png", 1);
 
     return dataUrl;
   } catch (error) {
-    console.error('Failed to generate thumbnail:', error);
+    console.error("Failed to generate thumbnail:", error);
+    Sentry.captureException(error);
     return null;
   }
 }

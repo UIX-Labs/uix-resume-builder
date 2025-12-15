@@ -40,6 +40,8 @@ import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
 import { useQueryClient } from "@tanstack/react-query";
 import AnalyzerModal from "@shared/ui/components/analyzer-modal";
+import { useAnalyzerStore } from "@shared/stores/analyzer-store";
+import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
 
 /**
  * Checks if a single section is empty
@@ -154,6 +156,7 @@ export function FormPageBuilder() {
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
   const queryClient = useQueryClient();
+  const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -225,6 +228,23 @@ export function FormPageBuilder() {
     setCurrentStep: (step: string) => setCurrentStep(step as any),
     generateAndSaveThumbnail,
   });
+
+  // Check if there are any suggestions in the form data
+  const hasSuggestions = Boolean(
+    formData &&
+      Object.values(formData).some((section) => {
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      })
+  );
 
   // Debounced function for hide/unhide
   const debouncedHideSave = useCallback(
@@ -423,57 +443,115 @@ export function FormPageBuilder() {
   );
 
   useEffect(() => {
-    async function initializeFormData() {
-      if (!resumeData) return;
+    async function processAnalyzerData() {
+      if (!resumeId || !analyzedData) return;
 
-      // Check if all sections are empty (create flow) or has data (edit flow)
-      const sectionKeys = Object.keys(resumeData).filter(
-        (key) => key !== "templateId" && key !== "updatedAt" && key !== "template"
-      );
+      // Fetch empty data for defaults
+      const emptyData = await getResumeEmptyData();
 
-      const allSectionsEmpty = sectionKeys.every((key) =>
-        isSectionEmpty(resumeData[key as keyof typeof resumeData])
-      );
-
-      if (allSectionsEmpty) {
-        // Create flow: Merge mock data with actual IDs
-        const mergedData: Record<string, any> = {};
-
-        for (const sectionKey of Object.keys(resumeData)) {
-          if (sectionKey === "templateId" || sectionKey === "updatedAt" || sectionKey === "template") {
-            mergedData[sectionKey] = resumeData[sectionKey as keyof typeof resumeData];
-            continue;
-          }
-
-          const actualSection = resumeData[sectionKey as keyof typeof resumeData];
-          const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-          if (mockSection) {
-            const syncedSection = syncSectionIds(actualSection, mockSection);
-            mergedData[sectionKey] = syncedSection;
-          } else {
-            mergedData[sectionKey] = actualSection;
-          }
-        }
-
-        // Get empty data for defaults and deep merge to ensure all fields have default values
-        const emptyData = await getResumeEmptyData();
-        for (const key of Object.keys(emptyData)) {
-          mergedData[key] = deepMerge(
-            mergedData[key],
-            (emptyData as Record<string, any>)[key]
-          );
-        }
-
-        setFormData(mergedData as Omit<ResumeData, "templateId">);
-      } else {
-        // Edit flow: Use actual data as-is
-        setFormData(resumeData);
+      // Deep merge analyzer data with empty data to ensure all fields have default values
+      let processedData: Record<string, any> = { ...analyzedData };
+      for (const key of Object.keys(emptyData)) {
+        processedData[key] = deepMerge(
+          processedData[key],
+          (emptyData as Record<string, any>)[key]
+        );
       }
+
+      // Normalize string fields (interests, achievements)
+      processedData = normalizeStringsFields(processedData);
+
+      setFormData(processedData as Omit<ResumeData, "templateId">);
     }
 
-    initializeFormData();
-  }, [resumeData, setFormData]);
+    if (!resumeId) {
+      return;
+    }
+
+    if (analyzerResumeId === resumeId && analyzedData) {
+      processAnalyzerData();
+      return;
+    }
+
+    if (!resumeData) return;
+
+    // Check if current formData has suggestions
+    const formDataHasSuggestions = formData && Object.values(formData).some((section) => {
+      if (
+        section &&
+        typeof section === "object" &&
+        "suggestedUpdates" in section
+      ) {
+        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+          .suggestedUpdates;
+        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      }
+      return false;
+    });
+
+    // Check if resumeData has suggestions
+    const resumeDataHasSuggestions = Object.values(resumeData).some((section) => {
+      if (
+        section &&
+        typeof section === "object" &&
+        "suggestedUpdates" in section
+      ) {
+        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+          .suggestedUpdates;
+        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      }
+      return false;
+    });
+
+    // If formData has suggestions but resumeData doesn't,
+    // it means Builder Intelligence set the suggestions - don't overwrite!
+    if (formDataHasSuggestions && !resumeDataHasSuggestions) {
+      return;
+    }
+
+    // Determine if this is create flow (all sections empty) or edit flow (has data)
+    const sectionKeys = Object.keys(resumeData).filter(
+      (key) =>
+        key !== "templateId" && key !== "updatedAt" && key !== "template"
+    );
+
+    const allSectionsEmpty = sectionKeys.every((key) =>
+      isSectionEmpty(resumeData[key as keyof typeof resumeData])
+    );
+
+    if (allSectionsEmpty) {
+      // Create flow: Merge mock data with actual IDs
+      const mergedData: Record<string, any> = {};
+
+      for (const sectionKey of Object.keys(resumeData)) {
+        if (
+          sectionKey === "templateId" ||
+          sectionKey === "updatedAt" ||
+          sectionKey === "template"
+        ) {
+          mergedData[sectionKey] =
+            resumeData[sectionKey as keyof typeof resumeData];
+          continue;
+        }
+
+        const actualSection =
+          resumeData[sectionKey as keyof typeof resumeData];
+        const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+        if (mockSection) {
+          const syncedSection = syncSectionIds(actualSection, mockSection);
+          mergedData[sectionKey] = syncedSection;
+        } else {
+          mergedData[sectionKey] = actualSection;
+        }
+      }
+
+      setFormData(mergedData as Omit<ResumeData, "templateId">);
+    } else {
+      // Edit flow: Use actual data as-is
+      setFormData(resumeData as Omit<ResumeData, "templateId">);
+    }
+  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
 
   return (
     <>
@@ -494,6 +572,7 @@ export function FormPageBuilder() {
               template={selectedTemplate}
               data={getCleanDataForRenderer(formData ?? {}, false)}
               currentSection={currentStep}
+              hasSuggestions={hasSuggestions}
             />
           </div>
           <div

@@ -19,6 +19,7 @@ export function useTemplateFormSchema() {
   return useFetch({
     queryKey: ["resume-schema"],
     queryFn: getResumeSchema,
+    staleTime: Infinity, // Cache forever since schema is static data
   });
 }
 

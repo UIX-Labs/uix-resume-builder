@@ -55,7 +55,7 @@ export function usePdfGeneration({
     } finally {
       setIsGeneratingPDF(false);
     }
-  }, [thumbnailRef, getResumeFileName]);
+  }, [thumbnailRef, getResumeFileName, resumeId]);
 
   return {
     isGeneratingPDF,

@@ -26,12 +26,31 @@ const inter = Inter({
 });
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || "https://pikaresume.com";
+const LOGO_URL = "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp";
 
 export const metadata: Metadata = {
   title: "Build AI Powered Resume in Minutes",
   description:
     "Choose from practical resume templates and power it with smart resume builder suggestions.",
   metadataBase: new URL(DOMAIN_URL),
+
+  keywords: [
+    "AI resume builder",
+    "resume templates",
+    "professional resume",
+    "CV builder",
+    "resume maker",
+    "free resume builder",
+    "ATS resume",
+    "resume creator",
+    "job application",
+    "career tools",
+    "resume design",
+    "modern resume templates",
+    "resume writing",
+    "online resume builder",
+    "resume generator",
+  ],
 
   alternates: {
     canonical: DOMAIN_URL,
@@ -58,6 +77,20 @@ export const metadata: Metadata = {
         type: "image/png",
       },
     ],
+    other: [
+      {
+        rel: "icon",
+        url: `${DOMAIN_URL}/images/fav-icons/fav-icon(192*192).png`,
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        rel: "icon",
+        url: `${DOMAIN_URL}/images/fav-icons/fav-icon(512*512).png`,
+        sizes: "512x512",
+        type: "image/png",
+      },
+    ],
   },
 
   // Open Graph SEO 
@@ -69,7 +102,7 @@ export const metadata: Metadata = {
     siteName: "Your Resume Builder",
     images: [
       {
-        url: `https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp`,
+        url: LOGO_URL,
         width: 1200,
         height: 630,
         alt: "AI Powered Resume Builder",
@@ -85,7 +118,7 @@ export const metadata: Metadata = {
     title: "Build AI Powered Resume in Minutes",
     description:
       "Choose from practical resume templates and power it with smart resume builder suggestions.",
-    images: ["https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"],
+    images: [LOGO_URL],
   },
 
   // LLM Metadata for AI previews
@@ -113,6 +146,13 @@ export default function RootLayout({
               "@type": "WebSite",
               name: "Your Resume Builder",
               url: DOMAIN_URL,
+              description: "Create professional AI-powered resumes in minutes using modern templates and smart suggestions.",
+              logo: {
+                "@type": "ImageObject",
+                url: LOGO_URL,
+                width: "512",
+                height: "512",
+              },
               potentialAction: {
                 "@type": "SearchAction",
                 target: `${DOMAIN_URL}/?q={search_term_string}`,

@@ -1,40 +1,34 @@
-import {
-  useTemplateFormSchema,
-  useUpdateResumeTemplate,
-  getResumeEmptyData,
-} from "@entities/resume";
-import { generateThumbnail, ResumeRenderer } from "@features/resume/renderer";
-import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-renderer";
-import aniketTemplate from "@features/resume/templates/standard";
-import { TemplateForm } from "@features/template-form";
-import { Button } from "@shared/ui/button";
+import { PreviewButton } from "@shared/ui/components/preview-button";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useFormPageBuilder } from "../models/ctx";
+import { ResumeRenderer } from "@features/resume/renderer";
 import { useFormDataStore } from "../models/store";
-import { camelToHumanString } from "@shared/lib/string";
-import { Resolution, usePDF } from "react-to-pdf";
-import { useParams } from "next/navigation";
-import { uploadThumbnail } from "@entities/resume/api/upload-resume";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserProfile } from "@shared/hooks/use-user";
-import { toast } from "sonner";
-import {
-  useResumeManager,
-  deepMerge,
-  normalizeStringsFields,
-} from "@entities/resume/models/use-resume-data";
+import { getCleanDataForRenderer } from "../lib/data-cleanup";
+import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-renderer";
+import TemplateButton from "./change-template-button";
 import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
-import type { Template } from "@entities/template-page/api/template-data";
+import { Button } from "@shared/ui/button";
+import { Download } from "lucide-react";
+import { TemplateForm } from "@features/template-form";
+import { camelToHumanString } from "@shared/lib/string";
+import { data as formSchemaData } from "@entities/resume/api/schema-data";
+import { usePdfGeneration } from "../hooks/use-pdf-generation";
+import WishlistModal from "./wishlist-modal";
+import WishlistSuccessModal from "./waitlist-success-modal";
 import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
-import { PreviewButton } from "@shared/ui/components/preview-button";
-import AnalyzerModal from "@shared/ui/components/analyzer-modal";
+import { useParams } from "next/navigation";
+import { useThumbnailGeneration } from "../hooks/use-thumbnail-generation";
+import { useTemplateManagement } from "../hooks/use-template-management";
+import { usePdfDownload } from "../hooks/use-pdf-download";
+import { useAutoThumbnail } from "../hooks/use-auto-thumbnail";
+import { useSaveAndNext } from "../hooks/use-save-and-next";
+import { useSaveResumeForm } from "@entities/resume";
+import { getResumeEmptyData, type ResumeData } from "@entities/resume";
+import { deepMerge } from "@entities/resume/models/use-resume-data";
 import mockData from "../../../../mock-data.json";
-
-import type {
-  SuggestedUpdate,
-  ResumeData,
-  SuggestionType,
-} from "@entities/resume";
+import { toast } from "sonner";
+import { debounce } from "@shared/lib/utils";
+import type { SuggestedUpdate, SuggestionType } from "@entities/resume";
 import {
   findItemById,
   applySuggestionsToFieldValue,
@@ -42,36 +36,10 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from "../lib/suggestion-helpers";
-import {
-  getCleanDataForRenderer,
-  isSectionModified,
-} from "../lib/data-cleanup";
-import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import { useCheckIfCommunityMember } from "@entities/download-pdf/queries/queries";
-import WishlistModal from "./wishlist-modal";
-import WishlistSuccessModal from "./waitlist-success-modal";
-import { Download } from "lucide-react";
-import type { JoinCommunityResponse } from "@entities/download-pdf/types/type";
-import TemplateButton from "./change-template-button";
-import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
-import { saveSectionWithSuggestions } from "../lib/save-helpers";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
-import { usePdfGeneration } from "../hooks/use-pdf-generation";
-import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
-import { formatTimeAgo } from "../lib/time-helpers";
-
-// Custom debounce function
-function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
-  let timeout: NodeJS.Timeout | null = null;
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      timeout = null;
-      func(...args);
-    };
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-  };
-}
+import { useQueryClient } from "@tanstack/react-query";
+import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 
 /**
  * Checks if a single section is empty
@@ -79,16 +47,13 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
  */
 function isSectionEmpty(section: any): boolean {
   if (!section || typeof section !== "object") {
-    console.log("section is empty", section);
     return true;
   }
 
   if ("items" in section && Array.isArray(section.items)) {
-    console.log("section items are not empty", section.items);
     const items = section.items;
 
     if (items.length === 0) {
-      console.log("section items.length is 0", items);
       return true;
     }
 
@@ -97,6 +62,7 @@ function isSectionEmpty(section: any): boolean {
     // Only return true if ALL items are empty
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
+      
 
       if (typeof item === "string" && item.trim() !== "") {
         return false;
@@ -114,22 +80,17 @@ function isSectionEmpty(section: any): boolean {
           }
 
           if (typeof value === "string") {
-            const isNonEmpty = value.trim() !== "";
-            return isNonEmpty;
+            return value.trim() !== "";
           }
 
           if (typeof value === "object" && value !== null) {
-            const hasNonEmptyNested = Object.values(value).some(
+            return Object.values(value).some(
               (v) => typeof v === "string" && v.trim() !== ""
             );
-            return hasNonEmptyNested;
           }
 
           if (Array.isArray(value)) {
-            const hasNonEmptyArray = value.some(
-              (v) => typeof v === "string" && v.trim() !== ""
-            );
-            return hasNonEmptyArray;
+            return value.some((v) => typeof v === "string" && v.trim() !== "");
           }
 
           return false;
@@ -188,21 +149,15 @@ function syncSectionIds(actualSection: any, mockSection: any): any {
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
+  const { resumeData, currentStep, navs, setCurrentStep } =
+    useFormPageBuilder();
+  const setFormData = useFormDataStore((state) => state.setFormData);
+  const formData = useFormDataStore((state) => state.formData);
+  const queryClient = useQueryClient();
 
-  const thumbnailGenerated = useRef(false);
-  const thumbnailRef = useRef<HTMLDivElement>(null);
-
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
-    null
-  );
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
-
-  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-  const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
-    useState(false);
-  const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
-
-  const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
+  const targetRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -213,481 +168,79 @@ export function FormPageBuilder() {
     suggestionType: SuggestionType;
   } | null>(null);
 
-  const { data, save } = useResumeManager(resumeId);
-  const { data: formSchema } = useTemplateFormSchema();
-  const queryClient = useQueryClient();
+  const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  const { data: user } = useUserProfile();
+  const { selectedTemplate, selectedTemplateId, handleTemplateSelect } =
+    useTemplateManagement({
+      resumeId,
+      initialTemplate: resumeData?.template?.json,
+      initialTemplateId: resumeData?.templateId,
+    });
 
-  const templateId = data?.templateId || null;
-  const embeddedTemplate = data?.template;
-
-  const { formData, setFormData } = useFormDataStore();
-
-  const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
-  const { mutateAsync: uploadThumbnailMutation } = useMutation({
-    mutationFn: uploadThumbnail,
-  });
-
-  const { mutateAsync: updateResumeTemplateMutation } =
-    useUpdateResumeTemplate();
-
-  const { mutateAsync: checkCommunityMember } = useCheckIfCommunityMember();
-
-  const { targetRef } = usePDF({
-    filename: "resume.pdf",
-    resolution: Resolution.HIGH,
-    page: {
-      format: "A4",
-    },
-    overrides: {
-      pdf: {
-        unit: "px",
-      },
-      canvas: {
-        useCORS: true,
-      },
-    },
-  });
+  const { thumbnailRef, generateAndSaveThumbnail } =
+    useThumbnailGeneration(resumeId);
 
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
     thumbnailRef,
     formData,
+    resumeId,
   });
 
-  const handleDownloadPDF = async () => {
-    try {
-      if (!user?.email) {
-        toast.error("User email is required to download PDF");
-        return;
-      }
+  const {
+    isWishlistModalOpen,
+    setIsWishlistModalOpen,
+    isWishlistSuccessModalOpen,
+    setIsWishlistSuccessModalOpen,
+    handleWaitlistJoinSuccess,
+    handleDownloadPDF,
+  } = usePdfDownload({ resumeId, generatePDF });
 
-      startTimedEvent("resume_download");
+  useAutoThumbnail({
+    resumeId,
+    formData,
+    generateAndSaveThumbnail,
+    intervalMs: 25000,
+  });
 
-      const response = await checkCommunityMember({
-        personal_email: user?.email,
-        uix_email: user?.email,
-      });
+  const { mutateAsync: saveResumeForm } = useSaveResumeForm();
 
-      if (response?.is_uix_member) {
-        await generatePDF();
-        trackEvent("resume_download", {
-          status: "success",
-          format: "pdf",
-          resumeId,
-        });
-      } else {
-        setIsWishlistModalOpen(true);
-        trackEvent("resume_download_waitlist_prompt", {
-          resumeId,
-        });
-      }
-    } catch (error) {
-      console.error("Failed to download PDF:", error);
-      toast.error("Failed to download PDF");
-      trackEvent("resume_download", {
-        status: "failed",
-        error: error instanceof Error ? error.message : "Unknown error",
-        resumeId,
-      });
-    }
+  const save = ({
+    type,
+    data,
+  }: {
+    type: string;
+    data: any;
+    updatedAt: number;
+  }) => {
+    saveResumeForm({ type: type as any, data });
   };
 
-  const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
-    if (response?.joinCommunityRequested) {
-      try {
-        await generatePDF();
-      } catch (error) {
-        console.error("Failed to generate PDF after joining waitlist:", error);
-        toast.error("Failed to download PDF");
-      }
-    } else {
-      setIsWishlistSuccessModalOpen(true);
-    }
-  };
-
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      const isMeta = e.metaKey || e.ctrlKey;
-      if (e.key === "s" && isMeta) {
-        handleSaveResume();
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  // Handle query invalidation on navigation
-  useQueryInvalidationOnNavigation(resumeId);
-
-  useEffect(() => {
-    async function processAnalyzerData() {
-      if (!resumeId || !analyzedData) return;
-
-      // Fetch empty data for defaults
-      const emptyData = await getResumeEmptyData();
-
-      // Deep merge analyzer data with empty data to ensure all fields have default values
-      let processedData = { ...analyzedData };
-      for (const key of Object.keys(emptyData)) {
-        processedData[key] = deepMerge(processedData[key], emptyData[key]);
-      }
-
-      // Normalize string fields (interests, achievements)
-      processedData = normalizeStringsFields(processedData);
-
-      useFormDataStore.setState({ formData: processedData ?? {} });
-    }
-
-    if (!resumeId) {
-      return;
-    }
-
-    if (analyzerResumeId === resumeId && analyzedData) {
-      processAnalyzerData();
-      return;
-    }
-
-    if (data) {
-      console.log("data", data);
-      // Determine if this is create flow (all sections empty) or edit flow (has data)
-      const sectionKeys = Object.keys(data).filter(
-        (key) => key !== "templateId" && key !== "updatedAt"
-      );
-      const allSectionsEmpty = sectionKeys.every((key) =>
-        isSectionEmpty(data[key as keyof typeof data])
-      );
-      console.log("sectionKeys", sectionKeys);
-
-      console.log("allSectionsEmpty", allSectionsEmpty);
-
-      if (allSectionsEmpty) {
-        const mergedData: Record<string, any> = {};
-
-        for (const sectionKey of Object.keys(data)) {
-          if (sectionKey === "templateId" || sectionKey === "updatedAt") {
-            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-            continue;
-          }
-
-          const actualSection = data[sectionKey as keyof typeof data];
-          const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-          if (mockSection) {
-            const syncedSection = syncSectionIds(actualSection, mockSection);
-            mergedData[sectionKey] = syncedSection;
-          } else {
-            mergedData[sectionKey] = actualSection;
-          }
-        }
-
-        useFormDataStore.setState({
-          formData: mergedData as Omit<ResumeData, "templateId">,
-        });
-      } else {
-        useFormDataStore.setState({
-          formData: data as Omit<ResumeData, "templateId">,
-        });
-      }
-    }
-  }, [resumeId, data, analyzedData, analyzerResumeId]);
-
-  useEffect(() => {
-    if (embeddedTemplate) {
-      setSelectedTemplate(embeddedTemplate);
-    } else if (templateId === null && data) {
-      setSelectedTemplate({
-        id: "default",
-        json: aniketTemplate,
-      } as Template);
-    }
-  }, [embeddedTemplate, templateId, data]);
-
-  // Auto-scroll to section when currentStep changes
-  useEffect(() => {
-    if (!targetRef.current || !currentStep) return;
-
-    // Small delay to ensure pages are rendered after pagination
-    const scrollTimer = setTimeout(() => {
-      // Find section by matching data-section attribute that contains the current step name
-      const allSections = targetRef.current!.querySelectorAll(
-        "[data-section]"
-      ) as NodeListOf<HTMLElement>;
-
-      for (const element of Array.from(allSections)) {
-        // Skip hidden elements (like the dummy content used for pagination)
-        const computedStyle = window.getComputedStyle(element);
-        if (
-          computedStyle.visibility === "hidden" ||
-          computedStyle.display === "none"
-        ) {
-          continue;
-        }
-
-        const sectionId = element.getAttribute("data-section");
-        if (sectionId) {
-          const lowerSectionId = sectionId.toLowerCase();
-          const lowerCurrentStep = currentStep.toLowerCase();
-
-          // Check if section ID matches or contains current step
-          if (
-            lowerSectionId === lowerCurrentStep ||
-            lowerSectionId.startsWith(lowerCurrentStep + "-") ||
-            lowerSectionId.includes(lowerCurrentStep)
-          ) {
-            element.scrollIntoView({ behavior: "smooth", block: "start" });
-            break;
-          }
-        }
-      }
-    }, 100);
-
-    return () => clearTimeout(scrollTimer);
-  }, [currentStep]);
-
-  // Check if there are any suggestions in the form data
-  const hasSuggestions = Boolean(
-    formData &&
-      Object.values(formData).some((section) => {
-        if (
-          section &&
-          typeof section === "object" &&
-          "suggestedUpdates" in section
-        ) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-            .suggestedUpdates;
-          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-        }
-        return false;
-      })
-  );
-
-  async function generateAndSaveThumbnail() {
-    if (!thumbnailRef.current || !resumeId) {
-      return;
-    }
-
-    try {
-      // Get the parent container
-      const container = thumbnailRef.current.parentElement as HTMLElement;
-
-      if (!container) {
-        return;
-      }
-
-      // Wait for component to render and layout to complete
-      await new Promise((resolve) => setTimeout(resolve, 300));
-
-      // Verify the element has content
-      if (
-        !thumbnailRef.current.innerHTML ||
-        thumbnailRef.current.innerHTML.trim() === ""
-      ) {
-        return;
-      }
-
-      // Temporarily make container visible for capture (but keep it hidden visually)
-      const originalHeight = container.style.height;
-      const originalOverflow = container.style.overflow;
-      const originalPosition = container.style.position;
-
-      container.style.height = "auto";
-      container.style.overflow = "visible";
-      container.style.position = "absolute";
-      container.style.left = "-9999px"; // Move far off-screen instead of clipping
-      container.style.top = "0";
-
-      // Wait a bit for layout to update
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // generateThumbnail now handles image loading internally
-      const thumbnailDataUrl = await generateThumbnail(thumbnailRef.current);
-
-      // Restore original styles
-      container.style.height = originalHeight;
-      container.style.overflow = originalOverflow;
-      container.style.position = originalPosition;
-      container.style.left = "0";
-
-      if (!thumbnailDataUrl) {
-        return;
-      }
-
-      await uploadThumbnailMutation({ resumeId, thumbnail: thumbnailDataUrl });
-
-      thumbnailGenerated.current = true;
-    } catch (error) {
-      console.error("Background thumbnail generation failed:", error);
-    }
-  }
-
-  // Auto-generate thumbnail every 20 seconds
-  useEffect(() => {
-    if (!resumeId || !targetRef.current) {
-      return;
-    }
-
-    const intervalId = setInterval(() => {
-      // Only regenerate if there's form data
-      if (formData && Object.keys(formData).length > 0) {
-        generateAndSaveThumbnail();
-      }
-    }, 25000);
-
-    return () => clearInterval(intervalId);
-  }, [resumeId]);
-
-  // Auto-save effect - triggers when formData changes
-  useEffect(() => {
-    if (!currentStep || !formData || !formData[currentStep]) {
-      return;
-    }
-
-    // Trigger auto-save after 2 seconds of inactivity
-    debouncedAutoSave(currentStep, formData[currentStep]);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData, currentStep]);
-
-  async function handleNextStep() {
-    try {
-      // Check if current section has been modified compared to mock data
-      const hasModifications = isSectionModified(
-        currentStep,
-        formData,
-        mockData
-      );
-
-      if (hasModifications) {
-        thumbnailGenerated.current = false;
-
-        // Save current section and all sections with suggestions
-        await saveSectionWithSuggestions(currentStep, formData, save);
-
-        // Get fresh formData after save to check suggestion state
-        const updatedFormData = useFormDataStore.getState().formData;
-        invalidateQueriesIfAllSuggestionsApplied(
-          queryClient,
-          updatedFormData,
-          resumeId
-        );
-      }
-    } catch (error) {
-      console.error("Failed to save before moving to next step:", error);
-      toast.error("Failed to save changes");
-      // Don't invalidate on error
-    }
-
-    setCurrentStep(navs[nextStepIndex]?.name ?? "");
-  }
-
-  async function handleSaveResume() {
-    try {
-      // Check if current section has been modified compared to mock data
-      const hasModifications = isSectionModified(
-        currentStep,
-        formData,
-        mockData
-      );
-
-      if (!hasModifications) {
-        toast.info(`No changes to save in ${currentStep}`);
-
-        return;
-      }
-
-      thumbnailGenerated.current = false;
-
-      // Save current section and all sections with suggestions
-      await saveSectionWithSuggestions(currentStep, formData, save);
-
-      await generateAndSaveThumbnail();
-
-      // Get fresh formData after save to check suggestion state
-      const updatedFormData = useFormDataStore.getState().formData;
-      invalidateQueriesIfAllSuggestionsApplied(
-        queryClient,
-        updatedFormData,
-        resumeId
-      );
-
-      toast.success(`Resume saved successfully`);
-
-      trackEvent("resume_saved", {
-        resumeId,
-        section: currentStep,
-        autoSave: false,
-      });
-    } catch {
-      toast.error("Failed to save resume");
-    }
-  }
+  const { handleSaveResume, handleNextStep } = useSaveAndNext({
+    currentStep,
+    formData,
+    save,
+    resumeId,
+    navs,
+    nextStepIndex,
+    setCurrentStep: (step: string) => setCurrentStep(step as any),
+    generateAndSaveThumbnail,
+  });
 
   // Debounced function for hide/unhide
   const debouncedHideSave = useCallback(
-    debounce(async (sectionId: string, data: any) => {
+    debounce((sectionId: string, data: any) => {
       try {
-        await save({
+        save({
           type: sectionId,
           data: data,
           updatedAt: Date.now(),
         });
-        // Update last save time when save completes successfully
-        setLastSaveTime(Date.now());
       } catch (error) {
         console.error("Failed to save section visibility:", error);
         toast.error("Failed to update section visibility");
       }
     }, 1000),
     [save]
-  );
-
-  // Debounced auto-save function
-  const debouncedAutoSave = useCallback(
-    debounce(async (step: string, data: any) => {
-      try {
-        // Get fresh formData from store instead of using stale closure
-        const currentFormData = useFormDataStore.getState().formData;
-
-        // Check if section has been modified compared to mock data
-        const hasModifications = isSectionModified(
-          step,
-          currentFormData,
-          mockData
-        );
-
-        if (!hasModifications) {
-          return;
-        }
-        await save({
-          type: step,
-          data: data,
-          updatedAt: Date.now(),
-        });
-        setLastSaveTime(Date.now());
-
-        // Get fresh formData to check suggestion state
-        const updatedFormData = useFormDataStore.getState().formData;
-        invalidateQueriesIfAllSuggestionsApplied(
-          queryClient,
-          updatedFormData,
-          resumeId
-        );
-
-        trackEvent("resume_saved", {
-          resumeId,
-          section: step,
-          autoSave: true,
-        });
-      } catch (error) {
-        console.error("Auto-save failed:", error);
-      }
-    }, 25000),
-    [save, queryClient]
   );
 
   const handleToggleHideSection = useCallback(
@@ -703,277 +256,271 @@ export function FormPageBuilder() {
     [formData, debouncedHideSave]
   );
 
-  const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
-
-  // Update display every 30 seconds to refresh relative time
-  const [refreshKey, setRefreshKey] = useState(0);
-  useEffect(() => {
-    if (!lastSaveTime) return;
-
-    const interval = setInterval(() => {
-      setRefreshKey((prev) => prev + 1);
-    }, 30000); // Update every 30 seconds
-
-    return () => clearInterval(interval);
-  }, [lastSaveTime]);
-
-  // Format last save time
-  const formatLastSaveTime = useCallback(() => {
-    return formatTimeAgo(lastSaveTime);
-  }, [lastSaveTime, refreshKey]);
-
-  // Initialize last save time from resume data
-  useEffect(() => {
-    if (data?.updatedAt) {
-      const updatedAt = new Date(data.updatedAt).getTime();
-      setLastSaveTime(updatedAt);
-    }
-  }, [data?.updatedAt]);
-
-  const handleTemplateSelect = async (template: Template) => {
-    try {
-      await updateResumeTemplateMutation({
-        resumeId: resumeId,
-        templateId: template.id,
-      });
-
-      setSelectedTemplate(template);
-
-      toast.success("Template updated successfully");
-
-      trackEvent("template_selected", {
-        templateId: template.id,
-        resumeId,
-      });
-    } catch (error) {
-      console.error("Failed to update template:", error);
-      toast.error("Failed to update template");
-    }
-  };
-
   // Callback to open analyzer modal with specific field data
-  const handleOpenAnalyzerModal = (
-    itemId: string,
-    fieldName: string,
-    suggestionType: SuggestionType
-  ) => {
-    // Get suggestions for this specific field and type
-    const currentData = formData?.[currentStep];
+  const handleOpenAnalyzerModal = useCallback(
+    (itemId: string, fieldName: string, suggestionType: SuggestionType) => {
+      // Get suggestions for this specific field and type
+      const currentData = formData?.[currentStep];
 
-    if (!currentData || !currentData.suggestedUpdates) {
-      return;
-    }
-
-    const itemUpdate = currentData.suggestedUpdates.find(
-      (update: SuggestedUpdate) => update.itemId === itemId
-    );
-
-    if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-      return;
-    }
-
-    const fieldData = itemUpdate.fields[fieldName];
-    const suggestions =
-      fieldData.suggestedUpdates?.filter(
-        (s: { old?: string; new: string; type: SuggestionType }) =>
-          s.type === suggestionType
-      ) || [];
-
-    setAnalyzerModalData({
-      suggestions,
-      fieldName,
-      itemId,
-      suggestionType,
-    });
-    setAnalyzerModalOpen(true);
-
-    trackEvent("builder_intelligence_viewed", {
-      resumeId,
-      section: currentStep,
-      field: fieldName,
-      suggestionType,
-      suggestionCount: suggestions.length,
-    });
-  };
-
-  const handleApplySuggestions = async (
-    selectedSuggestions: Array<{
-      old?: string;
-      new: string;
-      type: SuggestionType;
-    }>
-  ) => {
-    if (!analyzerModalData) return;
-
-    const { itemId, fieldName } = analyzerModalData;
-    const currentData = formData?.[currentStep];
-
-    if (
-      !currentData ||
-      !currentData.items ||
-      !Array.isArray(currentData.items)
-    ) {
-      toast.error("Failed to apply suggestions");
-      return;
-    }
-
-    try {
-      const items = currentData.items;
-      const itemIndex = findItemById(items, itemId);
-
-      if (itemIndex === -1) {
-        toast.error("Item not found");
+      if (!currentData || !currentData.suggestedUpdates) {
         return;
       }
 
-      const currentItem = items[itemIndex];
-      if (typeof currentItem !== "object" || currentItem === null) {
-        toast.error("Invalid item type");
-        return;
-      }
-
-      const currentFieldValue = (currentItem as Record<string, unknown>)[
-        fieldName
-      ];
-
-      // Check if field value is an array (for achievements, interests)
-      const isArrayField = Array.isArray(currentFieldValue);
-
-      let updatedFieldValue: string | string[];
-
-      if (isArrayField) {
-        updatedFieldValue = applySuggestionsToArrayField(
-          currentFieldValue as string[],
-          selectedSuggestions
-        );
-      } else {
-        updatedFieldValue = applySuggestionsToFieldValue(
-          currentFieldValue as string,
-          selectedSuggestions
-        );
-      }
-
-      // Check if suggestions were actually applied
-      const hasChanged = isArrayField
-        ? JSON.stringify(updatedFieldValue) !==
-          JSON.stringify(currentFieldValue)
-        : updatedFieldValue !== currentFieldValue;
-
-      if (!hasChanged) {
-        toast.error("Suggestions could not be applied");
-        return;
-      }
-
-      const updatedItems = updateItemFieldValue(
-        items,
-        itemIndex,
-        fieldName,
-        updatedFieldValue
+      const itemUpdate = currentData.suggestedUpdates.find(
+        (update: SuggestedUpdate) => update.itemId === itemId
       );
 
-      const updatedSuggestedUpdates = removeAppliedSuggestions(
-        currentData.suggestedUpdates,
+      if (!itemUpdate || !itemUpdate.fields[fieldName]) {
+        return;
+      }
+
+      const fieldData = itemUpdate.fields[fieldName];
+      const suggestions =
+        fieldData.suggestedUpdates?.filter(
+          (s: { old?: string; new: string; type: SuggestionType }) =>
+            s.type === suggestionType
+        ) || [];
+
+      setAnalyzerModalData({
+        suggestions,
+        fieldName,
         itemId,
-        fieldName,
-        selectedSuggestions
-      );
+        suggestionType,
+      });
+      setAnalyzerModalOpen(true);
 
-      trackEvent("builder_intelligence_applied", {
+      trackEvent("builder_intelligence_viewed", {
         resumeId,
         section: currentStep,
         field: fieldName,
-        suggestionType: analyzerModalData.suggestionType,
-        count: selectedSuggestions.length,
+        suggestionType,
+        suggestionCount: suggestions.length,
       });
+    },
+    [formData, currentStep, resumeId]
+  );
 
-      const updatedData = {
-        ...formData,
-        [currentStep]: {
-          ...currentData,
-          items: updatedItems,
-          suggestedUpdates:
-            updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
-              ? updatedSuggestedUpdates
-              : undefined,
-        },
-      };
+  const handleApplySuggestions = useCallback(
+    async (
+      selectedSuggestions: Array<{
+        old?: string;
+        new: string;
+        type: SuggestionType;
+      }>
+    ) => {
+      if (!analyzerModalData) return;
 
-      setFormData(updatedData as Omit<ResumeData, "templateId">);
+      const { itemId, fieldName } = analyzerModalData;
+      const currentData = formData?.[currentStep];
 
-      // Check if all suggestions are applied and invalidate queries if needed
-      invalidateQueriesIfAllSuggestionsApplied(
-        queryClient,
-        updatedData,
-        resumeId
+      if (
+        !currentData ||
+        !currentData.items ||
+        !Array.isArray(currentData.items)
+      ) {
+        toast.error("Failed to apply suggestions");
+        return;
+      }
+
+      try {
+        const items = currentData.items;
+        const itemIndex = findItemById(items, itemId);
+
+        if (itemIndex === -1) {
+          toast.error("Item not found");
+          return;
+        }
+
+        const currentItem = items[itemIndex];
+        if (typeof currentItem !== "object" || currentItem === null) {
+          toast.error("Invalid item type");
+          return;
+        }
+
+        const currentFieldValue = (currentItem as Record<string, unknown>)[
+          fieldName
+        ];
+
+        // Check if field value is an array (for achievements, interests)
+        const isArrayField = Array.isArray(currentFieldValue);
+
+        let updatedFieldValue: string | string[];
+
+        if (isArrayField) {
+          updatedFieldValue = applySuggestionsToArrayField(
+            currentFieldValue as string[],
+            selectedSuggestions
+          );
+        } else {
+          updatedFieldValue = applySuggestionsToFieldValue(
+            currentFieldValue as string,
+            selectedSuggestions
+          );
+        }
+
+        // Check if suggestions were actually applied
+        const hasChanged = isArrayField
+          ? JSON.stringify(updatedFieldValue) !==
+            JSON.stringify(currentFieldValue)
+          : updatedFieldValue !== currentFieldValue;
+
+        if (!hasChanged) {
+          toast.error("Suggestions could not be applied");
+          return;
+        }
+
+        const updatedItems = updateItemFieldValue(
+          items,
+          itemIndex,
+          fieldName,
+          updatedFieldValue
+        );
+
+        const updatedSuggestedUpdates = removeAppliedSuggestions(
+          currentData.suggestedUpdates,
+          itemId,
+          fieldName,
+          selectedSuggestions
+        );
+
+        trackEvent("builder_intelligence_applied", {
+          resumeId,
+          section: currentStep,
+          field: fieldName,
+          suggestionType: analyzerModalData.suggestionType,
+          count: selectedSuggestions.length,
+        });
+
+        const updatedData = {
+          ...formData,
+          [currentStep]: {
+            ...currentData,
+            items: updatedItems,
+            suggestedUpdates:
+              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
+                ? updatedSuggestedUpdates
+                : undefined,
+          },
+        };
+
+        setFormData(updatedData as Omit<ResumeData, "templateId">);
+
+        // Check if all suggestions are applied and invalidate queries if needed
+        invalidateQueriesIfAllSuggestionsApplied(
+          queryClient,
+          updatedData,
+          resumeId
+        );
+
+        toast.success("Suggestions applied successfully.");
+        setAnalyzerModalOpen(false);
+      } catch (error) {
+        console.error("❌ Failed to apply suggestions:", error);
+        toast.error("Failed to apply suggestions");
+      }
+    },
+    [analyzerModalData, formData, currentStep, resumeId, queryClient, setFormData]
+  );
+
+  useEffect(() => {
+    async function initializeFormData() {
+      if (!resumeData) return;
+
+      // Check if all sections are empty (create flow) or has data (edit flow)
+      const sectionKeys = Object.keys(resumeData).filter(
+        (key) => key !== "templateId" && key !== "updatedAt" && key !== "template"
       );
 
-      toast.success("Suggestions applied successfully.");
-      setAnalyzerModalOpen(false);
-    } catch (error) {
-      console.error("❌ Failed to apply suggestions:", error);
-      toast.error("Failed to apply suggestions");
+      const allSectionsEmpty = sectionKeys.every((key) =>
+        isSectionEmpty(resumeData[key as keyof typeof resumeData])
+      );
+
+      if (allSectionsEmpty) {
+        // Create flow: Merge mock data with actual IDs
+        const mergedData: Record<string, any> = {};
+
+        for (const sectionKey of Object.keys(resumeData)) {
+          if (sectionKey === "templateId" || sectionKey === "updatedAt" || sectionKey === "template") {
+            mergedData[sectionKey] = resumeData[sectionKey as keyof typeof resumeData];
+            continue;
+          }
+
+          const actualSection = resumeData[sectionKey as keyof typeof resumeData];
+          const mockSection = (mockData as Record<string, any>)[sectionKey];
+
+          if (mockSection) {
+            const syncedSection = syncSectionIds(actualSection, mockSection);
+            mergedData[sectionKey] = syncedSection;
+          } else {
+            mergedData[sectionKey] = actualSection;
+          }
+        }
+
+        // Get empty data for defaults and deep merge to ensure all fields have default values
+        const emptyData = await getResumeEmptyData();
+        for (const key of Object.keys(emptyData)) {
+          mergedData[key] = deepMerge(
+            mergedData[key],
+            (emptyData as Record<string, any>)[key]
+          );
+        }
+
+        setFormData(mergedData as Omit<ResumeData, "templateId">);
+      } else {
+        // Edit flow: Use actual data as-is
+        setFormData(resumeData);
+      }
     }
-  };
+
+    initializeFormData();
+  }, [resumeData, setFormData]);
 
   return (
     <>
       <div
+        ref={scrollContainerRef}
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
         style={{
           minWidth: 794 + 48 + 6,
           maxWidth: 794 + 48 + 6,
         }}
       >
-        {/* Preview Button at top right */}
         <div className="absolute top-0 right-3 z-10">
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
-
         <div className="min-w-0 flex-1 flex justify-center relative">
           <div ref={targetRef}>
-            {selectedTemplate ? (
-              <ResumeRenderer
-                template={selectedTemplate?.json ?? aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
-                currentSection={isGeneratingPDF ? undefined : currentStep}
-                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
-                isThumbnail={false}
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full min-h-[800px]">
-                <div className="text-gray-500">Loading template...</div>
-              </div>
-            )}
+            <ResumeRenderer
+              template={selectedTemplate}
+              data={getCleanDataForRenderer(formData ?? {}, false)}
+              currentSection={currentStep}
+            />
           </div>
-
-          {/* Hidden ThumbnailRenderer for thumbnail & PDF generation - isolated from main renderer */}
-          {/* This renderer always has isThumbnail=true, which ensures all images are proxied to avoid CORS issues */}
           <div
             style={{
               position: "absolute",
               left: "0",
               top: "0",
-              width: "794px", // A4 width
+              width: "794px",
               height: "0",
               overflow: "hidden",
               pointerEvents: "none",
+              visibility: "hidden",
+              zIndex: -1,
             }}
             aria-hidden="true"
           >
             <div ref={thumbnailRef}>
               {selectedTemplate && (
                 <ThumbnailRenderer
-                  template={selectedTemplate?.json ?? aniketTemplate}
+                  template={selectedTemplate}
                   data={getCleanDataForRenderer(formData ?? {}, false)}
                 />
               )}
             </div>
           </div>
         </div>
-
-        {/* Sticky Save as PDF button */}
         <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-          {/* Change Template Button */}
           <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
             <div
               className="
@@ -994,11 +541,8 @@ export function FormPageBuilder() {
               <TemplateButton />
             </div>
           </TemplatesDialog>
-
-          {/* Download PDF Button */}
           <Button
             onClick={handleDownloadPDF}
-            disabled={isGeneratingPDF}
             className="
               pointer-events-auto
               border border-[#CBE7FF]
@@ -1038,7 +582,6 @@ export function FormPageBuilder() {
           }}
         />
 
-        {/* Sticky Top - Save Button on the right */}
         <div className="sticky top-0 z-10 bg-white py-5 px-5 flex justify-end">
           <Button
             className="bg-[#E9F4FF] rounded-xl text-sm font-semibold px-6 text-[#005FF2] hover:bg-blue-700 hover:text-white border border-[#CBE7FF] cursor-pointer"
@@ -1051,7 +594,7 @@ export function FormPageBuilder() {
         {/* Scrollable Content */}
         <div className="overflow-auto px-5 py-5 scroll-hidden flex-1">
           <TemplateForm
-            formSchema={formSchema ?? {}}
+            formSchema={formSchemaData ?? {}}
             currentStep={currentStep}
             values={formData ?? {}}
             onChange={(formData) => setFormData(formData)}
@@ -1064,9 +607,9 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {formatLastSaveTime() && (
+            {/* {formatLastSaveTime() && (
               <p className="text-sm text-gray-500">{formatLastSaveTime()}</p>
-            )}
+            )} */}
           </div>
 
           {/* Next Button on the right */}
@@ -1104,11 +647,15 @@ export function FormPageBuilder() {
           onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
       )}
-
-      {/* Resume Preview Modal */}
       {selectedTemplate && (
         <PreviewModal
-          template={selectedTemplate}
+          template={{
+            id: selectedTemplateId ?? "",
+            json: selectedTemplate,
+            publicImageUrl: "",
+            createdAt: "",
+            updatedAt: "",
+          }}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
           resumeData={getCleanDataForRenderer(formData ?? {}, false)}

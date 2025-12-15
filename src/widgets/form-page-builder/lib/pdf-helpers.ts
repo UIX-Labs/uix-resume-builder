@@ -107,11 +107,12 @@ export function downloadPdfBlob(blob: Blob, filename: string): void {
  */
 export async function generatePdfFromHtml(
   htmlContent: string,
-  filename: string
+  filename: string,
+  resumeId?: string
 ): Promise<void> {
   try {
     const styledHtml = prepareHtmlForPdf(htmlContent);
-    const pdfBlob = await convertHtmlToPdf(styledHtml);
+    const pdfBlob = await convertHtmlToPdf(styledHtml, resumeId);
     downloadPdfBlob(pdfBlob, filename);
     toast.success("PDF downloaded successfully");
   } catch (error) {
@@ -120,4 +121,3 @@ export async function generatePdfFromHtml(
     throw error;
   }
 }
-

@@ -553,6 +553,57 @@ export function FormPageBuilder() {
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
 
+  // Auto-scroll to section when currentStep changes
+  useEffect(() => {
+    if (!targetRef.current || !currentStep) return;
+
+    // Map step names to template section IDs
+    const stepToSectionMap: Record<string, string> = {
+      personalDetails: "header",
+      experience: "experience",
+      education: "education",
+      skills: "skills",
+      projects: "projects",
+      certifications: "certifications",
+      interests: "interests",
+      achievements: "achievements",
+      professionalSummary: "summary",
+    };
+
+    const sectionId = stepToSectionMap[currentStep];
+    if (!sectionId) return;
+
+    // Small delay to ensure DOM is ready
+    const scrollTimer = setTimeout(() => {
+      // Find the section element by data-section attribute
+      const sectionElement = targetRef.current?.querySelector(
+        `[data-section="${sectionId}"]`
+      ) as HTMLElement;
+
+      if (sectionElement && scrollContainerRef.current) {
+        // Get the container's scroll position and dimensions
+        const container = scrollContainerRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const sectionRect = sectionElement.getBoundingClientRect();
+
+        // Calculate the scroll position to center the section
+        const scrollTop =
+          container.scrollTop +
+          sectionRect.top -
+          containerRect.top -
+          100; // 100px offset from top
+
+        // Smooth scroll to the section
+        container.scrollTo({
+          top: scrollTop,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
+
+    return () => clearTimeout(scrollTimer);
+  }, [currentStep]);
+
   return (
     <>
       <div

@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { useCachedUser } from "@shared/hooks/use-user";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileTextView } from "./mobile-text-view";
-import { LOGOS, ICONS } from "@shared/lib/image-assets";
 
 const FooterSection = () => {
   const router = useRouter();
@@ -30,7 +29,7 @@ const FooterSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           <img
-            src={ICONS.COLOR_PALETTE}
+            src="images/color-palete.svg"
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -51,7 +50,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.GOOGLE}
+                    src="images/google-logo.svg"
                     alt="google"
                     fill
                     className="object-contain"
@@ -78,7 +77,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.MICROSOFT}
+                    src="images/microsoft-logo.svg"
                     alt="microsoft"
                     fill
                     className="object-contain"
@@ -105,7 +104,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-black">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.APPLE}
+                    src="images/apple-logo.svg"
                     alt="apple"
                     fill
                     className="object-contain"
@@ -132,7 +131,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(214,235,255,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.META}
+                    src="images/meta-logo.svg"
                     alt="meta"
                     fill
                     className="object-contain"
@@ -159,7 +158,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.AMAZON}
+                    src="images/amazon-logo.svg"
                     alt="amazon"
                     fill
                     className="object-contain"
@@ -186,7 +185,7 @@ const FooterSection = () => {
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
                   <Image
-                    src={LOGOS.NVIDIA}
+                    src="images/nvidia-logo.svg"
                     alt="nvidia"
                     fill
                     className="object-contain"
@@ -246,7 +245,7 @@ const FooterSection = () => {
               <div className="flex items-center gap-1 bg-[rgb(2,164,79)] text-white text-xs font-bold px-3 py-1 rounded-full">
                 <span>AI Powered</span>
                 <Image
-                  src={ICONS.AUTO_AWESOME}
+                  src="/images/auto_awesome.svg"
                   alt="AI Powered"
                   width={17}
                   height={17}

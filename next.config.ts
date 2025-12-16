@@ -20,10 +20,6 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'uix-resume-builder.s3.ap-south-1.amazonaws.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
     ],
   },
   output: 'standalone',

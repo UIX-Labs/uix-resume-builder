@@ -1,5 +1,3 @@
-import { FALLBACKS } from '@shared/lib/image-assets';
-
 const enzoTemplate1 = {
   name: "Enzo Professional",
 

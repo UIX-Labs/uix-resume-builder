@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
-import { BACKGROUNDS } from '@shared/lib/image-assets';
 
 export interface TransitionText {
   title: string;
@@ -130,7 +129,7 @@ export function NewProgressBar({
       <div
         className="w-full max-w-3xl px-12 py-8 rounded-[36px] shadow-xl bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${BACKGROUNDS.PROGRESS_BAR})`,
+          backgroundImage: 'url(/images/progress-bar-bg.svg)',
         }}
       >
         <div className="flex flex-col gap-4 items-center">

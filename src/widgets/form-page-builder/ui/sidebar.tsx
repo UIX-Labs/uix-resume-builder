@@ -29,7 +29,6 @@ import { hasPendingSuggestions } from "@features/resume/renderer";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import PikaResume from "@shared/icons/pika-resume";
 import { useRouter } from "next/navigation";
-import { BACKGROUNDS, IMAGES } from "@shared/lib/image-assets";
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -367,7 +366,7 @@ export function Sidebar() {
             <div
               className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
               style={{
-                backgroundImage: `url(${BACKGROUNDS.BG_GRADIENT})`,
+                backgroundImage: "url('/images/bg-gradient.svg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
@@ -391,7 +390,7 @@ export function Sidebar() {
                   <>
                     Pika Intelligence
                     <Image
-                      src={IMAGES.RAT}
+                      src="/images/rat.png"
                       alt="Pika Intelligence"
                       width={40}
                       height={40}
@@ -403,7 +402,7 @@ export function Sidebar() {
           ) : (
             <div className="w-[200px] mt-4 mx-auto mb-2">
               <Image
-                src={IMAGES.PIKA_INTELLIGENCE}
+                src="/images/pika-intelligence.svg"
                 alt="Pika Intelligence"
                 width={217}
                 height={72}

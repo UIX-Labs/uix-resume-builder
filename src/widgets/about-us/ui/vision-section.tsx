@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ICONS } from '@shared/lib/image-assets';
 
 export function VisionSection() {
   return (
@@ -9,7 +8,7 @@ export function VisionSection() {
           {/* Decorative Geometric Shape - Left Side */}
           <div className="absolute left-0 top-[73px] w-[160px] h-[80px] hidden md:block">
             <Image
-              src={ICONS.VISION}
+              src="/images/vision.svg"
               alt="Decorative geometric shape"
               width={160}
               height={80}
@@ -20,7 +19,7 @@ export function VisionSection() {
           {/* Mobile: Show geometric shape at top */}
           <div className="w-[160px] h-[80px] md:hidden mx-auto mb-4">
             <Image
-              src={ICONS.VISION}
+              src="/images/vision.svg"
               alt="Decorative geometric shape"
               width={160}
               height={80}

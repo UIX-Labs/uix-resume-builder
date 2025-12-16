@@ -1,12 +1,11 @@
-'use client';
-import { useState } from 'react';
-import { Sortable, SortableItem } from '@shared/ui/components/sortable';
-import { cn } from '@shared/lib/cn';
-import Image from 'next/image';
-import { FieldErrorBadges } from '../error-badges';
-import { getFieldErrors } from '../../lib/get-field-errors';
-import type { SuggestedUpdates } from '@entities/resume';
-import { ICONS } from '@shared/lib/image-assets';
+"use client";
+import { useState } from "react";
+import { Sortable, SortableItem } from "@shared/ui/components/sortable";
+import { cn } from "@shared/lib/cn";
+import Image from "next/image";
+import { FieldErrorBadges } from "../error-badges";
+import { getFieldErrors } from "../../lib/get-field-errors";
+import type { SuggestedUpdates } from "@entities/resume";
 
 function CollapsedState({
   value,
@@ -189,7 +188,12 @@ export function Draggable({
                 )}
                 onClick={() => handleDeleteClick(index)}
               >
-                <Image src={ICONS.DELETE} alt="delete" width={24} height={24} />
+                <Image
+                  src="/images/delete.svg"
+                  alt="delete"
+                  width={24}
+                  height={24}
+                />
               </button>
 
               <div
@@ -205,7 +209,7 @@ export function Draggable({
                   onClick={() => handleCollapseClick(index)}
                 >
                   <Image
-                    src={ICONS.CHEVRON_UP}
+                    src="/images/cheveron-up.svg"
                     alt="cheveron-up"
                     className={cn(
                       "transition-all duration-300",
@@ -224,7 +228,12 @@ export function Draggable({
                   )}
                   onClick={() => handlePlusClick(index)}
                 >
-                  <Image src={ICONS.PLUS} alt="plus" width={16} height={16} />
+                  <Image
+                    src="/images/plus.svg"
+                    alt="plus"
+                    width={16}
+                    height={16}
+                  />
                 </button>
 
                 {!collapsed[index] ? (

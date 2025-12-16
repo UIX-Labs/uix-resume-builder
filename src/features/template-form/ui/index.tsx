@@ -98,7 +98,8 @@ export function TemplateForm({
               "border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl",
               "placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal",
               "focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]",
-              "bg-[#FAFBFC]"
+              "bg-[#FAFBFC]",
+              "[&>div]:!ml-0"
             )}
             onChange={(_value, html) => {
               onChange(html);

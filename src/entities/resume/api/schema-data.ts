@@ -63,6 +63,7 @@ export const data = {
       label: 'Job Title',
       placeholder: 'Enter your job title',
       required: true,
+      fluid: true,
     },
 
     description: {

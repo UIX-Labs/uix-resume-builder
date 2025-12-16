@@ -1,5 +1,5 @@
 import { PreviewButton } from "@shared/ui/components/preview-button";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 import { useFormPageBuilder } from "../models/ctx";
 import { ResumeRenderer } from "@features/resume/renderer";
 import { useFormDataStore } from "../models/store";
@@ -148,7 +148,7 @@ function syncSectionIds(actualSection: any, mockSection: any): any {
   return synced;
 }
 
-export function FormPageBuilder() {
+function FormPageBuilderInternal() {
   const params = useParams();
   const resumeId = params?.id as string;
   const { resumeData, currentStep, navs, setCurrentStep } =
@@ -553,6 +553,17 @@ export function FormPageBuilder() {
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
 
+  // Memoize cleaned data to prevent unnecessary re-renders and image flickering
+  const cleanedFormData = useMemo(
+    () => getCleanDataForRenderer(formData ?? {}, false),
+    [formData]
+  );
+
+  const cleanedFormDataForThumbnail = useMemo(
+    () => getCleanDataForRenderer(formData ?? {}, false),
+    [formData]
+  );
+
   // Auto-scroll to section when currentStep changes
   useEffect(() => {
     if (!targetRef.current || !currentStep) return;
@@ -621,7 +632,7 @@ export function FormPageBuilder() {
           <div ref={targetRef}>
             <ResumeRenderer
               template={selectedTemplate}
-              data={getCleanDataForRenderer(formData ?? {}, false)}
+              data={cleanedFormData}
               currentSection={currentStep}
               hasSuggestions={hasSuggestions}
             />
@@ -644,7 +655,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={cleanedFormDataForThumbnail}
                 />
               )}
             </div>
@@ -788,9 +799,13 @@ export function FormPageBuilder() {
           }}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
-          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
+          resumeData={cleanedFormData}
         />
       )}
     </>
   );
 }
+
+// Memoize the component to prevent re-renders when parent (page.tsx) updates
+// due to progress bar state changes (analyzerProgress updates every 100ms)
+export const FormPageBuilder = memo(FormPageBuilderInternal);

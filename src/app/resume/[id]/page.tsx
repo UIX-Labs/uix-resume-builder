@@ -24,9 +24,10 @@ export default function FormPage() {
     useState<ResumeDataKey>("personalDetails");
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
   const analyzerProgress = useFormDataStore((state) => state.analyzerProgress);
+  const currentTextIndex = useFormDataStore((state) => state.currentTextIndex);
+
   const analyzerError = useFormDataStore((state) => state.analyzerError);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
-  const currentTextIndex = useFormDataStore((state) => state.currentTextIndex);
 
   // Builder Intelligence logic
   const { handleBuilderIntelligence } = useBuilderIntelligence(id);
@@ -69,6 +70,18 @@ export default function FormPage() {
     []
   );
 
+  // Memoize provider value to prevent unnecessary re-renders
+  const providerValue = useMemo(
+    () => ({
+      currentStep,
+      setCurrentStep,
+      navs,
+      resumeData,
+      onBuilderIntelligence: handleBuilderIntelligence,
+    }),
+    [currentStep, setCurrentStep, navs, resumeData, handleBuilderIntelligence]
+  );
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -78,15 +91,7 @@ export default function FormPage() {
   }
 
   return (
-    <FormPageBuilderProvider
-      value={{
-        currentStep,
-        setCurrentStep,
-        navs,
-        resumeData,
-        onBuilderIntelligence: handleBuilderIntelligence,
-      }}
-    >
+    <FormPageBuilderProvider value={providerValue}>
       <div className="flex pl-4 ">
         <Sidebar />
 

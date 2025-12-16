@@ -18,6 +18,7 @@ import { VideoBackground } from "./ui/video-background";
 import Image from "next/image";
 import GoogleSignInButton from "@shared/ui/components/google-signin-button";
 import { cn } from "@shared/lib/utils";
+import { ICONS } from "@shared/lib/image-assets";
 import LinkedInSignInButton from "@shared/ui/components/linkedIn-signin-button";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
@@ -358,8 +359,8 @@ export default function AuthPageWidget() {
                     <Image
                       src={
                         showPassword.password
-                          ? "/images/eye-off.svg"
-                          : "/images/eye-open.svg"
+                          ? ICONS.EYE_OFF
+                          : ICONS.EYE_OPEN
                       }
                       alt={
                         showPassword.password
@@ -578,8 +579,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.password
-                            ? "/images/eye-off.svg"
-                            : "/images/eye-open.svg"
+                            ? ICONS.EYE_OFF
+                            : ICONS.EYE_OPEN
                         }
                         alt={
                           showPassword.password
@@ -627,8 +628,8 @@ export default function AuthPageWidget() {
                       <Image
                         src={
                           showPassword.confirmPassword
-                            ? "/images/eye-off.svg"
-                            : "/images/eye-open.svg"
+                            ? ICONS.EYE_OFF
+                            : ICONS.EYE_OPEN
                         }
                         alt={
                           showPassword.confirmPassword

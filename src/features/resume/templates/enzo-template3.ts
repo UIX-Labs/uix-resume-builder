@@ -1,3 +1,5 @@
+import { FALLBACKS } from '@shared/lib/image-assets';
+
 const enzoTemplate3 = {
   name: "Kate Creative",
 

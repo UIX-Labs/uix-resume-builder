@@ -8,7 +8,6 @@ import { Menu } from "lucide-react";
 import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileSidebar } from "./mobile-sidebar";
 import { cn } from "@shared/lib/cn";
-import { LOGOS } from "@shared/lib/image-assets";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 function Header() {
@@ -74,7 +73,7 @@ function Header() {
       <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
         <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
           <Image
-            src={LOGOS.PIKA_RESUME}
+            src="/images/Pika-Resume.png"
             alt="AI"
             width={60}
             height={60}

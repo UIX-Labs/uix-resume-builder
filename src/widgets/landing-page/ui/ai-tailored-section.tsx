@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 import { companiesLeft, companiesRight } from "../models/constants";
-import { LOGOS } from "@shared/lib/image-assets";
 
 export function AITailorSection() {
   const [highlightColor, setHighlightColor] = useState("rgb(227, 227, 227)");
@@ -195,8 +194,8 @@ export function AITailorSection() {
                         activeCompany
                           ? [...companiesLeft, ...companiesRight].find(
                               (c) => c.role === activeCompany
-                            )?.logo || LOGOS.PIKA_RESUME
-                          : LOGOS.PIKA_RESUME
+                            )?.logo || "/images/Pika-Resume.png"
+                          : "/images/Pika-Resume.png"
                       }
                       alt={activeCompany || "UIX Labs"}
                       fill

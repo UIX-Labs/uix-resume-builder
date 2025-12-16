@@ -3,7 +3,6 @@ import { Input } from '@shared/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { ICONS } from '@shared/lib/image-assets';
 
 export const UrlInput = ({
   data,
@@ -43,7 +42,7 @@ export const UrlInput = ({
       <div className="absolute top-0 right-2 bottom-0 flex items-center justify-center text-muted-foreground">
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger className="cursor-pointer">
-            <Image src={ICONS.LINK} alt="link" width={16} height={16} />
+            <Image src="/images/link.svg" alt="link" width={16} height={16} />
           </PopoverTrigger>
           <PopoverContent onClick={(e) => e.stopPropagation()}>
             <Input

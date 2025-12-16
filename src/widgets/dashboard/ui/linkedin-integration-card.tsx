@@ -7,7 +7,6 @@ import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { LOGOS, ICONS, IMAGES } from '@shared/lib/image-assets';
 
 interface LinkedInModalProps {
   isOpen: boolean;
@@ -66,7 +65,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
           className="absolute top-2 right-2 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-[#0C1118] border-2 border-white hover:bg-[#1a2230] transition-colors cursor-pointer"
           aria-label="Close"
         >
-          <Image src={ICONS.CLOSE} alt="close-icon" width={40} height={40} className="rotate-45" />
+          <Image src="/images/close.svg" alt="close-icon" width={40} height={40} className="rotate-45" />
         </button>
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-[198px] py-[176px]">
@@ -78,7 +77,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
             <div className="w-[539px] flex flex-col items-center justify-center p-2 bg-[#0C1118] border border-[#959DA8] rounded-[20px] shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
               <div className="w-full h-12 flex items-center">
                 <div className="flex items-center px-0 gap-1 flex-1">
-                  <Image src={LOGOS.LINKEDIN} alt="img" height={25} width={25} />
+                  <Image src="/images/linkedin.svg" alt="img" height={25} width={25} />
 
                   <input
                     type="text"
@@ -133,12 +132,12 @@ export default function LinkedinIntegrationCard() {
           <div className="absolute -left-[150px] -top-[214px] w-[550px] h-[500px] rounded-full opacity-100 bg-[linear-gradient(136deg,rgba(37,122,255,1)_30%,rgba(23,23,23,1)_68%)] blur-[100px]" />
 
           <div className="absolute right-[-29px] -top-[7px] w-[344px] h-[266px] opacity-10 rotate-45">
-            <Image src={IMAGES.LINKEDIN_INTEGRATION_BG} alt="Background decoration" fill className="object-cover" />
+            <Image src="/images/image-14.svg" alt="Background decoration" fill className="object-cover" />
           </div>
 
           <div className="absolute -left-[21px] top-[150px] w-[238px] h-[246px] opacity-25 rounded-[12px]">
             <Image
-              src={IMAGES.RESUME_SCORE}
+              src="/images/resume-score-img.svg"
               alt="LinkedIn decoration"
               fill
               className="object-cover rounded-[12px]"

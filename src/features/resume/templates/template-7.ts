@@ -1,5 +1,3 @@
-import { FALLBACKS } from '@shared/lib/image-assets';
-
 const template7 = {
   name: "Simran Professional",
 

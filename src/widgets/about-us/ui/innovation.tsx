@@ -2,39 +2,38 @@ import CountUp from '@shared/ui/count-up';
 import getCurrentStatsQuery from '@widgets/landing-page/api/query';
 import Image from 'next/image';
 import React, { useMemo } from 'react';
-import { LOGOS, ICONS } from '@shared/lib/image-assets';
 
 // Services data array
 const services = [
 	{
 		id: 1,
 		title: 'Practical and clean resume templates',
-		icon: ICONS.EXPERIENCE,
+		icon: '/images/epereince.svg',
 	},
 	{
 		id: 2,
 		title: 'AI Builder intelligence for corrections',
-		icon: ICONS.EXPERIENCE,
+		icon: '/images/epereince.svg',
 	},
 	{
 		id: 3,
 		title: 'Tailored resume for the Job',
-		icon: ICONS.EXPERIENCE,
+		icon: '/images/epereince.svg',
 	},
 	{
 		id: 4,
 		title: 'Community support for resume review and mentorship',
-		icon: ICONS.EXPERIENCE,
+		icon: '/images/epereince.svg',
 	},
 ];
 
 // Company logos data array
 const companyLogos = [
-	{ id: 1, src: LOGOS.META, alt: 'Meta' },
-	{ id: 2, src: LOGOS.GOOGLE_COLORED, alt: 'Google' },
-	{ id: 3, src: LOGOS.APPLE, alt: 'Apple' },
-	{ id: 4, src: LOGOS.LINKEDIN, alt: 'LinkedIn' },
-	{ id: 5, src: LOGOS.AMAZON, alt: 'Amazon' },
+	{ id: 1, src: '/images/meta-logo.svg', alt: 'Meta' },
+	{ id: 2, src: '/images/google.svg', alt: 'Google' },
+	{ id: 3, src: '/images/apple-logo.svg', alt: 'Apple' },
+	{ id: 4, src: '/images/linkedin.svg', alt: 'LinkedIn' },
+	{ id: 5, src: '/images/amazon-logo.svg', alt: 'Amazon' },
 ];
 
 function Innovation() {
@@ -97,7 +96,7 @@ function Innovation() {
 								<div className="flex items-center gap-1">
 									{[...Array(5)].map((_, i) => (
 										<Image
-											src={ICONS.STAR}
+											src="/images/Star.svg"
 											width={18}
 											height={18}
 											alt=""

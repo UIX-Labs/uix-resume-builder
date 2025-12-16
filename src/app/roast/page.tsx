@@ -14,7 +14,6 @@ import { TypewriterRoast } from './components/typewriter-roast'
 import Fire from './components/fire'
 import Header from '@widgets/landing-page/ui/header-section'
 import { trackEvent } from '@shared/lib/analytics/Mixpanel'
-import { IMAGES, ICONS } from '@shared/lib/image-assets';
 
 interface FireBackdropProps {
   variant: 'fixed' | 'flow'
@@ -35,21 +34,21 @@ function FireBackdrop({ variant }: FireBackdropProps) {
     <div aria-hidden className={containerClass}>
       <div className={wrapperClass}>
         <Image
-          src={IMAGES.ROAST_TEMPLATE_1}    
-		  alt='Resume Template 1'
+          src='/images/template-1.svg'
+          alt='Resume Template 1'
           width={300}
           height={400}
           className='absolute top-[30%] left-[5%] md:left-[10%] w-[100px] md:w-[300px] opacity-70 rotate-[15deg] z-0'
         />
         <Image
-          src={IMAGES.ROAST_TEMPLATE_2}    
+          src='/images/template-2.svg'
           alt='Resume Template 2'
           width={300}
           height={400}
           className='absolute top-[30%] right-[25%] md:right-[30%] w-[100px] md:w-[300px] opacity-70 rotate-[-15deg] z-0'
         />
         <Image
-          src={IMAGES.ROAST_TEMPLATE_3}    
+          src='/images/template-3.svg'
           alt='Resume Template 3'
           width={280}
           height={350}
@@ -171,7 +170,7 @@ export default function RoastPage() {
             <span>AI Powered</span>
 
             <Image
-              src={ICONS.AUTO_AWESOME}
+              src='/images/auto_awesome.svg'
               alt='AI'
               width={14}
               height={14}

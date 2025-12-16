@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ICONS } from '@shared/lib/image-assets';
 
 export function TheCommunity() {
   return (
@@ -8,7 +7,7 @@ export function TheCommunity() {
       <div className="lg:hidden flex flex-col items-center text-center">
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
           <Image
-            src={ICONS.COMMUNITY}
+            src="/images/community.svg"
             alt="Community icon"
             width={80}
             height={80}
@@ -45,7 +44,7 @@ export function TheCommunity() {
         {/* Community Icon - Top Center */}
         <div className="absolute left-[281px] top-0 w-20 h-20">
           <Image
-            src={ICONS.COMMUNITY}
+            src="/images/community.svg"
             alt="Community icon"
             width={80}
             height={80}

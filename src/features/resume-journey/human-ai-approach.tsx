@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { ICONS } from '@shared/lib/image-assets';
 
 export function HumanAiApproach() {
   return (
@@ -8,7 +7,7 @@ export function HumanAiApproach() {
       <div className="lg:hidden flex flex-col items-center text-center">
         <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
           <Image
-            src={ICONS.UNION}
+            src="/images/Union.svg"
             alt="Union icon"
             width={92}
             height={97}
@@ -56,7 +55,7 @@ export function HumanAiApproach() {
         {/* Union Icon - Right Side */}
         <div className="absolute left-[587px] top-8 w-[92px] h-[97px]">
           <Image
-            src={ICONS.UNION}
+            src="/images/Union.svg"
             alt="Union icon"
             width={92}
             height={97}

@@ -13,8 +13,8 @@ import {
 import type { SuggestionType } from "@entities/resume";
 import { useEffect, useMemo, useState } from "react";
 import { RadioGroup } from "@shared/ui/radio-group";
+
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { BACKGROUNDS, ICONS } from '@shared/lib/image-assets';
 
 interface Suggestion {
   old?: string;
@@ -138,7 +138,7 @@ export default function AnalyzerModal({
       <DialogContent
         className="!max-w-3xl max-h-[80vh] overflow-y-auto rounded-[36px]"
         style={{
-          backgroundImage: `url(${BACKGROUNDS.ANALYZER_MODAL})`,
+          backgroundImage: "url(/images/background.svg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -148,7 +148,7 @@ export default function AnalyzerModal({
           <DialogTitle className="flex items-center justify-center">
             <span className="flex items-center gap-2 text-2xl font-semibold text-white">
               <img
-                src={ICONS.AUTO_AWESOME}
+                src="/images/auto_awesome.svg"
                 alt="Stars"
                 className="w-6 h-6"
               />

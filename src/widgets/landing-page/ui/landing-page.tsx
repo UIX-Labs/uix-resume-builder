@@ -2,13 +2,12 @@ import React from "react";
 import HeroSection from "./hero-section";
 import Image from "next/image";
 import Header from "./header-section";
-import { BACKGROUNDS } from "@shared/lib/image-assets";
 
 function LandingPage() {
   return (
     <div className="relative w-full h-full">
       <Image
-        src={BACKGROUNDS.LANDING_PAGE}
+        src="images/landing-page-bg.svg"
         alt="Background"
         fill
         className="object-cover -z-10"

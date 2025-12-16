@@ -11,6 +11,7 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { useState, useMemo } from "react";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
+import { IMAGES, ICONS } from "@shared/lib/image-assets";
 import CountUp from "@shared/ui/count-up";
 import { getUserInitials } from "../lib/user-initials";
 
@@ -67,7 +68,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item z-10 opacity-[100%]">
           <img
-            src="images/resume-score-img.svg"
+            src={IMAGES.RESUME_SCORE}
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -83,7 +84,7 @@ const HeroSection = () => {
       id: "custom-templates",
       content: (
         <div className="overlay-item overflow-hidden z-10 rounded-3xl glass-card1">
-          <img src="images/templates.svg" alt="Template 1" />
+          <img src={IMAGES.TEMPLATES} alt="Template 1" />
         </div>
       ),
       desktopPosition: { top: "80%", left: "-7%" },
@@ -99,7 +100,7 @@ const HeroSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           <img
-            src="images/color-palete.svg"
+            src={ICONS.COLOR_PALETTE}
             alt="Hired at Meta"
             className="w-full h-auto"
           />
@@ -117,7 +118,7 @@ const HeroSection = () => {
       content: (
         <div className="overlay-item">
           <img
-            src="images/image-hired.svg"
+            src={IMAGES.HIRED}
             alt="Hired at Meta"
             className="w-full h-auto"
           />

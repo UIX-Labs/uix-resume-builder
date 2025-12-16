@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { BACKGROUNDS, ICONS } from '@shared/lib/image-assets';
 
 export function OurVision() {
 	return (
@@ -6,7 +7,7 @@ export function OurVision() {
 			<div className="relative flex flex-col items-center justify-center">
 				<div className="absolute top-[118px] right-[250px] w-[206px] h-[206px] hidden lg:block">
 					<Image
-						src="/images/sphere-dynamic-color.svg"
+						src={BACKGROUNDS.SPHERE_DYNAMIC}
 						alt="Decorative sphere"
 						width={206}
 						height={206}
@@ -18,7 +19,7 @@ export function OurVision() {
 					<div className="flex flex-col items-center gap-2">
 						<div className="w-[50px] h-[50px] md:w-[66px] md:h-[66px] rounded-[16px] md:rounded-[24px] overflow-hidden bg-black flex items-center justify-center">
 							<Image
-								src="/images/close.svg"
+								src={ICONS.CLOSE}
 								alt="Vision icon"
 								width={50}
 								height={50}

@@ -9,8 +9,11 @@ import { useIsMobile } from "@shared/hooks/use-mobile";
 import { MobileSidebar } from "./mobile-sidebar";
 import { cn } from "@shared/lib/cn";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+interface HeaderProps {
+  variant?: "default" | "roast";
+}
 
-function Header() {
+function Header({ variant = "default" }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
   const user = useCachedUser();
@@ -68,10 +71,25 @@ function Header() {
     });
   };
 
+  const isRoast = variant === "roast";
+
   return (
     <>
-      <header className="w-full flex items-center justify-between px-4 md:px-4 py-4">
-        <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
+      <header
+        className={cn(
+          isRoast
+            ? "fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-4 transition-all duration-300"
+            : "w-full flex items-center justify-between px-4 md:px-4 py-4",
+          isRoast
+            ? "backdrop-blur-md"
+            : ""
+        )}
+      >
+        <button
+          className="flex items-center gap-2 md:gap-4 cursor-pointer"
+          onClick={handleHomeClick}
+          type="button"
+        >
           <Image
             src="/images/Pika-Resume.png"
             alt="AI"
@@ -79,20 +97,45 @@ function Header() {
             height={60}
             className="inline-block "
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col items-start">
             <div className="flex flex-row">
-              <span className="font-bold text-[#005FF2] bg-clip-text text-3xl">
+              <span
+                className={cn(
+                  "font-bold text-3xl",
+                  isRoast ? "text-white" : "text-[#005FF2] bg-clip-text"
+                )}
+              >
                 Pika
               </span>
-              <span className="font-normal text-[#21344F] bg-clip-text text-3xl">
+              <span
+                className={cn(
+                  "font-normal text-3xl",
+                  isRoast ? "text-white/80" : "text-[#21344F] bg-clip-text"
+                )}
+              >
                 Resume
               </span>
             </div>
-            <div className="flex flex-row gap-1">
-              <span className="font-normal text-[#005FF2] bg-clip-text text-sm">
+            <div
+              className={cn(
+                "flex-row gap-1",
+                isRoast ? "hidden md:flex" : "flex"
+              )}
+            >
+              <span
+                className={cn(
+                  "font-normal text-sm",
+                  isRoast ? "text-white/90" : "text-[#005FF2] bg-clip-text"
+                )}
+              >
                 Build Fast.
               </span>
-              <span className="font-normal text-[#21344F] bg-clip-text text-sm">
+              <span
+                className={cn(
+                  "font-normal text-sm",
+                  isRoast ? "text-white/70" : "text-[#21344F] bg-clip-text"
+                )}
+              >
                 Build Right.
               </span>
             </div>
@@ -107,7 +150,11 @@ function Header() {
             className={cn(
               "font-semibold text-lg cursor-pointer",
               pathname === "/"
-                ? "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                ? isRoast
+                  ? "text-blue-400"
+                  : "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                : isRoast
+                ? "text-white hover:bg-white/10 hover:text-white"
                 : "text-blue-900 hover:text-gray-900"
             )}
           >
@@ -121,7 +168,11 @@ function Header() {
             className={cn(
               "font-semibold text-lg cursor-pointer",
               pathname === "/roast"
-                ? "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                ? isRoast
+                  ? "text-blue-400"
+                  : "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                : isRoast
+                ? "text-white hover:bg-white/10 hover:text-white"
                 : "text-blue-900 hover:text-gray-900"
             )}
           >
@@ -135,7 +186,11 @@ function Header() {
             className={cn(
               "font-semibold text-lg cursor-pointer",
               pathname === "/dashboard" || pathname === "/auth"
-                ? "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                ? isRoast
+                  ? "text-blue-400"
+                  : "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                : isRoast
+                ? "text-white hover:bg-white/10 hover:text-white"
                 : "text-blue-900 hover:text-gray-900"
             )}
           >
@@ -149,7 +204,11 @@ function Header() {
             className={cn(
               "font-semibold text-lg cursor-pointer",
               pathname === "/about-us"
-                ? "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                ? isRoast
+                  ? "text-blue-400"
+                  : "bg-blue-200 text-blue-900 hover:bg-blue-300"
+                : isRoast
+                ? "text-white hover:bg-white/10 hover:text-white"
                 : "text-blue-900 hover:text-gray-900"
             )}
           >
@@ -160,7 +219,12 @@ function Header() {
             variant="default"
             size="default"
             onClick={handleCreateResumeClick}
-            className="bg-blue-900 hover:bg-blue-700 text-white font-medium p-3 rounded-lg shadow-sm cursor-pointer"
+            className={cn(
+              "font-medium p-3 rounded-lg shadow-sm cursor-pointer",
+              isRoast
+                ? "bg-blue-600 hover:bg-blue-700 text-white"
+                : "bg-blue-900 hover:bg-blue-700 text-white"
+            )}
           >
             Create My Resume
           </Button>
@@ -170,10 +234,15 @@ function Header() {
         <button
           type="button"
           onClick={handleMenuClick}
-          className="md:hidden p-2 text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+          className={cn(
+            "md:hidden p-2 rounded-lg transition-colors",
+            isRoast
+              ? "text-white hover:bg-white/10"
+              : "text-gray-900 hover:bg-gray-100"
+          )}
           aria-label="Open menu"
         >
-          <Menu className="w-6 h-6" />
+          <Menu className={cn(isRoast ? "w-7 h-7" : "w-6 h-6")} />
         </button>
       </header>
 

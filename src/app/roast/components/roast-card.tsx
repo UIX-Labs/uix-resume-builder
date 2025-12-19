@@ -16,7 +16,7 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
       <div
         ref={ref}
         id='roast-card-content'
-        className='relative overflow-hidden space-y-4 font-mono text-base md:text-lg leading-relaxed text-slate-700 p-6 md:p-8 bg-white/50 backdrop-blur-sm rounded-xl border border-slate-100 shadow-sm'
+        className='relative overflow-hidden space-y-4 font-mono text-base md:text-lg leading-relaxed text-slate-700 p-6 md:p-8 bg-white/90 backdrop-blur-sm rounded-xl border border-slate-100 shadow-sm'
       >
         {/* Watermark Background */}
         <div

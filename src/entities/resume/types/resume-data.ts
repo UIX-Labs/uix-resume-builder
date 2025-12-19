@@ -12,7 +12,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       ongoing: boolean;
       link: { title: string; link: string };
       description: string;
-    }>
+    }>;
     suggestedUpdates?: SuggestedUpdates;
   };
 
@@ -123,24 +123,50 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
   };
 
   templateId: string;
+  template?: {
+    id: string;
+    name: string;
+    json: {
+      columns: {
+        left: {
+          width: number;
+          className?: string;
+        };
+        right: {
+          width: number;
+          className?: string;
+        };
+        spacing?: number;
+      };
+      name: string;
+      page: {
+        background?: string;
+        className?: string;
+        fontFamily?: string;
+        height?: string;
+        padding?: string;
+        width?: string;
+      };
+    };
+    previewImageUrl?: { url: string };
+  };
 }
 
 export type ResumeDataKey =
-  | 'experience'
-  | 'skills'
-  | 'projects'
-  | 'personalDetails'
-  | 'professionalSummary'
-  | 'education'
-  | 'certifications'
-  | 'interests'
-  | 'achievements';
-
+  | "experience"
+  | "skills"
+  | "projects"
+  | "personalDetails"
+  | "professionalSummary"
+  | "education"
+  | "certifications"
+  | "interests"
+  | "achievements";
 
 export enum SuggestionType {
-  SPELLING_ERROR = 'spelling_error',
-  SENTENCE_REFINEMENT = 'sentence_refinement',
-  NEW_SUMMARY = 'new_summary',
+  SPELLING_ERROR = "spelling_error",
+  SENTENCE_REFINEMENT = "sentence_refinement",
+  NEW_SUMMARY = "new_summary",
 }
 
 export interface SuggestedUpdateField {

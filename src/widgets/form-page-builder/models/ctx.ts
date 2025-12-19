@@ -1,4 +1,4 @@
-import type { ResumeDataKey } from '@entities/resume';
+import type { ResumeDataKey, ResumeData } from '@entities/resume';
 import { createContext, useContext } from 'react';
 
 export const FormPageBuilderContext = createContext<{
@@ -7,6 +7,8 @@ export const FormPageBuilderContext = createContext<{
   navs: { label: string; name: ResumeDataKey; completion?: number }[];
   sectionCompletions?: Record<string, number>;
   overallCompletion?: number;
+  resumeData?: ResumeData & { isAnalyzed?: boolean };
+  onBuilderIntelligence?: () => void;
 }>({
   currentStep: 'personalDetails',
   setCurrentStep: () => {
@@ -15,6 +17,8 @@ export const FormPageBuilderContext = createContext<{
   navs: [],
   sectionCompletions: undefined,
   overallCompletion: undefined,
+  resumeData: undefined,
+  onBuilderIntelligence: undefined,
 });
 
 export const FormPageBuilderProvider = FormPageBuilderContext.Provider;

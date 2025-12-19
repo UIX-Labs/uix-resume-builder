@@ -34,8 +34,6 @@ export const useFormDataStore = create<{
   setAnalyzerProgress: (progress: number) => void;
   analyzerError: boolean;
   setAnalyzerError: (error: boolean) => void;
-  retryAnalyzer: (() => void) | null;
-  setRetryAnalyzer: (retry: (() => void) | null) => void;
   currentTextIndex: number;
   setCurrentTextIndex: (index: number) => void;
 }>((set) => ({
@@ -47,8 +45,6 @@ export const useFormDataStore = create<{
   setAnalyzerProgress: (progress: number) => set({ analyzerProgress: progress }),
   analyzerError: false,
   setAnalyzerError: (error: boolean) => set({ analyzerError: error }),
-  retryAnalyzer: null,
-  setRetryAnalyzer: (retry: (() => void) | null) => set({ retryAnalyzer: retry }),
   currentTextIndex: 0,
   setCurrentTextIndex: (index: number) => set({ currentTextIndex: index }),
 }));

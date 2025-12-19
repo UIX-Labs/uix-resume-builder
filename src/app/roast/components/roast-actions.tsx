@@ -25,7 +25,7 @@ export function RoastActions({
       animate={{ opacity: 1, y: 0 }}
       className='mt-8 w-full max-w-2xl mx-auto'
     >
-      <div className='bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 text-center space-y-8'>
+      <div className='bg-white/90 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-sm border border-slate-100 text-center space-y-8'>
         <div className='space-y-2'>
           <h3 className='text-2xl font-bold text-[#005FF2]'>
             Roast Served! 🍽️

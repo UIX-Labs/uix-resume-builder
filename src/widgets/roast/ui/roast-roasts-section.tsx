@@ -69,7 +69,7 @@ export const RoastRoastsSection = () => {
   return (
     <div
       id="roast-roasts-section"
-      className="relative w-full bg-black flex flex-col items-center overflow-hidden font-sans"
+      className="relative w-full bg-black flex flex-col items-center overflow-hidden font-sans scroll-mt-24"
     >
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none">

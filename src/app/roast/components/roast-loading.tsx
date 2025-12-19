@@ -7,7 +7,7 @@ import Fire from './fire'
 
 export function RoastLoading() {
   return (
-    <div className='flex flex-col items-center justify-center w-full h-[400px] relative overflow-hidden rounded-2xl bg-slate-50/50 border border-slate-100'>
+    <div className='flex flex-col items-center justify-center w-full h-[400px] relative overflow-hidden rounded-2xl bg-slate-50/90 border border-slate-100'>
       {/* Background Grid Pattern - subtle */}
       <div
         className='absolute inset-0 opacity-[0.03]'
@@ -159,7 +159,7 @@ export function RoastLoading() {
         <motion.p
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className='text-slate-500 text-sm font-medium'
+          className='text-slate-700 text-sm font-medium'
         >
           Looking for missed opportunities & cringe moments 🕵️‍♂️
         </motion.p>

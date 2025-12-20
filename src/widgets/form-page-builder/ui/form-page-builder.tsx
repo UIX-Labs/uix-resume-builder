@@ -48,11 +48,7 @@ import {
   isSectionModified,
 } from "../lib/data-cleanup";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import { useCheckIfCommunityMember } from "@entities/download-pdf/queries/queries";
-import WishlistModal from "./wishlist-modal";
-import WishlistSuccessModal from "./waitlist-success-modal";
 import { Download } from "lucide-react";
-import type { JoinCommunityResponse } from "@entities/download-pdf/types/type";
 import TemplateButton from "./change-template-button";
 import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
 import { saveSectionWithSuggestions } from "../lib/save-helpers";
@@ -60,11 +56,6 @@ import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidat
 import { usePdfGeneration } from "../hooks/use-pdf-generation";
 import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
 import { formatTimeAgo } from "../lib/time-helpers";
-import enzoTemplate1 from "@features/resume/templates/enzo-template1";
-import template6 from "@features/resume/templates/template6";
-import laurenChenTemplate from "@features/resume/templates/eren-templete2";
-import template11 from "@features/resume/templates/template11";
-import template10 from "@features/resume/templates/template10";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -203,9 +194,9 @@ export function FormPageBuilder() {
   );
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
-  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
-  const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
-    useState(false);
+  // const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  // const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
+  //   useState(false);
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
 
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
@@ -243,7 +234,7 @@ export function FormPageBuilder() {
   const { mutateAsync: updateResumeTemplateMutation } =
     useUpdateResumeTemplate();
 
-  const { mutateAsync: checkCommunityMember } = useCheckIfCommunityMember();
+  // const { mutateAsync: checkCommunityMember } = useCheckIfCommunityMember();
 
   const { targetRef } = usePDF({
     filename: "resume.pdf",
@@ -276,24 +267,24 @@ export function FormPageBuilder() {
 
       startTimedEvent("resume_download");
 
-      const response = await checkCommunityMember({
-        personal_email: user?.email,
-        uix_email: user?.email,
-      });
+      // const response = await checkCommunityMember({
+      //   personal_email: user?.email,
+      //   uix_email: user?.email,
+      // });
 
-      if (response?.is_uix_member) {
-        await generatePDF();
-        trackEvent("resume_download", {
-          status: "success",
-          format: "pdf",
-          resumeId,
-        });
-      } else {
-        setIsWishlistModalOpen(true);
-        trackEvent("resume_download_waitlist_prompt", {
-          resumeId,
-        });
-      }
+      // if (response?.is_uix_member) {
+      await generatePDF();
+      trackEvent("resume_download", {
+        status: "success",
+        format: "pdf",
+        resumeId,
+      });
+      // } else {
+      //   setIsWishlistModalOpen(true);
+      //   trackEvent("resume_download_waitlist_prompt", {
+      //     resumeId,
+      //   });
+      // }
     } catch (error) {
       console.error("Failed to download PDF:", error);
       toast.error("Failed to download PDF");
@@ -305,18 +296,18 @@ export function FormPageBuilder() {
     }
   };
 
-  const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
-    if (response?.joinCommunityRequested) {
-      try {
-        await generatePDF();
-      } catch (error) {
-        console.error("Failed to generate PDF after joining waitlist:", error);
-        toast.error("Failed to download PDF");
-      }
-    } else {
-      setIsWishlistSuccessModalOpen(true);
-    }
-  };
+  // const handleWaitlistJoinSuccess = async (response: JoinCommunityResponse) => {
+  //   if (response?.joinCommunityRequested) {
+  //     try {
+  //       await generatePDF();
+  //     } catch (error) {
+  //       console.error("Failed to generate PDF after joining waitlist:", error);
+  //       toast.error("Failed to download PDF");
+  //     }
+  //   } else {
+  //     setIsWishlistSuccessModalOpen(true);
+  //   }
+  // };
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -1115,7 +1106,7 @@ export function FormPageBuilder() {
           resumeId={resumeId}
         />
       )}
-      {isWishlistModalOpen && (
+      {/* {isWishlistModalOpen && (
         <WishlistModal
           isOpen={isWishlistModalOpen}
           onClose={() => setIsWishlistModalOpen(false)}
@@ -1127,7 +1118,7 @@ export function FormPageBuilder() {
           isOpen={isWishlistSuccessModalOpen}
           onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
-      )}
+      )} */}
 
       {/* Resume Preview Modal */}
       {selectedTemplate && (

@@ -2,6 +2,7 @@ import { AITailorSection } from './ai-tailored-section';
 import FooterSection from './footer-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
+import JDSection from './jd-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import React from 'react';
@@ -24,6 +25,7 @@ export function LandingPage() {
       <div>
         <TemplateCarousel />
         <Testimonials />
+        <JDSection/>
       </div>
 
       <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">

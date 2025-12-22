@@ -9,12 +9,24 @@ import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { HomeIcon } from 'lucide-react';
 import { Button } from '@shared/ui';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function DashboardLayout() {
   const { data: user } = useUserProfile();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [shouldOpenJDModal, setShouldOpenJDModal] = useState(false);
+
+  useEffect(() => {
+    // Check if we should open the JD modal
+    const openModal = searchParams?.get('openModal');
+    if (openModal === 'jd') {
+      setShouldOpenJDModal(true);
+      // Clear the query parameter from URL
+      router.replace('/dashboard');
+    }
+  }, [searchParams, router]);
 
   return (
     <SidebarProvider>
@@ -23,8 +35,6 @@ export default function DashboardLayout() {
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
           <header className="flex justify-end items-center bg-[rgba(245,248,250,1)] p-4 rounded-3xl">
-            
-
             <div className="flex items-center gap-3 ">
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
                 <Button
@@ -64,7 +74,7 @@ export default function DashboardLayout() {
               <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
 
               <div className="px-4">
-                <ResumeCreationCard />
+                <ResumeCreationCard shouldOpenJDModal={shouldOpenJDModal} />
               </div>
 
               <div className="flex-1 mt-4 px-4">

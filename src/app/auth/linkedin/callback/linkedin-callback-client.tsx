@@ -52,8 +52,16 @@ export default function LinkedInCallbackClient() {
           setSuccess('Authentication successful! Redirecting...');
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+          
           setTimeout(() => {
-            router.push('/dashboard');
+            // Check if user came from JD section
+            const shouldOpenJDModal = localStorage.getItem('openJDModal');
+            if (shouldOpenJDModal === 'true') {
+              localStorage.removeItem('openJDModal');
+              router.push('/dashboard?openModal=jd');
+            } else {
+              router.push('/dashboard');
+            }
           }, 1000);
         } else {
           setError(authResponse.message || 'Authentication failed');

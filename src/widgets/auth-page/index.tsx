@@ -128,7 +128,15 @@ export default function AuthPageWidget() {
       {
         onSuccess: (data) => {
           trackEvent('login_success', { method: 'email' });
-          router.push("/dashboard");
+          
+          // Check if user came from JD section
+          const shouldOpenJDModal = localStorage.getItem('openJDModal');
+          if (shouldOpenJDModal === 'true') {
+            localStorage.removeItem('openJDModal');
+            router.push('/dashboard?openModal=jd');
+          } else {
+            router.push('/dashboard');
+          }
         },
         onError: (error) => {
           setErrors({ password: "Invalid password. Please try again." });
@@ -199,7 +207,15 @@ export default function AuthPageWidget() {
       {
         onSuccess: (data) => {
           trackEvent('registration_success', { method: 'email' });
-          router.push("/dashboard");
+          
+          // Check if user came from JD section
+          const shouldOpenJDModal = localStorage.getItem('openJDModal');
+          if (shouldOpenJDModal === 'true') {
+            localStorage.removeItem('openJDModal');
+            router.push('/dashboard?openModal=jd');
+          } else {
+            router.push('/dashboard');
+          }
         },
         onError: (error) => {
           setErrors({ submit: "Registration failed. Please try again." });

@@ -110,7 +110,7 @@ export default function JDSection() {
         <h1 className="text-5xl leading-none font-black text-blue-600">
           Match Your Resume
         </h1>
-        <p className="text-[32px] font-semibold text-black">
+        <p className="text-[32px] font-semibold text-black leading-none">
           to the job description
         </p>
       </div>
@@ -120,7 +120,7 @@ export default function JDSection() {
         <div
           className="
             h-[420px] w-auto
-            md:h-[776px] md:w-[650px]
+            md:h-[740px] md:w-[650px]
             overflow-hidden rounded-4xl border-white border-[2px]
             shadow-[0_20px_60px_rgba(0,0,0,0.1)]
           "

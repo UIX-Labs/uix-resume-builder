@@ -37,6 +37,7 @@ export default function JDSection() {
     if (!videoRef.current) return;
 
     if (inView) {
+      videoRef.current.currentTime = 0;
       videoRef.current.play();
     } else {
       videoRef.current.pause();

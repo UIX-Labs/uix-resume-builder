@@ -7,9 +7,11 @@ import { useRoastSharing } from '../hooks/use-roast-sharing'
 
 export function TypewriterRoast({
   content,
+  resumeId,
   onRoastAnother,
 }: {
   content: string
+  resumeId: string
   onRoastAnother: () => void
 }) {
   const [activeLineIndex, setActiveLineIndex] = useState(0)
@@ -39,6 +41,7 @@ export function TypewriterRoast({
           onDownload={downloadImage}
           onRoastAnother={onRoastAnother}
           isShareAvailable={isShareAvailable}
+          resumeId={resumeId}
         />
       )}
     </div>

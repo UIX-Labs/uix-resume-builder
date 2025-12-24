@@ -16,7 +16,7 @@ export const getLinkedInAuthUrl = () => {
   return `https://www.linkedin.com/oauth/v2/authorization?${params.toString()}`;
 };
 
-export const sendAuthCodeToBackend = async (authCode: string) => {
+export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: string) => {
   if (!authCode) {
     throw new Error('Auth code is required');
   }
@@ -33,6 +33,7 @@ export const sendAuthCodeToBackend = async (authCode: string) => {
           authCode: authCode,
           redirectUri:
             process.env.NEXT_PUBLIC_REDIRECT_URI,
+          guestEmail,
         }),
       },
     });

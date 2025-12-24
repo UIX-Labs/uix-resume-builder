@@ -15,7 +15,7 @@ export const getGoogleAuthUrl = () => {
   return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
 };
 
-export const sendAuthCodeToBackend = async (authCode: string) => {
+export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: string) => {
   if (!authCode) {
     throw new Error('Auth code is required');
   }
@@ -32,6 +32,7 @@ export const sendAuthCodeToBackend = async (authCode: string) => {
           authCode: authCode,
           redirectUri:
             process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI,
+          guestEmail,
         }),
       },
     });

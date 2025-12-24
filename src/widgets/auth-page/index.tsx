@@ -23,6 +23,16 @@ import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 
 export default function AuthPageWidget() {
   const router = useRouter();
+  const [guestEmail, setGuestEmail] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const storedGuestEmail = localStorage.getItem(
+      "pending_analyzer_guest_email"
+    );
+    if (storedGuestEmail) {
+      setGuestEmail(storedGuestEmail);
+    }
+  }, []);
 
   const [step, setStep] = useState<
     "initial" | "email" | "password" | "code" | "register" | "socialAccounts"
@@ -85,34 +95,37 @@ export default function AuthPageWidget() {
       return;
     }
 
-    checkEmailMutation.mutate(email, {
-      onSuccess: (emailCheckResult) => {
-        const emailExists = emailCheckResult.emailExists ?? false;
+    checkEmailMutation.mutate(
+      { email, guestEmail },
+      {
+        onSuccess: (emailCheckResult) => {
+          const emailExists = emailCheckResult.emailExists ?? false;
 
-        if (emailExists) {
-          if (
-            emailCheckResult.hasPassword === false &&
-            emailCheckResult.socialAccounts
-          ) {
-            setSocialAccounts(emailCheckResult.socialAccounts);
-            setStep("socialAccounts");
-          } else {
-            setStep("password");
-          }
-        } else {
-          setStep("code");
-
-          setTimeout(() => {
-            if (codeInputRef.current) {
-              codeInputRef.current.focus();
+          if (emailExists) {
+            if (
+              emailCheckResult.hasPassword === false &&
+              emailCheckResult.socialAccounts
+            ) {
+              setSocialAccounts(emailCheckResult.socialAccounts);
+              setStep("socialAccounts");
+            } else {
+              setStep("password");
             }
-          }, 100);
-        }
-      },
-      onError: (error) => {
-        setErrors({ email: "Failed to process email. Please try again." });
-      },
-    });
+          } else {
+            setStep("code");
+
+            setTimeout(() => {
+              if (codeInputRef.current) {
+                codeInputRef.current.focus();
+              }
+            }, 100);
+          }
+        },
+        onError: (error) => {
+          setErrors({ email: "Failed to process email. Please try again." });
+        },
+      }
+    );
   };
 
   const handlePasswordSubmit = async () => {
@@ -124,10 +137,11 @@ export default function AuthPageWidget() {
     }
 
     loginMutation.mutate(
-      { email, password },
+      { email, password, guestEmail },
       {
         onSuccess: (data) => {
-          trackEvent('login_success', { method: 'email' });
+          trackEvent("login_success", { method: "email" });
+          localStorage.removeItem("pending_analyzer_guest_email");
           router.push("/dashboard");
         },
         onError: (error) => {
@@ -195,10 +209,12 @@ export default function AuthPageWidget() {
         lastName,
         password,
         confirmPassword,
+        guestEmail,
       },
       {
         onSuccess: (data) => {
-          trackEvent('registration_success', { method: 'email' });
+          trackEvent("registration_success", { method: "email" });
+          localStorage.removeItem("pending_analyzer_guest_email");
           router.push("/dashboard");
         },
         onError: (error) => {

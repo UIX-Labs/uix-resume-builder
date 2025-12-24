@@ -37,9 +37,11 @@ export default function GoogleCallbackClient() {
       try {
         setSuccess('Authenticating...');
 
-        const authResponse = (await sendAuthCodeToBackend(code)) as any;
+        const guestEmail = localStorage.getItem("pending_analyzer_guest_email") || undefined;
+        const authResponse = (await sendAuthCodeToBackend(code, guestEmail)) as any;
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
+          localStorage.removeItem("pending_analyzer_guest_email");
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {

@@ -110,7 +110,7 @@ export default function JDSection() {
         <h1 className="text-5xl leading-none font-black text-blue-600">
           Match Your Resume
         </h1>
-        <p className="text-[32px] font-semibold text-black leading-none">
+        <p className="text-[28px] font-semibold text-black leading-none">
           to the job description
         </p>
       </div>

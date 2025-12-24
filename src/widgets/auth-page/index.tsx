@@ -142,7 +142,13 @@ export default function AuthPageWidget() {
         onSuccess: (data) => {
           trackEvent("login_success", { method: "email" });
           localStorage.removeItem("pending_analyzer_guest_email");
-          router.push("/dashboard");
+          
+          const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
+          if (pendingResumeId) {
+            router.push(`/resume/${pendingResumeId}`);
+          } else {
+            router.push("/dashboard");
+          }
         },
         onError: (error) => {
           setErrors({ password: "Invalid password. Please try again." });
@@ -215,7 +221,13 @@ export default function AuthPageWidget() {
         onSuccess: (data) => {
           trackEvent("registration_success", { method: "email" });
           localStorage.removeItem("pending_analyzer_guest_email");
-          router.push("/dashboard");
+          
+          const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
+          if (pendingResumeId) {
+            router.push(`/resume/${pendingResumeId}`);
+          } else {
+            router.push("/dashboard");
+          }
         },
         onError: (error) => {
           setErrors({ submit: "Registration failed. Please try again." });

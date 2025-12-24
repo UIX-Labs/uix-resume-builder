@@ -54,8 +54,14 @@ export default function LinkedInCallbackClient() {
           localStorage.removeItem("pending_analyzer_guest_email");
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+          
+          const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
           setTimeout(() => {
-            router.push('/dashboard');
+            if (pendingResumeId) {
+              router.push(`/resume/${pendingResumeId}`);
+            } else {
+              router.push('/dashboard');
+            }
           }, 1000);
         } else {
           setError(authResponse.message || 'Authentication failed');

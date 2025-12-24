@@ -274,7 +274,7 @@ export function FormPageBuilder() {
         const width = entry.contentRect.width;
         // 794px is the fixed width of the resume
         // We add some padding (e.g. 40px) to ensure it doesn't touch the edges
-        const scale = Math.min((width - 40) / 794, 1);
+        const scale = (width - 40) / 794;
         setPreviewScale(Math.max(scale, 0.4)); // Minimum scale 0.4
       }
     });
@@ -1047,8 +1047,7 @@ export function FormPageBuilder() {
               height: "0",
               overflow: "hidden",
               pointerEvents: "none",
-              transform: `scale(${previewScale})`,
-              transformOrigin: "top left",
+              zIndex: "-9999"
             }}
             aria-hidden="true"
           >

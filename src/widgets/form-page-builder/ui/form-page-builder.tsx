@@ -1122,10 +1122,10 @@ export function FormPageBuilder() {
       </div>
       {/* Resizer Handle */}
       <div
-        className="w-3 cursor-col-resize flex items-center justify-center hover:bg-gray-100 active:bg-blue-100 transition-colors z-50 shrink-0"
+        className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
         onMouseDown={startResizing}
       >
-        <div className="w-2 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+        <div className="w-2 h-12 bg-gray-300 rounded-full flex items-center justify-center">
           <GripVertical className="w-2 h-2 text-gray-500" />
         </div>
       </div>

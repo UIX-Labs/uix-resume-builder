@@ -13,6 +13,7 @@ import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import getCurrentStatsQuery from "../api/query";
 import CountUp from "@shared/ui/count-up";
 import { getUserInitials } from "../lib/user-initials";
+import Image from "next/image";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -199,7 +200,8 @@ const HeroSection = () => {
                 className="count-up-text"
                 onStart={undefined}
                 onEnd={undefined}
-              />+
+              />
+              +
             </span>{" "}
             professionals
           </span>
@@ -221,14 +223,32 @@ const HeroSection = () => {
         </div>
 
         <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
-          <Button
-            onClick={handleLinkedInUnified}
-            className="w-[280px] md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
-"
-          >
-            Auto-fill via LinkedIn
-          </Button>
+          {/* Claim Free Access (image button) */}
+          <div className="relative inline-flex flex-col items-center">
+            <Image
+              src="/images/claim-free-access.svg"
+              alt="Claim Free Access"
+              width={120}
+              height={36}
+              className="
+    absolute 
+    -top-3 md:-top-6 
+    -left-4 md:-left-7
+    h-6 md:h-9 w-auto
+    z-20
+    pointer-events-none
+  "
+              priority
+            />
 
+            <Button
+              onClick={handleLinkedInUnified}
+              className="w-[280px] md:w-auto py-6 md:py-8 px-3 md:px-6 bg-blue-900 border-2 border-white text-white text-xl md:text-[32px] font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
+"
+            >
+              Auto-fill via LinkedIn
+            </Button>
+          </div>
           <Button
             onClick={handleUploadClick}
             className="w-[240px] md:w-auto py-6 md:py-8 px-6 bg-gradient-to-l from-white to-[rgb(224,224,224)] text-black text-xl md:text-2xl font-semibold rounded-xl border-2 border-white hover:bg-gray-100 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"

@@ -16,9 +16,17 @@ interface TemplateCardProps {
 export function TemplateCard({ template, onClick, isDashboard = false, onPreviewClick }: TemplateCardProps) {
   return (
     <div
-      className={cn('group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0 hover:shadow-lg', isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]')}
+      className={cn(
+        'group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0 hover:shadow-lg',
+        isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]',
+      )}
     >
-      <div className={cn("relative glass-card2 border-0 p-4 rounded-[20px]", isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]')}>
+      <div
+        className={cn(
+          'relative glass-card2 border-0 p-4 rounded-[20px]',
+          isDashboard ? 'w-[380px] h-[547px]' : 'w-[260px] h-[360px]',
+        )}
+      >
         <div className="w-full h-full relative">
           <Image
             src={template.publicImageUrl}
@@ -49,4 +57,3 @@ export function TemplateCard({ template, onClick, isDashboard = false, onPreview
     </div>
   );
 }
-

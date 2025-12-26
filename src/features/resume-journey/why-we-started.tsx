@@ -42,13 +42,7 @@ export function WhyWeStarted() {
       {/* Desktop Layout - Original */}
       <div className="hidden lg:block relative min-h-[237px]">
         <div className="absolute left-[432px] top-0 w-20 h-20">
-          <Image
-            src="/images/flash.svg"
-            alt="Flash icon"
-            width={80}
-            height={80}
-            className="object-contain"
-          />
+          <Image src="/images/flash.svg" alt="Flash icon" width={80} height={80} className="object-contain" />
         </div>
 
         {/* Green Dot */}

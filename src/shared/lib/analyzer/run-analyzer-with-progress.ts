@@ -1,17 +1,11 @@
-import type { QueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import type { QueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import { getResumeEmptyData } from "@entities/resume";
-import type { ResumeData } from "@entities/resume";
-import { updateResumeByAnalyzerWithResumeId } from "@entities/resume/api/update-resume-by-analyzer";
-import {
-  deepMerge,
-  normalizeStringsFields,
-} from "@entities/resume/models/use-resume-data";
-import {
-  TRANSITION_TEXTS,
-  useFormDataStore,
-} from "@widgets/form-page-builder/models/store";
+import { getResumeEmptyData } from '@entities/resume';
+import type { ResumeData } from '@entities/resume';
+import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
+import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
+import { TRANSITION_TEXTS, useFormDataStore } from '@widgets/form-page-builder/models/store';
 
 interface AnalyzerRunParams {
   resumeId: string;
@@ -33,8 +27,8 @@ export async function runAnalyzerWithProgress({
   setFormData,
   setIsAnalyzing,
   setAnalyzerError,
-  successMessage = "Builder Intelligence analysis complete!",
-  errorMessage = "Failed to fix resume",
+  successMessage = 'Builder Intelligence analysis complete!',
+  errorMessage = 'Failed to fix resume',
 }: AnalyzerRunParams): Promise<void> {
   setIsAnalyzing(true);
   setAnalyzerError(false);
@@ -57,14 +51,8 @@ export async function runAnalyzerWithProgress({
     }
 
     const elapsedTime = Date.now() - startTime;
-    const progressPercent = Math.min(
-      (elapsedTime / ESTIMATED_TIME_TO_95_PERCENT) * TARGET_PROGRESS,
-      TARGET_PROGRESS
-    );
-    const calculatedTextIndex = Math.min(
-      Math.floor(elapsedTime / textInterval),
-      numberOfTexts - 1
-    );
+    const progressPercent = Math.min((elapsedTime / ESTIMATED_TIME_TO_95_PERCENT) * TARGET_PROGRESS, TARGET_PROGRESS);
+    const calculatedTextIndex = Math.min(Math.floor(elapsedTime / textInterval), numberOfTexts - 1);
 
     useFormDataStore.setState({
       analyzerProgress: progressPercent,
@@ -95,7 +83,7 @@ export async function runAnalyzerWithProgress({
         const k = key as keyof typeof emptyData;
         const mergedValue = deepMerge(
           processedData[k] as unknown,
-          emptyData[k] as unknown
+          emptyData[k] as unknown,
         ) as ResumeData[keyof ResumeData];
 
         processedData = {
@@ -108,11 +96,11 @@ export async function runAnalyzerWithProgress({
       setFormData(processedData);
 
       useFormDataStore.setState({ analyzerProgress: 100 });
-      queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
+      queryClient.invalidateQueries({ queryKey: ['resume-data', resumeId] });
       toast.success(successMessage);
     }
   } catch (error) {
-    console.error("Analyzer error:", error);
+    console.error('Analyzer error:', error);
     isCompleted = true;
 
     if (progressIntervalId) {

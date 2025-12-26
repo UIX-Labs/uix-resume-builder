@@ -6,12 +6,15 @@ export interface UpdateResumeTemplateRequest {
   templateId: string;
 }
 
-export const updateResumeTemplate = async ({ resumeId, templateId }: UpdateResumeTemplateRequest): Promise<UpdateResumeTemplateResponse> => {
+export const updateResumeTemplate = async ({
+  resumeId,
+  templateId,
+}: UpdateResumeTemplateRequest): Promise<UpdateResumeTemplateResponse> => {
   const response = await fetch<UpdateResumeTemplateResponse>(`resume/${resumeId}`, {
     options: {
       method: 'PUT',
       body: JSON.stringify({
-        templateId: templateId
+        templateId: templateId,
       }),
       headers: {
         'Content-Type': 'application/json',

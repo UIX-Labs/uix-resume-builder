@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Sidebar,
   SidebarContent,
@@ -9,14 +9,14 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-} from "@shared/ui/sidebar";
-import { Home, FileText, LogOut, Sparkles, LayoutGrid } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useLogoutUser } from "@entities/auth-page/api/auth-queries";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import PikaResume from "@shared/icons/pika-resume";
-import { useRouter } from "next/navigation";
+} from '@shared/ui/sidebar';
+import { Home, FileText, LogOut, Sparkles, LayoutGrid } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import PikaResume from '@shared/icons/pika-resume';
+import { useRouter } from 'next/navigation';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -28,35 +28,35 @@ export default function DashboardSidebar() {
   };
 
   const handleDashboardClick = () => {
-    trackEvent("navigation_click", {
-      source: "dashboard_sidebar",
-      destination: "dashboard",
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'dashboard',
     });
   };
 
   const handleAllTemplatesClick = () => {
-    trackEvent("navigation_click", {
-      source: "dashboard_sidebar",
-      destination: "all_templates",
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'all_templates',
     });
   };
 
   const handleYourResumesClick = () => {
-    trackEvent("navigation_click", {
-      source: "dashboard_sidebar",
-      destination: "your_resumes",
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'your_resumes',
     });
   };
 
   const handleLogoutClick = () => {
     handleLogout();
-    trackEvent("logout_click", {
-      source: "dashboard_sidebar",
+    trackEvent('logout_click', {
+      source: 'dashboard_sidebar',
     });
   };
 
   const handleLogoClick = () => {
-    router.push("/");
+    router.push('/');
   };
 
   return (
@@ -68,20 +68,11 @@ export default function DashboardSidebar() {
           type="button"
         >
           <div className="flex flex-row items-center justify-center">
-            <PikaResume
-              stopColor="black"
-              offsetColor="black"
-              width={40}
-              height={40}
-            />
+            <PikaResume stopColor="black" offsetColor="black" width={40} height={40} />
           </div>
           <div className="flex flex-row items-center justify-center">
-            <span className="font-bold text-black bg-clip-text text-2xl">
-              Pika
-            </span>
-            <span className="font-normal text-[#21344F] bg-clip-text text-2xl">
-              Resume
-            </span>
+            <span className="font-bold text-black bg-clip-text text-2xl">Pika</span>
+            <span className="font-normal text-[#21344F] bg-clip-text text-2xl">Resume</span>
           </div>
         </button>
       </SidebarHeader>
@@ -95,7 +86,7 @@ export default function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1.5">
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/dashboard"}>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard'}>
                   <Link href="/dashboard" onClick={handleDashboardClick}>
                     <Home className="w-5 h-5" />
                     Dashboard
@@ -104,14 +95,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname === "/get-all-resumes"}
-                >
-                  <Link
-                    href="/get-all-resumes"
-                    onClick={handleAllTemplatesClick}
-                  >
+                <SidebarMenuButton asChild isActive={pathname === '/get-all-resumes'}>
+                  <Link href="/get-all-resumes" onClick={handleAllTemplatesClick}>
                     <LayoutGrid className="w-5 h-5" />
                     All Templates
                   </Link>
@@ -119,7 +104,7 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === "/resumes"}>
+                <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
                   <Link href="/resumes" onClick={handleYourResumesClick}>
                     <FileText className="w-5 h-5" />
                     Your Resumes
@@ -175,7 +160,7 @@ export default function DashboardSidebar() {
                 >
                   <div className="flex items-center">
                     <LogOut className="w-5 h-5" />
-                    {logoutMutation.isPending ? "Logging out..." : "Logout"}
+                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
                   </div>
                 </SidebarMenuButton>
               </SidebarMenuItem>

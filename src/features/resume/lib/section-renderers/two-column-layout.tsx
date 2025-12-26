@@ -7,9 +7,15 @@ export function renderTwoColumnLayout(
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
-  renderSection?: (section: any, data: any, currentSection?: string, hasSuggestions?: boolean, isThumbnail?: boolean) => React.ReactNode,
+  renderSection?: (
+    section: any,
+    data: any,
+    currentSection?: string,
+    hasSuggestions?: boolean,
+    isThumbnail?: boolean,
+  ) => React.ReactNode,
 ): React.ReactNode {
-    const { leftColumn, rightColumn, className } = section;
+  const { leftColumn, rightColumn, className } = section;
 
   return (
     <div className={cn(className)} data-item="two-column-layout">

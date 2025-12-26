@@ -84,7 +84,9 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                       <h2 className="text-[28px] sm:text-[36px] md:text-[44px] font-bold leading-[1.3em] tracking-[-0.0059em] text-black mb-0">
                         {member.name}
                       </h2>
-                      <p className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.3em] tracking-[-0.0144em] text-black mt-0">{member.role}</p>
+                      <p className="text-[14px] sm:text-[16px] md:text-[18px] leading-[1.3em] tracking-[-0.0144em] text-black mt-0">
+                        {member.role}
+                      </p>
                     </div>
                     {/* LinkedIn Icon */}
                     <div className="flex-shrink-0 w-6 h-6 md:w-8 md:h-8 ml-3 md:ml-4">
@@ -100,7 +102,9 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
 
                   {/* Bio */}
                   <div className="">
-                    <p className="text-[12px] sm:text-[13px] md:text-[14px] leading-[1.43em] tracking-[-0.0036em] text-black">{member.bio}</p>
+                    <p className="text-[12px] sm:text-[13px] md:text-[14px] leading-[1.43em] tracking-[-0.0036em] text-black">
+                      {member.bio}
+                    </p>
                   </div>
                   <div className="flex flex-col gap-1 w-full md:w-[180px]">
                     <p className="text-[12px] sm:text-[13px] md:text-[14px] leading-[1.43em] tracking-[-0.0036em] text-black">
@@ -108,7 +112,10 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     </p>
                     <div className="flex gap-2">
                       {workHistory.slice(0, 3).map((work, index) => (
-                        <div key={index} className="w-[36px] h-[36px] md:w-[49px] md:h-[49px] rounded overflow-hidden bg-gray-100">
+                        <div
+                          key={index}
+                          className="w-[36px] h-[36px] md:w-[49px] md:h-[49px] rounded overflow-hidden bg-gray-100"
+                        >
                           <Image
                             src={work.logo}
                             alt={work.company}
@@ -127,9 +134,14 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     </p>
                     <div className="flex flex-wrap gap-[7px]">
                       {styleTags.map((tag, index) => (
-                        <div key={index} className="flex items-center gap-1 px-2 md:px-3 py-1 bg-[#E9ECF1] rounded-[25px]">
+                        <div
+                          key={index}
+                          className="flex items-center gap-1 px-2 md:px-3 py-1 bg-[#E9ECF1] rounded-[25px]"
+                        >
                           <span className="text-[10px] md:text-[12px] font-bold leading-[1.3em]">{tag.emoji}</span>
-                          <span className="text-[10px] md:text-[12px] font-bold leading-[1.3em] text-[#0C1118]">{tag.label}</span>
+                          <span className="text-[10px] md:text-[12px] font-bold leading-[1.3em] text-[#0C1118]">
+                            {tag.label}
+                          </span>
                         </div>
                       ))}
                     </div>

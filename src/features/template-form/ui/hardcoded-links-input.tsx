@@ -66,7 +66,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
   const handleDeleteLink = (key: string) => {
     setLinksData((prev) => {
       const visibleLinksCount = Object.keys(prev).length;
-      
+
       // If there's only one link box left, clear the text instead of deleting
       if (visibleLinksCount === 1) {
         return {
@@ -77,7 +77,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
           },
         };
       }
-      
+
       // Otherwise, delete the link box
       const newData = { ...prev };
       delete newData[key];
@@ -99,18 +99,18 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
     if (oldKey === newKey) return;
 
     const oldLink = linksData[oldKey]?.link || '';
-    
+
     setLinksData((prev) => {
       const newData = { ...prev };
       delete newData[oldKey];
-      
+
       if (oldLink.trim() !== '') {
         newData[newKey] = {
           title: LINK_TYPES.find((lt) => lt.key === newKey)?.label || newKey,
           link: oldLink,
         };
       }
-      
+
       return newData;
     });
   };
@@ -135,14 +135,14 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
         const currentLink = linksData[linkType.key]?.link || '';
         const availableTypes = LINK_TYPES.filter((lt) => lt.key !== linkType.key);
         const IconComponent = linkType.Icon;
-        
+
         return (
           <div
             key={linkType.key}
             className={cn(
               'relative flex items-center w-full border border-[#959DA8] rounded-lg',
               'bg-[#FAFBFC] focus-within:border-[#0059ED]',
-              'transition-colors overflow-hidden'
+              'transition-colors overflow-hidden',
             )}
           >
             <Popover>
@@ -151,9 +151,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
                   type="button"
                   className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[#005FF2] text-white rounded-lg min-w-[100px] justify-center cursor-pointer hover:bg-[#0051d4] transition-colors ml-2"
                 >
-                  {IconComponent && (
-                    <IconComponent width={16} height={16} className="object-contain" color="white" />
-                  )}
+                  {IconComponent && <IconComponent width={16} height={16} className="object-contain" color="white" />}
                   <span className="text-xs font-semibold whitespace-nowrap">{linkType.label}</span>
                   <ChevronDown className="w-3 h-3 text-white" />
                 </button>
@@ -171,9 +169,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
                         }}
                         className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
                       >
-                        {TypeIconComponent && (
-                          <TypeIconComponent width={16} height={16} className="object-contain" />
-                        )}
+                        {TypeIconComponent && <TypeIconComponent width={16} height={16} className="object-contain" />}
                         <span className="text-sm text-[#0C1118]">{type.label}</span>
                       </button>
                     );
@@ -229,9 +225,7 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
                     }}
                     className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
                   >
-                    {LinkIconComponent && (
-                      <LinkIconComponent width={16} height={16} className="object-contain" />
-                    )}
+                    {LinkIconComponent && <LinkIconComponent width={16} height={16} className="object-contain" />}
                     <span className="text-sm text-[#0C1118]">{linkType.label}</span>
                   </button>
                 );

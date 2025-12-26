@@ -31,7 +31,6 @@ export function flattenAndFilterItemsWithContext(
   return flattenedItems;
 }
 
-
 export function hasPendingSuggestions(suggestedUpdates: any[] | undefined): boolean {
   if (!suggestedUpdates || !Array.isArray(suggestedUpdates)) {
     return false;

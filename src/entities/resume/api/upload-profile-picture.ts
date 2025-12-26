@@ -1,7 +1,7 @@
 import { fetch } from '@shared/api';
 
 export interface UploadProfilePictureResponse {
-   url:string
+  url: string;
 }
 
 export async function uploadProfilePicture({

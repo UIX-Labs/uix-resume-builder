@@ -12,7 +12,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       ongoing: boolean;
       link: { title: string; link: string };
       description: string;
-    }>
+    }>;
     suggestedUpdates?: SuggestedUpdates;
   };
 
@@ -136,7 +136,6 @@ export type ResumeDataKey =
   | 'interests'
   | 'achievements';
 
-
 export enum SuggestionType {
   SPELLING_ERROR = 'spelling_error',
   SENTENCE_REFINEMENT = 'sentence_refinement',
@@ -147,10 +146,7 @@ export interface SuggestedUpdateField {
   suggestedUpdates: {
     old?: string;
     new: string;
-    type:
-      | SuggestionType.NEW_SUMMARY
-      | SuggestionType.SPELLING_ERROR
-      | SuggestionType.SENTENCE_REFINEMENT;
+    type: SuggestionType.NEW_SUMMARY | SuggestionType.SPELLING_ERROR | SuggestionType.SENTENCE_REFINEMENT;
   }[];
   fieldCounts: {
     [SuggestionType.NEW_SUMMARY]: number;

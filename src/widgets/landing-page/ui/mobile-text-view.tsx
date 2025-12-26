@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/shared/ui/components/button";
-import { ArrowLeft } from "lucide-react";
+import { motion } from 'framer-motion';
+import { Button } from '@/shared/ui/components/button';
+import { ArrowLeft } from 'lucide-react';
 
 export interface MobileTextViewProps {
   isOpen: boolean;
@@ -14,10 +14,10 @@ export const MobileTextView = ({ isOpen, onClose }: MobileTextViewProps) => {
 
   return (
     <motion.div
-      initial={{ x: "100%" }}
+      initial={{ x: '100%' }}
       animate={{ x: 0 }}
-      exit={{ x: "100%" }}
-      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      exit={{ x: '100%' }}
+      transition={{ type: 'spring', damping: 25, stiffness: 200 }}
       className="fixed inset-0 bg-gray-100 z-[100] overflow-y-auto"
     >
       <div className="p-6 min-h-screen flex flex-col">
@@ -30,19 +30,14 @@ export const MobileTextView = ({ isOpen, onClose }: MobileTextViewProps) => {
           <span>Back</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">
-          Build Your Professional Resume
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-6">Build Your Professional Resume</h1>
 
         <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 flex items-start gap-4">
           <div>
-            <h2 className="text-xl font-bold mb-2 text-black">
-              View on Desktop
-            </h2>
+            <h2 className="text-xl font-bold mb-2 text-black">View on Desktop</h2>
             <p className="text-base leading-relaxed text-black">
-              For the best experience building your resume, please visit this
-              website on a desktop or laptop computer. Our resume builder offers
-              full functionality and advanced features on larger screens.
+              For the best experience building your resume, please visit this website on a desktop or laptop computer.
+              Our resume builder offers full functionality and advanced features on larger screens.
             </p>
           </div>
         </div>

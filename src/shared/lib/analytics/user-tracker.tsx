@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useUserProfile } from "@shared/hooks/use-user";
-import { setUserId, setUserProperties } from "./Mixpanel";
+import { useEffect } from 'react';
+import { useUserProfile } from '@shared/hooks/use-user';
+import { setUserId, setUserProperties } from './Mixpanel';
 
 export function UserTracker() {
   const { data: user } = useUserProfile();
@@ -13,12 +13,12 @@ export function UserTracker() {
 
       setUserProperties({
         $email: user.email,
-        $name: user.firstName + " " + (user.lastName ? user.lastName : ""),
+        $name: user.firstName + ' ' + (user.lastName ? user.lastName : ''),
         $first_name: user.firstName,
-        $last_name: user.lastName ? user.lastName : "",
+        $last_name: user.lastName ? user.lastName : '',
         $is_verified: user.isVerified,
         $is_logged_in: user.isLoggedIn,
-        $is_verified_account: user.isVerified
+        $is_verified_account: user.isVerified,
       });
     }
   }, [user]);

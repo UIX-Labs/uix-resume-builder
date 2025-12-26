@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { initAnalytics } from "@shared/lib/analytics/Mixpanel";
+import { useEffect } from 'react';
+import { initAnalytics } from '@shared/lib/analytics/Mixpanel';
 
 export function AnalyticsProvider() {
   useEffect(() => {

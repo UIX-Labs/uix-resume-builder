@@ -56,7 +56,13 @@ export const fetchUserDetails = async (userId: string): Promise<User> => {
   return response;
 };
 
-const checkEmailExistsAPI = async ({ email, guestEmail }: { email: string; guestEmail?: string }): Promise<EmailCheckResponse> => {
+const checkEmailExistsAPI = async ({
+  email,
+  guestEmail,
+}: {
+  email: string;
+  guestEmail?: string;
+}): Promise<EmailCheckResponse> => {
   const response = await fetch<EmailCheckResponse>('auth/check-email', {
     options: {
       method: 'POST',
@@ -98,7 +104,15 @@ const registerUserAPI = async (userData: RegisterUserData): Promise<AuthResponse
   return response;
 };
 
-const loginUserAPI = async ({ email, password, guestEmail }: { email: string; password: string; guestEmail?: string }): Promise<AuthResponse> => {
+const loginUserAPI = async ({
+  email,
+  password,
+  guestEmail,
+}: {
+  email: string;
+  password: string;
+  guestEmail?: string;
+}): Promise<AuthResponse> => {
   const response = await fetch<AuthResponse>('auth/email-signin', {
     options: {
       method: 'POST',

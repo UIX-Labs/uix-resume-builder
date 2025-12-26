@@ -105,7 +105,7 @@ export default function FormPage() {
               </div>
             </div>
           )}
-          
+
           <NewProgressBar
             isVisible={isAnalyzing && !analyzerError}
             transitionTexts={TRANSITION_TEXTS}
@@ -114,7 +114,7 @@ export default function FormPage() {
             showLoader={true}
             className="z-50"
           />
-          
+
           <FormPageBuilder />
         </div>
       </div>

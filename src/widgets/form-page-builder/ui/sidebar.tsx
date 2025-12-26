@@ -1,29 +1,29 @@
-import { Education } from "@shared/icons/education";
-import { Experience } from "@shared/icons/experience";
-import { PersonalInfo } from "@shared/icons/personal-info";
-import { ProfessionalSummary } from "@shared/icons/prof-summary";
-import { Skills } from "@shared/icons/skills";
-import { cn } from "@shared/lib/cn";
-import { ProgressCircle } from "@shared/ui/progress-circle";
-import { useFormPageBuilder } from "../models/ctx";
-import Image from "next/image";
-import { Achievements } from "@shared/icons/achievements";
-import { useEffect, useState } from "react";
-import { useFormDataStore } from "../models/store";
-import { calculateResumeCompletion } from "@shared/lib/resume-completion";
-import { useParams } from "next/navigation";
-import type { ResumeData } from "@entities/resume";
-import mockData from "../../../../mock-data.json";
-import { CheckIcon, X, ArrowLeftIcon } from "lucide-react";
-import { Button } from "@shared/ui/button";
-import { useResumeData } from "@entities/resume";
-import { useQueryClient } from "@tanstack/react-query";
-import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import { hasPendingSuggestions } from "@features/resume/renderer";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import { useRouter } from "next/navigation";
-import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
-import { toast } from "sonner";
+import { Education } from '@shared/icons/education';
+import { Experience } from '@shared/icons/experience';
+import { PersonalInfo } from '@shared/icons/personal-info';
+import { ProfessionalSummary } from '@shared/icons/prof-summary';
+import { Skills } from '@shared/icons/skills';
+import { cn } from '@shared/lib/cn';
+import { ProgressCircle } from '@shared/ui/progress-circle';
+import { useFormPageBuilder } from '../models/ctx';
+import Image from 'next/image';
+import { Achievements } from '@shared/icons/achievements';
+import { useEffect, useState } from 'react';
+import { useFormDataStore } from '../models/store';
+import { calculateResumeCompletion } from '@shared/lib/resume-completion';
+import { useParams } from 'next/navigation';
+import type { ResumeData } from '@entities/resume';
+import mockData from '../../../../mock-data.json';
+import { CheckIcon, X, ArrowLeftIcon } from 'lucide-react';
+import { Button } from '@shared/ui/button';
+import { useResumeData } from '@entities/resume';
+import { useQueryClient } from '@tanstack/react-query';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import { hasPendingSuggestions } from '@features/resume/renderer';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { useRouter } from 'next/navigation';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
+import { toast } from 'sonner';
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -36,20 +36,19 @@ const icons = {
 
 // Check if a section has content (excluding suggestedUpdates field)
 function sectionHasContent(sectionData: unknown): boolean {
-  if (!sectionData || typeof sectionData !== "object") {
+  if (!sectionData || typeof sectionData !== 'object') {
     return false;
   }
 
   const entries = Object.entries(sectionData as Record<string, unknown>).filter(
-    ([key]) => key !== "suggestedUpdates" && key !== "isHidden"
+    ([key]) => key !== 'suggestedUpdates' && key !== 'isHidden',
   );
 
   return entries.some(([, value]) => {
     if (value === null || value === undefined) return false;
-    if (typeof value === "string") return value.trim().length > 0;
+    if (typeof value === 'string') return value.trim().length > 0;
     if (Array.isArray(value)) return value.length > 0;
-    if (typeof value === "object")
-      return Object.keys(value as Record<string, unknown>).length > 0;
+    if (typeof value === 'object') return Object.keys(value as Record<string, unknown>).length > 0;
     return true;
   });
 }
@@ -76,13 +75,13 @@ export function Sidebar() {
   const isAnalyzed = resumeDataFromApi?.isAnalyzed ?? false;
 
   const handleBuilderIntelligence = async () => {
-    trackEvent("builder_intelligence_click", {
-      source: "form_builder_sidebar",
+    trackEvent('builder_intelligence_click', {
+      source: 'form_builder_sidebar',
       resumeId: resumeId,
     });
 
     if (!resumeId) {
-      toast.error("Resume ID not found");
+      toast.error('Resume ID not found');
       return;
     }
 
@@ -92,16 +91,16 @@ export function Sidebar() {
       setFormData,
       setIsAnalyzing,
       setAnalyzerError,
-      successMessage: "Builder Intelligence analysis complete!",
-      errorMessage: "Failed to fix resume",
+      successMessage: 'Builder Intelligence analysis complete!',
+      errorMessage: 'Failed to fix resume',
     });
   };
 
   const handleLogoClick = () => {
     // Always invalidate when user explicitly navigates away via logo click
-    queryClient.invalidateQueries({ queryKey: ["resumes"] });
-    queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
-    router.push("/resumes");
+    queryClient.invalidateQueries({ queryKey: ['resumes'] });
+    queryClient.invalidateQueries({ queryKey: ['resume-data', resumeId] });
+    router.push('/resumes');
   };
 
   useEffect(() => {
@@ -111,10 +110,7 @@ export function Sidebar() {
   useEffect(() => {
     if (!resumeData) return;
 
-    const p = calculateResumeCompletion(
-      resumeData as ResumeData,
-      mockData as Record<string, any>
-    );
+    const p = calculateResumeCompletion(resumeData as ResumeData, mockData as Record<string, any>);
 
     const fixed = +p.toFixed(0);
     setProgress(Number.isNaN(fixed) ? 0 : Number(fixed));
@@ -125,52 +121,36 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] w-[20%] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-        isAnalyzing &&
-          "opacity-60 pointer-events-none select-none cursor-not-allowed"
+        'bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] w-[20%] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
+        isAnalyzing && 'opacity-60 pointer-events-none select-none cursor-not-allowed',
       )}
     >
       <div className="flex flex-col gap-4 mt-4 w-full pl-6 pr-2">
-        <button
-          className="flex flex-row items-center cursor-pointer gap-2"
-          type="button"
-          onClick={handleLogoClick}
-        >
+        <button className="flex flex-row items-center cursor-pointer gap-2" type="button" onClick={handleLogoClick}>
           <ArrowLeftIcon className="w-5 h-5" />
 
-          <span className="font-normal text-black bg-clip-text text-xl text-left">
-            Back
-          </span>
+          <span className="font-normal text-black bg-clip-text text-xl text-left">Back</span>
         </button>
       </div>
 
       {/* Progress Circle */}
       <div className="mt-5">
-        <ProgressCircle
-          progress={progress}
-          totalSteps={navs.length}
-          currentStep={currentStepIndex + 1}
-        />
+        <ProgressCircle progress={progress} totalSteps={navs.length} currentStep={currentStepIndex + 1} />
       </div>
 
       <div className="flex flex-col gap-2 mt-4 w-full pl-6 pr-2">
         {navs.map((nav) => {
-          const Icon =
-            icons[nav.name as keyof typeof icons] ?? ProfessionalSummary;
+          const Icon = icons[nav.name as keyof typeof icons] ?? ProfessionalSummary;
           const sectionData = resumeData?.[nav.name as keyof typeof resumeData];
 
           // Get suggestedUpdates array from section data
           const suggestedUpdatesArray =
-            sectionData &&
-            typeof sectionData === "object" &&
-            "suggestedUpdates" in sectionData
+            sectionData && typeof sectionData === 'object' && 'suggestedUpdates' in sectionData
               ? (sectionData as { suggestedUpdates?: any[] }).suggestedUpdates
               : undefined;
 
           // Check if section has pending suggestions
-          const hasValidPendingSuggestions = hasPendingSuggestions(
-            suggestedUpdatesArray
-          );
+          const hasValidPendingSuggestions = hasPendingSuggestions(suggestedUpdatesArray);
 
           // Check if section has content
           const hasContent = sectionHasContent(sectionData);
@@ -181,34 +161,24 @@ export function Sidebar() {
             Object.values(resumeData).some((section) => {
               return (
                 section &&
-                typeof section === "object" &&
-                "suggestedUpdates" in section &&
-                Array.isArray(
-                  (section as { suggestedUpdates?: unknown[] }).suggestedUpdates
-                ) &&
-                (section as { suggestedUpdates?: unknown[] }).suggestedUpdates!
-                  .length > 0
+                typeof section === 'object' &&
+                'suggestedUpdates' in section &&
+                Array.isArray((section as { suggestedUpdates?: unknown[] }).suggestedUpdates) &&
+                (section as { suggestedUpdates?: unknown[] }).suggestedUpdates!.length > 0
               );
             });
 
-          const showPendingIcon =
-            hasBuilderIntelligenceRun && hasValidPendingSuggestions;
-          const showCompletedIcon =
-            hasBuilderIntelligenceRun &&
-            !hasValidPendingSuggestions &&
-            hasContent;
-          const showEmptyIcon =
-            hasBuilderIntelligenceRun &&
-            !hasValidPendingSuggestions &&
-            !hasContent;
+          const showPendingIcon = hasBuilderIntelligenceRun && hasValidPendingSuggestions;
+          const showCompletedIcon = hasBuilderIntelligenceRun && !hasValidPendingSuggestions && hasContent;
+          const showEmptyIcon = hasBuilderIntelligenceRun && !hasValidPendingSuggestions && !hasContent;
 
           return (
             <button
               type="button"
               key={nav.name}
               className={cn(
-                "flex items-center gap-2 px-1 py-1.5 rounded-2xl cursor-pointer pr-4 w-fit",
-                currentStep === nav.name && "bg-[#E9F4FF]"
+                'flex items-center gap-2 px-1 py-1.5 rounded-2xl cursor-pointer pr-4 w-fit',
+                currentStep === nav.name && 'bg-[#E9F4FF]',
               )}
               onClick={() => setCurrentStep(nav.name)}
             >
@@ -220,8 +190,8 @@ export function Sidebar() {
 
               <p
                 className={cn(
-                  "text-[#0B0A09] text-sm transition-all",
-                  currentStep === nav.name && "text-[#005FF2] font-semibold"
+                  'text-[#0B0A09] text-sm transition-all',
+                  currentStep === nav.name && 'text-[#005FF2] font-semibold',
                 )}
               >
                 {nav.label}
@@ -260,14 +230,12 @@ export function Sidebar() {
               className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
               style={{
                 backgroundImage: "url('/images/bg-gradient.svg')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
               }}
             >
-              <p className="text-sm font-semibold text-white">
-                Switch to Pika Intelligence
-              </p>
+              <p className="text-sm font-semibold text-white">Switch to Pika Intelligence</p>
               <p className="text-[11px] font-normal text-white/80 mt-1">
                 Get grammar fixes, stronger verbs, and tailored improvements.
               </p>
@@ -278,16 +246,11 @@ export function Sidebar() {
                 disabled={isAnalyzing}
               >
                 {isAnalyzing ? (
-                  "Analyzing..."
+                  'Analyzing...'
                 ) : (
                   <>
                     Pika Intelligence
-                    <Image
-                      src="/images/rat.png"
-                      alt="Pika Intelligence"
-                      width={40}
-                      height={40}
-                    />
+                    <Image src="/images/rat.png" alt="Pika Intelligence" width={40} height={40} />
                   </>
                 )}
               </Button>

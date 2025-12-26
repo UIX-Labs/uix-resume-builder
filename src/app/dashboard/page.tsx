@@ -1,20 +1,21 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { HomeIcon } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { HomeIcon } from 'lucide-react';
 
-import { useUserProfile } from "@shared/hooks/use-user";
-import { SidebarProvider } from "@shared/ui/sidebar";
-import { Button } from "@shared/ui";
-import { useFormDataStore } from "@widgets/form-page-builder/models/store";
-import DashboardCarousel from "@widgets/dashboard/ui/dashboard-carousel";
-import DashboardSidebar from "@widgets/dashboard/ui/dashboard-sidebar";
-import LinkedinIntegrationCard from "@widgets/dashboard/ui/linkedin-integration-card";
-import ResumeCreationCard from "@widgets/dashboard/ui/resume-creation-card";
-import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
-import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
+import { useUserProfile } from '@shared/hooks/use-user';
+import { SidebarProvider } from '@shared/ui/sidebar';
+import { Button } from '@shared/ui';
+
+import { useFormDataStore } from '@widgets/form-page-builder/models/store';
+import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';
+import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import LinkedinIntegrationCard from '@widgets/dashboard/ui/linkedin-integration-card';
+import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
+import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 
 export default function DashboardLayout() {
   const { data: user } = useUserProfile();
@@ -23,14 +24,26 @@ export default function DashboardLayout() {
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
   const setFormData = useFormDataStore((state) => state.setFormData);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [shouldOpenJDModal, setShouldOpenJDModal] = useState(false);
 
   useEffect(() => {
-    const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
+    // Check if we should open the JD modal
+    const openModal = searchParams?.get('openModal');
+    if (openModal === 'jd') {
+      setShouldOpenJDModal(true);
+      // Clear the query parameter from URL
+      router.replace('/dashboard');
+    }
+  }, [searchParams, router]);
+
+  useEffect(() => {
+    const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
     if (!pendingResumeId) {
       return;
     }
 
-    localStorage.removeItem("pending_analyzer_resume_id");
+    localStorage.removeItem('pending_analyzer_resume_id');
 
     const resumeId = pendingResumeId;
 
@@ -63,7 +76,7 @@ export default function DashboardLayout() {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => router.push("/")}
+                  onClick={() => router.push('/')}
                   className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
@@ -71,20 +84,16 @@ export default function DashboardLayout() {
               </div>
 
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">
-                  {user?.firstName?.charAt(0)}
-                </span>
+                <span className="text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
               </div>
 
               <div className="flex flex-col">
                 <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
-                  {user
-                    ? `${user.firstName} ${user.lastName ?? ""}`
-                    : "Loading..."}
+                  {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
                 </span>
 
                 <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {user?.email ?? "Loading..."}
+                  {user?.email ?? 'Loading...'}
                 </span>
               </div>
             </div>
@@ -98,14 +107,10 @@ export default function DashboardLayout() {
                 </h1>
               </div>
 
-              <WelcomeHeader
-                userName={
-                  (user?.firstName ?? "") + " " + (user?.lastName ?? "")
-                }
-              />
+              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
 
               <div className="px-4">
-                <ResumeCreationCard />
+                <ResumeCreationCard shouldOpenJDModal={shouldOpenJDModal} />
               </div>
 
               <div className="flex-1 mt-4 px-4">

@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import Spotlight from "@shared/icons/spotlight";
-import { cn } from "@shared/lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { UploadIcon } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRef, useState } from "react";
-import { toast } from "sonner";
-import { fetch } from "@shared/api";
-import { RoastLoading } from "./components/roast-loading";
-import { TypewriterRoast } from "./components/typewriter-roast";
-import { useUserProfile } from "@shared/hooks/use-user";
+import Spotlight from '@shared/icons/spotlight';
+import { cn } from '@shared/lib/utils';
+import { useMutation } from '@tanstack/react-query';
+import { UploadIcon } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { fetch } from '@shared/api';
+import { RoastLoading } from './components/roast-loading';
+import { TypewriterRoast } from './components/typewriter-roast';
+import { useUserProfile } from '@shared/hooks/use-user';
 
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import { RoastFirstSection } from "@widgets/roast/ui/roast-first-section";
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { RoastFirstSection } from '@widgets/roast/ui/roast-first-section';
 
-import { RoastRoastsSection } from "@widgets/roast/ui/roast-roasts-section";
+import { RoastRoastsSection } from '@widgets/roast/ui/roast-roasts-section';
 
 // export function generateRandomEmail() {
 //   const chars = "abcdefghijklmnopqrstuvwxyz1234567890";
@@ -31,48 +31,43 @@ export default function RoastPage() {
   const { data: user } = useUserProfile();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [data, setData] = useState<{ roast: string; resumeId: string } | null>(
-    null
-  );
+  const [data, setData] = useState<{ roast: string; resumeId: string } | null>(null);
 
   const roastResume = async (file: File) => {
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append('file', file);
 
       if (!user?.isLoggedIn) {
         const randomGuestEmail = `guest_${crypto.randomUUID()}@guestuser.in`;
-        localStorage.setItem("pending_analyzer_guest_email", randomGuestEmail);
-        formData.append("guestEmail", randomGuestEmail);
+        localStorage.setItem('pending_analyzer_guest_email', randomGuestEmail);
+        formData.append('guestEmail', randomGuestEmail);
       }
 
-      const response = await fetch<{ roast: string; resumeId: string }>(
-        "resume/roast",
-        {
-          options: {
-            method: "POST",
-            body: formData,
-          },
-        }
-      );
+      const response = await fetch<{ roast: string; resumeId: string }>('resume/roast', {
+        options: {
+          method: 'POST',
+          body: formData,
+        },
+      });
       return response;
     } catch (error) {
-      console.error("Error roasting resume:", error);
-      throw new Error("Failed to roast resume");
+      console.error('Error roasting resume:', error);
+      throw new Error('Failed to roast resume');
     }
   };
 
   const { mutate: roastResumeMutation, isPending } = useMutation({
     mutationFn: roastResume,
     onSuccess: (data) => {
-      toast.success("Resume roasted successfully");
+      toast.success('Resume roasted successfully');
       setData(data);
-      trackEvent("roast_resume_success", {
+      trackEvent('roast_resume_success', {
         timestamp: new Date().toISOString(),
       });
     },
     onError: () => {
-      toast.error("Failed to roast resume");
+      toast.error('Failed to roast resume');
     },
   });
   const shouldHideOverflow = !data || isPending;
@@ -110,13 +105,13 @@ export default function RoastPage() {
 
   const onUploadClick = () => {
     fileInputRef.current?.click();
-    trackEvent("roast_resume_upload_click", {
+    trackEvent('roast_resume_upload_click', {
       timestamp: new Date().toISOString(),
     });
   };
 
   const handleUploadKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onUploadClick();
     }
@@ -125,15 +120,14 @@ export default function RoastPage() {
   return (
     <div
       className={cn(
-        "relative min-h-screen bg-black w-full font-sans overflow-x-hidden",
-        shouldHideOverflow && "overflow-hidden"
+        'relative min-h-screen bg-black w-full font-sans overflow-x-hidden',
+        shouldHideOverflow && 'overflow-hidden',
       )}
     >
       <div
         className="fixed inset-0 z-[2] pointer-events-none"
         style={{
-          background:
-            "radial-gradient(circle at 0% 0%, #005FF2 0%, transparent 45%)",
+          background: 'radial-gradient(circle at 0% 0%, #005FF2 0%, transparent 45%)',
         }}
       />
 
@@ -187,7 +181,7 @@ export default function RoastPage() {
           ) : data ? (
             <div className="w-full md:w-1/2 mt-6 lg:mt-3 mb-8 lg:mb-4">
               <TypewriterRoast
-                content={data.roast || ""}
+                content={data.roast || ''}
                 resumeId={data.resumeId}
                 onRoastAnother={() => setData(null)}
               />
@@ -218,12 +212,11 @@ export default function RoastPage() {
 
               <div
                 className={cn(
-                  "relative border-2 border-dashed z-10 border-[#C66101] border-b-0 rounded-[16px] px-6 pt-20 py-6 lg:px-11 lg:py-11 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center transition-colors cursor-pointer mt-6 lg:mt-3 w-full md:w-1/2",
-                  isDragging ? "border-[#005ff2]" : "hover:opacity-95"
+                  'relative border-2 border-dashed z-10 border-[#C66101] border-b-0 rounded-[16px] px-6 pt-20 py-6 lg:px-11 lg:py-11 shadow-[0px_10px_15px_-3px_rgba(0,0,0,0.1),0px_4px_6px_-4px_rgba(0,0,0,0.1)] flex flex-col items-center justify-center transition-colors cursor-pointer mt-6 lg:mt-3 w-full md:w-1/2',
+                  isDragging ? 'border-[#005ff2]' : 'hover:opacity-95',
                 )}
                 style={{
-                  background:
-                    "linear-gradient(180deg, #0D0600 0%, #B35802 100%)",
+                  background: 'linear-gradient(180deg, #0D0600 0%, #B35802 100%)',
                 }}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -233,34 +226,17 @@ export default function RoastPage() {
                 role="button"
                 tabIndex={0}
               >
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileSelect}
-                  className="hidden"
-                  accept=".pdf"
-                />
-                <h2 className="text-[#FFA855] text-2xl lg:text-[30px] font-semibold mb-1.5 lg:mb-1">
-                  Roast My Resume
-                </h2>
+                <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept=".pdf" />
+                <h2 className="text-[#FFA855] text-2xl lg:text-[30px] font-semibold mb-1.5 lg:mb-1">Roast My Resume</h2>
 
                 <div className=" w-12 h-12 lg:w-11 lg:h-11 rounded-full flex items-center justify-center mb-2 lg:mb-2">
                   <div className="relative w-11 h-11">
-                    <Image
-                      src="/images/upload-cloud.svg"
-                      alt="Upload"
-                      fill
-                      className="object-contain"
-                    />{" "}
+                    <Image src="/images/upload-cloud.svg" alt="Upload" fill className="object-contain" />{' '}
                   </div>
                 </div>
 
-                <p className="text-[#FFA855] text-sm mb-3 lg:mb-2 lg:text-lg">
-                  Select File from device
-                </p>
-                <p className="text-[#FFA855]/70 text-xs mt-1">
-                  JPEG and PDF formats, up to 5MB
-                </p>
+                <p className="text-[#FFA855] text-sm mb-3 lg:mb-2 lg:text-lg">Select File from device</p>
+                <p className="text-[#FFA855]/70 text-xs mt-1">JPEG and PDF formats, up to 5MB</p>
               </div>
             </div>
           )}

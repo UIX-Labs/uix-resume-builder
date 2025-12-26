@@ -14,11 +14,11 @@ interface PhoneInputProps {
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, placeholder = "Enter phone number", className, disabled, ...props }, ref) => {
+  ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }, ref) => {
     return (
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry
-          name=''
+          name=""
           value={value}
           onChange={onChange}
           placeholder={placeholder}
@@ -28,16 +28,16 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             'ring-4 ring-[#f6f6f6] placeholder:text-[#CFD4DB] text-[#0C1118] font-normal',
             'focus-within:border-[#0059ED] focus-within:ring-[#CBE7FF]',
             'disabled:cursor-not-allowed disabled:opacity-50',
-            'PhoneInputCountry'
+            'PhoneInputCountry',
           )}
           inputClassName={cn(
             'flex-1 border-0 bg-transparent outline-none focus:ring-0',
             'placeholder:text-[#CFD4DB] text-base text-[#0C1118] font-normal',
-            'disabled:cursor-not-allowed disabled:opacity-50'
+            'disabled:cursor-not-allowed disabled:opacity-50',
           )}
           countrySelectClassName={cn(
             'border-0 bg-transparent outline-none focus:ring-0 mr-2',
-            'text-base text-[#0C1118] font-normal'
+            'text-base text-[#0C1118] font-normal',
           )}
           {...props}
         />
@@ -69,7 +69,7 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
         `}</style>
       </div>
     );
-  }
+  },
 );
 
 PhoneInput.displayName = 'PhoneInput';

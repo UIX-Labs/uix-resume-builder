@@ -6,9 +6,8 @@ export const getLinkedInAuthUrl = () => {
 
   const params = new URLSearchParams({
     response_type: 'code',
-    client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || "",
-    redirect_uri:
-      process.env.NEXT_PUBLIC_REDIRECT_URI || "",
+    client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || '',
+    redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || '',
     scope: 'openid profile email',
     state: state,
   });
@@ -31,8 +30,7 @@ export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: strin
         credentials: 'include',
         body: JSON.stringify({
           authCode: authCode,
-          redirectUri:
-            process.env.NEXT_PUBLIC_REDIRECT_URI,
+          redirectUri: process.env.NEXT_PUBLIC_REDIRECT_URI,
           guestEmail,
         }),
       },

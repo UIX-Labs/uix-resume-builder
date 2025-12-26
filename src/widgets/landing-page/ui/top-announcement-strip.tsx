@@ -1,11 +1,25 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useUserProfile } from "@shared/hooks/use-user";
+import { useState } from "react";
+import { useIsMobile } from "@shared/hooks/use-mobile";
+import { MobileTextView } from "./mobile-text-view";
+import { useRouter } from "next/navigation";
 
 export const TopAnnouncementStrip = () => {
   const { data: user } = useUserProfile();
+  const isMobile = useIsMobile();
+  const [showMobileView, setShowMobileView] = useState(false);
+  const router = useRouter();
+
+  const handleSignUpClick = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+    } else {
+      router.push("/auth");
+    }
+  };
 
   return (
     <div
@@ -31,9 +45,12 @@ export const TopAnnouncementStrip = () => {
             <span className="font-semibold">1,000 users</span>.
             {!user && (
               <>
-                <Link href="/auth" className="underline cursor-pointer whitespace-nowrap">
+                <span
+                  onClick={handleSignUpClick}
+                  className="underline cursor-pointer whitespace-nowrap"
+                >
                   Sign up now
-                </Link>
+                </span>
                 .
               </>
             )}
@@ -53,7 +70,7 @@ export const TopAnnouncementStrip = () => {
                 src="/images/spots-left.svg"
                 alt="20 Spots Left Claim Free Access"
                 fill
-                className="object-contain cursor-pointer"
+                className="object-contain"
               />
             </div>
 
@@ -63,12 +80,16 @@ export const TopAnnouncementStrip = () => {
                 src="/images/spots-mobile.svg"
                 alt="20 Spots Left"
                 fill
-                className="object-contain cursor-pointer"
+                className="object-contain"
               />
             </div>
           </div>
         </div>
       </div>
+      <MobileTextView
+        isOpen={showMobileView}
+        onClose={() => setShowMobileView(false)}
+      />
     </div>
   );
 };

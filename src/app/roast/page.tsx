@@ -11,28 +11,50 @@ import { toast } from "sonner";
 import { fetch } from "@shared/api";
 import { RoastLoading } from "./components/roast-loading";
 import { TypewriterRoast } from "./components/typewriter-roast";
+import { useUserProfile } from "@shared/hooks/use-user";
 
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { RoastFirstSection } from "@widgets/roast/ui/roast-first-section";
 
 import { RoastRoastsSection } from "@widgets/roast/ui/roast-roasts-section";
 
+// export function generateRandomEmail() {
+//   const chars = "abcdefghijklmnopqrstuvwxyz1234567890";
+//   let string = "";
+//   for (let i = 0; i < 15; i++) {
+//     string += chars[Math.floor(Math.random() * chars.length)];
+//   }
+//   return string + "@guestuser.in";
+// }
+
 export default function RoastPage() {
+  const { data: user } = useUserProfile();
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [response, setResponse] = useState<string | null>(null);
+  const [data, setData] = useState<{ roast: string; resumeId: string } | null>(
+    null
+  );
 
   const roastResume = async (file: File) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch<{ roast: string }>("resume/roast", {
-        options: {
-          method: "POST",
-          body: formData,
-        },
-      });
+      if (!user?.isLoggedIn) {
+        const randomGuestEmail = `guest_${crypto.randomUUID()}@guestuser.in`;
+        localStorage.setItem("pending_analyzer_guest_email", randomGuestEmail);
+        formData.append("guestEmail", randomGuestEmail);
+      }
+
+      const response = await fetch<{ roast: string; resumeId: string }>(
+        "resume/roast",
+        {
+          options: {
+            method: "POST",
+            body: formData,
+          },
+        }
+      );
       return response;
     } catch (error) {
       console.error("Error roasting resume:", error);
@@ -44,7 +66,7 @@ export default function RoastPage() {
     mutationFn: roastResume,
     onSuccess: (data) => {
       toast.success("Resume roasted successfully");
-      setResponse(data.roast);
+      setData(data);
       trackEvent("roast_resume_success", {
         timestamp: new Date().toISOString(),
       });
@@ -53,7 +75,7 @@ export default function RoastPage() {
       toast.error("Failed to roast resume");
     },
   });
-  const shouldHideOverflow = !response || isPending;
+  const shouldHideOverflow = !data || isPending;
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -162,11 +184,12 @@ export default function RoastPage() {
             <div className="w-full md:w-1/2 mt-6 lg:mt-3">
               <RoastLoading />
             </div>
-          ) : response ? (
+          ) : data ? (
             <div className="w-full md:w-1/2 mt-6 lg:mt-3 mb-8 lg:mb-4">
               <TypewriterRoast
-                content={response || ""}
-                onRoastAnother={() => setResponse(null)}
+                content={data.roast || ""}
+                resumeId={data.resumeId}
+                onRoastAnother={() => setData(null)}
               />
             </div>
           ) : (

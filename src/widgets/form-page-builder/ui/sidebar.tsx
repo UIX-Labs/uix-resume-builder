@@ -9,26 +9,21 @@ import { useFormPageBuilder } from "../models/ctx";
 import Image from "next/image";
 import { Achievements } from "@shared/icons/achievements";
 import { useEffect, useState } from "react";
-import { useFormDataStore, TRANSITION_TEXTS } from "../models/store";
+import { useFormDataStore } from "../models/store";
 import { calculateResumeCompletion } from "@shared/lib/resume-completion";
 import { useParams } from "next/navigation";
 import type { ResumeData } from "@entities/resume";
 import mockData from "../../../../mock-data.json";
-import { CheckIcon, X, Sparkles, ArrowLeftIcon } from "lucide-react";
+import { CheckIcon, X, ArrowLeftIcon } from "lucide-react";
 import { Button } from "@shared/ui/button";
-import { getResumeEmptyData, useResumeData } from "@entities/resume";
+import { useResumeData } from "@entities/resume";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  deepMerge,
-  normalizeStringsFields,
-} from "@entities/resume/models/use-resume-data";
-import { updateResumeByAnalyzerWithResumeId } from "@entities/resume/api/update-resume-by-analyzer";
-import { toast } from "sonner";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
 import { hasPendingSuggestions } from "@features/resume/renderer";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import PikaResume from "@shared/icons/pika-resume";
 import { useRouter } from "next/navigation";
+import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
+import { toast } from "sonner";
 
 const icons = {
   personalDetails: PersonalInfo,
@@ -91,117 +86,15 @@ export function Sidebar() {
       return;
     }
 
-    setIsAnalyzing(true);
-    setAnalyzerError(false);
-    useFormDataStore.setState({ analyzerProgress: 0, currentTextIndex: 0 });
-
-    // Calculate time to reach 95%
-    // Total time: 36 seconds
-    const ESTIMATED_TIME_TO_95_PERCENT = 36000; // milliseconds (36 seconds)
-    const NUMBER_OF_TEXTS = TRANSITION_TEXTS.length;
-    const TEXT_INTERVAL = ESTIMATED_TIME_TO_95_PERCENT / NUMBER_OF_TEXTS; // milliseconds
-    const TARGET_PROGRESS = 95; // Stop at 95%
-
-    const startTime = Date.now();
-    const PROGRESS_UPDATE_INTERVAL = 100; // Update every 100ms for smooth progress
-
-    let progressIntervalId: NodeJS.Timeout | null = null;
-    let isCompleted = false;
-
-    // Smooth progress based on elapsed time
-    progressIntervalId = setInterval(() => {
-      if (isCompleted) {
-        if (progressIntervalId) {
-          clearInterval(progressIntervalId);
-          progressIntervalId = null;
-        }
-        return;
-      }
-
-      const elapsedTime = Date.now() - startTime;
-
-      // Calculate progress based on elapsed time (linear progression to 95%)
-      const progressPercent = Math.min(
-        (elapsedTime / ESTIMATED_TIME_TO_95_PERCENT) * TARGET_PROGRESS,
-        TARGET_PROGRESS
-      );
-
-      // Calculate text index based on elapsed time
-      const calculatedTextIndex = Math.min(
-        Math.floor(elapsedTime / TEXT_INTERVAL),
-        NUMBER_OF_TEXTS - 1
-      );
-
-      useFormDataStore.setState({
-        analyzerProgress: progressPercent,
-        currentTextIndex: calculatedTextIndex,
-      });
-
-      // Stop progress at 95% if we've reached the target time
-      if (progressPercent >= TARGET_PROGRESS) {
-        if (progressIntervalId) {
-          clearInterval(progressIntervalId);
-          progressIntervalId = null;
-        }
-      }
-    }, PROGRESS_UPDATE_INTERVAL);
-
-    try {
-      const response = await updateResumeByAnalyzerWithResumeId(resumeId);
-      if (response?.resume) {
-        isCompleted = true;
-
-        // Clear progress interval if still running
-        if (progressIntervalId) {
-          clearInterval(progressIntervalId);
-          progressIntervalId = null;
-        }
-
-        const emptyData = await getResumeEmptyData();
-
-        let processedData = { ...response.resume };
-        for (const key of Object.keys(emptyData)) {
-          const k = key as keyof typeof emptyData;
-          (processedData as any)[k] = deepMerge(
-            (processedData as any)[k],
-            emptyData[k]
-          );
-        }
-
-        processedData = normalizeStringsFields(processedData);
-
-        setFormData(processedData);
-
-        // Complete progress to 100%
-        useFormDataStore.setState({ analyzerProgress: 100 });
-
-        // Invalidate resume data query to refetch and update isAnalyzed flag
-        queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
-
-        toast.success("Builder Intelligence analysis complete!");
-      }
-    } catch (error) {
-      console.error("Builder Intelligence error:", error);
-      isCompleted = true;
-
-      // Clear progress interval on error
-      if (progressIntervalId) {
-        clearInterval(progressIntervalId);
-        progressIntervalId = null;
-      }
-
-      setAnalyzerError(true);
-    } finally {
-      // Ensure interval is cleared
-      if (progressIntervalId) {
-        clearInterval(progressIntervalId);
-      }
-
-      setTimeout(() => {
-        setIsAnalyzing(false);
-        useFormDataStore.setState({ analyzerProgress: 0, currentTextIndex: 0 });
-      }, 500);
-    }
+    await runAnalyzerWithProgress({
+      resumeId,
+      queryClient,
+      setFormData,
+      setIsAnalyzing,
+      setAnalyzerError,
+      successMessage: "Builder Intelligence analysis complete!",
+      errorMessage: "Failed to fix resume",
+    });
   };
 
   const handleLogoClick = () => {

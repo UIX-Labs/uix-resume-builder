@@ -125,7 +125,7 @@ export function Sidebar() {
   return (
     <div
       className={cn(
-        "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
+        "bg-white border-2 border-[#E9F4FF] rounded-[36px] min-w-[240px] w-[20%] h-[calc(100vh-32px)] py-4 flex flex-col items-center mt-4 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
         isAnalyzing &&
           "opacity-60 pointer-events-none select-none cursor-not-allowed"
       )}

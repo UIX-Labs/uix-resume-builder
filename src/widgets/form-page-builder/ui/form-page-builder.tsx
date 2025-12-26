@@ -48,7 +48,7 @@ import {
   isSectionModified,
 } from "../lib/data-cleanup";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import { Download } from "lucide-react";
+import { Download, GripVertical } from "lucide-react";
 import TemplateButton from "./change-template-button";
 import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
 import { saveSectionWithSuggestions } from "../lib/save-helpers";
@@ -257,6 +257,70 @@ export function FormPageBuilder() {
     formData,
     resumeId,
   });
+
+  // Resizable logic
+  const [leftWidth, setLeftWidth] = useState(50);
+  const isDragging = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(1);
+  const previewWrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = previewWrapperRef.current;
+    if (!element) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        // 794px is the fixed width of the resume
+        // We add some padding (e.g. 40px) to ensure it doesn't touch the edges
+        const scale = (width - 40) / 794;
+        setPreviewScale(Math.max(scale, 0.4)); // Minimum scale 0.4
+      }
+    });
+
+    resizeObserver.observe(element);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging.current || !containerRef.current) return;
+
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const newLeftWidth = e.clientX - containerRect.left;
+      const newPercent = (newLeftWidth / containerRect.width) * 100;
+
+      const minLeftWidthPx = (containerRect.height * 794) / 1122 + 40;
+      const minPercent = (minLeftWidthPx / containerRect.width) * 100;
+
+      const effectiveMinPercent = Math.max(minPercent, 20);
+
+      if (newPercent > effectiveMinPercent && newPercent < 70) {
+        setLeftWidth(newPercent);
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+      document.body.style.cursor = "default";
+      document.body.style.userSelect = "auto";
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const startResizing = () => {
+    isDragging.current = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
 
   const handleDownloadPDF = async () => {
     try {
@@ -931,12 +995,14 @@ export function FormPageBuilder() {
   };
 
   return (
-    <>
+    <div ref={containerRef} className="flex w-full h-full relative">
       <div
-        className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
+        className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] relative"
         style={{
-          minWidth: 794 + 48 + 6,
-          maxWidth: 794 + 48 + 6,
+          width: `${leftWidth}%`,
+          minWidth: "30%",
+          maxWidth: "70%",
+          flexShrink: 0,
         }}
       >
         {/* Preview Button at top right */}
@@ -944,8 +1010,17 @@ export function FormPageBuilder() {
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
 
-        <div className="min-w-0 flex-1 flex justify-center relative">
-          <div ref={targetRef}>
+        <div
+          className="min-w-0 flex-1 flex justify-center relative"
+          ref={previewWrapperRef}
+        >
+          <div
+            ref={targetRef}
+            style={{
+              transform: `scale(${previewScale})`,
+              transformOrigin: "top center",
+            }}
+          >
             {selectedTemplate ? (
               <ResumeRenderer
                 template={selectedTemplate?.json ?? aniketTemplate}
@@ -972,6 +1047,7 @@ export function FormPageBuilder() {
               height: "0",
               overflow: "hidden",
               pointerEvents: "none",
+              zIndex: "-9999"
             }}
             aria-hidden="true"
           >
@@ -1044,7 +1120,17 @@ export function FormPageBuilder() {
           </Button>
         </div>
       </div>
-      <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
+      {/* Resizer Handle */}
+      <div
+        className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
+        onMouseDown={startResizing}
+      >
+        <div className="w-2 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+          <GripVertical className="w-2 h-2 text-gray-500" />
+        </div>
+      </div>
+
+      <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] flex-1 max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -1129,6 +1215,6 @@ export function FormPageBuilder() {
           resumeData={getCleanDataForRenderer(formData ?? {}, false)}
         />
       )}
-    </>
+    </div>
   );
 }

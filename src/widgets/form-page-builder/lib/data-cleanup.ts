@@ -1,4 +1,5 @@
 import { normalizeMarkdownContent } from "@shared/lib/markdown";
+import { stripHtmlTags, normalizeWhitespace } from "@shared/lib/text-utils";
 
 /**
  * Removes background-color styles from HTML span tags
@@ -127,16 +128,6 @@ const removeErrorHighlighting = (value: string): string => {
 };
 
 /**
- * Strips all HTML tags from a string for content comparison
- *
- * @param value - The string potentially containing HTML tags
- * @returns The string without any HTML tags
- */
-const stripHtmlTags = (value: string): string => {
-  return value.replace(/<[^>]*>/g, "").trim();
-};
-
-/**
  * Deep comparison of two values, ignoring metadata fields
  */
 const deepEqual = (value1: unknown, value2: unknown): boolean => {
@@ -178,10 +169,17 @@ const deepEqual = (value1: unknown, value2: unknown): boolean => {
       const val1 = obj1[key];
       const val2 = obj2[key];
 
-      // Clean string values before comparison - strip HTML tags and error highlighting
+      // Clean string values before comparison
+      // 1. Remove error highlighting spans
+      // 2. Strip HTML tags (handles <br> and paragraph breaks properly)
+      // 3. Normalize whitespace (handles multiple spaces, tabs, newlines)
       if (typeof val1 === "string" && typeof val2 === "string") {
-        const clean1 = stripHtmlTags(removeErrorHighlighting(val1));
-        const clean2 = stripHtmlTags(removeErrorHighlighting(val2));
+        const clean1 = normalizeWhitespace(
+          stripHtmlTags(removeErrorHighlighting(val1))
+        );
+        const clean2 = normalizeWhitespace(
+          stripHtmlTags(removeErrorHighlighting(val2))
+        );
         return clean1 === clean2;
       }
 

@@ -174,6 +174,7 @@ const template10 = {
       containerClassName: "flex flex-col gap-4",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         rows: [
           {
             className: "flex flex-col leading-none",
@@ -208,6 +209,7 @@ const template10 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1",
               },
@@ -295,6 +297,7 @@ const template10 = {
       containerClassName: "flex flex-col gap-3",
       itemTemplate: {
         className: "flex flex-col gap-3",
+        break: true,
         rows: [
           {
             className: "flex flex-col leading-none",
@@ -323,6 +326,7 @@ const template10 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1",
               },
@@ -359,6 +363,7 @@ const template10 = {
       containerClassName: "flex flex-col gap-3",
       itemTemplate: {
         className: "flex flex-col gap-3",
+        break: true,
         rows: [
           {
             className: "flex flex-col leading-none",
@@ -428,6 +433,7 @@ const template10 = {
       type: "inline-list-section",
       column: "right",
       showBullet: true,
+      break: true,
       breakable: true,
       className: "mt-7",
       heading: {

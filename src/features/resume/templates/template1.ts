@@ -201,6 +201,7 @@ const aniketTemplate2 = {
       listPath: "education.items",
       itemTemplate: {
         className: "flex flex-col gap-1 mt-3 leading-none",
+        break: true,
         rows: [
           {
             className:
@@ -248,6 +249,8 @@ const aniketTemplate2 = {
     {
       id: "interests",
       type: "badge-section",
+      break: true,
+      breakable: true,
       heading: {
         path: "interests.heading",
         fallback: "Interests",
@@ -267,7 +270,8 @@ const aniketTemplate2 = {
     {
       id: "achievements",
       type: "badge-section",
-      break:true,
+      break: true,
+      breakable: true,
       heading: {
         path: "achievements.heading",
         fallback: "Achievements",
@@ -300,6 +304,7 @@ const aniketTemplate2 = {
       listPath: "certifications.items",
       itemTemplate: {
         className: "flex flex-col mt-3",
+        break: true,
         fields: [
           {
             path: "title",
@@ -321,7 +326,7 @@ const aniketTemplate2 = {
             path: "link.title",
             href: "link.link",
             fallback: "",
-            className: "text-sm text-blue-600 hover:underline",
+            className: "text-sm text-blue-600 hover:underline mt-1",
           },
         ],
       },

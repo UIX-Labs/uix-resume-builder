@@ -94,21 +94,23 @@ export function renderListSection(
 
           const content = section.itemTemplate.rows
             ? renderItemWithRows(
-                section.itemTemplate,
-                item,
-                itemId,
-                suggestedUpdates,
-                isThumbnail
-              )
+              section.itemTemplate,
+              item,
+              itemId,
+              suggestedUpdates,
+              isThumbnail
+            )
             : renderItemWithFields(
-                section.itemTemplate,
-                item,
-                itemId,
-                suggestedUpdates,
-                isThumbnail
-              );
+              section.itemTemplate,
+              item,
+              itemId,
+              suggestedUpdates,
+              isThumbnail
+            );
 
-          if (section.break && idx === 0) {
+          const isItemBreakable = section.break || section.itemTemplate?.break;
+
+          if (isItemBreakable && idx === 0) {
             return (
               <div
                 key={idx}
@@ -117,6 +119,8 @@ export function renderListSection(
                   shouldBlur ? "blur-[2px] pointer-events-none" : ""
                 )}
                 style={itemWrapperStyle}
+                data-canbreak={isItemBreakable ? 'true' : undefined}
+                data-has-breakable-content={isItemBreakable ? 'true' : undefined}
               >
                 {/* {shouldHighlight && (
                   <div style={{ position: "relative" }}>
@@ -126,7 +130,12 @@ export function renderListSection(
 
                 <RenderListSectionHeading />
 
-                <div>{content}</div>
+                <div
+                  data-canbreak={isItemBreakable ? 'true' : undefined}
+                  data-has-breakable-content={isItemBreakable ? 'true' : undefined}
+                >
+                  {content}
+                </div>
               </div>
             );
           }
@@ -136,11 +145,13 @@ export function renderListSection(
               key={idx}
               className={cn(
                 section.itemTemplate.className,
-                section.break && shouldBlur
+                isItemBreakable && shouldBlur
                   ? "blur-[2px] pointer-events-none"
                   : ""
               )}
               style={itemWrapperStyle}
+              data-canbreak={isItemBreakable ? 'true' : undefined}
+              data-has-breakable-content={isItemBreakable ? 'true' : undefined}
             >
               {content}
             </div>

@@ -175,6 +175,7 @@ const aniketTemplate = {
       listPath: "experience.items",
       itemTemplate: {
         className: "flex flex-col mt-3",
+        break: true,
         rows: [
           {
             className:
@@ -184,6 +185,7 @@ const aniketTemplate = {
                 type: "inline-group",
                 separator: " | ",
                 className: "flex flex-row gap-1",
+                break: true,
                 items: [
                   { path: "position", className: "font-semibold" },
                   { path: "company", className: "font-semibold" },
@@ -202,6 +204,7 @@ const aniketTemplate = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-xs text-neutral-800 text-justify whitespace-pre-wrap",
               },
@@ -258,6 +261,7 @@ const aniketTemplate = {
       listPath: "projects.items",
       itemTemplate: {
         className: "flex flex-col gap-1 mt-2",
+        break: true,
         fields: [
           {
             path: "title",
@@ -276,6 +280,7 @@ const aniketTemplate = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-xs text-neutral-800 text-justify whitespace-pre-wrap",
           },
@@ -287,6 +292,8 @@ const aniketTemplate = {
       id: "interests",
       type: "badge-section",
       column: "right",
+      break: true,
+      breakable: true,
       heading: {
         path: "interests.heading",
         fallback: "Interests",
@@ -305,6 +312,7 @@ const aniketTemplate = {
       id: "achievements",
       type: "badge-section",
       break: true,
+      breakable: true,
       column: "left",
       heading: {
         path: "achievements.heading",
@@ -340,6 +348,7 @@ const aniketTemplate = {
       listPath: "certifications.items",
       itemTemplate: {
         className: "flex flex-col gap-1 mt-2 leading-none",
+        break: true,
         fields: [
           {
             path: "title",

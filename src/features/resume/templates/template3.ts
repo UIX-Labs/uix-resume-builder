@@ -185,6 +185,7 @@ const annaFieldTemplate = {
       containerClassName: 'flex flex-col gap-6 px-2',
       itemTemplate: {
         className: 'flex flex-col gap-3 mt-3',
+        break: true,
         rows: [
           {
             className: 'flex flex-row justify-between items-start',
@@ -236,6 +237,7 @@ const annaFieldTemplate = {
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
         className: 'flex flex-col mt-3',
+        break: true,
         rows: [
           {
             className: 'flex flex-row justify-between items-start',
@@ -257,6 +259,7 @@ const annaFieldTemplate = {
               {
                 type: 'html',
                 path: 'description',
+                break: true,
                 className:
                   'text-sm text-gray-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
@@ -334,6 +337,8 @@ const annaFieldTemplate = {
     {
       id: 'interests',
       type: 'inline-list-section',
+      break: true,
+      breakable: true,
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -352,11 +357,12 @@ const annaFieldTemplate = {
     {
       id: 'achievements',
       type: 'badge-section',
-      break:true,
+      break: true,
+      breakable: true,
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className:'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+        className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
       },
       listPath: 'achievements.items[0].items',
       itemPrefix: '• ',
@@ -379,6 +385,7 @@ const annaFieldTemplate = {
       containerClassName: 'flex flex-col gap-4 px-3',
       itemTemplate: {
         className: 'flex flex-col justify-between items-start mt-3',
+        break: true,
         rows: [
           {
             className: 'flex flex-col flex-1',

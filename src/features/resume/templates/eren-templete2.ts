@@ -289,6 +289,7 @@ const laurenChenTemplate = {
       listPath: "experience.items",
       itemTemplate: {
         className: "mb-5 flex flex-col",
+        break: true,
         fields: [
           {
             path: "duration",
@@ -319,6 +320,7 @@ const laurenChenTemplate = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap",
           },
@@ -348,6 +350,7 @@ const laurenChenTemplate = {
       listPath: "education.items",
       itemTemplate: {
         className: "mb-3",
+        break: true,
         fields: [
           {
             type: "duration",
@@ -389,7 +392,7 @@ const laurenChenTemplate = {
       column: "right",
       showBullet: true,
       break: true,
-      breakable:true,
+      breakable: true,
       heading: {
         path: "skills.heading",
         fallback: "SKILLS",
@@ -424,6 +427,7 @@ const laurenChenTemplate = {
       listPath: "projects.items",
       itemTemplate: {
         className: "mb-5 flex flex-col",
+        break: true,
         fields: [
           {
             type: "link",
@@ -440,6 +444,7 @@ const laurenChenTemplate = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap",
           },
@@ -469,6 +474,7 @@ const laurenChenTemplate = {
       listPath: "certifications.items",
       itemTemplate: {
         className: "mb-3",
+        break: true,
         fields: [
           {
             path: "title",
@@ -506,6 +512,7 @@ const laurenChenTemplate = {
       column: "right",
       showBullet: true,
       break: true,
+      breakable: true,
       heading: {
         path: "interests.title",
         fallback: "INTERESTS",
@@ -528,6 +535,7 @@ const laurenChenTemplate = {
       column: "right",
       showBullet: true,
       break: true,
+      breakable: true,
       heading: {
         path: "achievements.title",
         fallback: "ACHIEVEMENTS",

@@ -252,6 +252,7 @@ const template5 = {
       containerClassName: "flex flex-col gap-2 mt-2",
       itemTemplate: {
         className: "flex flex-col leading-none",
+        break: true,
         fields: [
           {
             path: "name",
@@ -285,6 +286,7 @@ const template5 = {
       containerClassName: "flex flex-col gap-3 mt-2",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         fields: [
           {
             path: "title",
@@ -310,7 +312,8 @@ const template5 = {
       id: "interests",
       type: "badge-section",
       column: "left",
-      break: false,
+      break: true,
+      breakable: true,
       className: "mt-6",
       heading: {
         path: "interests.title",
@@ -346,6 +349,7 @@ const template5 = {
       containerClassName: "flex flex-col gap-6 mt-2",
       itemTemplate: {
         className: "flex flex-col leading-none",
+        break: true,
         rows: [
           {
             className: "flex flex-row justify-between items-baseline mt-2",
@@ -406,6 +410,7 @@ const template5 = {
       containerClassName: "flex flex-col gap-6 mt-2",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         rows: [
           {
             className: "flex flex-row justify-between items-baseline",
@@ -430,6 +435,7 @@ const template5 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap",
               },
@@ -497,6 +503,7 @@ const template5 = {
       type: "badge-section",
       column: "right",
       break: true,
+      breakable: true,
       className: "mt-6",
       heading: {
         path: "achievements.title",

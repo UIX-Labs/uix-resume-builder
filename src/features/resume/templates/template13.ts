@@ -125,6 +125,7 @@ const template13 = {
 
       itemTemplate: {
         className: "flex items-start",
+        break: true,
         rows: [
           {
             cells: [
@@ -159,6 +160,7 @@ const template13 = {
       containerClassName: "flex flex-col gap-4",
       itemTemplate: {
         className: "flex flex-col mb-4",
+        break: true,
         rows: [
           {
             className: "flex leading-none",
@@ -189,6 +191,7 @@ const template13 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
               },
@@ -266,6 +269,7 @@ const template13 = {
       containerClassName: "flex flex-col ",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         fields: [
           {
             type: "inline-group",
@@ -316,6 +320,7 @@ const template13 = {
       containerClassName: "flex flex-col gap-4",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         rows: [
           {
             className: "flex flex-row justify-between items-start",
@@ -338,6 +343,7 @@ const template13 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
               },
@@ -351,7 +357,8 @@ const template13 = {
     {
       id: "interests",
       type: "badge-section",
-      break: false,
+      break: true,
+      breakable: true,
       className: "flex flex-col mt-6",
       heading: {
         path: "interests.heading",
@@ -375,6 +382,7 @@ const template13 = {
       id: "achievements",
       type: "badge-section",
       break: true,
+      breakable: true,
       className: "flex flex-col mt-6",
       heading: {
         path: "achievements.heading",

@@ -132,7 +132,15 @@ export function renderField(
 
     // Wrap in a div if a className exists
     if (wrapperClassName) {
-      return <div className={cn(wrapperClassName)}>{content}</div>;
+      return (
+        <div
+          className={cn(wrapperClassName)}
+          data-canbreak={field.break ? 'true' : undefined}
+          data-has-breakable-content={field.break ? 'true' : undefined}
+        >
+          {content}
+        </div>
+      );
     }
 
     // Otherwise return just the content
@@ -146,14 +154,14 @@ export function renderField(
   }
 
   if (field.type === 'image') {
-  const src = resolvePath(data, field.path, field.fallback)?.replace(
-    /&amp;/g,
-    "&"
-  );    
-  if (!src && !field.fallback) return null;
+    const src = resolvePath(data, field.path, field.fallback)?.replace(
+      /&amp;/g,
+      "&"
+    );
+    if (!src && !field.fallback) return null;
 
     // Determine the actual image URL (use src if available, otherwise fallback)
- const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
+    const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {
@@ -272,7 +280,14 @@ export function renderField(
   if (field.type === 'html') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <div className={field.className} dangerouslySetInnerHTML={{ __html: value }} data-canbreak="true" />;
+    return (
+      <div
+        className={field.className}
+        dangerouslySetInnerHTML={{ __html: value }}
+        data-canbreak={field.break !== false ? 'true' : undefined}
+        data-has-breakable-content={field.break !== false ? 'true' : undefined}
+      />
+    );
   }
 
   if (field.type === 'link') {
@@ -300,7 +315,7 @@ export function renderField(
     const isValidUrl =
       href &&
       typeof href === 'string' &&
-                      (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
+      (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
 
     // If link exists but is invalid, create a data URL that shows \"Link not valid\" message
 
@@ -330,13 +345,25 @@ export function renderItemWithRows(
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
 ): React.ReactNode {
-  return template.rows.map((row: any, rowIdx: number) => (
-    <div key={rowIdx} className={row.className}>
-      {row.cells.map((cell: any, cellIdx: number) => (
-        <React.Fragment key={cellIdx}>{renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
-      ))}
-    </div>
-  ));
+  console.log("rows", template.rows)
+  return template.rows.map((row: any, rowIdx: number) => {
+    // Check if any cell in this row has break/breakable: true
+    const hasBreakableCell = row.cells.some((cell: any) => cell.break === true || cell.breakable === true);
+    const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
+
+    return (
+      <div
+        key={rowIdx}
+        className={row.className}
+        data-canbreak={isRowBreakable ? 'true' : undefined}
+        data-has-breakable-content={isRowBreakable ? 'true' : undefined}
+      >
+        {row.cells.map((cell: any, cellIdx: number) => (
+          <React.Fragment key={cellIdx}>{renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
+        ))}
+      </div>
+    );
+  });
 }
 
 export function renderItemWithFields(
@@ -346,11 +373,12 @@ export function renderItemWithFields(
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
 ): React.ReactNode {
+  console.log("fields", template.fields)
   return template.fields.map((field: any, idx: number) => (
     <div
       key={idx}
-      data-canbreak={field.breakable ? 'true' : undefined}
-      data-has-breakable-content={field.breakable ? 'true' : undefined}
+      data-canbreak={field.break || field.breakable ? 'true' : undefined}
+      data-has-breakable-content={field.break || field.breakable ? 'true' : undefined}
     >
       {renderField(field, item, itemId, suggestedUpdates, isThumbnail)}
     </div>

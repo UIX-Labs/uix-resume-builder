@@ -163,6 +163,7 @@ const enzoTemplate3 = {
       containerClassName: "flex flex-col gap-6",
       itemTemplate: {
         className: "flex flex-col gap-1",
+        break: true,
         rows: [
           {
             cells: [
@@ -192,6 +193,7 @@ const enzoTemplate3 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1",
               },
@@ -282,6 +284,7 @@ const enzoTemplate3 = {
       containerClassName: "flex flex-col",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         rows: [
           {
             cells: [
@@ -319,6 +322,7 @@ const enzoTemplate3 = {
       containerClassName: "flex flex-col gap-4",
       itemTemplate: {
         className: "flex flex-col gap-1",
+        break: true,
         rows: [
           {
             cells: [
@@ -350,6 +354,7 @@ const enzoTemplate3 = {
               {
                 type: "html",
                 path: "description",
+                break: true,
                 className:
                   "text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1",
               },
@@ -362,7 +367,8 @@ const enzoTemplate3 = {
     // Skills Section - Right Column
     {
       id: "skills",
-      break: false,
+      break: true,
+      breakable: true,
       type: "inline-list-section",
       column: "right",
       className: "",
@@ -381,7 +387,8 @@ const enzoTemplate3 = {
     // Interests Section - Right Column
     {
       id: "interests",
-      break: false,
+      break: true,
+      breakable: true,
       type: "inline-list-section",
       column: "right",
       className: "",
@@ -399,7 +406,8 @@ const enzoTemplate3 = {
     // Achievements Section - Right Column
     {
       id: "achievements",
-      break: false,
+      break: true,
+      breakable: true,
       type: "inline-list-section",
       column: "right",
       className: "",

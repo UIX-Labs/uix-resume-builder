@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: "Build AI Powered Resume in Minutes",
   description:
     "Choose from practical resume templates and power it with smart resume builder suggestions.",
-  metadataBase: new URL(DOMAIN_URL),
+  // metadataBase: new URL(DOMAIN_URL),
 
   keywords: [
     "AI resume builder",

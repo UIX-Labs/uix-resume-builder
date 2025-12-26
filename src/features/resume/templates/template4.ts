@@ -323,6 +323,7 @@ const brianWayneTemplate = {
       type: "badge-section",
       column: "left",
       break: true,
+      breakable: true,
       heading: {
         path: "achievements.title",
         fallback: "Achievements",
@@ -358,6 +359,7 @@ const brianWayneTemplate = {
       containerClassName: "flex flex-col gap-6 mt-1",
       itemTemplate: {
         className: "flex flex-col mb-3",
+        break: true,
         fields: [
           {
             path: "duration",
@@ -415,6 +417,7 @@ const brianWayneTemplate = {
       containerClassName: "flex flex-col gap-6 mt-1",
       itemTemplate: {
         className: "flex flex-col mb-2",
+        break: true,
         fields: [
           {
             path: "title",
@@ -431,6 +434,7 @@ const brianWayneTemplate = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap",
           },
@@ -454,13 +458,16 @@ const brianWayneTemplate = {
         },
       },
       listPath: "skills.items",
-      containerClassName: "flex flex-col gap-2 mt-2",
+      containerClassName: "flex flex-col gap-2 mt-2 mb-2.5",
       itemTemplate: {
+        break: true,
         className: "flex flex-col items-start gap-2",
         fields: [
           {
             prefix: "• ",
             path: "name",
+            breakable: true,
+            break: true,
             className: "text-sm text-[rgb(56,76,65)]",
           },
         ],
@@ -486,6 +493,7 @@ const brianWayneTemplate = {
       containerClassName: "flex flex-col gap-3 mt-1",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         fields: [
           {
             path: "title",
@@ -508,7 +516,7 @@ const brianWayneTemplate = {
                 className: "text-sm text-[rgb(56,76,65)]",
               },
             ],
-          },         
+          },
         ],
       },
     },

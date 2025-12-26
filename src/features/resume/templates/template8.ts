@@ -242,6 +242,7 @@ const template8 = {
       listPath: "experience.items",
       itemTemplate: {
         className: "flex flex-col gap-1 leading-none mt-2",
+        break: true,
         rows: [
           {
             className: "flex flex-row justify-between items-start",
@@ -280,6 +281,7 @@ const template8 = {
       id: "projects",
       type: "list-section",
       className: "flex flex-col mt-4",
+      break: true,
       heading: {
         path: "projects.heading",
         fallback: "Projects",
@@ -289,6 +291,7 @@ const template8 = {
       listPath: "projects.items",
       itemTemplate: {
         className: "flex flex-col mt-1.5",
+        break: true,
         fields: [
           {
             type: "inline-group",
@@ -307,6 +310,7 @@ const template8 = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap",
           },
@@ -318,6 +322,8 @@ const template8 = {
     {
       id: "skills",
       type: "inline-list-section",
+      break: true,
+      breakable: true,
       heading: {
         path: "skills.heading",
         fallback: "Technical Skills",
@@ -335,6 +341,8 @@ const template8 = {
     {
       id: "achievements",
       type: "badge-section",
+      break: true,
+      breakable: true,
       heading: {
         path: "achievements.heading",
         fallback: "Achievements",
@@ -362,6 +370,7 @@ const template8 = {
       listPath: "certifications.items",
       itemTemplate: {
         className: "flex flex-col gap-0.5 mt-2 leading-none",
+        break: true,
         fields: [
           {
             path: "title",
@@ -385,6 +394,8 @@ const template8 = {
     {
       id: "interests",
       type: "badge-section",
+      break: true,
+      breakable: true,
       heading: {
         path: "interests.heading",
         fallback: "Interests",

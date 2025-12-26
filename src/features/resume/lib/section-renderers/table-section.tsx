@@ -160,8 +160,8 @@ export function renderTableSection(
                         {allBadgeItems.map((item: any, badgeIdx: number) => {
                           const value =
                             typeof item === "object" &&
-                            item !== null &&
-                            "value" in item
+                              item !== null &&
+                              "value" in item
                               ? item.value
                               : item;
                           if (IconComponent) {
@@ -189,7 +189,12 @@ export function renderTableSection(
               };
 
               return (
-                <div key={colIdx} className={column.className}>
+                <div
+                  key={colIdx}
+                  className={column.className}
+                  data-canbreak={column.break ? 'true' : undefined}
+                  data-has-breakable-content={column.break ? 'true' : undefined}
+                >
                   {renderColumnContent(column)}
                 </div>
               );
@@ -231,7 +236,11 @@ export function renderTableSection(
 
                 if (renderedItems.length > 0) {
                   content = (
-                    <div className={column.containerClassName}>
+                    <div
+                      className={column.containerClassName}
+                      data-canbreak={column.break ? 'true' : undefined}
+                      data-has-breakable-content={column.break ? 'true' : undefined}
+                    >
                       {renderedItems.map(
                         (
                           {
@@ -342,7 +351,11 @@ export function renderTableSection(
 
                       if (wrapperClassName) {
                         return (
-                          <div className={wrapperClassName}>
+                          <div
+                            className={wrapperClassName}
+                            data-canbreak={subField.break ? 'true' : undefined}
+                            data-has-breakable-content={subField.break ? 'true' : undefined}
+                          >
                             {inlineContent}
                           </div>
                         );
@@ -389,9 +402,9 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) =>
-                        v && (typeof v !== "string" || v.trim() !== "")
-                    );
+                    (v: any) =>
+                      v && (typeof v !== "string" || v.trim() !== "")
+                  );
 
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
@@ -413,8 +426,8 @@ export function renderTableSection(
                       {badgeItems.map((item: any, badgeIdx: number) => {
                         const value =
                           typeof item === "object" &&
-                          item !== null &&
-                          "value" in item
+                            item !== null &&
+                            "value" in item
                             ? item.value
                             : item;
                         if (IconComponent) {
@@ -451,12 +464,16 @@ export function renderTableSection(
               <div
                 key={itemIdx}
                 data-item="table-row"
+                data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn("grid", section.rowClassName)}
                 style={{ gridTemplateColumns }}
               >
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
-                  <div className={section.headingColumn.className}>
+                  <div
+                    className={section.headingColumn.className}
+                    style={{ gridColumn: 1 }}
+                  >
                     {itemIdx === 0 && section.heading && (
                       <>
                         <p
@@ -481,6 +498,9 @@ export function renderTableSection(
                   <div
                     key={`${itemIdx}-${colIdx}`}
                     className={column.className}
+                    data-canbreak={column.break ? 'true' : undefined}
+                    data-has-breakable-content={column.break ? 'true' : undefined}
+                    style={{ gridColumn: section.headingColumn ? colIdx + 2 : colIdx + 1 }}
                   >
                     {renderColumnContent(column)}
                   </div>

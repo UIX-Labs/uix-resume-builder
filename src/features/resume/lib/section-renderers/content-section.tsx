@@ -87,7 +87,8 @@ export function renderContentSection(
         shouldBlur && "blur-[2px] pointer-events-none"
       )}
       data-section={sectionId}
-      data-break={section.break}
+      data-canbreak={section.break ? 'true' : undefined}
+      data-has-breakable-content={section.break ? 'true' : undefined}
       style={wrapperStyle}
     >
       {/* {shouldHighlight && <SparkleIndicator />} */}
@@ -103,6 +104,7 @@ export function renderContentSection(
         <div
           className={section.content.className}
           dangerouslySetInnerHTML={{ __html: value }}
+          data-canbreak={section.break ? 'true' : undefined}
         />
       ) : (
         <p className={section.content.className}>{value}</p>

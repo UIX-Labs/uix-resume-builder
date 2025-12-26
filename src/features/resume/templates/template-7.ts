@@ -241,6 +241,8 @@ const template7 = {
       id: "skills",
       type: "badge-section",
       className: "px-8 pb-6 pt-3",
+      break: true,
+      breakable: true,
       heading: {
         path: "skills.heading",
         fallback: "SKILLS",
@@ -266,6 +268,7 @@ const template7 = {
       listPath: "experience.items",
       itemTemplate: {
         className: "flex flex-col mt-2 leading-none",
+        break: true,
         rows: [
           {
             className: "flex flex-col",
@@ -310,6 +313,7 @@ const template7 = {
       id: "projects",
       type: "list-section",
       className: "px-8 pb-4",
+      break: true,
       heading: {
         path: "projects.heading",
         fallback: "PROJECTS",
@@ -319,6 +323,7 @@ const template7 = {
       listPath: "projects.items",
       itemTemplate: {
         className: "flex flex-col mt-2",
+        break: true,
         fields: [
           {
             path: "title",
@@ -334,6 +339,7 @@ const template7 = {
           {
             type: "html",
             path: "description",
+            break: true,
             className:
               "text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap",
           },
@@ -346,6 +352,8 @@ const template7 = {
       id: "interests",
       type: "badge-section",
       className: "px-8 pb-4",
+      break: true,
+      breakable: true,
       heading: {
         path: "interests.heading",
         fallback: "INTERESTS",
@@ -364,6 +372,7 @@ const template7 = {
       id: "achievements",
       type: "badge-section",
       break: true,
+      breakable: true,
       className: "px-8 pb-4",
       heading: {
         path: "achievements.heading",
@@ -383,6 +392,7 @@ const template7 = {
       id: "certifications",
       type: "list-section",
       className: "px-8 pb-4",
+      break: true,
       heading: {
         path: "certifications.heading",
         fallback: "CERTIFICATIONS",
@@ -393,6 +403,7 @@ const template7 = {
       containerClassName: "grid grid-cols-2 gap-4 mt-2",
       itemTemplate: {
         className: "flex flex-col",
+        break: true,
         fields: [
           {
             path: "title",

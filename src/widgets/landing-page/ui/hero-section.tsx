@@ -202,12 +202,13 @@ const HeroSection = () => {
         <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
           {/* Claim Free Access (image button) */}
           <div className="relative inline-flex flex-col items-center">
-            <Image
-              src="/images/claim-free-access.svg"
-              alt="Claim Free Access"
-              width={120}
-              height={36}
-              className="
+            {!user && (
+              <Image
+                src="/images/claim-free-access.svg"
+                alt="Claim Free Access"
+                width={120}
+                height={36}
+                className="
     absolute 
     -top-3 md:-top-6 
     -left-4 md:-left-7
@@ -215,8 +216,9 @@ const HeroSection = () => {
     z-20
     pointer-events-none
   "
-              priority
-            />
+                priority
+              />
+            )}
 
             <Button
               onClick={handleLinkedInUnified}

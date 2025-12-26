@@ -6,11 +6,15 @@ import JDSection from './jd-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import React from 'react';
+import { TopAnnouncementStrip } from './top-announcement-strip';
 
 export function LandingPage() {
   return (
     <div className="relative w-full h-full">
       <Header />
+      <div className="mb-3.5 md:mb-5">
+        <TopAnnouncementStrip />
+      </div>
 
       <div
         className="h-[724px] border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
@@ -25,7 +29,7 @@ export function LandingPage() {
       <div>
         <TemplateCarousel />
         <Testimonials />
-        <JDSection/>
+        <JDSection />
       </div>
 
       <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">

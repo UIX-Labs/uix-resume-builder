@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Button } from "@shared/ui";
-import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useCachedUser } from "@shared/hooks/use-user";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import { useIsMobile } from "@shared/hooks/use-mobile";
-import { MobileTextView } from "./mobile-text-view";
+import { Button } from '@shared/ui';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { MobileTextView } from './mobile-text-view';
 
 export default function JDSection() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function JDSection() {
       },
       {
         threshold: 0.5,
-      }
+      },
     );
 
     observer.observe(videoRef.current);
@@ -48,10 +48,10 @@ export default function JDSection() {
     if (isMobile) {
       setShowMobileView(true);
 
-      trackEvent("create_resume_click", {
-        source: "landing_jd_section",
-        method: "upload_resume_jd",
-        device: "mobile",
+      trackEvent('create_resume_click', {
+        source: 'landing_jd_section',
+        method: 'upload_resume_jd',
+        device: 'mobile',
       });
 
       return;
@@ -59,24 +59,24 @@ export default function JDSection() {
 
     if (!user) {
       // User not logged in, store intent and redirect to auth page
-      localStorage.setItem("openJDModal", "true");
+      localStorage.setItem('openJDModal', 'true');
 
-      trackEvent("create_resume_click", {
-        source: "landing_jd_section",
-        method: "upload_resume_jd",
-        user_status: "not_logged_in",
+      trackEvent('create_resume_click', {
+        source: 'landing_jd_section',
+        method: 'upload_resume_jd',
+        user_status: 'not_logged_in',
       });
 
-      router.push("/auth");
+      router.push('/auth');
     } else {
       // User logged in, redirect to dashboard with modal parameter
-      trackEvent("create_resume_click", {
-        source: "landing_jd_section",
-        method: "upload_resume_jd",
-        user_status: "logged_in",
+      trackEvent('create_resume_click', {
+        source: 'landing_jd_section',
+        method: 'upload_resume_jd',
+        user_status: 'logged_in',
       });
 
-      router.push("/dashboard?openModal=jd");
+      router.push('/dashboard?openModal=jd');
     }
   };
 
@@ -101,18 +101,14 @@ export default function JDSection() {
     "
         style={{
           background:
-            "linear-gradient(139deg, rgba(228,187,167,0.5) 22.84%, rgba(94,31,29,0.5) 37.54%, rgba(23,23,23,0.5) 62.55%)",
+            'linear-gradient(139deg, rgba(228,187,167,0.5) 22.84%, rgba(94,31,29,0.5) 37.54%, rgba(23,23,23,0.5) 62.55%)',
         }}
       />
       <div></div>
       {/* MOBILE: Heading */}
       <div className="md:hidden text-center mt-12 mb-5 px-4">
-        <h1 className="text-5xl leading-none font-black text-blue-600">
-          Match Your Resume
-        </h1>
-        <p className="text-[28px] font-semibold text-black leading-none">
-          to the job description
-        </p>
+        <h1 className="text-5xl leading-none font-black text-blue-600">Match Your Resume</h1>
+        <p className="text-[28px] font-semibold text-black leading-none">to the job description</p>
       </div>
 
       {/* LEFT: Video */}
@@ -142,9 +138,7 @@ export default function JDSection() {
         <h1 className="mb-6 text-[80px] leading-none">
           <span className="text-blue-600 font-black">Match your resume</span>
           <br />
-          <span className="text-black font-semibold">
-            to the job description
-          </span>
+          <span className="text-black font-semibold">to the job description</span>
         </h1>
 
         <p className="mb-4 max-w-md text-base text-gray-500 text-nowrap">
@@ -176,12 +170,7 @@ export default function JDSection() {
           Upload Resume & JD
         </Button>
       </div>
-      {isMobile && (
-        <MobileTextView
-          isOpen={showMobileView}
-          onClose={() => setShowMobileView(false)}
-        />
-      )}
+      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );
 }

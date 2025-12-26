@@ -146,14 +146,11 @@ export function renderField(
   }
 
   if (field.type === 'image') {
-  const src = resolvePath(data, field.path, field.fallback)?.replace(
-    /&amp;/g,
-    "&"
-  );    
-  if (!src && !field.fallback) return null;
+    const src = resolvePath(data, field.path, field.fallback)?.replace(/&amp;/g, '&');
+    if (!src && !field.fallback) return null;
 
     // Determine the actual image URL (use src if available, otherwise fallback)
- const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
+    const actualImageUrl = src && src.trim() !== '' ? src : field.fallback;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {
@@ -300,7 +297,7 @@ export function renderField(
     const isValidUrl =
       href &&
       typeof href === 'string' &&
-                      (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
+      (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('mailto:'));
 
     // If link exists but is invalid, create a data URL that shows \"Link not valid\" message
 

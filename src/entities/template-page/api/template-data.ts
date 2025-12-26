@@ -43,7 +43,7 @@ export const useGetAllTemplates = () => {
   return useFetch({
     queryKey: ['templates'],
     queryFn: fetchAllTemplates,
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
   });
 };
 

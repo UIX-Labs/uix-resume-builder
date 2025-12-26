@@ -1,6 +1,6 @@
-import { ResumeData } from "./resume-data"
+import { ResumeData } from './resume-data';
 
-export interface UpdateResumeAnalyzer{
-    resumeId:string
-    resume:ResumeData
+export interface UpdateResumeAnalyzer {
+  resumeId: string;
+  resume: ResumeData;
 }

@@ -46,16 +46,12 @@ export function isSchemaEmpty(data: Partial<Omit<ResumeData, 'templateId'>>): bo
 
             // Check nested objects (like links, duration)
             if (typeof value === 'object' && value !== null) {
-              return Object.values(value).some(
-                (v) => typeof v === 'string' && v.trim() !== ''
-              );
+              return Object.values(value).some((v) => typeof v === 'string' && v.trim() !== '');
             }
 
             // Check arrays
             if (Array.isArray(value)) {
-              return value.some((v) =>
-                typeof v === 'string' && v.trim() !== ''
-              );
+              return value.some((v) => typeof v === 'string' && v.trim() !== '');
             }
 
             return false;

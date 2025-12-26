@@ -1,8 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-const TemplateButton = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => {
+const TemplateButton = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
   return (
     <div ref={ref} {...props} className="flex items-center gap-1.5 cursor-pointer">
       <div className="w-8 h-8 rounded-full flex items-center justify-center relative">

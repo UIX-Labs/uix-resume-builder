@@ -56,16 +56,13 @@ export function getFieldSuggestions(
   itemId: string | undefined,
   fieldName: string,
 ) {
-
   if (!suggestedUpdates || !itemId) return [];
 
-const itemUpdate = suggestedUpdates.find((update) => update.itemId === itemId);
+  const itemUpdate = suggestedUpdates.find((update) => update.itemId === itemId);
   if (!itemUpdate || !itemUpdate.fields[fieldName]) {
-
     return [];
   }
   const fieldData = itemUpdate.fields[fieldName];
-
 
   // Get actual suggestions and filter out invalid ones (where old === new)
   const suggestions = fieldData.suggestedUpdates || [];
@@ -77,10 +74,7 @@ const itemUpdate = suggestedUpdates.find((update) => update.itemId === itemId);
     return true;
   });
 
-  
   return validSuggestions;
-
-  
 }
 
 /**
@@ -93,8 +87,6 @@ export function getArrayValueSuggestions(
   fieldName: string,
   value: string,
 ): any[] {
- 
-
   if (!suggestedUpdates || !itemId) {
     return [];
   }
@@ -113,7 +105,7 @@ export function getArrayValueSuggestions(
     const isMatch = suggestionOld === normalizedValue;
 
     if (!isMatch && suggestion.old) {
-    return
+      return;
     }
 
     return isMatch;
@@ -128,11 +120,11 @@ export function getSuggestionBackgroundColor(suggestions: any[]): string {
   if (suggestions.length === 0) return '';
 
   // Check if any suggestion is a spelling error
-  const hasSpellingError = suggestions.some(s => s.type === 'spelling_error');
+  const hasSpellingError = suggestions.some((s) => s.type === 'spelling_error');
   if (hasSpellingError) return 'bg-[#FBDDBB]';
 
   // Check if any suggestion is a sentence refinement (weak sentence)
-  const hasSentenceRefinement = suggestions.some(s => s.type === 'sentence_refinement');
+  const hasSentenceRefinement = suggestions.some((s) => s.type === 'sentence_refinement');
   if (hasSentenceRefinement) return 'bg-[#F8BEC2]';
 
   // Default to sentence refinement color for other error types

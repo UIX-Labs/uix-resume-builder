@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { HomeIcon } from 'lucide-react';
@@ -17,7 +17,7 @@ import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 
-export default function DashboardLayout() {
+function DashboardContent() {
   const { data: user } = useUserProfile();
   const queryClient = useQueryClient();
   const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
@@ -127,3 +127,12 @@ export default function DashboardLayout() {
     </SidebarProvider>
   );
 }
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={null}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+

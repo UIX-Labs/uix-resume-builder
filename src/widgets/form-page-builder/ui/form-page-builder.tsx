@@ -9,7 +9,7 @@ import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-rend
 import aniketTemplate from "@features/resume/templates/standard";
 import { TemplateForm } from "@features/template-form";
 import { Button } from "@shared/ui/button";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useFormPageBuilder } from "../models/ctx";
 import { useFormDataStore } from "../models/store";
 import { camelToHumanString } from "@shared/lib/string";
@@ -104,8 +104,7 @@ function isSectionEmpty(section: any): boolean {
             key === "id" ||
             key === "itemId" ||
             key === "ongoing" ||
-            key === "rank" ||
-            key === "title"
+            key === "rank"
           ) {
             return false;
           }
@@ -182,6 +181,39 @@ function syncSectionIds(actualSection: any, mockSection: any): any {
   return synced;
 }
 
+function getPreviewData(formData: any, mockData: any) {
+  if (!formData) return mockData;
+
+  const result: Record<string, any> = {};
+  const keys = new Set([
+    ...Object.keys(formData),
+    ...Object.keys(mockData as object),
+  ]);
+
+  keys.forEach((key) => {
+    if (key === "templateId" || key === "updatedAt") {
+      result[key] = formData[key] ?? (mockData as any)[key];
+      return;
+    }
+
+    const formSection = formData[key];
+    const mockSection = (mockData as any)[key];
+
+    if (!formSection) {
+      result[key] = mockSection;
+      return;
+    }
+
+    if (isSectionEmpty(formSection) && mockSection) {
+      result[key] = mockSection;
+    } else {
+      result[key] = formSection;
+    }
+  });
+
+  return result;
+}
+
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
@@ -225,6 +257,11 @@ export function FormPageBuilder() {
   const embeddedTemplate = currentResume?.template;
 
   const { formData, setFormData } = useFormDataStore();
+
+  const previewData = useMemo(
+    () => getPreviewData(formData, mockData),
+    [formData]
+  );
 
   const { currentStep, setCurrentStep, navs } = useFormPageBuilder();
   const { mutateAsync: uploadThumbnailMutation } = useMutation({
@@ -368,34 +405,10 @@ export function FormPageBuilder() {
 
       console.log("allSectionsEmpty", allSectionsEmpty);
 
-      if (allSectionsEmpty) {
-        const mergedData: Record<string, any> = {};
-
-        for (const sectionKey of Object.keys(data)) {
-          if (sectionKey === "templateId" || sectionKey === "updatedAt") {
-            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-            continue;
-          }
-
-          const actualSection = data[sectionKey as keyof typeof data];
-          const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-          if (mockSection) {
-            const syncedSection = syncSectionIds(actualSection, mockSection);
-            mergedData[sectionKey] = syncedSection;
-          } else {
-            mergedData[sectionKey] = actualSection;
-          }
-        }
-
-        useFormDataStore.setState({
-          formData: mergedData as Omit<ResumeData, "templateId">,
-        });
-      } else {
-        useFormDataStore.setState({
-          formData: data as Omit<ResumeData, "templateId">,
-        });
-      }
+      // Always use data from API, even if empty. Do not merge with mock data for the form.
+      useFormDataStore.setState({
+        formData: data as Omit<ResumeData, "templateId">,
+      });
     }
   }, [resumeId, data, analyzedData, analyzerResumeId]);
 
@@ -949,7 +962,10 @@ export function FormPageBuilder() {
             {selectedTemplate ? (
               <ResumeRenderer
                 template={selectedTemplate?.json ?? aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                data={getCleanDataForRenderer(
+                  previewData ?? {},
+                  isGeneratingPDF
+                )}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
@@ -979,7 +995,7 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(previewData ?? {}, false)}
                 />
               )}
             </div>
@@ -1126,7 +1142,7 @@ export function FormPageBuilder() {
           template={selectedTemplate}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
-          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
+          resumeData={getCleanDataForRenderer(previewData ?? {}, false)}
         />
       )}
     </>

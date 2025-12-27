@@ -222,10 +222,10 @@ const enzoTemplate1 = {
 
     // Professional Profile Section - Left Column
     {
-      id: 'summary',
-      type: 'content-section',
-      column: 'left',
-      className: 'flex flex-col gap-1 pt-6 border-t border-[#C9A961]',
+      id: "summary",
+      type: "content-section",
+      column: "left",
+      className: "flex flex-col gap-1 pt-3 border-t border-[#C9A961]",
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
@@ -244,20 +244,22 @@ const enzoTemplate1 = {
       type: 'list-section',
       column: 'left',
       break: true,
-      className: 'pl-6 mb-8 ',
+      className: "pl-6 mb-4",
       heading: {
-        path: 'skills.heading',
-        fallback: 'SKILLS',
-        className: 'text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-6 border-t border-[#C9A961]',
+        path: "skills.heading",
+        fallback: "SKILLS",
+        className:
+          "text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-3 border-t border-[#C9A961]",
       },
-      listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-1 text-xs',
+      listPath: "skills.items",
+      containerClassName: "flex flex-col gap-1 text-xs mb-3.5",
       itemTemplate: {
+        break: true,
         fields: [
           {
-            prefix: '• ',
-            path: 'name',
-            className: 'text-xs text-neutral-800 leading-none',
+            prefix: "• ",
+            path: "name",
+            className: "text-xs text-neutral-800 leading-none py-0.5",
           },
         ],
       },
@@ -320,7 +322,8 @@ const enzoTemplate1 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-5',
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: "flex flex-col gap-1",
+        break: true,
         rows: [
           {
             className: 'flex flex-row justify-between items-baseline gap-2',
@@ -354,8 +357,9 @@ const enzoTemplate1 = {
           {
             cells: [
               {
-                type: 'html',
-                path: 'description',
+                type: "html",
+                path: "description",
+                break: true,
                 className:
                   'text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words',
               },
@@ -435,7 +439,8 @@ const enzoTemplate1 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: 'flex flex-col gap-0.5',
+        className: "flex flex-col gap-0.5",
+        break: true,
         fields: [
           {
             path: 'title',
@@ -453,11 +458,12 @@ const enzoTemplate1 = {
 
     // Interests Section - Left Column
     {
-      id: 'interests',
-      break: false,
-      type: 'inline-list-section',
-      column: 'right',
-      className: 'pt-6 border-t border-[#C9A961]',
+      id: "interests",
+      break: true,
+      breakable: true,
+      type: "inline-list-section",
+      column: "right",
+      className: "pt-6 border-t border-[#C9A961]",
       heading: {
         path: 'interests.heading',
         fallback: 'INTERESTS',
@@ -471,7 +477,8 @@ const enzoTemplate1 = {
 
     // Achievements Section - Left Column
     {
-      id: 'achievements',
+      id: "achievements",
+      break: true,
       breakable: true,
       type: 'inline-list-section',
       column: 'right',

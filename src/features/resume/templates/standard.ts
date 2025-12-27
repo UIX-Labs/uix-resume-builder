@@ -169,15 +169,17 @@ const aniketTemplate = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col mt-3',
+        className: "flex flex-col mt-3",
+        break: true,
         rows: [
           {
             className: 'flex flex-row justify-between items-center text-sm text-black mb-1',
             cells: [
               {
-                type: 'inline-group',
-                separator: ' | ',
-                className: 'flex flex-row gap-1',
+                type: "inline-group",
+                separator: " | ",
+                className: "flex flex-row gap-1",
+                break: true,
                 items: [
                   { path: 'position', className: 'font-semibold' },
                   { path: 'company', className: 'font-semibold' },
@@ -194,9 +196,11 @@ const aniketTemplate = {
             className: 'flex flex-col',
             cells: [
               {
-                type: 'html',
-                path: 'description',
-                className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap',
+                type: "html",
+                path: "description",
+                break: true,
+                className:
+                  "text-xs text-neutral-800 text-justify whitespace-pre-wrap",
               },
             ],
           },
@@ -248,7 +252,8 @@ const aniketTemplate = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2',
+        className: "flex flex-col gap-1 mt-2",
+        break: true,
         fields: [
           {
             path: 'title',
@@ -265,18 +270,22 @@ const aniketTemplate = {
             className: 'text-xs text-neutral-600 italic mb-1',
           },
           {
-            type: 'html',
-            path: 'description',
-            className: 'text-xs text-neutral-800 text-justify whitespace-pre-wrap',
+            type: "html",
+            path: "description",
+            break: true,
+            className:
+              "text-xs text-neutral-800 text-justify whitespace-pre-wrap",
           },
         ],
       },
     },
     // Interests Section (Badge Style)
     {
-      id: 'interests',
-      type: 'badge-section',
-      column: 'right',
+      id: "interests",
+      type: "badge-section",
+      column: "right",
+      break: true,
+      breakable: true,
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -294,7 +303,8 @@ const aniketTemplate = {
       id: 'achievements',
       type: 'badge-section',
       break: true,
-      column: 'left',
+      breakable: true,
+      column: "left",
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
@@ -326,7 +336,8 @@ const aniketTemplate = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-2 leading-none',
+        className: "flex flex-col gap-1 mt-2 leading-none",
+        break: true,
         fields: [
           {
             path: 'title',

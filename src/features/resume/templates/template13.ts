@@ -120,7 +120,8 @@ const template13 = {
       containerClassName: 'grid grid-cols-3 w-full',
 
       itemTemplate: {
-        className: 'flex items-start',
+        className: "flex items-start",
+        break: true,
         rows: [
           {
             cells: [
@@ -153,7 +154,8 @@ const template13 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
-        className: 'flex flex-col mb-4',
+        className: "flex flex-col mb-4",
+        break: true,
         rows: [
           {
             className: 'flex leading-none',
@@ -182,9 +184,11 @@ const template13 = {
             className: 'flex flex-col',
             cells: [
               {
-                type: 'html',
-                path: 'description',
-                className: 'text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap',
+                type: "html",
+                path: "description",
+                break: true,
+                className:
+                  "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
               },
             ],
           },
@@ -257,7 +261,8 @@ const template13 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col ',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: "flex flex-col",
+        break: true,
         fields: [
           {
             type: 'inline-group',
@@ -306,7 +311,8 @@ const template13 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: "flex flex-col",
+        break: true,
         rows: [
           {
             className: 'flex flex-row justify-between items-start',
@@ -327,9 +333,11 @@ const template13 = {
             className: 'flex flex-col mt-1',
             cells: [
               {
-                type: 'html',
-                path: 'description',
-                className: 'text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap',
+                type: "html",
+                path: "description",
+                break: true,
+                className:
+                  "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
               },
             ],
           },
@@ -339,10 +347,11 @@ const template13 = {
 
     // Interests Section
     {
-      id: 'interests',
-      type: 'badge-section',
-      break: false,
-      className: 'flex flex-col mt-6',
+      id: "interests",
+      type: "badge-section",
+      break: true,
+      breakable: true,
+      className: "flex flex-col mt-6",
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -364,7 +373,8 @@ const template13 = {
       id: 'achievements',
       type: 'badge-section',
       break: true,
-      className: 'flex flex-col mt-6',
+      breakable: true,
+      className: "flex flex-col mt-6",
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',

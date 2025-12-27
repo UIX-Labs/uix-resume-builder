@@ -234,9 +234,11 @@ const template7 = {
 
     // Skills Section
     {
-      id: 'skills',
-      type: 'badge-section',
-      className: 'px-8 pb-6 pt-3',
+      id: "skills",
+      type: "badge-section",
+      className: "px-8 pb-6 pt-3",
+      break: true,
+      breakable: true,
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
@@ -261,7 +263,8 @@ const template7 = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2 leading-none',
+        className: "flex flex-col mt-2 leading-none",
+        break: true,
         rows: [
           {
             className: 'flex flex-col',
@@ -303,9 +306,10 @@ const template7 = {
 
     // Projects Section
     {
-      id: 'projects',
-      type: 'list-section',
-      className: 'px-8 pb-4',
+      id: "projects",
+      type: "list-section",
+      className: "px-8 pb-4",
+      break: true,
       heading: {
         path: 'projects.heading',
         fallback: 'PROJECTS',
@@ -313,7 +317,8 @@ const template7 = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2',
+        className: "flex flex-col mt-2",
+        break: true,
         fields: [
           {
             path: 'title',
@@ -327,8 +332,9 @@ const template7 = {
             className: 'text-sm text-gray-500 italic',
           },
           {
-            type: 'html',
-            path: 'description',
+            type: "html",
+            path: "description",
+            break: true,
             className:
               'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
           },
@@ -338,9 +344,11 @@ const template7 = {
 
     // Interests Section
     {
-      id: 'interests',
-      type: 'badge-section',
-      className: 'px-8 pb-4',
+      id: "interests",
+      type: "badge-section",
+      className: "px-8 pb-4",
+      break: true,
+      breakable: true,
       heading: {
         path: 'interests.heading',
         fallback: 'INTERESTS',
@@ -358,7 +366,8 @@ const template7 = {
       id: 'achievements',
       type: 'badge-section',
       break: true,
-      className: 'px-8 pb-4',
+      breakable: true,
+      className: "px-8 pb-4",
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
@@ -373,9 +382,10 @@ const template7 = {
 
     // Certifications Section
     {
-      id: 'certifications',
-      type: 'list-section',
-      className: 'px-8 pb-4',
+      id: "certifications",
+      type: "list-section",
+      className: "px-8 pb-4",
+      break: true,
       heading: {
         path: 'certifications.heading',
         fallback: 'CERTIFICATIONS',
@@ -384,7 +394,8 @@ const template7 = {
       listPath: 'certifications.items',
       containerClassName: 'grid grid-cols-2 gap-4 mt-2',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: "flex flex-col",
+        break: true,
         fields: [
           {
             path: 'title',

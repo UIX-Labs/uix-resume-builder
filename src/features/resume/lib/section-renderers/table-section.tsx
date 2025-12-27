@@ -123,7 +123,11 @@ export function renderTableSection(
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
                         {allBadgeItems.map((item: any, badgeIdx: number) => {
                           const value =
-                            typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
+                            typeof item === "object" &&
+                              item !== null &&
+                              "value" in item
+                              ? item.value
+                              : item;
                           if (IconComponent) {
                             return (
                               <div key={badgeIdx} className={col.itemClassName}>
@@ -147,7 +151,12 @@ export function renderTableSection(
               };
 
               return (
-                <div key={colIdx} className={column.className}>
+                <div
+                  key={colIdx}
+                  className={column.className}
+                  data-canbreak={column.break ? 'true' : undefined}
+                  data-has-breakable-content={column.break ? 'true' : undefined}
+                >
                   {renderColumnContent(column)}
                 </div>
               );
@@ -175,7 +184,11 @@ export function renderTableSection(
 
                 if (renderedItems.length > 0) {
                   content = (
-                    <div className={column.containerClassName}>
+                    <div
+                      className={column.containerClassName}
+                      data-canbreak={column.break ? 'true' : undefined}
+                      data-has-breakable-content={column.break ? 'true' : undefined}
+                    >
                       {renderedItems.map(
                         ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
                           <React.Fragment key={idx}>
@@ -264,7 +277,15 @@ export function renderTableSection(
                       const wrapperClassName = hasContainerClassName ? subField.containerClassName : subField.className;
 
                       if (wrapperClassName) {
-                        return <div className={wrapperClassName}>{inlineContent}</div>;
+                        return (
+                          <div
+                            className={wrapperClassName}
+                            data-canbreak={subField.break ? 'true' : undefined}
+                            data-has-breakable-content={subField.break ? 'true' : undefined}
+                          >
+                            {inlineContent}
+                          </div>
+                        );
                       }
 
                       return <>{inlineContent}</>;
@@ -295,8 +316,9 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
-                    );
+                    (v: any) =>
+                      v && (typeof v !== "string" || v.trim() !== "")
+                  );
 
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
@@ -309,7 +331,12 @@ export function renderTableSection(
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
                       {badgeItems.map((item: any, badgeIdx: number) => {
-                        const value = typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
+                        const value =
+                          typeof item === "object" &&
+                            item !== null &&
+                            "value" in item
+                            ? item.value
+                            : item;
                         if (IconComponent) {
                           return (
                             <div key={badgeIdx} className={column.itemClassName}>
@@ -336,12 +363,16 @@ export function renderTableSection(
               <div
                 key={itemIdx}
                 data-item="table-row"
-                className={cn('grid', section.rowClassName)}
+                data-has-breakable-content={section.break ? 'true' : undefined}
+                className={cn("grid", section.rowClassName)}
                 style={{ gridTemplateColumns }}
               >
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
-                  <div className={section.headingColumn.className}>
+                  <div
+                    className={section.headingColumn.className}
+                    style={{ gridColumn: 1 }}
+                  >
                     {itemIdx === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>
@@ -355,7 +386,13 @@ export function renderTableSection(
 
                 {/* Render content columns for each item */}
                 {columns.map((column: any, colIdx: number) => (
-                  <div key={`${itemIdx}-${colIdx}`} className={column.className}>
+                  <div
+                    key={`${itemIdx}-${colIdx}`}
+                    className={column.className}
+                    data-canbreak={column.break ? 'true' : undefined}
+                    data-has-breakable-content={column.break ? 'true' : undefined}
+                    style={{ gridColumn: section.headingColumn ? colIdx + 2 : colIdx + 1 }}
+                  >
                     {renderColumnContent(column)}
                   </div>
                 ))}

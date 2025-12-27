@@ -37,9 +37,7 @@ export function normalizeStringsFields(data: any): any {
       if (Array.isArray(data[field].items) && data[field].items.length > 0) {
         const firstItem = data[field].items[0];
         if (typeof firstItem === 'string') {
-          data[field].items = [
-            { itemId: crypto.randomUUID(), items: data[field].items }
-          ];
+          data[field].items = [{ itemId: crypto.randomUUID(), items: data[field].items }];
         }
       }
     }
@@ -74,7 +72,7 @@ export function useResumeManager(id: string) {
   useEffect(() => {
     (async () => {
       const [actualData, emptyData] = await Promise.all([getResumeData(id), getResumeEmptyData()]);
-      const localData = JSON.parse(localStorage.getItem(fullKey) ?? '{}');     
+      const localData = JSON.parse(localStorage.getItem(fullKey) ?? '{}');
 
       let finalData = actualData;
 

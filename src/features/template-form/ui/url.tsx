@@ -20,7 +20,6 @@ export const UrlInput = ({
   });
   const [open, setOpen] = useState(false);
 
-
   useEffect(() => {
     onChange({ title, link: link });
   }, [title, link]);

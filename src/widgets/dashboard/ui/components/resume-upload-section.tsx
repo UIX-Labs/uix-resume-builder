@@ -37,7 +37,7 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
 
       trackEvent('tailored_resume_upload_start', {
         fileName: selectedFile.name,
-        fileSize: selectedFile.size
+        fileSize: selectedFile.size,
       });
 
       let progress = 0;
@@ -52,7 +52,7 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
             onFileStatusChange?.('success');
             onFileChange?.(selectedFile);
             trackEvent('tailored_resume_upload_success', {
-              fileName: selectedFile.name
+              fileName: selectedFile.name,
             });
           }, 300);
         }

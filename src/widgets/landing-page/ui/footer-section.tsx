@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { Button } from "@/shared/ui/components/button";
-import Image from "next/image";
-import FooterNavigation from "./navigation-footer";
-import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useCachedUser } from "@shared/hooks/use-user";
-import { useIsMobile } from "@shared/hooks/use-mobile";
-import { MobileTextView } from "./mobile-text-view";
+import { motion } from 'framer-motion';
+import { Button } from '@/shared/ui/components/button';
+import Image from 'next/image';
+import FooterNavigation from './navigation-footer';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { MobileTextView } from './mobile-text-view';
 
 const FooterSection = () => {
   const router = useRouter();
@@ -20,19 +20,15 @@ const FooterSection = () => {
     if (isMobile) {
       setShowMobileView(true);
     } else {
-      router.push(user ? "/dashboard" : "/auth");
+      router.push(user ? '/dashboard' : '/auth');
     }
   };
   const overlays = [
     {
-      id: "colors",
+      id: 'colors',
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
-          <img
-            src="images/color-palete.svg"
-            alt="Hired at Meta"
-            className="w-full h-auto"
-          />
+          <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
       desktopPosition: { top: '-1%', left: '2%' },
@@ -42,19 +38,14 @@ const FooterSection = () => {
       initial: { rotate: -25, x: 400, y: -200, opacity: 0 },
     },
     {
-      id: "google",
+      id: 'google',
       content: (
         <div className="flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/google-logo.svg"
-                    alt="google"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/google-logo.svg" alt="google" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Google</span>
@@ -69,19 +60,14 @@ const FooterSection = () => {
       initial: { rotate: 15, x: 200, y: -150, opacity: 0 },
     },
     {
-      id: "microsoft",
+      id: 'microsoft',
       content: (
         <div className="flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/microsoft-logo.svg"
-                    alt="microsoft"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/microsoft-logo.svg" alt="microsoft" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Microsoft</span>
@@ -96,19 +82,14 @@ const FooterSection = () => {
       initial: { rotate: -24, x: 300, y: -100, opacity: 0 },
     },
     {
-      id: "apple",
+      id: 'apple',
       content: (
         <div className="flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-black">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/apple-logo.svg"
-                    alt="apple"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/apple-logo.svg" alt="apple" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Apple</span>
@@ -123,19 +104,14 @@ const FooterSection = () => {
       initial: { rotate: 13, x: 250, y: 100, opacity: 0 },
     },
     {
-      id: "meta",
+      id: 'meta',
       content: (
         <div className="absolute flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card ">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(214,235,255,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/meta-logo.svg"
-                    alt="meta"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/meta-logo.svg" alt="meta" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Meta</span>
@@ -150,19 +126,14 @@ const FooterSection = () => {
       initial: { rotate: -10, x: -200, y: 200, opacity: 0 },
     },
     {
-      id: "amazon",
+      id: 'amazon',
       content: (
         <div className="absolute flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/amazon-logo.svg"
-                    alt="amazon"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/amazon-logo.svg" alt="amazon" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Amazon</span>
@@ -177,19 +148,14 @@ const FooterSection = () => {
       initial: { rotate: 10, x: 300, y: 50, opacity: 0 },
     },
     {
-      id: "nvidia",
+      id: 'nvidia',
       content: (
         <div className="flex items-center bg-white/30 backdrop-blur-sm rounded-full p-2 shadow-[0px_10px_10px_rgba(0,0,0,0.1)] glass-card">
           <div className="bg-white rounded-full p-2">
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image
-                    src="images/nvidia-logo.svg"
-                    alt="nvidia"
-                    fill
-                    className="object-contain"
-                  />
+                  <Image src="images/nvidia-logo.svg" alt="nvidia" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Nvidia</span>
@@ -238,18 +204,11 @@ const FooterSection = () => {
 
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 sm:gap-0">
             <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-lg font-semibold text-[rgb(11,10,9)]">
-                PikaResume
-              </h2>
+              <h2 className="text-base sm:text-lg font-semibold text-[rgb(11,10,9)]">PikaResume</h2>
 
               <div className="flex items-center gap-1 bg-[rgb(2,164,79)] text-white text-xs font-bold px-3 py-1 rounded-full">
                 <span>AI Powered</span>
-                <Image
-                  src="/images/auto_awesome.svg"
-                  alt="AI Powered"
-                  width={17}
-                  height={17}
-                />
+                <Image src="/images/auto_awesome.svg" alt="AI Powered" width={17} height={17} />
               </div>
             </div>
 
@@ -270,13 +229,13 @@ const FooterSection = () => {
               top: overlay.desktopPosition.top,
               left: overlay.desktopPosition.left,
               right: overlay.desktopPosition.right,
-              width: overlay.width ? `${overlay.width}px` : "auto",
+              width: overlay.width ? `${overlay.width}px` : 'auto',
             }}
             initial={overlay.initial}
             animate={{ x: 0, y: 0, opacity: 1 }}
             transition={{
               duration: 1.2,
-              ease: "easeOut",
+              ease: 'easeOut',
               delay: i * 0.1,
             }}
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
@@ -320,12 +279,7 @@ const FooterSection = () => {
           </motion.div>
         ))} */}
 
-        {isMobile && (
-          <MobileTextView
-            isOpen={showMobileView}
-            onClose={() => setShowMobileView(false)}
-          />
-        )}
+        {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
       </div>
     </section>
   );

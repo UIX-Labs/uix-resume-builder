@@ -5,8 +5,10 @@ import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
 import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
 import { useFormDataStore, TRANSITION_TEXTS } from '@widgets/form-page-builder/models/store';
 import { useParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AlertCircle } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { Button } from '@shared/ui/button';
 import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
 
@@ -15,12 +17,29 @@ export default function FormPage() {
   const id = params.id as string;
 
   const [currentStep, setCurrentStep] = useState<ResumeDataKey>('personalDetails');
+  const queryClient = useQueryClient();
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
+  const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
+  const setFormData = useFormDataStore((state) => state.setFormData);
   const analyzerProgress = useFormDataStore((state) => state.analyzerProgress);
   const analyzerError = useFormDataStore((state) => state.analyzerError);
   const retryAnalyzer = useFormDataStore((state) => state.retryAnalyzer);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
   const currentTextIndex = useFormDataStore((state) => state.currentTextIndex);
+
+  useEffect(() => {
+    const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+    if (pendingResumeId && pendingResumeId === id) {
+      localStorage.removeItem('pending_analyzer_resume_id');
+      runAnalyzerWithProgress({
+        resumeId: id,
+        queryClient,
+        setFormData,
+        setIsAnalyzing,
+        setAnalyzerError,
+      });
+    }
+  }, [id, queryClient, setFormData, setIsAnalyzing, setAnalyzerError]);
 
   const navs = useMemo(
     () => [
@@ -86,7 +105,7 @@ export default function FormPage() {
               </div>
             </div>
           )}
-          
+
           <NewProgressBar
             isVisible={isAnalyzing && !analyzerError}
             transitionTexts={TRANSITION_TEXTS}
@@ -95,7 +114,7 @@ export default function FormPage() {
             showLoader={true}
             className="z-50"
           />
-          
+
           <FormPageBuilder />
         </div>
       </div>

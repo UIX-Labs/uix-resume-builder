@@ -1,22 +1,20 @@
-import { useInView, useMotionValue, useSpring } from "motion/react";
-import { useCallback, useEffect, useRef } from "react";
+import { useInView, useMotionValue, useSpring } from 'motion/react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export default function CountUp({
   to,
   from = 0,
-  direction = "up",
+  direction = 'up',
   delay = 0,
   duration = 2,
-  className = "",
+  className = '',
   startWhen = true,
-  separator = "",
+  separator = '',
   onStart,
   onEnd,
 }) {
   const ref = useRef(null);
-  const motionValue = useMotionValue(
-    direction === "down" ? (to ?? 0) : (from ?? 0)
-  );
+  const motionValue = useMotionValue(direction === 'down' ? (to ?? 0) : (from ?? 0));
 
   const damping = 20 + 40 * (1 / duration);
   const stiffness = 100 * (1 / duration);
@@ -26,7 +24,7 @@ export default function CountUp({
     stiffness,
   });
 
-  const isInView = useInView(ref, { once: true, margin: "0px" });
+  const isInView = useInView(ref, { once: true, margin: '0px' });
 
   const getDecimalPlaces = (num) => {
     if (num === undefined || num === null) {
@@ -35,8 +33,8 @@ export default function CountUp({
 
     const str = num.toString();
 
-    if (str.includes(".")) {
-      const decimals = str.split(".")[1];
+    if (str.includes('.')) {
+      const decimals = str.split('.')[1];
 
       if (parseInt(decimals) !== 0) {
         return decimals.length;
@@ -51,7 +49,7 @@ export default function CountUp({
   const formatValue = useCallback(
     (latest) => {
       if (latest === undefined || latest === null) {
-        return "0";
+        return '0';
       }
 
       const hasDecimals = maxDecimals > 0;
@@ -62,57 +60,45 @@ export default function CountUp({
         maximumFractionDigits: hasDecimals ? maxDecimals : 0,
       };
 
-      const formattedNumber = Intl.NumberFormat("en-US", options).format(
-        latest
-      );
+      const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
 
-      return separator
-        ? formattedNumber.replace(/,/g, separator)
-        : formattedNumber;
+      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
     },
-    [maxDecimals, separator]
+    [maxDecimals, separator],
   );
 
   useEffect(() => {
     if (ref.current) {
-      const initialValue = direction === "down" ? (to ?? 0) : (from ?? 0);
+      const initialValue = direction === 'down' ? (to ?? 0) : (from ?? 0);
       ref.current.textContent = formatValue(initialValue);
     }
   }, [from, to, direction, formatValue]);
 
   useEffect(() => {
     if (isInView && startWhen) {
-      if (typeof onStart === "function") onStart();
+      if (typeof onStart === 'function') onStart();
 
       const timeoutId = setTimeout(() => {
-        const targetValue = direction === "down" ? (from ?? 0) : (to ?? 0);
+        const targetValue = direction === 'down' ? (from ?? 0) : (to ?? 0);
         motionValue.set(targetValue);
       }, delay * 1000);
 
-      const durationTimeoutId = setTimeout(() => {
-        if (typeof onEnd === "function") onEnd();
-      }, delay * 1000 + duration * 1000);
+      const durationTimeoutId = setTimeout(
+        () => {
+          if (typeof onEnd === 'function') onEnd();
+        },
+        delay * 1000 + duration * 1000,
+      );
 
       return () => {
         clearTimeout(timeoutId);
         clearTimeout(durationTimeoutId);
       };
     }
-  }, [
-    isInView,
-    startWhen,
-    motionValue,
-    direction,
-    from,
-    to,
-    delay,
-    onStart,
-    onEnd,
-    duration,
-  ]);
+  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
 
   useEffect(() => {
-    const unsubscribe = springValue.on("change", (latest) => {
+    const unsubscribe = springValue.on('change', (latest) => {
       if (ref.current) {
         ref.current.textContent = formatValue(latest);
       }

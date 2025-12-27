@@ -1,4 +1,4 @@
-import { useFetch } from "@/shared/api/hooks/useFetch";
+import { useFetch } from '@/shared/api/hooks/useFetch';
 
 import {
   getResumeData,
@@ -10,21 +10,21 @@ import {
   fetchAllResumes,
   saveFormData,
   updateResumeTemplate,
-} from "../api";
+} from '../api';
 
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import type { ResumeData, ResumeDataKey } from "../types/resume-data";
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import type { ResumeData, ResumeDataKey } from '../types/resume-data';
 
 export function useTemplateFormSchema() {
   return useFetch({
-    queryKey: ["resume-schema"],
+    queryKey: ['resume-schema'],
     queryFn: getResumeSchema,
   });
 }
 
 export function useResumeData(id: string) {
   return useFetch({
-    queryKey: ["resume-data", id],
+    queryKey: ['resume-data', id],
     queryFn: async () => {
       const promisesArray = [getResumeData(id), getResumeEmptyData()];
       const [actualData, emptyData] = await Promise.all(promisesArray);
@@ -49,13 +49,9 @@ export function useResumeData(id: string) {
             const sourceValue = source[key];
             const targetValue = result[key];
 
-            if (key === "items" && Array.isArray(sourceValue)) {
+            if (key === 'items' && Array.isArray(sourceValue)) {
               // Special handling for items arrays
-              if (
-                !targetValue ||
-                !Array.isArray(targetValue) ||
-                targetValue.length === 0
-              ) {
+              if (!targetValue || !Array.isArray(targetValue) || targetValue.length === 0) {
                 // If target has no items, use source items (default empty items)
                 result[key] = sourceValue;
               } else {
@@ -63,7 +59,7 @@ export function useResumeData(id: string) {
                 const emptyItemTemplate = sourceValue[0];
                 result[key] = targetValue.map((item: any) => {
                   // For string arrays (interests/achievements), don't merge
-                  if (typeof emptyItemTemplate === "string") {
+                  if (typeof emptyItemTemplate === 'string') {
                     return item;
                   }
                   // For object items, recursively merge to fill missing nested fields
@@ -75,10 +71,7 @@ export function useResumeData(id: string) {
               if (targetValue === undefined || targetValue === null) {
                 result[key] = sourceValue;
               }
-            } else if (
-              typeof sourceValue === "object" &&
-              sourceValue !== null
-            ) {
+            } else if (typeof sourceValue === 'object' && sourceValue !== null) {
               // Recursively merge nested objects
               result[key] = deepMerge(targetValue, sourceValue);
             } else {
@@ -95,16 +88,13 @@ export function useResumeData(id: string) {
 
       const mergedRes: ResumeData & { isAnalyzed?: boolean } = {
         ...actualData,
-        templateId: (actualData as any).templateId || "", // Ensure templateId is always present
+        templateId: (actualData as any).templateId || '', // Ensure templateId is always present
         isAnalyzed: (actualData as any).isAnalyzed, // Preserve isAnalyzed flag from API response
       };
 
       Object.keys(emptyData).forEach((key) => {
         const resumeKey = key as keyof typeof emptyData;
-        mergedRes[resumeKey] = deepMerge(
-          actualData[resumeKey],
-          emptyData[resumeKey]
-        );
+        mergedRes[resumeKey] = deepMerge(actualData[resumeKey], emptyData[resumeKey]);
       });
 
       return mergedRes;
@@ -114,7 +104,7 @@ export function useResumeData(id: string) {
 
 export function useResumeEmptyData() {
   return useFetch({
-    queryKey: ["resume-empty-data"],
+    queryKey: ['resume-empty-data'],
     queryFn: getResumeEmptyData,
   });
 }
@@ -125,7 +115,7 @@ export const useDeleteResume = () => {
   return useMutation({
     mutationFn: deleteResume,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
@@ -136,7 +126,7 @@ export const useUpdateResumeTemplate = () => {
   return useMutation({
     mutationFn: updateResumeTemplate,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
@@ -149,7 +139,7 @@ export const useParseLinkedInProfile = () => {
 
 export const useGetAllResumes = ({ userId }: { userId: string }) => {
   return useFetch({
-    queryKey: ["resumes", userId],
+    queryKey: ['resumes', userId],
     queryFn: () => fetchAllResumes(userId),
     staleTime: 0,
   });
@@ -161,16 +151,13 @@ export const useParsePdfResume = () => {
   return useMutation({
     mutationFn: (file: File) => parsePdfResume(file),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
 
 export const useSaveResumeForm = () => {
   return useMutation({
-    mutationFn: (data: {
-      type: ResumeDataKey;
-      data: ResumeData[ResumeDataKey];
-    }) => saveFormData(data),
+    mutationFn: (data: { type: ResumeDataKey; data: ResumeData[ResumeDataKey] }) => saveFormData(data),
   });
 };

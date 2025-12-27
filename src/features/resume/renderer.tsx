@@ -349,7 +349,9 @@ export function ResumeRenderer({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
+                  <React.Fragment key={i}>
+                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                  </React.Fragment>
                 ))}
               </div>
             )}

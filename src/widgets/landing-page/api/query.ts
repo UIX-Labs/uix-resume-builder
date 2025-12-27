@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCurrentStats } from "./stats";
+import { useQuery } from '@tanstack/react-query';
+import { getCurrentStats } from './stats';
 
 const getCurrentStatsQuery = () => {
   return useQuery({
-    queryKey: ["currentStats"],
+    queryKey: ['currentStats'],
     queryFn: getCurrentStats,
   });
 };

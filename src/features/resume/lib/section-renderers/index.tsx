@@ -46,8 +46,8 @@ export function renderSection(
   if (section.type === 'list-section')
     return renderListSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'two-column-layout')
- return renderTwoColumnLayout(section, data, currentSection, hasSuggestions, isThumbnail, renderSection); 
- if (section.type === 'content-section')
+    return renderTwoColumnLayout(section, data, currentSection, hasSuggestions, isThumbnail, renderSection);
+  if (section.type === 'content-section')
     return renderContentSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'inline-list-section')
     return renderInlineListSection(section, data, currentSection, hasSuggestions, isThumbnail);

@@ -142,11 +142,7 @@ export default function GetAllResumesPage() {
         </div>
       </div>
 
-      <PreviewModal
-        template={previewTemplate}
-        isOpen={isPreviewOpen}
-        onClose={() => setIsPreviewOpen(false)}
-      />
+      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </SidebarProvider>
   );
 }

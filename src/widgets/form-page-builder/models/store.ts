@@ -9,7 +9,7 @@ export interface TransitionText {
 export const TRANSITION_TEXTS: TransitionText[] = [
   {
     title: 'Parsing',
-    subtitle: 'Polishing words so recruiters can\'t look away',
+    subtitle: "Polishing words so recruiters can't look away",
   },
   {
     title: 'Analyzing',

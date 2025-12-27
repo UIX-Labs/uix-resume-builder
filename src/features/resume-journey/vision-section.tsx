@@ -29,9 +29,8 @@ export function VisionSection() {
           className="max-w-[500px] font-medium text-base sm:text-lg md:text-xl leading-[1.456em] tracking-[-0.02em] text-[#666666]"
           style={{ fontFamily: 'Geist, sans-serif' }}
         >
-          We're not just building resumes - we're rebuilding confidence.{' '}
-          A world where rejections guide you, not break you.{' '}
-          Where every skill finds its spotlight.
+          We're not just building resumes - we're rebuilding confidence. A world where rejections guide you, not break
+          you. Where every skill finds its spotlight.
         </p>
       </div>
 
@@ -50,10 +49,7 @@ export function VisionSection() {
 
         <div className="absolute left-[239px] top-0 flex flex-col items-start text-left">
           <div className="relative flex items-center justify-start gap-3 mb-4 w-full">
-            <div
-              className="w-[13px] h-[13px] rounded-full bg-[#309F66] flex-shrink-0"
-              aria-hidden="true"
-            />
+            <div className="w-[13px] h-[13px] rounded-full bg-[#309F66] flex-shrink-0" aria-hidden="true" />
 
             <h2
               className="font-extrabold text-[40px] leading-[1.2em] tracking-[-0.02em] text-[#171717]"
@@ -67,9 +63,8 @@ export function VisionSection() {
             className="max-w-[569px] font-medium text-[20px] leading-[1.456em] tracking-[-0.02em] text-[#666666]"
             style={{ fontFamily: 'Geist, sans-serif' }}
           >
-            We're not just building resumes - we're rebuilding confidence.{' '}
-            A world where rejections guide you, not break you.{' '}
-            Where every skill finds its spotlight.
+            We're not just building resumes - we're rebuilding confidence. A world where rejections guide you, not break
+            you. Where every skill finds its spotlight.
           </p>
         </div>
       </div>

@@ -33,4 +33,3 @@ export const WebsiteIcon: React.FC<WebsiteIconProps> = ({
     </svg>
   );
 };
-

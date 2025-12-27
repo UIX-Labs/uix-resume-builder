@@ -1,31 +1,33 @@
-'use client'
+'use client';
 
-import { useRef, useState } from 'react'
-import { RoastCard } from './roast-card'
-import { RoastActions } from './roast-actions'
-import { useRoastSharing } from '../hooks/use-roast-sharing'
+import { useRef, useState } from 'react';
+import { RoastCard } from './roast-card';
+import { RoastActions } from './roast-actions';
+import { useRoastSharing } from '../hooks/use-roast-sharing';
 
 export function TypewriterRoast({
   content,
+  resumeId,
   onRoastAnother,
 }: {
-  content: string
-  onRoastAnother: () => void
+  content: string;
+  resumeId: string;
+  onRoastAnother: () => void;
 }) {
-  const [activeLineIndex, setActiveLineIndex] = useState(0)
-  const roastRef = useRef<HTMLDivElement>(null)
+  const [activeLineIndex, setActiveLineIndex] = useState(0);
+  const roastRef = useRef<HTMLDivElement>(null);
 
   const { isShareAvailable, handleShare, downloadImage } = useRoastSharing({
     roastRef,
-  })
+  });
 
   // Parse content into lines, handling the markdown bullet points
   // Split by newline, but sometimes markdown has soft wraps.
   // Assuming the roast comes as * Item \n * Item
-  const lines = content.split('\n').filter((line) => line.trim().length > 0)
+  const lines = content.split('\n').filter((line) => line.trim().length > 0);
 
   return (
-    <div className='w-full max-w-3xl mx-auto'>
+    <div className="w-full max-w-3xl mx-auto">
       <RoastCard
         ref={roastRef}
         lines={lines}
@@ -39,8 +41,9 @@ export function TypewriterRoast({
           onDownload={downloadImage}
           onRoastAnother={onRoastAnother}
           isShareAvailable={isShareAvailable}
+          resumeId={resumeId}
         />
       )}
     </div>
-  )
+  );
 }

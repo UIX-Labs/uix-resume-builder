@@ -38,4 +38,3 @@ export const LinkedInIcon: React.FC<LinkedInIconProps> = ({
     </svg>
   );
 };
-

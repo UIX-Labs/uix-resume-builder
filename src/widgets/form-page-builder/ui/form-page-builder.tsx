@@ -1,45 +1,62 @@
-import { useGetAllResumes, useTemplateFormSchema, useUpdateResumeTemplate, getResumeEmptyData } from '@entities/resume';
-import { generateThumbnail, ResumeRenderer } from '@features/resume/renderer';
-import { ThumbnailRenderer } from '@features/resume/lib/thumbnail/thumbnail-renderer';
-import aniketTemplate from '@features/resume/templates/standard';
-import { TemplateForm } from '@features/template-form';
-import { Button } from '@shared/ui/button';
-import { useEffect, useRef, useState, useCallback } from 'react';
-import { useFormPageBuilder } from '../models/ctx';
-import { useFormDataStore } from '../models/store';
-import { camelToHumanString } from '@shared/lib/string';
-import { Resolution, usePDF } from 'react-to-pdf';
-import { useParams } from 'next/navigation';
-import { uploadThumbnail } from '@entities/resume/api/upload-resume';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { toast } from 'sonner';
-import { useResumeManager, deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import type { Template } from '@entities/template-page/api/template-data';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import AnalyzerModal from '@shared/ui/components/analyzer-modal';
-import mockData from '../../../../mock-data.json';
+import {
+  useGetAllResumes,
+  useTemplateFormSchema,
+  useUpdateResumeTemplate,
+  getResumeEmptyData,
+} from "@entities/resume";
+import { generateThumbnail, ResumeRenderer } from "@features/resume/renderer";
+import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-renderer";
+import aniketTemplate from "@features/resume/templates/standard";
+import { TemplateForm } from "@features/template-form";
+import { Button } from "@shared/ui/button";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { useFormPageBuilder } from "../models/ctx";
+import { useFormDataStore } from "../models/store";
+import { camelToHumanString } from "@shared/lib/string";
+import { Resolution, usePDF } from "react-to-pdf";
+import { useParams } from "next/navigation";
+import { uploadThumbnail } from "@entities/resume/api/upload-resume";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserProfile } from "@shared/hooks/use-user";
+import { toast } from "sonner";
+import {
+  useResumeManager,
+  deepMerge,
+  normalizeStringsFields,
+} from "@entities/resume/models/use-resume-data";
+import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
+import type { Template } from "@entities/template-page/api/template-data";
+import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
+import { PreviewButton } from "@shared/ui/components/preview-button";
+import AnalyzerModal from "@shared/ui/components/analyzer-modal";
+import mockData from "../../../../mock-data.json";
 
-import type { SuggestedUpdate, ResumeData, SuggestionType } from '@entities/resume';
+import type {
+  SuggestedUpdate,
+  ResumeData,
+  SuggestionType,
+} from "@entities/resume";
+import { syncMockDataWithActualIds } from "../lib/data-cleanup";
 import {
   findItemById,
   applySuggestionsToFieldValue,
   applySuggestionsToArrayField,
   removeAppliedSuggestions,
   updateItemFieldValue,
-} from '../lib/suggestion-helpers';
-import { getCleanDataForRenderer, isSectionModified } from '../lib/data-cleanup';
-import { useAnalyzerStore } from '@shared/stores/analyzer-store';
-import { Download, GripVertical } from 'lucide-react';
-import TemplateButton from './change-template-button';
-import { trackEvent, startTimedEvent } from '@shared/lib/analytics/Mixpanel';
-import { saveSectionWithSuggestions } from '../lib/save-helpers';
-import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { usePdfGeneration } from '../hooks/use-pdf-generation';
-import { useQueryInvalidationOnNavigation } from '../hooks/use-query-invalidation';
-import { formatTimeAgo } from '../lib/time-helpers';
+} from "../lib/suggestion-helpers";
+import {
+  getCleanDataForRenderer,
+  isSectionModified,
+} from "../lib/data-cleanup";
+import { useAnalyzerStore } from "@shared/stores/analyzer-store";
+import { Download, GripVertical } from "lucide-react";
+import TemplateButton from "./change-template-button";
+import { trackEvent, startTimedEvent } from "@shared/lib/analytics/Mixpanel";
+import { saveSectionWithSuggestions } from "../lib/save-helpers";
+import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
+import { usePdfGeneration } from "../hooks/use-pdf-generation";
+import { useQueryInvalidationOnNavigation } from "../hooks/use-query-invalidation";
+import { formatTimeAgo } from "../lib/time-helpers";
 
 // Custom debounce function
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
@@ -84,7 +101,13 @@ function isSectionEmpty(section: any): boolean {
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
           // Skip id, title, itemId, rank, ongoing and metadata fields
-          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank' || key === 'title') {
+          if (
+            key === "id" ||
+            key === "itemId" ||
+            key === "ongoing" ||
+            key === "rank" ||
+            key === "title"
+          ) {
             return false;
           }
 
@@ -118,38 +141,148 @@ function isSectionEmpty(section: any): boolean {
 }
 
 /**
- * Syncs IDs from actual section to mock section
- * Preserves actual IDs while using mock data content
+ * Checks if a field value is empty
  */
-function syncSectionIds(actualSection: any, mockSection: any): any {
-  if (!actualSection || !mockSection) {
-    return mockSection;
+function isFieldEmpty(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === "string") return value.trim() === "";
+  if (Array.isArray(value)) {
+    if (value.length === 0) return true;
+    // Check if all array items are empty strings
+    return value.every(
+      (item) => typeof item === "string" && item.trim() === ""
+    );
   }
-
-  const synced = { ...mockSection };
-
-  // Sync section ID
-  if (actualSection.id) {
-    synced.id = actualSection.id;
-  }
-
-  // Sync itemIds in items array
-  if (Array.isArray(synced.items) && Array.isArray(actualSection.items)) {
-    synced.items = synced.items.map((mockItem: any, index: number) => {
-      if (typeof mockItem === 'object' && mockItem !== null) {
-        const actualItem = actualSection.items[index];
-        if (actualItem && typeof actualItem === 'object' && actualItem !== null) {
-          return {
-            ...mockItem,
-            itemId: actualItem.itemId || mockItem.itemId,
-          };
-        }
-      }
-      return mockItem;
+  if (typeof value === "object") {
+    // For nested objects like duration, links - check if all nested values are empty
+    return Object.entries(value).every(([key, val]) => {
+      if (key === "ongoing") return true; // Skip boolean flags
+      return isFieldEmpty(val);
     });
   }
+  return false;
+}
 
-  return synced;
+/**
+ * Deep merges form item with mock item, using mock values as fallback for empty fields
+ */
+function mergeItemWithMockFallback(
+  formItem: Record<string, unknown>,
+  mockItem: Record<string, unknown>
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = { ...formItem };
+
+  for (const [key, mockValue] of Object.entries(mockItem)) {
+    // Skip ID fields - always use form IDs
+    if (key === "id" || key === "itemId") continue;
+
+    const formValue = formItem[key];
+
+    if (isFieldEmpty(formValue) && !isFieldEmpty(mockValue)) {
+      // Use mock value as fallback for empty form fields
+      merged[key] = mockValue;
+    }
+  }
+
+  return merged;
+}
+
+/**
+ * Gets data for the renderer by merging form data with mock data
+ * For create mode: uses mock data as fallback for empty fields
+ * For edit mode: uses form data directly
+ */
+function getRendererDataWithMockFallback(
+  formData: Record<string, unknown>,
+  isCreateMode: boolean
+): Record<string, unknown> {
+  if (!isCreateMode) {
+    return formData;
+  }
+
+  // In create mode, merge with mock data as fallback at field level
+  const mergedData: Record<string, unknown> = {};
+  const mockDataTyped = mockData as Record<string, unknown>;
+
+  // Get all keys from both formData and mockData
+  const allKeys = new Set([
+    ...Object.keys(formData),
+    ...Object.keys(mockDataTyped),
+  ]);
+
+  for (const sectionKey of allKeys) {
+    if (sectionKey === "templateId" || sectionKey === "updatedAt") {
+      mergedData[sectionKey] = formData[sectionKey];
+      continue;
+    }
+
+    const formSection = formData[sectionKey] as
+      | Record<string, unknown>
+      | undefined;
+    const mockSection = mockDataTyped[sectionKey] as
+      | Record<string, unknown>
+      | undefined;
+
+    if (!formSection) {
+      // No form section, use mock section with synced IDs
+      if (mockSection) {
+        const syncedMock = syncMockDataWithActualIds(
+          { [sectionKey]: formSection },
+          { [sectionKey]: mockSection }
+        );
+        mergedData[sectionKey] = syncedMock[sectionKey];
+      }
+      continue;
+    }
+
+    if (!mockSection) {
+      // No mock section, use form section as-is
+      mergedData[sectionKey] = formSection;
+      continue;
+    }
+
+    // Both exist - merge at field level within items
+    const mergedSection: Record<string, unknown> = {
+      ...formSection,
+    };
+
+    // Preserve section-level properties from form
+    if ("id" in formSection) mergedSection.id = formSection.id;
+    if ("isHidden" in formSection)
+      mergedSection.isHidden = formSection.isHidden;
+    if ("suggestedUpdates" in formSection)
+      mergedSection.suggestedUpdates = formSection.suggestedUpdates;
+
+    // Merge items array at field level
+    const formItems = formSection.items as
+      | Array<Record<string, unknown>>
+      | undefined;
+    const mockItems = mockSection.items as
+      | Array<Record<string, unknown>>
+      | undefined;
+
+    if (Array.isArray(formItems) && Array.isArray(mockItems)) {
+      mergedSection.items = formItems.map((formItem, index) => {
+        const mockItem = mockItems[index];
+        if (!mockItem) return formItem;
+
+        // Handle string items (like in achievements/interests)
+        if (typeof formItem === "string" || typeof formItem !== "object") {
+          return isFieldEmpty(formItem) ? mockItem : formItem;
+        }
+
+        // Handle object items - merge field by field
+        return mergeItemWithMockFallback(
+          formItem as Record<string, unknown>,
+          mockItem as Record<string, unknown>
+        );
+      });
+    }
+
+    mergedData[sectionKey] = mergedSection;
+  }
+
+  return mergedData;
 }
 
 export function FormPageBuilder() {
@@ -161,6 +294,7 @@ export function FormPageBuilder() {
 
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isCreateMode, setIsCreateMode] = useState(false);
 
   // const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   // const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
@@ -270,23 +404,23 @@ export function FormPageBuilder() {
 
     const handleMouseUp = () => {
       isDragging.current = false;
-      document.body.style.cursor = 'default';
-      document.body.style.userSelect = 'auto';
+      document.body.style.cursor = "default";
+      document.body.style.userSelect = "auto";
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
   }, []);
 
   const startResizing = () => {
     isDragging.current = true;
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
   };
 
   const handleDownloadPDF = async () => {
@@ -396,31 +530,16 @@ export function FormPageBuilder() {
       console.log('allSectionsEmpty', allSectionsEmpty);
 
       if (allSectionsEmpty) {
-        const mergedData: Record<string, any> = {};
-
-        for (const sectionKey of Object.keys(data)) {
-          if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
-            mergedData[sectionKey] = data[sectionKey as keyof typeof data];
-            continue;
-          }
-
-          const actualSection = data[sectionKey as keyof typeof data];
-          const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-          if (mockSection) {
-            const syncedSection = syncSectionIds(actualSection, mockSection);
-            mergedData[sectionKey] = syncedSection;
-          } else {
-            mergedData[sectionKey] = actualSection;
-          }
-        }
-
+        // Create mode: form stays empty, renderer will use mock data as preview
+        setIsCreateMode(true);
         useFormDataStore.setState({
-          formData: mergedData as Omit<ResumeData, 'templateId'>,
+          formData: data as Omit<ResumeData, "templateId">,
         });
       } else {
+        // Edit mode: form shows existing data
+        setIsCreateMode(false);
         useFormDataStore.setState({
-          formData: data as Omit<ResumeData, 'templateId'>,
+          formData: data as Omit<ResumeData, "templateId">,
         });
       }
     }
@@ -444,7 +563,9 @@ export function FormPageBuilder() {
     // Small delay to ensure pages are rendered after pagination
     const scrollTimer = setTimeout(() => {
       // Find section by matching data-section attribute that contains the current step name
-      const allSections = targetRef.current!.querySelectorAll('[data-section]') as NodeListOf<HTMLElement>;
+      const allSections = targetRef.current!.querySelectorAll(
+        "[data-section]"
+      ) as NodeListOf<HTMLElement>;
 
       for (const element of Array.from(allSections)) {
         // Skip hidden elements (like the dummy content used for pagination)
@@ -893,8 +1014,8 @@ export function FormPageBuilder() {
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] relative"
         style={{
           width: `${leftWidth}%`,
-          minWidth: '30%',
-          maxWidth: '70%',
+          minWidth: "30%",
+          maxWidth: "70%",
           flexShrink: 0,
         }}
       >
@@ -903,18 +1024,24 @@ export function FormPageBuilder() {
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
 
-        <div className="min-w-0 flex-1 flex justify-center relative" ref={previewWrapperRef}>
+        <div
+          className="min-w-0 flex-1 flex justify-center relative"
+          ref={previewWrapperRef}
+        >
           <div
             ref={targetRef}
             style={{
               transform: `scale(${previewScale})`,
-              transformOrigin: 'top center',
+              transformOrigin: "top center",
             }}
           >
             {selectedTemplate ? (
               <ResumeRenderer
                 template={selectedTemplate?.json ?? aniketTemplate}
-                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                data={getCleanDataForRenderer(
+                  getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+                  isGeneratingPDF
+                )}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
@@ -930,14 +1057,14 @@ export function FormPageBuilder() {
           {/* This renderer always has isThumbnail=true, which ensures all images are proxied to avoid CORS issues */}
           <div
             style={{
-              position: 'absolute',
-              left: '0',
-              top: '0',
-              width: '794px', // A4 width
-              height: '0',
-              overflow: 'hidden',
-              pointerEvents: 'none',
-              zIndex: '-9999',
+              position: "absolute",
+              left: "0",
+              top: "0",
+              width: "794px", // A4 width
+              height: "0",
+              overflow: "hidden",
+              pointerEvents: "none",
+              zIndex: "-9999",
             }}
             aria-hidden="true"
           >
@@ -945,7 +1072,13 @@ export function FormPageBuilder() {
               {selectedTemplate && (
                 <ThumbnailRenderer
                   template={selectedTemplate?.json ?? aniketTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(
+                    getRendererDataWithMockFallback(
+                      formData ?? {},
+                      isCreateMode
+                    ),
+                    false
+                  )}
                 />
               )}
             </div>
@@ -1100,7 +1233,10 @@ export function FormPageBuilder() {
           template={selectedTemplate}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
-          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
+          resumeData={getCleanDataForRenderer(
+            getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+            false
+          )}
         />
       )}
     </div>

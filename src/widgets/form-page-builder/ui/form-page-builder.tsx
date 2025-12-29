@@ -22,6 +22,8 @@ import { useTemplateManagement } from "../hooks/use-template-management";
 import { usePdfDownload } from "../hooks/use-pdf-download";
 import { useAutoThumbnail } from "../hooks/use-auto-thumbnail";
 import { useSaveAndNext } from "../hooks/use-save-and-next";
+import { useAutoSave } from "../hooks/use-auto-save";
+import { useResizablePanel } from "../hooks/use-resizable-panel";
 import { useSaveResumeForm } from "@entities/resume";
 import { getResumeEmptyData, type ResumeData } from "@entities/resume";
 import { deepMerge } from "@entities/resume/models/use-resume-data";
@@ -36,6 +38,7 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from "../lib/suggestion-helpers";
+import { isSectionEmpty, syncSectionIds } from "../lib/section-utils";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
 import { useQueryClient } from "@tanstack/react-query";
@@ -43,111 +46,6 @@ import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
 import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
 import { formatTimeAgo } from "../lib/time-helpers";
-import aniketTemplate from "@features/resume/templates/standard";
-
-/**
- * Checks if a single section is empty
- * Returns true if section has no meaningful data
- */
-function isSectionEmpty(section: any): boolean {
-  if (!section || typeof section !== "object") {
-    return true;
-  }
-
-  if ("items" in section && Array.isArray(section.items)) {
-    const items = section.items;
-
-    if (items.length === 0) {
-      return true;
-    }
-
-    // Check if items contain any non-empty values
-    // If ANY item has ANY non-empty field, return false
-    // Only return true if ALL items are empty
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-
-      if (typeof item === "string" && item.trim() !== "") {
-        return false;
-      } else if (typeof item === "object" && item !== null) {
-        const hasNonEmptyField = Object.entries(item).some(([key, value]) => {
-          // Skip id, title, itemId, rank, ongoing and metadata fields
-          if (
-            key === "id" ||
-            key === "itemId" ||
-            key === "ongoing" ||
-            key === "rank" ||
-            key === "title"
-          ) {
-            return false;
-          }
-
-          if (typeof value === "string") {
-            return value.trim() !== "";
-          }
-
-          if (typeof value === "object" && value !== null) {
-            return Object.values(value).some(
-              (v) => typeof v === "string" && v.trim() !== ""
-            );
-          }
-
-          if (Array.isArray(value)) {
-            return value.some((v) => typeof v === "string" && v.trim() !== "");
-          }
-
-          return false;
-        });
-
-        // If this item has any non-empty field, the section is not empty
-        if (hasNonEmptyField) {
-          return false;
-        }
-      }
-    }
-  }
-
-  return true;
-}
-
-/**
- * Syncs IDs from actual section to mock section
- * Preserves actual IDs while using mock data content
- */
-function syncSectionIds(actualSection: any, mockSection: any): any {
-  if (!actualSection || !mockSection) {
-    return mockSection;
-  }
-
-  const synced = { ...mockSection };
-
-  // Sync section ID
-  if (actualSection.id) {
-    synced.id = actualSection.id;
-  }
-
-  // Sync itemIds in items array
-  if (Array.isArray(synced.items) && Array.isArray(actualSection.items)) {
-    synced.items = synced.items.map((mockItem: any, index: number) => {
-      if (typeof mockItem === "object" && mockItem !== null) {
-        const actualItem = actualSection.items[index];
-        if (
-          actualItem &&
-          typeof actualItem === "object" &&
-          actualItem !== null
-        ) {
-          return {
-            ...mockItem,
-            itemId: actualItem.itemId || mockItem.itemId,
-          };
-        }
-      }
-      return mockItem;
-    });
-  }
-
-  return synced;
-}
 
 export function FormPageBuilder() {
   const params = useParams();
@@ -168,10 +66,11 @@ export function FormPageBuilder() {
   // Last save time state
   const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
 
-  // Resizable logic
-  const [leftWidth, setLeftWidth] = useState(50);
-  const isDragging = useRef(false);
-  const [previewScale, setPreviewScale] = useState(1);
+  // Resizable panel logic
+  const { leftWidth, previewScale, startResizing } = useResizablePanel({
+    containerRef,
+    previewWrapperRef,
+  });
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -200,14 +99,7 @@ export function FormPageBuilder() {
     resumeId,
   });
 
-  const {
-    isWishlistModalOpen,
-    setIsWishlistModalOpen,
-    isWishlistSuccessModalOpen,
-    setIsWishlistSuccessModalOpen,
-    handleWaitlistJoinSuccess,
-    handleDownloadPDF,
-  } = usePdfDownload({ resumeId, generatePDF });
+  const { handleDownloadPDF } = usePdfDownload({ resumeId, generatePDF });
 
   useAutoThumbnail({
     resumeId,
@@ -241,63 +133,14 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail,
   });
 
-  // Resizable panel logic
-  useEffect(() => {
-    const element = previewWrapperRef.current;
-    if (!element) return;
-
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const width = entry.contentRect.width;
-        // 794px is the fixed width of the resume
-        // We add some padding (e.g. 40px) to ensure it doesn't touch the edges
-        const scale = (width - 40) / 794;
-        setPreviewScale(Math.max(scale, 0.4)); // Minimum scale 0.4
-      }
-    });
-
-    resizeObserver.observe(element);
-    return () => resizeObserver.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging.current || !containerRef.current) return;
-
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const newLeftWidth = e.clientX - containerRect.left;
-      const newPercent = (newLeftWidth / containerRect.width) * 100;
-
-      const minLeftWidthPx = (containerRect.height * 794) / 1122 + 40;
-      const minPercent = (minLeftWidthPx / containerRect.width) * 100;
-
-      const effectiveMinPercent = Math.max(minPercent, 20);
-
-      if (newPercent > effectiveMinPercent && newPercent < 70) {
-        setLeftWidth(newPercent);
-      }
-    };
-
-    const handleMouseUp = () => {
-      isDragging.current = false;
-      document.body.style.cursor = "default";
-      document.body.style.userSelect = "auto";
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, []);
-
-  const startResizing = () => {
-    isDragging.current = true;
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
-  };
+  // Auto-save functionality - saves current section after 25s of inactivity
+  useAutoSave({
+    currentStep,
+    formData,
+    save,
+    onSaveComplete: () => setLastSaveTime(Date.now()),
+    debounceMs: 25000,
+  });
 
   // Keyboard shortcut for save
   useEffect(() => {
@@ -353,8 +196,11 @@ export function FormPageBuilder() {
   const handleToggleHideSection = useCallback(
     (sectionId: string, isHidden: boolean) => {
       const sectionData = formData[sectionId as keyof typeof formData];
-      if (sectionData) {
-        debouncedHideSave(sectionId, { ...sectionData, isHidden });
+      if (sectionData && typeof sectionData === "object") {
+        debouncedHideSave(sectionId, {
+          ...(sectionData as Record<string, unknown>),
+          isHidden,
+        });
         toast.success(
           isHidden ? `Section hidden from resume` : `Section visible in resume`
         );
@@ -635,7 +481,10 @@ export function FormPageBuilder() {
         const mockSection = (mockData as Record<string, any>)[sectionKey];
 
         if (mockSection) {
-          const syncedSection = syncSectionIds(actualSection, mockSection);
+          const syncedSection = syncSectionIds(
+            actualSection as Record<string, unknown>,
+            mockSection as Record<string, unknown>
+          );
           mergedData[sectionKey] = syncedSection;
         } else {
           mergedData[sectionKey] = actualSection;
@@ -751,7 +600,7 @@ export function FormPageBuilder() {
           >
             {selectedTemplate ? (
               <ResumeRenderer
-                template={selectedTemplate.json ?? aniketTemplate}
+                template={selectedTemplate}
                 data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
@@ -842,8 +691,20 @@ export function FormPageBuilder() {
       </div>
       {/* Resizer Handle */}
       <div
+        role="slider"
+        aria-orientation="vertical"
+        aria-label="Resize panels"
+        aria-valuemin={20}
+        aria-valuemax={70}
+        aria-valuenow={Math.round(leftWidth)}
+        tabIndex={0}
         className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
         onMouseDown={startResizing}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            startResizing();
+          }
+        }}
       >
         <div className="w-2 h-12 bg-gray-300 rounded-full flex items-center justify-center">
           <GripVertical className="w-2 h-2 text-gray-500" />
@@ -911,7 +772,7 @@ export function FormPageBuilder() {
           resumeId={resumeId}
         />
       )}
-      {isWishlistModalOpen && (
+      {/* {isWishlistModalOpen && (
         <WishlistModal
           isOpen={isWishlistModalOpen}
           onClose={() => setIsWishlistModalOpen(false)}
@@ -923,7 +784,7 @@ export function FormPageBuilder() {
           isOpen={isWishlistSuccessModalOpen}
           onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
-      )}
+      )} */}
       {/* Resume Preview Modal */}
       {selectedTemplate && (
         <PreviewModal

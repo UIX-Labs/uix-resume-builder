@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useUpdateResumeTemplate } from "@entities/resume";
-import { Template } from "@entities/template-page/api/template-data";
+import type { Template } from "@entities/template-page/api/template-data";
 import { toast } from "sonner";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
 import aniketTemplate from "@features/resume/templates/standard";

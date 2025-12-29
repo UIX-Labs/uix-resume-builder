@@ -13,6 +13,7 @@ export function renderField(
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
+  skipImageFallbacks?: boolean,
 ): React.ReactNode {
   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
   const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
@@ -22,7 +23,7 @@ export function renderField(
     return (
       <div className={cn(field.className)}>
         {field.children?.map((child: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(child, data, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
+          <React.Fragment key={idx}>{renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}</React.Fragment>
         ))}
       </div>
     );
@@ -81,7 +82,7 @@ export function renderField(
           </div>
         )}
         {field.items?.map((subField: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(subField, data)}</React.Fragment>
+          <React.Fragment key={idx}>{renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}</React.Fragment>
         ))}
       </div>
     );
@@ -93,7 +94,7 @@ export function renderField(
         {field.items.map((subField: any, idx: number) => (
           <React.Fragment key={idx}>
             {idx > 0 && field.separator && <span>{field.separator}</span>}
-            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}
           </React.Fragment>
         ))}
       </div>
@@ -105,7 +106,7 @@ export function renderField(
     const renderedItems = field.items
       .map((subField: any, idx: number) => ({
         idx,
-        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks),
       }))
       .filter(
         ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
@@ -154,14 +155,18 @@ export function renderField(
   }
 
   if (field.type === 'image') {
-    const src = resolvePath(data, field.path, field.fallback)?.replace(
-      /&amp;/g,
-      "&"
-    );
-    if (!src && !field.fallback) return null;
+    // Get the actual value from data path (without fallback first to check if real image exists)
+    const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, "&");
+    const hasActualImage = actualSrc && actualSrc.trim() !== "";
+    
+    // When skipImageFallbacks is true (during PDF generation), don't use fallback
+    // This hides the profile image section if no real image is uploaded
+    if (skipImageFallbacks && !hasActualImage) {
+      return null;
+    }
 
-    // Determine the actual image URL (use src if available, otherwise fallback)
-    const actualImageUrl = src && src.trim() !== "" ? src : field.fallback;
+    const src = hasActualImage ? actualSrc : field.fallback;
+    if (!src) return null;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {
@@ -171,14 +176,14 @@ export function renderField(
     // Use proxy ONLY for thumbnails with external URLs to avoid CORS issues
     // Local images (like /images/google.svg) don't need proxying
     const imageSrc =
-      isThumbnail && actualImageUrl && isExternalUrl(actualImageUrl)
-        ? `/api/proxy-image?url=${encodeURIComponent(actualImageUrl)}`
-        : actualImageUrl;
+      isThumbnail && src && isExternalUrl(src)
+        ? `/api/proxy-image?url=${encodeURIComponent(src)}`
+        : src;
 
     return (
       <img
         src={imageSrc}
-        crossOrigin={isThumbnail && isExternalUrl(actualImageUrl) ? 'anonymous' : undefined}
+        crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
         alt={field.alt || 'Image'}
         className={cn(field.className)}
       />
@@ -190,7 +195,7 @@ export function renderField(
       <div className={field.className}>
         {field.items.map((subField: any, idx: number) => (
           <React.Fragment key={idx}>
-            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail)}
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}
           </React.Fragment>
         ))}
       </div>
@@ -230,7 +235,7 @@ export function renderField(
   if (field.type === 'inline-group-with-icon') {
     const renderedItems = field.items.map((subField: any, idx: number) => ({
       idx,
-      element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail),
+      element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks),
       isIcon: subField.type === 'icon',
       subField,
     }));

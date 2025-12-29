@@ -1,10 +1,9 @@
 import { PreviewButton } from "@shared/ui/components/preview-button";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { useFormPageBuilder } from "../models/ctx";
 import { ResumeRenderer } from "@features/resume/renderer";
 import { useFormDataStore } from "../models/store";
 import { getCleanDataForRenderer } from "../lib/data-cleanup";
-import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-renderer";
 import TemplateButton from "./change-template-button";
 import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
 import { Button } from "@shared/ui/button";
@@ -100,6 +99,23 @@ export function FormPageBuilder() {
   });
 
   const { handleDownloadPDF } = usePdfDownload({ resumeId, generatePDF });
+
+  // Memoize cleaned data for renderer to prevent unnecessary re-renders
+  // Only recompute when formData or isGeneratingPDF actually changes
+  const cleanedDataForPreview = useMemo(
+    () => getCleanDataForRenderer(formData ?? {}, isGeneratingPDF),
+    [formData, isGeneratingPDF]
+  );
+
+  const cleanedDataForThumbnail = useMemo(
+    () => getCleanDataForRenderer(formData ?? {}, true),
+    [formData]
+  );
+
+  const cleanedDataForModal = useMemo(
+    () => getCleanDataForRenderer(formData ?? {}, false),
+    [formData]
+  );
 
   useAutoThumbnail({
     resumeId,
@@ -601,10 +617,11 @@ export function FormPageBuilder() {
             {selectedTemplate ? (
               <ResumeRenderer
                 template={selectedTemplate}
-                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                data={cleanedDataForPreview}
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
+                skipImageFallbacks={isGeneratingPDF}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -628,9 +645,13 @@ export function FormPageBuilder() {
           >
             <div ref={thumbnailRef}>
               {selectedTemplate && (
-                <ThumbnailRenderer
+                <ResumeRenderer
                   template={selectedTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={cleanedDataForThumbnail}
+                  currentSection={undefined}
+                  hasSuggestions={false}
+                  isThumbnail={true}
+                  skipImageFallbacks={isGeneratingPDF}
                 />
               )}
             </div>
@@ -797,7 +818,7 @@ export function FormPageBuilder() {
           }}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}
-          resumeData={getCleanDataForRenderer(formData ?? {}, false)}
+          resumeData={cleanedDataForModal}
         />
       )}
     </div>

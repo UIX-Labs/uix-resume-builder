@@ -13,15 +13,17 @@ export type RenderProps = {
   currentSection?: string;
   hasSuggestions?: boolean;
   isThumbnail?: boolean;
+  skipImageFallbacks?: boolean;
 };
 
-export function ResumeRenderer({
+function ResumeRendererComponent({
   template,
   data,
   className,
   currentSection,
   hasSuggestions = false,
   isThumbnail = false,
+  skipImageFallbacks = false,
 }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
@@ -38,6 +40,7 @@ export function ResumeRenderer({
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
+    // Note: skipImageFallbacks is used to hide profile pictures when no image is set during PDF generation
 
     // Get the actual computed height of the banner as it appears in the grid
     const bannerEl = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
@@ -303,7 +306,7 @@ export function ResumeRenderer({
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
               <React.Fragment key={i}>
-                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
               </React.Fragment>
             ))}
           </div>
@@ -311,14 +314,14 @@ export function ResumeRenderer({
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s: any, i: number) => (
             <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
             </React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s: any, i: number) => (
             <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
             </React.Fragment>
           ))}
         </div>
@@ -350,7 +353,7 @@ export function ResumeRenderer({
               >
                 {bannerItems.map((s: any, i: number) => (
                   <React.Fragment key={i}>
-                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
                 ))}
               </div>
@@ -377,3 +380,7 @@ export function ResumeRenderer({
     </>
   );
 }
+
+// Wrap with React.memo to prevent unnecessary re-renders
+// Uses shallow comparison for all props - parent should memoize data prop
+export const ResumeRenderer = React.memo(ResumeRendererComponent);

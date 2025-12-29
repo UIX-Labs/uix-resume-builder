@@ -12,6 +12,7 @@ export function renderHeaderSection(
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
+  skipImageFallbacks?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
 
@@ -39,17 +40,22 @@ export function renderHeaderSection(
   //   return getSuggestionBackgroundColor(suggestions);
   // };
 
-  const isHeader = sectionId.toLowerCase() === 'header' || sectionId.toLowerCase() === 'header-section';
+  // Check if this section is related to personal details (header, profile-picture, etc.)
+  const isPersonalDetailsRelated = 
+    sectionId.toLowerCase() === 'header' || 
+    sectionId.toLowerCase() === 'header-section' ||
+    sectionId.toLowerCase() === 'profile-picture';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  // Highlight header when personalDetails OR summary is selected (merged sections)
+  // Highlight/blur header-related sections when personalDetails OR summary is selected
   const currentSectionLower = currentSection?.toLowerCase();
   const isMergedSectionActive =
-    isHeader &&
+    isPersonalDetailsRelated &&
     (currentSectionLower === 'personaldetails' ||
       currentSectionLower === 'summary' ||
       currentSectionLower === 'header' ||
-      currentSectionLower === 'header-section');
+      currentSectionLower === 'header-section' ||
+      currentSectionLower === 'profile-picture');
 
   const shouldBlur =
     !isThumbnail && hasSuggestions && currentSection && !isActive && !isMergedSectionActive && hasValidSuggestions;
@@ -79,7 +85,7 @@ export function renderHeaderSection(
         {/* {shouldHighlight && <SparkleIndicator />} */}
         {Object.keys(fields).map((key) => (
           <React.Fragment key={key}>
-            {renderField(fields[key], data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail)}
+            {renderField(fields[key], data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}
           </React.Fragment>
         ))}
       </div>
@@ -138,7 +144,7 @@ export function renderHeaderSection(
       )}
 
       {fields.contact && fields.contact.type === 'contact-grid' && (
-        <>{renderField(fields.contact, data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail)}</>
+        <>{renderField(fields.contact, data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}</>
       )}
 
       {fields.contact?.items && (

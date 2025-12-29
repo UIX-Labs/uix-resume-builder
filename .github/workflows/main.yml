@@ -1,9 +1,9 @@
-#Deploy resume-builder-fe-service
-name: deploy resume-builder-fe-service
+#Deploy pikaresume-fe-service
+name: deploy pikaresume-fe-service
 on:
   push:
     branches:
-      - main
+      - stage
   workflow_dispatch:
       
 env:
@@ -11,7 +11,7 @@ env:
 
 jobs:
   deploy:
-    name: deploy resume-builder-fe-service
+    name: deploy pikaresume-fe-service
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Code
@@ -19,12 +19,12 @@ jobs:
 
       - name: Set Environment Variables
         run: |
-          echo "PROJECT_NAME=resume-builder" >> $GITHUB_ENV
-          echo "ECR_REPOSITORY=resume-builder-fe-image" >> $GITHUB_ENV
-          echo "ECS_SERVICE=resume-builder-fe-svc" >> $GITHUB_ENV
-          echo "ECS_CLUSTER=resume-builder-cluster" >> $GITHUB_ENV
-          echo "TASK_DEFINITION_NAME=resume-builder-fe-td" >> $GITHUB_ENV
-          echo "CONTAINER_NAME=resume-builder-fe-container" >> $GITHUB_ENV
+          echo "PROJECT_NAME=pikaresume" >> $GITHUB_ENV
+          echo "ECR_REPOSITORY=pikaresume-fe-image" >> $GITHUB_ENV
+          echo "ECS_SERVICE=pikaresume-fe-svc" >> $GITHUB_ENV
+          echo "ECS_CLUSTER=pikaresume-cluster" >> $GITHUB_ENV
+          echo "TASK_DEFINITION_NAME=pikaresume-fe-td" >> $GITHUB_ENV
+          echo "CONTAINER_NAME=pikaresume-fe-container" >> $GITHUB_ENV
 
           echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV

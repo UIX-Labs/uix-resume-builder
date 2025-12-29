@@ -149,7 +149,7 @@ export function renderField(
   const src = resolvePath(data, field.path, field.fallback)?.replace(
     /&amp;/g,
     "&"
-  );
+  );    
   if (!src && !field.fallback) return null;
 
     // Determine the actual image URL (use src if available, otherwise fallback)
@@ -171,26 +171,8 @@ export function renderField(
       <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(actualImageUrl) ? 'anonymous' : undefined}
-        alt=""
+        alt={field.alt || 'Image'}
         className={cn(field.className)}
-        loading="eager"
-        decoding="async"
-        onError={(e) => {
-          // On error, hide the broken image icon by setting visibility
-          const target = e.target as HTMLImageElement;
-          target.style.visibility = 'hidden';
-        }}
-        style={{
-          // Prevent layout shift and alt text from showing during load
-          objectFit: 'cover',
-          backgroundColor: 'transparent',
-          // Tell browser to keep image in memory during layout changes
-          willChange: 'auto',
-          // Use GPU acceleration to prevent flickering
-          transform: 'translateZ(0)',
-          // Prevent sub-pixel rendering issues
-          backfaceVisibility: 'hidden',
-        }}
       />
     );
   }
@@ -294,6 +276,8 @@ export function renderField(
   }
 
   if (field.type === 'link') {
+    // First, check if the href path exists in the data (without fallback)
+    const hrefValue = resolvePath(data, field.href);
     const value = resolvePath(data, field.path, field.fallback);
 
     // If the value itself doesn't exist, don't render

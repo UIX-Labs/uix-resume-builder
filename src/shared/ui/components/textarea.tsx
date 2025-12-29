@@ -362,21 +362,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     }, [editor, value, errorSuggestions, applyErrorHighlights]);
 
     // Apply error highlights when errorSuggestions change
-    // Use a ref to track previous errorSuggestions to prevent unnecessary re-renders
-    const prevErrorSuggestionsRef = React.useRef<ErrorSuggestion[] | undefined>(undefined);
-
     useEffect(() => {
       if (!editor) return;
-
-      // Deep comparison to check if errorSuggestions actually changed
-      const suggestionsChanged =
-        JSON.stringify(prevErrorSuggestionsRef.current) !== JSON.stringify(errorSuggestions);
-
-      if (!suggestionsChanged) {
-        return;
-      }
-
-      prevErrorSuggestionsRef.current = errorSuggestions;
 
       // Use a small delay to ensure editor content is ready
       const timeoutId = setTimeout(() => {

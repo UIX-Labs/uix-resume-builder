@@ -149,7 +149,7 @@ export const ProfilePictureInput = ({
                   'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
                   'bg-[#E9F4FF] text-[#005FF2] border border-[#CBE7FF]',
                   'hover:bg-[#005FF2] hover:text-white',
-                  isUploading && 'opacity-50 cursor-not-allowed'
+                  isUploading && 'opacity-50 cursor-not-allowed',
                 )}
               >
                 Change
@@ -165,7 +165,7 @@ export const ProfilePictureInput = ({
                   'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
                   'bg-red-50 text-red-600 border border-red-200',
                   'hover:bg-red-600 hover:text-white',
-                  isUploading && 'opacity-50 cursor-not-allowed'
+                  isUploading && 'opacity-50 cursor-not-allowed',
                 )}
               >
                 Delete

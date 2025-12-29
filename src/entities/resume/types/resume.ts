@@ -1,4 +1,4 @@
-import type { ResumeDataKey } from "./resume-data";
+import type { ResumeDataKey } from './resume-data';
 
 export interface ResumeItem {
   id: string;

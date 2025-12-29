@@ -5,19 +5,12 @@ import type { ResumeData, ResumeDataKey } from "@entities/resume";
 /**
  * Checks if all suggestions are applied across all sections
  */
-export function hasAllSuggestionsApplied(
-  formData: Omit<ResumeData, "templateId"> | null | undefined
-): boolean {
+export function hasAllSuggestionsApplied(formData: Omit<ResumeData, 'templateId'> | null | undefined): boolean {
   if (!formData) return true;
 
   return !Object.values(formData).some((section) => {
-    if (
-      section &&
-      typeof section === "object" &&
-      "suggestedUpdates" in section
-    ) {
-      const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-        .suggestedUpdates;
+    if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+      const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
       return hasPendingSuggestions(suggestedUpdates as any[] | undefined);
     }
     return false;
@@ -54,8 +47,8 @@ export function updateResumeDataCacheOptimistically(
  */
 export function invalidateQueriesIfAllSuggestionsApplied(
   queryClient: QueryClient,
-  formData: Omit<ResumeData, "templateId"> | null | undefined,
-  resumeId: string
+  formData: Omit<ResumeData, 'templateId'> | null | undefined,
+  resumeId: string,
 ): void {
   const allSuggestionsApplied = hasAllSuggestionsApplied(formData);
 
@@ -68,4 +61,3 @@ export function invalidateQueriesIfAllSuggestionsApplied(
     // REMOVED: queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
   }
 }
-

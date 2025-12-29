@@ -1,27 +1,17 @@
-"use client";
-import { useState } from "react";
-import { Sortable, SortableItem } from "@shared/ui/components/sortable";
-import { cn } from "@shared/lib/cn";
-import Image from "next/image";
-import { FieldErrorBadges } from "../error-badges";
-import { getFieldErrors } from "../../lib/get-field-errors";
-import type { SuggestedUpdates } from "@entities/resume";
+'use client';
+import { useState } from 'react';
+import { Sortable, SortableItem } from '@shared/ui/components/sortable';
+import { cn } from '@shared/lib/cn';
+import Image from 'next/image';
+import { FieldErrorBadges } from '../error-badges';
+import { getFieldErrors } from '../../lib/get-field-errors';
+import type { SuggestedUpdates } from '@entities/resume';
 
-function CollapsedState({
-  value,
-  subValue,
-}: {
-  value: string;
-  subValue: string;
-}) {
+function CollapsedState({ value, subValue }: { value: string; subValue: string }) {
   return (
     <div className="pl-4">
-      {value && (
-        <div className="text-sm text-[#0C1118] font-semibold">{value}</div>
-      )}
-      {subValue && (
-        <div className="text-sm font-normal text-[#000000]">{subValue}</div>
-      )}
+      {value && <div className="text-sm text-[#0C1118] font-semibold">{value}</div>}
+      {subValue && <div className="text-sm font-normal text-[#000000]">{subValue}</div>}
     </div>
   );
 }
@@ -47,14 +37,10 @@ function UnCollapsedState({
     onChange: (data: any[]) => void,
     suggestedUpdates?: SuggestedUpdates,
     itemId?: string,
-    fieldName?: string
+    fieldName?: string,
   ) => void;
   suggestedUpdates?: SuggestedUpdates;
-  onOpenAnalyzerModal?: (
-    itemId: string,
-    fieldName: string,
-    suggestionType: any
-  ) => void;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   const itemId = item.itemId;
 
@@ -68,17 +54,15 @@ function UnCollapsedState({
 
         // Check if field has badges
         const hasBadges =
-          errorCounts.spellingCount > 0 ||
-          errorCounts.sentenceCount > 0 ||
-          errorCounts.newSummaryCount > 0;
+          errorCounts.spellingCount > 0 || errorCounts.sentenceCount > 0 || errorCounts.newSummaryCount > 0;
 
         return (
           <div
             key={key}
             className={cn(
-              "text-sm text-[#0C1118] font-semibold flex flex-col gap-2 w-full min-w-0",
-              section[key]?.fluid && "col-span-1 md:col-span-2",
-              !section[key]?.fluid && hasBadges && "col-span-1 md:col-span-2"
+              'text-sm text-[#0C1118] font-semibold flex flex-col gap-2 w-full min-w-0',
+              section[key]?.fluid && 'col-span-1 md:col-span-2',
+              !section[key]?.fluid && hasBadges && 'col-span-1 md:col-span-2',
             )}
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full min-w-0">
@@ -88,9 +72,7 @@ function UnCollapsedState({
                   spellingCount={errorCounts.spellingCount}
                   sentenceCount={errorCounts.sentenceCount}
                   newSummaryCount={errorCounts.newSummaryCount}
-                  onBadgeClick={(suggestionType) =>
-                    onOpenAnalyzerModal?.(itemId, key, suggestionType)
-                  }
+                  onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
                 />
               </div>
             </div>
@@ -105,7 +87,7 @@ function UnCollapsedState({
                 },
                 suggestedUpdates,
                 itemId,
-                key
+                key,
               )}
             </div>
           </div>
@@ -128,28 +110,27 @@ export function Draggable({
   onChange: (data: any[]) => void;
   getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
   suggestedUpdates?: SuggestedUpdates;
-  onOpenAnalyzerModal?: (
-    itemId: string,
-    fieldName: string,
-    suggestionType: any
-  ) => void;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
   const [collapsed, setCollapsed] = useState<boolean[]>([]);
 
   function handlePlusClick(index: number) {
-    const newItem = Object.entries(data[0]).reduce((acc, [key]) => {
-      if (key === "rank") {
+    const newItem = Object.entries(data[0]).reduce(
+      (acc, [key]) => {
+        if (key === 'rank') {
+          return acc;
+        }
+
+        if (key === 'itemId') {
+          acc[key] = crypto.randomUUID();
+        } else {
+          acc[key] = '';
+        }
+
         return acc;
-      }
-
-      if (key === "itemId") {
-        acc[key] = crypto.randomUUID();
-      } else {
-        acc[key] = "";
-      }
-
-      return acc;
-    }, {} as Record<string, string>);
+      },
+      {} as Record<string, string>,
+    );
 
     const newData = [...data];
 
@@ -176,31 +157,23 @@ export function Draggable({
         return localData.map((item, index) => {
           const id = item.itemId;
           const collapsedTitleValue = item[section.collapsedState?.titleKey];
-          const collapsedSubTitleValue =
-            item[section.collapsedState?.subTitleKey];
+          const collapsedSubTitleValue = item[section.collapsedState?.subTitleKey];
 
           return (
             <SortableItem key={id} id={id} className="mb-4">
               <button
                 type="button"
-                className={cn(
-                  "absolute cursor-pointer top-0 right-0 translate-x-full flex"
-                )}
+                className={cn('absolute cursor-pointer top-0 right-0 translate-x-full flex')}
                 onClick={() => handleDeleteClick(index)}
               >
-                <Image
-                  src="/images/delete.svg"
-                  alt="delete"
-                  width={24}
-                  height={24}
-                />
+                <Image src="/images/delete.svg" alt="delete" width={24} height={24} />
               </button>
 
               <div
                 className={cn(
-                  "group relative text-sm text-[#0C1118] w-full border border-[#CCD4DF] rounded-[12px]",
-                  "bg-white transition-all duration-300",
-                  collapsed[index] && "h-15 items-center flex"
+                  'group relative text-sm text-[#0C1118] w-full border border-[#CCD4DF] rounded-[12px]',
+                  'bg-white transition-all duration-300',
+                  collapsed[index] && 'h-15 items-center flex',
                 )}
               >
                 <button
@@ -211,10 +184,7 @@ export function Draggable({
                   <Image
                     src="/images/cheveron-up.svg"
                     alt="cheveron-up"
-                    className={cn(
-                      "transition-all duration-300",
-                      collapsed[index] && "rotate-180"
-                    )}
+                    className={cn('transition-all duration-300', collapsed[index] && 'rotate-180')}
                     width={24}
                     height={24}
                   />
@@ -223,17 +193,12 @@ export function Draggable({
                 <button
                   type="button"
                   className={cn(
-                    "hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center",
-                    "bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300"
+                    'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
+                    'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300',
                   )}
                   onClick={() => handlePlusClick(index)}
                 >
-                  <Image
-                    src="/images/plus.svg"
-                    alt="plus"
-                    width={16}
-                    height={16}
-                  />
+                  <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
                 </button>
 
                 {!collapsed[index] ? (
@@ -248,10 +213,7 @@ export function Draggable({
                     onOpenAnalyzerModal={onOpenAnalyzerModal}
                   />
                 ) : (
-                  <CollapsedState
-                    value={collapsedTitleValue}
-                    subValue={collapsedSubTitleValue}
-                  />
+                  <CollapsedState value={collapsedTitleValue} subValue={collapsedSubTitleValue} />
                 )}
               </div>
             </SortableItem>

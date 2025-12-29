@@ -43,11 +43,11 @@ function deepEqual(val1: any, val2: any): boolean {
   }
 
   if (typeof val1 === 'object' && typeof val2 === 'object') {
-    const keys1 = Object.keys(val1).filter(k => !ignoredFields.includes(k));
-    const keys2 = Object.keys(val2).filter(k => !ignoredFields.includes(k));
+    const keys1 = Object.keys(val1).filter((k) => !ignoredFields.includes(k));
+    const keys2 = Object.keys(val2).filter((k) => !ignoredFields.includes(k));
 
     if (keys1.length !== keys2.length) return false;
-    return keys1.every(key => deepEqual(val1[key], val2[key]));
+    return keys1.every((key) => deepEqual(val1[key], val2[key]));
   }
 
   return false;
@@ -154,7 +154,7 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
       const isModified = isSectionModified(
         key,
         resumeData as unknown as Record<string, unknown>,
-        mockData as Record<string, unknown>
+        mockData as Record<string, unknown>,
       );
 
       // If section is not modified (identical to mockData or empty), skip it

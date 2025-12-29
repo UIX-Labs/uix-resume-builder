@@ -1,11 +1,11 @@
 /**
  * Example Analytics Integration Components
- * 
+ *
  * This file demonstrates how to integrate Percept analytics
  * into various components of the resume builder application.
  */
 
-"use client";
+'use client';
 
 import { trackEvent, startTimedEvent } from '@shared/lib/analytics/Mixpanel';
 import { useState } from 'react';
@@ -18,33 +18,23 @@ export function AnalyticsButton() {
     trackEvent('button_clicked', {
       buttonId: 'cta-button',
       section: 'hero',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   };
 
-  return (
-    <button onClick={handleClick}>
-      Click Me (Tracked)
-    </button>
-  );
+  return <button onClick={handleClick}>Click Me (Tracked)</button>;
 }
 
 // ============================================
 // Example 2: Track Template Selection
 // ============================================
-export function TemplateCard({
-  templateId,
-  templateName
-}: {
-  templateId: string;
-  templateName: string;
-}) {
+export function TemplateCard({ templateId, templateName }: { templateId: string; templateName: string }) {
   const handleSelect = () => {
     trackEvent('template_selected', {
       templateId,
       templateName,
       category: 'professional',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   };
 
@@ -63,7 +53,7 @@ export function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,17 +62,13 @@ export function ContactForm() {
     trackEvent('form_submitted', {
       formType: 'contact',
       fields: Object.keys(formData),
-      hasAllFields: Object.values(formData).every(v => v.length > 0)
+      hasAllFields: Object.values(formData).every((v) => v.length > 0),
     });
 
     // Submit form...
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* Form fields */}
-    </form>
-  );
+  return <form onSubmit={handleSubmit}>{/* Form fields */}</form>;
 }
 
 // ============================================
@@ -99,21 +85,19 @@ export function DownloadResumeButton() {
 
     try {
       // Simulate download process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Track successful download (duration is automatically included)
       trackEvent('resume_download', {
         status: 'success',
         format: 'pdf',
-        pageCount: 2
+        pageCount: 2,
       });
-
-
     } catch (error) {
       // Track failed download
       trackEvent('resume_download', {
         status: 'failed',
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : 'Unknown error',
       });
     } finally {
       setIsDownloading(false);
@@ -134,34 +118,24 @@ export function AddSectionButton({ sectionType }: { sectionType: string }) {
   const handleAddSection = () => {
     trackEvent('section_added', {
       sectionType,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Add section logic...
   };
 
-  return (
-    <button onClick={handleAddSection}>
-      Add {sectionType} Section
-    </button>
-  );
+  return <button onClick={handleAddSection}>Add {sectionType} Section</button>;
 }
 
 // ============================================
 // Example 6: Track AI Suggestion Acceptance
 // ============================================
-export function AISuggestion({
-  suggestion,
-  section
-}: {
-  suggestion: string;
-  section: string;
-}) {
+export function AISuggestion({ suggestion, section }: { suggestion: string; section: string }) {
   const handleAccept = () => {
     trackEvent('ai_suggestion_accepted', {
       suggestionType: 'content',
       section,
-      suggestionLength: suggestion.length
+      suggestionLength: suggestion.length,
     });
 
     // Apply suggestion...
@@ -170,7 +144,7 @@ export function AISuggestion({
   const handleReject = () => {
     trackEvent('ai_suggestion_rejected', {
       suggestionType: 'content',
-      section
+      section,
     });
   };
 
@@ -191,7 +165,7 @@ export function ExportButton() {
     trackEvent('resume_exported', {
       format,
       timestamp: new Date().toISOString(),
-      source: 'export_menu'
+      source: 'export_menu',
     });
 
     // Export logic...
@@ -216,22 +190,18 @@ export function ErrorBoundaryExample() {
       await riskyOperation();
 
       trackEvent('operation_success', {
-        operation: 'data_sync'
+        operation: 'data_sync',
       });
     } catch (error) {
       trackEvent('operation_error', {
         operation: 'data_sync',
         errorMessage: error instanceof Error ? error.message : 'Unknown error',
-        errorType: error instanceof Error ? error.constructor.name : 'Unknown'
+        errorType: error instanceof Error ? error.constructor.name : 'Unknown',
       });
     }
   };
 
-  return (
-    <button onClick={handleOperation}>
-      Perform Operation
-    </button>
-  );
+  return <button onClick={handleOperation}>Perform Operation</button>;
 }
 
 // Dummy function for example

@@ -8,21 +8,27 @@ import {
   TRANSITION_TEXTS,
 } from "@widgets/form-page-builder/models/store";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@shared/ui/button";
 import { NewProgressBar } from "@shared/ui/components/new-progress-bar";
 import { useBuilderIntelligence } from "@widgets/form-page-builder/hooks/use-builder-intelligence";
+import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function FormPage() {
   const params = useParams();
   const id = params.id as string;
+
+  const queryClient = useQueryClient();
 
   const { data: resumeData, isLoading } = useResumeData(id);
 
   const [currentStep, setCurrentStep] =
     useState<ResumeDataKey>("personalDetails");
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
+  const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
+  const setFormData = useFormDataStore((state) => state.setFormData);
   const analyzerProgress = useFormDataStore((state) => state.analyzerProgress);
   const analyzerError = useFormDataStore((state) => state.analyzerError);
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
@@ -30,6 +36,20 @@ export default function FormPage() {
 
   // Builder Intelligence logic
   const { handleBuilderIntelligence } = useBuilderIntelligence(id);
+
+  useEffect(() => {
+    const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
+    if (pendingResumeId && pendingResumeId === id) {
+      localStorage.removeItem("pending_analyzer_resume_id");
+      runAnalyzerWithProgress({
+        resumeId: id,
+        queryClient,
+        setFormData,
+        setIsAnalyzing,
+        setAnalyzerError,
+      });
+    }
+  }, [id, queryClient, setFormData, setIsAnalyzing, setAnalyzerError]);
 
   const navs = useMemo(
     () => [

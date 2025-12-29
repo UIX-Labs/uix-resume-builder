@@ -40,7 +40,7 @@ export function JDUploadSection({
 
       trackEvent(`tailored_${type}_upload_start`, {
         fileName: selectedFile.name,
-        fileSize: selectedFile.size
+        fileSize: selectedFile.size,
       });
 
       let progress = 0;
@@ -55,7 +55,7 @@ export function JDUploadSection({
             if (type === 'resume') onResumeFileChange?.(selectedFile);
 
             trackEvent(`tailored_${type}_upload_success`, {
-              fileName: selectedFile.name
+              fileName: selectedFile.name,
             });
           }, 300);
         }
@@ -181,7 +181,9 @@ export function JDUploadSection({
   return (
     <>
       {/* Resume Upload Box */}
-      <div className="flex-1 min-w-[500px]">{renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}</div>
+      <div className="flex-1 min-w-[500px]">
+        {renderUploadBox('Upload Your Resume', 'resume', resumeFile, resumeInputRef, false)}
+      </div>
 
       {/* JD Upload Box - disabled until Resume is uploaded successfully */}
       <div className="flex-1 min-w-[500px]">

@@ -32,7 +32,8 @@ export function TheCommunity() {
           If we see true skill, you join our invite-only community.
           <br className="hidden sm:block" />
           <span className="sm:hidden"> </span>
-          Here, members get feedback from people at top companies, access freelance gigs, and use our builder for free - for life.
+          Here, members get feedback from people at top companies, access freelance gigs, and use our builder for free -
+          for life.
           <br className="hidden sm:block" />
           <span className="sm:hidden"> </span>
           Because one rejection should never end your story.
@@ -43,13 +44,7 @@ export function TheCommunity() {
       <div className="hidden lg:block relative min-h-[296px]">
         {/* Community Icon - Top Center */}
         <div className="absolute left-[281px] top-0 w-20 h-20">
-          <Image
-            src="/images/community.svg"
-            alt="Community icon"
-            width={80}
-            height={80}
-            className="object-contain"
-          />
+          <Image src="/images/community.svg" alt="Community icon" width={80} height={80} className="object-contain" />
         </div>
 
         {/* Green Dot */}
@@ -70,7 +65,8 @@ export function TheCommunity() {
         >
           If we see true skill, you join our invite-only community.
           <br />
-          Here, members get feedback from people at top companies, access freelance gigs, and use our builder for free - for life.
+          Here, members get feedback from people at top companies, access freelance gigs, and use our builder for free -
+          for life.
           <br />
           Because one rejection should never end your story.
         </p>

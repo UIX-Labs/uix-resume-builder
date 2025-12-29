@@ -6,7 +6,6 @@ export async function createResume(data: {
   userInfo: {
     userId: string;
   };
-
 }) {
   const res = await fetch<CreateResumeResponse>('resume/create', {
     options: {

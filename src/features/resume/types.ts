@@ -79,4 +79,14 @@ export interface ImageNode extends TemplateNode {
   alt?: string;
 }
 
-export type Nodes = ContainerNode | TextNode | SeperatorNode | ListNode | LinkNode | HtmlNode | DurationNode | IconNode | SkillLevelNode | ImageNode;
+export type Nodes =
+  | ContainerNode
+  | TextNode
+  | SeperatorNode
+  | ListNode
+  | LinkNode
+  | HtmlNode
+  | DurationNode
+  | IconNode
+  | SkillLevelNode
+  | ImageNode;

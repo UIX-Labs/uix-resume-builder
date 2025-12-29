@@ -33,4 +33,3 @@ export const BehanceIcon: React.FC<BehanceIconProps> = ({
     </svg>
   );
 };
-

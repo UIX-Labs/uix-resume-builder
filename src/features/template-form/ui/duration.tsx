@@ -78,10 +78,7 @@ export function Duration({ data, onChange }: DurationProps) {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto p-0" align="start">
-            <MonthYearPicker
-              selected={startDate}
-              onSelect={(date) => setStartDate(date)}
-            />
+            <MonthYearPicker selected={startDate} onSelect={(date) => setStartDate(date)} />
           </PopoverContent>
         </Popover>
       </div>

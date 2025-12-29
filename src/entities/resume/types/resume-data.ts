@@ -173,10 +173,7 @@ export interface SuggestedUpdateField {
   suggestedUpdates: {
     old?: string;
     new: string;
-    type:
-      | SuggestionType.NEW_SUMMARY
-      | SuggestionType.SPELLING_ERROR
-      | SuggestionType.SENTENCE_REFINEMENT;
+    type: SuggestionType.NEW_SUMMARY | SuggestionType.SPELLING_ERROR | SuggestionType.SENTENCE_REFINEMENT;
   }[];
   fieldCounts: {
     [SuggestionType.NEW_SUMMARY]: number;

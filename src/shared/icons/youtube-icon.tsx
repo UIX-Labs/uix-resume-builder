@@ -35,4 +35,3 @@ export const YoutubeIcon: React.FC<YoutubeIconProps> = ({
     </svg>
   );
 };
-

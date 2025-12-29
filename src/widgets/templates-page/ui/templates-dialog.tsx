@@ -42,9 +42,9 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
             <div className="flex-1 overflow-y-auto p-6">
               <div className="flex flex-wrap justify-center gap-8">
                 {templates?.map((template) => (
-                  <TemplateCard 
-                    key={template.id} 
-                    template={template} 
+                  <TemplateCard
+                    key={template.id}
+                    template={template}
                     onClick={() => {
                       onTemplateSelect?.(template);
                       setIsOpen(false);
@@ -58,11 +58,7 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
         </DialogContent>
       </Dialog>
 
-      <PreviewModal
-        template={previewTemplate}
-        isOpen={isPreviewOpen}
-        onClose={() => setIsPreviewOpen(false)}
-      />
+      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </>
   );
 }

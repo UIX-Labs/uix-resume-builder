@@ -8,7 +8,7 @@ import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-rend
 import TemplateButton from "./change-template-button";
 import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
 import { Button } from "@shared/ui/button";
-import { Download } from "lucide-react";
+import { Download, GripVertical } from "lucide-react";
 import { TemplateForm } from "@features/template-form";
 import { camelToHumanString } from "@shared/lib/string";
 import { data as formSchemaData } from "@entities/resume/api/schema-data";
@@ -42,6 +42,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
 import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
+import { formatTimeAgo } from "../lib/time-helpers";
+import aniketTemplate from "@features/resume/templates/standard";
 
 /**
  * Checks if a single section is empty
@@ -64,7 +66,6 @@ function isSectionEmpty(section: any): boolean {
     // Only return true if ALL items are empty
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      
 
       if (typeof item === "string" && item.trim() !== "") {
         return false;
@@ -161,6 +162,16 @@ export function FormPageBuilder() {
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const previewWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Last save time state
+  const [lastSaveTime, setLastSaveTime] = useState<number | null>(null);
+
+  // Resizable logic
+  const [leftWidth, setLeftWidth] = useState(50);
+  const isDragging = useRef(false);
+  const [previewScale, setPreviewScale] = useState(1);
 
   // Analyzer modal state
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
@@ -216,6 +227,7 @@ export function FormPageBuilder() {
     updatedAt: number;
   }) => {
     saveResumeForm({ type: type as any, data });
+    setLastSaveTime(Date.now());
   };
 
   const { handleSaveResume, handleNextStep } = useSaveAndNext({
@@ -228,6 +240,81 @@ export function FormPageBuilder() {
     setCurrentStep: (step: string) => setCurrentStep(step as any),
     generateAndSaveThumbnail,
   });
+
+  // Resizable panel logic
+  useEffect(() => {
+    const element = previewWrapperRef.current;
+    if (!element) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const width = entry.contentRect.width;
+        // 794px is the fixed width of the resume
+        // We add some padding (e.g. 40px) to ensure it doesn't touch the edges
+        const scale = (width - 40) / 794;
+        setPreviewScale(Math.max(scale, 0.4)); // Minimum scale 0.4
+      }
+    });
+
+    resizeObserver.observe(element);
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging.current || !containerRef.current) return;
+
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const newLeftWidth = e.clientX - containerRect.left;
+      const newPercent = (newLeftWidth / containerRect.width) * 100;
+
+      const minLeftWidthPx = (containerRect.height * 794) / 1122 + 40;
+      const minPercent = (minLeftWidthPx / containerRect.width) * 100;
+
+      const effectiveMinPercent = Math.max(minPercent, 20);
+
+      if (newPercent > effectiveMinPercent && newPercent < 70) {
+        setLeftWidth(newPercent);
+      }
+    };
+
+    const handleMouseUp = () => {
+      isDragging.current = false;
+      document.body.style.cursor = "default";
+      document.body.style.userSelect = "auto";
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
+  const startResizing = () => {
+    isDragging.current = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  // Keyboard shortcut for save
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      const isMeta = e.metaKey || e.ctrlKey;
+      if (e.key === "s" && isMeta) {
+        e.preventDefault();
+        handleSaveResume();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleSaveResume]);
 
   // Check if there are any suggestions in the form data
   const hasSuggestions = Boolean(
@@ -439,7 +526,14 @@ export function FormPageBuilder() {
         toast.error("Failed to apply suggestions");
       }
     },
-    [analyzerModalData, formData, currentStep, resumeId, queryClient, setFormData]
+    [
+      analyzerModalData,
+      formData,
+      currentStep,
+      resumeId,
+      queryClient,
+      setFormData,
+    ]
   );
 
   useEffect(() => {
@@ -476,32 +570,36 @@ export function FormPageBuilder() {
     if (!resumeData) return;
 
     // Check if current formData has suggestions
-    const formDataHasSuggestions = formData && Object.values(formData).some((section) => {
-      if (
-        section &&
-        typeof section === "object" &&
-        "suggestedUpdates" in section
-      ) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-          .suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-      }
-      return false;
-    });
+    const formDataHasSuggestions =
+      formData &&
+      Object.values(formData).some((section) => {
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
+      });
 
     // Check if resumeData has suggestions
-    const resumeDataHasSuggestions = Object.values(resumeData).some((section) => {
-      if (
-        section &&
-        typeof section === "object" &&
-        "suggestedUpdates" in section
-      ) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-          .suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+    const resumeDataHasSuggestions = Object.values(resumeData).some(
+      (section) => {
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
+          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+        }
+        return false;
       }
-      return false;
-    });
+    );
 
     // If formData has suggestions but resumeData doesn't,
     // it means Builder Intelligence set the suggestions - don't overwrite!
@@ -511,8 +609,7 @@ export function FormPageBuilder() {
 
     // Determine if this is create flow (all sections empty) or edit flow (has data)
     const sectionKeys = Object.keys(resumeData).filter(
-      (key) =>
-        key !== "templateId" && key !== "updatedAt" && key !== "template"
+      (key) => key !== "templateId" && key !== "updatedAt" && key !== "template"
     );
 
     const allSectionsEmpty = sectionKeys.every((key) =>
@@ -534,8 +631,7 @@ export function FormPageBuilder() {
           continue;
         }
 
-        const actualSection =
-          resumeData[sectionKey as keyof typeof resumeData];
+        const actualSection = resumeData[sectionKey as keyof typeof resumeData];
         const mockSection = (mockData as Record<string, any>)[sectionKey];
 
         if (mockSection) {
@@ -552,6 +648,31 @@ export function FormPageBuilder() {
       setFormData(resumeData as Omit<ResumeData, "templateId">);
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
+
+  // Initialize last save time from resume data
+  useEffect(() => {
+    if (resumeData?.updatedAt) {
+      const updatedAt = new Date(resumeData.updatedAt as string).getTime();
+      setLastSaveTime(updatedAt);
+    }
+  }, [resumeData?.updatedAt]);
+
+  // Update display every 30 seconds to refresh relative time
+  const [refreshKey, setRefreshKey] = useState(0);
+  useEffect(() => {
+    if (!lastSaveTime) return;
+
+    const interval = setInterval(() => {
+      setRefreshKey((prev) => prev + 1);
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [lastSaveTime]);
+
+  // Format last save time
+  const getFormattedSaveTime = useCallback(() => {
+    return formatTimeAgo(lastSaveTime);
+  }, [lastSaveTime, refreshKey]);
 
   // Auto-scroll to section when currentStep changes
   useEffect(() => {
@@ -588,10 +709,7 @@ export function FormPageBuilder() {
 
         // Calculate the scroll position to center the section
         const scrollTop =
-          container.scrollTop +
-          sectionRect.top -
-          containerRect.top -
-          100; // 100px offset from top
+          container.scrollTop + sectionRect.top - containerRect.top - 100; // 100px offset from top
 
         // Smooth scroll to the section
         container.scrollTo({
@@ -605,26 +723,45 @@ export function FormPageBuilder() {
   }, [currentStep]);
 
   return (
-    <>
+    <div ref={containerRef} className="flex w-full h-full relative">
       <div
         ref={scrollContainerRef}
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
         style={{
-          minWidth: 794 + 48 + 6,
-          maxWidth: 794 + 48 + 6,
+          width: `${leftWidth}%`,
+          minWidth: "30%",
+          maxWidth: "70%",
+          flexShrink: 0,
         }}
       >
         <div className="absolute top-0 right-3 z-10">
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
-        <div className="min-w-0 flex-1 flex justify-center relative">
-          <div ref={targetRef}>
-            <ResumeRenderer
-              template={selectedTemplate}
-              data={getCleanDataForRenderer(formData ?? {}, false)}
-              currentSection={currentStep}
-              hasSuggestions={hasSuggestions}
-            />
+
+        <div
+          className="min-w-0 flex-1 flex justify-center relative"
+          ref={previewWrapperRef}
+        >
+          <div
+            ref={targetRef}
+            style={{
+              transform: `scale(${previewScale})`,
+              transformOrigin: "top center",
+            }}
+          >
+            {selectedTemplate ? (
+              <ResumeRenderer
+                template={selectedTemplate.json ?? aniketTemplate}
+                data={getCleanDataForRenderer(formData ?? {}, isGeneratingPDF)}
+                currentSection={isGeneratingPDF ? undefined : currentStep}
+                hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
+                isThumbnail={false}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full min-h-[800px]">
+                <div className="text-gray-500">Loading template...</div>
+              </div>
+            )}
           </div>
           <div
             style={{
@@ -703,7 +840,17 @@ export function FormPageBuilder() {
           </Button>
         </div>
       </div>
-      <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] w-full max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
+      {/* Resizer Handle */}
+      <div
+        className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
+        onMouseDown={startResizing}
+      >
+        <div className="w-2 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+          <GripVertical className="w-2 h-2 text-gray-500" />
+        </div>
+      </div>
+
+      <div className="relative bg-white rounded-tl-[36px] rounded-bl-[36px] flex-1 max-h-[calc(100vh-32px)] mt-4 flex-col flex overflow-hidden px-1">
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -737,9 +884,9 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {/* {formatLastSaveTime() && (
-              <p className="text-sm text-gray-500">{formatLastSaveTime()}</p>
-            )} */}
+            {getFormattedSaveTime() && (
+              <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>
+            )}
           </div>
 
           {/* Next Button on the right */}
@@ -777,6 +924,7 @@ export function FormPageBuilder() {
           onClose={() => setIsWishlistSuccessModalOpen(false)}
         />
       )}
+      {/* Resume Preview Modal */}
       {selectedTemplate && (
         <PreviewModal
           template={{
@@ -791,6 +939,6 @@ export function FormPageBuilder() {
           resumeData={getCleanDataForRenderer(formData ?? {}, false)}
         />
       )}
-    </>
+    </div>
   );
 }

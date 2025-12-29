@@ -7,7 +7,7 @@ import { FileUpload } from '@widgets/resumes/file-upload';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
@@ -23,10 +23,14 @@ const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
     title: 'Pika Morph',
     subtitle: 'Organising your data to PikaResume format',
-  }
+  },
 ];
 
-export default function ResumeCreationCard() {
+interface ResumeCreationCardProps {
+  shouldOpenJDModal?: boolean;
+}
+
+export default function ResumeCreationCard({ shouldOpenJDModal = false }: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
   const createResumeMutation = useMutation({
@@ -57,7 +61,7 @@ export default function ResumeCreationCard() {
 
     trackEvent('create_resume_click', {
       source: 'dashboard_card',
-      method: 'from_scratch'
+      method: 'from_scratch',
     });
 
     if (!user.data?.id) {
@@ -85,7 +89,7 @@ export default function ResumeCreationCard() {
   const handleUploadSuccess = (data: any) => {
     trackEvent('resume_uploaded', {
       source: 'dashboard_card',
-      resumeId: data.resumeId
+      resumeId: data.resumeId,
     });
 
     setTimeout(() => {
@@ -116,7 +120,7 @@ export default function ResumeCreationCard() {
   const handleOpenTailoredWithJD = () => {
     trackEvent('create_resume_click', {
       source: 'dashboard_card',
-      method: 'tailored_with_jd'
+      method: 'tailored_with_jd',
     });
 
     lockOptions('tailoredJD');
@@ -124,6 +128,14 @@ export default function ResumeCreationCard() {
     setShowJDUpload(true);
     setIsBuilderIntelligenceModalOpen(true);
   };
+
+  // Handle opening JD modal from external trigger (e.g., from landing page JD section)
+  useEffect(() => {
+    if (shouldOpenJDModal) {
+      handleOpenTailoredWithJD();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shouldOpenJDModal]);
 
   const closeBuilderIntelligenceModal = useCallback(
     (shouldRelease = true) => {
@@ -226,7 +238,6 @@ export default function ResumeCreationCard() {
       />
 
       <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
-
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
           <div className="w-full">
             {/* Options Grid */}
@@ -234,10 +245,11 @@ export default function ResumeCreationCard() {
               {/* From Scratch */}
               <Button
                 variant="outline"
-                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group disabled:opacity-50 cursor-pointer hover:shadow-md ${activeAction === 'create'
-                  ? 'bg-blue-50 border-blue-500'
-                  : 'bg-white border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:hover:border-gray-200 disabled:hover:bg-white'
-                  }`}
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group disabled:opacity-50 cursor-pointer hover:shadow-md ${
+                  activeAction === 'create'
+                    ? 'bg-blue-50 border-blue-500'
+                    : 'bg-white border-gray-200 hover:border-blue-500 hover:bg-blue-50 disabled:hover:border-gray-200 disabled:hover:bg-white'
+                }`}
                 disabled={optionsLocked && activeAction !== 'create'}
                 onClick={resumeCreateHandler}
               >
@@ -252,10 +264,9 @@ export default function ResumeCreationCard() {
 
               {/* Upload Resume */}
               <div
-                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group cursor-pointer hover:shadow-md ${activeAction === 'upload'
-                  ? 'border-purple-600 bg-purple-100'
-                  : 'border-purple-500 bg-purple-50'
-                  }`}
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 rounded-xl transition-all group cursor-pointer hover:shadow-md ${
+                  activeAction === 'upload' ? 'border-purple-600 bg-purple-100' : 'border-purple-500 bg-purple-50'
+                }`}
               >
                 <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                   <Upload className="w-5 h-5 text-purple-600" />
@@ -272,7 +283,7 @@ export default function ResumeCreationCard() {
                   renderAsOverlay={true}
                   onUploadClick={() => {
                     trackEvent('upload_resume_click', {
-                      source: 'dashboard_card'
+                      source: 'dashboard_card',
                     });
                   }}
                 />
@@ -281,10 +292,11 @@ export default function ResumeCreationCard() {
               {/* Tailored with JD - Recommended */}
               <Button
                 variant="outline"
-                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 cursor-pointer ${activeAction === 'tailoredJD'
-                  ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
-                  : 'hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
-                  }`}
+                className={`relative h-auto p-4 flex flex-col items-center gap-3 border-2 hover:shadow-md rounded-xl transition-all group disabled:opacity-50 cursor-pointer ${
+                  activeAction === 'tailoredJD'
+                    ? 'bg-gradient-to-br from-green-100 to-blue-100 border-green-600'
+                    : 'hover:border-green-500 disabled:hover:border-green-500 disabled:hover:shadow-none'
+                }`}
                 disabled={optionsLocked && activeAction !== 'tailoredJD'}
                 onClick={handleOpenTailoredWithJD}
               >

@@ -1,4 +1,4 @@
-import { useFetch } from "@/shared/api/hooks/useFetch";
+import { useFetch } from '@/shared/api/hooks/useFetch';
 
 import {
   getResumeSchema,
@@ -9,7 +9,7 @@ import {
   fetchAllResumes,
   saveFormData,
   updateResumeTemplate,
-} from "../api";
+} from '../api';
 
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import type { ResumeData, ResumeDataKey } from "../types/resume-data";
@@ -17,7 +17,7 @@ import { fetchAndMergeResumeData } from "../lib/merge-resume-data";
 
 export function useTemplateFormSchema() {
   return useFetch({
-    queryKey: ["resume-schema"],
+    queryKey: ['resume-schema'],
     queryFn: getResumeSchema,
     staleTime: Infinity, // Cache forever since schema is static data
   });
@@ -32,7 +32,7 @@ export function useResumeData(id: string) {
 
 export function useResumeEmptyData() {
   return useFetch({
-    queryKey: ["resume-empty-data"],
+    queryKey: ['resume-empty-data'],
     queryFn: getResumeEmptyData,
   });
 }
@@ -43,7 +43,7 @@ export const useDeleteResume = () => {
   return useMutation({
     mutationFn: deleteResume,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
@@ -54,7 +54,7 @@ export const useUpdateResumeTemplate = () => {
   return useMutation({
     mutationFn: updateResumeTemplate,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
@@ -67,7 +67,7 @@ export const useParseLinkedInProfile = () => {
 
 export const useGetAllResumes = ({ userId }: { userId: string }) => {
   return useFetch({
-    queryKey: ["resumes", userId],
+    queryKey: ['resumes', userId],
     queryFn: () => fetchAllResumes(userId),
     staleTime: 0,
   });
@@ -79,16 +79,13 @@ export const useParsePdfResume = () => {
   return useMutation({
     mutationFn: (file: File) => parsePdfResume(file),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["resumes"] });
+      queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
 };
 
 export const useSaveResumeForm = () => {
   return useMutation({
-    mutationFn: (data: {
-      type: ResumeDataKey;
-      data: ResumeData[ResumeDataKey];
-    }) => saveFormData(data),
+    mutationFn: (data: { type: ResumeDataKey; data: ResumeData[ResumeDataKey] }) => saveFormData(data),
   });
 };

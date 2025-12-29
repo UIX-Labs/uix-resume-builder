@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useCachedUser } from "@shared/hooks/use-user";
-import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
-import { TestimonialsModal } from "@widgets/landing-page/ui/testimonials-modal";
-import { useMutation } from "@tanstack/react-query";
-import { createResume, updateResumeTemplate } from "@entities/resume";
-import type { Template } from "@entities/template-page/api/template-data";
+import React, { useState } from 'react';
+import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
+import { TestimonialsModal } from '@widgets/landing-page/ui/testimonials-modal';
+import { useMutation } from '@tanstack/react-query';
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import type { Template } from '@entities/template-page/api/template-data';
 
 interface NavigationLink {
   label: string;
@@ -32,13 +32,13 @@ const FooterNavigation = () => {
 
   const handleTemplateSelect = async (template: Template) => {
     if (!user) {
-      router.push("/auth");
+      router.push('/auth');
       return;
     }
 
     try {
       const data = await createResumeMutation.mutateAsync({
-        title: "New Resume",
+        title: 'New Resume',
         userInfo: {
           userId: user.id,
         },
@@ -51,26 +51,21 @@ const FooterNavigation = () => {
 
       router.push(`/resume/${data.id}`);
     } catch (error) {
-      console.error("Failed to create resume:", error);
+      console.error('Failed to create resume:', error);
     }
   };
 
   const leftColumnLinks: NavigationLink[] = [
-    { label: "About Us", href: "/about-us" },
-    { label: "Check Templates", isTemplateDialog: true },
+    { label: 'About Us', href: '/about-us' },
+    { label: 'Check Templates', isTemplateDialog: true },
   ];
 
   const rightColumnLinks: NavigationLink[] = [
-    { label: "Reviews", isTestimonialsModal: true },
-    { label: "Terms of Service", href: "https://uixlabs.co/" },
+    { label: 'Reviews', isTestimonialsModal: true },
+    { label: 'Terms of Service', href: 'https://uixlabs.co/' },
   ];
 
-  const NavigationLinkItem = ({
-    label,
-    href,
-    isTemplateDialog,
-    isTestimonialsModal,
-  }: NavigationLink) => {
+  const NavigationLinkItem = ({ label, href, isTemplateDialog, isTestimonialsModal }: NavigationLink) => {
     if (isTemplateDialog) {
       return (
         <TemplatesDialog onTemplateSelect={handleTemplateSelect}>

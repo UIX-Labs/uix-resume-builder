@@ -1,5 +1,5 @@
-import { convertHtmlToPdf } from "@entities/download-pdf/api";
-import { toast } from "sonner";
+import { convertHtmlToPdf } from '@entities/download-pdf/api';
+import { toast } from 'sonner';
 
 const PDF_STYLES = `
   <!DOCTYPE html>
@@ -80,12 +80,9 @@ const PDF_STYLES = `
 export function prepareHtmlForPdf(htmlContent: string): string {
   // Convert relative proxy URLs to absolute URLs for backend PDF generation
   const currentOrigin = window.location.origin;
-  const processedHtml = htmlContent.replace(
-    /src="\/api\/proxy-image/g,
-    `src="${currentOrigin}/api/proxy-image`
-  );
+  const processedHtml = htmlContent.replace(/src="\/api\/proxy-image/g, `src="${currentOrigin}/api/proxy-image`);
 
-  return PDF_STYLES.replace("{content}", processedHtml);
+  return PDF_STYLES.replace('{content}', processedHtml);
 }
 
 /**
@@ -93,7 +90,7 @@ export function prepareHtmlForPdf(htmlContent: string): string {
  */
 export function downloadPdfBlob(blob: Blob, filename: string): void {
   const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = url;
   link.download = filename;
   document.body.appendChild(link);
@@ -105,19 +102,15 @@ export function downloadPdfBlob(blob: Blob, filename: string): void {
 /**
  * Generates and downloads a PDF from HTML content
  */
-export async function generatePdfFromHtml(
-  htmlContent: string,
-  filename: string,
-  resumeId?: string
-): Promise<void> {
+export async function generatePdfFromHtml(htmlContent: string, filename: string, resumeId?: string): Promise<void> {
   try {
     const styledHtml = prepareHtmlForPdf(htmlContent);
     const pdfBlob = await convertHtmlToPdf(styledHtml, resumeId);
     downloadPdfBlob(pdfBlob, filename);
-    toast.success("PDF downloaded successfully");
+    toast.success('PDF downloaded successfully');
   } catch (error) {
-    console.error("PDF generation error:", error);
-    toast.error("Failed to generate PDF");
+    console.error('PDF generation error:', error);
+    toast.error('Failed to generate PDF');
     throw error;
   }
 }

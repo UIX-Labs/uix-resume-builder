@@ -16,7 +16,7 @@ export type RenderProps = {
   skipImageFallbacks?: boolean;
 };
 
-export function ResumeRenderer({
+function ResumeRendererComponent({
   template,
   data,
   className,
@@ -380,3 +380,7 @@ export function ResumeRenderer({
     </>
   );
 }
+
+// Wrap with React.memo to prevent unnecessary re-renders
+// Uses shallow comparison for all props - parent should memoize data prop
+export const ResumeRenderer = React.memo(ResumeRendererComponent);

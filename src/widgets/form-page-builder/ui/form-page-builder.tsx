@@ -77,16 +77,13 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number) {
  */
 function isSectionEmpty(section: any): boolean {
   if (!section || typeof section !== 'object') {
-    console.log('section is empty', section);
     return true;
   }
 
   if ('items' in section && Array.isArray(section.items)) {
-    console.log('section items are not empty', section.items);
     const items = section.items;
 
     if (items.length === 0) {
-      console.log('section items.length is 0', items);
       return true;
     }
 
@@ -521,13 +518,9 @@ export function FormPageBuilder() {
     }
 
     if (data) {
-      console.log('data', data);
       // Determine if this is create flow (all sections empty) or edit flow (has data)
       const sectionKeys = Object.keys(data).filter((key) => key !== 'templateId' && key !== 'updatedAt');
       const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(data[key as keyof typeof data]));
-      console.log('sectionKeys', sectionKeys);
-
-      console.log('allSectionsEmpty', allSectionsEmpty);
 
       if (allSectionsEmpty) {
         // Create mode: form stays empty, renderer will use mock data as preview

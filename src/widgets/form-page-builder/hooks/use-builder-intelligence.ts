@@ -9,6 +9,7 @@ import {
 import { updateResumeByAnalyzerWithResumeId } from "@entities/resume/api/update-resume-by-analyzer";
 import { useFormDataStore, TRANSITION_TEXTS } from "../models/store";
 import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
 
 const ESTIMATED_TIME_TO_95_PERCENT = 36000; // 36 seconds
 const TARGET_PROGRESS = 95;
@@ -71,6 +72,14 @@ export function useBuilderIntelligence(resumeId: string) {
       toast.error("Resume ID not found");
       return;
     }
+
+    await runAnalyzerWithProgress({
+      resumeId,
+      queryClient,
+      setFormData,
+      setIsAnalyzing,
+      setAnalyzerError,
+    });
 
     setIsAnalyzing(true);
     setAnalyzerError(false);

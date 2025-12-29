@@ -12,6 +12,7 @@ export function renderHeaderSection(
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
+  skipImageFallbacks?: boolean,
 ): React.ReactNode {
   const { fields, className, id } = section;
 
@@ -79,7 +80,7 @@ export function renderHeaderSection(
         {/* {shouldHighlight && <SparkleIndicator />} */}
         {Object.keys(fields).map((key) => (
           <React.Fragment key={key}>
-            {renderField(fields[key], data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail)}
+            {renderField(fields[key], data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}
           </React.Fragment>
         ))}
       </div>
@@ -138,7 +139,7 @@ export function renderHeaderSection(
       )}
 
       {fields.contact && fields.contact.type === 'contact-grid' && (
-        <>{renderField(fields.contact, data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail)}</>
+        <>{renderField(fields.contact, data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}</>
       )}
 
       {fields.contact?.items && (

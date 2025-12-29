@@ -4,7 +4,6 @@ import { useFormPageBuilder } from "../models/ctx";
 import { ResumeRenderer } from "@features/resume/renderer";
 import { useFormDataStore } from "../models/store";
 import { getCleanDataForRenderer } from "../lib/data-cleanup";
-import { ThumbnailRenderer } from "@features/resume/lib/thumbnail/thumbnail-renderer";
 import TemplateButton from "./change-template-button";
 import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
 import { Button } from "@shared/ui/button";
@@ -605,6 +604,7 @@ export function FormPageBuilder() {
                 currentSection={isGeneratingPDF ? undefined : currentStep}
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
+                skipImageFallbacks={isGeneratingPDF}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -628,9 +628,13 @@ export function FormPageBuilder() {
           >
             <div ref={thumbnailRef}>
               {selectedTemplate && (
-                <ThumbnailRenderer
+                <ResumeRenderer
                   template={selectedTemplate}
-                  data={getCleanDataForRenderer(formData ?? {}, false)}
+                  data={getCleanDataForRenderer(formData ?? {}, true)}
+                  currentSection={undefined}
+                  hasSuggestions={false}
+                  isThumbnail={true}
+                  skipImageFallbacks={isGeneratingPDF}
                 />
               )}
             </div>

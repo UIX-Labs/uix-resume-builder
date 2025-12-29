@@ -14,6 +14,7 @@ export function renderSection(
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
+  skipImageFallbacks?: boolean,
 ): React.ReactNode {
   // Check if section is hidden
   // Get section ID from different possible sources
@@ -41,8 +42,8 @@ export function renderSection(
     return null;
   }
 
-  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail);
-  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail);
+  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
+  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
   if (section.type === 'list-section')
     return renderListSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'two-column-layout')

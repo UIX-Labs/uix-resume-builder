@@ -1,11 +1,10 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
-import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { getArrayValueSuggestions } from '@features/template-form/lib/get-field-errors';
 
 export function renderBadgeSection(
   section: any,
@@ -98,23 +97,18 @@ export function renderBadgeSection(
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+          const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
           // const errorBgColor = isThumbnail
           //   ? ""
           //   : getSuggestionBackgroundColor(valueSuggestions);
 
-          const displayValue = `${section.itemPrefix || ""}${actualValue}${section.itemSuffix || ""
-            }`;
+          const displayValue = `${section.itemPrefix || ''}${actualValue}${section.itemSuffix || ''}`;
 
           // If icon exists
           if (IconComponent) {
             return (
-              <div
-                key={idx}
-                className={section.itemClassName}
-                data-canbreak={section.break ? 'true' : undefined}
-              >
+              <div key={idx} className={section.itemClassName} data-canbreak={section.break ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
                 <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
               </div>
@@ -123,13 +117,8 @@ export function renderBadgeSection(
 
           // Default rendering without icon
           return (
-            <span
-              key={idx}
-              data-canbreak={section.break ? 'true' : undefined}
-            >
-              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>
-                {displayValue}
-              </span>
+            <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
+              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
 
               {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                 <span>{section.itemSeparator}</span>

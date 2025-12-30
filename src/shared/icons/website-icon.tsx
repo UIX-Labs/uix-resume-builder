@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface WebsiteIconProps {
   className?: string;
@@ -21,6 +21,7 @@ export const WebsiteIcon: React.FC<WebsiteIconProps> = ({
       viewBox="0 0 16 16"
       fill="none"
       className={className}
+      aria-hidden="true"
     >
       <path
         d="M8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C2.2549e-07 3.58172 3.58172 2.25497e-07 8 0ZM8 3.2002C5.3536 3.2002 3.2002 5.35327 3.2002 8C3.20029 10.6467 5.35366 12.7998 8 12.7998C10.6466 12.7997 12.7997 10.6469 12.7998 8C12.7998 5.35332 10.6467 3.20029 8 3.2002Z"

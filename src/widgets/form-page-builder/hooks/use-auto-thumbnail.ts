@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import type { ResumeData } from "@entities/resume";
+import { useEffect } from 'react';
+import type { ResumeData } from '@entities/resume';
 
 interface UseAutoThumbnailParams {
   resumeId?: string;
-  formData: Omit<ResumeData, "templateId"> | null | undefined;
+  formData: Omit<ResumeData, 'templateId'> | null | undefined;
   generateAndSaveThumbnail: () => Promise<void>;
   intervalMs?: number;
 }

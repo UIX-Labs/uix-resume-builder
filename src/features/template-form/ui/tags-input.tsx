@@ -26,7 +26,7 @@ export function TagsInput({ onChange, data, section }: { data: any; section: any
       <TagInput
         activeTagIndex={0}
         placeholder={section.placeholder}
-        setActiveTagIndex={() => {}}
+        setActiveTagIndex={() => undefined}
         tags={tags}
         setTags={handleTagsChange}
         styleClasses={{

@@ -238,7 +238,7 @@ const HeroSection = () => {
 
         {/* Desktop Overlays */}
         <div className="hidden md:block">
-          {overlays.map((overlay, i) => (
+          {overlays.map((overlay, _i) => (
             <motion.div
               key={overlay.id}
               className="overlay-item absolute"
@@ -262,7 +262,7 @@ const HeroSection = () => {
 
         {/* Mobile Overlays */}
         <div className="block md:hidden">
-          {overlays.map((overlay, i) => (
+          {overlays.map((overlay, _i) => (
             <motion.div
               key={`${overlay.id}-mobile`}
               className="overlay-item absolute scale-[0.4] md:scale-100"

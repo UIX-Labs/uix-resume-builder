@@ -14,7 +14,7 @@ interface PhoneInputProps {
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }, ref) => {
+  ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }, _ref) => {
     return (
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry

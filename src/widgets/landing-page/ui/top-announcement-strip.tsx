@@ -38,14 +38,10 @@ export const TopAnnouncementStrip = () => {
 
           <span className="text-xs md:text-lg text-start md:text-left leading-tight">
             Free lifetime access for the first <span className="font-semibold">1,000 users</span>.
-           
-              <span
-                onClick={handleSignUpClick}
-                className="underline cursor-pointer whitespace-nowrap"
-              >
-                Sign up now
-              </span>
-              .
+            <button type="button" onClick={handleSignUpClick} className="underline cursor-pointer whitespace-nowrap">
+              Sign up now
+            </button>
+            .
           </span>
 
           <Image src="/images/crown.svg" alt="Crown" width={24} height={24} className="hidden md:block md:w-9 md:h-9" />

@@ -62,7 +62,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
             disabled={deleteResumeMutation.isPending}
             className="w-1/2 rounded-4xl cursor-pointer"
           >
-            {deleteResumeMutation.isPending ? <>Deleting...</> : <>Delete Resume</>}
+            {deleteResumeMutation.isPending ? 'Deleting...' : 'Delete Resume'}
           </Button>
         </div>
       </DialogContent>

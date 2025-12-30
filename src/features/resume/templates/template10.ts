@@ -164,7 +164,7 @@ const template10 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -196,8 +196,8 @@ const template10 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -280,7 +280,7 @@ const template10 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {
@@ -307,8 +307,8 @@ const template10 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -344,7 +344,7 @@ const template10 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {

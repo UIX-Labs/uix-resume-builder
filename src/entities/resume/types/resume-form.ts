@@ -1,4 +1,4 @@
-import { ResumeDataKey } from './resume-data';
+import type { ResumeDataKey } from './resume-data';
 
 type FieldType = 'text' | 'email' | 'tel' | 'url' | 'textarea' | 'duration' | 'dropdown' | 'tags' | 'data';
 

@@ -107,7 +107,7 @@ function DashboardContent() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
+              <WelcomeHeader userName={`${user?.firstName ?? ''} ${user?.lastName ?? ''}`} />
 
               <div className="px-4">
                 <ResumeCreationCard shouldOpenJDModal={shouldOpenJDModal} />
@@ -135,4 +135,3 @@ export default function DashboardPage() {
     </Suspense>
   );
 }
-

@@ -28,8 +28,6 @@ export const TRANSITION_TEXTS: TransitionText[] = [
 export const useFormDataStore = create<{
   formData: Omit<ResumeData, 'templateId'>;
   setFormData: (formData: Omit<ResumeData, 'templateId'>) => void;
-  currentResumeId: string | null;
-  setCurrentResumeId: (resumeId: string | null) => void;
   isAnalyzing: boolean;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
   analyzerProgress: number;
@@ -38,12 +36,9 @@ export const useFormDataStore = create<{
   setAnalyzerError: (error: boolean) => void;
   currentTextIndex: number;
   setCurrentTextIndex: (index: number) => void;
-  resetFormData: () => void;
 }>((set) => ({
   formData: {} as Omit<ResumeData, 'templateId'>,
   setFormData: (formData: Omit<ResumeData, 'templateId'>) => set({ formData }),
-  currentResumeId: null,
-  setCurrentResumeId: (resumeId: string | null) => set({ currentResumeId: resumeId }),
   isAnalyzing: false,
   setIsAnalyzing: (isAnalyzing: boolean) => set({ isAnalyzing }),
   analyzerProgress: 0,
@@ -52,8 +47,4 @@ export const useFormDataStore = create<{
   setAnalyzerError: (error: boolean) => set({ analyzerError: error }),
   currentTextIndex: 0,
   setCurrentTextIndex: (index: number) => set({ currentTextIndex: index }),
-  resetFormData: () => set({ 
-    formData: {} as Omit<ResumeData, 'templateId'>,
-    currentResumeId: null,
-  }),
 }));

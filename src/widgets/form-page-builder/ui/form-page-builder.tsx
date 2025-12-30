@@ -43,7 +43,6 @@ import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidat
 import { useQueryClient } from "@tanstack/react-query";
 import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-const { clearAnalyzedData } = useAnalyzerStore.getState();
 import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
 import { formatTimeAgo } from "../lib/time-helpers";
 
@@ -54,26 +53,8 @@ export function FormPageBuilder() {
     useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
-  const currentResumeId = useFormDataStore((state) => state.currentResumeId);
-  const setCurrentResumeId = useFormDataStore(
-    (state) => state.setCurrentResumeId
-  );
-  const resetFormData = useFormDataStore((state) => state.resetFormData);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
-
-  // Reset form data when navigating to a different resume
-  // This prevents stale data from a previous resume from persisting
-  useEffect(() => {
-    if (resumeId && currentResumeId && currentResumeId !== resumeId) {
-      // User navigated to a different resume - reset form data
-      resetFormData();
-    }
-    // Update the current resume ID
-    if (resumeId) {
-      setCurrentResumeId(resumeId);
-    }
-  }, [resumeId, currentResumeId, resetFormData, setCurrentResumeId]);
 
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -417,6 +398,9 @@ export function FormPageBuilder() {
     ]
   );
 
+  // Track the previous resumeId to detect navigation between resumes
+  const previousResumeIdRef = useRef<string | null>(null);
+
   useEffect(() => {
     async function processAnalyzerData() {
       if (!resumeId || !analyzedData) return;
@@ -437,15 +421,17 @@ export function FormPageBuilder() {
       processedData = normalizeStringsFields(processedData);
 
       setFormData(processedData as Omit<ResumeData, "templateId">);
-
-      // Clear the analyzer store after successfully applying the data
-      // This prevents the old analyzer data from persisting when navigating away
-      clearAnalyzedData();
     }
 
     if (!resumeId) {
       return;
     }
+
+    // Check if user navigated to a different resume
+    const isNewResume =
+      previousResumeIdRef.current !== null &&
+      previousResumeIdRef.current !== resumeId;
+    previousResumeIdRef.current = resumeId;
 
     if (analyzerResumeId === resumeId && analyzedData) {
       processAnalyzerData();
@@ -454,42 +440,55 @@ export function FormPageBuilder() {
 
     if (!resumeData) return;
 
-    // Check if current formData has suggestions
-    const formDataHasSuggestions =
-      formData &&
-      Object.values(formData).some((section) => {
-        if (
-          section &&
-          typeof section === "object" &&
-          "suggestedUpdates" in section
-        ) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-            .suggestedUpdates;
-          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-        }
-        return false;
-      });
+    // If user navigated to a different resume, always load the new resume's data
+    // Don't preserve suggestions from a different resume
+    if (isNewResume) {
+      // Skip the suggestion preservation check and load the new resume's data
+    } else {
+      // Check if current formData has suggestions
+      const formDataHasSuggestions =
+        formData &&
+        Object.values(formData).some((section) => {
+          if (
+            section &&
+            typeof section === "object" &&
+            "suggestedUpdates" in section
+          ) {
+            const suggestedUpdates = (
+              section as { suggestedUpdates?: unknown[] }
+            ).suggestedUpdates;
+            return (
+              Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0
+            );
+          }
+          return false;
+        });
 
-    // Check if resumeData has suggestions
-    const resumeDataHasSuggestions = Object.values(resumeData).some(
-      (section) => {
-        if (
-          section &&
-          typeof section === "object" &&
-          "suggestedUpdates" in section
-        ) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-            .suggestedUpdates;
-          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      // Check if resumeData has suggestions
+      const resumeDataHasSuggestions = Object.values(resumeData).some(
+        (section) => {
+          if (
+            section &&
+            typeof section === "object" &&
+            "suggestedUpdates" in section
+          ) {
+            const suggestedUpdates = (
+              section as { suggestedUpdates?: unknown[] }
+            ).suggestedUpdates;
+            return (
+              Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0
+            );
+          }
+          return false;
         }
-        return false;
+      );
+
+      // If formData has suggestions but resumeData doesn't,
+      // it means Builder Intelligence set the suggestions - don't overwrite!
+      // Only do this for the SAME resume (not when navigating to a different resume)
+      if (formDataHasSuggestions && !resumeDataHasSuggestions) {
+        return;
       }
-    );
-
-    // If formData has suggestions but resumeData doesn't,
-    // it means Builder Intelligence set the suggestions - don't overwrite!
-    if (formDataHasSuggestions && !resumeDataHasSuggestions) {
-      return;
     }
 
     // Determine if this is create flow (all sections empty) or edit flow (has data)

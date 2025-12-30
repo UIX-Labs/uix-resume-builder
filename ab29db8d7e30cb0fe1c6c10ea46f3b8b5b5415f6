@@ -1,0 +1,51 @@
+src/app/api/sentry-example-api/route.ts
+  89e3af9f0cabc5c0 9
+.husky/pre-commit
+  89e3af9f0cabc5c0 1
+src/components/ui/shadcn-io/tags/index.tsx
+  89e3af9f0cabc5c0 33,125,127
+src/widgets/landing-page/ui/top-announcement-strip.tsx
+  89e3af9f0cabc5c0 41,43
+src/app/about-us/page.tsx
+  89e3af9f0cabc5c0 53,56-58
+src/features/template-form/ui/tags-input.tsx
+  89e3af9f0cabc5c0 29
+src/features/resume/lib/section-renderers/header-section.tsx
+  89e3af9f0cabc5c0 24-25,31,92,152,159,175
+src/app/globals.css
+  89e3af9f0cabc5c0 602
+src/widgets/templates-page/ui/preview-modal.tsx
+  89e3af9f0cabc5c0 3,7,29-30,35
+src/widgets/dashboard/ui/dashboard-carousel.tsx
+  89e3af9f0cabc5c0 3,16,18-19,71
+src/app/roast/components/fire.tsx
+  89e3af9f0cabc5c0 23
+src/features/resume/utils.ts
+  89e3af9f0cabc5c0 20,22,24
+biome.json
+  89e3af9f0cabc5c0 2
+src/app/global-error.tsx
+  89e3af9f0cabc5c0 13
+src/features/resume/lib/components/SparkleIndicator.tsx
+  89e3af9f0cabc5c0 21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.25",
+  "base_commit_sha": "ab29db8d7e30cb0fe1c6c10ea46f3b8b5b5415f6",
+  "prompts": {
+    "89e3af9f0cabc5c0": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "150c2caf-2453-449c-a1c1-88da776ea1a3",
+        "model": "claude-4.5-opus-high-thinking"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 103,
+      "total_deletions": 98,
+      "accepted_lines": 37,
+      "overriden_lines": 0
+    }
+  }
+}

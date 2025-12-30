@@ -43,6 +43,7 @@ import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidat
 import { useQueryClient } from "@tanstack/react-query";
 import AnalyzerModal from "@shared/ui/components/analyzer-modal";
 import { useAnalyzerStore } from "@shared/stores/analyzer-store";
+const { clearAnalyzedData } = useAnalyzerStore.getState();
 import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
 import { formatTimeAgo } from "../lib/time-helpers";
 
@@ -53,8 +54,26 @@ export function FormPageBuilder() {
     useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
+  const currentResumeId = useFormDataStore((state) => state.currentResumeId);
+  const setCurrentResumeId = useFormDataStore(
+    (state) => state.setCurrentResumeId
+  );
+  const resetFormData = useFormDataStore((state) => state.resetFormData);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
+
+  // Reset form data when navigating to a different resume
+  // This prevents stale data from a previous resume from persisting
+  useEffect(() => {
+    if (resumeId && currentResumeId && currentResumeId !== resumeId) {
+      // User navigated to a different resume - reset form data
+      resetFormData();
+    }
+    // Update the current resume ID
+    if (resumeId) {
+      setCurrentResumeId(resumeId);
+    }
+  }, [resumeId, currentResumeId, resetFormData, setCurrentResumeId]);
 
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
   const targetRef = useRef<HTMLDivElement>(null);
@@ -418,6 +437,10 @@ export function FormPageBuilder() {
       processedData = normalizeStringsFields(processedData);
 
       setFormData(processedData as Omit<ResumeData, "templateId">);
+
+      // Clear the analyzer store after successfully applying the data
+      // This prevents the old analyzer data from persisting when navigating away
+      clearAnalyzedData();
     }
 
     if (!resumeId) {

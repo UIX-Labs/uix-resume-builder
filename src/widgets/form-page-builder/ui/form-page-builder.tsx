@@ -12,8 +12,6 @@ import { TemplateForm } from "@features/template-form";
 import { camelToHumanString } from "@shared/lib/string";
 import { data as formSchemaData } from "@entities/resume/api/schema-data";
 import { usePdfGeneration } from "../hooks/use-pdf-generation";
-import WishlistModal from "./wishlist-modal";
-import WishlistSuccessModal from "./waitlist-success-modal";
 import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
 import { useParams } from "next/navigation";
 import { useThumbnailGeneration } from "../hooks/use-thumbnail-generation";
@@ -53,6 +51,7 @@ export function FormPageBuilder() {
     useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
+  const formDataResumeId = useFormDataStore((state) => state.formDataResumeId);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -121,7 +120,6 @@ export function FormPageBuilder() {
     resumeId,
     formData,
     generateAndSaveThumbnail,
-    intervalMs: 25000,
   });
 
   const { mutateAsync: saveResumeForm } = useSaveResumeForm();
@@ -141,6 +139,7 @@ export function FormPageBuilder() {
   const { handleSaveResume, handleNextStep } = useSaveAndNext({
     currentStep,
     formData,
+    resumeData,
     save,
     resumeId,
     navs,
@@ -372,7 +371,7 @@ export function FormPageBuilder() {
           },
         };
 
-        setFormData(updatedData as Omit<ResumeData, "templateId">);
+        setFormData(updatedData as Omit<ResumeData, "templateId">, resumeId);
 
         // Check if all suggestions are applied and invalidate queries if needed
         invalidateQueriesIfAllSuggestionsApplied(
@@ -398,9 +397,6 @@ export function FormPageBuilder() {
     ]
   );
 
-  // Track the previous resumeId to detect navigation between resumes
-  const previousResumeIdRef = useRef<string | null>(null);
-
   useEffect(() => {
     async function processAnalyzerData() {
       if (!resumeId || !analyzedData) return;
@@ -420,18 +416,12 @@ export function FormPageBuilder() {
       // Normalize string fields (interests, achievements)
       processedData = normalizeStringsFields(processedData);
 
-      setFormData(processedData as Omit<ResumeData, "templateId">);
+      setFormData(processedData as Omit<ResumeData, "templateId">, resumeId);
     }
 
     if (!resumeId) {
       return;
     }
-
-    // Check if user navigated to a different resume
-    const isNewResume =
-      previousResumeIdRef.current !== null &&
-      previousResumeIdRef.current !== resumeId;
-    previousResumeIdRef.current = resumeId;
 
     if (analyzerResumeId === resumeId && analyzedData) {
       processAnalyzerData();
@@ -440,53 +430,14 @@ export function FormPageBuilder() {
 
     if (!resumeData) return;
 
-    // If user navigated to a different resume, always load the new resume's data
-    // Don't preserve suggestions from a different resume
-    if (isNewResume) {
-      // Skip the suggestion preservation check and load the new resume's data
-    } else {
-      // Check if current formData has suggestions
-      const formDataHasSuggestions =
-        formData &&
-        Object.values(formData).some((section) => {
-          if (
-            section &&
-            typeof section === "object" &&
-            "suggestedUpdates" in section
-          ) {
-            const suggestedUpdates = (
-              section as { suggestedUpdates?: unknown[] }
-            ).suggestedUpdates;
-            return (
-              Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0
-            );
-          }
-          return false;
-        });
+    // Only preserve suggestions if formData belongs to this resume
+    const isSameResume = formDataResumeId === resumeId;
+    if (isSameResume) {
+      const hasSuggestions = (data: any) =>
+        Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
 
-      // Check if resumeData has suggestions
-      const resumeDataHasSuggestions = Object.values(resumeData).some(
-        (section) => {
-          if (
-            section &&
-            typeof section === "object" &&
-            "suggestedUpdates" in section
-          ) {
-            const suggestedUpdates = (
-              section as { suggestedUpdates?: unknown[] }
-            ).suggestedUpdates;
-            return (
-              Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0
-            );
-          }
-          return false;
-        }
-      );
-
-      // If formData has suggestions but resumeData doesn't,
-      // it means Builder Intelligence set the suggestions - don't overwrite!
-      // Only do this for the SAME resume (not when navigating to a different resume)
-      if (formDataHasSuggestions && !resumeDataHasSuggestions) {
+      // If formData has suggestions but resumeData doesn't, preserve formData
+      if (hasSuggestions(formData) && !hasSuggestions(resumeData)) {
         return;
       }
     }
@@ -529,12 +480,19 @@ export function FormPageBuilder() {
         }
       }
 
-      setFormData(mergedData as Omit<ResumeData, "templateId">);
+      setFormData(mergedData as Omit<ResumeData, "templateId">, resumeId);
     } else {
       // Edit flow: Use actual data as-is
-      setFormData(resumeData as Omit<ResumeData, "templateId">);
+      setFormData(resumeData as Omit<ResumeData, "templateId">, resumeId);
     }
-  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
+  }, [
+    resumeId,
+    resumeData,
+    analyzedData,
+    analyzerResumeId,
+    setFormData,
+    formDataResumeId,
+  ]);
 
   // Initialize last save time from resume data
   useEffect(() => {
@@ -778,7 +736,7 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             currentStep={currentStep}
             values={formData ?? {}}
-            onChange={(formData) => setFormData(formData)}
+            onChange={(formData) => setFormData(formData, resumeId)}
             onOpenAnalyzerModal={handleOpenAnalyzerModal}
             onToggleHideSection={handleToggleHideSection}
           />

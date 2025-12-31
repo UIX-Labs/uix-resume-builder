@@ -97,7 +97,7 @@ export function useBuilderIntelligence(resumeId: string) {
 
         processedData = normalizeStringsFields(processedData);
 
-        setFormData(processedData as any);
+        setFormData(processedData as any, resumeId);
 
         // Complete progress to 100%
         useFormDataStore.setState({ analyzerProgress: 100 });

@@ -10,7 +10,7 @@ import { TRANSITION_TEXTS, useFormDataStore } from '@widgets/form-page-builder/m
 interface AnalyzerRunParams {
   resumeId: string;
   queryClient: QueryClient;
-  setFormData: (data: ResumeData) => void;
+  setFormData: (data: ResumeData, resumeId?: string) => void;
   setIsAnalyzing: (value: boolean) => void;
   setAnalyzerError: (value: boolean) => void;
   successMessage?: string;
@@ -93,7 +93,7 @@ export async function runAnalyzerWithProgress({
       }
 
       processedData = normalizeStringsFields(processedData);
-      setFormData(processedData);
+      setFormData(processedData, resumeId);
 
       useFormDataStore.setState({ analyzerProgress: 100 });
       queryClient.invalidateQueries({ queryKey: ['resume-data', resumeId] });

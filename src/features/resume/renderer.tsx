@@ -13,15 +13,17 @@ export type RenderProps = {
   currentSection?: string;
   hasSuggestions?: boolean;
   isThumbnail?: boolean;
+  skipImageFallbacks?: boolean;
 };
 
-export function ResumeRenderer({
+function ResumeRendererComponent({
   template,
   data,
   className,
   currentSection,
   hasSuggestions = false,
   isThumbnail = false,
+  skipImageFallbacks = false,
 }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
@@ -32,18 +34,23 @@ export function ResumeRenderer({
   const PAGE_PADDING = page.padding ?? 24;
 
   // NEW: dynamic max height per column
-  const DEFAULT_MAX = PAGE_HEIGHT - PAGE_PADDING * 2;
-  const COLUMN_MAX = {
-    left: DEFAULT_MAX,
-    right: DEFAULT_MAX,
-  };
+  const PAGE_PADDING_PX = PAGE_PADDING;
+  const COLUMN_MAX_DEFAULT = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
 
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
+    // Note: skipImageFallbacks is used to hide profile pictures when no image is set during PDF generation
 
+    // Get the actual computed height of the banner as it appears in the grid
     const bannerEl = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
-    const calculatedBannerHeight = bannerEl ? bannerEl.offsetHeight : 0;
+    const bHeight = bannerEl ? bannerEl.offsetHeight : 0;
+
+    // On the first page, the columns are in a grid row below the banner.
+    // The banner's negative top margin means it occupies space starting from the top.
+    // However, the column content is still subject to the page's bottom padding.
+    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX;
+    const pageMaxOther = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
 
     const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
     const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
@@ -55,10 +62,8 @@ export function ResumeRenderer({
       columnEl: HTMLElement,
       columnName: 'left' | 'right',
       outPages: React.ReactNode[][],
-      bHeight: number,
     ) {
-      const pageMax = COLUMN_MAX[columnName];
-      const pageMaxFirst = pageMax - bHeight;
+      const pageMax = pageMaxOther;
 
       // Create a test container to measure actual heights
       const testContainer = document.createElement('div');
@@ -69,73 +74,157 @@ export function ResumeRenderer({
       testContainer.className = columnEl.className;
       document.body.appendChild(testContainer);
 
-      let currentColumnPage: React.ReactNode[] = [];
-      outPages.push(currentColumnPage);
+      // State management
+      let currentPageIndex = 0;
+      outPages.push([]);
+
+      // Stack to track parent wrappers we're currently inside
+      const containerStack: HTMLElement[] = [];
+
+      function getCurrentPageMax(): number {
+        return currentPageIndex === 0 ? pageMaxFirst : pageMax;
+      }
+
+      function getPageHeight(): number {
+        testContainer.innerHTML = '';
+        const currentPageNodes = outPages[currentPageIndex];
+
+        currentPageNodes.forEach((node: any) => {
+          if (node.nodeType) {
+            testContainer.appendChild(node.cloneNode(true));
+          }
+        });
+
+        return testContainer.getBoundingClientRect().height;
+      }
+
+      function startNewPage() {
+        currentPageIndex++;
+        outPages.push([]);
+
+        // Recreate the container stack on the new page
+        for (let i = 0; i < containerStack.length; i++) {
+          const originalContainer = containerStack[i];
+          const newContainer = originalContainer.cloneNode(false) as HTMLElement;
+
+          if (i === 0) {
+            // First container goes directly on the page
+            outPages[currentPageIndex].push(newContainer as any);
+          } else {
+            // Nested containers get appended to their parent
+            const parent = findContainerOnCurrentPage(i - 1);
+            if (parent) {
+              parent.appendChild(newContainer);
+            }
+          }
+
+          // Update the stack reference
+          containerStack[i] = newContainer;
+        }
+      }
+
+      function findContainerOnCurrentPage(stackIndex: number): HTMLElement | null {
+        if (stackIndex < 0 || stackIndex >= containerStack.length) return null;
+        return containerStack[stackIndex];
+      }
+
+      function getCurrentContainer(): HTMLElement | null {
+        return containerStack.length > 0 ? containerStack[containerStack.length - 1] : null;
+      }
+
+      function addToPage(element: HTMLElement) {
+        const container = getCurrentContainer();
+        if (container) {
+          container.appendChild(element);
+        } else {
+          outPages[currentPageIndex].push(element as any);
+        }
+      }
 
       function processChildren(parentEl: HTMLElement) {
         const children = Array.from(parentEl.children) as HTMLElement[];
 
         for (const child of children) {
-          // Check if element is breakable - either via attribute or by tag name (ul, ol are naturally breakable)
           const tagName = child.tagName?.toLowerCase();
-          const isListElement = tagName === 'ul' || tagName === 'ol';
-          const canBreak = child.getAttribute('data-canbreak') === 'true' || isListElement;
+          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div', 'li'].includes(tagName);
+          const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
           const hasBreakableContent =
+            child.querySelector('[data-canbreak="true"]') !== null ||
             child.querySelector('[data-has-breakable-content="true"]') !== null ||
             child.getAttribute('data-has-breakable-content') === 'true';
 
-          // Clone and measure the actual height
+          // Try adding the full element first
           const clone = child.cloneNode(true) as HTMLElement;
-          testContainer.innerHTML = '';
-          testContainer.appendChild(clone);
+          addToPage(clone);
 
-          const isFirstPage = outPages.length === 1;
-          const currentMax = isFirstPage ? pageMaxFirst : pageMax;
+          const currentHeight = getPageHeight();
+          const max = getCurrentPageMax();
 
-          const cloneHeight = clone.getBoundingClientRect().height;
-          const computedStyle = window.getComputedStyle(clone);
-          const marginTop = parseFloat(computedStyle.marginTop) || 0;
-          const marginBottom = parseFloat(computedStyle.marginBottom) || 0;
-          const totalHeight = cloneHeight + marginTop + marginBottom;
-
-          // Calculate current page height
-          testContainer.innerHTML = '';
-          currentColumnPage.forEach((node: any) => {
-            const nodeClone =
-              typeof node === 'string'
-                ? document.createRange().createContextualFragment(node).firstChild
-                : node.cloneNode(true);
-            if (nodeClone) testContainer.appendChild(nodeClone as Node);
-          });
-
-          const currentHeight = testContainer.getBoundingClientRect().height;
-
-          // If element is too tall to fit on remaining space
-          if (currentHeight + totalHeight + 40 > currentMax && currentColumnPage.length > 0) {
-            // If the element is breakable and has children, try to break it
-            if (canBreak && child.children.length > 0) {
-              processChildren(child);
-              continue;
-            }
-
-            currentColumnPage = [];
-            outPages.push(currentColumnPage);
+          // If it fits, keep it and continue
+          if (currentHeight <= max) {
+            continue;
           }
 
-          if (totalHeight > pageMax && child.children.length > 0) {
-            // If element itself is breakable, process its children
-            if (canBreak) {
-              processChildren(child);
-              continue;
-            }
-            // If not breakable but has breakable content (via template prop), process children
-            if (hasBreakableContent) {
-              processChildren(child);
-              continue;
-            }
+          // It doesn't fit - remove it
+          const container = getCurrentContainer();
+          if (container && container.contains(clone)) {
+            container.removeChild(clone);
+          } else {
+            outPages[currentPageIndex].pop();
           }
 
-          currentColumnPage.push(child.cloneNode(true) as unknown as React.ReactNode);
+          // Try to break it
+          if ((canBreak || hasBreakableContent) && child.children.length > 0) {
+            // Create empty wrapper and add to current page
+            const wrapper = child.cloneNode(false) as HTMLElement;
+            addToPage(wrapper);
+
+            // Push to stack
+            containerStack.push(wrapper);
+
+            // Process children (they'll be added inside the wrapper)
+            processChildren(child);
+
+            // Pop from stack
+            containerStack.pop();
+            continue;
+          }
+
+          // Cannot break - need new page
+          const pageHeight = getPageHeight();
+          const hasContent = pageHeight > 10;
+
+          if (!hasContent) {
+            // Page is empty, must add anyway to avoid infinite loop
+            addToPage(clone);
+            continue;
+          }
+
+          // Start new page and try again
+          startNewPage();
+
+          // Recursively try to add on new page
+          const newClone = child.cloneNode(true) as HTMLElement;
+          addToPage(newClone);
+
+          const newHeight = getPageHeight();
+          const newMax = getCurrentPageMax();
+
+          if (newHeight > newMax && (canBreak || hasBreakableContent) && child.children.length > 0) {
+            // Still doesn't fit on new page - must break it
+            const container = getCurrentContainer();
+            if (container && container.contains(newClone)) {
+              container.removeChild(newClone);
+            } else {
+              outPages[currentPageIndex].pop();
+            }
+
+            const wrapper = child.cloneNode(false) as HTMLElement;
+            addToPage(wrapper);
+            containerStack.push(wrapper);
+            processChildren(child);
+            containerStack.pop();
+          }
         }
       }
 
@@ -145,8 +234,8 @@ export function ResumeRenderer({
       document.body.removeChild(testContainer);
     }
 
-    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages, calculatedBannerHeight);
-    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages, calculatedBannerHeight);
+    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
+    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
 
     const totalPages = Math.max(leftPages.length, rightPages.length);
     const merged: [React.ReactNode[], React.ReactNode[]][] = [];
@@ -217,7 +306,7 @@ export function ResumeRenderer({
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
               <React.Fragment key={i}>
-                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
               </React.Fragment>
             ))}
           </div>
@@ -225,14 +314,14 @@ export function ResumeRenderer({
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
           {leftItems.map((s: any, i: number) => (
             <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
             </React.Fragment>
           ))}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
           {rightItems.map((s: any, i: number) => (
             <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
             </React.Fragment>
           ))}
         </div>
@@ -263,7 +352,9 @@ export function ResumeRenderer({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>{renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}</React.Fragment>
+                  <React.Fragment key={i}>
+                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+                  </React.Fragment>
                 ))}
               </div>
             )}
@@ -272,7 +363,7 @@ export function ResumeRenderer({
               style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
             >
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
               ))}
             </div>
             <div
@@ -280,7 +371,7 @@ export function ResumeRenderer({
               style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
             >
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} className={node.containerClassName} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
               ))}
             </div>
           </div>
@@ -290,3 +381,6 @@ export function ResumeRenderer({
   );
 }
 
+// Wrap with React.memo to prevent unnecessary re-renders
+// Uses shallow comparison for all props - parent should memoize data prop
+export const ResumeRenderer = React.memo(ResumeRendererComponent);

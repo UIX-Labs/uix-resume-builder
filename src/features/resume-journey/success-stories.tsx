@@ -49,7 +49,7 @@ export function SuccessStories() {
           </p>
 
           <button
-            type='button'
+            type="button"
             className="bg-[#257AFF] text-white rounded-lg px-4 py-2 text-base sm:text-lg font-normal hover:bg-[#1e66d9] transition-colors cursor-pointer"
             onClick={handleReadTestimonials}
           >
@@ -61,13 +61,7 @@ export function SuccessStories() {
         <div className="hidden lg:block relative w-full max-w-[586px] min-h-[275px]">
           {/* Moon Icon - Top */}
           <div className="absolute left-[126px] top-0 w-20 h-20">
-            <Image
-              src="/images/moon.svg"
-              alt="Moon icon"
-              width={80}
-              height={80}
-              className="object-contain"
-            />
+            <Image src="/images/moon.svg" alt="Moon icon" width={80} height={80} className="object-contain" />
           </div>
 
           {/* Green Dot */}
@@ -94,7 +88,11 @@ export function SuccessStories() {
           </p>
 
           {/* Button */}
-          <button type='button' className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors cursor-pointer" onClick={handleReadTestimonials}>
+          <button
+            type="button"
+            className="absolute left-0 top-[235px] bg-[#257AFF] text-white rounded-lg px-3 py-2 text-lg font-normal hover:bg-[#1e66d9] transition-colors cursor-pointer"
+            onClick={handleReadTestimonials}
+          >
             Read all testimonials
           </button>
         </div>

@@ -1,8 +1,12 @@
-import { fetch } from "@shared/api";
+import { fetch } from '@shared/api';
 
-import type { ResumeData } from "../types/resume-data";
+import type { ResumeData } from '../types/resume-data';
 
 export interface ResumeDataResponse extends ResumeData {
+  id: string;
+  updatedAt: string;
+  template: any | null;
+  publicThumbnail?: { url: string; expiresAt: string } | null;
   isAnalyzed?: boolean;
 }
 

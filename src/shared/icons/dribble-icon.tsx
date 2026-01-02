@@ -30,4 +30,3 @@ export const DribbleIcon: React.FC<DribbleIconProps> = ({
     </svg>
   );
 };
-

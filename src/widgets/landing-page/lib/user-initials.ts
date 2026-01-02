@@ -5,12 +5,9 @@
  * - If no lastName but firstName has spaces: split firstName, use first part as firstName and last part as lastName
  * - Returns initials (first letter of firstName + first letter of lastName)
  */
-export function getUserInitials(
-  firstName: string | null,
-  lastName: string | null
-): string {
-  let firstPart = "";
-  let lastPart = "";
+export function getUserInitials(firstName: string | null, lastName: string | null): string {
+  let firstPart = '';
+  let lastPart = '';
 
   // If lastName exists, use it
   if (lastName && lastName.trim()) {
@@ -18,9 +15,9 @@ export function getUserInitials(
     const lastNameWords = lastName.trim().split(/\s+/);
 
     // First word of firstName
-    firstPart = firstNameWords[0] || "";
+    firstPart = firstNameWords[0] || '';
     // Last word of lastName
-    lastPart = lastNameWords[lastNameWords.length - 1] || "";
+    lastPart = lastNameWords[lastNameWords.length - 1] || '';
   } else if (firstName && firstName.trim()) {
     // No lastName, check if firstName has spaces
     const firstNameWords = firstName.trim().split(/\s+/);
@@ -32,13 +29,13 @@ export function getUserInitials(
     } else {
       // Single word firstName, use it as firstPart only
       firstPart = firstNameWords[0];
-      lastPart = "";
+      lastPart = '';
     }
   }
 
   // Extract first letter of each part and convert to uppercase
-  const firstInitial = firstPart.charAt(0).toUpperCase() || "";
-  const lastInitial = lastPart.charAt(0).toUpperCase() || "";
+  const firstInitial = firstPart.charAt(0).toUpperCase() || '';
+  const lastInitial = lastPart.charAt(0).toUpperCase() || '';
 
   return firstInitial + lastInitial;
 }

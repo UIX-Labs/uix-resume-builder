@@ -1,44 +1,35 @@
-import { Input } from "@/shared/ui/components/input";
+import { Input } from '@/shared/ui/components/input';
 
-import type {
-  FormSchema,
-  ResumeDataKey,
-  ResumeData,
-  SuggestedUpdates,
-} from "@entities/resume";
-import { cn } from "@shared/lib/cn";
-import { TiptapTextArea } from "@shared/ui/components/textarea";
-import { Draggable } from "./draggable";
-import { UrlInput } from "./url";
-import { Dropdown } from "./dropdown";
-import { Duration } from "./duration";
-import { TagsInput } from "./tags-input";
-import { LinksInput } from "./links-input";
-import { StringsInput } from "./strings-input";
-import { FieldErrorBadges } from "./error-badges";
-import { getFieldErrors, getFieldSuggestions } from "../lib/get-field-errors";
-import { ProfilePictureInput } from "./profile-picture";
-import { PhoneInput } from "./phone-input";
-import { Eye, EyeOff } from "lucide-react";
-import { Button } from "@shared/ui/button";
+import type { FormSchema, ResumeDataKey, ResumeData, SuggestedUpdates } from '@entities/resume';
+import { cn } from '@shared/lib/cn';
+import { TiptapTextArea } from '@shared/ui/components/textarea';
+import { Draggable } from './draggable';
+import { UrlInput } from './url';
+import { Dropdown } from './dropdown';
+import { Duration } from './duration';
+import { TagsInput } from './tags-input';
+import { LinksInput } from './links-input';
+import { StringsInput } from './strings-input';
+import { FieldErrorBadges } from './error-badges';
+import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
+import { ProfilePictureInput } from './profile-picture';
+import { PhoneInput } from './phone-input';
+import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@shared/ui/button';
 
 export function TemplateForm({
   formSchema,
   values,
   onChange,
-  currentStep = "personalDetails",
+  currentStep = 'personalDetails',
   onOpenAnalyzerModal,
   onToggleHideSection,
 }: {
   formSchema: FormSchema | {};
-  values: Omit<ResumeData, "templateId">;
-  onChange: (data: Omit<ResumeData, "templateId">) => void;
+  values: Omit<ResumeData, 'templateId'>;
+  onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
-  onOpenAnalyzerModal?: (
-    itemId: string,
-    fieldName: string,
-    suggestionType: any
-  ) => void;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }) {
   function getItem<T = any>(
@@ -47,33 +38,29 @@ export function TemplateForm({
     onChange: (data: T) => void,
     suggestedUpdates?: SuggestedUpdates,
     itemId?: string,
-    fieldName?: string
+    fieldName?: string,
   ) {
     switch (section.type) {
-      case "profilePicture": {
+      case 'profilePicture': {
         return (
           <ProfilePictureInput
-            data={
-              typeof data === "string"
-                ? { profilePicturePublicUrl: data }
-                : undefined
-            }
+            data={typeof data === 'string' ? { profilePicturePublicUrl: data } : undefined}
             onChange={(value) => onChange(value.profilePicturePublicUrl as T)}
-            personalDetailItemId={itemId || ""}
+            personalDetailItemId={itemId || ''}
             section={section}
           />
         );
       }
 
-      case "data": {
+      case 'data': {
         return (
           <Input
             placeholder={section.placeholder}
             className={cn(
-              "border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]",
-              "placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal",
-              "focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]",
-              "bg-[#FAFBFC]"
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
             )}
             value={data.value}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
@@ -81,7 +68,7 @@ export function TemplateForm({
         );
       }
 
-      case "textarea": {
+      case 'textarea': {
         // Get error suggestions for this field
         const errorSuggestions =
           suggestedUpdates && itemId && fieldName
@@ -95,10 +82,10 @@ export function TemplateForm({
             placeholder={section.placeholder}
             errorSuggestions={errorSuggestions}
             className={cn(
-              "border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl",
-              "placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal",
-              "focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]",
-              "bg-[#FAFBFC]",
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
               "[&>div]:!ml-0"
             )}
             onChange={(_value, html) => {
@@ -108,48 +95,41 @@ export function TemplateForm({
         );
       }
 
-      case "tel": {
+      case 'tel': {
         return (
           <PhoneInput
-            value={typeof data === "string" ? data : data?.value || ""}
+            value={typeof data === 'string' ? data : data?.value || ''}
             placeholder={section.placeholder}
             onChange={(phoneValue) => {
-              onChange(phoneValue || "");
+              onChange(phoneValue || '');
             }}
             className="w-full"
           />
         );
       }
 
-      case "url": {
+      case 'url': {
         return <UrlInput data={data} onChange={onChange} section={section} />;
       }
 
-      case "dropdown": {
+      case 'dropdown': {
         return <Dropdown data={data} onChange={onChange} section={section} />;
       }
 
-      case "duration": {
+      case 'duration': {
         return <Duration data={data} onChange={onChange} section={section} />;
       }
 
-      case "tags": {
+      case 'tags': {
         return <TagsInput data={data} onChange={onChange} section={section} />;
       }
 
-      case "links": {
+      case 'links': {
         return <LinksInput data={data} onChange={onChange} section={section} />;
       }
 
-      case "strings": {
-        return (
-          <StringsInput
-            data={data}
-            onChange={onChange}
-            section={section}
-            suggestedUpdates={suggestedUpdates}
-          />
-        );
+      case 'strings': {
+        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} />;
       }
 
       default: {
@@ -157,10 +137,10 @@ export function TemplateForm({
           <Input
             placeholder={section.placeholder}
             className={cn(
-              "border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]",
-              "placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal",
-              "focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]",
-              "bg-[#FAFBFC]"
+              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
+              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
+              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
+              'bg-[#FAFBFC]',
             )}
             value={data}
             onChange={(e) => onChange(e.target.value)}
@@ -173,12 +153,7 @@ export function TemplateForm({
   const currentData = values[currentStep];
   const currentSchema = formSchema?.[currentStep];
 
-  if (
-    !currentSchema ||
-    !currentData ||
-    typeof currentData === "string" ||
-    !("items" in currentData)
-  ) {
+  if (!currentSchema || !currentData || typeof currentData === 'string' || !('items' in currentData)) {
     return null;
   }
 
@@ -198,11 +173,9 @@ export function TemplateForm({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="text-[20px] font-semibold text-gray-1000">
           {currentSchema?.label}
-          <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">
-            {currentSchema?.subTitle}
-          </p>
+          <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
         </div>
-        {currentStep !== "personalDetails" && (
+        {currentStep !== 'personalDetails' && (
           <Button
             type="button"
             onClick={handleToggleHide}
@@ -226,12 +199,9 @@ export function TemplateForm({
       </div>
 
       <form
-        className={cn(
-          "grid grid-cols-1 md:grid-cols-2 gap-4 w-full",
-          isHidden && "opacity-50 pointer-events-none"
-        )}
+        className={cn('grid grid-cols-1 md:grid-cols-2 gap-4 w-full', isHidden && 'opacity-50 pointer-events-none')}
       >
-        {currentSchema.itemsType === "draggable" ? (
+        {currentSchema.itemsType === 'draggable' ? (
           <div className="col-span-1 md:col-span-2">
             <Draggable
               data={currentData.items}
@@ -247,7 +217,7 @@ export function TemplateForm({
               onOpenAnalyzerModal={onOpenAnalyzerModal}
             />
           </div>
-        ) : currentSchema.itemsType === "strings" ? (
+        ) : currentSchema.itemsType === 'strings' ? (
           <div className="col-span-1 md:col-span-2">
             {currentData.items.map((item, i) => (
               <StringsInput
@@ -275,39 +245,29 @@ export function TemplateForm({
                 return null;
               }
 
-              const errorCounts = getFieldErrors(
-                currentData.suggestedUpdates,
-                itemId,
-                key
-              );
+              const errorCounts = getFieldErrors(currentData.suggestedUpdates, itemId, key);
 
               const hasBadges =
-                errorCounts.spellingCount > 0 ||
-                errorCounts.sentenceCount > 0 ||
-                errorCounts.newSummaryCount > 0;
+                errorCounts.spellingCount > 0 || errorCounts.sentenceCount > 0 || errorCounts.newSummaryCount > 0;
 
               return (
                 <label
                   key={key}
                   className={cn(
-                    "flex flex-col gap-2 w-full min-w-0",
-                    section.fluid && "col-span-1 md:col-span-2",
-                    !section.fluid && hasBadges && "col-span-1 md:col-span-2"
+                    'flex flex-col gap-2 w-full min-w-0',
+                    section.fluid && 'col-span-1 md:col-span-2',
+                    !section.fluid && hasBadges && 'col-span-1 md:col-span-2',
                   )}
                   htmlFor={key}
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full min-w-0">
-                    <span className="text-sm text-[#0C1118] font-semibold flex-shrink-0">
-                      {section.label}
-                    </span>
+                    <span className="text-sm text-[#0C1118] font-semibold flex-shrink-0">{section.label}</span>
                     <div>
                       <FieldErrorBadges
                         spellingCount={errorCounts.spellingCount}
                         sentenceCount={errorCounts.sentenceCount}
                         newSummaryCount={errorCounts.newSummaryCount}
-                        onBadgeClick={(suggestionType) =>
-                          onOpenAnalyzerModal?.(itemId, key, suggestionType)
-                        }
+                        onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
                       />
                     </div>
                   </div>
@@ -325,7 +285,7 @@ export function TemplateForm({
                     },
                     currentData.suggestedUpdates,
                     currentData.items[itemIdx]?.itemId,
-                    key
+                    key,
                   )}
                 </label>
               );

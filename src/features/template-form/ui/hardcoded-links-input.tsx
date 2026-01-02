@@ -130,7 +130,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
     if (oldKey === newKey) return;
     
     const oldLink = linksData[oldKey]?.link || '';
-    
+
     setLinksData((prev) => {
       const { [oldKey]: _, ...rest } = prev;
       return { ...rest, [newKey]: { title: getLinkType(newKey)?.label || newKey, link: oldLink } };

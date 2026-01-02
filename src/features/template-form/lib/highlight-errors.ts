@@ -33,33 +33,29 @@ export function highlightErrorsInHTML(
   let highlightedContent = htmlContent;
 
   suggestions.forEach((suggestion) => {
-    if (!suggestion.old) return; 
+    if (!suggestion.old) return;
 
     const color = getUnderlineColor(suggestion.type);
-    
+
     const plainOldText = suggestion.old.replace(/<[^>]*>/g, '').trim();
 
     if (!plainText.includes(plainOldText)) {
-     
       return;
     }
 
     const escapedText = escapeRegex(plainOldText);
 
     const words = escapedText.split(/\s+/);
-    const pattern = words
-      .map((word) => `${word}`)
-      .join('(?:\\s*(?:<[^>]*>)?\\s*)');
+    const pattern = words.map((word) => `${word}`).join('(?:\\s*(?:<[^>]*>)?\\s*)');
 
     const regex = new RegExp(pattern, 'i');
 
     const match = highlightedContent.match(regex);
 
     if (match) {
-
       highlightedContent = highlightedContent.replace(
         regex,
-        `<span style="text-decoration: underline; text-decoration-color: ${color}; text-decoration-thickness: 2px; text-underline-offset: 2px;">$&</span>`
+        `<span style="text-decoration: underline; text-decoration-color: ${color}; text-decoration-thickness: 2px; text-underline-offset: 2px;">$&</span>`,
       );
     } else {
       console.log('⚠️ No regex match found for:', plainOldText.substring(0, 50));

@@ -54,13 +54,7 @@ export function HumanAiApproach() {
 
         {/* Union Icon - Right Side */}
         <div className="absolute left-[587px] top-8 w-[92px] h-[97px]">
-          <Image
-            src="/images/Union.svg"
-            alt="Union icon"
-            width={92}
-            height={97}
-            className="object-contain"
-          />
+          <Image src="/images/Union.svg" alt="Union icon" width={92} height={97} className="object-contain" />
         </div>
 
         {/* Description Text */}

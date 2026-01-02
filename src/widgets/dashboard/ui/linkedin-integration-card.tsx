@@ -16,7 +16,7 @@ interface LinkedInModalProps {
 export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const router=useRouter();
+  const router = useRouter();
 
   const parseLinkedInMutation = useParseLinkedInProfile();
 

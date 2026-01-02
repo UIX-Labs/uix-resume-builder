@@ -1,18 +1,23 @@
-'use client';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { formatDate } from '@shared/lib/date-time';
-import { SidebarProvider } from '@shared/ui/sidebar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
-import { Button } from '@shared/ui/button';
-import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
-import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { HomeIcon, MoreVertical, Search, Trash2 } from 'lucide-react';
-import { useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
+"use client";
+import { useUserProfile } from "@shared/hooks/use-user";
+import { formatDate } from "@shared/lib/date-time";
+import { SidebarProvider } from "@shared/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@shared/ui/dropdown";
+import { Button } from "@shared/ui/button";
+import DashboardSidebar from "@widgets/dashboard/ui/dashboard-sidebar";
+import WelcomeHeader from "@widgets/dashboard/ui/welcome-header";
+import { DeleteResumeModal } from "@widgets/resumes/ui/delete-resume-modal";
+import { HomeIcon, MoreVertical, Search, Trash2 } from "lucide-react";
+import { useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { useGetAllResumes, createResume, type Resume } from "@entities/resume";
 
 export default function AllResumePage() {
   const { data: user } = useUserProfile();
@@ -24,15 +29,20 @@ export default function AllResumePage() {
 
   const router = useRouter();
 
-  const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  const sortedResumes = resumes?.sort(
+    (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  );
 
   async function handleCreateResume() {
     if (!user) {
       return;
     }
 
-    const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    const userName = `${user.firstName} ${user.lastName || ''}`.trim();
+    const currentDate = new Date().toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+    const userName = `${user.firstName} ${user.lastName || ""}`.trim();
     const title = `${userName}-Resume-${currentDate}`;
 
     const data = await createResumeMutation.mutateAsync({
@@ -57,7 +67,7 @@ export default function AllResumePage() {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => router.push('/')}
+                  onClick={() => router.push("/")}
                   className="border-none bg-transparent hover:bg-transparent cursor-pointer"
                 >
                   <HomeIcon className="w-full h-full" />
@@ -65,16 +75,20 @@ export default function AllResumePage() {
               </div>
 
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
+                <span className="text-xl font-bold text-gray-600">
+                  {user?.firstName?.charAt(0)}
+                </span>
               </div>
 
               <div className="flex flex-col">
                 <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
-                  {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
+                  {user
+                    ? `${user.firstName} ${user.lastName ?? ""}`
+                    : "Loading..."}
                 </span>
 
                 <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {user?.email ?? 'Loading...'}
+                  {user?.email ?? "Loading..."}
                 </span>
               </div>
             </div>
@@ -88,7 +102,11 @@ export default function AllResumePage() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
+              <WelcomeHeader
+                userName={
+                  (user?.firstName ?? "") + " " + (user?.lastName ?? "")
+                }
+              />
 
               <div className="flex gap-6 mt-6 mx-4 flex-wrap">
                 <button
@@ -129,21 +147,38 @@ function ResumeCard({ resume }: ResumeCardProps) {
         <div className="w-full h-full overflow-hidden rounded-t-2xl">
           <div className="">
             {resume.publicThumbnail?.url ? (
-              <Image src={resume.publicThumbnail.url} width={260} height={320} alt={resume.title} unoptimized />
+              <Image
+                src={resume.publicThumbnail.url}
+                width={260}
+                height={320}
+                alt={resume.title}
+                unoptimized
+              />
             ) : (
-              <Image src="/images/image-14.svg" alt={resume.title} className="w-full h-full object-contain" fill />
+              <Image
+                src="/images/image-14.svg"
+                alt={resume.title}
+                className="w-full h-full object-contain"
+                fill
+              />
             )}
           </div>
 
-          <div className="absolute bottom-0 px-4 py-3 flex justify-between items-center bg-white w-full">
-            <div className="flex-1 min-w-0 mr-2">
-              <h3 className="font-medium text-sm truncate">{resume.title}</h3>
-              <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
+          <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">
+            <div>
+              <h3 className="font-medium text-sm">{resume.title}</h3>
+              <p className="text-xs text-gray-500">
+                {formatDate(resume.updatedAt)}
+              </p>
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 p-0 cursor-pointer bg-white z-20 flex-shrink-0">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 p-0 cursor-pointer"
+                >
                   <MoreVertical className="w-4 h-4 text-gray-500" />
                 </Button>
               </DropdownMenuTrigger>
@@ -168,11 +203,17 @@ function ResumeCard({ resume }: ResumeCardProps) {
           className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
-          <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>
+          <span className="hover:text-blue-500 transition-all duration-300">
+            VIEW RESUME →
+          </span>
         </button>
       </div>
 
-      <DeleteResumeModal isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} resume={resume} />
+      <DeleteResumeModal
+        isOpen={showDeleteDialog}
+        onClose={() => setShowDeleteDialog(false)}
+        resume={resume}
+      />
     </>
   );
 }

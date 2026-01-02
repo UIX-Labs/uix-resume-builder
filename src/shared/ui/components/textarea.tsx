@@ -1,24 +1,17 @@
-"use client";
+'use client';
 
-import { cn } from "@shared/lib/cn";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
-import {
-  Bold,
-  Italic,
-  List,
-  ListOrdered,
-  Underline as UnderlineIcon,
-  Link as LinkIcon,
-} from "lucide-react";
-import * as React from "react";
-import { ErrorHighlight } from "./textarea-extensions/error-highlight";
-import { useEffect } from "react";
-import type { SuggestionType } from "@entities/resume/types";
-import { convertMarkdownToHtml } from "@shared/lib/markdown";
+import { cn } from '@shared/lib/cn';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
+import Underline from '@tiptap/extension-underline';
+import Link from '@tiptap/extension-link';
+import { Bold, Italic, List, ListOrdered, Underline as UnderlineIcon, Link as LinkIcon } from 'lucide-react';
+import * as React from 'react';
+import { ErrorHighlight } from './textarea-extensions/error-highlight';
+import { useEffect } from 'react';
+import type { SuggestionType } from '@entities/resume/types';
+import { convertMarkdownToHtml } from '@shared/lib/markdown';
 
 interface ErrorSuggestion {
   old?: string;
@@ -36,7 +29,7 @@ interface TiptapTextAreaProps {
   disabled?: boolean;
   minHeight?: string;
   maxHeight?: string;
-  "aria-invalid"?: boolean;
+  'aria-invalid'?: boolean;
   id?: string;
   showToolbar?: boolean;
   errorSuggestions?: ErrorSuggestion[];
@@ -67,10 +60,10 @@ const FormatButton: React.FC<FormatButtonProps> = ({
     disabled={disabled}
     title={title}
     className={cn(
-      "inline-flex items-center justify-center w-[18px] h-[18px] rounded-sm text-xs transition-colors",
-      "hover:bg-muted focus:outline-none focus:ring-1 focus:ring-ring",
-      "disabled:pointer-events-none disabled:opacity-50 text-gray-1000",
-      isActive && "bg-muted "
+      'inline-flex items-center justify-center w-[18px] h-[18px] rounded-sm text-xs transition-colors',
+      'hover:bg-muted focus:outline-none focus:ring-1 focus:ring-ring',
+      'disabled:pointer-events-none disabled:opacity-50 text-gray-1000',
+      isActive && 'bg-muted ',
     )}
   >
     {children}
@@ -79,7 +72,7 @@ const FormatButton: React.FC<FormatButtonProps> = ({
 
 function normalizeContent(content: string | undefined): string {
   if (!content) {
-    return "";
+    return '';
   }
 
   const trimmed = content.trim();
@@ -104,10 +97,10 @@ function normalizeContent(content: string | undefined): string {
       if (!inBulletList) {
         // Close ordered list if open
         if (inOrderedList) {
-          result.push("</ol>");
+          result.push('</ol>');
           inOrderedList = false;
         }
-        result.push("<ul>");
+        result.push('<ul>');
         inBulletList = true;
       }
       // Convert markdown in list item content
@@ -118,10 +111,10 @@ function normalizeContent(content: string | undefined): string {
       if (!inOrderedList) {
         // Close bullet list if open
         if (inBulletList) {
-          result.push("</ul>");
+          result.push('</ul>');
           inBulletList = false;
         }
-        result.push("<ol>");
+        result.push('<ol>');
         inOrderedList = true;
       }
       // Convert markdown in list item content
@@ -130,16 +123,16 @@ function normalizeContent(content: string | undefined): string {
     } else {
       // Close any open lists
       if (inBulletList) {
-        result.push("</ul>");
+        result.push('</ul>');
         inBulletList = false;
       }
       if (inOrderedList) {
-        result.push("</ol>");
+        result.push('</ol>');
         inOrderedList = false;
       }
 
       if (!line) {
-        result.push("<p><br /></p>");
+        result.push('<p><br /></p>');
       } else {
         // Convert markdown in paragraph content
         const markdownContent = convertMarkdownToHtml(line);
@@ -150,13 +143,13 @@ function normalizeContent(content: string | undefined): string {
 
   // Close any remaining open lists
   if (inBulletList) {
-    result.push("</ul>");
+    result.push('</ul>');
   }
   if (inOrderedList) {
-    result.push("</ol>");
+    result.push('</ol>');
   }
 
-  return result.join("");
+  return result.join('');
 }
 
 /**
@@ -165,38 +158,35 @@ function normalizeContent(content: string | undefined): string {
  */
 function stripErrorHighlightSpans(html: string): string {
   // Simply remove spans with data-error-color attribute and return their inner content
-  return html.replace(/<span[^>]*data-error-color[^>]*>(.*?)<\/span>/gi, "$1");
+  return html.replace(/<span[^>]*data-error-color[^>]*>(.*?)<\/span>/gi, '$1');
 }
 
 const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
   (
     {
-      defaultValue = "",
+      defaultValue = '',
       value,
       onChange,
       onBlur,
-      placeholder = "Enter text...",
+      placeholder = 'Enter text...',
       className,
       disabled = false,
-      minHeight = "238px",
-      maxHeight = "238px",
-      "aria-invalid": ariaInvalid,
+      minHeight = '238px',
+      maxHeight = '238px',
+      'aria-invalid': ariaInvalid,
       id,
       showToolbar = true,
       errorSuggestions,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [isToolbarVisible, setIsToolbarVisible] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
     // Flag to prevent onChange from firing during highlight application
     const isApplyingHighlightsRef = React.useRef(false);
 
-    const normalizedDefaultValue = React.useMemo(
-      () => normalizeContent(defaultValue),
-      [defaultValue]
-    );
+    const normalizedDefaultValue = React.useMemo(() => normalizeContent(defaultValue), [defaultValue]);
 
     const editor = useEditor({
       extensions: [
@@ -221,14 +211,14 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
             keepMarks: true,
             keepAttributes: true,
             HTMLAttributes: {
-              style: "list-style-type: disc;",
+              style: 'list-style-type: disc;',
             },
           },
           orderedList: {
             keepMarks: true,
             keepAttributes: true,
             HTMLAttributes: {
-              style: "list-style-type: decimal;",
+              style: 'list-style-type: decimal;',
             },
           },
           hardBreak: {
@@ -242,7 +232,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         Link.configure({
           openOnClick: false,
           HTMLAttributes: {
-            class: "text-primary underline underline-offset-4",
+            class: 'text-primary underline underline-offset-4',
           },
         }),
         ErrorHighlight as any,
@@ -257,7 +247,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         const html = editor.getHTML();
         const value = editor.getText();
 
-        onChange?.(value, !value ? "" : html);
+        onChange?.(value, !value ? '' : html);
       },
       onFocus: () => {
         setIsToolbarVisible(true);
@@ -280,9 +270,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
       try {
         const colorMap = {
-          spelling_error: "#D97706",
-          sentence_refinement: "#F8BEC2",
-          new_summary: "#10B981",
+          spelling_error: '#D97706',
+          sentence_refinement: '#F8BEC2',
+          new_summary: '#10B981',
         };
 
         const text = editor.getText();
@@ -295,13 +285,13 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
           const normalizeText = (str: string) =>
             str
-              .replace(/<\/(p|li|div)>/gi, " ") // Replace closing block tags with space to preserve word boundaries
-              .replace(/<br\s*\/?>/gi, " ") // Replace <br> with space
-              .replace(/<[^>]*>/g, "") // Remove remaining HTML tags
-              .replace(/^[-•*]\s*/gm, "") // Remove bullet markers at start of lines (-, •, *)
-              .replace(/\n[-•*]\s*/g, " ") // Replace newline + bullet with space
-              .replace(/\n/g, " ") // Replace remaining newlines with space
-              .replace(/\s+/g, " ") // Normalize multiple spaces to single space
+              .replace(/<\/(p|li|div)>/gi, ' ') // Replace closing block tags with space to preserve word boundaries
+              .replace(/<br\s*\/?>/gi, ' ') // Replace <br> with space
+              .replace(/<[^>]*>/g, '') // Remove remaining HTML tags
+              .replace(/^[-•*]\s*/gm, '') // Remove bullet markers at start of lines (-, •, *)
+              .replace(/\n[-•*]\s*/g, ' ') // Replace newline + bullet with space
+              .replace(/\n/g, ' ') // Replace remaining newlines with space
+              .replace(/\s+/g, ' ') // Normalize multiple spaces to single space
               .trim(); // Trim leading/trailing spaces
 
           const searchText = normalizeText(suggestion.old);
@@ -316,11 +306,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             // Remove any underline marks first (to avoid <u> tag wrapping)
             if (underlineType) {
-              editor
-                .chain()
-                .setTextSelection({ from, to })
-                .unsetMark("underline")
-                .run();
+              editor.chain().setTextSelection({ from, to }).unsetMark('underline').run();
             }
 
             // Apply the error highlight mark
@@ -346,9 +332,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       // Strip error highlight spans from HTML to prevent marks from being recreated
       // The marks will be reapplied by the errorSuggestions effect
       const valueToSet =
-        errorSuggestions && errorSuggestions.length > 0
-          ? stripErrorHighlightSpans(normalizedValue)
-          : normalizedValue;
+        errorSuggestions && errorSuggestions.length > 0 ? stripErrorHighlightSpans(normalizedValue) : normalizedValue;
       const currentContent = editor.getHTML();
       if (currentContent !== valueToSet) {
         editor.commands.setContent(valueToSet, { emitUpdate: false });
@@ -380,7 +364,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
             state.doc.descendants((node, pos) => {
               if (node.marks) {
                 node.marks.forEach((mark) => {
-                  if (mark.type.name === "errorHighlight") {
+                  if (mark.type.name === 'errorHighlight') {
                     const from = pos;
                     const to = pos + node.nodeSize;
                     tr.removeMark(from, to, mark.type);
@@ -419,8 +403,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     const setLink = React.useCallback(() => {
       if (!editor) return;
 
-      const previousUrl = editor.getAttributes("link").href;
-      const url = window.prompt("URL", previousUrl);
+      const previousUrl = editor.getAttributes('link').href;
+      const url = window.prompt('URL', previousUrl);
 
       // cancelled
       if (url === null) {
@@ -428,18 +412,13 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       }
 
       // empty
-      if (url === "") {
-        editor.chain().focus().extendMarkRange("link").unsetLink().run();
+      if (url === '') {
+        editor.chain().focus().extendMarkRange('link').unsetLink().run();
         return;
       }
 
       // update link
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
+      editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
     }, [editor]);
 
     return (
@@ -448,10 +427,10 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
           ref={ref}
           data-slot="textarea"
           className={cn(
-            "placeholder:text-[#CFD4DB] selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex w-full min-w-0 rounded-2xl border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-            "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
-            "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-            className
+            'placeholder:text-[#CFD4DB] selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex w-full min-w-0 rounded-2xl border bg-transparent text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+            'focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]',
+            'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+            className,
           )}
           style={{
             minHeight,
@@ -464,22 +443,22 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
           <EditorContent
             editor={editor}
             className={cn(
-              "prose prose-sm max-w-none w-full overflow-y-auto px-3 py-2",
-              "prose-p:text-sm prose-p:leading-relaxed prose-p:mt-0 prose-p:mb-2",
-              "prose-ul:text-sm prose-ul:mt-0 prose-ul:mb-2 prose-ul:list-disc prose-ul:pl-6",
-              "prose-ol:text-sm prose-ol:mt-0 prose-ol:mb-2 prose-ol:list-decimal prose-ol:pl-6",
-              "prose-li:mt-0 prose-li:mb-1 prose-li:marker:text-gray-600",
-              "prose-strong:font-semibold",
-              "prose-em:italic  ml-2",
-              "prose-a:text-primary prose-a:underline prose-a:underline-offset-4",
-              "[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-full",
-              "[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]",
-              "[&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left",
-              "[&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground",
-              "[&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none",
-              "[&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0",
-              "[&_ul]:list-disc [&_ol]:list-decimal [&_li]:list-item",
-              "[&_ul]:ml-0 [&_ol]:ml-0 [&_li]:ml-0"
+              'prose prose-sm max-w-none w-full overflow-y-auto px-3 py-2',
+              'prose-p:text-sm prose-p:leading-relaxed prose-p:mt-0 prose-p:mb-2',
+              'prose-ul:text-sm prose-ul:mt-0 prose-ul:mb-2 prose-ul:list-disc prose-ul:pl-6',
+              'prose-ol:text-sm prose-ol:mt-0 prose-ol:mb-2 prose-ol:list-decimal prose-ol:pl-6',
+              'prose-li:mt-0 prose-li:mb-1 prose-li:marker:text-gray-600',
+              'prose-strong:font-semibold',
+              'prose-em:italic  ml-2',
+              'prose-a:text-primary prose-a:underline prose-a:underline-offset-4',
+              '[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-full',
+              '[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]',
+              '[&_.ProseMirror_p.is-editor-empty:first-child::before]:float-left',
+              '[&_.ProseMirror_p.is-editor-empty:first-child::before]:text-muted-foreground',
+              '[&_.ProseMirror_p.is-editor-empty:first-child::before]:pointer-events-none',
+              '[&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0',
+              '[&_ul]:list-disc [&_ol]:list-decimal [&_li]:list-item',
+              '[&_ul]:ml-0 [&_ol]:ml-0 [&_li]:ml-0',
             )}
           />
         </div>
@@ -487,17 +466,17 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         {showToolbar && editor && isToolbarVisible && (
           <div
             className={cn(
-              "absolute bottom-2 left-2 z-50",
-              "flex items-center gap-1 p-2",
-              "bg-background border border-gray-200 rounded-lg shadow-lg",
-              "backdrop-blur-sm bg-background/95",
-              "transition-all duration-200 ease-in-out",
-              "animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2"
+              'absolute bottom-2 left-2 z-50',
+              'flex items-center gap-1 p-2',
+              'bg-background border border-gray-200 rounded-lg shadow-lg',
+              'backdrop-blur-sm bg-background/95',
+              'transition-all duration-200 ease-in-out',
+              'animate-in fade-in-0 zoom-in-95 slide-in-from-bottom-2',
             )}
           >
             <FormatButton
               onClick={() => editor.chain().focus().toggleBold().run()}
-              isActive={editor.isActive("bold")}
+              isActive={editor.isActive('bold')}
               disabled={disabled}
               title="Bold (Ctrl+B)"
             >
@@ -506,7 +485,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             <FormatButton
               onClick={() => editor.chain().focus().toggleItalic().run()}
-              isActive={editor.isActive("italic")}
+              isActive={editor.isActive('italic')}
               disabled={disabled}
               title="Italic (Ctrl+I)"
             >
@@ -515,7 +494,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             <FormatButton
               onClick={() => editor.chain().focus().toggleUnderline().run()}
-              isActive={editor.isActive("underline")}
+              isActive={editor.isActive('underline')}
               disabled={disabled}
               title="Underline (Ctrl+U)"
             >
@@ -524,7 +503,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             <FormatButton
               onClick={setLink}
-              isActive={editor.isActive("link")}
+              isActive={editor.isActive('link')}
               disabled={disabled}
               title="Add Link (Ctrl+K)"
             >
@@ -535,7 +514,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             <FormatButton
               onClick={() => editor.chain().focus().toggleBulletList().run()}
-              isActive={editor.isActive("bulletList")}
+              isActive={editor.isActive('bulletList')}
               disabled={disabled}
               title="Bullet List"
             >
@@ -544,7 +523,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
 
             <FormatButton
               onClick={() => editor.chain().focus().toggleOrderedList().run()}
-              isActive={editor.isActive("orderedList")}
+              isActive={editor.isActive('orderedList')}
               disabled={disabled}
               title="Numbered List"
             >
@@ -554,9 +533,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
-TiptapTextArea.displayName = "TiptapTextArea";
+TiptapTextArea.displayName = 'TiptapTextArea';
 
 export { TiptapTextArea };

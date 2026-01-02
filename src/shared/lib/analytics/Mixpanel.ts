@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import Percept from "@perceptinsight/percept-js";
-import mixpanel from "mixpanel-browser";
+import Percept from '@perceptinsight/percept-js';
+import mixpanel from 'mixpanel-browser';
 
 interface AnalyticsProps {
   [key: string]: unknown;
 }
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProduction = process.env.NODE_ENV === 'production';
 
 let mixpanelInitialized = false;
 let perceptInitialized = false;
@@ -20,14 +20,14 @@ function initMixpanel(): void {
 
   const projectToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
   if (!projectToken) {
-    console.error("❌ Missing NEXT_PUBLIC_MIXPANEL_TOKEN");
+    console.error('❌ Missing NEXT_PUBLIC_MIXPANEL_TOKEN');
     return;
   }
 
   mixpanel.init(projectToken, {
     debug: !isProduction,
     track_pageview: true,
-    persistence: "localStorage",
+    persistence: 'localStorage',
     record_sessions_percent: 100,
     record_heatmap_data: true,
   });
@@ -43,7 +43,7 @@ function initPercept(): void {
 
   const projectToken = process.env.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN;
   if (!projectToken) {
-    console.error("❌ Missing NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN");
+    console.error('❌ Missing NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN');
     return;
   }
 
@@ -69,10 +69,7 @@ export function initAnalytics(): void {
   ensureInitialized();
 }
 
-export function trackEvent(
-  eventName: string,
-  props: AnalyticsProps = {}
-): void {
+export function trackEvent(eventName: string, props: AnalyticsProps = {}): void {
   if (!isProduction) return;
   ensureInitialized();
   if (mixpanelInitialized) mixpanel.track(eventName, props);

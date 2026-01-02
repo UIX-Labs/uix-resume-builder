@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
-import Autoplay from "embla-carousel-autoplay";
-import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { testimonials } from "../models/constants";
+import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
+import Autoplay from 'embla-carousel-autoplay';
+import useEmblaCarousel from 'embla-carousel-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { testimonials } from '../models/constants';
 
 interface TestimonialsCarouselProps {
   className?: string;
@@ -13,18 +13,16 @@ interface TestimonialsCarouselProps {
 }
 
 export function TestimonialsCarousel({
-  className = "",
-  roundedClassName = "rounded-[36px]",
+  className = '',
+  roundedClassName = 'rounded-[36px]',
 }: TestimonialsCarouselProps) {
   const options: EmblaOptionsType = {
     loop: true,
-    align: "center",
+    align: 'center',
     duration: 30,
   };
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({ delay: 4000, stopOnInteraction: false }),
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 4000, stopOnInteraction: false })]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -44,8 +42,8 @@ export function TestimonialsCarousel({
     if (!emblaApi) return;
 
     onSelect(emblaApi);
-    emblaApi.on("reInit", onSelect);
-    emblaApi.on("select", onSelect);
+    emblaApi.on('reInit', onSelect);
+    emblaApi.on('select', onSelect);
   }, [emblaApi, onSelect]);
 
   return (
@@ -53,10 +51,7 @@ export function TestimonialsCarousel({
       <div className={`overflow-hidden ${roundedClassName}`} ref={emblaRef}>
         <div className="flex">
           {testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="flex-[0_0_100%] min-w-0 relative h-[550px] sm:h-[550px] lg:h-[679px]"
-            >
+            <div key={index} className="flex-[0_0_100%] min-w-0 relative h-[550px] sm:h-[550px] lg:h-[679px]">
               <div
                 className={`absolute inset-0 bg-cover bg-center ${roundedClassName}`}
                 style={{
@@ -108,13 +103,9 @@ export function TestimonialsCarousel({
         </button>
 
         <span className="text-sm sm:text-base lg:text-xl min-w-[48px] sm:min-w-[55px] lg:min-w-[63px] text-right">
-          <span className="font-semibold text-white">
-            {String(selectedIndex + 1).padStart(2, "0")}/
-          </span>
+          <span className="font-semibold text-white">{String(selectedIndex + 1).padStart(2, '0')}/</span>
 
-          <span className="text-gray-700 font-normal">
-            {String(testimonials.length).padStart(2, "0")}
-          </span>
+          <span className="text-gray-700 font-normal">{String(testimonials.length).padStart(2, '0')}</span>
         </span>
 
         <button

@@ -12,13 +12,10 @@ export default function InvalidLinkPage() {
           </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Link Not Valid
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-3">Link Not Valid</h1>
 
         <p className="text-gray-600 mb-6 leading-relaxed">
-          The link you clicked is not configured properly or is invalid. 
-          Please check the URL and try again.
+          The link you clicked is not configured properly or is invalid. Please check the URL and try again.
         </p>
 
         <div className="space-y-3">

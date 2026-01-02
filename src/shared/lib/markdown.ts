@@ -3,22 +3,19 @@
  * Handles: **bold**, *italic*, bullet lists, ordered lists, line breaks
  */
 export function convertMarkdownToHtml(text: string): string {
-  if (!text) return "";
+  if (!text) return '';
 
   // Escape HTML entities first
-  let html = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
   // Convert **bold** or __bold__ to <strong> (process before italic to avoid conflicts)
-  html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-  html = html.replace(/__(.+?)__/g, "<strong>$1</strong>");
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/__(.+?)__/g, '<strong>$1</strong>');
 
   // Convert *italic* or _italic_ to <em> (only if not already part of bold)
   // Match single asterisk/underscore that's not part of double asterisk/underscore
-  html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, "<em>$1</em>");
-  html = html.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, "<em>$1</em>");
+  html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>');
+  html = html.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
 
   return html;
 }
@@ -37,11 +34,11 @@ export function isHtml(content: string): boolean {
  */
 export function normalizeMarkdownContent(content: string | undefined | null): string {
   if (!content) {
-    return "";
+    return '';
   }
 
   const trimmed = content.trim();
-  
+
   // If already HTML, return as-is
   if (isHtml(trimmed)) {
     return content;
@@ -50,4 +47,3 @@ export function normalizeMarkdownContent(content: string | undefined | null): st
   // Convert markdown to HTML
   return convertMarkdownToHtml(content);
 }
-

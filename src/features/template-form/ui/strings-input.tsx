@@ -26,9 +26,8 @@ export function StringInput({
   }, [data]);
 
   // Filter suggestions that match the current string value
-  const matchingSuggestions = suggestions?.filter(
-    (suggestion) => suggestion.old && suggestion.old.trim() === value?.trim()
-  ) || [];
+  const matchingSuggestions =
+    suggestions?.filter((suggestion) => suggestion.old && suggestion.old.trim() === value?.trim()) || [];
 
   // Calculate error counts only for matching suggestions
   const errorCounts = {
@@ -110,45 +109,47 @@ export function StringsInput({
   return (
     <div className="flex flex-col gap-2">
       <Sortable data={localData} getId={(item) => item.itemId || item.id} onDragEnd={handleDragEnd}>
-        {((items: any[]) => (
-          <>
-            {items.map((item, index) => {
-              const itemId = item.itemId || item.id || `item-${index}`;
+        {
+          ((items: any[]) => (
+            <>
+              {items.map((item, index) => {
+                const itemId = item.itemId || item.id || `item-${index}`;
 
-              return (
-                <SortableItem id={itemId} key={itemId} className="group">
-                  <StringInput
-                    data={item.name || item}
-                    suggestions={suggestionsArray}
-                    parentItemId={data.itemId}
-                    onOpenAnalyzerModal={onOpenAnalyzerModal}
-                    onChange={(value) => {
-                      const newData = [...localData];
-                      // Handle both object and string formats
-                      if (typeof newData[index] === 'object') {
-                        newData[index] = { ...newData[index], name: value };
-                      } else {
-                        newData[index] = value;
-                      }
-                      onChange({ ...data, items: newData });
-                      setLocalData(newData);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className={cn(
-                      'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
-                      'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300 z-10',
-                    )}
-                    onClick={() => handlePlusClick(index)}
-                  >
-                    <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
-                  </button>
-                </SortableItem>
-              );
-            })}
-          </>
-        )) as any}
+                return (
+                  <SortableItem id={itemId} key={itemId} className="group">
+                    <StringInput
+                      data={item.name || item}
+                      suggestions={suggestionsArray}
+                      parentItemId={data.itemId}
+                      onOpenAnalyzerModal={onOpenAnalyzerModal}
+                      onChange={(value) => {
+                        const newData = [...localData];
+                        // Handle both object and string formats
+                        if (typeof newData[index] === 'object') {
+                          newData[index] = { ...newData[index], name: value };
+                        } else {
+                          newData[index] = value;
+                        }
+                        onChange({ ...data, items: newData });
+                        setLocalData(newData);
+                      }}
+                    />
+                    <button
+                      type="button"
+                      className={cn(
+                        'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
+                        'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300 z-10',
+                      )}
+                      onClick={() => handlePlusClick(index)}
+                    >
+                      <Image src="/images/plus.svg" alt="plus" width={16} height={16} />
+                    </button>
+                  </SortableItem>
+                );
+              })}
+            </>
+          )) as any
+        }
       </Sortable>
     </div>
   );

@@ -90,16 +90,10 @@ export function NewProgressBar({
 
     progressIntervalId = setInterval(() => {
       const elapsedTime = Date.now() - startTime;
-      const progressPercent = Math.min(
-        (elapsedTime / estimatedTime) * targetProgress,
-        targetProgress
-      );
+      const progressPercent = Math.min((elapsedTime / estimatedTime) * targetProgress, targetProgress);
 
       // Calculate text index based on elapsed time
-      const calculatedTextIndex = Math.min(
-        Math.floor(elapsedTime / TEXT_INTERVAL),
-        NUMBER_OF_TEXTS - 1
-      );
+      const calculatedTextIndex = Math.min(Math.floor(elapsedTime / TEXT_INTERVAL), NUMBER_OF_TEXTS - 1);
 
       setInternalProgress(progressPercent);
       setInternalTextIndex(calculatedTextIndex);
@@ -125,7 +119,9 @@ export function NewProgressBar({
   }
 
   return (
-    <div className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-sm ${className}`}>
+    <div
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-sm ${className}`}
+    >
       <div
         className="w-full max-w-3xl px-12 py-8 rounded-[36px] shadow-xl bg-cover bg-center bg-no-repeat"
         style={{
@@ -142,9 +138,7 @@ export function NewProgressBar({
               {showLoader && progress >= 95 && progress < 100 && (
                 <Loader2 className="h-5 w-5 animate-spin text-white" />
               )}
-              {stepCounter && (
-                <span className="text-white text-lg font-medium">{stepCounter}</span>
-              )}
+              {stepCounter && <span className="text-white text-lg font-medium">{stepCounter}</span>}
             </div>
           </div>
 
@@ -159,12 +153,9 @@ export function NewProgressBar({
             </div>
           )}
 
-          <p className="text-white/90 text-base text-center">
-            {currentTransitionText.subtitle}
-          </p>
+          <p className="text-white/90 text-base text-center">{currentTransitionText.subtitle}</p>
         </div>
       </div>
     </div>
   );
 }
-

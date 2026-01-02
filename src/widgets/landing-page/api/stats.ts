@@ -1,4 +1,4 @@
-import { fetch } from "@shared/api";
+import { fetch } from '@shared/api';
 
 export interface LatestUser {
   firstName: string | null;
@@ -12,9 +12,9 @@ export interface CurrentStats {
 }
 
 export const getCurrentStats = async (): Promise<CurrentStats> => {
-  const response = await fetch<CurrentStats>("monitoring/stats", {
+  const response = await fetch<CurrentStats>('monitoring/stats', {
     options: {
-      method: "GET",
+      method: 'GET',
     },
   });
 

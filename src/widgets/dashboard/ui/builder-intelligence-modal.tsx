@@ -132,7 +132,6 @@ export default function BuilderIntelligenceModal({
           >
             {isSubmitting ? 'Analyzing...' : 'Initiate Builder Intelligence'}
           </Button>
-        
         </div>
       </DialogContent>
     </Dialog>

@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { generateThumbnail } from "@features/resume/renderer";
-import { uploadThumbnail } from "@entities/resume/api/upload-resume";
+import { useRef, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { generateThumbnail } from '@features/resume/renderer';
+import { uploadThumbnail } from '@entities/resume/api/upload-resume';
 
 export function useThumbnailGeneration(resumeId?: string) {
   const thumbnailRef = useRef<HTMLDivElement>(null);
@@ -26,10 +26,7 @@ export function useThumbnailGeneration(resumeId?: string) {
 
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      if (
-        !thumbnailRef.current.innerHTML ||
-        thumbnailRef.current.innerHTML.trim() === ""
-      ) {
+      if (!thumbnailRef.current.innerHTML || thumbnailRef.current.innerHTML.trim() === '') {
         return;
       }
 
@@ -42,13 +39,13 @@ export function useThumbnailGeneration(resumeId?: string) {
       const originalLeft = container.style.left;
 
       // Temporarily make visible for capture but move it far off-screen
-      container.style.height = "auto";
-      container.style.overflow = "visible";
-      container.style.visibility = "visible";
-      container.style.position = "fixed";
-      container.style.left = "-99999px";
-      container.style.top = "0";
-      container.style.zIndex = "-9999";
+      container.style.height = 'auto';
+      container.style.overflow = 'visible';
+      container.style.visibility = 'visible';
+      container.style.position = 'fixed';
+      container.style.left = '-99999px';
+      container.style.top = '0';
+      container.style.zIndex = '-9999';
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -68,7 +65,7 @@ export function useThumbnailGeneration(resumeId?: string) {
 
       // Check if thumbnail has changed compared to the last one
       if (lastThumbnailDataUrl && lastThumbnailDataUrl === thumbnailDataUrl) {
-        console.log("Thumbnail unchanged, skipping upload");
+        console.log('Thumbnail unchanged, skipping upload');
         return;
       }
 
@@ -77,7 +74,7 @@ export function useThumbnailGeneration(resumeId?: string) {
       setLastThumbnailDataUrl(thumbnailDataUrl);
       thumbnailGeneratedRef.current = true;
     } catch (error) {
-      console.error("Error generating thumbnail:", error);
+      console.error('Error generating thumbnail:', error);
     }
   }
 

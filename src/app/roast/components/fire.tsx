@@ -1,7 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
-
 interface FireProps {
   width?: number | string;
   height?: number | string;
@@ -22,6 +20,7 @@ function Fire({ width = '100%', height = 'auto', className }: FireProps) {
         enableBackground="new 0 0 1016 440"
         xmlSpace="preserve"
         className="w-full h-full"
+        aria-hidden="true"
       >
         <style jsx>{`
           .flame {

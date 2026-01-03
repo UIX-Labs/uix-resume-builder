@@ -362,7 +362,8 @@ const annaFieldTemplate = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
+        className:
+          'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-6',
       },
       listPath: 'achievements.items[0].items',
       itemPrefix: '• ',

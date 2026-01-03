@@ -33,7 +33,7 @@ export function normalizeStringsFields(data: any): any {
   const stringsFields = ['interests', 'achievements'];
 
   for (const field of stringsFields) {
-    if (data[field] && data[field].items) {
+    if (data[field]?.items) {
       if (Array.isArray(data[field].items) && data[field].items.length > 0) {
         const firstItem = data[field].items[0];
         if (typeof firstItem === 'string') {

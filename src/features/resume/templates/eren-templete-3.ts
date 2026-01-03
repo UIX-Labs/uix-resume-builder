@@ -255,11 +255,11 @@ const erenTemplate3 = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: "flex flex-col gap-2 pt-4",
+        className: 'flex flex-col gap-2 pt-4',
         break: true,
         rows: [
           {
-            className: "flex flex-col gap-1 text-[11px] font-semibold text-neutral-900",
+            className: 'flex flex-col gap-1 text-[11px] font-semibold text-neutral-900',
             cells: [
               {
                 path: 'position',
@@ -274,7 +274,7 @@ const erenTemplate3 = {
             ],
           },
           {
-            className: "flex flex-wrap items-center gap-2 text-[10px] text-neutral-600",
+            className: 'flex flex-wrap items-center gap-2 text-[10px] text-neutral-600',
             cells: [
               {
                 type: 'duration',
@@ -282,8 +282,8 @@ const erenTemplate3 = {
                 fallback: '01/2020 – Present',
               },
               {
-                path: "location",
-                prefix: " • ",
+                path: 'location',
+                prefix: ' • ',
               },
             ],
           },
@@ -291,13 +291,13 @@ const erenTemplate3 = {
             break: true,
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
-                  "text-[11px] text-neutral-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap border-b border-dashed border-neutral-300 pb-2",
+                  'text-[11px] text-neutral-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap border-b border-dashed border-neutral-300 pb-2',
                 fallback:
-                  "<ul><li>Developed and implemented an extensive customer experience strategy that achieved a 40% increase in Net Promoter Score (NPS) within the first year, directly influencing customer retention and loyalty.</li><li>Led a cross-functional team to enhance customer journey mappings, increasing conversion rates by 25% through informed insights derived from extensive customer feedback assessments.</li><li>Collaborated closely with product and marketing teams, resulting in a 30% reduction in customer complaints by aligning service offerings with customer expectations.</li><li>Conducted in-depth data analyses of customer interactions, identifying critical bottlenecks which led to a 20% increase in customer engagement metrics over two quarters.</li><li>Served as the voice of the customer during executive strategy meetings, advocating for customer interests and ensuring alignment across all departments.</li><li>Designed and rolled out new employee training programs that improved service delivery, resulting in a notable 15% improvement in frontline customer satisfaction scores.</li></ul>",
+                  '<ul><li>Developed and implemented an extensive customer experience strategy that achieved a 40% increase in Net Promoter Score (NPS) within the first year, directly influencing customer retention and loyalty.</li><li>Led a cross-functional team to enhance customer journey mappings, increasing conversion rates by 25% through informed insights derived from extensive customer feedback assessments.</li><li>Collaborated closely with product and marketing teams, resulting in a 30% reduction in customer complaints by aligning service offerings with customer expectations.</li><li>Conducted in-depth data analyses of customer interactions, identifying critical bottlenecks which led to a 20% increase in customer engagement metrics over two quarters.</li><li>Served as the voice of the customer during executive strategy meetings, advocating for customer interests and ensuring alignment across all departments.</li><li>Designed and rolled out new employee training programs that improved service delivery, resulting in a notable 15% improvement in frontline customer satisfaction scores.</li></ul>',
               },
             ],
           },

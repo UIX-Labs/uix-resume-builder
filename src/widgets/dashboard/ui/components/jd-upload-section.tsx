@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
+import { UploadCloudIcon, Trash2, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';

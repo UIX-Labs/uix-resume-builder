@@ -125,7 +125,7 @@ export default function GetAllResumesPage() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
+              <WelcomeHeader userName={`${user?.firstName ?? ''} ${user?.lastName ?? ''}`} />
 
               <div className="flex gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
                 {templates?.map((template) => (

@@ -1,7 +1,6 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
 
@@ -26,8 +25,8 @@ export function renderContentSection(
   // For summary section, check both professionalSummary and personalDetails suggestions (merged logic)
   let hasValidSuggestions = false;
   if (isSummarySection) {
-    const professionalSummarySuggestions = data['professionalSummary']?.suggestedUpdates;
-    const personalDetailsSuggestions = data['personalDetails']?.suggestedUpdates;
+    const professionalSummarySuggestions = data.professionalSummary?.suggestedUpdates;
+    const personalDetailsSuggestions = data.personalDetails?.suggestedUpdates;
     hasValidSuggestions =
       hasPendingSuggestions(professionalSummarySuggestions) || hasPendingSuggestions(personalDetailsSuggestions);
   } else {
@@ -77,9 +76,10 @@ export function renderContentSection(
 
       {section.divider && renderDivider(section.divider)}
 
-      {section.content.type === "html" ? (
+      {section.content.type === 'html' ? (
         <div
           className={section.content.className}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
           dangerouslySetInnerHTML={{ __html: value }}
           data-canbreak={section.break ? 'true' : undefined}
         />

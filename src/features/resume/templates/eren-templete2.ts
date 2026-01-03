@@ -283,7 +283,7 @@ const laurenChenTemplate = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: "mb-5 flex flex-col",
+        className: 'mb-5 flex flex-col',
         break: true,
         fields: [
           {
@@ -313,8 +313,8 @@ const laurenChenTemplate = {
             ],
           },
           {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
             className:
               'text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
@@ -343,7 +343,7 @@ const laurenChenTemplate = {
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: "mb-3",
+        className: 'mb-3',
         break: true,
         fields: [
           {
@@ -419,7 +419,7 @@ const laurenChenTemplate = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: "mb-5 flex flex-col",
+        className: 'mb-5 flex flex-col',
         break: true,
         fields: [
           {
@@ -435,8 +435,8 @@ const laurenChenTemplate = {
             className: 'text-xs text-neutral-600 font-normal mt-1',
           },
           {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
             className:
               'text-xs text-neutral-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
@@ -465,7 +465,7 @@ const laurenChenTemplate = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: "mb-3",
+        className: 'mb-3',
         break: true,
         fields: [
           {

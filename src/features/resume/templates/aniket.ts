@@ -238,7 +238,7 @@ const aniketTemplate1 = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: "flex flex-col gap-1 mt-4",
+        className: 'flex flex-col gap-1 mt-4',
         break: true,
         fields: [
           {
@@ -253,12 +253,11 @@ const aniketTemplate1 = {
             className: 'text-xs text-neutral-600 italic',
           },
           {
-            type: "html",
-            path: "description",
-            fallback: "",
+            type: 'html',
+            path: 'description',
+            fallback: '',
             break: true,
-            className:
-              "text-xs text-neutral-700 text-justify whitespace-pre-wrap",
+            className: 'text-xs text-neutral-700 text-justify whitespace-pre-wrap',
           },
           {
             type: 'link',
@@ -272,9 +271,9 @@ const aniketTemplate1 = {
     },
 
     {
-      id: "interests",
-      type: "badge-section",
-      column: "right",
+      id: 'interests',
+      type: 'badge-section',
+      column: 'right',
       break: true,
       breakable: true,
       heading: {
@@ -321,7 +320,7 @@ const aniketTemplate1 = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: "flex flex-col gap-1 leading-none",
+        className: 'flex flex-col gap-1 leading-none',
         break: true,
         fields: [
           {

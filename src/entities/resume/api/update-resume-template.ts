@@ -1,5 +1,5 @@
 import { fetch } from '@shared/api';
-import { UpdateResumeTemplateResponse } from '../types/update-resume';
+import type { UpdateResumeTemplateResponse } from '../types/update-resume';
 
 export interface UpdateResumeTemplateRequest {
   resumeId: string;

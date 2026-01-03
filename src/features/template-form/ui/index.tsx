@@ -237,7 +237,7 @@ export function TemplateForm({
           currentData.items.map((item, itemIdx) => {
             const itemId = item.id || item.itemId || `item-${itemIdx}`;
 
-            return Object.entries(item).map(([key, value], i) => {
+            return Object.entries(item).map(([key, value], _i) => {
               const section = currentSchema[key];
 
               if (!section) {

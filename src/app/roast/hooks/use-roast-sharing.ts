@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, RefObject } from 'react';
+import { useState, useCallback, useEffect, type RefObject } from 'react';
 import html2canvas from 'html2canvas';
 import { toast } from 'sonner';
 

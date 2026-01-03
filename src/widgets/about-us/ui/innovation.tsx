@@ -1,7 +1,7 @@
 import CountUp from '@shared/ui/count-up';
 import getCurrentStatsQuery from '@widgets/landing-page/api/query';
 import Image from 'next/image';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 // Services data array
 const services = [

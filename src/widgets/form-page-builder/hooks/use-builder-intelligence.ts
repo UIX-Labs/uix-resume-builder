@@ -1,14 +1,11 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useCallback } from "react";
-import { getResumeEmptyData } from "@entities/resume";
-import {
-  deepMerge,
-  normalizeStringsFields,
-} from "@entities/resume/models/use-resume-data";
-import { updateResumeByAnalyzerWithResumeId } from "@entities/resume/api/update-resume-by-analyzer";
-import { useFormDataStore, TRANSITION_TEXTS } from "../models/store";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useCallback } from 'react';
+import { getResumeEmptyData } from '@entities/resume';
+import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
+import { updateResumeByAnalyzerWithResumeId } from '@entities/resume/api/update-resume-by-analyzer';
+import { useFormDataStore, TRANSITION_TEXTS } from '../models/store';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 const ESTIMATED_TIME_TO_95_PERCENT = 36000; // 36 seconds
 const TARGET_PROGRESS = 95;
@@ -33,15 +30,9 @@ export function useBuilderIntelligence(resumeId: string) {
       }
 
       const elapsedTime = Date.now() - startTime;
-      const progressPercent = Math.min(
-        (elapsedTime / ESTIMATED_TIME_TO_95_PERCENT) * TARGET_PROGRESS,
-        TARGET_PROGRESS
-      );
+      const progressPercent = Math.min((elapsedTime / ESTIMATED_TIME_TO_95_PERCENT) * TARGET_PROGRESS, TARGET_PROGRESS);
 
-      const calculatedTextIndex = Math.min(
-        Math.floor(elapsedTime / TEXT_INTERVAL),
-        NUMBER_OF_TEXTS - 1
-      );
+      const calculatedTextIndex = Math.min(Math.floor(elapsedTime / TEXT_INTERVAL), NUMBER_OF_TEXTS - 1);
 
       useFormDataStore.setState({
         analyzerProgress: progressPercent,
@@ -62,13 +53,13 @@ export function useBuilderIntelligence(resumeId: string) {
   };
 
   const handleBuilderIntelligence = useCallback(async () => {
-    trackEvent("builder_intelligence_click", {
-      source: "form_builder_sidebar",
+    trackEvent('builder_intelligence_click', {
+      source: 'form_builder_sidebar',
       resumeId: resumeId,
     });
 
     if (!resumeId) {
-      toast.error("Resume ID not found");
+      toast.error('Resume ID not found');
       return;
     }
 
@@ -89,10 +80,7 @@ export function useBuilderIntelligence(resumeId: string) {
         let processedData = { ...response.resume };
         for (const key of Object.keys(emptyData)) {
           const k = key as keyof typeof emptyData;
-          (processedData as any)[k] = deepMerge(
-            (processedData as any)[k],
-            emptyData[k]
-          );
+          (processedData as any)[k] = deepMerge((processedData as any)[k], emptyData[k]);
         }
 
         processedData = normalizeStringsFields(processedData);
@@ -103,12 +91,12 @@ export function useBuilderIntelligence(resumeId: string) {
         useFormDataStore.setState({ analyzerProgress: 100 });
 
         // Invalidate resume data query to refetch and update isAnalyzed flag
-        queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
+        queryClient.invalidateQueries({ queryKey: ['resume-data', resumeId] });
 
-        toast.success("Builder Intelligence analysis complete!");
+        toast.success('Builder Intelligence analysis complete!');
       }
     } catch (error) {
-      console.error("Builder Intelligence error:", error);
+      console.error('Builder Intelligence error:', error);
       progressTracker.stop();
       setAnalyzerError(true);
     } finally {

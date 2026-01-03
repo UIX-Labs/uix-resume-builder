@@ -82,18 +82,15 @@ const PDF_STYLES = `
 function convertProxyUrlsToOriginal(html: string): string {
   // Match both relative and absolute proxy URLs
   // Format: src="/api/proxy-image?url=<encoded-url>" or src="http.../api/proxy-image?url=<encoded-url>"
-  return html.replace(
-    /src="(?:https?:\/\/[^"]*)?\/api\/proxy-image\?url=([^"]+)"/g,
-    (_match, encodedUrl) => {
-      try {
-        const originalUrl = decodeURIComponent(encodedUrl);
-        return `src="${originalUrl}"`;
-      } catch {
-        // If decoding fails, keep the original match
-        return _match;
-      }
+  return html.replace(/src="(?:https?:\/\/[^"]*)?\/api\/proxy-image\?url=([^"]+)"/g, (_match, encodedUrl) => {
+    try {
+      const originalUrl = decodeURIComponent(encodedUrl);
+      return `src="${originalUrl}"`;
+    } catch {
+      // If decoding fails, keep the original match
+      return _match;
     }
-  );
+  });
 }
 
 /**

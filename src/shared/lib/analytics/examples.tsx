@@ -22,7 +22,11 @@ export function AnalyticsButton() {
     });
   };
 
-  return <button onClick={handleClick}>Click Me (Tracked)</button>;
+  return (
+    <button type="button" onClick={handleClick}>
+      Click Me (Tracked)
+    </button>
+  );
 }
 
 // ============================================
@@ -39,10 +43,10 @@ export function TemplateCard({ templateId, templateName }: { templateId: string;
   };
 
   return (
-    <div onClick={handleSelect}>
+    <button type="button" onClick={handleSelect} className="text-left">
       <h3>{templateName}</h3>
-      <button>Select Template</button>
-    </div>
+      <span>Select Template</span>
+    </button>
   );
 }
 
@@ -50,7 +54,7 @@ export function TemplateCard({ templateId, templateName }: { templateId: string;
 // Example 3: Track Form Submission
 // ============================================
 export function ContactForm() {
-  const [formData, setFormData] = useState({
+  const [formData, _setFormData] = useState({
     name: '',
     email: '',
     message: '',
@@ -105,7 +109,7 @@ export function DownloadResumeButton() {
   };
 
   return (
-    <button onClick={handleDownload} disabled={isDownloading}>
+    <button type="button" onClick={handleDownload} disabled={isDownloading}>
       {isDownloading ? 'Downloading...' : 'Download Resume'}
     </button>
   );
@@ -124,7 +128,11 @@ export function AddSectionButton({ sectionType }: { sectionType: string }) {
     // Add section logic...
   };
 
-  return <button onClick={handleAddSection}>Add {sectionType} Section</button>;
+  return (
+    <button type="button" onClick={handleAddSection}>
+      Add {sectionType} Section
+    </button>
+  );
 }
 
 // ============================================
@@ -151,8 +159,12 @@ export function AISuggestion({ suggestion, section }: { suggestion: string; sect
   return (
     <div>
       <p>{suggestion}</p>
-      <button onClick={handleAccept}>Accept</button>
-      <button onClick={handleReject}>Reject</button>
+      <button type="button" onClick={handleAccept}>
+        Accept
+      </button>
+      <button type="button" onClick={handleReject}>
+        Reject
+      </button>
     </div>
   );
 }
@@ -173,9 +185,15 @@ export function ExportButton() {
 
   return (
     <div>
-      <button onClick={() => handleExport('pdf')}>Export as PDF</button>
-      <button onClick={() => handleExport('docx')}>Export as DOCX</button>
-      <button onClick={() => handleExport('txt')}>Export as TXT</button>
+      <button type="button" onClick={() => handleExport('pdf')}>
+        Export as PDF
+      </button>
+      <button type="button" onClick={() => handleExport('docx')}>
+        Export as DOCX
+      </button>
+      <button type="button" onClick={() => handleExport('txt')}>
+        Export as TXT
+      </button>
     </div>
   );
 }
@@ -201,7 +219,11 @@ export function ErrorBoundaryExample() {
     }
   };
 
-  return <button onClick={handleOperation}>Perform Operation</button>;
+  return (
+    <button type="button" onClick={handleOperation}>
+      Perform Operation
+    </button>
+  );
 }
 
 // Dummy function for example

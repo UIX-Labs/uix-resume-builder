@@ -1,54 +1,53 @@
-import { PreviewButton } from "@shared/ui/components/preview-button";
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
-import { useFormPageBuilder } from "../models/ctx";
-import { ResumeRenderer } from "@features/resume/renderer";
-import { useFormDataStore } from "../models/store";
-import { getCleanDataForRenderer } from "../lib/data-cleanup";
-import TemplateButton from "./change-template-button";
-import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
-import { Button } from "@shared/ui/button";
-import { Download, GripVertical } from "lucide-react";
-import { TemplateForm } from "@features/template-form";
-import { camelToHumanString } from "@shared/lib/string";
-import { data as formSchemaData } from "@entities/resume/api/schema-data";
-import { usePdfGeneration } from "../hooks/use-pdf-generation";
-import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
-import { useParams } from "next/navigation";
-import { useThumbnailGeneration } from "../hooks/use-thumbnail-generation";
-import { useTemplateManagement } from "../hooks/use-template-management";
-import { usePdfDownload } from "../hooks/use-pdf-download";
-import { useAutoThumbnail } from "../hooks/use-auto-thumbnail";
-import { useSaveAndNext } from "../hooks/use-save-and-next";
-import { useAutoSave } from "../hooks/use-auto-save";
-import { useResizablePanel } from "../hooks/use-resizable-panel";
-import { useSaveResumeForm } from "@entities/resume";
-import { getResumeEmptyData, type ResumeData } from "@entities/resume";
-import { deepMerge } from "@entities/resume/models/use-resume-data";
-import mockData from "../../../../mock-data.json";
-import { toast } from "sonner";
-import { debounce } from "@shared/lib/utils";
-import type { SuggestedUpdate, SuggestionType } from "@entities/resume";
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useFormPageBuilder } from '../models/ctx';
+import { ResumeRenderer } from '@features/resume/renderer';
+import { useFormDataStore } from '../models/store';
+import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import TemplateButton from './change-template-button';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
+import { Button } from '@shared/ui/button';
+import { Download, GripVertical } from 'lucide-react';
+import { TemplateForm } from '@features/template-form';
+import { camelToHumanString } from '@shared/lib/string';
+import { data as formSchemaData } from '@entities/resume/api/schema-data';
+import { usePdfGeneration } from '../hooks/use-pdf-generation';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { useParams } from 'next/navigation';
+import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
+import { useTemplateManagement } from '../hooks/use-template-management';
+import { usePdfDownload } from '../hooks/use-pdf-download';
+import { useAutoThumbnail } from '../hooks/use-auto-thumbnail';
+import { useSaveAndNext } from '../hooks/use-save-and-next';
+import { useAutoSave } from '../hooks/use-auto-save';
+import { useResizablePanel } from '../hooks/use-resizable-panel';
+import { useSaveResumeForm } from '@entities/resume';
+import { getResumeEmptyData, type ResumeData } from '@entities/resume';
+import { deepMerge } from '@entities/resume/models/use-resume-data';
+import mockData from '../../../../mock-data.json';
+import { toast } from 'sonner';
+import { debounce } from '@shared/lib/utils';
+import type { SuggestedUpdate, SuggestionType } from '@entities/resume';
 import {
   findItemById,
   applySuggestionsToFieldValue,
   applySuggestionsToArrayField,
   removeAppliedSuggestions,
   updateItemFieldValue,
-} from "../lib/suggestion-helpers";
-import { isSectionEmpty, syncSectionIds } from "../lib/section-utils";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
-import { useQueryClient } from "@tanstack/react-query";
-import AnalyzerModal from "@shared/ui/components/analyzer-modal";
-import { useAnalyzerStore } from "@shared/stores/analyzer-store";
-import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
-import { formatTimeAgo } from "../lib/time-helpers";
+} from '../lib/suggestion-helpers';
+import { isSectionEmpty, syncSectionIds } from '../lib/section-utils';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
+import { useQueryClient } from '@tanstack/react-query';
+import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import { normalizeStringsFields } from '@entities/resume/models/use-resume-data';
+import { formatTimeAgo } from '../lib/time-helpers';
 
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
-  const { resumeData, currentStep, navs, setCurrentStep } =
-    useFormPageBuilder();
+  const { resumeData, currentStep, navs, setCurrentStep } = useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
   const formDataResumeId = useFormDataStore((state) => state.formDataResumeId);
@@ -81,15 +80,13 @@ export function FormPageBuilder() {
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  const { selectedTemplate, selectedTemplateId, handleTemplateSelect } =
-    useTemplateManagement({
-      resumeId,
-      initialTemplate: resumeData?.template?.json,
-      initialTemplateId: resumeData?.templateId,
-    });
+  const { selectedTemplate, selectedTemplateId, handleTemplateSelect } = useTemplateManagement({
+    resumeId,
+    initialTemplate: resumeData?.template?.json,
+    initialTemplateId: resumeData?.templateId,
+  });
 
-  const { thumbnailRef, generateAndSaveThumbnail } =
-    useThumbnailGeneration(resumeId);
+  const { thumbnailRef, generateAndSaveThumbnail } = useThumbnailGeneration(resumeId);
 
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
     thumbnailRef,
@@ -103,18 +100,12 @@ export function FormPageBuilder() {
   // Only recompute when formData or isGeneratingPDF actually changes
   const cleanedDataForPreview = useMemo(
     () => getCleanDataForRenderer(formData ?? {}, isGeneratingPDF),
-    [formData, isGeneratingPDF]
+    [formData, isGeneratingPDF],
   );
 
-  const cleanedDataForThumbnail = useMemo(
-    () => getCleanDataForRenderer(formData ?? {}, true),
-    [formData]
-  );
+  const cleanedDataForThumbnail = useMemo(() => getCleanDataForRenderer(formData ?? {}, true), [formData]);
 
-  const cleanedDataForModal = useMemo(
-    () => getCleanDataForRenderer(formData ?? {}, false),
-    [formData]
-  );
+  const cleanedDataForModal = useMemo(() => getCleanDataForRenderer(formData ?? {}, false), [formData]);
 
   useAutoThumbnail({
     resumeId,
@@ -124,14 +115,7 @@ export function FormPageBuilder() {
 
   const { mutateAsync: saveResumeForm } = useSaveResumeForm();
 
-  const save = ({
-    type,
-    data,
-  }: {
-    type: string;
-    data: any;
-    updatedAt: number;
-  }) => {
+  const save = ({ type, data }: { type: string; data: any; updatedAt: number }) => {
     saveResumeForm({ type: type as any, data });
     setLastSaveTime(Date.now());
   };
@@ -161,16 +145,16 @@ export function FormPageBuilder() {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       const isMeta = e.metaKey || e.ctrlKey;
-      if (e.key === "s" && isMeta) {
+      if (e.key === 's' && isMeta) {
         e.preventDefault();
         handleSaveResume();
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [handleSaveResume]);
 
@@ -178,17 +162,12 @@ export function FormPageBuilder() {
   const hasSuggestions = Boolean(
     formData &&
       Object.values(formData).some((section) => {
-        if (
-          section &&
-          typeof section === "object" &&
-          "suggestedUpdates" in section
-        ) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
-            .suggestedUpdates;
+        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
           return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
         }
         return false;
-      })
+      }),
   );
 
   // Debounced function for hide/unhide
@@ -201,27 +180,25 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
       } catch (error) {
-        console.error("Failed to save section visibility:", error);
-        toast.error("Failed to update section visibility");
+        console.error('Failed to save section visibility:', error);
+        toast.error('Failed to update section visibility');
       }
     }, 1000),
-    [save]
+    [save],
   );
 
   const handleToggleHideSection = useCallback(
     (sectionId: string, isHidden: boolean) => {
       const sectionData = formData[sectionId as keyof typeof formData];
-      if (sectionData && typeof sectionData === "object") {
+      if (sectionData && typeof sectionData === 'object') {
         debouncedHideSave(sectionId, {
           ...(sectionData as Record<string, unknown>),
           isHidden,
         });
-        toast.success(
-          isHidden ? `Section hidden from resume` : `Section visible in resume`
-        );
+        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
       }
     },
-    [formData, debouncedHideSave]
+    [formData, debouncedHideSave],
   );
 
   // Callback to open analyzer modal with specific field data
@@ -234,9 +211,7 @@ export function FormPageBuilder() {
         return;
       }
 
-      const itemUpdate = currentData.suggestedUpdates.find(
-        (update: SuggestedUpdate) => update.itemId === itemId
-      );
+      const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
       if (!itemUpdate || !itemUpdate.fields[fieldName]) {
         return;
@@ -245,8 +220,7 @@ export function FormPageBuilder() {
       const fieldData = itemUpdate.fields[fieldName];
       const suggestions =
         fieldData.suggestedUpdates?.filter(
-          (s: { old?: string; new: string; type: SuggestionType }) =>
-            s.type === suggestionType
+          (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType,
         ) || [];
 
       setAnalyzerModalData({
@@ -257,7 +231,7 @@ export function FormPageBuilder() {
       });
       setAnalyzerModalOpen(true);
 
-      trackEvent("builder_intelligence_viewed", {
+      trackEvent('builder_intelligence_viewed', {
         resumeId,
         section: currentStep,
         field: fieldName,
@@ -265,7 +239,7 @@ export function FormPageBuilder() {
         suggestionCount: suggestions.length,
       });
     },
-    [formData, currentStep, resumeId]
+    [formData, currentStep, resumeId],
   );
 
   const handleApplySuggestions = useCallback(
@@ -274,19 +248,15 @@ export function FormPageBuilder() {
         old?: string;
         new: string;
         type: SuggestionType;
-      }>
+      }>,
     ) => {
       if (!analyzerModalData) return;
 
       const { itemId, fieldName } = analyzerModalData;
       const currentData = formData?.[currentStep];
 
-      if (
-        !currentData ||
-        !currentData.items ||
-        !Array.isArray(currentData.items)
-      ) {
-        toast.error("Failed to apply suggestions");
+      if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
+        toast.error('Failed to apply suggestions');
         return;
       }
 
@@ -295,19 +265,17 @@ export function FormPageBuilder() {
         const itemIndex = findItemById(items, itemId);
 
         if (itemIndex === -1) {
-          toast.error("Item not found");
+          toast.error('Item not found');
           return;
         }
 
         const currentItem = items[itemIndex];
-        if (typeof currentItem !== "object" || currentItem === null) {
-          toast.error("Invalid item type");
+        if (typeof currentItem !== 'object' || currentItem === null) {
+          toast.error('Invalid item type');
           return;
         }
 
-        const currentFieldValue = (currentItem as Record<string, unknown>)[
-          fieldName
-        ];
+        const currentFieldValue = (currentItem as Record<string, unknown>)[fieldName];
 
         // Check if field value is an array (for achievements, interests)
         const isArrayField = Array.isArray(currentFieldValue);
@@ -315,43 +283,31 @@ export function FormPageBuilder() {
         let updatedFieldValue: string | string[];
 
         if (isArrayField) {
-          updatedFieldValue = applySuggestionsToArrayField(
-            currentFieldValue as string[],
-            selectedSuggestions
-          );
+          updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
         } else {
-          updatedFieldValue = applySuggestionsToFieldValue(
-            currentFieldValue as string,
-            selectedSuggestions
-          );
+          updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, selectedSuggestions);
         }
 
         // Check if suggestions were actually applied
         const hasChanged = isArrayField
-          ? JSON.stringify(updatedFieldValue) !==
-            JSON.stringify(currentFieldValue)
+          ? JSON.stringify(updatedFieldValue) !== JSON.stringify(currentFieldValue)
           : updatedFieldValue !== currentFieldValue;
 
         if (!hasChanged) {
-          toast.error("Suggestions could not be applied");
+          toast.error('Suggestions could not be applied');
           return;
         }
 
-        const updatedItems = updateItemFieldValue(
-          items,
-          itemIndex,
-          fieldName,
-          updatedFieldValue
-        );
+        const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
 
         const updatedSuggestedUpdates = removeAppliedSuggestions(
           currentData.suggestedUpdates,
           itemId,
           fieldName,
-          selectedSuggestions
+          selectedSuggestions,
         );
 
-        trackEvent("builder_intelligence_applied", {
+        trackEvent('builder_intelligence_applied', {
           resumeId,
           section: currentStep,
           field: fieldName,
@@ -365,36 +321,23 @@ export function FormPageBuilder() {
             ...currentData,
             items: updatedItems,
             suggestedUpdates:
-              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
-                ? updatedSuggestedUpdates
-                : undefined,
+              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
           },
         };
 
-        setFormData(updatedData as Omit<ResumeData, "templateId">, resumeId);
+        setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
 
         // Check if all suggestions are applied and invalidate queries if needed
-        invalidateQueriesIfAllSuggestionsApplied(
-          queryClient,
-          updatedData,
-          resumeId
-        );
+        invalidateQueriesIfAllSuggestionsApplied(queryClient, updatedData, resumeId);
 
-        toast.success("Suggestions applied successfully.");
+        toast.success('Suggestions applied successfully.');
         setAnalyzerModalOpen(false);
       } catch (error) {
-        console.error("❌ Failed to apply suggestions:", error);
-        toast.error("Failed to apply suggestions");
+        console.error('❌ Failed to apply suggestions:', error);
+        toast.error('Failed to apply suggestions');
       }
     },
-    [
-      analyzerModalData,
-      formData,
-      currentStep,
-      resumeId,
-      queryClient,
-      setFormData,
-    ]
+    [analyzerModalData, formData, currentStep, resumeId, queryClient, setFormData],
   );
 
   useEffect(() => {
@@ -407,16 +350,13 @@ export function FormPageBuilder() {
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData: Record<string, any> = { ...analyzedData };
       for (const key of Object.keys(emptyData)) {
-        processedData[key] = deepMerge(
-          processedData[key],
-          (emptyData as Record<string, any>)[key]
-        );
+        processedData[key] = deepMerge(processedData[key], (emptyData as Record<string, any>)[key]);
       }
 
       // Normalize string fields (interests, achievements)
       processedData = normalizeStringsFields(processedData);
 
-      setFormData(processedData as Omit<ResumeData, "templateId">, resumeId);
+      setFormData(processedData as Omit<ResumeData, 'templateId'>, resumeId);
     }
 
     if (!resumeId) {
@@ -433,8 +373,7 @@ export function FormPageBuilder() {
     // Only preserve suggestions if formData belongs to this resume
     const isSameResume = formDataResumeId === resumeId;
     if (isSameResume) {
-      const hasSuggestions = (data: any) =>
-        Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
+      const hasSuggestions = (data: any) => Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
 
       // If formData has suggestions but resumeData doesn't, preserve formData
       if (hasSuggestions(formData) && !hasSuggestions(resumeData)) {
@@ -444,25 +383,18 @@ export function FormPageBuilder() {
 
     // Determine if this is create flow (all sections empty) or edit flow (has data)
     const sectionKeys = Object.keys(resumeData).filter(
-      (key) => key !== "templateId" && key !== "updatedAt" && key !== "template"
+      (key) => key !== 'templateId' && key !== 'updatedAt' && key !== 'template',
     );
 
-    const allSectionsEmpty = sectionKeys.every((key) =>
-      isSectionEmpty(resumeData[key as keyof typeof resumeData])
-    );
+    const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(resumeData[key as keyof typeof resumeData]));
 
     if (allSectionsEmpty) {
       // Create flow: Merge mock data with actual IDs
       const mergedData: Record<string, any> = {};
 
       for (const sectionKey of Object.keys(resumeData)) {
-        if (
-          sectionKey === "templateId" ||
-          sectionKey === "updatedAt" ||
-          sectionKey === "template"
-        ) {
-          mergedData[sectionKey] =
-            resumeData[sectionKey as keyof typeof resumeData];
+        if (sectionKey === 'templateId' || sectionKey === 'updatedAt' || sectionKey === 'template') {
+          mergedData[sectionKey] = resumeData[sectionKey as keyof typeof resumeData];
           continue;
         }
 
@@ -472,7 +404,7 @@ export function FormPageBuilder() {
         if (mockSection) {
           const syncedSection = syncSectionIds(
             actualSection as Record<string, unknown>,
-            mockSection as Record<string, unknown>
+            mockSection as Record<string, unknown>,
           );
           mergedData[sectionKey] = syncedSection;
         } else {
@@ -480,19 +412,12 @@ export function FormPageBuilder() {
         }
       }
 
-      setFormData(mergedData as Omit<ResumeData, "templateId">, resumeId);
+      setFormData(mergedData as Omit<ResumeData, 'templateId'>, resumeId);
     } else {
       // Edit flow: Use actual data as-is
-      setFormData(resumeData as Omit<ResumeData, "templateId">, resumeId);
+      setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     }
-  }, [
-    resumeId,
-    resumeData,
-    analyzedData,
-    analyzerResumeId,
-    setFormData,
-    formDataResumeId,
-  ]);
+  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
 
   // Initialize last save time from resume data
   useEffect(() => {
@@ -525,15 +450,15 @@ export function FormPageBuilder() {
 
     // Map step names to template section IDs
     const stepToSectionMap: Record<string, string> = {
-      personalDetails: "header",
-      experience: "experience",
-      education: "education",
-      skills: "skills",
-      projects: "projects",
-      certifications: "certifications",
-      interests: "interests",
-      achievements: "achievements",
-      professionalSummary: "summary",
+      personalDetails: 'header',
+      experience: 'experience',
+      education: 'education',
+      skills: 'skills',
+      projects: 'projects',
+      certifications: 'certifications',
+      interests: 'interests',
+      achievements: 'achievements',
+      professionalSummary: 'summary',
     };
 
     const sectionId = stepToSectionMap[currentStep];
@@ -542,9 +467,7 @@ export function FormPageBuilder() {
     // Small delay to ensure DOM is ready
     const scrollTimer = setTimeout(() => {
       // Find the section element by data-section attribute
-      const sectionElement = targetRef.current?.querySelector(
-        `[data-section="${sectionId}"]`
-      ) as HTMLElement;
+      const sectionElement = targetRef.current?.querySelector(`[data-section="${sectionId}"]`) as HTMLElement;
 
       if (sectionElement && scrollContainerRef.current) {
         // Get the container's scroll position and dimensions
@@ -553,13 +476,12 @@ export function FormPageBuilder() {
         const sectionRect = sectionElement.getBoundingClientRect();
 
         // Calculate the scroll position to center the section
-        const scrollTop =
-          container.scrollTop + sectionRect.top - containerRect.top - 100; // 100px offset from top
+        const scrollTop = container.scrollTop + sectionRect.top - containerRect.top - 100; // 100px offset from top
 
         // Smooth scroll to the section
         container.scrollTo({
           top: scrollTop,
-          behavior: "smooth",
+          behavior: 'smooth',
         });
       }
     }, 100);
@@ -574,8 +496,8 @@ export function FormPageBuilder() {
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
         style={{
           width: `${leftWidth}%`,
-          minWidth: "30%",
-          maxWidth: "70%",
+          minWidth: '30%',
+          maxWidth: '70%',
           flexShrink: 0,
         }}
       >
@@ -583,15 +505,12 @@ export function FormPageBuilder() {
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
 
-        <div
-          className="min-w-0 flex-1 flex justify-center relative"
-          ref={previewWrapperRef}
-        >
+        <div className="min-w-0 flex-1 flex justify-center relative" ref={previewWrapperRef}>
           <div
             ref={targetRef}
             style={{
               transform: `scale(${previewScale})`,
-              transformOrigin: "top center",
+              transformOrigin: 'top center',
             }}
           >
             {selectedTemplate ? (
@@ -611,14 +530,14 @@ export function FormPageBuilder() {
           </div>
           <div
             style={{
-              position: "absolute",
-              left: "0",
-              top: "0",
-              width: "794px",
-              height: "0",
-              overflow: "hidden",
-              pointerEvents: "none",
-              visibility: "hidden",
+              position: 'absolute',
+              left: '0',
+              top: '0',
+              width: '794px',
+              height: '0',
+              overflow: 'hidden',
+              pointerEvents: 'none',
+              visibility: 'hidden',
               zIndex: -1,
             }}
             aria-hidden="true"
@@ -702,7 +621,7 @@ export function FormPageBuilder() {
         className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
         onMouseDown={startResizing}
         onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
+          if (e.key === 'Enter' || e.key === ' ') {
             startResizing();
           }
         }}
@@ -716,8 +635,8 @@ export function FormPageBuilder() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: "radial-gradient(circle, #ccc 1px, transparent 1px)",
-            backgroundSize: "20px 20px",
+            background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
           }}
         />
 
@@ -746,9 +665,7 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {getFormattedSaveTime() && (
-              <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>
-            )}
+            {getFormattedSaveTime() && <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>}
           </div>
 
           {/* Next Button on the right */}
@@ -790,11 +707,11 @@ export function FormPageBuilder() {
       {selectedTemplate && (
         <PreviewModal
           template={{
-            id: selectedTemplateId ?? "",
+            id: selectedTemplateId ?? '',
             json: selectedTemplate,
-            publicImageUrl: "",
-            createdAt: "",
-            updatedAt: "",
+            publicImageUrl: '',
+            createdAt: '',
+            updatedAt: '',
           }}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}

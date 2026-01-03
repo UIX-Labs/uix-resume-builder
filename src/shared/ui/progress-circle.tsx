@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 interface ProgressCircleProps {
   progress: number; // 0-100
   currentStep: number;
@@ -20,7 +18,7 @@ export function ProgressCircle({ currentStep, totalSteps, progress }: ProgressCi
   return (
     <div className="relative w-[188px] h-[188px] flex items-center justify-center">
       {/* Background circle */}
-      <svg width="188" height="188" viewBox="0 0 188 188" fill="none">
+      <svg width="188" height="188" viewBox="0 0 188 188" fill="none" aria-hidden="true">
         <g filter="url(#filter0_i_1090_113)">
           <path
             d="M188 94.0002C188 145.915 145.915 188 94.0002 188C42.0853 188 0 145.915 0 94.0002C0 42.0853 42.0853 0 94.0002 0C145.915 0 188 42.0853 188 94.0002ZM22.5601 94.0002C22.5601 133.456 54.5449 165.44 94.0002 165.44C133.456 165.44 165.44 133.456 165.44 94.0002C165.44 54.5449 133.456 22.5601 94.0002 22.5601C54.5449 22.5601 22.5601 54.5449 22.5601 94.0002Z"

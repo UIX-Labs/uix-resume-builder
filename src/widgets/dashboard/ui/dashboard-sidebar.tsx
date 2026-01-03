@@ -10,7 +10,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@shared/ui/sidebar';
-import { Home, FileText, LogOut, Sparkles, LayoutGrid } from 'lucide-react';
+import { Home, FileText, LogOut, LayoutGrid } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLogoutUser } from '@entities/auth-page/api/auth-queries';

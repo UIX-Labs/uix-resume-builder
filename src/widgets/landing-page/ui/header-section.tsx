@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';

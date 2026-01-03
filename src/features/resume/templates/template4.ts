@@ -357,7 +357,7 @@ const brianWayneTemplate = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-1 mt-1',
       itemTemplate: {
-        className: "flex flex-col mb-3",
+        className: 'flex flex-col mb-3',
         break: true,
         fields: [
           {
@@ -415,7 +415,7 @@ const brianWayneTemplate = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-1',
       itemTemplate: {
-        className: "flex flex-col mb-2",
+        className: 'flex flex-col mb-2',
         break: true,
         fields: [
           {
@@ -430,8 +430,8 @@ const brianWayneTemplate = {
             className: 'text-sm text-[rgb(56,76,65)]',
           },
           {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
             className:
               'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
@@ -456,11 +456,11 @@ const brianWayneTemplate = {
           className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
-      listPath: "skills.items",
-      itemPath: "name",
-      itemSeparator: ", ",
-      containerClassName: "flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1",
-      badgeClassName: "text-sm text-[rgb(56,76,65)]",
+      listPath: 'skills.items',
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1',
+      badgeClassName: 'text-sm text-[rgb(56,76,65)]',
     },
 
     // Certifications Section - Right Column
@@ -481,7 +481,7 @@ const brianWayneTemplate = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-1 mt-1',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         fields: [
           {

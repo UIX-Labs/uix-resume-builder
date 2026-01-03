@@ -23,7 +23,7 @@ export const TypewriterLine = ({
 
       const typeInterval = setInterval(() => {
         if (currentIndex < text.length) {
-          setDisplayedText((prev) => text.slice(0, currentIndex + 1));
+          setDisplayedText((_prev) => text.slice(0, currentIndex + 1));
           currentIndex++;
         } else {
           clearInterval(typeInterval);

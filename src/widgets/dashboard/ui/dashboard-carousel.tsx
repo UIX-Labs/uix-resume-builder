@@ -1,23 +1,22 @@
 'use client';
 
-import { Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function DashboardCarousel() {
   const options: EmblaOptionsType = { loop: true, align: 'center' };
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 4000, stopOnInteraction: false })]);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [_selectedIndex, setSelectedIndex] = useState(0);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   const onSelect = useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -69,7 +68,7 @@ export default function DashboardCarousel() {
               <TemplateCard
                 key={template.id}
                 template={template}
-                onClick={() => {}}
+                onClick={() => undefined}
                 isDashboard={true}
                 onPreviewClick={() => {
                   setPreviewTemplate(template);

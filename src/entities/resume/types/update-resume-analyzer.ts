@@ -1,4 +1,4 @@
-import { ResumeData } from './resume-data';
+import type { ResumeData } from './resume-data';
 
 export interface UpdateResumeAnalyzer {
   resumeId: string;

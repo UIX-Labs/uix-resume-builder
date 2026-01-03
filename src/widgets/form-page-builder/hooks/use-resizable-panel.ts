@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 interface UseResizablePanelParams {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -64,8 +64,7 @@ export function useResizablePanel({
       const newPercent = (newLeftWidth / containerRect.width) * 100;
 
       // Calculate minimum width based on aspect ratio
-      const minLeftWidthPx =
-        (containerRect.height * resumeWidth) / resumeHeight + 40;
+      const minLeftWidthPx = (containerRect.height * resumeWidth) / resumeHeight + 40;
       const calculatedMinPercent = (minLeftWidthPx / containerRect.width) * 100;
 
       const effectiveMinPercent = Math.max(calculatedMinPercent, minPercent);
@@ -77,23 +76,23 @@ export function useResizablePanel({
 
     const handleMouseUp = () => {
       isDragging.current = false;
-      document.body.style.cursor = "default";
-      document.body.style.userSelect = "auto";
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [containerRef, minPercent, maxPercent, resumeWidth, resumeHeight]);
 
   const startResizing = useCallback(() => {
     isDragging.current = true;
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
   }, []);
 
   return {

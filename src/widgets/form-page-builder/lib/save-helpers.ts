@@ -1,15 +1,15 @@
-import type { ResumeData, ResumeDataKey } from "@entities/resume";
-import { isSectionModified } from "./data-cleanup";
+import type { ResumeData, ResumeDataKey } from '@entities/resume';
+import { isSectionModified } from './data-cleanup';
 
 const SECTION_KEYS: ResumeDataKey[] = [
-  "personalDetails",
-  "experience",
-  "education",
-  "skills",
-  "projects",
-  "certifications",
-  "interests",
-  "achievements",
+  'personalDetails',
+  'experience',
+  'education',
+  'skills',
+  'projects',
+  'certifications',
+  'interests',
+  'achievements',
 ];
 
 /**
@@ -18,22 +18,16 @@ const SECTION_KEYS: ResumeDataKey[] = [
  */
 export async function saveSectionWithSuggestions(
   currentStep: string,
-  formData: Omit<ResumeData, "templateId">,
+  formData: Omit<ResumeData, 'templateId'>,
   save: (params: { type: string; data: any; updatedAt: number }) => void,
-  resumeData?: Omit<ResumeData, "templateId">
+  resumeData?: Omit<ResumeData, 'templateId'>,
 ): Promise<void> {
   const sectionsToSave = new Set<string>([currentStep]);
 
   // If we have resumeData, find all sections that have been modified
   if (resumeData) {
     SECTION_KEYS.forEach((key) => {
-      if (
-        isSectionModified(
-          key,
-          formData as Record<string, unknown>,
-          resumeData as Record<string, unknown>
-        )
-      ) {
+      if (isSectionModified(key, formData as Record<string, unknown>, resumeData as Record<string, unknown>)) {
         sectionsToSave.add(key);
       }
     });

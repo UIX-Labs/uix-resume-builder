@@ -1,10 +1,8 @@
 import React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderField } from '../field-renderer';
-import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
 export function renderHeaderSection(
   section: any,
@@ -23,14 +21,14 @@ export function renderHeaderSection(
   const sectionId = id || 'header-section';
 
   // Check for suggestions in both personalDetails and professionalSummary (merged logic)
-  const personalDetailsSuggestions = data['personalDetails']?.suggestedUpdates;
-  const professionalSummarySuggestions = data['professionalSummary']?.suggestedUpdates;
+  const personalDetailsSuggestions = data.personalDetails?.suggestedUpdates;
+  const professionalSummarySuggestions = data.professionalSummary?.suggestedUpdates;
   const hasValidPersonalDetailsSuggestions = hasPendingSuggestions(personalDetailsSuggestions);
   const hasValidSummarySuggestions = hasPendingSuggestions(professionalSummarySuggestions);
   const hasValidSuggestions = hasValidPersonalDetailsSuggestions || hasValidSummarySuggestions;
 
   // Get itemId for personalDetails (typically the first item)
-  const personalDetailsItem = data['personalDetails']?.items?.[0];
+  const personalDetailsItem = data.personalDetails?.items?.[0];
   const personalDetailsItemId = personalDetailsItem?.itemId || personalDetailsItem?.id;
 
   // Helper function to get error background color for a field
@@ -41,8 +39,8 @@ export function renderHeaderSection(
   // };
 
   // Check if this section is related to personal details (header, profile-picture, etc.)
-  const isPersonalDetailsRelated = 
-    sectionId.toLowerCase() === 'header' || 
+  const isPersonalDetailsRelated =
+    sectionId.toLowerCase() === 'header' ||
     sectionId.toLowerCase() === 'header-section' ||
     sectionId.toLowerCase() === 'profile-picture';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -85,7 +83,14 @@ export function renderHeaderSection(
         {/* {shouldHighlight && <SparkleIndicator />} */}
         {Object.keys(fields).map((key) => (
           <React.Fragment key={key}>
-            {renderField(fields[key], data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}
+            {renderField(
+              fields[key],
+              data,
+              personalDetailsItemId,
+              personalDetailsSuggestions,
+              isThumbnail,
+              skipImageFallbacks,
+            )}
           </React.Fragment>
         ))}
       </div>
@@ -114,6 +119,7 @@ export function renderHeaderSection(
           {fields.description?.path && (
             <div
               className={cn(fields.description.className /*, getFieldErrorBgColor('description')*/)}
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
               dangerouslySetInnerHTML={{
                 __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
               }}
@@ -135,6 +141,7 @@ export function renderHeaderSection(
           {fields.description?.path && (
             <div
               className={cn(fields.description.className /*, getFieldErrorBgColor('description')*/)}
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
               dangerouslySetInnerHTML={{
                 __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
               }}
@@ -143,9 +150,16 @@ export function renderHeaderSection(
         </>
       )}
 
-      {fields.contact && fields.contact.type === 'contact-grid' && (
-        <>{renderField(fields.contact, data, personalDetailsItemId, personalDetailsSuggestions, isThumbnail, skipImageFallbacks)}</>
-      )}
+      {fields.contact &&
+        fields.contact.type === 'contact-grid' &&
+        renderField(
+          fields.contact,
+          data,
+          personalDetailsItemId,
+          personalDetailsSuggestions,
+          isThumbnail,
+          skipImageFallbacks,
+        )}
 
       {fields.contact?.items && (
         <div className={fields.contact.className}>
@@ -160,7 +174,7 @@ export function renderHeaderSection(
               })
               .filter((entry: any) => entry !== null);
             return validItems.map((entry: any, arrayIdx: number) => {
-              const { item, value, originalIdx, fieldName } = entry;
+              const { item, value, originalIdx, fieldName: _fieldName } = entry;
               const showSeparator = arrayIdx > 0 && fields.contact.separator;
               // const errorBgColor = getFieldErrorBgColor(fieldName);
               if (item.type === 'link') {

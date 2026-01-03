@@ -1,6 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
-import { hasPendingSuggestions } from "@features/resume/renderer";
-import type { ResumeData, ResumeDataKey } from "@entities/resume";
+import type { QueryClient } from '@tanstack/react-query';
+import { hasPendingSuggestions } from '@features/resume/renderer';
+import type { ResumeData, ResumeDataKey } from '@entities/resume';
 
 /**
  * Checks if all suggestions are applied across all sections
@@ -25,19 +25,16 @@ export function updateResumeDataCacheOptimistically(
   queryClient: QueryClient,
   resumeId: string,
   section: ResumeDataKey,
-  sectionData: ResumeData[ResumeDataKey]
+  sectionData: ResumeData[ResumeDataKey],
 ): void {
-  queryClient.setQueryData(
-    ["resume-data", resumeId],
-    (old: ResumeData | undefined) => {
-      if (!old) return old;
-      return {
-        ...old,
-        [section]: sectionData,
-        updatedAt: new Date().toISOString(),
-      };
-    }
-  );
+  queryClient.setQueryData(['resume-data', resumeId], (old: ResumeData | undefined) => {
+    if (!old) return old;
+    return {
+      ...old,
+      [section]: sectionData,
+      updatedAt: new Date().toISOString(),
+    };
+  });
 }
 
 /**
@@ -48,7 +45,7 @@ export function updateResumeDataCacheOptimistically(
 export function invalidateQueriesIfAllSuggestionsApplied(
   queryClient: QueryClient,
   formData: Omit<ResumeData, 'templateId'> | null | undefined,
-  resumeId: string,
+  _resumeId: string,
 ): void {
   const allSuggestionsApplied = hasAllSuggestionsApplied(formData);
 
@@ -57,7 +54,7 @@ export function invalidateQueriesIfAllSuggestionsApplied(
   if (allSuggestionsApplied) {
     // Only invalidate resumes list to update icons - NOT resume-data
     // We already have the latest data in local state, no need to refetch
-    queryClient.invalidateQueries({ queryKey: ["resumes"] });
+    queryClient.invalidateQueries({ queryKey: ['resumes'] });
     // REMOVED: queryClient.invalidateQueries({ queryKey: ["resume-data", resumeId] });
   }
 }

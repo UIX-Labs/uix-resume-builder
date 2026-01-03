@@ -249,7 +249,7 @@ const template5 = {
       listPath: 'skills.items',
       containerClassName: 'flex flex-col gap-2 mt-2',
       itemTemplate: {
-        className: "flex flex-col leading-none",
+        className: 'flex flex-col leading-none',
         break: true,
         fields: [
           {
@@ -283,7 +283,7 @@ const template5 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         fields: [
           {
@@ -307,12 +307,12 @@ const template5 = {
 
     // Interests Section - Left Column
     {
-      id: "interests",
-      type: "badge-section",
-      column: "left",
+      id: 'interests',
+      type: 'badge-section',
+      column: 'left',
       break: true,
       breakable: true,
-      className: "mt-6",
+      className: 'mt-6',
       heading: {
         path: 'interests.title',
         fallback: 'Interests',
@@ -346,7 +346,7 @@ const template5 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: "flex flex-col leading-none",
+        className: 'flex flex-col leading-none',
         break: true,
         rows: [
           {
@@ -404,7 +404,7 @@ const template5 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -426,8 +426,8 @@ const template5 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
@@ -494,7 +494,7 @@ const template5 = {
       column: 'right',
       break: true,
       breakable: true,
-      className: "mt-6",
+      className: 'mt-6',
       heading: {
         path: 'achievements.title',
         fallback: 'Achievements',

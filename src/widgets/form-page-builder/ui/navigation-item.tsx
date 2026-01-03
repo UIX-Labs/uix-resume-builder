@@ -1,14 +1,9 @@
-import { CheckIcon, X } from "lucide-react";
-import { cn } from "@shared/lib/cn";
-import { ProfessionalSummary } from "@shared/icons/prof-summary";
-import { hasPendingSuggestions } from "@features/resume/renderer";
-import {
-  SECTION_ICONS,
-  sectionHasContent,
-  hasBuilderIntelligenceRun,
-  getSuggestedUpdates,
-} from "../lib/section-utils";
-import type { ResumeDataKey } from "@entities/resume";
+import { CheckIcon, X } from 'lucide-react';
+import { cn } from '@shared/lib/cn';
+import { ProfessionalSummary } from '@shared/icons/prof-summary';
+import { hasPendingSuggestions } from '@features/resume/renderer';
+import { SECTION_ICONS, sectionHasContent, hasBuilderIntelligenceRun, getSuggestedUpdates } from '../lib/section-utils';
+import type { ResumeDataKey } from '@entities/resume';
 
 interface NavigationItemProps {
   nav: { label: string; name: ResumeDataKey };
@@ -17,12 +12,7 @@ interface NavigationItemProps {
   onSelect: (name: ResumeDataKey) => void;
 }
 
-export function NavigationItem({
-  nav,
-  currentStep,
-  resumeData,
-  onSelect,
-}: NavigationItemProps) {
+export function NavigationItem({ nav, currentStep, resumeData, onSelect }: NavigationItemProps) {
   const Icon = SECTION_ICONS[nav.name as keyof typeof SECTION_ICONS] ?? ProfessionalSummary;
   const sectionData = resumeData?.[nav.name as keyof typeof resumeData];
 
@@ -39,8 +29,8 @@ export function NavigationItem({
     <button
       type="button"
       className={cn(
-        "flex items-center gap-2 px-1 py-1.5 rounded-2xl cursor-pointer pr-4 w-fit",
-        currentStep === nav.name && "bg-[#E9F4FF]"
+        'flex items-center gap-2 px-1 py-1.5 rounded-2xl cursor-pointer pr-4 w-fit',
+        currentStep === nav.name && 'bg-[#E9F4FF]',
       )}
       onClick={() => onSelect(nav.name)}
     >
@@ -50,8 +40,8 @@ export function NavigationItem({
 
       <p
         className={cn(
-          "text-[#0B0A09] text-sm transition-all",
-          currentStep === nav.name && "text-[#005FF2] font-semibold"
+          'text-[#0B0A09] text-sm transition-all',
+          currentStep === nav.name && 'text-[#005FF2] font-semibold',
         )}
       >
         {nav.label}

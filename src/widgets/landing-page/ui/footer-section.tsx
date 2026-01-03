@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import FooterNavigation from './navigation-footer';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { useIsMobile } from '@shared/hooks/use-mobile';

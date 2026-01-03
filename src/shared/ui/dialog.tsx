@@ -53,7 +53,7 @@ function DialogContent({
           className,
         )}
         {...props}
-        onCloseAutoFocus={(event) => {
+        onCloseAutoFocus={(_event) => {
           document.body.style.pointerEvents = '';
         }}
       >

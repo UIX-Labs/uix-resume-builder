@@ -5,7 +5,6 @@ import HeroSection from './hero-section';
 import JDSection from './jd-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
-import React from 'react';
 import { TopAnnouncementStrip } from './top-announcement-strip';
 
 export function LandingPage() {

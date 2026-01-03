@@ -136,6 +136,7 @@ export default function RootLayout({
         <Script
           id="structured-data"
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',

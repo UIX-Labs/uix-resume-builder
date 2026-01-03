@@ -35,7 +35,7 @@ function ResumeRendererComponent({
 
   // NEW: dynamic max height per column
   const PAGE_PADDING_PX = PAGE_PADDING;
-  const COLUMN_MAX_DEFAULT = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
+  const _COLUMN_MAX_DEFAULT = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
 
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
@@ -50,7 +50,7 @@ function ResumeRendererComponent({
     // The banner's negative top margin means it occupies space starting from the top.
     // However, the column content is still subject to the page's bottom padding.
     const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX;
-    const pageMaxOther = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
+    const pageMaxOther = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
 
     const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
     const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
@@ -58,11 +58,7 @@ function ResumeRendererComponent({
     const leftPages: React.ReactNode[][] = [];
     const rightPages: React.ReactNode[][] = [];
 
-    function paginateOneColumn(
-      columnEl: HTMLElement,
-      columnName: 'left' | 'right',
-      outPages: React.ReactNode[][],
-    ) {
+    function paginateOneColumn(columnEl: HTMLElement, _columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
       const pageMax = pageMaxOther;
 
       // Create a test container to measure actual heights
@@ -167,7 +163,7 @@ function ResumeRendererComponent({
 
           // It doesn't fit - remove it
           const container = getCurrentContainer();
-          if (container && container.contains(clone)) {
+          if (container?.contains(clone)) {
             container.removeChild(clone);
           } else {
             outPages[currentPageIndex].pop();
@@ -213,7 +209,7 @@ function ResumeRendererComponent({
           if (newHeight > newMax && (canBreak || hasBreakableContent) && child.children.length > 0) {
             // Still doesn't fit on new page - must break it
             const container = getCurrentContainer();
-            if (container && container.contains(newClone)) {
+            if (container?.contains(newClone)) {
               container.removeChild(newClone);
             } else {
               outPages[currentPageIndex].pop();
@@ -363,6 +359,7 @@ function ResumeRendererComponent({
               style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
             >
               {leftColumn.map((node: any, i) => (
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
               ))}
             </div>
@@ -371,6 +368,7 @@ function ResumeRendererComponent({
               style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
             >
               {rightColumn.map((node: any, i) => (
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
               ))}
             </div>

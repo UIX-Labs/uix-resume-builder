@@ -53,7 +53,7 @@ const normalizeText = (str: string): string => {
       };
       return entities[entity] || entity;
     })
-    .replace(/[•\-\*◦▪▫►▸]/g, '') // Remove bullet characters and hyphens
+    .replace(/[•\-*◦▪▫►▸]/g, '') // Remove bullet characters and hyphens
     .replace(/\s+/g, '') // Remove ALL spaces for comparison
     .toLowerCase() // Convert to lowercase for case-insensitive comparison
     .trim();
@@ -100,7 +100,7 @@ export const applySuggestionsToArrayField = (
   currentValue: string[],
   suggestions: Array<{ old?: string; new: string; type: SuggestionType }>,
 ): string[] => {
-  let updatedArray = [...currentValue];
+  const updatedArray = [...currentValue];
 
   suggestions.forEach((suggestion) => {
     if (suggestion.old) {

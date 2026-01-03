@@ -50,7 +50,13 @@ function AboutPage() {
             <h2 className="text-[32px] sm:text-[48px] md:text-[60px] font-semibold leading-[1.1] text-[#0C1118] font-[Geist,sans-serif] tracking-[-0.03em] mb-4">
               Meet <span className="font-black">Resume Builder</span>
             </h2>
-            <img src="/images/Group-35.png" alt="Group 35" fill className="object-cover" />
+            <Image
+              src="/images/Group-35.png"
+              alt="Group 35"
+              width={364}
+              height={664}
+              className="object-cover mx-auto"
+            />
             <p className="text-[20px] sm:text-[24px] md:text-[28px] font-normal leading-[1.4] text-[#0C1118] font-[Geist,sans-serif] tracking-[-0.03em] mb-2">
               Where Bold Ideas
             </p>

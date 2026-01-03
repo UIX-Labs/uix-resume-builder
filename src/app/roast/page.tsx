@@ -1,11 +1,8 @@
 'use client';
 
-import Spotlight from '@shared/icons/spotlight';
 import { cn } from '@shared/lib/utils';
 import { useMutation } from '@tanstack/react-query';
-import { UploadIcon } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { fetch } from '@shared/api';

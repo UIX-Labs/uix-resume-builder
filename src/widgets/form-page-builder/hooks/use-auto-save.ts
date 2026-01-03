@@ -1,13 +1,13 @@
-import { useEffect, useRef } from "react";
-import { useFormDataStore } from "../models/store";
-import { isSectionModified } from "../lib/data-cleanup";
-import mockData from "../../../../mock-data.json";
-import type { ResumeData, ResumeDataKey } from "@entities/resume";
-import dayjs from "dayjs";
+import { useEffect, useRef } from 'react';
+import { useFormDataStore } from '../models/store';
+import { isSectionModified } from '../lib/data-cleanup';
+import mockData from '../../../../mock-data.json';
+import type { ResumeData, ResumeDataKey } from '@entities/resume';
+import dayjs from 'dayjs';
 
 interface UseAutoSaveParams {
   currentStep: string;
-  formData: Omit<ResumeData, "templateId"> | null | undefined;
+  formData: Omit<ResumeData, 'templateId'> | null | undefined;
   save: (params: { type: string; data: any; updatedAt: number }) => void;
   onSaveComplete?: () => void;
   debounceMs?: number;
@@ -16,15 +16,9 @@ interface UseAutoSaveParams {
 /**
  * Simple auto-save hook that saves the current section after a period of inactivity.
  */
-export function useAutoSave({
-  currentStep,
-  formData,
-  save,
-  onSaveComplete,
-  debounceMs = 25000,
-}: UseAutoSaveParams) {
+export function useAutoSave({ currentStep, formData, save, onSaveComplete, debounceMs = 25000 }: UseAutoSaveParams) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const lastSavedRef = useRef<string>("");
+  const lastSavedRef = useRef<string>('');
 
   useEffect(() => {
     // Skip if no data

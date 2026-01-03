@@ -70,6 +70,7 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
                     // Render fully typed lines as static text to save resources
                     // and parse simple markdown bolding if present
                     <span
+                      // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for markdown rendering
                       dangerouslySetInnerHTML={{
                         __html: cleanLine
                           .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')

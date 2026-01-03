@@ -298,8 +298,8 @@ const enjiTemplate = {
       },
       columns: [
         {
-          type: "group",
-          className: "flex-1 space-y-1.5",
+          type: 'group',
+          className: 'flex-1 space-y-1.5',
           break: true,
           items: [
             {
@@ -308,10 +308,10 @@ const enjiTemplate = {
               className: '',
               items: [
                 {
-                  type: "inline-group",
-                  containerClassName: "flex items-center gap-1",
+                  type: 'inline-group',
+                  containerClassName: 'flex items-center gap-1',
                   break: true,
-                  className: "",
+                  className: '',
                   items: [
                     {
                       type: 'text',
@@ -339,10 +339,10 @@ const enjiTemplate = {
               className: 'text-[12px] text-slate-500 italic',
             },
             {
-              type: "html",
-              path: "description",
+              type: 'html',
+              path: 'description',
               break: true,
-              className: "text-[12px] text-slate-700 leading-relaxed",
+              className: 'text-[12px] text-slate-700 leading-relaxed',
             },
           ],
         },
@@ -379,8 +379,8 @@ const enjiTemplate = {
       },
       columns: [
         {
-          type: "group",
-          className: "flex-1 space-y-1",
+          type: 'group',
+          className: 'flex-1 space-y-1',
           break: true,
           items: [
             {
@@ -396,10 +396,10 @@ const enjiTemplate = {
               className: 'text-[12px] text-slate-500 italic',
             },
             {
-              type: "html",
-              path: "description",
+              type: 'html',
+              path: 'description',
               break: true,
-              className: "text-[12px] text-slate-700 leading-relaxed",
+              className: 'text-[12px] text-slate-700 leading-relaxed',
             },
             {
               type: 'link',
@@ -438,8 +438,8 @@ const enjiTemplate = {
       },
       columns: [
         {
-          type: "badge-list",
-          itemPath: "name",
+          type: 'badge-list',
+          itemPath: 'name',
           break: true,
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
@@ -531,8 +531,8 @@ const enjiTemplate = {
       },
       columns: [
         {
-          type: "badge-list",
-          itemPath: "items",
+          type: 'badge-list',
+          itemPath: 'items',
           break: true,
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
@@ -568,8 +568,8 @@ const enjiTemplate = {
       },
       columns: [
         {
-          type: "badge-list",
-          itemPath: "items",
+          type: 'badge-list',
+          itemPath: 'items',
           break: true,
           badgeClassName:
             'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium line-clamp-2 break-all',

@@ -18,7 +18,7 @@ async function waitForImagesToLoad(element: HTMLElement, timeoutMs: number = 500
     return Promise.resolve();
   }
 
-  const imagePromises = images.map((img, index) => {
+  const imagePromises = images.map((img, _index) => {
     // If image is already loaded, resolve immediately
     if (img.complete && img.naturalHeight !== 0) {
       return Promise.resolve();

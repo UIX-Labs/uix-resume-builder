@@ -1,4 +1,3 @@
-import React from 'react';
 import HeroSection from './hero-section';
 import Image from 'next/image';
 import Header from './header-section';

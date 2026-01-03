@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { UploadCloudIcon, Trash2, RotateCcw, Edit } from 'lucide-react';
+import { UploadCloudIcon, Trash2, Edit } from 'lucide-react';
 import { cn } from '@shared/lib/cn';
 import { Progress } from '@shared/ui/progress';
 import { toast } from 'sonner';
@@ -102,45 +102,43 @@ export default function ResumeUploadSection({ onFileStatusChange, onFileChange }
             <span className="text-sm text-gray-300">or Select File from your device</span>
           </label>
         ) : (
-          <>
-            <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[85%] mt-2">
-              <div className="flex justify-between items-start">
-                <div className="flex flex-col flex-1">
-                  <span className="font-medium text-gray-900">{file.name}</span>
-                  <span className="text-xs text-gray-500">
-                    {file.size} MB {file.status === 'success' && <span>• Uploaded Successfully</span>}
-                    {file.status === 'error' && toast.error('Upload failed. Please try again.')}
-                  </span>
-                </div>
-
-                <div className="flex gap-2">
-                  {file.status === 'success' && (
-                    <button
-                      type="button"
-                      onClick={handleReupload}
-                      className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-                    >
-                      <Edit className="h-4 w-4 text-gray-600" />
-                    </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={handleDelete}
-                    className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
-                  >
-                    <Trash2 className="h-4 w-4 text-gray-600" />
-                  </button>
-                </div>
+          <div className="flex flex-col bg-white rounded-[10px] px-4 py-3 w-[85%] mt-2">
+            <div className="flex justify-between items-start">
+              <div className="flex flex-col flex-1">
+                <span className="font-medium text-gray-900">{file.name}</span>
+                <span className="text-xs text-gray-500">
+                  {file.size} MB {file.status === 'success' && <span>• Uploaded Successfully</span>}
+                  {file.status === 'error' && toast.error('Upload failed. Please try again.')}
+                </span>
               </div>
 
-              {file.status !== 'success' && (
-                <div className="mt-3">
-                  <Progress value={file.progress} className="h-1 [&>div]:bg-[#02A44F]" />
-                </div>
-              )}
+              <div className="flex gap-2">
+                {file.status === 'success' && (
+                  <button
+                    type="button"
+                    onClick={handleReupload}
+                    className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                  >
+                    <Edit className="h-4 w-4 text-gray-600" />
+                  </button>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="flex items-center justify-center w-10 h-10 border border-gray-300 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
+                >
+                  <Trash2 className="h-4 w-4 text-gray-600" />
+                </button>
+              </div>
             </div>
-          </>
+
+            {file.status !== 'success' && (
+              <div className="mt-3">
+                <Progress value={file.progress} className="h-1 [&>div]:bg-[#02A44F]" />
+              </div>
+            )}
+          </div>
         )}
 
         <input

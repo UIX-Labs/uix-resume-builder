@@ -50,6 +50,7 @@ export function FormPageBuilder() {
   const { resumeData, currentStep, navs, setCurrentStep } = useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
+  const formDataResumeId = useFormDataStore((state) => state.formDataResumeId);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -110,7 +111,6 @@ export function FormPageBuilder() {
     resumeId,
     formData,
     generateAndSaveThumbnail,
-    intervalMs: 25000,
   });
 
   const { mutateAsync: saveResumeForm } = useSaveResumeForm();
@@ -123,6 +123,7 @@ export function FormPageBuilder() {
   const { handleSaveResume, handleNextStep } = useSaveAndNext({
     currentStep,
     formData,
+    resumeData,
     save,
     resumeId,
     navs,
@@ -324,7 +325,7 @@ export function FormPageBuilder() {
           },
         };
 
-        setFormData(updatedData as Omit<ResumeData, 'templateId'>);
+        setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
 
         // Check if all suggestions are applied and invalidate queries if needed
         invalidateQueriesIfAllSuggestionsApplied(queryClient, updatedData, resumeId);
@@ -355,7 +356,7 @@ export function FormPageBuilder() {
       // Normalize string fields (interests, achievements)
       processedData = normalizeStringsFields(processedData);
 
-      setFormData(processedData as Omit<ResumeData, 'templateId'>);
+      setFormData(processedData as Omit<ResumeData, 'templateId'>, resumeId);
     }
 
     if (!resumeId) {
@@ -369,30 +370,15 @@ export function FormPageBuilder() {
 
     if (!resumeData) return;
 
-    // Check if current formData has suggestions
-    const formDataHasSuggestions =
-      formData &&
-      Object.values(formData).some((section) => {
-        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
-          return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
-        }
-        return false;
-      });
+    // Only preserve suggestions if formData belongs to this resume
+    const isSameResume = formDataResumeId === resumeId;
+    if (isSameResume) {
+      const hasSuggestions = (data: any) => Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
 
-    // Check if resumeData has suggestions
-    const resumeDataHasSuggestions = Object.values(resumeData).some((section) => {
-      if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
-        const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
-        return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
+      // If formData has suggestions but resumeData doesn't, preserve formData
+      if (hasSuggestions(formData) && !hasSuggestions(resumeData)) {
+        return;
       }
-      return false;
-    });
-
-    // If formData has suggestions but resumeData doesn't,
-    // it means Builder Intelligence set the suggestions - don't overwrite!
-    if (formDataHasSuggestions && !resumeDataHasSuggestions) {
-      return;
     }
 
     // Determine if this is create flow (all sections empty) or edit flow (has data)
@@ -426,12 +412,12 @@ export function FormPageBuilder() {
         }
       }
 
-      setFormData(mergedData as Omit<ResumeData, 'templateId'>);
+      setFormData(mergedData as Omit<ResumeData, 'templateId'>, resumeId);
     } else {
       // Edit flow: Use actual data as-is
-      setFormData(resumeData as Omit<ResumeData, 'templateId'>);
+      setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     }
-  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData]);
+  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
 
   // Initialize last save time from resume data
   useEffect(() => {
@@ -669,7 +655,7 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             currentStep={currentStep}
             values={formData ?? {}}
-            onChange={(formData) => setFormData(formData)}
+            onChange={(formData) => setFormData(formData, resumeId)}
             onOpenAnalyzerModal={handleOpenAnalyzerModal}
             onToggleHideSection={handleToggleHideSection}
           />

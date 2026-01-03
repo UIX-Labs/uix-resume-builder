@@ -9,6 +9,7 @@ import type { ResumeData } from '@entities/resume';
 interface UseSaveAndNextParams {
   currentStep: string;
   formData: Omit<ResumeData, 'templateId'> | null | undefined;
+  resumeData?: Omit<ResumeData, 'templateId'> | null;
   save: (params: { type: string; data: any; updatedAt: number }) => void;
   resumeId: string;
   navs: Array<{ name: string }>;
@@ -21,6 +22,7 @@ interface UseSaveAndNextParams {
 export function useSaveAndNext({
   currentStep,
   formData,
+  resumeData,
   save,
   resumeId,
   navs,
@@ -46,7 +48,13 @@ export function useSaveAndNext({
 
       onThumbnailInvalidate?.();
 
-      await saveSectionWithSuggestions(currentStep, formData!, save);
+      // Save current section + any other modified sections
+      await saveSectionWithSuggestions(
+        currentStep,
+        formData!,
+        save,
+        resumeData as Omit<ResumeData, 'templateId'> | undefined,
+      );
 
       if (generateAndSaveThumbnail) {
         await generateAndSaveThumbnail();
@@ -62,7 +70,7 @@ export function useSaveAndNext({
     } catch {
       toast.error('Failed to save resume');
     }
-  }, [currentStep, formData, save, resumeId, onThumbnailInvalidate, generateAndSaveThumbnail]);
+  }, [currentStep, formData, resumeData, save, resumeId, onThumbnailInvalidate, generateAndSaveThumbnail]);
 
   const handleNextStep = useCallback(async () => {
     try {
@@ -73,8 +81,13 @@ export function useSaveAndNext({
         if (hasModifications) {
           onThumbnailInvalidate?.();
 
-          // Save current section and all sections with suggestions
-          await saveSectionWithSuggestions(currentStep, formData, save);
+          // Save current section + any other modified sections
+          await saveSectionWithSuggestions(
+            currentStep,
+            formData,
+            save,
+            resumeData as Omit<ResumeData, 'templateId'> | undefined,
+          );
 
           // Generate thumbnail after saving
           if (generateAndSaveThumbnail) {
@@ -92,6 +105,7 @@ export function useSaveAndNext({
   }, [
     currentStep,
     formData,
+    resumeData,
     save,
     navs,
     nextStepIndex,

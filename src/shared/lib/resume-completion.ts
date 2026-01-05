@@ -1,26 +1,36 @@
-import type { ResumeData, ResumeDataKey } from '@entities/resume/types/resume-data';
-import { isSectionModified } from '@widgets/form-page-builder/lib/data-cleanup';
+import type {
+  ResumeData,
+  ResumeDataKey,
+} from "@entities/resume/types/resume-data";
+import { isSectionModified } from "@widgets/form-page-builder/lib/data-cleanup";
 
 const whiteList = [
-  'personalDetails',
-  'professionalSummary',
-  'experience',
-  'education',
-  'skills',
-  'projects',
-  'certifications',
-  'interests',
-  'achievements',
+  "personalDetails",
+  "professionalSummary",
+  "experience",
+  "education",
+  "skills",
+  "projects",
+  "certifications",
+  "interests",
+  "achievements",
 ];
 
 // Fields to ignore during comparison (metadata fields)
-const ignoredFields = ['id', 'itemId', 'rank', 'title', 'ongoing', 'suggestedUpdates'];
+const ignoredFields = [
+  "id",
+  "itemId",
+  "rank",
+  "title",
+  "ongoing",
+  "suggestedUpdates",
+];
 
 /**
  * Strips HTML tags from a string for comparison
  */
 function stripHtmlTags(value: string): string {
-  return value.replace(/<[^>]*>/g, '').trim();
+  return value.replace(/<[^>]*>/g, "").trim();
 }
 
 /**
@@ -31,7 +41,7 @@ function deepEqual(val1: any, val2: any): boolean {
   if (val1 == null || val2 == null) return val1 === val2;
 
   // Compare strings after stripping HTML
-  if (typeof val1 === 'string' && typeof val2 === 'string') {
+  if (typeof val1 === "string" && typeof val2 === "string") {
     return stripHtmlTags(val1) === stripHtmlTags(val2);
   }
 
@@ -42,7 +52,7 @@ function deepEqual(val1: any, val2: any): boolean {
     return val1.every((item, index) => deepEqual(item, val2[index]));
   }
 
-  if (typeof val1 === 'object' && typeof val2 === 'object') {
+  if (typeof val1 === "object" && typeof val2 === "object") {
     const keys1 = Object.keys(val1).filter((k) => !ignoredFields.includes(k));
     const keys2 = Object.keys(val2).filter((k) => !ignoredFields.includes(k));
 
@@ -57,7 +67,7 @@ function deepEqual(val1: any, val2: any): boolean {
  * Calculates how many fields are different from mockData in an item
  */
 function calculateModifiedFieldsCount(actualItem: any, mockItem: any): number {
-  if (typeof actualItem !== 'object' || typeof mockItem !== 'object') {
+  if (typeof actualItem !== "object" || typeof mockItem !== "object") {
     return 0;
   }
 
@@ -85,23 +95,58 @@ function calculateModifiedFieldsCount(actualItem: any, mockItem: any): number {
 }
 
 function calculateSectionWeight(value: any) {
-  if (typeof value !== 'object') {
+  if (typeof value !== "object") {
     return 1;
   }
 
-  if (['string', 'number'].includes(typeof value)) {
+  if (["string", "number"].includes(typeof value)) {
     return 1;
   }
 
-  return Object.keys(value).filter((key) => !ignoredFields.includes(key)).length;
+  return Object.keys(value).filter((key) => !ignoredFields.includes(key))
+    .length;
+}
+
+/**
+ * Checks if a value has actual content (not just structure)
+ */
+function hasActualContent(value: any): boolean {
+  if (value === null || value === undefined) return false;
+
+  // Empty string is not content
+  if (typeof value === "string") {
+    return value.trim().length > 0;
+  }
+
+  // Numbers and booleans are content
+  if (typeof value === "number" || typeof value === "boolean") {
+    return true;
+  }
+
+  // Empty array is not content
+  if (Array.isArray(value)) {
+    return value.length > 0 && value.some((item) => hasActualContent(item));
+  }
+
+  // For objects, check if any nested value has actual content
+  if (typeof value === "object") {
+    return Object.entries(value).some(([key, val]) => {
+      if (ignoredFields.includes(key)) return false;
+      return hasActualContent(val);
+    });
+  }
+
+  return Boolean(value);
 }
 
 function calculateItemWeight(value: any) {
-  if (typeof value !== 'object') {
-    return value ? 1 : 0;
+  if (typeof value !== "object") {
+    return hasActualContent(value) ? 1 : 0;
   }
 
-  return Object.entries(value).filter(([key, value]) => !ignoredFields.includes(key) && value).length;
+  return Object.entries(value).filter(
+    ([key, val]) => !ignoredFields.includes(key) && hasActualContent(val)
+  ).length;
 }
 
 /**
@@ -117,7 +162,10 @@ function calculateItemWeight(value: any) {
  * @param mockData - Mock/template data for comparison
  * @returns Completion percentage (0-100)
  */
-export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Record<string, any>) {
+export function calculateResumeCompletion(
+  resumeData: ResumeData,
+  mockData?: Record<string, any>
+) {
   // If no mockData provided, use old logic (backward compatibility)
   if (!mockData) {
     const { total, filled } = Object.entries(resumeData).reduce(
@@ -131,12 +179,15 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
 
         if (items.length > 0) {
           acc.total += calculateSectionWeight(items[0]);
-          acc.filled += items.reduce((acc, item) => Math.max(acc, calculateItemWeight(item)), 0);
+          acc.filled += items.reduce(
+            (acc, item) => Math.max(acc, calculateItemWeight(item)),
+            0
+          );
         }
 
         return acc;
       },
-      { total: 0, filled: 0 },
+      { total: 0, filled: 0 }
     );
 
     return total === 0 ? 0 : (filled / total) * 100;
@@ -154,7 +205,7 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
       const isModified = isSectionModified(
         key,
         resumeData as unknown as Record<string, unknown>,
-        mockData as Record<string, unknown>,
+        mockData as Record<string, unknown>
       );
 
       // If section is not modified (identical to mockData or empty), skip it
@@ -183,10 +234,16 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
 
         if (!mockItem) {
           // No mock item to compare - this is a new item, count all filled fields
-          modifiedFieldsCount = Math.max(modifiedFieldsCount, calculateItemWeight(actualItem));
+          modifiedFieldsCount = Math.max(
+            modifiedFieldsCount,
+            calculateItemWeight(actualItem)
+          );
         } else {
           // Compare with mock item - count only modified fields
-          const modifiedCount = calculateModifiedFieldsCount(actualItem, mockItem);
+          const modifiedCount = calculateModifiedFieldsCount(
+            actualItem,
+            mockItem
+          );
           modifiedFieldsCount = Math.max(modifiedFieldsCount, modifiedCount);
         }
       }
@@ -196,7 +253,7 @@ export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Rec
 
       return acc;
     },
-    { total: 0, filled: 0 },
+    { total: 0, filled: 0 }
   );
 
   // If no sections have been modified, return 0%

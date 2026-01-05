@@ -14,11 +14,11 @@ const brianWayneTemplate = {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-8 flex flex-col',
+      className: 'bg-[rgb(56,76,65)] text-black px-6 py-6 flex flex-col',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'px-8 pl-8 pt-10 flex flex-col min-w-0',
+      className: 'px-8 pl-8 py-8 flex flex-col min-w-0',
     },
   },
 
@@ -355,7 +355,7 @@ const brianWayneTemplate = {
         },
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-6 mt-1',
+      containerClassName: 'flex flex-col gap-1 mt-1',
       itemTemplate: {
         className: "flex flex-col mb-3",
         break: true,
@@ -406,7 +406,7 @@ const brianWayneTemplate = {
       heading: {
         path: 'projects.title',
         fallback: 'Projects',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)]',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
@@ -443,33 +443,24 @@ const brianWayneTemplate = {
     // Skills Section - Right Column
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       column: 'right',
       break: true,
+      breakable: true,
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'text-xl font-semibold text-[rgb(56,76,65)]',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: "skills.items",
-      containerClassName: "flex flex-col gap-2 mt-2 mb-2.5",
-      itemTemplate: {
-        break: true,
-        className: "flex flex-col items-start gap-2",
-        fields: [
-          {
-            prefix: "• ",
-            path: "name",
-            breakable: true,
-            break: true,
-            className: "text-sm text-[rgb(56,76,65)]",
-          },
-        ],
-      },
+      itemPath: "name",
+      itemSeparator: ", ",
+      containerClassName: "flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1",
+      badgeClassName: "text-sm text-[rgb(56,76,65)]",
     },
 
     // Certifications Section - Right Column
@@ -481,14 +472,14 @@ const brianWayneTemplate = {
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)]',
         divider: {
           variant: 'line',
           className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
         },
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-3 mt-1',
+      containerClassName: 'flex flex-col gap-1 mt-1',
       itemTemplate: {
         className: "flex flex-col",
         break: true,
@@ -496,16 +487,19 @@ const brianWayneTemplate = {
           {
             path: 'title',
             fallback: 'Certification Title',
+            break: true,
             className: 'text-sm font-semibold text-[rgb(56,76,65)]',
           },
           {
             type: 'inline-group',
             className: 'flex flex-row items-baseline gap-1 leading-none',
+            break: true,
             items: [
               {
                 path: 'issuer',
                 fallback: 'Issuer',
                 className: 'text-sm text-[rgb(56,76,65)] italic',
+                break: true,
                 suffix: ', ',
               },
               {

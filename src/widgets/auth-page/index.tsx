@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -116,7 +116,7 @@ export default function AuthPageWidget() {
             }, 100);
           }
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ email: 'Failed to process email. Please try again.' });
         },
       },
@@ -134,7 +134,7 @@ export default function AuthPageWidget() {
     loginMutation.mutate(
       { email, password, guestEmail },
       {
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
           trackEvent('login_success', { method: 'email' });
 
           localStorage.removeItem('pending_analyzer_guest_email');
@@ -154,7 +154,7 @@ export default function AuthPageWidget() {
 
           router.push('/dashboard');
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ password: 'Invalid password. Please try again.' });
         },
       },
@@ -180,7 +180,7 @@ export default function AuthPageWidget() {
         onSuccess: () => {
           setStep('register');
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ code: 'Invalid or expired OTP. Please try again.' });
         },
       },
@@ -220,7 +220,7 @@ export default function AuthPageWidget() {
         guestEmail,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
           trackEvent('registration_success', { method: 'email' });
 
           localStorage.removeItem('pending_analyzer_guest_email');
@@ -240,7 +240,7 @@ export default function AuthPageWidget() {
 
           router.push('/dashboard');
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ submit: 'Registration failed. Please try again.' });
         },
       },
@@ -353,6 +353,7 @@ export default function AuthPageWidget() {
                 <p className="text-neutral-500 text-center text-sm">
                   Welcome back! Please enter your password for {email}
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     disabled={isLoading}
                     className="font-semibold hover:underline ml-1 text-blue-600"
@@ -412,6 +413,7 @@ export default function AuthPageWidget() {
                 <p className="text-neutral-500 text-center whitespace-nowrap">
                   We sent a temporary login code to {email} <br />
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     disabled={isLoading}
                     className="font-semibold hover:underline ml-1"
@@ -456,7 +458,13 @@ export default function AuthPageWidget() {
               <div className="flex flex-col items-center justify-center gap-6 text-sm leading-5 -tracking-[0.02px]">
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-8 h-8 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -490,6 +498,7 @@ export default function AuthPageWidget() {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     className="text-blue-600 hover:underline text-sm font-semibold"
                   >

@@ -237,7 +237,7 @@ const template8 = {
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: "flex flex-col gap-1 leading-none mt-2",
+        className: 'flex flex-col gap-1 leading-none mt-2',
         break: true,
         rows: [
           {
@@ -274,9 +274,9 @@ const template8 = {
 
     // Projects Section
     {
-      id: "projects",
-      type: "list-section",
-      className: "flex flex-col mt-4",
+      id: 'projects',
+      type: 'list-section',
+      className: 'flex flex-col mt-4',
       break: true,
       heading: {
         path: 'projects.heading',
@@ -285,7 +285,7 @@ const template8 = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: "flex flex-col mt-1.5",
+        className: 'flex flex-col mt-1.5',
         break: true,
         fields: [
           {
@@ -303,11 +303,10 @@ const template8 = {
             ],
           },
           {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
-            className:
-              "text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap",
+            className: 'text-sm [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap',
           },
         ],
       },
@@ -315,8 +314,8 @@ const template8 = {
 
     // Technical Skills Section
     {
-      id: "skills",
-      type: "inline-list-section",
+      id: 'skills',
+      type: 'inline-list-section',
       break: true,
       breakable: true,
       heading: {
@@ -333,8 +332,8 @@ const template8 = {
 
     // Achievements Section
     {
-      id: "achievements",
-      type: "badge-section",
+      id: 'achievements',
+      type: 'badge-section',
       break: true,
       breakable: true,
       heading: {
@@ -361,7 +360,7 @@ const template8 = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: "flex flex-col gap-0.5 mt-2 leading-none",
+        className: 'flex flex-col gap-0.5 mt-2 leading-none',
         break: true,
         fields: [
           {
@@ -384,8 +383,8 @@ const template8 = {
 
     // Interests Section
     {
-      id: "interests",
-      type: "badge-section",
+      id: 'interests',
+      type: 'badge-section',
       break: true,
       breakable: true,
       heading: {

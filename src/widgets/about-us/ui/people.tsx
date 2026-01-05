@@ -5,10 +5,9 @@ import type { EmblaOptionsType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { MemberDetailModal } from './member-detail-modal';
 import { Button } from '@shared/ui';
-import Autoplay from 'embla-carousel-autoplay';
 
 const teamMembers = [
   {
@@ -95,15 +94,15 @@ export function People() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [_selectedIndex, setSelectedIndex] = useState(0);
   const [selectedMember, setSelectedMember] = useState<(typeof teamMembers)[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0); // Default first card expanded
 
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [_canScrollPrev, setCanScrollPrev] = useState(false);
 
-  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [_canScrollNext, setCanScrollNext] = useState(false);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -171,11 +170,13 @@ export function People() {
                     : 'w-[80px] sm:w-[100px] md:w-[125px]';
 
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={template.id}
                       onClick={() => handleOpenModal(template)}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(0)}
+                      className="text-left"
                     >
                       <div className="cursor-pointer h-full">
                         <div className="h-full">
@@ -223,7 +224,7 @@ export function People() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>

@@ -154,30 +154,27 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
 }
 
 export type ResumeDataKey =
-  | "experience"
-  | "skills"
-  | "projects"
-  | "personalDetails"
-  | "professionalSummary"
-  | "education"
-  | "certifications"
-  | "interests"
-  | "achievements";
+  | 'experience'
+  | 'skills'
+  | 'projects'
+  | 'personalDetails'
+  | 'professionalSummary'
+  | 'education'
+  | 'certifications'
+  | 'interests'
+  | 'achievements';
 
 export enum SuggestionType {
-  SPELLING_ERROR = "spelling_error",
-  SENTENCE_REFINEMENT = "sentence_refinement",
-  NEW_SUMMARY = "new_summary",
+  SPELLING_ERROR = 'spelling_error',
+  SENTENCE_REFINEMENT = 'sentence_refinement',
+  NEW_SUMMARY = 'new_summary',
 }
 
 export interface SuggestedUpdateField {
   suggestedUpdates: {
     old?: string;
     new: string;
-    type:
-      | SuggestionType.NEW_SUMMARY
-      | SuggestionType.SPELLING_ERROR
-      | SuggestionType.SENTENCE_REFINEMENT;
+    type: SuggestionType.NEW_SUMMARY | SuggestionType.SPELLING_ERROR | SuggestionType.SENTENCE_REFINEMENT;
   }[];
   fieldCounts: {
     [SuggestionType.NEW_SUMMARY]: number;

@@ -1,5 +1,4 @@
 import { fetch } from '@shared/api';
-import { useMutation } from '@tanstack/react-query';
 import type { ParseLinkedInResponse } from '../types';
 
 export async function parseLinkedInProfile(url: string): Promise<ParseLinkedInResponse> {

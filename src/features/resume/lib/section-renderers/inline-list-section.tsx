@@ -1,10 +1,9 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
-import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { getArrayValueSuggestions } from '@features/template-form/lib/get-field-errors';
 
 export function renderInlineListSection(
   section: any,
@@ -78,7 +77,7 @@ export function renderInlineListSection(
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
               const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-              const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
               // const errorBgColor = isThumbnail
               //   ? ""
@@ -103,7 +102,7 @@ export function renderInlineListSection(
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
               const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-              const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
               // const errorBgColor = isThumbnail
               //   ? ""

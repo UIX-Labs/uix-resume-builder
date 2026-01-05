@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Button } from '@shared/ui/components/button';
 import { cn } from '@shared/lib/cn';
-import { type Template } from '@entities/template-page/api/template-data';
+import type { Template } from '@entities/template-page/api/template-data';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 
 interface TemplateCardProps {

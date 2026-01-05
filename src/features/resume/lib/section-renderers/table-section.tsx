@@ -2,7 +2,6 @@ import React from 'react';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
 import { renderField } from '../field-renderer';
@@ -123,11 +122,7 @@ export function renderTableSection(
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
                         {allBadgeItems.map((item: any, badgeIdx: number) => {
                           const value =
-                            typeof item === "object" &&
-                              item !== null &&
-                              "value" in item
-                              ? item.value
-                              : item;
+                            typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
                           if (IconComponent) {
                             return (
                               <div key={badgeIdx} className={col.itemClassName}>
@@ -316,9 +311,8 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                    (v: any) =>
-                      v && (typeof v !== "string" || v.trim() !== "")
-                  );
+                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
+                    );
 
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
@@ -331,12 +325,7 @@ export function renderTableSection(
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
                       {badgeItems.map((item: any, badgeIdx: number) => {
-                        const value =
-                          typeof item === "object" &&
-                            item !== null &&
-                            "value" in item
-                            ? item.value
-                            : item;
+                        const value = typeof item === 'object' && item !== null && 'value' in item ? item.value : item;
                         if (IconComponent) {
                           return (
                             <div key={badgeIdx} className={column.itemClassName}>
@@ -364,15 +353,12 @@ export function renderTableSection(
                 key={itemIdx}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
-                className={cn("grid", section.rowClassName)}
+                className={cn('grid', section.rowClassName)}
                 style={{ gridTemplateColumns }}
               >
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
-                  <div
-                    className={section.headingColumn.className}
-                    style={{ gridColumn: 1 }}
-                  >
+                  <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
                     {itemIdx === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>

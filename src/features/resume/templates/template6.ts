@@ -338,22 +338,22 @@ const template6 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6 mt-2',
       itemTemplate: {
-        className: "flex flex-col pt-2 px-8",
+        className: 'flex flex-col pt-2 px-8',
         break: true,
         fields: [
           {
-            path: "position",
+            path: 'position',
             break: true,
-            className: "text-[#F2936F] text-xs font-bold uppercase mt-1",
+            className: 'text-[#F2936F] text-xs font-bold uppercase mt-1',
           },
           {
             type: 'inline-group',
             className: 'flex gap-2 items-baseline mt-1',
             items: [
               {
-                path: "company",
+                path: 'company',
                 break: true,
-                className: "text-black text-sm font-semibold",
+                className: 'text-black text-sm font-semibold',
               },
               {
                 path: 'separator',
@@ -373,8 +373,8 @@ const template6 = {
             className: 'text-black text-sm font-normal',
           },
           {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
             className:
               'text-sm text-black leading-relaxed [&_ul]:ml-5 [&_li]:list-disc [&_li]:mb-2 [&_strong]:font-bold break-words whitespace-pre-wrap',

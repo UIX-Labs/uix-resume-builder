@@ -1,5 +1,5 @@
-import type { ResumeData } from "../types/resume-data";
-import { getResumeData, getResumeEmptyData } from "../api";
+import type { ResumeData } from '../types/resume-data';
+import { getResumeData, getResumeEmptyData } from '../api';
 
 // Deep merge utility to fill missing fields from source into target
 function deepMerge(target: any, source: any): any {
@@ -12,11 +12,11 @@ function deepMerge(target: any, source: any): any {
     const sourceValue = source[key];
     const targetValue = result[key];
 
-    if (key === "items" && Array.isArray(sourceValue)) {
+    if (key === 'items' && Array.isArray(sourceValue)) {
       result[key] = mergeItemsArray(targetValue, sourceValue);
     } else if (Array.isArray(sourceValue)) {
       result[key] = targetValue ?? sourceValue;
-    } else if (typeof sourceValue === "object" && sourceValue !== null) {
+    } else if (typeof sourceValue === 'object' && sourceValue !== null) {
       result[key] = deepMerge(targetValue, sourceValue);
     } else {
       result[key] = targetValue ?? sourceValue;
@@ -35,7 +35,7 @@ function mergeItemsArray(targetItems: any, sourceItems: any[]): any[] {
 
   return targetItems.map((item: any) => {
     // Don't merge string arrays (interests/achievements)
-    if (typeof emptyItemTemplate === "string") return item;
+    if (typeof emptyItemTemplate === 'string') return item;
     // Recursively merge object items to fill missing nested fields
     return deepMerge(item, emptyItemTemplate);
   });
@@ -44,7 +44,7 @@ function mergeItemsArray(targetItems: any, sourceItems: any[]): any[] {
 function mergeResumeData(actualData: any, emptyData: any): ResumeData & { isAnalyzed?: boolean } {
   const mergedRes: ResumeData & { isAnalyzed?: boolean } = {
     ...actualData,
-    templateId: actualData.templateId || "",
+    templateId: actualData.templateId || '',
     isAnalyzed: actualData.isAnalyzed,
   };
 
@@ -57,10 +57,7 @@ function mergeResumeData(actualData: any, emptyData: any): ResumeData & { isAnal
 }
 
 export async function fetchAndMergeResumeData(id: string) {
-  const [actualData, emptyData] = await Promise.all([
-    getResumeData(id),
-    getResumeEmptyData(),
-  ]);
+  const [actualData, emptyData] = await Promise.all([getResumeData(id), getResumeEmptyData()]);
 
   return mergeResumeData(actualData, emptyData);
 }

@@ -30,6 +30,7 @@ export function Sidebar() {
 
   const resumeData = useFormDataStore((state) => state.formData);
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
+  const isCreateMode = useFormDataStore((state) => state.isCreateMode);
   const isTailoredWithJD = useAnalyzerStore((state) => state.isTailoredWithJD);
 
   const isAnalyzed = resumeDataFromContext?.isAnalyzed ?? false;
@@ -43,11 +44,16 @@ export function Sidebar() {
   useEffect(() => {
     if (!resumeData) return;
 
-    const p = calculateResumeCompletion(resumeData as ResumeData, mockData as Record<string, any>);
+    // In create mode, don't pass mockData so we use simple "filled fields" calculation
+    // This ensures progress starts at 0% and increases as user fills in actual data
+    const p = calculateResumeCompletion(
+      resumeData as ResumeData,
+      isCreateMode ? undefined : (mockData as Record<string, any>),
+    );
 
     const fixed = +p.toFixed(0);
     setProgress(Number.isNaN(fixed) ? 0 : Number(fixed));
-  }, [resumeData]);
+  }, [resumeData, isCreateMode]);
 
   const currentStepIndex = navs.findIndex((nav) => nav.label === currentStep);
 

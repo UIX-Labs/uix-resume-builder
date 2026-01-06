@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { useFormPageBuilder } from '../models/ctx';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { useFormDataStore } from '../models/store';
-import { getCleanDataForRenderer } from '../lib/data-cleanup';
+import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
 import TemplateButton from './change-template-button';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Button } from '@shared/ui/button';
@@ -35,7 +35,7 @@ import {
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { isSectionEmpty, syncSectionIds } from '../lib/section-utils';
+import { isSectionEmpty } from '../lib/section-utils';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
 import { useQueryClient } from '@tanstack/react-query';
@@ -44,6 +44,158 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { formatTimeAgo } from '../lib/time-helpers';
 
+/**
+ * Checks if a field value is empty
+ */
+function isFieldEmpty(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === 'string') return value.trim() === '';
+  if (Array.isArray(value)) {
+    if (value.length === 0) return true;
+    // Check if all array items are empty strings
+    return value.every((item) => typeof item === 'string' && item.trim() === '');
+  }
+  if (typeof value === 'object') {
+    // For nested objects like duration, links - check if all nested values are empty
+    return Object.entries(value).every(([key, val]) => {
+      if (key === 'ongoing') return true; // Skip boolean flags
+      return isFieldEmpty(val);
+    });
+  }
+  return false;
+}
+
+/**
+ * Deep merges form item with mock item, using mock values as fallback for empty fields
+ */
+function mergeItemWithMockFallback(
+  formItem: Record<string, unknown>,
+  mockItem: Record<string, unknown>,
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = { ...formItem };
+
+  for (const [key, mockValue] of Object.entries(mockItem)) {
+    // Skip ID fields - always use form IDs
+    if (key === 'id' || key === 'itemId') continue;
+
+    const formValue = formItem[key];
+
+    if (isFieldEmpty(formValue) && !isFieldEmpty(mockValue)) {
+      // Use mock value as fallback for empty form fields
+      merged[key] = mockValue;
+    }
+  }
+
+  return merged;
+}
+
+/**
+ * Gets data for the renderer by merging form data with mock data
+ * For create mode: uses mock data as fallback for empty fields
+ * For edit mode: uses form data directly
+ */
+function getRendererDataWithMockFallback(
+  formData: Record<string, unknown>,
+  isCreateMode: boolean,
+): Record<string, unknown> {
+  if (!isCreateMode) {
+    return formData;
+  }
+
+  // In create mode, merge with mock data as fallback at field level
+  const mergedData: Record<string, unknown> = {};
+  const mockDataTyped = mockData as Record<string, unknown>;
+
+  // Get all keys from both formData and mockData
+  const allKeys = new Set([...Object.keys(formData), ...Object.keys(mockDataTyped)]);
+
+  for (const sectionKey of allKeys) {
+    if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+      mergedData[sectionKey] = formData[sectionKey];
+      continue;
+    }
+
+    const formSection = formData[sectionKey] as Record<string, unknown> | undefined;
+    const mockSection = mockDataTyped[sectionKey] as Record<string, unknown> | undefined;
+
+    if (!formSection) {
+      // No form section, use mock section with synced IDs
+      if (mockSection) {
+        const syncedMock = syncMockDataWithActualIds({ [sectionKey]: formSection }, { [sectionKey]: mockSection });
+        mergedData[sectionKey] = syncedMock[sectionKey];
+      }
+      continue;
+    }
+
+    if (!mockSection) {
+      // No mock section, use form section as-is
+      mergedData[sectionKey] = formSection;
+      continue;
+    }
+
+    // Both exist - merge at field level within items
+    const mergedSection: Record<string, unknown> = {
+      ...formSection,
+    };
+
+    // Preserve section-level properties from form
+    if ('id' in formSection) mergedSection.id = formSection.id;
+    if ('isHidden' in formSection) mergedSection.isHidden = formSection.isHidden;
+    if ('suggestedUpdates' in formSection) mergedSection.suggestedUpdates = formSection.suggestedUpdates;
+
+    // Merge items array at field level
+    const formItems = formSection.items as Array<Record<string, unknown>> | undefined;
+    const mockItems = mockSection.items as Array<Record<string, unknown>> | undefined;
+
+    if (Array.isArray(mockItems)) {
+      // Merge form items with mock items as fallback for empty fields
+      // Use the longer array length to ensure we show all mock items
+      const maxLength = Math.max(formItems?.length || 0, mockItems.length);
+
+      mergedSection.items = Array.from({ length: maxLength }, (_, index) => {
+        const formItem = formItems?.[index];
+        const mockItem = mockItems[index];
+
+        // If no form item exists at this index, use mock item
+        if (!formItem) {
+          return mockItem;
+        }
+
+        // If no mock item exists at this index, use form item
+        if (!mockItem) {
+          return formItem;
+        }
+
+        // Handle string items (like in achievements/interests)
+        if (typeof formItem === 'string') {
+          return isFieldEmpty(formItem) ? mockItem : formItem;
+        }
+
+        if (typeof formItem !== 'object' || formItem === null) {
+          return mockItem;
+        }
+
+        // Handle object items - merge field by field, preserving form's itemId
+        const merged = mergeItemWithMockFallback(
+          formItem as Record<string, unknown>,
+          mockItem as Record<string, unknown>,
+        );
+
+        // Always preserve the form's itemId if available
+        if ((formItem as Record<string, unknown>).itemId) {
+          merged.itemId = (formItem as Record<string, unknown>).itemId;
+        }
+
+        return merged;
+      });
+    }
+
+    mergedData[sectionKey] = mergedSection;
+  }
+
+  return mergedData;
+}
+
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
@@ -51,6 +203,8 @@ export function FormPageBuilder() {
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
   const formDataResumeId = useFormDataStore((state) => state.formDataResumeId);
+  const isCreateMode = useFormDataStore((state) => state.isCreateMode);
+  const setIsCreateMode = useFormDataStore((state) => state.setIsCreateMode);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
@@ -97,15 +251,21 @@ export function FormPageBuilder() {
   const { handleDownloadPDF } = usePdfDownload({ resumeId, generatePDF });
 
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
-  // Only recompute when formData or isGeneratingPDF actually changes
+  // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes
   const cleanedDataForPreview = useMemo(
-    () => getCleanDataForRenderer(formData ?? {}, isGeneratingPDF),
-    [formData, isGeneratingPDF],
+    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), isGeneratingPDF),
+    [formData, isCreateMode, isGeneratingPDF],
   );
 
-  const cleanedDataForThumbnail = useMemo(() => getCleanDataForRenderer(formData ?? {}, true), [formData]);
+  const cleanedDataForThumbnail = useMemo(
+    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), true),
+    [formData, isCreateMode],
+  );
 
-  const cleanedDataForModal = useMemo(() => getCleanDataForRenderer(formData ?? {}, false), [formData]);
+  const cleanedDataForModal = useMemo(
+    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), false),
+    [formData, isCreateMode],
+  );
 
   useAutoThumbnail({
     resumeId,
@@ -373,10 +533,10 @@ export function FormPageBuilder() {
     // Only preserve suggestions if formData belongs to this resume
     const isSameResume = formDataResumeId === resumeId;
     if (isSameResume) {
-      const hasSuggestions = (data: any) => Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
+      const hasSuggestionsInData = (data: any) => Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
 
       // If formData has suggestions but resumeData doesn't, preserve formData
-      if (hasSuggestions(formData) && !hasSuggestions(resumeData)) {
+      if (hasSuggestionsInData(formData) && !hasSuggestionsInData(resumeData)) {
         return;
       }
     }
@@ -389,32 +549,15 @@ export function FormPageBuilder() {
     const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(resumeData[key as keyof typeof resumeData]));
 
     if (allSectionsEmpty) {
-      // Create flow: Merge mock data with actual IDs
-      const mergedData: Record<string, any> = {};
-
-      for (const sectionKey of Object.keys(resumeData)) {
-        if (sectionKey === 'templateId' || sectionKey === 'updatedAt' || sectionKey === 'template') {
-          mergedData[sectionKey] = resumeData[sectionKey as keyof typeof resumeData];
-          continue;
-        }
-
-        const actualSection = resumeData[sectionKey as keyof typeof resumeData];
-        const mockSection = (mockData as Record<string, any>)[sectionKey];
-
-        if (mockSection) {
-          const syncedSection = syncSectionIds(
-            actualSection as Record<string, unknown>,
-            mockSection as Record<string, unknown>,
-          );
-          mergedData[sectionKey] = syncedSection;
-        } else {
-          mergedData[sectionKey] = actualSection;
-        }
-      }
-
-      setFormData(mergedData as Omit<ResumeData, 'templateId'>, resumeId);
+      // Create flow: Set create mode flag
+      // Keep form data EMPTY - user will fill it
+      // Preview will use mock data via getRendererDataWithMockFallback
+      setIsCreateMode(true);
+      // Use the empty resumeData directly for the form (no mock data)
+      setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     } else {
       // Edit flow: Use actual data as-is
+      setIsCreateMode(false);
       setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
@@ -618,7 +761,7 @@ export function FormPageBuilder() {
         aria-valuemax={70}
         aria-valuenow={Math.round(leftWidth)}
         tabIndex={0}
-        className="w-3 cursor-col-resize flex items-center justify-center active:bg-blue-100 transition-colors z-50 shrink-0"
+        className="w-3 cursor-col-resize flex items-center justify-center bg-gray-200 active:bg-blue-100 transition-colors z-50 shrink-0"
         onMouseDown={startResizing}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -690,19 +833,6 @@ export function FormPageBuilder() {
           resumeId={resumeId}
         />
       )}
-      {/* {isWishlistModalOpen && (
-        <WishlistModal
-          isOpen={isWishlistModalOpen}
-          onClose={() => setIsWishlistModalOpen(false)}
-          onJoinSuccess={handleWaitlistJoinSuccess}
-        />
-      )}
-      {isWishlistSuccessModalOpen && (
-        <WishlistSuccessModal
-          isOpen={isWishlistSuccessModalOpen}
-          onClose={() => setIsWishlistSuccessModalOpen(false)}
-        />
-      )} */}
       {/* Resume Preview Modal */}
       {selectedTemplate && (
         <PreviewModal

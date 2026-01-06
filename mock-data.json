@@ -80,24 +80,7 @@
         "fullName": "John Doe",
         "email": "john.doe@email.com",
         "phone": "+1 (555) 123-4567",
-        "links": {
-          "GitHub": {
-            "link": "https://github.com/johndoe",
-            "title": "johndoe"
-          },
-          "LinkedIn": {
-            "link": "https://linkedin.com/in/johndoe",
-            "title": "John Doe"
-          },
-          "github": {
-            "title": "johndoe",
-            "link": "https://github.com/johndoe"
-          },
-          "linkedin": {
-            "title": "John Doe",
-            "link": "https://linkedin.com/in/johndoe"
-          }
-        },
+        "links": {},
         "address": "123 Main Street, San Francisco, CA 94102",
         "description": "Passionate software engineer with 5+ years of experience",
         "city": "San Francisco",
@@ -128,7 +111,6 @@
         "institution": "Stanford University",
         "degree": "Bachelor of Science",
         "fieldOfStudy": "Computer Science",
-        "location": "Stanford, CA",
         "rank": 0,
         "duration": {
           "startDate": "2015-09",

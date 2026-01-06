@@ -39,6 +39,14 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
   });
 
   useEffect(() => {
+    if (data && typeof data === 'object') {
+      setLinksData(data);
+    } else {
+      setLinksData({});
+    }
+  }, [data]);
+
+  useEffect(() => {
     onChange(linksData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [linksData]);

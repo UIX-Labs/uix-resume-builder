@@ -21,7 +21,12 @@ function Header({ variant = 'default' }: HeaderProps) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const handleNavigate = () => {
-    router.push(user ? '/dashboard' : '/auth');
+    if (user) {
+      router.push('/dashboard');
+    } else {
+      const callbackUrl = encodeURIComponent(pathname + window.location.search);
+      router.push(`/auth?callbackUrl=${callbackUrl}`);
+    }
   };
 
   const handleMenuClick = () => {

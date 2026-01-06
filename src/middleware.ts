@@ -40,11 +40,16 @@ export async function middleware(request: NextRequest) {
   const isAuthenticated = await checkAuth(request);
 
   if (isAuthenticated && isAuthRoute) {
+    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl');
+    if (callbackUrl) {
+      return NextResponse.redirect(new URL(callbackUrl, request.url));
+    }
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
-    return NextResponse.redirect(new URL('/auth', request.url));
+    const callbackUrl = encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search);
+    return NextResponse.redirect(new URL(`/auth?callbackUrl=${callbackUrl}`, request.url));
   }
 
   return NextResponse.next();

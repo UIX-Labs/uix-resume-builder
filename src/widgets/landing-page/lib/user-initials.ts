@@ -10,7 +10,7 @@ export function getUserInitials(firstName: string | null, lastName: string | nul
   let lastPart = '';
 
   // If lastName exists, use it
-  if (lastName && lastName.trim()) {
+  if (lastName?.trim()) {
     const firstNameWords = firstName?.trim().split(/\s+/) || [];
     const lastNameWords = lastName.trim().split(/\s+/);
 
@@ -18,7 +18,7 @@ export function getUserInitials(firstName: string | null, lastName: string | nul
     firstPart = firstNameWords[0] || '';
     // Last word of lastName
     lastPart = lastNameWords[lastNameWords.length - 1] || '';
-  } else if (firstName && firstName.trim()) {
+  } else if (firstName?.trim()) {
     // No lastName, check if firstName has spaces
     const firstNameWords = firstName.trim().split(/\s+/);
 

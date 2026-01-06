@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 import { renderHeaderSection } from './header-section';
 import { renderListSection } from './list-section';
 import { renderContentSection } from './content-section';
@@ -42,8 +42,10 @@ export function renderSection(
     return null;
   }
 
-  if (section.type === 'header') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
-  if (section.type === 'banner') return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
+  if (section.type === 'header')
+    return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
+  if (section.type === 'banner')
+    return renderHeaderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks);
   if (section.type === 'list-section')
     return renderListSection(section, data, currentSection, hasSuggestions, isThumbnail);
   if (section.type === 'two-column-layout')

@@ -599,7 +599,7 @@
   color: transparent;
 }
 
-page[size="A4"] {
+.page-a4 {
   display: block;
   margin: 0 auto;
 }

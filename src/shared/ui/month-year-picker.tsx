@@ -40,7 +40,7 @@ export function MonthYearPicker({ selected, onSelect, className, disabled, defau
 
   const handleMonthSelect = (monthIndex: number) => {
     const newDate = new Date(currentYear, monthIndex, 1);
-    if (disabled && disabled(newDate)) {
+    if (disabled?.(newDate)) {
       return;
     }
     onSelect?.(newDate);
@@ -72,7 +72,7 @@ export function MonthYearPicker({ selected, onSelect, className, disabled, defau
         {MONTHS.map((month, index) => {
           const date = new Date(currentYear, index, 1);
           const isSelected = selectedMonth === index && selectedYear === currentYear;
-          const isDisabled = disabled && disabled(date);
+          const isDisabled = disabled?.(date);
 
           return (
             <Button

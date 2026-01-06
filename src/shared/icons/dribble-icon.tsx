@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface DribbleIconProps {
   className?: string;
@@ -21,6 +21,7 @@ export const DribbleIcon: React.FC<DribbleIconProps> = ({
       viewBox="0 0 16 16"
       fill="none"
       className={className}
+      aria-hidden="true"
     >
       {color === 'white' ? null : <rect width="16" height="16" rx="8" fill={color} />}
       <path

@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface GithubIconProps {
   className?: string;
@@ -21,6 +21,7 @@ export const GithubIcon: React.FC<GithubIconProps> = ({
       viewBox="0 0 17 16"
       fill="none"
       className={className}
+      aria-hidden="true"
     >
       <path
         fillRule="evenodd"

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { useUpdateResumeTemplate } from "@entities/resume";
-import type { Template } from "@entities/template-page/api/template-data";
-import { toast } from "sonner";
-import { trackEvent } from "@shared/lib/analytics/Mixpanel";
-import aniketTemplate from "@features/resume/templates/standard";
+import { useState, useEffect } from 'react';
+import { useUpdateResumeTemplate } from '@entities/resume';
+import type { Template } from '@entities/template-page/api/template-data';
+import { toast } from 'sonner';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import aniketTemplate from '@features/resume/templates/standard';
 
 interface UseTemplateManagementParams {
   resumeId: string;
@@ -11,20 +11,11 @@ interface UseTemplateManagementParams {
   initialTemplateId?: string;
 }
 
-export function useTemplateManagement({
-  resumeId,
-  initialTemplate,
-  initialTemplateId,
-}: UseTemplateManagementParams) {
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(
-    initialTemplate ?? aniketTemplate
-  );
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
-    initialTemplateId ?? null
-  );
+export function useTemplateManagement({ resumeId, initialTemplate, initialTemplateId }: UseTemplateManagementParams) {
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(initialTemplate ?? aniketTemplate);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(initialTemplateId ?? null);
 
-  const { mutateAsync: updateResumeTemplateMutation } =
-    useUpdateResumeTemplate();
+  const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
   useEffect(() => {
     if (initialTemplate) {
@@ -47,15 +38,15 @@ export function useTemplateManagement({
       setSelectedTemplate(template.json);
       setSelectedTemplateId(template.id);
 
-      toast.success("Template updated successfully");
+      toast.success('Template updated successfully');
 
-      trackEvent("template_selected", {
+      trackEvent('template_selected', {
         templateId: template.id,
         resumeId,
       });
     } catch (error) {
-      console.error("Failed to update template:", error);
-      toast.error("Failed to update template");
+      console.error('Failed to update template:', error);
+      toast.error('Failed to update template');
     }
   };
 

@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { Button } from "@shared/ui/button";
+import Image from 'next/image';
+import { Button } from '@shared/ui/button';
 
 interface BuilderIntelligenceCardProps {
   isAnalyzed: boolean;
@@ -35,14 +35,12 @@ export function BuilderIntelligenceCard({
       className="w-[200px] rounded-2xl p-3 mt-4 mx-auto mb-2"
       style={{
         backgroundImage: "url('/images/bg-gradient.svg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
       }}
     >
-      <p className="text-sm font-semibold text-white">
-        Switch to Pika Intelligence
-      </p>
+      <p className="text-sm font-semibold text-white">Switch to Pika Intelligence</p>
       <p className="text-[11px] font-normal text-white/80 mt-1">
         Get grammar fixes, stronger verbs, and tailored improvements.
       </p>
@@ -53,16 +51,11 @@ export function BuilderIntelligenceCard({
         disabled={isAnalyzing}
       >
         {isAnalyzing ? (
-          "Analyzing..."
+          'Analyzing...'
         ) : (
           <>
             Pika Intelligence
-            <Image
-              src="/images/rat.png"
-              alt="Pika Intelligence"
-              width={40}
-              height={40}
-            />
+            <Image src="/images/rat.png" alt="Pika Intelligence" width={40} height={40} />
           </>
         )}
       </Button>

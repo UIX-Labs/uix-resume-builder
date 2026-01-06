@@ -3,7 +3,7 @@ import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 import type { SuggestedUpdates } from '@entities/resume';
-import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { getFieldSuggestions } from '@features/template-form/lib/get-field-errors';
 import { resolvePath } from './resolve-path';
 import { renderDivider } from './components/Divider';
 
@@ -16,14 +16,16 @@ export function renderField(
   skipImageFallbacks?: boolean,
 ): React.ReactNode {
   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
-  const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
+  const _errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
   // const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
 
   if (field.type === 'container') {
     return (
       <div className={cn(field.className)}>
         {field.children?.map((child: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}</React.Fragment>
+          <React.Fragment key={idx}>
+            {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}
+          </React.Fragment>
         ))}
       </div>
     );
@@ -82,7 +84,9 @@ export function renderField(
           </div>
         )}
         {field.items?.map((subField: any, idx: number) => (
-          <React.Fragment key={idx}>{renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}</React.Fragment>
+          <React.Fragment key={idx}>
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks)}
+          </React.Fragment>
         ))}
       </div>
     );
@@ -156,9 +160,9 @@ export function renderField(
 
   if (field.type === 'image') {
     // Get the actual value from data path (without fallback first to check if real image exists)
-    const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, "&");
-    const hasActualImage = actualSrc && actualSrc.trim() !== "";
-    
+    const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, '&');
+    const hasActualImage = actualSrc && actualSrc.trim() !== '';
+
     // When skipImageFallbacks is true (during PDF generation), don't use fallback
     // This hides the profile image section if no real image is uploaded
     if (skipImageFallbacks && !hasActualImage) {
@@ -175,10 +179,7 @@ export function renderField(
 
     // Use proxy ONLY for thumbnails with external URLs to avoid CORS issues
     // Local images (like /images/google.svg) don't need proxying
-    const imageSrc =
-      isThumbnail && src && isExternalUrl(src)
-        ? `/api/proxy-image?url=${encodeURIComponent(src)}`
-        : src;
+    const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
       <img
@@ -288,6 +289,7 @@ export function renderField(
     return (
       <div
         className={field.className}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
         dangerouslySetInnerHTML={{ __html: value }}
         data-canbreak={field.break !== false ? 'true' : undefined}
         data-has-breakable-content={field.break !== false ? 'true' : undefined}
@@ -297,7 +299,7 @@ export function renderField(
 
   if (field.type === 'link') {
     // First, check if the href path exists in the data (without fallback)
-    const hrefValue = resolvePath(data, field.href);
+    const _hrefValue = resolvePath(data, field.href);
     const value = resolvePath(data, field.path, field.fallback);
 
     // If the value itself doesn't exist, don't render
@@ -306,7 +308,7 @@ export function renderField(
     let href = field.href;
 
     // Handle template placeholders like mailto:{{value}}
-    if (href && href.includes('{{value}}')) {
+    if (href?.includes('{{value}}')) {
       href = href.replace('{{value}}', value);
     } else {
       // Otherwise, resolve href as a path in the data
@@ -350,7 +352,7 @@ export function renderItemWithRows(
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
 ): React.ReactNode {
-  console.log("rows", template.rows)
+  console.log('rows', template.rows);
   return template.rows.map((row: any, rowIdx: number) => {
     // Check if any cell in this row has break/breakable: true
     const hasBreakableCell = row.cells.some((cell: any) => cell.break === true || cell.breakable === true);
@@ -364,7 +366,9 @@ export function renderItemWithRows(
         data-has-breakable-content={isRowBreakable ? 'true' : undefined}
       >
         {row.cells.map((cell: any, cellIdx: number) => (
-          <React.Fragment key={cellIdx}>{renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}</React.Fragment>
+          <React.Fragment key={cellIdx}>
+            {renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}
+          </React.Fragment>
         ))}
       </div>
     );
@@ -378,7 +382,7 @@ export function renderItemWithFields(
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
 ): React.ReactNode {
-  console.log("fields", template.fields)
+  console.log('fields', template.fields);
   return template.fields.map((field: any, idx: number) => (
     <div
       key={idx}

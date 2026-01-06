@@ -1,7 +1,6 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
@@ -76,20 +75,8 @@ export function renderListSection(
           const itemId = item.itemId || item.id;
 
           const content = section.itemTemplate.rows
-            ? renderItemWithRows(
-              section.itemTemplate,
-              item,
-              itemId,
-              suggestedUpdates,
-              isThumbnail
-            )
-            : renderItemWithFields(
-              section.itemTemplate,
-              item,
-              itemId,
-              suggestedUpdates,
-              isThumbnail
-            );
+            ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail)
+            : renderItemWithFields(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail);
 
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
@@ -125,9 +112,7 @@ export function renderListSection(
               key={idx}
               className={cn(
                 section.itemTemplate.className,
-                isItemBreakable && shouldBlur
-                  ? "blur-[2px] pointer-events-none"
-                  : ""
+                isItemBreakable && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
               )}
               style={itemWrapperStyle}
               data-canbreak={isItemBreakable ? 'true' : undefined}

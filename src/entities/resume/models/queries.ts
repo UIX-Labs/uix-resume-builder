@@ -11,9 +11,9 @@ import {
   updateResumeTemplate,
 } from '../api';
 
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import type { ResumeData, ResumeDataKey } from "../types/resume-data";
-import { fetchAndMergeResumeData } from "../lib/merge-resume-data";
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import type { ResumeData, ResumeDataKey } from '../types/resume-data';
+import { fetchAndMergeResumeData } from '../lib/merge-resume-data';
 
 export function useTemplateFormSchema() {
   return useFetch({
@@ -25,7 +25,7 @@ export function useTemplateFormSchema() {
 
 export function useResumeData(id: string) {
   return useFetch({
-    queryKey: ["resume-data", id],
+    queryKey: ['resume-data', id],
     queryFn: () => fetchAndMergeResumeData(id),
   });
 }

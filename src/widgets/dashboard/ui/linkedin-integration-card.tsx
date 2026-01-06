@@ -1,8 +1,6 @@
 'use client';
 
 import { useParseLinkedInProfile } from '@entities/resume';
-import { Button } from '@shared/ui';
-import { Input } from '@shared/ui/components/input';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';

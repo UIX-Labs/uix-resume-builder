@@ -4,7 +4,6 @@ import Image from 'next/image';
 import { useState } from 'react';
 import { cn } from '@shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@shared/ui/avatar';
-import { CheckCircle2, Flame } from 'lucide-react';
 
 const users = [
   {

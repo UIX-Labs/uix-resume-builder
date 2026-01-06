@@ -3,7 +3,7 @@
 import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
 import { useSortable } from '@dnd-kit/sortable';
-import React, { type PropsWithChildren, useState, useEffect } from 'react';
+import { type PropsWithChildren, useState, useEffect } from 'react';
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
 import { SortableContext as SortableContextOriginal, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 

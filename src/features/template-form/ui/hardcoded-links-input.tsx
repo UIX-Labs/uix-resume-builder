@@ -1,7 +1,6 @@
 'use client';
 
 import { cn } from '@shared/lib/cn';
-import { Input } from '@shared/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import { useEffect, useState } from 'react';
 import { Link2, ChevronDown, Trash2 } from 'lucide-react';
@@ -38,6 +37,14 @@ export function HardcodedLinksInput({ data, onChange, section }: HardcodedLinksI
     }
     return data;
   });
+
+  useEffect(() => {
+    if (data && typeof data === 'object') {
+      setLinksData(data);
+    } else {
+      setLinksData({});
+    }
+  }, [data]);
 
   useEffect(() => {
     onChange(linksData);

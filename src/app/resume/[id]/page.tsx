@@ -1,20 +1,17 @@
-"use client";
+'use client';
 
-import { type ResumeDataKey, useResumeData } from "@entities/resume";
-import { FormPageBuilder, Sidebar } from "@widgets/form-page-builder";
-import { FormPageBuilderProvider } from "@widgets/form-page-builder/models/ctx";
-import {
-  useFormDataStore,
-  TRANSITION_TEXTS,
-} from "@widgets/form-page-builder/models/store";
-import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import { AlertCircle } from "lucide-react";
-import { Button } from "@shared/ui/button";
-import { NewProgressBar } from "@shared/ui/components/new-progress-bar";
-import { useBuilderIntelligence } from "@widgets/form-page-builder/hooks/use-builder-intelligence";
-import { runAnalyzerWithProgress } from "@shared/lib/analyzer/run-analyzer-with-progress";
-import { useQueryClient } from "@tanstack/react-query";
+import { type ResumeDataKey, useResumeData } from '@entities/resume';
+import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
+import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
+import { useFormDataStore, TRANSITION_TEXTS } from '@widgets/form-page-builder/models/store';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { AlertCircle } from 'lucide-react';
+import { Button } from '@shared/ui/button';
+import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
+import { useBuilderIntelligence } from '@widgets/form-page-builder/hooks/use-builder-intelligence';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function FormPage() {
   const params = useParams();
@@ -24,8 +21,7 @@ export default function FormPage() {
 
   const { data: resumeData, isLoading } = useResumeData(id);
 
-  const [currentStep, setCurrentStep] =
-    useState<ResumeDataKey>("personalDetails");
+  const [currentStep, setCurrentStep] = useState<ResumeDataKey>('personalDetails');
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
   const setIsAnalyzing = useFormDataStore((state) => state.setIsAnalyzing);
   const setFormData = useFormDataStore((state) => state.setFormData);
@@ -38,9 +34,9 @@ export default function FormPage() {
   const { handleBuilderIntelligence } = useBuilderIntelligence(id);
 
   useEffect(() => {
-    const pendingResumeId = localStorage.getItem("pending_analyzer_resume_id");
+    const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
     if (pendingResumeId && pendingResumeId === id) {
-      localStorage.removeItem("pending_analyzer_resume_id");
+      localStorage.removeItem('pending_analyzer_resume_id');
       runAnalyzerWithProgress({
         resumeId: id,
         queryClient,
@@ -54,39 +50,39 @@ export default function FormPage() {
   const navs = useMemo(
     () => [
       {
-        label: "Personal Details",
-        name: "personalDetails" as ResumeDataKey,
+        label: 'Personal Details',
+        name: 'personalDetails' as ResumeDataKey,
       },
       {
-        label: "Experience",
-        name: "experience" as ResumeDataKey,
+        label: 'Experience',
+        name: 'experience' as ResumeDataKey,
       },
       {
-        label: "Education",
-        name: "education" as ResumeDataKey,
+        label: 'Education',
+        name: 'education' as ResumeDataKey,
       },
       {
-        label: "Skills",
-        name: "skills" as ResumeDataKey,
+        label: 'Skills',
+        name: 'skills' as ResumeDataKey,
       },
       {
-        label: "Projects",
-        name: "projects" as ResumeDataKey,
+        label: 'Projects',
+        name: 'projects' as ResumeDataKey,
       },
       {
-        label: "Certifications",
-        name: "certifications" as ResumeDataKey,
+        label: 'Certifications',
+        name: 'certifications' as ResumeDataKey,
       },
       {
-        label: "Interests",
-        name: "interests" as ResumeDataKey,
+        label: 'Interests',
+        name: 'interests' as ResumeDataKey,
       },
       {
-        label: "Achievements",
-        name: "achievements" as ResumeDataKey,
+        label: 'Achievements',
+        name: 'achievements' as ResumeDataKey,
       },
     ],
-    []
+    [],
   );
 
   if (isLoading) {
@@ -115,9 +111,7 @@ export default function FormPage() {
             <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-sm">
               <div className="flex flex-col items-center gap-4 bg-white p-8 rounded-2xl shadow-lg border border-red-200">
                 <AlertCircle className="h-12 w-12 text-red-500" />
-                <p className="text-lg font-semibold text-gray-800">
-                  Sorry, please try again
-                </p>
+                <p className="text-lg font-semibold text-gray-800">Sorry, please try again</p>
                 <p className="text-sm text-gray-600 text-center max-w-md">
                   We encountered an error while analyzing your resume.
                 </p>

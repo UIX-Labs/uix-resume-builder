@@ -6,12 +6,16 @@ import { useState } from 'react';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { MobileTextView } from './mobile-text-view';
 import { useRouter } from 'next/navigation';
+import getCurrentStatsQuery from '../api/query';
 
 export const TopAnnouncementStrip = () => {
-  const { data: user } = useUserProfile();
+  const { data: user, isLoading } = useUserProfile();
   const isMobile = useIsMobile();
   const [showMobileView, setShowMobileView] = useState(false);
   const router = useRouter();
+  const { data: currentStats } = getCurrentStatsQuery();
+
+  const spotsLeft = Math.max(0, 1000 - (currentStats?.totalUsers ?? 0));
 
   const handleSignUpClick = () => {
     if (isMobile) {
@@ -21,7 +25,8 @@ export const TopAnnouncementStrip = () => {
     }
   };
 
-  if (user) return null;
+  // Don't render while loading to prevent flash on refresh
+  if (isLoading || user) return null;
 
   return (
     <div
@@ -38,33 +43,27 @@ export const TopAnnouncementStrip = () => {
 
           <span className="text-xs md:text-lg text-start md:text-left leading-tight">
             Free lifetime access for the first <span className="font-semibold">1,000 users</span>.
-           
-              <span
-                onClick={handleSignUpClick}
-                className="underline cursor-pointer whitespace-nowrap"
-              >
-                Sign up now
-              </span>
-              .
+            <button type="button" onClick={handleSignUpClick} className="underline cursor-pointer whitespace-nowrap">
+              Sign up now
+            </button>
+            .
           </span>
 
           <Image src="/images/crown.svg" alt="Crown" width={24} height={24} className="hidden md:block md:w-9 md:h-9" />
 
-          <div className="relative flex-shrink-0">
-            <div className="relative hidden md:block h-12 w-[230px]">
-              <Image
-                src="/images/spots-left.svg"
-                alt="20 Spots Left Claim Free Access"
-                fill
-                className="object-contain"
-              />
-            </div>
-
-            {/* Mobile */}
-            <div className="relative block md:hidden h-6 w-[120px]">
-              <Image src="/images/spots-mobile.svg" alt="20 Spots Left" fill className="object-contain" />
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={handleSignUpClick}
+            className="flex-shrink-0 flex items-center gap-1/2 md:gap-2 px-3 py-1.5 md:px-5 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold text-white cursor-pointer transition-opacity hover:opacity-90"
+            style={{
+              background: 'linear-gradient(135deg, #ADE4DB 0%, #5DC4E4 50%, #28A5EE 100%)',
+            }}
+          >
+            <Image src="/images/flash-img.svg" alt="" width={24} height={24} className="w-3 h-3 md:w-6 md:h-6" />
+            <span className="md:hidden">{spotsLeft} Spots Left</span>
+            <span className="hidden md:inline">{spotsLeft} Spots Left • Claim Free Access</span>
+            <Image src="/images/flash-img.svg" alt="" width={16} height={16} className="w-3 h-3 md:w-6 md:h-6" />
+          </button>
         </div>
       </div>
       <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />

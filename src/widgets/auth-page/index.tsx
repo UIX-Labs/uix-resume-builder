@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   useCheckEmailExists,
   useLoginUser,
@@ -23,7 +23,42 @@ import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 export default function AuthPageWidget() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [guestEmail, setGuestEmail] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const callbackUrl = searchParams.get('callbackUrl');
+    if (callbackUrl) {
+      localStorage.setItem('auth_callback_url', callbackUrl);
+    }
+  }, [searchParams]);
+
+  const handleAuthSuccessRedirect = () => {
+    const storedCallbackUrl = localStorage.getItem('auth_callback_url');
+    const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+    const shouldOpenJDModal = localStorage.getItem('openJDModal');
+
+    localStorage.removeItem('auth_callback_url');
+    localStorage.removeItem('pending_analyzer_guest_email');
+
+    if (pendingResumeId) {
+      router.push(`/resume/${pendingResumeId}`);
+      return;
+    }
+
+    if (shouldOpenJDModal === 'true') {
+      localStorage.removeItem('openJDModal');
+      router.push('/dashboard?openModal=jd');
+      return;
+    }
+
+    if (storedCallbackUrl) {
+      router.push(storedCallbackUrl);
+      return;
+    }
+
+    router.push('/dashboard');
+  };
 
   useEffect(() => {
     const storedGuestEmail = localStorage.getItem('pending_analyzer_guest_email');
@@ -136,23 +171,7 @@ export default function AuthPageWidget() {
       {
         onSuccess: (_data) => {
           trackEvent('login_success', { method: 'email' });
-
-          localStorage.removeItem('pending_analyzer_guest_email');
-
-          const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
-          if (pendingResumeId) {
-            router.push(`/resume/${pendingResumeId}`);
-            return;
-          }
-
-          const shouldOpenJDModal = localStorage.getItem('openJDModal');
-          if (shouldOpenJDModal === 'true') {
-            localStorage.removeItem('openJDModal');
-            router.push('/dashboard?openModal=jd');
-            return;
-          }
-
-          router.push('/dashboard');
+          handleAuthSuccessRedirect();
         },
         onError: (_error) => {
           setErrors({ password: 'Invalid password. Please try again.' });
@@ -222,23 +241,7 @@ export default function AuthPageWidget() {
       {
         onSuccess: (_data) => {
           trackEvent('registration_success', { method: 'email' });
-
-          localStorage.removeItem('pending_analyzer_guest_email');
-
-          const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
-          if (pendingResumeId) {
-            router.push(`/resume/${pendingResumeId}`);
-            return;
-          }
-
-          const shouldOpenJDModal = localStorage.getItem('openJDModal');
-          if (shouldOpenJDModal === 'true') {
-            localStorage.removeItem('openJDModal');
-            router.push('/dashboard?openModal=jd');
-            return;
-          }
-
-          router.push('/dashboard');
+          handleAuthSuccessRedirect();
         },
         onError: (_error) => {
           setErrors({ submit: 'Registration failed. Please try again.' });

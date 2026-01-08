@@ -306,7 +306,7 @@ const erenTemplate3 = {
                 path: 'description',
                 break: true,
                 className:
-                  'text-xs text-neutral-800 leading-relaxed mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap border-b border-dashed border-neutral-300 pb-2 mb-3',
+                  'text-xs text-neutral-800 leading-relaxed mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap pb-2',
               },
             ],
           },
@@ -397,7 +397,7 @@ const erenTemplate3 = {
     {
       id: 'projects',
       type: 'list-section',
-      column: 'right',
+      column: 'left',
       break: true,
       heading: {
         path: 'projects.title',
@@ -406,7 +406,7 @@ const erenTemplate3 = {
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-3',
+        className: 'flex flex-col',
         fields: [
           {
             path: 'title',

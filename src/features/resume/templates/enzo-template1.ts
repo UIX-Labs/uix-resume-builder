@@ -56,7 +56,7 @@ const enzoTemplate1 = {
               type: 'text',
               path: '',
               fallback: 'CONTACT',
-              className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2',
+              className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
             },
             // Phone
             {
@@ -225,11 +225,11 @@ const enzoTemplate1 = {
       id: 'summary',
       type: 'content-section',
       column: 'left',
-      className: 'flex flex-col gap-1 pt-3 border-t border-[#C9A961]',
+      className: 'flex flex-col pt-3 border-t border-[#C9A961]',
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1',
       },
       content: {
         type: 'html',
@@ -249,7 +249,7 @@ const enzoTemplate1 = {
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-3 border-t border-[#C9A961]',
+        className: 'text-sm font-bold text-[#C9A961] mb-1 tracking-wide uppercase pt-3 border-t border-[#C9A961]',
       },
 
       listPath: 'skills.items',
@@ -314,7 +314,7 @@ const enzoTemplate1 = {
       heading: {
         path: 'experience.heading',
         fallback: 'EXPERIENCE',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
       },
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-5',
@@ -323,7 +323,7 @@ const enzoTemplate1 = {
         break: true,
         rows: [
           {
-            className: 'flex flex-row justify-between items-baseline gap-2',
+            className: 'flex flex-row justify-between items-baseline gap-2 flex-wrap',
             cells: [
               {
                 path: 'position',
@@ -331,7 +331,7 @@ const enzoTemplate1 = {
               },
               {
                 path: 'company',
-                className: 'text-xs font-normal text-neutral-600 italic break-words flex-shrink-0',
+                className: 'text-xs font-normal text-neutral-600 italic break-words',
               },
             ],
           },
@@ -374,7 +374,7 @@ const enzoTemplate1 = {
       heading: {
         path: 'education.heading',
         fallback: 'EDUCATION',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-3 mt-2',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1 mt-2',
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',
@@ -431,7 +431,7 @@ const enzoTemplate1 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'CERTIFICATIONS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2.5 mt-2',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1 mt-2',
       },
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3',
@@ -464,7 +464,7 @@ const enzoTemplate1 = {
       heading: {
         path: 'interests.heading',
         fallback: 'INTERESTS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide mb-3 mt-2 uppercase',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide mb-1 mt-2 uppercase',
       },
       listPath: 'interests.items[0].items',
       itemClassName: 'text-xs text-neutral-800',
@@ -483,11 +483,11 @@ const enzoTemplate1 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2 mt-2',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2',
       },
       listPath: 'achievements.items[0].items',
       itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-col gap-1 mt-2 text-xs',
+      containerClassName: 'flex flex-col gap-1 mt-1 text-xs',
       itemSeparator: ', ',
     },
   ],

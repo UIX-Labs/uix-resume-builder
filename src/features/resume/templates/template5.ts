@@ -33,7 +33,7 @@ const template5 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Divyam Malik',
-          className: 'text-3xl break-words font-bold text-[#1a1a1a]',
+          className: 'text-2xl break-words font-bold text-[#1a1a1a]',
         },
         title: {
           path: 'personalDetails.items[0].jobTitle',
@@ -68,7 +68,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'Noida',
-                  className: 'text-sm text-[#1a1a1a] font-normal',
+                  className: 'text-xs text-[#1a1a1a] font-normal',
                 },
               ],
             },
@@ -86,7 +86,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '+918527886118',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline',
                 },
               ],
             },
@@ -106,7 +106,7 @@ const template5 = {
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'divyam.malik@gmail.com',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline break-all whitespace-normal',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline break-all whitespace-normal',
                 },
               ],
             },
@@ -126,7 +126,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline',
                 },
               ],
             },
@@ -145,7 +145,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -164,7 +164,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.website.title',
                   href: 'personalDetails.items[0].links.website.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -183,7 +183,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.youtube.title',
                   href: 'personalDetails.items[0].links.youtube.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -202,7 +202,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.dribble.title',
                   href: 'personalDetails.items[0].links.dribble.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -221,7 +221,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.behance.title',
                   href: 'personalDetails.items[0].links.behance.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -254,7 +254,7 @@ const template5 = {
       itemPath: 'name',
       itemSeparator: ', ',
       containerClassName: 'block text-[#1a1a1a]',
-      badgeClassName: 'text-sm text-[#1a1a1a] leading-relaxed',
+      badgeClassName: 'text-xs text-[#1a1a1a] leading-relaxed',
     },
 
     // Certifications Section - Left Column
@@ -282,17 +282,17 @@ const template5 = {
           {
             path: 'title',
             fallback: 'Certification Title',
-            className: 'text-sm font-bold text-[#1a1a1a]',
+            className: 'text-xs font-bold text-[#1a1a1a]',
           },
           {
             path: 'issuer',
             fallback: 'Issuer',
-            className: 'text-sm text-[#1a1a1a] font-normal mb-3',
+            className: 'text-xs text-[#1a1a1a] font-normal mb-3',
           },
           {
             type: 'duration',
             path: 'duration',
-            className: 'text-sm text-[#1a1a1a]',
+            className: 'text-xs text-[#1a1a1a]',
           },
         ],
       },
@@ -326,7 +326,7 @@ const template5 = {
       // 🔑 SINGLE LINE FLOW
       containerClassName: 'block mt-2 text-black',
 
-      badgeClassName: 'text-sm text-[#1a1a1a] leading-none',
+      badgeClassName: 'text-xs text-[#1a1a1a] leading-none',
     },
 
     // Experience Section - Right Column
@@ -355,12 +355,12 @@ const template5 = {
             cells: [
               {
                 path: 'company',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
               },
             ],
           },
@@ -368,7 +368,7 @@ const template5 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-sm font-normal text-[rgb(0,0,0)]',
+                className: 'text-xs font-normal text-[rgb(0,0,0)]',
               },
             ],
           },
@@ -378,7 +378,7 @@ const template5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-xs text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -391,7 +391,7 @@ const template5 = {
       id: 'projects',
       type: 'list-section',
       column: 'right',
-      break: true,
+      // break: true,
       className: 'mt-6',
       heading: {
         path: 'projects.title',
@@ -415,12 +415,12 @@ const template5 = {
                 path: 'title',
                 href: 'link.link',
                 fallback: 'Project Title',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] hover:underline',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] hover:underline',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] whitespace-nowrap',
               },
             ],
           },
@@ -431,7 +431,7 @@ const template5 = {
                 path: 'description',
                 break: true,
                 className:
-                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-xs text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -465,7 +465,7 @@ const template5 = {
             cells: [
               {
                 path: 'institution',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
               },
               {
                 type: 'inline-group',
@@ -474,11 +474,11 @@ const template5 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
+                    className: 'text-xs font-bold text-[rgb(0,0,0)] whitespace-nowrap',
                   },
                   {
                     path: 'degree',
-                    className: 'text-sm font-normal text-[rgb(0,0,0)] text-right',
+                    className: 'text-xs font-normal text-[rgb(0,0,0)] text-right',
                   },
                 ],
               },
@@ -507,7 +507,7 @@ const template5 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-sm text-black',
+      badgeClassName: 'text-xs text-black',
       containerClassName: 'flex flex-col gap-2 mt-2',
       itemPrefix: '• ',
     },

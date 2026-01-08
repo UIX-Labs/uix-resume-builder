@@ -4,6 +4,21 @@ import type { Template } from '@entities/template-page/api/template-data';
 import { toast } from 'sonner';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import aniketTemplate from '@features/resume/templates/standard';
+import brianWayneTemplate from '@features/resume/templates/template4';
+import template5 from '@features/resume/templates/template5';
+import template7 from '@features/resume/templates/template-7';
+import template8 from '@features/resume/templates/template8';
+import enzoTemplate1 from '@features/resume/templates/enzo-template1';
+import template10 from '@features/resume/templates/template10';
+import template13 from '@features/resume/templates/template13';
+import enzoTemplate2 from '@features/resume/templates/enzo-template2';
+import enjiTemplate from '@features/resume/templates/eren-templete1';
+import laurenChenTemplate from '@features/resume/templates/eren-templete2';
+import erenTemplate3 from '@features/resume/templates/eren-templete-3';
+import aniketTemplate1 from '@features/resume/templates/aniket';
+import aniketTemplate2 from '@features/resume/templates/template1';
+import annaFieldTemplate from '@features/resume/templates/template3';
+import template11 from '@features/resume/templates/template11';
 
 interface UseTemplateManagementParams {
   resumeId: string;
@@ -19,7 +34,7 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   useEffect(() => {
     if (initialTemplate) {
-      setSelectedTemplate(initialTemplate);
+      setSelectedTemplate(erenTemplate3);
     }
   }, [initialTemplate]);
 

@@ -158,7 +158,7 @@ const aniketTemplate1 = {
               {
                 type: 'html',
                 path: 'description',
-                className: 'text-xs text-neutral-700 break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
+                className: 'text-xs text-neutral-700 break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap mb-2',
               },
             ],
           },

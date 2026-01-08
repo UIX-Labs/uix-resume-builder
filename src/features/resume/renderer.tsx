@@ -157,7 +157,7 @@ function ResumeRendererComponent({
           const max = getCurrentPageMax();
 
           // If it fits, keep it and continue
-          if (currentHeight <= max) {
+          if (currentHeight < max) {
             continue;
           }
 
@@ -331,7 +331,7 @@ function ResumeRendererComponent({
             className={cn('grid mb-5', page.className, className)}
             style={{
               ...baseStyle,
-              height: '29.7cm',
+              minHeight: '29.7cm',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
@@ -362,7 +362,7 @@ function ResumeRendererComponent({
             >
               {leftColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
             <div
@@ -373,7 +373,7 @@ function ResumeRendererComponent({
             >
               {rightColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
           </div>

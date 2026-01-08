@@ -13,7 +13,7 @@ import { camelToHumanString } from '@shared/lib/string';
 import { data as formSchemaData } from '@entities/resume/api/schema-data';
 import { usePdfGeneration } from '../hooks/use-pdf-generation';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
 import { useTemplateManagement } from '../hooks/use-template-management';
 import { usePdfDownload } from '../hooks/use-pdf-download';
@@ -208,7 +208,9 @@ export function FormPageBuilder() {
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
 
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const searchParams = useSearchParams();
+
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(searchParams.get('preview') === 'true');
   const targetRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);

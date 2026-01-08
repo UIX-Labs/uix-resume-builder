@@ -18,7 +18,7 @@ const template8 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'VIVEK KUMAR',
-          className: 'text-4xl font-base tracking-[0.1em] uppercase mb-2',
+          className: 'text-xl break-words font-base tracking-[0.1em] uppercase mb-2',
         },
         contact: {
           type: 'contact-grid',
@@ -228,16 +228,16 @@ const template8 = {
     {
       id: 'experience',
       type: 'list-section',
-      className: 'flex flex-col mt-4',
+      className: 'flex flex-col',
       break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'Work Experience',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4 mb-1',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-2 mb-1',
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none mt-2',
+        className: 'flex flex-col gap-1 leading-none mt-3',
         break: true,
         rows: [
           {
@@ -281,11 +281,11 @@ const template8 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-4 mb-1',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 mt-2.5 mb-1',
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col mt-1.5',
+        className: 'flex flex-col mt-3',
         break: true,
         fields: [
           {
@@ -346,7 +346,6 @@ const template8 = {
       containerClassName: 'flex flex-wrap gap-1',
       itemSeparator: ', ',
     },
-
     // Certifications Section
     {
       id: 'certifications',
@@ -356,26 +355,53 @@ const template8 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-4',
+        className: 'text-base font-bold border-b border-neutral-900 pb-0.5 capitalize mt-1.5 mb-1',
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-0.5 mt-2 leading-none',
+        className: 'flex flex-col gap-0.5 mt-3 leading-none',
         break: true,
-        fields: [
+
+        rows: [
+          // Row 1: Title ⬅️ | Date ➡️
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-bold',
+            className: 'flex justify-between items-baseline',
+            cells: [
+              {
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-sm font-bold',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-sm italic whitespace-nowrap',
+              },
+            ],
           },
-          { path: 'issuer', fallback: 'Issuer', className: 'text-sm' },
-          { type: 'duration', path: 'duration', className: 'text-sm italic' },
+
+          // Row 2: Issuer
           {
-            type: 'link',
-            path: 'link.title',
-            href: 'link.link',
-            fallback: '',
-            className: 'text-sm underline hover:text-blue-600',
+            cells: [
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-sm',
+              },
+            ],
+          },
+
+          // Row 3: Link (optional)
+          {
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                fallback: '',
+                className: 'text-sm underline hover:text-blue-600',
+              },
+            ],
           },
         ],
       },

@@ -354,7 +354,7 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
+      // containerClassName: 'space-y-4',
       rowClassName: 'items-start px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
@@ -370,7 +370,7 @@ const enjiTemplate = {
       break: true,
       heading: {
         path: 'projects.heading',
-        fallback: 'Featured Project',
+        fallback: 'Projects',
         className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'projects.items',
@@ -505,7 +505,7 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
+      containerClassName: '',
       rowClassName: 'items-start px-16 pt-4 pb-4',
       divider: {
         variant: 'line',

@@ -142,7 +142,7 @@ function ResumeRendererComponent({
 
         for (const child of children) {
           const tagName = child.tagName?.toLowerCase();
-          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div', 'li'].includes(tagName);
+          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div'].includes(tagName);
           const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
           const hasBreakableContent =
             child.querySelector('[data-canbreak="true"]') !== null ||
@@ -356,7 +356,9 @@ function ResumeRendererComponent({
             )}
             <div
               className={cn('flex flex-col', leftColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {leftColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
@@ -365,7 +367,9 @@ function ResumeRendererComponent({
             </div>
             <div
               className={cn('flex flex-col', rightColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {rightColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering

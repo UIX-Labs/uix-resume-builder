@@ -28,12 +28,12 @@ const template5 = {
       id: 'header',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col text-center gap-2',
+      className: 'flex flex-col text-start gap-2',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Divyam Malik',
-          className: 'text-3xl font-bold text-[#1a1a1a]',
+          className: 'text-3xl break-words font-bold text-[#1a1a1a]',
         },
         title: {
           path: 'personalDetails.items[0].jobTitle',
@@ -233,35 +233,28 @@ const template5 = {
     // Skills Section - Left Column
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       column: 'left',
       break: true,
+      breakable: true,
       className: 'mt-6',
+
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'text-base font-bold text-[#5b7fc7] mt-7.5',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1 mb-2',
         },
       },
+
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-2 mt-2',
-      itemTemplate: {
-        className: 'flex flex-col leading-none',
-        break: true,
-        fields: [
-          {
-            path: 'name',
-            className: 'text-sm font-regular text-[#1a1a1a] mb-1',
-          },
-          {
-            path: 'level',
-            className: 'text-xs text-[#1a1a1a] font-normal mb-2',
-          },
-        ],
-      },
+
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'block text-[#1a1a1a]',
+      badgeClassName: 'text-sm text-[#1a1a1a] leading-relaxed',
     },
 
     // Certifications Section - Left Column
@@ -274,7 +267,7 @@ const template5 = {
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
-        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-3',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1 mb-2',
@@ -313,19 +306,27 @@ const template5 = {
       break: true,
       breakable: true,
       className: 'mt-6',
+
       heading: {
         path: 'interests.title',
         fallback: 'Interests',
-        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-5',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1',
         },
       },
+
       listPath: 'interests.items[0].items',
+
+      // 🔑 REQUIRED FOR COMMA SEPARATION
       itemPath: '',
+      itemSeparator: ', ',
+
+      // 🔑 SINGLE LINE FLOW
+      containerClassName: 'block mt-2 text-black',
+
       badgeClassName: 'text-sm text-[#1a1a1a] leading-none',
-      containerClassName: 'flex flex-col gap-2 mt-2',
     },
 
     // Experience Section - Right Column
@@ -344,7 +345,7 @@ const template5 = {
         },
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
         className: 'flex flex-col leading-none',
         break: true,
@@ -402,7 +403,7 @@ const template5 = {
         },
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
         className: 'flex flex-col',
         break: true,

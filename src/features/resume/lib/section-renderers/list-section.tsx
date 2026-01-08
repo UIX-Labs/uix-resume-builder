@@ -80,7 +80,7 @@ export function renderListSection(
 
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
-          if (isItemBreakable && idx === 0) {
+          if (section.break && idx === 0) {
             return (
               <div
                 key={idx}

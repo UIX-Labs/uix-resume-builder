@@ -33,7 +33,7 @@ const template13 = {
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Business Analyst',
-          className: 'text-4xl font-normal text-[#2C5F5F]',
+          className: 'text-xl font-normal text-[#2C5F5F]',
         },
 
         contact: {
@@ -96,7 +96,7 @@ const template13 = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col mt-3',
+      className: 'flex flex-col',
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
@@ -108,33 +108,22 @@ const template13 = {
     // Key Skills Section
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       break: false,
       className: 'flex flex-col mt-6',
+
       heading: {
         path: 'skills.heading',
         fallback: 'Key Skills',
         className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
-      listPath: 'skills.items',
-      containerClassName: 'grid grid-cols-3 w-full',
 
-      itemTemplate: {
-        className: 'flex items-start',
-        break: true,
-        rows: [
-          {
-            cells: [
-              {
-                prefix: '• ',
-                path: 'name',
-                className: 'text-sm text-[#2C5F5F]',
-                // type: 'text',
-              },
-            ],
-          },
-        ],
-      },
+      listPath: 'skills.items',
+
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'block w-full',
+      badgeClassName: 'text-sm text-[#2C5F5F]',
     },
     // Professional Experience Section
     {
@@ -152,9 +141,9 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-4',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: 'flex flex-col mb-4',
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -211,7 +200,7 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-2',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
         className: 'flex flex-col',
         rows: [
@@ -308,7 +297,7 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-4',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
         className: 'flex flex-col',
         break: true,

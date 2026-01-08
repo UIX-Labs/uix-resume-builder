@@ -4,7 +4,7 @@ const aniketTemplate1 = {
   page: {
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Inter',
   },
 
   sections: [
@@ -17,7 +17,7 @@ const aniketTemplate1 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Your Name',
-          className: 'tracking-wide text-3xl font-extrabold text-blue-600',
+          className: 'tracking-wide text-[20px] font-extrabold text-blue-600',
         },
         contact: {
           type: 'inline-group',
@@ -80,13 +80,13 @@ const aniketTemplate1 = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col gap-2 mt-5',
+      className: 'flex flex-col mt-5',
       heading: {
         path: 'summary.heading',
         fallback: 'Summary',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600',
+        className: 'uppercase text-xs font-semibold text-blue-600',
       },
-      divider: { variant: 'line', className: 'border-neutral-300' },
+      divider: { variant: 'line', className: 'border-neutral-300 mb-2' },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
@@ -103,7 +103,7 @@ const aniketTemplate1 = {
         path: 'skills.heading',
         fallback: 'Skills',
         className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-5',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        divider: { variant: 'line', className: 'border-neutral-300 mb-2' },
       },
       listPath: 'skills.items',
       itemPath: 'name',
@@ -119,12 +119,12 @@ const aniketTemplate1 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-4 mb-2',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-2',
+        divider: { variant: 'line', className: 'border-neutral-300 mb-2' },
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col mt-4',
+        className: 'flex flex-col mt-3',
         rows: [
           {
             className: 'flex flex-row justify-between items-center leading-none',
@@ -136,7 +136,7 @@ const aniketTemplate1 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-neutral-600 text-xs',
+                className: 'text-neutral-600 italic text-xs',
               },
             ],
           },
@@ -145,11 +145,11 @@ const aniketTemplate1 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-xs italic text-blue-600',
+                className: 'text-xs text-blue-600',
               },
               {
                 path: 'location',
-                className: 'text-xs italic text-neutral-600',
+                className: 'text-xs text-neutral-600',
               },
             ],
           },
@@ -158,7 +158,7 @@ const aniketTemplate1 = {
               {
                 type: 'html',
                 path: 'description',
-                className: 'text-xs text-neutral-700 text-justify mt-1 whitespace-pre-wrap',
+                className: 'text-xs text-neutral-700 break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
               },
             ],
           },
@@ -175,11 +175,11 @@ const aniketTemplate1 = {
         path: 'education.heading',
         fallback: 'Education',
         className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-5',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        divider: { variant: 'line', className: 'border-neutral-300 -mb-0.5' },
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2 leading-tight',
+        className: 'flex flex-col mt-3 leading-tight',
         rows: [
           {
             className: 'flex flex-row justify-between items-center',
@@ -233,38 +233,56 @@ const aniketTemplate1 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-5',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-2',
+        divider: { variant: 'line', className: 'border-neutral-300 mb-2' },
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-4',
+        className: 'flex flex-col mt-3 leading-tight',
         break: true,
-        fields: [
+        rows: [
+          // Row 1: Title (left) + Date (right)
           {
-            path: 'title',
-            fallback: 'Project Title',
-            className: 'text-sm font-semibold text-neutral-900',
+            className: 'flex flex-row justify-between items-center',
+            cells: [
+              {
+                path: 'title',
+                fallback: 'Project Title',
+                className: 'text-sm font-semibold text-neutral-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                fallback: '',
+                className: 'text-xs text-neutral-600 italic',
+              },
+            ],
           },
+
+          // Row 2: Description
           {
-            type: 'duration',
-            path: 'duration',
-            fallback: '',
-            className: 'text-xs text-neutral-600 italic',
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                fallback: '',
+                break: true,
+                className: 'text-xs text-neutral-700 break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
+              },
+            ],
           },
+
+          // Row 3: Link (optional)
           {
-            type: 'html',
-            path: 'description',
-            fallback: '',
-            break: true,
-            className: 'text-xs text-neutral-700 text-justify whitespace-pre-wrap',
-          },
-          {
-            type: 'link',
-            path: 'link.title',
-            href: 'link.link',
-            fallback: '',
-            className: 'text-xs text-blue-600 hover:underline mt-1',
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                fallback: '',
+                className: 'text-xs text-blue-600 hover:underline',
+              },
+            ],
           },
         ],
       },
@@ -280,14 +298,12 @@ const aniketTemplate1 = {
         path: 'interests.heading',
         fallback: 'Interests',
         className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-5',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        divider: { variant: 'line', className: 'border-neutral-300 mb-2' },
       },
       listPath: 'interests.items[0].items',
-      containerClassName: 'flex flex-row flex-wrap gap-2 mt-2',
-      badgeClassName:
-        'flex gap-1 items-center justify-center w-fit px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
+      containerClassName: 'flex flex-wrap gap-1',
+      badgeClassName: 'px-2 py-0.5 bg-blue-600 text-white rounded-md text-xs font-medium',
     },
-
     // Achievements Section
     {
       id: 'achievements',
@@ -298,7 +314,7 @@ const aniketTemplate1 = {
         path: 'achievements.heading',
         fallback: 'Achievements',
         className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-5',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        divider: { variant: 'line', className: 'border-neutral-300 mb-1' },
       },
       listPath: 'achievements.items[0].items',
       containerClassName: 'flex flex-col gap-2',
@@ -316,34 +332,54 @@ const aniketTemplate1 = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className: 'uppercase tracking-wide text-xs font-semibold text-blue-600 mt-3 mb-1',
-        divider: { variant: 'line', className: 'border-neutral-300' },
+        divider: { variant: 'line', className: 'border-neutral-300 mb-1' },
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none',
+        className: 'flex flex-col mt-3 leading-tight',
         break: true,
-        fields: [
+        rows: [
+          // Row 1: Title (left) + Date (right)
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-semibold text-neutral-900',
+            className: 'flex flex-row justify-between items-center',
+            cells: [
+              {
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-sm font-semibold text-neutral-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600 italic',
+              },
+            ],
           },
+
+          // Row 2: Issuer
           {
-            path: 'issuer',
-            fallback: 'Issuer',
-            className: 'text-xs text-neutral-700',
+            className: 'flex flex-row',
+            cells: [
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-xs text-neutral-700',
+              },
+            ],
           },
+
+          // Row 3: Link (optional)
           {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-xs text-neutral-600 italic',
-          },
-          {
-            type: 'link',
-            path: 'link.title',
-            href: 'link.link',
-            fallback: '',
-            className: 'text-xs text-blue-600 hover:underline mt-1',
+            className: 'flex flex-row',
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                fallback: '',
+                className: 'text-xs text-blue-600 hover:underline',
+              },
+            ],
           },
         ],
       },

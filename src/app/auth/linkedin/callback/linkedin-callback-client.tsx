@@ -56,16 +56,24 @@ export default function LinkedInCallbackClient() {
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {
             const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+            const shouldOpenJDModal = localStorage.getItem('openJDModal');
+            const storedCallbackUrl = localStorage.getItem('auth_callback_url');
+
+            localStorage.removeItem('auth_callback_url');
 
             if (pendingResumeId) {
               router.push(`/resume/${pendingResumeId}`);
               return;
             }
 
-            const shouldOpenJDModal = localStorage.getItem('openJDModal');
             if (shouldOpenJDModal === 'true') {
               localStorage.removeItem('openJDModal');
               router.push('/dashboard?openModal=jd');
+              return;
+            }
+
+            if (storedCallbackUrl) {
+              router.push(storedCallbackUrl);
               return;
             }
 

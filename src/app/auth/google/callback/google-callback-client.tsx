@@ -47,6 +47,10 @@ export default function GoogleCallbackClient() {
 
           setTimeout(() => {
             const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+            const shouldOpenJDModal = localStorage.getItem('openJDModal');
+            const storedCallbackUrl = localStorage.getItem('auth_callback_url');
+
+            localStorage.removeItem('auth_callback_url');
 
             // 1. Analyzer flow (highest priority)
             if (pendingResumeId) {
@@ -55,14 +59,19 @@ export default function GoogleCallbackClient() {
             }
 
             // 2. JD section flow
-            const shouldOpenJDModal = localStorage.getItem('openJDModal');
             if (shouldOpenJDModal === 'true') {
               localStorage.removeItem('openJDModal');
               router.push('/dashboard?openModal=jd');
               return;
             }
 
-            // 3. Default fallback
+            // 3. Callback URL flow
+            if (storedCallbackUrl) {
+              router.push(storedCallbackUrl);
+              return;
+            }
+
+            // 4. Default fallback
             router.push('/dashboard');
           }, 1000);
         } else {

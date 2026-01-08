@@ -29,6 +29,8 @@ export const useFormDataStore = create<{
   formData: Omit<ResumeData, 'templateId'>;
   formDataResumeId: string | null;
   setFormData: (formData: Omit<ResumeData, 'templateId'>, resumeId?: string) => void;
+  isCreateMode: boolean;
+  setIsCreateMode: (isCreateMode: boolean) => void;
   isAnalyzing: boolean;
   setIsAnalyzing: (isAnalyzing: boolean) => void;
   analyzerProgress: number;
@@ -45,6 +47,8 @@ export const useFormDataStore = create<{
       formData,
       formDataResumeId: resumeId ?? state.formDataResumeId,
     })),
+  isCreateMode: false,
+  setIsCreateMode: (isCreateMode: boolean) => set({ isCreateMode }),
   isAnalyzing: false,
   setIsAnalyzing: (isAnalyzing: boolean) => set({ isAnalyzing }),
   analyzerProgress: 0,

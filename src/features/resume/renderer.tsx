@@ -157,7 +157,7 @@ function ResumeRendererComponent({
           const max = getCurrentPageMax();
 
           // If it fits, keep it and continue
-          if (currentHeight < max) {
+          if (currentHeight <= max) {
             continue;
           }
 

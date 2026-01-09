@@ -9,7 +9,7 @@ const laurenChenTemplate = {
     padding: 0,
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'Inter',
   },
 
   columns: {
@@ -32,22 +32,22 @@ const laurenChenTemplate = {
       id: 'header',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col gap-3 mb-6',
+      className: 'flex flex-col gap-2',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'LAUREN CHEN',
-          className: 'text-3xl font-bold text-white uppercase tracking-wider',
+          className: 'text-xl font-bold text-white uppercase break-words',
         },
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'DIGITAL MARKETING SPECIALIST',
-          className: 'text-sm font-normal text-white uppercase tracking-wide mt-2',
+          className: 'text-sm font-normal text-white uppercase tracking-wide',
         },
         contact: {
           id: 'header',
           type: 'contact-grid',
-          className: 'flex flex-col mt-1',
+          className: 'flex flex-col mt-4',
           separator: '',
           items: [
             // Contact heading and info
@@ -63,7 +63,8 @@ const laurenChenTemplate = {
                     {
                       type: 'text',
                       fallback: 'CONTACT',
-                      className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
+                      className:
+                        'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1 mb-1',
                     },
                   ],
                 },
@@ -253,7 +254,7 @@ const laurenChenTemplate = {
       heading: {
         path: 'professionalSummary.heading',
         fallback: 'SUMMARY',
-        className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
+        className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1 mt-1',
       },
       content: {
         type: 'html',
@@ -286,19 +287,29 @@ const laurenChenTemplate = {
         className: 'mb-5 flex flex-col',
         break: true,
         fields: [
-          {
-            path: 'duration',
-            type: 'duration',
-            className: 'text-xs text-neutral-600 font-normal',
-          },
-          {
-            path: 'position',
-            fallback: 'Digital Marketing Specialist',
-            className: 'text-sm font-bold text-neutral-900 mt-1',
-          },
+          // 🔹 ROW 1: Position (LEFT) | Date (RIGHT)
           {
             type: 'horizontal-group',
-            className: 'flex gap-1 mt-0.5',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'position',
+                fallback: 'Digital Marketing Specialist',
+                className: 'text-sm font-bold text-neutral-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600 whitespace-nowrap',
+              },
+            ],
+          },
+
+          // 🔹 ROW 2: Company, Location
+          {
+            type: 'horizontal-group',
+            separator: ', ',
+            className: 'flex mt-0.5',
             items: [
               {
                 path: 'company',
@@ -312,6 +323,8 @@ const laurenChenTemplate = {
               },
             ],
           },
+
+          // 🔹 ROW 3: Description
           {
             type: 'html',
             path: 'description',
@@ -323,7 +336,6 @@ const laurenChenTemplate = {
       },
       containerClassName: 'space-y-3',
     },
-
     /**
      * EDUCATION - Right Column
      */
@@ -343,19 +355,28 @@ const laurenChenTemplate = {
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: 'mb-3',
+        className: 'mb-3 flex flex-col',
         break: true,
         fields: [
+          // 🔹 ROW 1: Degree (LEFT) | Date (RIGHT)
           {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-xs text-neutral-600',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'degree',
+                fallback: 'Bachelor of Arts, Communications',
+                className: 'text-sm font-bold text-neutral-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600 whitespace-nowrap',
+              },
+            ],
           },
-          {
-            path: 'degree',
-            fallback: 'Bachelor of Arts, Communications',
-            className: 'text-sm font-bold text-neutral-900 mt-1',
-          },
+
+          // 🔹 ROW 2: Institution, Location
           {
             type: 'horizontal-group',
             separator: ', ',
@@ -363,40 +384,66 @@ const laurenChenTemplate = {
             items: [
               {
                 path: 'institution',
+                fallback: 'University Name',
                 className: 'text-xs text-neutral-900 font-semibold',
               },
               {
                 path: 'location',
-                fallback: 'India',
+                fallback: 'New York, NY',
                 className: 'text-xs text-neutral-600',
               },
             ],
           },
         ],
       },
-      containerClassName: 'space-y-3',
     },
 
     /**
      * SKILLS - Right Column
      */
+    // {
+    //   id: "skills",
+    //   type: "inline-list-section",
+    //   column: "right",
+    //   showBullet: true,
+    //   break: true,
+    //   breakable: true,
+    //   heading: {
+    //     path: "skills.heading",
+    //     fallback: "SKILLS",
+    //     className:
+    //       "text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-2",
+    //   },
+    //   listPath: "skills.items",
+    //   itemPath: "name",
+    //   itemClassName: "text-xs text-neutral-900 inline-block",
+    //   containerClassName: "grid grid-cols-2 gap-3",
+    //   itemSeparator: "",
+    // },
+
     {
       id: 'skills',
-      type: 'inline-list-section',
+      type: 'inline-list-section', // ✅ important
       column: 'right',
-      showBullet: true,
       break: true,
-      breakable: true,
+      className: 'pl-6 mb-4',
+
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-2',
       },
+
       listPath: 'skills.items',
+
+      // 🔑 KEY CHANGES
       itemPath: 'name',
+      itemSeparator: ', ',
+      showBullet: false,
+
+      containerClassName: 'text-xs',
       itemClassName: 'text-xs text-neutral-900 inline-block',
-      containerClassName: 'grid grid-cols-2 gap-3',
-      itemSeparator: '',
     },
 
     /**
@@ -411,7 +458,7 @@ const laurenChenTemplate = {
         path: 'projects.title',
         fallback: 'PROJECTS',
         className:
-          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-6',
       },
       divider: {
         variant: 'line',
@@ -422,18 +469,26 @@ const laurenChenTemplate = {
         className: 'mb-5 flex flex-col',
         break: true,
         fields: [
+          // 🔹 Row 1: Title (LEFT) | Date (RIGHT)
           {
-            type: 'link',
-            path: 'title',
-            href: 'link.link',
-            fallback: 'Project Title',
-            className: 'text-sm font-bold text-neutral-900 hover:underline',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'title',
+                href: 'link.link',
+                fallback: 'Project Title',
+                className: 'text-sm font-bold text-neutral-900 hover:underline',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600 whitespace-nowrap',
+              },
+            ],
           },
-          {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-xs text-neutral-600 font-normal mt-1',
-          },
+
+          // 🔹 Row 2: Description
           {
             type: 'html',
             path: 'description',
@@ -457,7 +512,8 @@ const laurenChenTemplate = {
       heading: {
         path: 'certifications.title',
         fallback: 'CERTIFICATIONS',
-        className: 'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40]',
+        className:
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-1',
       },
       divider: {
         variant: 'line',
@@ -465,30 +521,32 @@ const laurenChenTemplate = {
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'mb-3',
+        className: 'mb-3 flex flex-col',
         break: true,
         fields: [
+          // 🔹 Row 1: Title (LEFT) | Date (RIGHT)
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-bold text-neutral-900',
-          },
-          {
-            type: 'inline-group',
-            className: 'flex flex-row items-baseline gap-1 leading-none mt-0.5',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
             items: [
               {
-                path: 'issuer',
-                fallback: 'Issuer',
-                className: 'text-xs text-neutral-900 font-semibold italic',
-                suffix: ', ',
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-sm font-bold text-neutral-900',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-neutral-600',
+                className: 'text-xs text-neutral-600 whitespace-nowrap',
               },
             ],
+          },
+
+          // 🔹 Row 2: Issuer
+          {
+            path: 'issuer',
+            fallback: 'Issuer',
+            className: 'text-xs text-neutral-900 font-semibold italic mt-0.5',
           },
         ],
       },
@@ -532,7 +590,7 @@ const laurenChenTemplate = {
         path: 'achievements.title',
         fallback: 'ACHIEVEMENTS',
         className:
-          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-4',
+          'text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-7',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',

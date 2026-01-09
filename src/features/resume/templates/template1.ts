@@ -23,7 +23,7 @@ const aniketTemplate2 = {
         },
         contact: {
           type: 'inline-group',
-          className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
+          className: 'flex flex-row flex-wrap justify-start gap-2 text-xs text-black',
           separator: ' | ',
           items: [
             { path: 'personalDetails.items[0].phone', fallback: 'Phone' },
@@ -84,7 +84,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Summary',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-3',
       },
       divider: {
         variant: 'line',
@@ -95,7 +95,7 @@ const aniketTemplate2 = {
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-neutral-700 text-justify [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
+          'text-xs text-neutral-700 text-justify [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap mt-2',
       },
     },
 
@@ -106,7 +106,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-4',
         divider: {
           variant: 'line',
           className: 'bg-neutral-400 w-full h-[2px] mt-0.5',
@@ -114,8 +114,8 @@ const aniketTemplate2 = {
       },
       listPath: 'skills.items',
       itemPath: 'name',
-      itemClassName: 'text-sm text-black',
-      containerClassName: 'text-sm text-black leading-relaxed mt-2',
+      itemClassName: 'text-xs text-black',
+      containerClassName: 'text-xs text-black leading-relaxed mt-2',
       itemSeparator: ', ',
     },
 
@@ -127,7 +127,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'text-lg font-bold text-black mt-1',
+        className: 'text-xs font-bold text-black mt-1',
         divider: {
           variant: 'line',
           className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5',
@@ -138,7 +138,7 @@ const aniketTemplate2 = {
         className: 'flex flex-col gap-1 mt-3',
         rows: [
           {
-            className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
+            className: 'flex flex-row flex-wrap justify-start gap-2 text-xs text-black',
             cells: [
               {
                 type: 'inline-group',
@@ -151,7 +151,7 @@ const aniketTemplate2 = {
             ],
           },
           {
-            className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
+            className: 'flex flex-row flex-wrap justify-start gap-2 text-xs text-black',
             cells: [
               {
                 type: 'inline-group',
@@ -161,7 +161,7 @@ const aniketTemplate2 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'font-semibold',
+                    className: 'text-xs text-neutral-600 italic',
                   },
                 ],
               },
@@ -172,7 +172,7 @@ const aniketTemplate2 = {
               {
                 type: 'html',
                 path: 'description',
-                className: 'text-sm text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
+                className: 'text-xs text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
               },
             ],
           },
@@ -187,50 +187,90 @@ const aniketTemplate2 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-4',
         divider: {
           variant: 'line',
           className: 'bg-neutral-400 w-full h-[2px] mt-0.5',
         },
       },
       listPath: 'education.items',
+      // itemTemplate: {
+      //   className: "flex flex-col gap-1 leading-none",
+      //   break: true,
+      //   rows: [
+      //     {
+      //       className:
+      //         "flex flex-row flex-wrap justify-start gap-2 mt-4 text-xs text-black",
+      //       cells: [
+      //         {
+      //           type: "inline-group",
+      //           separator: " | ",
+      //           items: [
+      //             { path: "institution", className: "font-semibold" },
+      //             {
+      //               path: "location",
+      //               fallback: "",
+      //               className: "font-semibold",
+      //             },
+      //             { path: "degree", className: "font-semibold" },
+      //           ],
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       className:
+      //         "flex flex-row flex-wrap justify-start gap-2 text-xs text-black",
+      //       cells: [
+      //         {
+      //           type: "duration",
+      //           path: "duration",
+      //           className: "text-xs text-neutral-600 italic",
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       cells: [
+      //         {
+      //           path: "grade.value",
+      //           className: "text-xs text-black",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
+
       itemTemplate: {
-        className: 'flex flex-col gap-1 mt-3 leading-none',
-        break: true,
+        className: 'flex flex-col mt-3',
         rows: [
           {
-            className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
+            className: 'flex flex-row justify-between items-start',
             cells: [
+              // LEFT: Institution + Degree (tight stack)
               {
-                type: 'inline-group',
-                separator: ' | ',
+                type: 'group',
+                className: 'flex flex-col leading-tight',
                 items: [
-                  { path: 'institution', className: 'font-semibold' },
-                  {
-                    path: 'location',
-                    fallback: '',
-                    className: 'font-semibold',
-                  },
-                  { path: 'degree', className: 'font-semibold' },
+                  { path: 'institution', className: 'text-xs font-semibold' },
+
+                  { path: 'degree', className: 'text-xs font-normal' },
                 ],
               },
-            ],
-          },
-          {
-            className: 'flex flex-row flex-wrap justify-start gap-2 text-sm text-black',
-            cells: [
+
+              // RIGHT: Date + Grade
               {
-                type: 'duration',
-                path: 'duration',
-                className: 'font-semibold',
-              },
-            ],
-          },
-          {
-            cells: [
-              {
-                path: 'grade.value',
-                className: 'text-sm text-black',
+                type: 'group',
+                className: 'flex flex-col items-end text-right leading-tight',
+                items: [
+                  {
+                    type: 'duration',
+                    path: 'duration',
+                    className: 'text-xs text-neutral-600 italic',
+                  },
+                  {
+                    path: 'grade.value',
+                    className: 'text-xs text-black',
+                  },
+                ],
               },
             ],
           },
@@ -247,15 +287,15 @@ const aniketTemplate2 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-4',
         divider: {
           variant: 'line',
           className: 'bg-neutral-400 w-full h-[2px] mt-0.5',
         },
       },
       listPath: 'interests.items[0].items',
-      badgeClassName: 'text-sm text-black',
-      containerClassName: 'text-sm text-black leading-relaxed mt-2',
+      badgeClassName: 'text-xs text-black',
+      containerClassName: 'text-xs text-black leading-relaxed mt-2',
       itemSeparator: ', ',
     },
 
@@ -268,7 +308,7 @@ const aniketTemplate2 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-4',
         divider: {
           variant: 'line',
           className: 'bg-neutral-400 w-full h-[2px] mt-0.5',
@@ -276,8 +316,8 @@ const aniketTemplate2 = {
       },
       listPath: 'achievements.items[0].items',
       itemPrefix: '• ',
-      badgeClassName: 'text-sm text-black',
-      containerClassName: 'flex flex-col gap-1 mt-2',
+      badgeClassName: 'text-xs text-black',
+      containerClassName: 'flex flex-col gap-1 mt-1.5 leading-none',
     },
 
     // Certifications Section
@@ -288,38 +328,58 @@ const aniketTemplate2 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-lg font-bold text-black mt-4',
+        className: 'text-xs font-bold text-black mt-1',
         divider: {
           variant: 'line',
-          className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5',
+          className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-2',
         },
       },
       listPath: 'certifications.items',
       itemTemplate: {
-        className: 'flex flex-col mt-3',
+        className: 'flex flex-col mt-3 leading-tight',
         break: true,
-        fields: [
+        rows: [
+          // Row 1: Title (left) + Date (right)
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-semibold text-neutral-900',
+            className: 'flex flex-row justify-between items-center',
+            cells: [
+              {
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-xs font-semibold text-neutral-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600 italic',
+              },
+            ],
           },
+
+          // Row 2: Issuer
           {
-            path: 'issuer',
-            fallback: 'Issuer',
-            className: 'text-sm text-neutral-700',
+            className: 'flex flex-row',
+            cells: [
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-xs text-neutral-700',
+              },
+            ],
           },
+
+          // Row 3: Link (optional)
           {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-sm text-neutral-600 italic',
-          },
-          {
-            type: 'link',
-            path: 'link.title',
-            href: 'link.link',
-            fallback: '',
-            className: 'text-sm text-blue-600 hover:underline mt-1',
+            className: 'flex flex-row',
+            cells: [
+              {
+                type: 'link',
+                path: 'link.title',
+                href: 'link.link',
+                fallback: '',
+                className: 'text-xs text-blue-600 hover:underline',
+              },
+            ],
           },
         ],
       },

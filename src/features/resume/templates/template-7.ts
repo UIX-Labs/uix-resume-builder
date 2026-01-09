@@ -29,13 +29,13 @@ const template7 = {
               type: 'text',
               path: 'personalDetails.items[0].fullName',
               fallback: 'John Doe',
-              className: 'text-3xl font-bold text-[#4178B4] leading-tight',
+              className: 'text-xl font-bold text-[#4178B4] leading-tight',
             },
             {
               type: 'text',
               path: 'personalDetails.items[0].jobTitle',
               fallback: 'Mobile Developer',
-              className: 'text-base font-medium text-gray-700 mt-1',
+              className: 'text-sm font-medium text-gray-700 mt-1',
             },
             {
               type: 'html',
@@ -43,7 +43,7 @@ const template7 = {
               fallback:
                 'Mobile Developer experienced in building and maintaining scalable cross-platform applications using React Native for both iOS (Swift) and Android (Kotlin).',
               className:
-                'text-sm text-gray-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                'text-xs text-gray-700 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
             },
           ],
         },
@@ -54,11 +54,11 @@ const template7 = {
     {
       id: 'header',
       type: 'header',
-      className: 'border-b border-t border-black py-3 pl-14 -mx-6 bg-gray-50 mt-2',
+      className: 'border-b border-t border-black py-3 -mx-6 bg-gray-50 mt-2',
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-row gap-4 items-center justify-start flex-wrap text-sm',
+          className: 'flex flex-row flex-wrap items-center justify-center gap-x-8 gap-y-2 text-xs max-w-full mx-auto',
           items: [
             {
               type: 'inline-group-with-icon',
@@ -75,7 +75,7 @@ const template7 = {
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'simran.smjp@gmail.com',
-                  className: 'text-sm text-gray-800',
+                  className: 'text-xs text-gray-800',
                 },
               ],
             },
@@ -92,7 +92,7 @@ const template7 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '7042403591',
-                  className: 'text-sm text-gray-800',
+                  className: 'text-xs text-gray-800',
                 },
               ],
             },
@@ -109,7 +109,7 @@ const template7 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'Gurugram, India',
-                  className: 'text-sm text-gray-800',
+                  className: 'text-xs text-gray-800',
                 },
               ],
             },
@@ -128,7 +128,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -147,7 +147,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -166,7 +166,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.website.title',
                   href: 'personalDetails.items[0].links.website.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -185,7 +185,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.youtube.title',
                   href: 'personalDetails.items[0].links.youtube.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -204,7 +204,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.dribble.title',
                   href: 'personalDetails.items[0].links.dribble.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -223,7 +223,7 @@ const template7 = {
                   path: 'personalDetails.items[0].links.behance.title',
                   href: 'personalDetails.items[0].links.behance.link',
                   fallback: '',
-                  className: 'text-sm text-gray-800 hover:text-blue-600',
+                  className: 'text-xs text-gray-800 hover:text-blue-600',
                 },
               ],
             },
@@ -236,18 +236,18 @@ const template7 = {
     {
       id: 'skills',
       type: 'badge-section',
-      className: 'px-8 pb-6 pt-3',
+      className: 'px-8 pb-6',
       break: true,
       breakable: true,
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-xl font-bold text-[#4178B4] tracking-wider mt-4',
+        className: 'text-sm font-bold text-[#4178B4] tracking-wider mt-6.5 mb-1',
       },
       listPath: 'skills.items',
       itemPath: 'name',
-      badgeClassName: 'px-2 py-1 bg-[#8CAADB] text-white text-sm rounded',
-      containerClassName: 'flex flex-wrap gap-2.5 mt-3',
+      badgeClassName: 'px-2 py-1 bg-[#8CAADB] text-white text-xs rounded leading-none',
+      containerClassName: 'flex flex-wrap gap-x-2.5 gap-y-1.5',
     },
 
     // Work Experience Section
@@ -259,44 +259,52 @@ const template7 = {
       heading: {
         path: 'experience.heading',
         fallback: 'WORK EXPERIENCE',
-        className: 'text-xl font-bold text-[#4178B4] mb-2 tracking-wide mt-4',
+        className: 'text-sm font-bold text-[#4178B4] mb-2 mt-3 tracking-wide',
       },
       listPath: 'experience.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2 leading-none',
+        className: 'flex flex-col mt-3 leading-none',
         break: true,
         rows: [
+          // Row 1: Company (LEFT) | Date (RIGHT)
           {
-            className: 'flex flex-col',
+            className: 'flex justify-between items-baseline leading-none',
             cells: [
               {
                 path: 'company',
-                className: 'text-base font-medium text-gray-900',
+                className: 'text-xs font-semibold text-gray-900',
               },
-              {
-                path: 'position',
-                className: 'text-sm font-medium text-gray-900',
-              },
-            ],
-          },
-          {
-            className: 'flex flex-row justify-between items-start',
-            cells: [
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-gray-500 italic',
+                className: 'text-xs text-gray-500 italic whitespace-nowrap',
               },
-              { path: 'location', className: 'text-sm text-gray-500 italic' },
             ],
           },
+
+          // Row 2: Position (LEFT) | Location (RIGHT)
+          {
+            className: 'flex justify-between items-baseline leading-none mt-1',
+            cells: [
+              {
+                path: 'position',
+                className: 'text-xs font-normal text-gray-500',
+              },
+              {
+                path: 'location',
+                className: 'text-xs text-gray-500 italic whitespace-nowrap',
+              },
+            ],
+          },
+
+          // Row 3: Description
           {
             cells: [
               {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                  'text-xs text-gray-800 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -313,30 +321,42 @@ const template7 = {
       heading: {
         path: 'projects.heading',
         fallback: 'PROJECTS',
-        className: 'text-xl uppercase font-bold text-[#4178B4] mb-2 tracking-wide mt-4',
+        className: 'text-sm uppercase font-bold text-[#4178B4] mb-2 mt-1 tracking-wide',
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2',
+        className: 'flex flex-col mt-3 leading-none',
         break: true,
-        fields: [
+        rows: [
+          // Row 1: Title (LEFT) | Date (RIGHT)
           {
-            path: 'title',
-            href: 'link.link',
-            fallback: '',
-            className: 'text-base font-medium text-gray-900',
+            className: 'flex justify-between items-baseline leading-none',
+            cells: [
+              {
+                path: 'title',
+                href: 'link.link',
+                fallback: '',
+                className: 'text-xs font-semibold text-gray-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-gray-500 italic whitespace-nowrap',
+              },
+            ],
           },
+
+          // Row 2: Description
           {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-sm text-gray-500 italic',
-          },
-          {
-            type: 'html',
-            path: 'description',
-            break: true,
-            className:
-              'text-sm text-gray-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                break: true,
+                className:
+                  'text-xs text-gray-800 leading-relaxed mt-2 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+              },
+            ],
           },
         ],
       },
@@ -349,18 +369,21 @@ const template7 = {
       className: 'px-8 pb-4',
       break: true,
       breakable: true,
+
       heading: {
         path: 'interests.heading',
         fallback: 'INTERESTS',
-        className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide mt-4',
+        className: 'uppercase text-sm font-bold text-[#4178B4] tracking-wide mt-5',
       },
-      listPath: 'interests.items[0].items',
-      itemPath: '',
-      itemClassName: 'text-sm text-black',
-      containerClassName: 'text-sm grid grid-cols-2 gap-x-4 gap-y-1 mt-2',
-      itemPrefix: '• ',
-    },
 
+      listPath: 'interests.items[0].items',
+
+      // 🔑 REQUIRED CHANGES
+      itemPath: '',
+      itemSeparator: ', ',
+      containerClassName: 'block',
+      badgeClassName: 'text-xs text-black',
+    },
     // Achievements Section
     {
       id: 'achievements',
@@ -371,13 +394,13 @@ const template7 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
-        className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide mt-4 mb-2',
+        className: 'uppercase text-sm font-bold text-[#4178B4] tracking-wide mt-5 mb-2',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
       itemPrefix: '• ',
-      badgeClassName: 'text-sm text-black',
-      containerClassName: 'text-sm flex flex-col gap-2',
+      badgeClassName: 'text-xs text-black',
+      containerClassName: 'text-xs flex flex-col gap-2',
     },
 
     // Certifications Section
@@ -389,28 +412,37 @@ const template7 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'CERTIFICATIONS',
-        className: 'uppercase text-xl font-bold text-[#4178B4] tracking-wide mt-4',
+        className: 'uppercase text-sm font-bold text-[#4178B4] tracking-wide mt-2.5 mb-2',
       },
       listPath: 'certifications.items',
-      containerClassName: 'grid grid-cols-2 gap-4 mt-2',
+      containerClassName: '',
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col mt-3 leading-none',
         break: true,
         fields: [
+          // Title ⬅️ | Date ➡️
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-base font-medium text-gray-900',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-xs font-semibold text-gray-900',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-gray-500 italic whitespace-nowrap',
+              },
+            ],
           },
+
+          // Issuer (next line)
           {
             path: 'issuer',
             fallback: 'Issuer',
-            className: 'text-sm text-gray-700',
-          },
-          {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-sm text-gray-500 italic',
+            className: 'text-xs text-gray-700 mt-1',
           },
         ],
       },
@@ -424,32 +456,59 @@ const template7 = {
       heading: {
         path: 'education.heading',
         fallback: 'EDUCATION',
-        className: 'text-xl font-bold text-[#4178B4] tracking-wide mt-4',
+        className: 'text-sm font-bold text-[#4178B4] tracking-wide mt-5.5 -mb-2',
       },
       listPath: 'education.items',
       itemTemplate: {
-        className: 'flex flex-col mt-2',
+        className: 'flex flex-col mt-3',
+
         rows: [
+          // Row 1: Institution ⬅️ | Date ➡️
           {
-            className: 'flex flex-col leading-none',
+            className: 'flex justify-between items-baseline leading-none',
             cells: [
               {
-                path: 'degree',
-                className: 'text-base font-medium text-gray-900',
+                path: 'institution',
+                className: 'text-xs font-semibold text-gray-900',
               },
-              { path: 'institution', className: 'text-sm text-gray-900' },
-              { path: 'grade.value', className: 'text-sm text-gray-700' },
-            ],
-          },
-          {
-            className: 'flex flex-row justify-between items-start',
-            cells: [
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-gray-500 italic',
+                className: 'text-xs text-gray-500 italic whitespace-nowrap',
               },
-              { path: 'location', className: 'text-sm text-gray-500 italic' },
+            ],
+          },
+
+          // Row 2: Degree (below institute)
+          {
+            className: 'flex leading-none mt-1',
+            cells: [
+              {
+                path: 'degree',
+                className: 'text-xs font-normal text-gray-900',
+              },
+            ],
+          },
+
+          // Row 3: Grade (below date, but naturally flows under content)
+          {
+            className: 'flex leading-none mt-1',
+            cells: [
+              {
+                path: 'grade.value',
+                className: 'text-xs text-gray-700',
+              },
+            ],
+          },
+
+          // Row 4: Location
+          {
+            className: 'flex leading-none mt-1',
+            cells: [
+              {
+                path: 'location',
+                className: 'text-xs text-gray-500 italic',
+              },
             ],
           },
         ],

@@ -4,7 +4,7 @@ import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
-import { getArrayValueSuggestions } from '@features/template-form/lib/get-field-errors';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
 export function renderBadgeSection(
   section: any,
@@ -97,11 +97,11 @@ export function renderBadgeSection(
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-          const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+          const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
-          // const errorBgColor = isThumbnail
-          //   ? ""
-          //   : getSuggestionBackgroundColor(valueSuggestions);
+          const errorBgColor = isThumbnail
+            ? ""
+            : getSuggestionBackgroundColor(valueSuggestions);
 
           const displayValue = `${section.itemPrefix || ''}${actualValue}${section.itemSuffix || ''}`;
 
@@ -110,7 +110,7 @@ export function renderBadgeSection(
             return (
               <div key={idx} className={section.itemClassName} data-canbreak={section.break ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
-                <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
+                <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
               </div>
             );
           }
@@ -118,7 +118,7 @@ export function renderBadgeSection(
           // Default rendering without icon
           return (
             <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
-              <span className={cn(section.badgeClassName /*, errorBgColor*/)}>{displayValue}</span>
+              <span className={cn(section.badgeClassName, errorBgColor)}>{displayValue}</span>
 
               {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                 <span>{section.itemSeparator}</span>

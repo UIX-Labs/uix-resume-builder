@@ -3,7 +3,7 @@ import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
-import { getArrayValueSuggestions } from '@features/template-form/lib/get-field-errors';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
 export function renderInlineListSection(
   section: any,
@@ -77,18 +77,18 @@ export function renderInlineListSection(
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
               const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
-              // const errorBgColor = isThumbnail
-              //   ? ""
-              //   : getSuggestionBackgroundColor(valueSuggestions);
+              const errorBgColor = isThumbnail
+                ? ""
+                : getSuggestionBackgroundColor(valueSuggestions);
 
               return (
                 <li
                   key={idx}
                   className={cn(
                     section.itemClassName,
-                    // errorBgColor,
+                    errorBgColor,
                     'list-item',
                   )}
                 >
@@ -102,15 +102,15 @@ export function renderInlineListSection(
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
               const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
 
-              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              const valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
 
-              // const errorBgColor = isThumbnail
-              //   ? ""
-              //   : getSuggestionBackgroundColor(valueSuggestions);
+              const errorBgColor = isThumbnail
+                ? ""
+                : getSuggestionBackgroundColor(valueSuggestions);
 
               return (
                 <span key={idx}>
-                  <span className={cn(section.itemClassName)}>{value}</span>
+                  <span className={cn(section.itemClassName, errorBgColor)}>{value}</span>
                   {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                     <span>{section.itemSeparator}</span>
                   )}

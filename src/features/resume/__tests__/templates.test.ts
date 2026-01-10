@@ -105,10 +105,7 @@ describe('Template Structure Validation', () => {
     ];
 
     template.sections.forEach((section: any, index: number) => {
-      expect(
-        validSectionTypes.includes(section.type),
-        `Section ${index} has invalid type: ${section.type}`,
-      ).toBe(true);
+      expect(validSectionTypes.includes(section.type), `Section ${index} has invalid type: ${section.type}`).toBe(true);
     });
   });
 
@@ -122,13 +119,9 @@ describe('Template Structure Validation', () => {
         // Check nested sections in two-column-layout
         if (section.type === 'two-column-layout') {
           const leftHasHeader =
-            section.leftColumn?.sections?.some(
-              (s: any) => s.type === 'header' || s.type === 'banner',
-            ) || false;
+            section.leftColumn?.sections?.some((s: any) => s.type === 'header' || s.type === 'banner') || false;
           const rightHasHeader =
-            section.rightColumn?.sections?.some(
-              (s: any) => s.type === 'header' || s.type === 'banner',
-            ) || false;
+            section.rightColumn?.sections?.some((s: any) => s.type === 'header' || s.type === 'banner') || false;
           return leftHasHeader || rightHasHeader;
         }
         return false;

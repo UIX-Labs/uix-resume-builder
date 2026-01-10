@@ -150,10 +150,7 @@ export const mockResumeData = {
     items: [
       {
         itemId: '42d365d2-298e-4bfe-b718-b3c0595dbaf6',
-        items: [
-          'Winner of Google Cloud Hackathon 2023',
-          'Published 3 research papers on Machine Learning',
-        ],
+        items: ['Winner of Google Cloud Hackathon 2023', 'Published 3 research papers on Machine Learning'],
       },
     ],
   },

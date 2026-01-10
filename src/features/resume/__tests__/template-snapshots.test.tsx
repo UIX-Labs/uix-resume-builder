@@ -59,12 +59,7 @@ describe('Full Template Rendering Snapshots', () => {
     // Render the template with mock data
     // Using isThumbnail=true to avoid pagination complexity in snapshots
     const { container } = render(
-      <ResumeRenderer
-        template={template}
-        data={mockResumeData}
-        isThumbnail={true}
-        skipImageFallbacks={true}
-      />,
+      <ResumeRenderer template={template} data={mockResumeData} isThumbnail={true} skipImageFallbacks={true} />,
     );
 
     // Create snapshot of the rendered output
@@ -74,26 +69,14 @@ describe('Full Template Rendering Snapshots', () => {
   // Test that templates render without errors
   it.each(allTemplates)('$name template renders without throwing errors', ({ template }) => {
     expect(() => {
-      render(
-        <ResumeRenderer
-          template={template}
-          data={mockResumeData}
-          isThumbnail={true}
-          skipImageFallbacks={true}
-        />,
-      );
+      render(<ResumeRenderer template={template} data={mockResumeData} isThumbnail={true} skipImageFallbacks={true} />);
     }).not.toThrow();
   });
 
   // Test that templates produce non-empty output
   it.each(allTemplates)('$name template produces non-empty output', ({ template }) => {
     const { container } = render(
-      <ResumeRenderer
-        template={template}
-        data={mockResumeData}
-        isThumbnail={true}
-        skipImageFallbacks={true}
-      />,
+      <ResumeRenderer template={template} data={mockResumeData} isThumbnail={true} skipImageFallbacks={true} />,
     );
 
     // Check that container has content

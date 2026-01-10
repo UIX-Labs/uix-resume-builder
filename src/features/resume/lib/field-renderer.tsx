@@ -1,11 +1,11 @@
-import dayjs from 'dayjs';
-import { cn } from '@shared/lib/cn';
-import * as LucideIcons from 'lucide-react';
-import React from 'react';
 import type { SuggestedUpdates } from '@entities/resume';
 import { getFieldSuggestions } from '@features/template-form/lib/get-field-errors';
-import { resolvePath } from './resolve-path';
+import { cn } from '@shared/lib/cn';
+import dayjs from 'dayjs';
+import * as LucideIcons from 'lucide-react';
+import React from 'react';
 import { renderDivider } from './components/Divider';
+import { resolvePath } from './resolve-path';
 
 export function renderField(
   field: any,

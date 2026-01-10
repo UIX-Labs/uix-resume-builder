@@ -16,6 +16,14 @@ if [ $? -ne 0 ]; then
 fi
 echo "✅ Lint successful!"
 
+echo "🔍 Starting Test Check..."
+pnpm run test
+if [ $? -ne 0 ]; then
+  echo "❌ Test failed. Fix test errors before committing."
+  exit 1
+fi
+echo "✅ Test successful!"
+
 echo "🔍 Starting Build Check..."
 pnpm run build
 if [ $? -ne 0 ]; then

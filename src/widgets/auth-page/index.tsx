@@ -21,7 +21,7 @@ import { cn } from '@shared/lib/utils';
 import LinkedInSignInButton from '@shared/ui/components/linkedIn-signin-button';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
-export default function AuthPageWidget() {
+export default function DesktopAuthLayout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [guestEmail, setGuestEmail] = useState<string | undefined>(undefined);

@@ -23,16 +23,6 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const [showMobileTextView, setShowMobileTextView] = useState(false);
 
   const handleNavigation = (path: string, eventName: string, destination: string) => {
-    // For routes that need desktop, show the mobile text view
-    if (path === '/auth') {
-      setShowMobileTextView(true);
-      trackEvent(eventName, {
-        source: 'mobile_sidebar',
-        destination,
-        blocked: 'mobile_device',
-      });
-      return;
-    }
     router.push(path);
     onClose();
     trackEvent(eventName, {
@@ -54,12 +44,17 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   };
 
   const handleDashboardClick = () => {
-    const destination = user ? 'dashboard' : 'auth';
+    if (!user) {
+      handleNavigation('/auth', 'navigation_click', 'sign_in');
+      return;
+    }
+
+    const destination = 'dashboard';
     setShowMobileTextView(true);
     trackEvent('navigation_click', {
       source: 'mobile_sidebar',
       destination,
-      action: user ? 'dashboard' : 'sign_in',
+      action: 'dashboard',
       blocked: 'mobile_device',
     });
   };

@@ -4,14 +4,18 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { sendAuthCodeToBackend } from '@/shared/lib/linkedin-auth';
+import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 export default function LinkedInCallbackClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const isMobile = useIsMobile();
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showMobileRestricted, setShowMobileRestricted] = useState(false);
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -55,6 +59,11 @@ export default function LinkedInCallbackClient() {
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {
+            if (isMobile) {
+              setShowMobileRestricted(true);
+              return;
+            }
+
             const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
             const shouldOpenJDModal = localStorage.getItem('openJDModal');
             const storedCallbackUrl = localStorage.getItem('auth_callback_url');
@@ -109,12 +118,15 @@ export default function LinkedInCallbackClient() {
 
   if (success) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center text-green-600">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p>{success}</p>
+      <>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-center text-green-600">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p>{success}</p>
+          </div>
         </div>
-      </div>
+        <MobileTextView isOpen={showMobileRestricted} onClose={() => router.push('/')} />
+      </>
     );
   }
 

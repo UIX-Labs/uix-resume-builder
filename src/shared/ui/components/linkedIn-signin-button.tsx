@@ -16,7 +16,7 @@ export default function LinkedInSignInButton() {
   return (
     <Button
       onClick={handleLinkedInSignIn}
-      className="py-8 w-[336px] bg-blue-900 border-2 border-white text-white text-2xl font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
+      className="py-6 md:py-8 w-[336px] bg-blue-900 border-2 border-white text-white text-xl md:text-2xl font-semibold rounded-xl hover:bg-blue-700 hover:shadow-xl transition-all duration-300 hover:scale-105 shadow-[0_1px_2px_0_rgba(0,0,0,0.04)] cursor-pointer
     "
     >
       <div className="flex items-center justify-center gap-3">

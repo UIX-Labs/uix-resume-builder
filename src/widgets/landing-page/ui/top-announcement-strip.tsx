@@ -2,27 +2,18 @@
 
 import Image from 'next/image';
 import { useUserProfile } from '@shared/hooks/use-user';
-import { useState } from 'react';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileTextView } from './mobile-text-view';
 import { useRouter } from 'next/navigation';
 import getCurrentStatsQuery from '../api/query';
 
 export const TopAnnouncementStrip = () => {
   const { data: user, isLoading } = useUserProfile();
-  const isMobile = useIsMobile();
-  const [showMobileView, setShowMobileView] = useState(false);
   const router = useRouter();
   const { data: currentStats } = getCurrentStatsQuery();
 
   const spotsLeft = Math.max(0, 1000 - (currentStats?.totalUsers ?? 0));
 
   const handleSignUpClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-    } else {
-      router.push('/auth');
-    }
+    router.push('/auth');
   };
 
   // Don't render while loading to prevent flash on refresh
@@ -66,7 +57,6 @@ export const TopAnnouncementStrip = () => {
           </button>
         </div>
       </div>
-      <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />
     </div>
   );
 };

@@ -228,7 +228,7 @@ const erenTemplate3 = {
       className: 'flex flex-col',
       heading: {
         path: 'summary.heading',
-        fallback: 'SUMMARY',
+        fallback: 'Summary',
         className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       content: {

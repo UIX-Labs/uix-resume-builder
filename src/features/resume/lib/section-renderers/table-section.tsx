@@ -12,41 +12,7 @@ import {
   getArrayValueSuggestions,
   getSuggestionBackgroundColor,
 } from "@features/template-form/lib/get-field-errors";
-
-/**
- * Generate data-suggestion attribute value for DOM manipulation approach
- * Format: "sectionId|itemId|fieldName|suggestionType"
- */
-function getSuggestionDataAttribute(
-  sectionId: string | undefined,
-  itemId: string | undefined,
-  fieldName: string | undefined,
-  valueSuggestions: any[],
-  isThumbnail?: boolean
-): string | undefined {
-  if (
-    isThumbnail ||
-    !valueSuggestions.length ||
-    !sectionId ||
-    !itemId ||
-    !fieldName
-  ) {
-    return undefined;
-  }
-
-  // Determine primary suggestion type (priority: spelling > sentence > new)
-  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
-    "spelling_error";
-  if (valueSuggestions.some((s) => s.type === "spelling_error")) {
-    suggestionType = "spelling_error";
-  } else if (valueSuggestions.some((s) => s.type === "sentence_refinement")) {
-    suggestionType = "sentence_refinement";
-  } else if (valueSuggestions.some((s) => s.type === "new_summary")) {
-    suggestionType = "new_summary";
-  }
-
-  return `${sectionId}|${itemId}|${fieldName}|${suggestionType}`;
-}
+import { getSuggestionDataAttribute } from "../suggestion-utils";
 
 // Table section renderer (row-based layout with configurable columns)
 export function renderTableSection(
@@ -87,16 +53,14 @@ export function renderTableSection(
   const isActive =
     currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+  // Get section key from listPath (e.g., "experience.items" -> "experience")
+  // This is needed for checking suggestions correctly
+  const sectionKey = section.listPath?.split(".")[0];
+  const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  // Get section key from listPath (e.g., "experience.items" -> "experience")
-  const sectionKey = section.listPath?.split(".")[0];
-
-  // Get suggestedUpdates from the data for this section
-  const suggestedUpdates = sectionKey
-    ? (data[sectionKey] as any)?.suggestedUpdates
-    : sectionSuggestedUpdates;
+  // Use the sectionSuggestedUpdates for rendering
+  const suggestedUpdates = sectionSuggestedUpdates;
 
   const shouldBlur =
     !isThumbnail &&

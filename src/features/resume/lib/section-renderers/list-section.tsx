@@ -20,7 +20,11 @@ export function renderListSection(
     section.id || section.heading?.path?.split(".").pop() || "list-section";
   const isActive =
     currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
-  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+
+  // Get section key from listPath (e.g., "experience.items" -> "experience")
+  // This is needed for checking suggestions correctly
+  const sectionKey = section.listPath?.split(".")[0];
+  const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
   const shouldBlur =
@@ -64,13 +68,8 @@ export function renderListSection(
   const itemWrapperStyle = section.break ? wrapperStyle : {};
   const containerWrapperStyle = section.break ? {} : wrapperStyle;
 
-  // Get section key from listPath (e.g., "experience.items" -> "experience")
-  const sectionKey = section.listPath?.split(".")[0];
-
-  // Get suggestedUpdates from the data for this section
-  const suggestedUpdates = sectionKey
-    ? (data[sectionKey] as any)?.suggestedUpdates
-    : undefined;
+  // Use the sectionSuggestedUpdates already defined above
+  const suggestedUpdates = sectionSuggestedUpdates;
 
   return (
     <div

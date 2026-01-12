@@ -231,14 +231,14 @@ const enzoTemplate1 = {
       className: "flex flex-col gap-1 pt-3 border-t border-[#C9A961]",
       heading: {
         path: "summary.heading",
-        fallback: "Profile",
+        fallback: 'Summary',
         className:
           "text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-2",
       },
       content: {
         type: "html",
         path: "personalDetails.items[0].description",
-        fallback: "Summary",
+        fallback: 'Summary',
         className:
           "text-xs text-neutral-800 leading-relaxed break-words whitespace-pre-wrap mb-6",
       },

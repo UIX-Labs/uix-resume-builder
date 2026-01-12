@@ -157,7 +157,7 @@ const annaFieldTemplate = {
       className: 'flex flex-col gap-3',
       heading: {
         path: 'summary.heading',
-        fallback: 'Profile',
+        fallback: 'Summary',
         className:
           'bg-[rgba(17,9,128,0.07)] px-4 py-2 flex justify-center items-center text-lg font-bold text-[rgb(17,9,128)] mt-8 ',
       },

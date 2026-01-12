@@ -252,7 +252,7 @@ const laurenChenTemplate = {
       className: 'flex flex-col gap-3',
       heading: {
         path: 'professionalSummary.heading',
-        fallback: 'SUMMARY',
+        fallback: 'Summary',
         className: 'text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1',
       },
       content: {

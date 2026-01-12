@@ -9,41 +9,7 @@ import {
 } from "@features/template-form/lib/get-field-errors";
 import { resolvePath } from "./resolve-path";
 import { renderDivider } from "./components/Divider";
-
-/**
- * Generate data-suggestion attribute value for DOM manipulation approach
- * Format: "sectionId|itemId|fieldName|suggestionType"
- */
-function getSuggestionDataAttribute(
-  sectionId: string | undefined,
-  itemId: string | undefined,
-  fieldPath: string | undefined,
-  errorSuggestions: any[],
-  isThumbnail?: boolean
-): string | undefined {
-  if (
-    isThumbnail ||
-    !errorSuggestions.length ||
-    !sectionId ||
-    !itemId ||
-    !fieldPath
-  ) {
-    return undefined;
-  }
-
-  // Determine primary suggestion type (priority: spelling > sentence > new)
-  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
-    "spelling_error";
-  if (errorSuggestions.some((s) => s.type === "spelling_error")) {
-    suggestionType = "spelling_error";
-  } else if (errorSuggestions.some((s) => s.type === "sentence_refinement")) {
-    suggestionType = "sentence_refinement";
-  } else if (errorSuggestions.some((s) => s.type === "new_summary")) {
-    suggestionType = "new_summary";
-  }
-
-  return `${sectionId}|${itemId}|${fieldPath}|${suggestionType}`;
-}
+import { getSuggestionDataAttribute } from "./suggestion-utils";
 
 export function renderField(
   field: any,

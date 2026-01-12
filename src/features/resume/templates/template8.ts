@@ -176,7 +176,7 @@ const template8 = {
       className: 'flex flex-col mt-4',
       heading: {
         path: 'summary.heading',
-        fallback: 'Professional Summary',
+        fallback: 'Summary',
         className: 'text-base font-bold border-b border-neutral-900 mb-1.5 mt-5',
       },
       content: {

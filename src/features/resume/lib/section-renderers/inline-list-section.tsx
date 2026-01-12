@@ -10,42 +10,7 @@ import {
   getArrayValueSuggestions,
   getSuggestionBackgroundColor,
 } from "@features/template-form/lib/get-field-errors";
-
-/**
- * Generate data-suggestion attribute value for DOM manipulation approach
- * Format: "sectionId|itemId|fieldName|suggestionType"
- * Same as in field-renderer.tsx for consistency
- */
-function getSuggestionDataAttribute(
-  sectionId: string | undefined,
-  itemId: string | undefined,
-  fieldName: string | undefined,
-  valueSuggestions: any[],
-  isThumbnail?: boolean
-): string | undefined {
-  if (
-    isThumbnail ||
-    !valueSuggestions.length ||
-    !sectionId ||
-    !itemId ||
-    !fieldName
-  ) {
-    return undefined;
-  }
-
-  // Determine primary suggestion type (priority: spelling > sentence > new)
-  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
-    "spelling_error";
-  if (valueSuggestions.some((s) => s.type === "spelling_error")) {
-    suggestionType = "spelling_error";
-  } else if (valueSuggestions.some((s) => s.type === "sentence_refinement")) {
-    suggestionType = "sentence_refinement";
-  } else if (valueSuggestions.some((s) => s.type === "new_summary")) {
-    suggestionType = "new_summary";
-  }
-
-  return `${sectionId}|${itemId}|${fieldName}|${suggestionType}`;
-}
+import { getSuggestionDataAttribute } from "../suggestion-utils";
 
 export function renderInlineListSection(
   section: any,
@@ -78,9 +43,10 @@ export function renderInlineListSection(
   const isActive =
     currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const dataKey =
-    sectionId.toLowerCase() === "summary" ? "professionalSummary" : sectionId;
-  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
+  // Get section key from listPath (e.g., "interests.items[0].items" -> "interests")
+  // This is needed for checking suggestions correctly
+  const sectionKey = section.listPath?.split(".")[0];
+  const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
   const shouldBlur =
@@ -106,10 +72,6 @@ export function renderInlineListSection(
       position: "relative",
     }),
   };
-
-  // Get section key from listPath (e.g., "interests.items[0].items" -> "interests")
-  // This matches formData keys - same pattern as list-section
-  const sectionKey = section.listPath?.split(".")[0];
 
   // Extract field name for suggestions lookup
   // The fieldName should be the property within each item that has suggestions
@@ -194,7 +156,7 @@ export function renderInlineListSection(
                 : getSuggestionBackgroundColor(valueSuggestions);
 
               // Use sectionKey (which maps to formData) - same pattern as list-section
-              const formDataSectionKey = sectionKey || dataKey;
+              const formDataSectionKey = sectionKey || sectionId;
 
               // Create suggestion data attribute if we have all required values
               const suggestionData =
@@ -254,7 +216,7 @@ export function renderInlineListSection(
                 : getSuggestionBackgroundColor(valueSuggestions);
 
               // Use sectionKey (which maps to formData) - same pattern as list-section
-              const formDataSectionKey = sectionKey || dataKey;
+              const formDataSectionKey = sectionKey || sectionId;
 
               // Create suggestion data attribute if we have all required values
               const suggestionData =

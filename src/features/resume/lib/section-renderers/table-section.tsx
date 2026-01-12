@@ -8,6 +8,45 @@ import {
   flattenAndFilterItemsWithContext,
 } from "../section-utils";
 import { renderField } from "../field-renderer";
+import {
+  getArrayValueSuggestions,
+  getSuggestionBackgroundColor,
+} from "@features/template-form/lib/get-field-errors";
+
+/**
+ * Generate data-suggestion attribute value for DOM manipulation approach
+ * Format: "sectionId|itemId|fieldName|suggestionType"
+ */
+function getSuggestionDataAttribute(
+  sectionId: string | undefined,
+  itemId: string | undefined,
+  fieldName: string | undefined,
+  valueSuggestions: any[],
+  isThumbnail?: boolean
+): string | undefined {
+  if (
+    isThumbnail ||
+    !valueSuggestions.length ||
+    !sectionId ||
+    !itemId ||
+    !fieldName
+  ) {
+    return undefined;
+  }
+
+  // Determine primary suggestion type (priority: spelling > sentence > new)
+  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
+    "spelling_error";
+  if (valueSuggestions.some((s) => s.type === "spelling_error")) {
+    suggestionType = "spelling_error";
+  } else if (valueSuggestions.some((s) => s.type === "sentence_refinement")) {
+    suggestionType = "sentence_refinement";
+  } else if (valueSuggestions.some((s) => s.type === "new_summary")) {
+    suggestionType = "new_summary";
+  }
+
+  return `${sectionId}|${itemId}|${fieldName}|${suggestionType}`;
+}
 
 // Table section renderer (row-based layout with configurable columns)
 export function renderTableSection(
@@ -147,6 +186,10 @@ export function renderTableSection(
                     col.itemPath
                   );
 
+                  // Determine fieldName for suggestions
+                  // For simple arrays like "skills.items" with itemPath="name", use itemPath
+                  const fieldName = col.itemPath || "items";
+
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
                       if (!iconName) return null;
@@ -164,26 +207,71 @@ export function renderTableSection(
                           col.containerClassName
                         )}
                       >
-                        {allBadgeItems.map((item: any, badgeIdx: number) => {
-                          const value =
-                            typeof item === "object" &&
-                            item !== null &&
-                            "value" in item
-                              ? item.value
-                              : item;
+                        {allBadgeItems.map(({ value, itemId }, badgeIdx: number) => {
+                          const actualValue =
+                            typeof value === "object" &&
+                            value !== null &&
+                            "value" in value
+                              ? value.value
+                              : value;
+
+                          // Get suggestions for this specific value
+                          const valueSuggestions =
+                            itemId && fieldName
+                              ? getArrayValueSuggestions(
+                                  suggestedUpdates,
+                                  itemId,
+                                  fieldName,
+                                  actualValue
+                                )
+                              : [];
+
+                          const errorBgColor = isThumbnail
+                            ? ""
+                            : getSuggestionBackgroundColor(valueSuggestions);
+
+                          // Create suggestion data attribute
+                          const suggestionData =
+                            itemId && fieldName && sectionKey
+                              ? getSuggestionDataAttribute(
+                                  sectionKey,
+                                  itemId,
+                                  fieldName,
+                                  valueSuggestions,
+                                  isThumbnail
+                                )
+                              : undefined;
+
+                          const hasClickableSuggestions = !!suggestionData;
+
                           if (IconComponent) {
                             return (
                               <div key={badgeIdx} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
-                                <span className={col.badgeClassName}>
-                                  {value}
+                                <span
+                                  className={cn(
+                                    col.badgeClassName,
+                                    errorBgColor,
+                                    hasClickableSuggestions && "cursor-pointer"
+                                  )}
+                                  data-suggestion={suggestionData}
+                                >
+                                  {actualValue}
                                 </span>
                               </div>
                             );
                           }
                           return (
-                            <span key={badgeIdx} className={col.badgeClassName}>
-                              {value}
+                            <span
+                              key={badgeIdx}
+                              className={cn(
+                                col.badgeClassName,
+                                errorBgColor,
+                                hasClickableSuggestions && "cursor-pointer"
+                              )}
+                              data-suggestion={suggestionData}
+                            >
+                              {actualValue}
                             </span>
                           );
                         })}
@@ -223,7 +311,9 @@ export function renderTableSection(
                   item,
                   itemId,
                   suggestedUpdates,
-                  isThumbnail
+                  isThumbnail,
+                  undefined,
+                  sectionKey || sectionId
                 );
               } else if (column.type === "inline-group") {
                 const renderedItems = column.items
@@ -234,7 +324,9 @@ export function renderTableSection(
                       item,
                       itemId,
                       suggestedUpdates,
-                      isThumbnail
+                      isThumbnail,
+                      undefined,
+                      sectionKey || sectionId
                     ),
                   }))
                   .filter(
@@ -282,7 +374,9 @@ export function renderTableSection(
                   item,
                   itemId,
                   suggestedUpdates,
-                  isThumbnail
+                  isThumbnail,
+                  undefined,
+                  sectionKey || sectionId
                 );
               } else if (column.type === "html") {
                 content = renderField(
@@ -294,7 +388,9 @@ export function renderTableSection(
                   item,
                   itemId,
                   suggestedUpdates,
-                  isThumbnail
+                  isThumbnail,
+                  undefined,
+                  sectionKey || sectionId
                 );
               } else if (column.type === "text") {
                 content = renderField(
@@ -307,7 +403,9 @@ export function renderTableSection(
                   item,
                   itemId,
                   suggestedUpdates,
-                  isThumbnail
+                  isThumbnail,
+                  undefined,
+                  sectionKey || sectionId
                 );
               } else if (column.type === "group") {
                 // Render a group of fields stacked vertically
@@ -323,7 +421,9 @@ export function renderTableSection(
                             item,
                             itemId,
                             suggestedUpdates,
-                            isThumbnail
+                            isThumbnail,
+                            undefined,
+                            sectionKey || sectionId
                           ),
                         }))
                         .filter(
@@ -383,7 +483,9 @@ export function renderTableSection(
                       item,
                       itemId,
                       suggestedUpdates,
-                      isThumbnail
+                      isThumbnail,
+                      undefined,
+                      sectionKey || sectionId
                     );
                   })
                   .filter(
@@ -409,7 +511,9 @@ export function renderTableSection(
                   item,
                   itemId,
                   suggestedUpdates,
-                  isThumbnail
+                  isThumbnail,
+                  undefined,
+                  sectionKey || sectionId
                 );
               } else if (column.type === "badge-list") {
                 // Render badges from item path (flatten if needed)
@@ -419,6 +523,9 @@ export function renderTableSection(
                       (v: any) =>
                         v && (typeof v !== "string" || v.trim() !== "")
                     );
+
+                // Determine fieldName for suggestions
+                const fieldName = column.itemPath || "items";
 
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
@@ -437,13 +544,45 @@ export function renderTableSection(
                         column.containerClassName
                       )}
                     >
-                      {badgeItems.map((item: any, badgeIdx: number) => {
+                      {badgeItems.map((badgeItem: any, badgeIdx: number) => {
                         const value =
-                          typeof item === "object" &&
-                          item !== null &&
-                          "value" in item
-                            ? item.value
-                            : item;
+                          typeof badgeItem === "object" &&
+                          badgeItem !== null &&
+                          "value" in badgeItem
+                            ? badgeItem.value
+                            : badgeItem;
+
+                        const badgeItemId = badgeItem?.itemId || itemId;
+
+                        // Get suggestions for this specific value
+                        const valueSuggestions =
+                          badgeItemId && fieldName
+                            ? getArrayValueSuggestions(
+                                suggestedUpdates,
+                                badgeItemId,
+                                fieldName,
+                                value
+                              )
+                            : [];
+
+                        const errorBgColor = isThumbnail
+                          ? ""
+                          : getSuggestionBackgroundColor(valueSuggestions);
+
+                        // Create suggestion data attribute
+                        const suggestionData =
+                          badgeItemId && fieldName && sectionKey
+                            ? getSuggestionDataAttribute(
+                                sectionKey,
+                                badgeItemId,
+                                fieldName,
+                                valueSuggestions,
+                                isThumbnail
+                              )
+                            : undefined;
+
+                        const hasClickableSuggestions = !!suggestionData;
+
                         if (IconComponent) {
                           return (
                             <div
@@ -451,7 +590,14 @@ export function renderTableSection(
                               className={column.itemClassName}
                             >
                               <IconComponent className={column.iconClassName} />
-                              <span className={column.badgeClassName}>
+                              <span
+                                className={cn(
+                                  column.badgeClassName,
+                                  errorBgColor,
+                                  hasClickableSuggestions && "cursor-pointer"
+                                )}
+                                data-suggestion={suggestionData}
+                              >
                                 {value}
                               </span>
                             </div>
@@ -460,7 +606,12 @@ export function renderTableSection(
                         return (
                           <span
                             key={badgeIdx}
-                            className={column.badgeClassName}
+                            className={cn(
+                              column.badgeClassName,
+                              errorBgColor,
+                              hasClickableSuggestions && "cursor-pointer"
+                            )}
+                            data-suggestion={suggestionData}
                           >
                             {value}
                           </span>

@@ -1,64 +1,70 @@
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { useFormPageBuilder } from '../models/ctx';
-import { ResumeRenderer } from '@features/resume/renderer';
-import { useFormDataStore } from '../models/store';
-import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
-import TemplateButton from './change-template-button';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Button } from '@shared/ui/button';
-import { Download, GripVertical } from 'lucide-react';
-import { TemplateForm } from '@features/template-form';
-import { camelToHumanString } from '@shared/lib/string';
-import { data as formSchemaData } from '@entities/resume/api/schema-data';
-import { usePdfGeneration } from '../hooks/use-pdf-generation';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
-import { useTemplateManagement } from '../hooks/use-template-management';
-import { usePdfDownload } from '../hooks/use-pdf-download';
-import { useAutoThumbnail } from '../hooks/use-auto-thumbnail';
-import { useSaveAndNext } from '../hooks/use-save-and-next';
-import { useAutoSave } from '../hooks/use-auto-save';
-import { useResizablePanel } from '../hooks/use-resizable-panel';
-import { useSaveResumeForm } from '@entities/resume';
-import { getResumeEmptyData, type ResumeData } from '@entities/resume';
-import { deepMerge } from '@entities/resume/models/use-resume-data';
-import mockData from '../../../../mock-data.json';
-import { toast } from 'sonner';
-import { debounce } from '@shared/lib/utils';
-import type { SuggestedUpdate, SuggestionType } from '@entities/resume';
+import { PreviewButton } from "@shared/ui/components/preview-button";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useFormPageBuilder } from "../models/ctx";
+import { ResumeRenderer } from "@features/resume/renderer";
+import { useFormDataStore } from "../models/store";
+import {
+  getCleanDataForRenderer,
+  syncMockDataWithActualIds,
+} from "../lib/data-cleanup";
+import TemplateButton from "./change-template-button";
+import { TemplatesDialog } from "@widgets/templates-page/ui/templates-dialog";
+import { Button } from "@shared/ui/button";
+import { Download, GripVertical } from "lucide-react";
+import { TemplateForm } from "@features/template-form";
+import { camelToHumanString } from "@shared/lib/string";
+import { data as formSchemaData } from "@entities/resume/api/schema-data";
+import { usePdfGeneration } from "../hooks/use-pdf-generation";
+import { PreviewModal } from "@widgets/templates-page/ui/preview-modal";
+import { useParams, useSearchParams } from "next/navigation";
+import { useThumbnailGeneration } from "../hooks/use-thumbnail-generation";
+import { useTemplateManagement } from "../hooks/use-template-management";
+import { usePdfDownload } from "../hooks/use-pdf-download";
+import { useAutoThumbnail } from "../hooks/use-auto-thumbnail";
+import { useSaveAndNext } from "../hooks/use-save-and-next";
+import { useAutoSave } from "../hooks/use-auto-save";
+import { useResizablePanel } from "../hooks/use-resizable-panel";
+import { useSaveResumeForm } from "@entities/resume";
+import { getResumeEmptyData, type ResumeData } from "@entities/resume";
+import { deepMerge } from "@entities/resume/models/use-resume-data";
+import mockData from "../../../../mock-data.json";
+import { toast } from "sonner";
+import { debounce } from "@shared/lib/utils";
+import type { SuggestedUpdate, SuggestionType } from "@entities/resume";
 import {
   findItemById,
   applySuggestionsToFieldValue,
   applySuggestionsToArrayField,
   removeAppliedSuggestions,
   updateItemFieldValue,
-} from '../lib/suggestion-helpers';
-import { isSectionEmpty } from '../lib/section-utils';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { useQueryClient } from '@tanstack/react-query';
-import AnalyzerModal from '@shared/ui/components/analyzer-modal';
-import { useAnalyzerStore } from '@shared/stores/analyzer-store';
-import { normalizeStringsFields } from '@entities/resume/models/use-resume-data';
-import { formatTimeAgo } from '../lib/time-helpers';
+} from "../lib/suggestion-helpers";
+import { isSectionEmpty } from "../lib/section-utils";
+import { trackEvent } from "@shared/lib/analytics/Mixpanel";
+import { invalidateQueriesIfAllSuggestionsApplied } from "../lib/query-invalidation";
+import { useQueryClient } from "@tanstack/react-query";
+import AnalyzerModal from "@shared/ui/components/analyzer-modal";
+import { useAnalyzerStore } from "@shared/stores/analyzer-store";
+import { normalizeStringsFields } from "@entities/resume/models/use-resume-data";
+import { formatTimeAgo } from "../lib/time-helpers";
+import { useSuggestionClickHandler } from "../hooks/use-suggestion-click-handler";
 
 /**
  * Checks if a field value is empty
  */
 function isFieldEmpty(value: unknown): boolean {
   if (value === null || value === undefined) return true;
-  if (typeof value === 'string') return value.trim() === '';
+  if (typeof value === "string") return value.trim() === "";
   if (Array.isArray(value)) {
     if (value.length === 0) return true;
     // Check if all array items are empty strings
-    return value.every((item) => typeof item === 'string' && item.trim() === '');
+    return value.every(
+      (item) => typeof item === "string" && item.trim() === ""
+    );
   }
-  if (typeof value === 'object') {
+  if (typeof value === "object") {
     // For nested objects like duration, links - check if all nested values are empty
     return Object.entries(value).every(([key, val]) => {
-      if (key === 'ongoing') return true; // Skip boolean flags
+      if (key === "ongoing") return true; // Skip boolean flags
       return isFieldEmpty(val);
     });
   }
@@ -70,13 +76,13 @@ function isFieldEmpty(value: unknown): boolean {
  */
 function mergeItemWithMockFallback(
   formItem: Record<string, unknown>,
-  mockItem: Record<string, unknown>,
+  mockItem: Record<string, unknown>
 ): Record<string, unknown> {
   const merged: Record<string, unknown> = { ...formItem };
 
   for (const [key, mockValue] of Object.entries(mockItem)) {
     // Skip ID fields - always use form IDs
-    if (key === 'id' || key === 'itemId') continue;
+    if (key === "id" || key === "itemId") continue;
 
     const formValue = formItem[key];
 
@@ -96,7 +102,7 @@ function mergeItemWithMockFallback(
  */
 function getRendererDataWithMockFallback(
   formData: Record<string, unknown>,
-  isCreateMode: boolean,
+  isCreateMode: boolean
 ): Record<string, unknown> {
   if (!isCreateMode) {
     return formData;
@@ -107,21 +113,31 @@ function getRendererDataWithMockFallback(
   const mockDataTyped = mockData as Record<string, unknown>;
 
   // Get all keys from both formData and mockData
-  const allKeys = new Set([...Object.keys(formData), ...Object.keys(mockDataTyped)]);
+  const allKeys = new Set([
+    ...Object.keys(formData),
+    ...Object.keys(mockDataTyped),
+  ]);
 
   for (const sectionKey of allKeys) {
-    if (sectionKey === 'templateId' || sectionKey === 'updatedAt') {
+    if (sectionKey === "templateId" || sectionKey === "updatedAt") {
       mergedData[sectionKey] = formData[sectionKey];
       continue;
     }
 
-    const formSection = formData[sectionKey] as Record<string, unknown> | undefined;
-    const mockSection = mockDataTyped[sectionKey] as Record<string, unknown> | undefined;
+    const formSection = formData[sectionKey] as
+      | Record<string, unknown>
+      | undefined;
+    const mockSection = mockDataTyped[sectionKey] as
+      | Record<string, unknown>
+      | undefined;
 
     if (!formSection) {
       // No form section, use mock section with synced IDs
       if (mockSection) {
-        const syncedMock = syncMockDataWithActualIds({ [sectionKey]: formSection }, { [sectionKey]: mockSection });
+        const syncedMock = syncMockDataWithActualIds(
+          { [sectionKey]: formSection },
+          { [sectionKey]: mockSection }
+        );
         mergedData[sectionKey] = syncedMock[sectionKey];
       }
       continue;
@@ -139,13 +155,19 @@ function getRendererDataWithMockFallback(
     };
 
     // Preserve section-level properties from form
-    if ('id' in formSection) mergedSection.id = formSection.id;
-    if ('isHidden' in formSection) mergedSection.isHidden = formSection.isHidden;
-    if ('suggestedUpdates' in formSection) mergedSection.suggestedUpdates = formSection.suggestedUpdates;
+    if ("id" in formSection) mergedSection.id = formSection.id;
+    if ("isHidden" in formSection)
+      mergedSection.isHidden = formSection.isHidden;
+    if ("suggestedUpdates" in formSection)
+      mergedSection.suggestedUpdates = formSection.suggestedUpdates;
 
     // Merge items array at field level
-    const formItems = formSection.items as Array<Record<string, unknown>> | undefined;
-    const mockItems = mockSection.items as Array<Record<string, unknown>> | undefined;
+    const formItems = formSection.items as
+      | Array<Record<string, unknown>>
+      | undefined;
+    const mockItems = mockSection.items as
+      | Array<Record<string, unknown>>
+      | undefined;
 
     if (Array.isArray(mockItems)) {
       // Merge form items with mock items as fallback for empty fields
@@ -167,18 +189,18 @@ function getRendererDataWithMockFallback(
         }
 
         // Handle string items (like in achievements/interests)
-        if (typeof formItem === 'string') {
+        if (typeof formItem === "string") {
           return isFieldEmpty(formItem) ? mockItem : formItem;
         }
 
-        if (typeof formItem !== 'object' || formItem === null) {
+        if (typeof formItem !== "object" || formItem === null) {
           return mockItem;
         }
 
         // Handle object items - merge field by field, preserving form's itemId
         const merged = mergeItemWithMockFallback(
           formItem as Record<string, unknown>,
-          mockItem as Record<string, unknown>,
+          mockItem as Record<string, unknown>
         );
 
         // Always preserve the form's itemId if available
@@ -199,7 +221,8 @@ function getRendererDataWithMockFallback(
 export function FormPageBuilder() {
   const params = useParams();
   const resumeId = params?.id as string;
-  const { resumeData, currentStep, navs, setCurrentStep } = useFormPageBuilder();
+  const { resumeData, currentStep, navs, setCurrentStep } =
+    useFormPageBuilder();
   const setFormData = useFormDataStore((state) => state.setFormData);
   const formData = useFormDataStore((state) => state.formData);
   const formDataResumeId = useFormDataStore((state) => state.formDataResumeId);
@@ -210,7 +233,9 @@ export function FormPageBuilder() {
 
   const searchParams = useSearchParams();
 
-  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(searchParams.get('preview') === 'true');
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(
+    searchParams.get("preview") === "true"
+  );
   const targetRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -232,17 +257,20 @@ export function FormPageBuilder() {
     fieldName: string;
     itemId: string;
     suggestionType: SuggestionType;
+    formDataSectionKey?: string;
   } | null>(null);
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
-  const { selectedTemplate, selectedTemplateId, handleTemplateSelect } = useTemplateManagement({
-    resumeId,
-    initialTemplate: resumeData?.template?.json,
-    initialTemplateId: resumeData?.templateId,
-  });
+  const { selectedTemplate, selectedTemplateId, handleTemplateSelect } =
+    useTemplateManagement({
+      resumeId,
+      initialTemplate: resumeData?.template?.json,
+      initialTemplateId: resumeData?.templateId,
+    });
 
-  const { thumbnailRef, generateAndSaveThumbnail } = useThumbnailGeneration(resumeId);
+  const { thumbnailRef, generateAndSaveThumbnail } =
+    useThumbnailGeneration(resumeId);
 
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
     thumbnailRef,
@@ -255,18 +283,30 @@ export function FormPageBuilder() {
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
   // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes
   const cleanedDataForPreview = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), isGeneratingPDF),
-    [formData, isCreateMode, isGeneratingPDF],
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        isGeneratingPDF
+      ),
+    [formData, isCreateMode, isGeneratingPDF]
   );
 
   const cleanedDataForThumbnail = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), true),
-    [formData, isCreateMode],
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        true
+      ),
+    [formData, isCreateMode]
   );
 
   const cleanedDataForModal = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), false),
-    [formData, isCreateMode],
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        false
+      ),
+    [formData, isCreateMode]
   );
 
   useAutoThumbnail({
@@ -277,7 +317,14 @@ export function FormPageBuilder() {
 
   const { mutateAsync: saveResumeForm } = useSaveResumeForm();
 
-  const save = ({ type, data }: { type: string; data: any; updatedAt: number }) => {
+  const save = ({
+    type,
+    data,
+  }: {
+    type: string;
+    data: any;
+    updatedAt: number;
+  }) => {
     saveResumeForm({ type: type as any, data });
     setLastSaveTime(Date.now());
   };
@@ -307,16 +354,16 @@ export function FormPageBuilder() {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       const isMeta = e.metaKey || e.ctrlKey;
-      if (e.key === 's' && isMeta) {
+      if (e.key === "s" && isMeta) {
         e.preventDefault();
         handleSaveResume();
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleSaveResume]);
 
@@ -324,12 +371,17 @@ export function FormPageBuilder() {
   const hasSuggestions = Boolean(
     formData &&
       Object.values(formData).some((section) => {
-        if (section && typeof section === 'object' && 'suggestedUpdates' in section) {
-          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] }).suggestedUpdates;
+        if (
+          section &&
+          typeof section === "object" &&
+          "suggestedUpdates" in section
+        ) {
+          const suggestedUpdates = (section as { suggestedUpdates?: unknown[] })
+            .suggestedUpdates;
           return Array.isArray(suggestedUpdates) && suggestedUpdates.length > 0;
         }
         return false;
-      }),
+      })
   );
 
   // Debounced function for hide/unhide
@@ -342,28 +394,30 @@ export function FormPageBuilder() {
           updatedAt: Date.now(),
         });
       } catch (error) {
-        console.error('Failed to save section visibility:', error);
-        toast.error('Failed to update section visibility');
+        console.error("Failed to save section visibility:", error);
+        toast.error("Failed to update section visibility");
       }
     }, 1000),
-    [save],
+    [save]
   );
 
   const handleToggleHideSection = useCallback(
     (sectionId: string, isHidden: boolean) => {
       const sectionData = formData[sectionId as keyof typeof formData];
-      if (sectionData && typeof sectionData === 'object') {
+      if (sectionData && typeof sectionData === "object") {
         debouncedHideSave(sectionId, {
           ...(sectionData as Record<string, unknown>),
           isHidden,
         });
-        toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
+        toast.success(
+          isHidden ? `Section hidden from resume` : `Section visible in resume`
+        );
       }
     },
-    [formData, debouncedHideSave],
+    [formData, debouncedHideSave]
   );
 
-  // Callback to open analyzer modal with specific field data
+  // Callback to open analyzer modal with specific field data (for form-based clicks)
   const handleOpenAnalyzerModal = useCallback(
     (itemId: string, fieldName: string, suggestionType: SuggestionType) => {
       // Get suggestions for this specific field and type
@@ -373,7 +427,9 @@ export function FormPageBuilder() {
         return;
       }
 
-      const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
+      const itemUpdate = currentData.suggestedUpdates.find(
+        (update: SuggestedUpdate) => update.itemId === itemId
+      );
 
       if (!itemUpdate || !itemUpdate.fields[fieldName]) {
         return;
@@ -382,7 +438,8 @@ export function FormPageBuilder() {
       const fieldData = itemUpdate.fields[fieldName];
       const suggestions =
         fieldData.suggestedUpdates?.filter(
-          (s: { old?: string; new: string; type: SuggestionType }) => s.type === suggestionType,
+          (s: { old?: string; new: string; type: SuggestionType }) =>
+            s.type === suggestionType
         ) || [];
 
       setAnalyzerModalData({
@@ -390,10 +447,11 @@ export function FormPageBuilder() {
         fieldName,
         itemId,
         suggestionType,
+        formDataSectionKey: currentStep,
       });
       setAnalyzerModalOpen(true);
 
-      trackEvent('builder_intelligence_viewed', {
+      trackEvent("builder_intelligence_viewed", {
         resumeId,
         section: currentStep,
         field: fieldName,
@@ -401,8 +459,95 @@ export function FormPageBuilder() {
         suggestionCount: suggestions.length,
       });
     },
-    [formData, currentStep, resumeId],
+    [formData, currentStep, resumeId]
   );
+
+  // Handler for DOM-based suggestion clicks (from resume renderer)
+  const handleSuggestionClickFromDOM = useCallback(
+    ({
+      sectionId,
+      itemId,
+      fieldName,
+      suggestionType,
+    }: {
+      sectionId: string;
+      itemId: string;
+      fieldName: string;
+      suggestionType: "spelling_error" | "sentence_refinement" | "new_summary";
+    }) => {
+      // Map template sectionId to formData key
+      const sectionToFormDataMap: Record<string, string> = {
+        personaldetails: "personalDetails",
+        "header-section": "personalDetails",
+        header: "personalDetails",
+        summary: "professionalSummary",
+        professionalsummary: "professionalSummary",
+        experience: "experience",
+        education: "education",
+        skills: "skills",
+        projects: "projects",
+        certifications: "certifications",
+        interests: "interests",
+        achievements: "achievements",
+      };
+
+      const formDataSectionKey =
+        sectionToFormDataMap[sectionId.toLowerCase()] || sectionId;
+
+      // Get section data from formData
+      const sectionData = formData?.[formDataSectionKey];
+
+      if (!sectionData || !sectionData.suggestedUpdates) {
+        return;
+      }
+
+      // Find suggestions for this item and field
+      const itemUpdate = sectionData.suggestedUpdates.find(
+        (update: SuggestedUpdate) => update.itemId === itemId
+      );
+
+      if (!itemUpdate || !itemUpdate.fields[fieldName]) {
+        return;
+      }
+
+      const fieldData = itemUpdate.fields[fieldName];
+
+      const suggestions =
+        fieldData.suggestedUpdates?.filter(
+          (s: { old?: string; new: string; type: SuggestionType }) =>
+            s.type === suggestionType
+        ) || [];
+
+      if (suggestions.length === 0) {
+        return;
+      }
+
+      setAnalyzerModalData({
+        suggestions,
+        fieldName,
+        itemId,
+        suggestionType,
+        formDataSectionKey,
+      });
+      setAnalyzerModalOpen(true);
+
+      trackEvent("builder_intelligence_viewed", {
+        resumeId,
+        section: formDataSectionKey,
+        field: fieldName,
+        suggestionType,
+        suggestionCount: suggestions.length,
+      });
+    },
+    [formData, resumeId]
+  );
+
+  // Use DOM event delegation for suggestion clicks
+  useSuggestionClickHandler({
+    containerRef: targetRef,
+    onSuggestionClick: handleSuggestionClickFromDOM,
+    enabled: hasSuggestions && !isGeneratingPDF,
+  });
 
   const handleApplySuggestions = useCallback(
     async (
@@ -410,15 +555,21 @@ export function FormPageBuilder() {
         old?: string;
         new: string;
         type: SuggestionType;
-      }>,
+      }>
     ) => {
       if (!analyzerModalData) return;
 
-      const { itemId, fieldName } = analyzerModalData;
-      const currentData = formData?.[currentStep];
+      const { itemId, fieldName, formDataSectionKey } = analyzerModalData;
+      // Use formDataSectionKey if available (from DOM clicks), otherwise fallback to currentStep
+      const sectionKey = formDataSectionKey || currentStep;
+      const currentData = formData?.[sectionKey];
 
-      if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
-        toast.error('Failed to apply suggestions');
+      if (
+        !currentData ||
+        !currentData.items ||
+        !Array.isArray(currentData.items)
+      ) {
+        toast.error("Failed to apply suggestions");
         return;
       }
 
@@ -427,17 +578,19 @@ export function FormPageBuilder() {
         const itemIndex = findItemById(items, itemId);
 
         if (itemIndex === -1) {
-          toast.error('Item not found');
+          toast.error("Item not found");
           return;
         }
 
         const currentItem = items[itemIndex];
-        if (typeof currentItem !== 'object' || currentItem === null) {
-          toast.error('Invalid item type');
+        if (typeof currentItem !== "object" || currentItem === null) {
+          toast.error("Invalid item type");
           return;
         }
 
-        const currentFieldValue = (currentItem as Record<string, unknown>)[fieldName];
+        const currentFieldValue = (currentItem as Record<string, unknown>)[
+          fieldName
+        ];
 
         // Check if field value is an array (for achievements, interests)
         const isArrayField = Array.isArray(currentFieldValue);
@@ -445,33 +598,45 @@ export function FormPageBuilder() {
         let updatedFieldValue: string | string[];
 
         if (isArrayField) {
-          updatedFieldValue = applySuggestionsToArrayField(currentFieldValue as string[], selectedSuggestions);
+          updatedFieldValue = applySuggestionsToArrayField(
+            currentFieldValue as string[],
+            selectedSuggestions
+          );
         } else {
-          updatedFieldValue = applySuggestionsToFieldValue(currentFieldValue as string, selectedSuggestions);
+          updatedFieldValue = applySuggestionsToFieldValue(
+            currentFieldValue as string,
+            selectedSuggestions
+          );
         }
 
         // Check if suggestions were actually applied
         const hasChanged = isArrayField
-          ? JSON.stringify(updatedFieldValue) !== JSON.stringify(currentFieldValue)
+          ? JSON.stringify(updatedFieldValue) !==
+            JSON.stringify(currentFieldValue)
           : updatedFieldValue !== currentFieldValue;
 
         if (!hasChanged) {
-          toast.error('Suggestions could not be applied');
+          toast.error("Suggestions could not be applied");
           return;
         }
 
-        const updatedItems = updateItemFieldValue(items, itemIndex, fieldName, updatedFieldValue);
+        const updatedItems = updateItemFieldValue(
+          items,
+          itemIndex,
+          fieldName,
+          updatedFieldValue
+        );
 
         const updatedSuggestedUpdates = removeAppliedSuggestions(
           currentData.suggestedUpdates,
           itemId,
           fieldName,
-          selectedSuggestions,
+          selectedSuggestions
         );
 
-        trackEvent('builder_intelligence_applied', {
+        trackEvent("builder_intelligence_applied", {
           resumeId,
-          section: currentStep,
+          section: sectionKey,
           field: fieldName,
           suggestionType: analyzerModalData.suggestionType,
           count: selectedSuggestions.length,
@@ -479,27 +644,33 @@ export function FormPageBuilder() {
 
         const updatedData = {
           ...formData,
-          [currentStep]: {
+          [sectionKey]: {
             ...currentData,
             items: updatedItems,
             suggestedUpdates:
-              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
+              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
+                ? updatedSuggestedUpdates
+                : undefined,
           },
         };
 
-        setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
+        setFormData(updatedData as Omit<ResumeData, "templateId">, resumeId);
 
         // Check if all suggestions are applied and invalidate queries if needed
-        invalidateQueriesIfAllSuggestionsApplied(queryClient, updatedData, resumeId);
+        invalidateQueriesIfAllSuggestionsApplied(
+          queryClient,
+          updatedData,
+          resumeId
+        );
 
-        toast.success('Suggestions applied successfully.');
+        toast.success("Suggestions applied successfully.");
         setAnalyzerModalOpen(false);
       } catch (error) {
-        console.error('❌ Failed to apply suggestions:', error);
-        toast.error('Failed to apply suggestions');
+        console.error("❌ Failed to apply suggestions:", error);
+        toast.error("Failed to apply suggestions");
       }
     },
-    [analyzerModalData, formData, currentStep, resumeId, queryClient, setFormData],
+    [analyzerModalData, formData, resumeId, queryClient, setFormData]
   );
 
   useEffect(() => {
@@ -512,13 +683,16 @@ export function FormPageBuilder() {
       // Deep merge analyzer data with empty data to ensure all fields have default values
       let processedData: Record<string, any> = { ...analyzedData };
       for (const key of Object.keys(emptyData)) {
-        processedData[key] = deepMerge(processedData[key], (emptyData as Record<string, any>)[key]);
+        processedData[key] = deepMerge(
+          processedData[key],
+          (emptyData as Record<string, any>)[key]
+        );
       }
 
       // Normalize string fields (interests, achievements)
       processedData = normalizeStringsFields(processedData);
 
-      setFormData(processedData as Omit<ResumeData, 'templateId'>, resumeId);
+      setFormData(processedData as Omit<ResumeData, "templateId">, resumeId);
     }
 
     if (!resumeId) {
@@ -535,7 +709,8 @@ export function FormPageBuilder() {
     // Only preserve suggestions if formData belongs to this resume
     const isSameResume = formDataResumeId === resumeId;
     if (isSameResume) {
-      const hasSuggestionsInData = (data: any) => Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
+      const hasSuggestionsInData = (data: any) =>
+        Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
 
       // If formData has suggestions but resumeData doesn't, preserve formData
       if (hasSuggestionsInData(formData) && !hasSuggestionsInData(resumeData)) {
@@ -545,10 +720,12 @@ export function FormPageBuilder() {
 
     // Determine if this is create flow (all sections empty) or edit flow (has data)
     const sectionKeys = Object.keys(resumeData).filter(
-      (key) => key !== 'templateId' && key !== 'updatedAt' && key !== 'template',
+      (key) => key !== "templateId" && key !== "updatedAt" && key !== "template"
     );
 
-    const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(resumeData[key as keyof typeof resumeData]));
+    const allSectionsEmpty = sectionKeys.every((key) =>
+      isSectionEmpty(resumeData[key as keyof typeof resumeData])
+    );
 
     if (allSectionsEmpty) {
       // Create flow: Set create mode flag
@@ -556,13 +733,20 @@ export function FormPageBuilder() {
       // Preview will use mock data via getRendererDataWithMockFallback
       setIsCreateMode(true);
       // Use the empty resumeData directly for the form (no mock data)
-      setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
+      setFormData(resumeData as Omit<ResumeData, "templateId">, resumeId);
     } else {
       // Edit flow: Use actual data as-is
       setIsCreateMode(false);
-      setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
+      setFormData(resumeData as Omit<ResumeData, "templateId">, resumeId);
     }
-  }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
+  }, [
+    resumeId,
+    resumeData,
+    analyzedData,
+    analyzerResumeId,
+    setFormData,
+    formDataResumeId,
+  ]);
 
   // Initialize last save time from resume data
   useEffect(() => {
@@ -595,15 +779,15 @@ export function FormPageBuilder() {
 
     // Map step names to template section IDs
     const stepToSectionMap: Record<string, string> = {
-      personalDetails: 'header',
-      experience: 'experience',
-      education: 'education',
-      skills: 'skills',
-      projects: 'projects',
-      certifications: 'certifications',
-      interests: 'interests',
-      achievements: 'achievements',
-      professionalSummary: 'summary',
+      personalDetails: "header",
+      experience: "experience",
+      education: "education",
+      skills: "skills",
+      projects: "projects",
+      certifications: "certifications",
+      interests: "interests",
+      achievements: "achievements",
+      professionalSummary: "summary",
     };
 
     const sectionId = stepToSectionMap[currentStep];
@@ -612,7 +796,9 @@ export function FormPageBuilder() {
     // Small delay to ensure DOM is ready
     const scrollTimer = setTimeout(() => {
       // Find the section element by data-section attribute
-      const sectionElement = targetRef.current?.querySelector(`[data-section="${sectionId}"]`) as HTMLElement;
+      const sectionElement = targetRef.current?.querySelector(
+        `[data-section="${sectionId}"]`
+      ) as HTMLElement;
 
       if (sectionElement && scrollContainerRef.current) {
         // Get the container's scroll position and dimensions
@@ -621,12 +807,13 @@ export function FormPageBuilder() {
         const sectionRect = sectionElement.getBoundingClientRect();
 
         // Calculate the scroll position to center the section
-        const scrollTop = container.scrollTop + sectionRect.top - containerRect.top - 100; // 100px offset from top
+        const scrollTop =
+          container.scrollTop + sectionRect.top - containerRect.top - 100; // 100px offset from top
 
         // Smooth scroll to the section
         container.scrollTo({
           top: scrollTop,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }, 100);
@@ -641,8 +828,8 @@ export function FormPageBuilder() {
         className="overflow-auto pt-4 pb-8 scroll-hidden h-[calc(100vh)] px-3 relative"
         style={{
           width: `${leftWidth}%`,
-          minWidth: '30%',
-          maxWidth: '70%',
+          minWidth: "30%",
+          maxWidth: "70%",
           flexShrink: 0,
         }}
       >
@@ -650,12 +837,15 @@ export function FormPageBuilder() {
           <PreviewButton onClick={() => setIsPreviewModalOpen(true)} />
         </div>
 
-        <div className="min-w-0 flex-1 flex justify-center relative" ref={previewWrapperRef}>
+        <div
+          className="min-w-0 flex-1 flex justify-center relative"
+          ref={previewWrapperRef}
+        >
           <div
             ref={targetRef}
             style={{
               transform: `scale(${previewScale})`,
-              transformOrigin: 'top center',
+              transformOrigin: "top center",
             }}
           >
             {selectedTemplate ? (
@@ -675,14 +865,14 @@ export function FormPageBuilder() {
           </div>
           <div
             style={{
-              position: 'absolute',
-              left: '0',
-              top: '0',
-              width: '794px',
-              height: '0',
-              overflow: 'hidden',
-              pointerEvents: 'none',
-              visibility: 'hidden',
+              position: "absolute",
+              left: "0",
+              top: "0",
+              width: "794px",
+              height: "0",
+              overflow: "hidden",
+              pointerEvents: "none",
+              visibility: "hidden",
               zIndex: -1,
             }}
             aria-hidden="true"
@@ -766,7 +956,7 @@ export function FormPageBuilder() {
         className="w-3 cursor-col-resize flex items-center justify-center bg-gray-200 active:bg-blue-100 transition-colors z-50 shrink-0"
         onMouseDown={startResizing}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             startResizing();
           }
         }}
@@ -780,8 +970,8 @@ export function FormPageBuilder() {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
-            backgroundSize: '20px 20px',
+            background: "radial-gradient(circle, #ccc 1px, transparent 1px)",
+            backgroundSize: "20px 20px",
           }}
         />
 
@@ -810,7 +1000,9 @@ export function FormPageBuilder() {
         <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
           {/* Last Save Time on the left */}
           <div className="flex-1 flex justify-start">
-            {getFormattedSaveTime() && <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>}
+            {getFormattedSaveTime() && (
+              <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>
+            )}
           </div>
 
           {/* Next Button on the right */}
@@ -839,11 +1031,11 @@ export function FormPageBuilder() {
       {selectedTemplate && (
         <PreviewModal
           template={{
-            id: selectedTemplateId ?? '',
+            id: selectedTemplateId ?? "",
             json: selectedTemplate,
-            publicImageUrl: '',
-            createdAt: '',
-            updatedAt: '',
+            publicImageUrl: "",
+            createdAt: "",
+            updatedAt: "",
           }}
           isOpen={isPreviewModalOpen}
           onClose={() => setIsPreviewModalOpen(false)}

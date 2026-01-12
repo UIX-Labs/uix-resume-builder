@@ -10,13 +10,49 @@ import {
 import { resolvePath } from "./resolve-path";
 import { renderDivider } from "./components/Divider";
 
+/**
+ * Generate data-suggestion attribute value for DOM manipulation approach
+ * Format: "sectionId|itemId|fieldName|suggestionType"
+ */
+function getSuggestionDataAttribute(
+  sectionId: string | undefined,
+  itemId: string | undefined,
+  fieldPath: string | undefined,
+  errorSuggestions: any[],
+  isThumbnail?: boolean
+): string | undefined {
+  if (
+    isThumbnail ||
+    !errorSuggestions.length ||
+    !sectionId ||
+    !itemId ||
+    !fieldPath
+  ) {
+    return undefined;
+  }
+
+  // Determine primary suggestion type (priority: spelling > sentence > new)
+  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
+    "spelling_error";
+  if (errorSuggestions.some((s) => s.type === "spelling_error")) {
+    suggestionType = "spelling_error";
+  } else if (errorSuggestions.some((s) => s.type === "sentence_refinement")) {
+    suggestionType = "sentence_refinement";
+  } else if (errorSuggestions.some((s) => s.type === "new_summary")) {
+    suggestionType = "new_summary";
+  }
+
+  return `${sectionId}|${itemId}|${fieldPath}|${suggestionType}`;
+}
+
 export function renderField(
   field: any,
   data: any,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
-  skipImageFallbacks?: boolean
+  skipImageFallbacks?: boolean,
+  sectionId?: string
 ): React.ReactNode {
   const fieldPath = field.path?.split(".").pop(); // Get the field name from path like "experience.items[0].description"
   const errorSuggestions = fieldPath
@@ -25,6 +61,14 @@ export function renderField(
   const errorBgColor = isThumbnail
     ? ""
     : getSuggestionBackgroundColor(errorSuggestions);
+  const suggestionData = getSuggestionDataAttribute(
+    sectionId,
+    itemId,
+    fieldPath,
+    errorSuggestions,
+    isThumbnail
+  );
+  const hasSuggestions = !!suggestionData;
 
   if (field.type === "container") {
     return (
@@ -37,7 +81,8 @@ export function renderField(
               itemId,
               suggestedUpdates,
               isThumbnail,
-              skipImageFallbacks
+              skipImageFallbacks,
+              sectionId
             )}
           </React.Fragment>
         ))}
@@ -72,8 +117,10 @@ export function renderField(
         className={cn(
           "inline-flex items-center gap-1 rounded-full py-1 px-2",
           field.badgeClassName,
-          errorBgColor
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
         )}
+        data-suggestion={suggestionData}
       >
         {iconElement}
         {value}
@@ -103,7 +150,18 @@ export function renderField(
 
     if (!value) return null;
     const text = `${field.prefix || ""}${value}${field.suffix || ""}`;
-    return <span className={cn(field.className, errorBgColor)}>{text}</span>;
+    return (
+      <span
+        className={cn(
+          field.className,
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
+        )}
+        data-suggestion={suggestionData}
+      >
+        {text}
+      </span>
+    );
   }
 
   if (field.type === "contact-grid") {
@@ -125,7 +183,8 @@ export function renderField(
               itemId,
               suggestedUpdates,
               isThumbnail,
-              skipImageFallbacks
+              skipImageFallbacks,
+              sectionId
             )}
           </React.Fragment>
         ))}
@@ -145,7 +204,8 @@ export function renderField(
               itemId,
               suggestedUpdates,
               isThumbnail,
-              skipImageFallbacks
+              skipImageFallbacks,
+              sectionId
             )}
           </React.Fragment>
         ))}
@@ -164,7 +224,8 @@ export function renderField(
           itemId,
           suggestedUpdates,
           isThumbnail,
-          skipImageFallbacks
+          skipImageFallbacks,
+          sectionId
         ),
       }))
       .filter(
@@ -210,7 +271,14 @@ export function renderField(
     }
 
     // Otherwise return just the content
-    return <span className={cn(errorBgColor)}>{content}</span>;
+    return (
+      <span
+        className={cn(errorBgColor, hasSuggestions && "cursor-pointer")}
+        data-suggestion={suggestionData}
+      >
+        {content}
+      </span>
+    );
   }
 
   if (field.type === "icon") {
@@ -270,7 +338,8 @@ export function renderField(
               itemId,
               suggestedUpdates,
               isThumbnail,
-              skipImageFallbacks
+              skipImageFallbacks,
+              sectionId
             )}
           </React.Fragment>
         ))}
@@ -281,7 +350,18 @@ export function renderField(
   if (field.type === "text") {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
-    return <p className={cn(field.className, errorBgColor)}>{value}</p>;
+    return (
+      <p
+        className={cn(
+          field.className,
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
+        )}
+        data-suggestion={suggestionData}
+      >
+        {value}
+      </p>
+    );
   }
 
   if (field.type === "skillLevel") {
@@ -297,7 +377,15 @@ export function renderField(
     const circleCount = levelMap[value] || 3;
 
     return (
-      <div className={cn("flex gap-1", field.className, errorBgColor)}>
+      <div
+        className={cn(
+          "flex gap-1",
+          field.className,
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
+        )}
+        data-suggestion={suggestionData}
+      >
         {Array.from({ length: 5 }, (_, index) => (
           <div
             key={index}
@@ -320,7 +408,8 @@ export function renderField(
         itemId,
         suggestedUpdates,
         isThumbnail,
-        skipImageFallbacks
+        skipImageFallbacks,
+        sectionId
       ),
       isIcon: subField.type === "icon",
       subField,
@@ -372,7 +461,12 @@ export function renderField(
       const end = dayjs(duration.endDate).format("MMM YYYY");
       return (
         <span
-          className={cn(field.className, errorBgColor)}
+          className={cn(
+            field.className,
+            errorBgColor,
+            hasSuggestions && "cursor-pointer"
+          )}
+          data-suggestion={suggestionData}
         >{`${start} - ${end}`}</span>
       );
     }
@@ -381,7 +475,12 @@ export function renderField(
       const start = dayjs(duration.startDate).format("MMM YYYY");
       return (
         <span
-          className={cn(field.className, errorBgColor)}
+          className={cn(
+            field.className,
+            errorBgColor,
+            hasSuggestions && "cursor-pointer"
+          )}
+          data-suggestion={suggestionData}
         >{`${start} - Present`}</span>
       );
     }
@@ -394,11 +493,16 @@ export function renderField(
     if (!value) return null;
     return (
       <div
-        className={cn(field.className, errorBgColor)}
+        className={cn(
+          field.className,
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
+        )}
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
         dangerouslySetInnerHTML={{ __html: value }}
         data-canbreak={field.break !== false ? "true" : undefined}
         data-has-breakable-content={field.break !== false ? "true" : undefined}
+        data-suggestion={suggestionData}
       />
     );
   }
@@ -444,9 +548,20 @@ export function renderField(
     return (
       <a
         href={href}
-        className={cn(field.className, errorBgColor)}
+        className={cn(
+          field.className,
+          errorBgColor,
+          hasSuggestions && "cursor-pointer"
+        )}
         target="_blank"
         rel="noopener noreferrer"
+        data-suggestion={suggestionData}
+        onClick={(e) => {
+          // Prevent navigation if it has suggestions (will be handled by event delegation)
+          if (suggestionData) {
+            e.preventDefault();
+          }
+        }}
       >
         {value}
       </a>
@@ -457,7 +572,18 @@ export function renderField(
   if (!value) return null;
 
   const text = `${field.prefix || ""}${value}${field.suffix || ""}`;
-  return <span className={cn(field.className, errorBgColor)}>{text}</span>;
+  return (
+    <span
+      className={cn(
+        field.className,
+        errorBgColor,
+        hasSuggestions && "cursor-pointer"
+      )}
+      data-suggestion={suggestionData}
+    >
+      {text}
+    </span>
+  );
 }
 
 export function renderItemWithRows(
@@ -465,9 +591,9 @@ export function renderItemWithRows(
   item: any,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
+  sectionId?: string
 ): React.ReactNode {
-  console.log("rows", template.rows);
   return template.rows.map((row: any, rowIdx: number) => {
     // Check if any cell in this row has break/breakable: true
     const hasBreakableCell = row.cells.some(
@@ -485,7 +611,15 @@ export function renderItemWithRows(
       >
         {row.cells.map((cell: any, cellIdx: number) => (
           <React.Fragment key={cellIdx}>
-            {renderField(cell, item, itemId, suggestedUpdates, isThumbnail)}
+            {renderField(
+              cell,
+              item,
+              itemId,
+              suggestedUpdates,
+              isThumbnail,
+              undefined,
+              sectionId
+            )}
           </React.Fragment>
         ))}
       </div>
@@ -498,9 +632,9 @@ export function renderItemWithFields(
   item: any,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
+  sectionId?: string
 ): React.ReactNode {
-  console.log("fields", template.fields);
   return template.fields.map((field: any, idx: number) => (
     <div
       key={idx}
@@ -509,7 +643,15 @@ export function renderItemWithFields(
         field.break || field.breakable ? "true" : undefined
       }
     >
-      {renderField(field, item, itemId, suggestedUpdates, isThumbnail)}
+      {renderField(
+        field,
+        item,
+        itemId,
+        suggestedUpdates,
+        isThumbnail,
+        undefined,
+        sectionId
+      )}
     </div>
   ));
 }

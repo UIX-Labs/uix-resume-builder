@@ -1,6 +1,5 @@
 import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import React from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderSection } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
@@ -65,9 +64,19 @@ function ResumeRendererComponent({
       const testContainer = document.createElement('div');
       testContainer.style.position = 'absolute';
       testContainer.style.visibility = 'hidden';
-      testContainer.style.width = columnEl.style.width || getComputedStyle(columnEl).width;
       testContainer.style.left = '-9999px';
+      testContainer.style.top = '0';
+
+      // Copy all computed styles from the column to ensure accurate measurements
+      const columnStyles = getComputedStyle(columnEl);
+      testContainer.style.width = columnStyles.width;
+      testContainer.style.fontFamily = columnStyles.fontFamily;
+      testContainer.style.fontSize = columnStyles.fontSize;
+      testContainer.style.lineHeight = columnStyles.lineHeight;
+      testContainer.style.letterSpacing = columnStyles.letterSpacing;
+      testContainer.style.wordSpacing = columnStyles.wordSpacing;
       testContainer.className = columnEl.className;
+
       document.body.appendChild(testContainer);
 
       // State management
@@ -328,10 +337,10 @@ function ResumeRendererComponent({
         return (
           <div
             key={index}
-            className={cn('grid mb-5', page.className, className)}
+            className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
-              minHeight: '29.7cm',
+              [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',

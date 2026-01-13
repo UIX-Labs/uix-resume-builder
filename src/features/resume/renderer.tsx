@@ -142,7 +142,7 @@ function ResumeRendererComponent({
 
         for (const child of children) {
           const tagName = child.tagName?.toLowerCase();
-          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div', 'li'].includes(tagName);
+          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div'].includes(tagName);
           const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
           const hasBreakableContent =
             child.querySelector('[data-canbreak="true"]') !== null ||
@@ -331,7 +331,7 @@ function ResumeRendererComponent({
             className={cn('grid mb-5', page.className, className)}
             style={{
               ...baseStyle,
-              height: '29.7cm',
+              minHeight: '29.7cm',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
               gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
@@ -356,20 +356,24 @@ function ResumeRendererComponent({
             )}
             <div
               className={cn('flex flex-col', leftColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {leftColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
             <div
               className={cn('flex flex-col', rightColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {rightColumn.map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
           </div>

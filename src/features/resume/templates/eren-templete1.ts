@@ -342,7 +342,8 @@ const enjiTemplate = {
               type: 'html',
               path: 'description',
               break: true,
-              className: 'text-[12px] text-slate-700 leading-relaxed',
+              className:
+                'text-xs text-slate-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
             },
           ],
         },
@@ -354,7 +355,7 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
+      // containerClassName: 'space-y-4',
       rowClassName: 'items-start px-16 pt-4 pb-4',
       divider: {
         variant: 'line',
@@ -370,7 +371,7 @@ const enjiTemplate = {
       break: true,
       heading: {
         path: 'projects.heading',
-        fallback: 'Featured Project',
+        fallback: 'Projects',
         className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'projects.items',
@@ -399,7 +400,8 @@ const enjiTemplate = {
               type: 'html',
               path: 'description',
               break: true,
-              className: 'text-[12px] text-slate-700 leading-relaxed',
+              className:
+                'text-xs text-slate-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
             },
             {
               type: 'link',
@@ -505,7 +507,7 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
+      containerClassName: '',
       rowClassName: 'items-start px-16 pt-4 pb-4',
       divider: {
         variant: 'line',

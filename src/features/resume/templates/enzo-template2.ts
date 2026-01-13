@@ -151,7 +151,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-sm font-bold pt-4',
+                className: 'text-xs font-bold pt-4',
               },
             ],
           },
@@ -205,7 +205,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'degree',
-                className: 'text-sm font-bold',
+                className: 'text-xs font-bold',
               },
             ],
           },
@@ -310,7 +310,7 @@ const enzoTemplate2 = {
               {
                 path: 'title',
                 fallback: 'Project Title',
-                className: 'text-sm font-bold',
+                className: 'text-xs font-bold',
               },
             ],
           },

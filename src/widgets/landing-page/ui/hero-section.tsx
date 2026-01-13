@@ -1,19 +1,19 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
-import { MobileTextView } from './mobile-text-view';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useState, useMemo } from 'react';
+import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import getCurrentStatsQuery from '../api/query';
 import CountUp from '@shared/ui/count-up';
-import { getUserInitials } from '../lib/user-initials';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
+import getCurrentStatsQuery from '../api/query';
+import { getUserInitials } from '../lib/user-initials';
+import { MobileTextView } from './mobile-text-view';
 
 const HeroSection = () => {
   const router = useRouter();
@@ -200,24 +200,19 @@ const HeroSection = () => {
         </div>
 
         <div className="mt-7 md:mt-10 flex flex-col items-center gap-3 md:gap-[16px]">
-          {/* Claim Free Access (image button) */}
           <div className="relative inline-flex flex-col items-center">
             {!user && (
-              <Image
-                src="/images/claim-free-access.svg"
-                alt="Claim Free Access"
-                width={120}
-                height={36}
-                className="
-    absolute 
-    -top-3 md:-top-6 
-    -left-4 md:-left-7
-    h-6 md:h-9 w-auto
-    z-20
-    pointer-events-none
-  "
-                priority
-              />
+              <button
+                type="button"
+                className="absolute -left-1/4 -top-1/4 z-100 flex-shrink-0 flex items-center gap-1/2 md:gap-2 px-3 py-1.5 md:px-5 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold text-white cursor-pointer transition-opacity hover:opacity-90"
+                style={{
+                  background: 'linear-gradient(135deg, #ADE4DB 0%, #5DC4E4 50%, #28A5EE 100%)',
+                }}
+              >
+                <Image src="/images/flash-img.svg" alt="" width={24} height={24} className="w-3 h-3 md:w-6 md:h-6" />
+                <span className="hidden md:inline">Claim Free Access</span>
+                <Image src="/images/flash-img.svg" alt="" width={16} height={16} className="w-3 h-3 md:w-6 md:h-6" />
+              </button>
             )}
 
             <Button

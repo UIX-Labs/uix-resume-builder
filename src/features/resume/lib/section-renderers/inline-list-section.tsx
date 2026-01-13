@@ -5,6 +5,7 @@ import { renderDivider } from "../components/Divider";
 import {
   hasPendingSuggestions,
   flattenAndFilterItemsWithContext,
+  extractRenderableValue,
 } from "../section-utils";
 import {
   getArrayValueSuggestions,
@@ -132,10 +133,13 @@ export function renderInlineListSection(
             )}
           >
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
-              const actualValue =
-                typeof value === "object" && value !== null && "value" in value
-                  ? value.value
-                  : value;
+              // Extract renderable value - will return null for complex objects
+              const actualValue = extractRenderableValue(value);
+
+              // Skip rendering if we can't extract a renderable value
+              if (actualValue === null) {
+                return null;
+              }
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier
@@ -192,10 +196,13 @@ export function renderInlineListSection(
         ) : (
           <div className={section.containerClassName}>
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
-              const actualValue =
-                typeof value === "object" && value !== null && "value" in value
-                  ? value.value
-                  : value;
+              // Extract renderable value - will return null for complex objects
+              const actualValue = extractRenderableValue(value);
+
+              // Skip rendering if we can't extract a renderable value
+              if (actualValue === null) {
+                return null;
+              }
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier
@@ -241,7 +248,7 @@ export function renderInlineListSection(
                     )}
                     data-suggestion={suggestionData}
                   >
-                    {value}
+                    {actualValue}
                   </span>
                   {idx < flattenedItemsWithContext.length - 1 &&
                     section.itemSeparator && (

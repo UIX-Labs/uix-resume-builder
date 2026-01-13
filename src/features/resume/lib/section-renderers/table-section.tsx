@@ -6,6 +6,7 @@ import { renderDivider } from "../components/Divider";
 import {
   hasPendingSuggestions,
   flattenAndFilterItemsWithContext,
+  extractRenderableValue,
 } from "../section-utils";
 import { renderField } from "../field-renderer";
 import {
@@ -172,12 +173,13 @@ export function renderTableSection(
                         )}
                       >
                         {allBadgeItems.map(({ value, itemId }, badgeIdx: number) => {
-                          const actualValue =
-                            typeof value === "object" &&
-                            value !== null &&
-                            "value" in value
-                              ? value.value
-                              : value;
+                          // Extract renderable value - will return null for complex objects
+                          const actualValue = extractRenderableValue(value);
+
+                          // Skip rendering if we can't extract a renderable value
+                          if (actualValue === null) {
+                            return null;
+                          }
 
                           // Get suggestions for this specific value
                           const valueSuggestions =
@@ -509,12 +511,13 @@ export function renderTableSection(
                       )}
                     >
                       {badgeItems.map((badgeItem: any, badgeIdx: number) => {
-                        const value =
-                          typeof badgeItem === "object" &&
-                          badgeItem !== null &&
-                          "value" in badgeItem
-                            ? badgeItem.value
-                            : badgeItem;
+                        // Extract renderable value - will return null for complex objects
+                        const value = extractRenderableValue(badgeItem);
+
+                        // Skip rendering if we can't extract a renderable value
+                        if (value === null) {
+                          return null;
+                        }
 
                         const badgeItemId = badgeItem?.itemId || itemId;
 

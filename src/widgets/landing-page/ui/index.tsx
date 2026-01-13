@@ -31,9 +31,9 @@ export function LandingPage() {
         <JDSection />
       </div>
 
-      <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
+      {/* <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
         <AITailorSection />
-      </div>
+      </div> */}
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"

@@ -1,96 +1,188 @@
-import type React from 'react';
-import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
-import { renderDivider } from '../components/Divider';
-import { hasPendingSuggestions, flattenAndFilterItemsWithContext } from '../section-utils';
-import { getArrayValueSuggestions } from '@features/template-form/lib/get-field-errors';
+import type React from "react";
+import { cn } from "@shared/lib/cn";
+import { resolvePath } from "../resolve-path";
+import { renderDivider } from "../components/Divider";
+import {
+  hasPendingSuggestions,
+  flattenAndFilterItemsWithContext,
+} from "../section-utils";
+import {
+  getArrayValueSuggestions,
+  getSuggestionBackgroundColor,
+} from "@features/template-form/lib/get-field-errors";
+import { getSuggestionDataAttribute } from "../suggestion-utils";
 
 export function renderInlineListSection(
   section: any,
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
-  isThumbnail?: boolean,
+  isThumbnail?: boolean
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
   let parentId: string | undefined;
-
-  if (section.listPath.includes('[0].items')) {
-    const parentPath = section.listPath.replace(/\[0\]\.items$/, '[0]');
+  // Extract parent itemId for nested paths like "interests.items[0].items"
+  if (section.listPath?.includes("[0].items")) {
+    // Get parent path by removing everything after [0].
+    // e.g., "interests.items[0].items" -> "interests.items[0]"
+    const parentPath = section.listPath.replace(/\[0\]\.items$/, "[0]");
     const parentObj = resolvePath(data, parentPath);
-    parentId = parentObj?.id || parentObj?.itemId;
+    parentId = parentObj?.itemId || parentObj?.id;
   }
 
-  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
+  const flattenedItemsWithContext = flattenAndFilterItemsWithContext(
+    items,
+    section.itemPath,
+    parentId
+  );
 
-  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'inline-list-section';
-  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+  const sectionId =
+    section.id ||
+    section.heading?.path?.split(".").pop() ||
+    "inline-list-section";
+  const isActive =
+    currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
-  const dataKey = sectionId.toLowerCase() === 'summary' ? 'professionalSummary' : sectionId;
-  const sectionSuggestedUpdates = data[dataKey]?.suggestedUpdates;
+  // Get section key from listPath (e.g., "interests.items[0].items" -> "interests")
+  // This is needed for checking suggestions correctly
+  const sectionKey = section.listPath?.split(".")[0];
+  const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
-  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
-  const shouldHighlight = !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
+  const shouldBlur =
+    !isThumbnail &&
+    hasSuggestions &&
+    currentSection &&
+    !isActive &&
+    hasValidSuggestions;
+  const shouldHighlight =
+    !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
-    scrollMarginTop: '20px',
+    scrollMarginTop: "20px",
     ...(hasSuggestions && {
-      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
+      transition:
+        "filter 0.3s ease, background-color 0.3s ease, border 0.3s ease",
     }),
     ...(shouldHighlight && {
-      backgroundColor: 'rgba(200, 255, 230, 0.35)',
-      border: '2px solid rgba(0, 168, 107, 0.4)',
-      borderRadius: '12px',
-      padding: '16px',
-      position: 'relative',
+      backgroundColor: "rgba(200, 255, 230, 0.35)",
+      border: "2px solid rgba(0, 168, 107, 0.4)",
+      borderRadius: "12px",
+      padding: "16px",
+      position: "relative",
     }),
   };
 
-  const sectionKey = section.listPath?.split('.')[0];
+  // Extract field name for suggestions lookup
+  // The fieldName should be the property within each item that has suggestions
+  // For nested arrays like "interests.items[0].items", fieldName is "items" (the nested array)
+  // For simple arrays like "skills.items" with itemPath="name", fieldName is "name" (the property)
+  let fieldName: string | undefined;
 
-  const fieldName = section.listPath.includes('[0].') ? section.listPath.split('[0].').pop() : section.itemPath;
+  if (section.itemPath) {
+    // If itemPath is specified (e.g., "name" for skills), use it as fieldName
+    // This is the property within each item that has suggestions
+    fieldName = section.itemPath;
+  } else if (section.listPath?.includes("[0].")) {
+    // Nested path like "interests.items[0].items" -> "items" (the nested array)
+    const parts = section.listPath.split("[0].");
+    fieldName = parts[parts.length - 1];
+  } else if (section.listPath?.includes(".")) {
+    // Path like "interests.items" without itemPath -> default to "items"
+    fieldName = "items";
+  } else {
+    // No listPath, use itemPath as fallback
+    fieldName = section.itemPath;
+  }
 
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey
+    ? (data[sectionKey] as any)?.suggestedUpdates
+    : undefined;
 
   return (
     <div
       data-break={section.break}
-      data-canbreak={section.breakable ? 'true' : undefined}
-      data-has-breakable-content={section.breakable ? 'true' : undefined}
+      data-canbreak={section.breakable ? "true" : undefined}
+      data-has-breakable-content={section.breakable ? "true" : undefined}
       data-section={sectionId}
-      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
+      className={cn(shouldBlur && "blur-[2px] pointer-events-none")}
       style={wrapperStyle}
     >
       {/* {shouldHighlight && <SparkleIndicator />} */}
-      <div className={cn('flex flex-col', section.heading.className)}>
+      <div className={cn("flex flex-col", section.heading.className)}>
         {section.heading && (
-          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+          <p data-item="heading">
+            {resolvePath(data, section.heading.path, section.heading.fallback)}
+          </p>
         )}
 
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-item="content" data-break={section.break} data-canbreak={section.breakable ? 'true' : undefined}>
+      <div
+        data-item="content"
+        data-break={section.break}
+        data-canbreak={section.breakable ? "true" : undefined}
+      >
         {section.showBullet ? (
-          <ul className={cn('list-disc list-outside pl-6', section.containerClassName)}>
+          <ul
+            className={cn(
+              "list-disc list-outside pl-6",
+              section.containerClassName
+            )}
+          >
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
-              const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
+              const actualValue =
+                typeof value === "object" && value !== null && "value" in value
+                  ? value.value
+                  : value;
 
-              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
+              // If not present, use parentId we extracted earlier
+              const finalItemId = itemId || parentId;
 
-              // const errorBgColor = isThumbnail
-              //   ? ""
-              //   : getSuggestionBackgroundColor(valueSuggestions);
+              const valueSuggestions =
+                finalItemId && fieldName
+                  ? getArrayValueSuggestions(
+                      suggestedUpdates,
+                      finalItemId,
+                      fieldName,
+                      actualValue
+                    )
+                  : [];
+
+              const errorBgColor = isThumbnail
+                ? ""
+                : getSuggestionBackgroundColor(valueSuggestions);
+
+              // Use sectionKey (which maps to formData) - same pattern as list-section
+              const formDataSectionKey = sectionKey || sectionId;
+
+              // Create suggestion data attribute if we have all required values
+              const suggestionData =
+                finalItemId && fieldName && formDataSectionKey
+                  ? getSuggestionDataAttribute(
+                      formDataSectionKey,
+                      finalItemId,
+                      fieldName,
+                      valueSuggestions,
+                      isThumbnail
+                    )
+                  : undefined;
+
+              const hasClickableSuggestions = !!suggestionData;
 
               return (
                 <li
                   key={idx}
                   className={cn(
                     section.itemClassName,
-                    // errorBgColor,
-                    'list-item',
+
+                    errorBgColor,
+                    hasClickableSuggestions && "cursor-pointer",
+                    "list-item"
                   )}
+                  data-suggestion={suggestionData}
                 >
                   {actualValue}
                 </li>
@@ -100,20 +192,61 @@ export function renderInlineListSection(
         ) : (
           <div className={section.containerClassName}>
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
-              const actualValue = typeof value === 'object' && value !== null && 'value' in value ? value.value : value;
+              const actualValue =
+                typeof value === "object" && value !== null && "value" in value
+                  ? value.value
+                  : value;
 
-              const _valueSuggestions = getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue);
+              // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
+              // If not present, use parentId we extracted earlier
+              const finalItemId = itemId || parentId;
 
-              // const errorBgColor = isThumbnail
-              //   ? ""
-              //   : getSuggestionBackgroundColor(valueSuggestions);
+              const valueSuggestions =
+                finalItemId && fieldName
+                  ? getArrayValueSuggestions(
+                      suggestedUpdates,
+                      finalItemId,
+                      fieldName,
+                      actualValue
+                    )
+                  : [];
+
+              const errorBgColor = isThumbnail
+                ? ""
+                : getSuggestionBackgroundColor(valueSuggestions);
+
+              // Use sectionKey (which maps to formData) - same pattern as list-section
+              const formDataSectionKey = sectionKey || sectionId;
+
+              // Create suggestion data attribute if we have all required values
+              const suggestionData =
+                finalItemId && fieldName && formDataSectionKey
+                  ? getSuggestionDataAttribute(
+                      formDataSectionKey,
+                      finalItemId,
+                      fieldName,
+                      valueSuggestions,
+                      isThumbnail
+                    )
+                  : undefined;
+              const hasClickableSuggestions = !!suggestionData;
 
               return (
                 <span key={idx}>
-                  <span className={cn(section.itemClassName)}>{value}</span>
-                  {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
-                    <span>{section.itemSeparator}</span>
-                  )}
+                  <span
+                    className={cn(
+                      section.itemClassName,
+                      errorBgColor,
+                      hasClickableSuggestions && "cursor-pointer"
+                    )}
+                    data-suggestion={suggestionData}
+                  >
+                    {value}
+                  </span>
+                  {idx < flattenedItemsWithContext.length - 1 &&
+                    section.itemSeparator && (
+                      <span>{section.itemSeparator}</span>
+                    )}
                 </span>
               );
             })}

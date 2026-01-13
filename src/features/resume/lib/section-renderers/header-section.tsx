@@ -3,6 +3,7 @@ import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderField } from '../field-renderer';
+import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
 export function renderHeaderSection(
   section: any,
@@ -32,11 +33,11 @@ export function renderHeaderSection(
   const personalDetailsItemId = personalDetailsItem?.itemId || personalDetailsItem?.id;
 
   // Helper function to get error background color for a field
-  // const getFieldErrorBgColor = (fieldName: string): string => {
-  //   if (isThumbnail) return '';
-  //   const suggestions = getFieldSuggestions(personalDetailsSuggestions, personalDetailsItemId, fieldName);
-  //   return getSuggestionBackgroundColor(suggestions);
-  // };
+  const getFieldErrorBgColor = (fieldName: string): string => {
+    if (isThumbnail) return '';
+    const suggestions = getFieldSuggestions(personalDetailsSuggestions, personalDetailsItemId, fieldName);
+    return getSuggestionBackgroundColor(suggestions);
+  };
 
   // Check if this section is related to personal details (header, profile-picture, etc.)
   const isPersonalDetailsRelated =
@@ -90,6 +91,7 @@ export function renderHeaderSection(
               personalDetailsSuggestions,
               isThumbnail,
               skipImageFallbacks,
+              'personalDetails'
             )}
           </React.Fragment>
         ))}
@@ -107,18 +109,18 @@ export function renderHeaderSection(
       {fields.nameTitle ? (
         <div className={fields.nameTitle.className}>
           {fields.name && (
-            <p className={cn(fields.name.className /*, getFieldErrorBgColor('fullName')*/)}>
+            <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
               {resolvePath(data, fields.name.path, fields.name.fallback)}
             </p>
           )}
           {fields.title?.path && (
-            <p className={cn(fields.title.className /*, getFieldErrorBgColor('jobTitle')*/)}>
+            <p className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}>
               {resolvePath(data, fields.title.path)}
             </p>
           )}
           {fields.description?.path && (
             <div
-              className={cn(fields.description.className /*, getFieldErrorBgColor('description')*/)}
+              className={cn(fields.description.className, getFieldErrorBgColor('description'))}
               // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
               dangerouslySetInnerHTML={{
                 __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
@@ -129,18 +131,18 @@ export function renderHeaderSection(
       ) : (
         <>
           {fields.name && (
-            <p className={cn(fields.name.className /*, getFieldErrorBgColor('fullName')*/)}>
+            <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
               {resolvePath(data, fields.name.path, fields.name.fallback)}
             </p>
           )}
           {fields.title?.path && (
-            <p className={cn(fields.title.className /*, getFieldErrorBgColor('jobTitle')*/)}>
+            <p className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}>
               {resolvePath(data, fields.title.path)}
             </p>
           )}
           {fields.description?.path && (
             <div
-              className={cn(fields.description.className /*, getFieldErrorBgColor('description')*/)}
+              className={cn(fields.description.className, getFieldErrorBgColor('description'))}
               // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
               dangerouslySetInnerHTML={{
                 __html: resolvePath(data, fields.description.path, fields.description.fallback) || '',
@@ -159,6 +161,7 @@ export function renderHeaderSection(
           personalDetailsSuggestions,
           isThumbnail,
           skipImageFallbacks,
+          'personalDetails'
         )}
 
       {fields.contact?.items && (
@@ -174,9 +177,9 @@ export function renderHeaderSection(
               })
               .filter((entry: any) => entry !== null);
             return validItems.map((entry: any, arrayIdx: number) => {
-              const { item, value, originalIdx, fieldName: _fieldName } = entry;
+              const { item, value, originalIdx, fieldName } = entry;
               const showSeparator = arrayIdx > 0 && fields.contact.separator;
-              // const errorBgColor = getFieldErrorBgColor(fieldName);
+              const errorBgColor = getFieldErrorBgColor(fieldName);
               if (item.type === 'link') {
                 const href = item.href.startsWith('mailto:')
                   ? item.href.replace('{{value}}', value)
@@ -187,7 +190,7 @@ export function renderHeaderSection(
                 return (
                   <span key={originalIdx}>
                     {showSeparator && fields.contact.separator}
-                    <a href={href} className={cn(item.className /*, errorBgColor*/)} {...linkProps}>
+                    <a href={href} className={cn(item.className, errorBgColor)} {...linkProps}>
                       {value}
                     </a>
                   </span>
@@ -196,7 +199,7 @@ export function renderHeaderSection(
               return (
                 <span key={originalIdx}>
                   {showSeparator && fields.contact.separator}
-                  <span className={cn(item.className /*, errorBgColor*/)}>{value}</span>
+                  <span className={cn(item.className, errorBgColor)}>{value}</span>
                 </span>
               );
             });
@@ -205,7 +208,7 @@ export function renderHeaderSection(
       )}
 
       {fields.address && (
-        <p className={cn(fields.address.className /*, getFieldErrorBgColor('address')*/)}>
+        <p className={cn(fields.address.className, getFieldErrorBgColor('address'))}>
           {resolvePath(data, fields.address.path, fields.address.fallback)}
         </p>
       )}

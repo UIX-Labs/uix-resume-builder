@@ -91,7 +91,7 @@ export function renderHeaderSection(
               personalDetailsSuggestions,
               isThumbnail,
               skipImageFallbacks,
-              'personalDetails'
+              'personalDetails',
             )}
           </React.Fragment>
         ))}
@@ -161,7 +161,7 @@ export function renderHeaderSection(
           personalDetailsSuggestions,
           isThumbnail,
           skipImageFallbacks,
-          'personalDetails'
+          'personalDetails',
         )}
 
       {fields.contact?.items && (

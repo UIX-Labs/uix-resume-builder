@@ -10,27 +10,20 @@ export function getSuggestionDataAttribute(
   itemId: string | undefined,
   fieldName: string | undefined,
   suggestions: any[],
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
 ): string | undefined {
-  if (
-    isThumbnail ||
-    !suggestions.length ||
-    !sectionId ||
-    !itemId ||
-    !fieldName
-  ) {
+  if (isThumbnail || !suggestions.length || !sectionId || !itemId || !fieldName) {
     return undefined;
   }
 
   // Determine primary suggestion type (priority: spelling > sentence > new)
-  let suggestionType: "spelling_error" | "sentence_refinement" | "new_summary" =
-    "spelling_error";
-  if (suggestions.some((s) => s.type === "spelling_error")) {
-    suggestionType = "spelling_error";
-  } else if (suggestions.some((s) => s.type === "sentence_refinement")) {
-    suggestionType = "sentence_refinement";
-  } else if (suggestions.some((s) => s.type === "new_summary")) {
-    suggestionType = "new_summary";
+  let suggestionType: 'spelling_error' | 'sentence_refinement' | 'new_summary' = 'spelling_error';
+  if (suggestions.some((s) => s.type === 'spelling_error')) {
+    suggestionType = 'spelling_error';
+  } else if (suggestions.some((s) => s.type === 'sentence_refinement')) {
+    suggestionType = 'sentence_refinement';
+  } else if (suggestions.some((s) => s.type === 'new_summary')) {
+    suggestionType = 'new_summary';
   }
 
   return `${sectionId}|${itemId}|${fieldName}|${suggestionType}`;

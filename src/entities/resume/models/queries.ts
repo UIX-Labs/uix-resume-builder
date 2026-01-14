@@ -65,10 +65,10 @@ export const useParseLinkedInProfile = () => {
   });
 };
 
-export const useGetAllResumes = ({ userId }: { userId: string }) => {
+export const useGetAllResumes = () => {
   return useFetch({
-    queryKey: ['resumes', userId],
-    queryFn: () => fetchAllResumes(userId),
+    queryKey: ['resumes'],
+    queryFn: () => fetchAllResumes(),
     staleTime: 0,
   });
 };

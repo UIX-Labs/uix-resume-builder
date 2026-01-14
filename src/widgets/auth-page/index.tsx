@@ -20,6 +20,7 @@ import GoogleSignInButton from '@shared/ui/components/google-signin-button';
 import { cn } from '@shared/lib/utils';
 import LinkedInSignInButton from '@shared/ui/components/linkedIn-signin-button';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { clearGuestEmail } from '@shared/lib/guest-email';
 
 export default function DesktopAuthLayout() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function DesktopAuthLayout() {
     const shouldOpenJDModal = localStorage.getItem('openJDModal');
 
     localStorage.removeItem('auth_callback_url');
-    localStorage.removeItem('pending_analyzer_guest_email');
+    clearGuestEmail();
 
     if (pendingResumeId) {
       router.push(`/resume/${pendingResumeId}`);

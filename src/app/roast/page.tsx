@@ -14,6 +14,7 @@ import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { RoastFirstSection } from '@widgets/roast/ui/roast-first-section';
 
 import { RoastRoastsSection } from '@widgets/roast/ui/roast-roasts-section';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 // export function generateRandomEmail() {
 //   const chars = "abcdefghijklmnopqrstuvwxyz1234567890";
@@ -36,9 +37,8 @@ export default function RoastPage() {
       formData.append('file', file);
 
       if (!user?.isLoggedIn) {
-        const randomGuestEmail = `guest_${crypto.randomUUID()}@guestuser.in`;
-        localStorage.setItem('pending_analyzer_guest_email', randomGuestEmail);
-        formData.append('guestEmail', randomGuestEmail);
+        const guestEmail = getOrCreateGuestEmail();
+        formData.append('guestEmail', guestEmail);
       }
 
       const response = await fetch<{ roast: string; resumeId: string }>('resume/roast', {

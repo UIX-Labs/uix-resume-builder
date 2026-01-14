@@ -222,6 +222,7 @@ exports[`Section Renderer Snapshots > List Section Renderer > renders education 
     </div>
     <div
       data-item="content"
+      id="teacher-content"
     >
       <div
         class="flex flex-col gap-1"
@@ -272,6 +273,7 @@ exports[`Section Renderer Snapshots > List Section Renderer > renders experience
     </div>
     <div
       data-item="content"
+      id="teacher-content"
     >
       <div
         class="flex flex-col gap-1"

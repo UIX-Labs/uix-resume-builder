@@ -1,5 +1,7 @@
-import Image from 'next/image';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { Button } from '@shared/ui/button';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 interface BuilderIntelligenceCardProps {
   isAnalyzed: boolean;
@@ -14,7 +16,22 @@ export function BuilderIntelligenceCard({
   isTailoredWithJD,
   onAnalyze,
 }: BuilderIntelligenceCardProps) {
+  const { data: user } = useUserProfile();
+  const params = useParams();
+  const resumeId = params?.id as string;
+
   if (isTailoredWithJD) return null;
+
+  const handleAnalyzeClick = () => {
+    // Guest users must login to use Pika Intelligence
+    if (!user?.isLoggedIn) {
+      localStorage.setItem('pending_analyzer_resume_id', resumeId);
+      const callbackUrl = encodeURIComponent(window.location.pathname);
+      window.location.href = `/auth?callbackUrl=${callbackUrl}`;
+      return;
+    }
+    onAnalyze();
+  };
 
   if (isAnalyzed) {
     return (
@@ -47,7 +64,7 @@ export function BuilderIntelligenceCard({
 
       <Button
         className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer border-2 border-white"
-        onClick={onAnalyze}
+        onClick={handleAnalyzeClick}
         disabled={isAnalyzing}
       >
         {isAnalyzing ? (

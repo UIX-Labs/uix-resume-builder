@@ -1189,8 +1189,26 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           data-item="content"
         >
           <div
-            class="flex flex-col gap-1 text-xs mb-3.5"
-          />
+            class="text-xs mb-3.5"
+          >
+            <span>
+              <span
+                class="text-xs text-neutral-800"
+              >
+                JavaScript/TypeScript
+              </span>
+              <span>
+                , 
+              </span>
+            </span>
+            <span>
+              <span
+                class="text-xs text-neutral-800"
+              >
+                React.js & Next.js
+              </span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -1653,8 +1671,26 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             data-item="content"
           >
             <div
-              class="flex flex-col gap-1 text-xs mb-3.5"
-            />
+              class="text-xs mb-3.5"
+            >
+              <span>
+                <span
+                  class="text-xs text-neutral-800"
+                >
+                  JavaScript/TypeScript
+                </span>
+                <span>
+                  , 
+                </span>
+              </span>
+              <span>
+                <span
+                  class="text-xs text-neutral-800"
+                >
+                  React.js & Next.js
+                </span>
+              </span>
+            </div>
           </div>
         </div>
       </div>

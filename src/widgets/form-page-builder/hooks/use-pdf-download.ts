@@ -1,6 +1,6 @@
 import { useUserProfile } from '@shared/hooks/use-user';
-import { toast } from 'sonner';
 import { startTimedEvent, trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { toast } from 'sonner';
 
 interface UsePdfDownloadParams {
   resumeId: string;
@@ -30,8 +30,13 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
 
   const handleDownloadPDF = async () => {
     try {
-      if (!user?.email) {
-        toast.error('User email is required to download PDF');
+      // Guest users must login to download PDF
+      if (!user?.isLoggedIn) {
+        // Store current resume ID so we can return after login
+        localStorage.setItem('pending_download_resume_id', resumeId);
+        // Redirect to auth with callback to current page
+        const callbackUrl = encodeURIComponent(window.location.pathname + '?download=true');
+        window.location.href = `/auth?callbackUrl=${callbackUrl}`;
         return;
       }
       startTimedEvent('resume_download');

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { sendAuthCodeToBackend } from '@/shared/lib/linkedin-auth';
+import { clearGuestEmail } from '@shared/lib/guest-email';
 import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 
@@ -55,7 +56,7 @@ export default function LinkedInCallbackClient() {
 
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
-          localStorage.removeItem('pending_analyzer_guest_email');
+          clearGuestEmail();
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
           setTimeout(() => {

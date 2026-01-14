@@ -1,19 +1,12 @@
-import React from "react";
-import { cn } from "@shared/lib/cn";
-import * as LucideIcons from "lucide-react";
-import { resolvePath } from "../resolve-path";
-import { renderDivider } from "../components/Divider";
-import {
-  hasPendingSuggestions,
-  flattenAndFilterItemsWithContext,
-  extractRenderableValue,
-} from "../section-utils";
-import { renderField } from "../field-renderer";
-import {
-  getArrayValueSuggestions,
-  getSuggestionBackgroundColor,
-} from "@features/template-form/lib/get-field-errors";
-import { getSuggestionDataAttribute } from "../suggestion-utils";
+import React from 'react';
+import { cn } from '@shared/lib/cn';
+import * as LucideIcons from 'lucide-react';
+import { resolvePath } from '../resolve-path';
+import { renderDivider } from '../components/Divider';
+import { hasPendingSuggestions, flattenAndFilterItemsWithContext, extractRenderableValue } from '../section-utils';
+import { renderField } from '../field-renderer';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 // Table section renderer (row-based layout with configurable columns)
 export function renderTableSection(
@@ -21,7 +14,7 @@ export function renderTableSection(
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
-  isThumbnail?: boolean
+  isThumbnail?: boolean,
 ): React.ReactNode {
   const items = resolvePath(data, section.listPath, []);
 
@@ -30,17 +23,15 @@ export function renderTableSection(
 
   // Filter out items where all values are empty, null, or undefined
   const validItems = items.filter((item: any) => {
-    if (!item || typeof item !== "object") return false;
+    if (!item || typeof item !== 'object') return false;
 
     // Check if at least one field has a non-empty value
     return Object.values(item).some((value: any) => {
       if (!value) return false;
-      if (typeof value === "string" && value.trim() === "") return false;
-      if (typeof value === "object") {
+      if (typeof value === 'string' && value.trim() === '') return false;
+      if (typeof value === 'object') {
         const nestedValues = Object.values(value);
-        return nestedValues.some(
-          (v: any) => v && (typeof v !== "string" || v.trim() !== "")
-        );
+        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
       return true;
     });
@@ -49,49 +40,39 @@ export function renderTableSection(
   // Return null if no valid items after filtering
   if (validItems.length === 0) return null;
 
-  const sectionId =
-    section.id || section.heading?.path?.split(".").pop() || "table-section";
-  const isActive =
-    currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
+  const sectionId = section.id || section.heading?.path?.split('.').pop() || 'table-section';
+  const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
 
   // Get section key from listPath (e.g., "experience.items" -> "experience")
   // This is needed for checking suggestions correctly
-  const sectionKey = section.listPath?.split(".")[0];
+  const sectionKey = section.listPath?.split('.')[0];
   const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
   // Use the sectionSuggestedUpdates for rendering
   const suggestedUpdates = sectionSuggestedUpdates;
 
-  const shouldBlur =
-    !isThumbnail &&
-    hasSuggestions &&
-    currentSection &&
-    !isActive &&
-    hasValidSuggestions;
-  const shouldHighlight =
-    !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
+  const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
+  const shouldHighlight = !isThumbnail && hasSuggestions && isActive && hasValidSuggestions;
 
   const wrapperStyle: React.CSSProperties = {
-    scrollMarginTop: "20px",
+    scrollMarginTop: '20px',
     ...(hasSuggestions && {
-      transition:
-        "filter 0.3s ease, background-color 0.3s ease, border 0.3s ease",
+      transition: 'filter 0.3s ease, background-color 0.3s ease, border 0.3s ease',
     }),
     ...(shouldHighlight && {
-      backgroundColor: "rgba(200, 255, 230, 0.35)",
-      border: "2px solid rgba(0, 168, 107, 0.4)",
-      borderRadius: "12px",
-      padding: "16px",
-      position: "relative",
+      backgroundColor: 'rgba(200, 255, 230, 0.35)',
+      border: '2px solid rgba(0, 168, 107, 0.4)',
+      borderRadius: '12px',
+      padding: '16px',
+      position: 'relative',
     }),
   };
 
   // Get column configuration
   const columns = section.columns || [];
   const numColumns = columns.length + (section.headingColumn ? 1 : 0);
-  const gridTemplateColumns =
-    section.gridTemplateColumns || `repeat(${numColumns}, 1fr)`;
+  const gridTemplateColumns = section.gridTemplateColumns || `repeat(${numColumns}, 1fr)`;
 
   // Check if this is a single-row section (e.g., badges where all items go in one row)
   const isSingleRow = section.singleRow === true;
@@ -101,39 +82,28 @@ export function renderTableSection(
       data-item="table-section"
       data-canbreak={section.break}
       data-section={sectionId}
-      className={cn(shouldBlur && "blur-[2px] pointer-events-none")}
+      className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
       {/* {shouldHighlight && <SparkleIndicator />} */}
 
       <div
         data-item="content"
-        data-canbreak={section.break ? "true" : undefined}
+        data-canbreak={section.break ? 'true' : undefined}
         className={section.containerClassName}
       >
         {isSingleRow ? (
           // Single row mode: render all items in one row
-          <div
-            className={cn("grid", section.rowClassName)}
-            style={{ gridTemplateColumns }}
-          >
+          <div className={cn('grid', section.rowClassName)} style={{ gridTemplateColumns }}>
             {/* Render heading column */}
             {section.headingColumn && (
               <div className={section.headingColumn.className}>
                 {section.heading && (
                   <>
-                    <p
-                      data-item="heading"
-                      className={section.heading.className}
-                    >
-                      {resolvePath(
-                        data,
-                        section.heading.path,
-                        section.heading.fallback
-                      )}
+                    <p data-item="heading" className={section.heading.className}>
+                      {resolvePath(data, section.heading.path, section.heading.fallback)}
                     </p>
-                    {section.heading?.divider &&
-                      renderDivider(section.heading.divider)}
+                    {section.heading?.divider && renderDivider(section.heading.divider)}
                   </>
                 )}
               </div>
@@ -144,16 +114,13 @@ export function renderTableSection(
               const renderColumnContent = (col: any): React.ReactNode => {
                 let content: React.ReactNode = null;
 
-                if (col.type === "badge-list") {
+                if (col.type === 'badge-list') {
                   // Flatten all items and render as badges
-                  const allBadgeItems = flattenAndFilterItemsWithContext(
-                    validItems,
-                    col.itemPath
-                  );
+                  const allBadgeItems = flattenAndFilterItemsWithContext(validItems, col.itemPath);
 
                   // Determine fieldName for suggestions
                   // For simple arrays like "skills.items" with itemPath="name", use itemPath
-                  const fieldName = col.itemPath || "items";
+                  const fieldName = col.itemPath || 'items';
 
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
@@ -161,17 +128,10 @@ export function renderTableSection(
                       const Icon = (LucideIcons as any)[iconName];
                       return Icon || null;
                     };
-                    const IconComponent = col.icon
-                      ? getIconComponent(col.icon)
-                      : null;
+                    const IconComponent = col.icon ? getIconComponent(col.icon) : null;
 
                     content = (
-                      <div
-                        className={cn(
-                          "flex gap-1 flex-wrap",
-                          col.containerClassName
-                        )}
-                      >
+                      <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
                         {allBadgeItems.map(({ value, itemId }, badgeIdx: number) => {
                           // Extract renderable value - will return null for complex objects
                           const actualValue = extractRenderableValue(value);
@@ -184,28 +144,15 @@ export function renderTableSection(
                           // Get suggestions for this specific value
                           const valueSuggestions =
                             itemId && fieldName
-                              ? getArrayValueSuggestions(
-                                  suggestedUpdates,
-                                  itemId,
-                                  fieldName,
-                                  actualValue
-                                )
+                              ? getArrayValueSuggestions(suggestedUpdates, itemId, fieldName, actualValue)
                               : [];
 
-                          const errorBgColor = isThumbnail
-                            ? ""
-                            : getSuggestionBackgroundColor(valueSuggestions);
+                          const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
 
                           // Create suggestion data attribute
                           const suggestionData =
                             itemId && fieldName && sectionKey
-                              ? getSuggestionDataAttribute(
-                                  sectionKey,
-                                  itemId,
-                                  fieldName,
-                                  valueSuggestions,
-                                  isThumbnail
-                                )
+                              ? getSuggestionDataAttribute(sectionKey, itemId, fieldName, valueSuggestions, isThumbnail)
                               : undefined;
 
                           const hasClickableSuggestions = !!suggestionData;
@@ -218,7 +165,7 @@ export function renderTableSection(
                                   className={cn(
                                     col.badgeClassName,
                                     errorBgColor,
-                                    hasClickableSuggestions && "cursor-pointer"
+                                    hasClickableSuggestions && 'cursor-pointer',
                                   )}
                                   data-suggestion={suggestionData}
                                 >
@@ -233,7 +180,7 @@ export function renderTableSection(
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
-                                hasClickableSuggestions && "cursor-pointer"
+                                hasClickableSuggestions && 'cursor-pointer',
                               )}
                               data-suggestion={suggestionData}
                             >
@@ -253,8 +200,8 @@ export function renderTableSection(
                 <div
                   key={colIdx}
                   className={column.className}
-                  data-canbreak={column.break ? "true" : undefined}
-                  data-has-breakable-content={column.break ? "true" : undefined}
+                  data-canbreak={column.break ? 'true' : undefined}
+                  data-has-breakable-content={column.break ? 'true' : undefined}
                 >
                   {renderColumnContent(column)}
                 </div>
@@ -271,7 +218,7 @@ export function renderTableSection(
             const renderColumnContent = (column: any): React.ReactNode => {
               let content: React.ReactNode = null;
 
-              if (column.type === "field") {
+              if (column.type === 'field') {
                 content = renderField(
                   { ...column, path: column.path },
                   item,
@@ -279,9 +226,9 @@ export function renderTableSection(
                   suggestedUpdates,
                   isThumbnail,
                   undefined,
-                  sectionKey || sectionId
+                  sectionKey || sectionId,
                 );
-              } else if (column.type === "inline-group") {
+              } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
                   .map((subField: any, subIdx: number) => ({
                     idx: subIdx,
@@ -292,48 +239,36 @@ export function renderTableSection(
                       suggestedUpdates,
                       isThumbnail,
                       undefined,
-                      sectionKey || sectionId
+                      sectionKey || sectionId,
                     ),
                   }))
                   .filter(
                     ({ element }: { element: React.ReactNode }) =>
-                      element !== null &&
-                      element !== undefined &&
-                      element !== ""
+                      element !== null && element !== undefined && element !== '',
                   );
 
                 if (renderedItems.length > 0) {
                   content = (
                     <div
                       className={column.containerClassName}
-                      data-canbreak={column.break ? "true" : undefined}
-                      data-has-breakable-content={
-                        column.break ? "true" : undefined
-                      }
+                      data-canbreak={column.break ? 'true' : undefined}
+                      data-has-breakable-content={column.break ? 'true' : undefined}
                     >
                       {renderedItems.map(
-                        (
-                          {
-                            element,
-                            idx,
-                          }: { element: React.ReactNode; idx: number },
-                          arrayIdx: number
-                        ) => (
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
                           <React.Fragment key={idx}>
-                            {arrayIdx > 0 && column.separator && (
-                              <span>{column.separator}</span>
-                            )}
+                            {arrayIdx > 0 && column.separator && <span>{column.separator}</span>}
                             <span>{element}</span>
                           </React.Fragment>
-                        )
+                        ),
                       )}
                     </div>
                   );
                 }
-              } else if (column.type === "duration") {
+              } else if (column.type === 'duration') {
                 content = renderField(
                   {
-                    type: "duration",
+                    type: 'duration',
                     path: column.path,
                     className: column.className,
                   },
@@ -342,12 +277,12 @@ export function renderTableSection(
                   suggestedUpdates,
                   isThumbnail,
                   undefined,
-                  sectionKey || sectionId
+                  sectionKey || sectionId,
                 );
-              } else if (column.type === "html") {
+              } else if (column.type === 'html') {
                 content = renderField(
                   {
-                    type: "html",
+                    type: 'html',
                     path: column.path,
                     className: column.className,
                   },
@@ -356,12 +291,12 @@ export function renderTableSection(
                   suggestedUpdates,
                   isThumbnail,
                   undefined,
-                  sectionKey || sectionId
+                  sectionKey || sectionId,
                 );
-              } else if (column.type === "text") {
+              } else if (column.type === 'text') {
                 content = renderField(
                   {
-                    type: "text",
+                    type: 'text',
                     path: column.path,
                     className: column.className,
                     fallback: column.fallback,
@@ -371,14 +306,14 @@ export function renderTableSection(
                   suggestedUpdates,
                   isThumbnail,
                   undefined,
-                  sectionKey || sectionId
+                  sectionKey || sectionId,
                 );
-              } else if (column.type === "group") {
+              } else if (column.type === 'group') {
                 // Render a group of fields stacked vertically
                 const groupItems = column.items
                   .map((subField: any) => {
                     // Handle inline-group specially to preserve inline layout
-                    if (subField.type === "inline-group") {
+                    if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
                         .map((inlineSubField: any, idx: number) => ({
                           idx,
@@ -389,52 +324,37 @@ export function renderTableSection(
                             suggestedUpdates,
                             isThumbnail,
                             undefined,
-                            sectionKey || sectionId
+                            sectionKey || sectionId,
                           ),
                         }))
                         .filter(
                           ({ element }: { element: React.ReactNode }) =>
-                            element !== null &&
-                            element !== undefined &&
-                            element !== ""
+                            element !== null && element !== undefined && element !== '',
                         );
 
                       if (renderedItems.length === 0) return null;
 
-                      const hasContainerClassName =
-                        !!subField.containerClassName;
+                      const hasContainerClassName = !!subField.containerClassName;
                       const hasSeparator = !!subField.separator;
 
                       const inlineContent = renderedItems.map(
-                        (
-                          {
-                            element,
-                            idx,
-                          }: { element: React.ReactNode; idx: number },
-                          arrayIdx: number
-                        ) => (
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
                           <React.Fragment key={idx}>
-                            {arrayIdx > 0 && hasSeparator && (
-                              <span>{subField.separator}</span>
-                            )}
+                            {arrayIdx > 0 && hasSeparator && <span>{subField.separator}</span>}
                             <span>{element}</span>
                           </React.Fragment>
-                        )
+                        ),
                       );
 
                       // Use containerClassName if provided, otherwise className
-                      const wrapperClassName = hasContainerClassName
-                        ? subField.containerClassName
-                        : subField.className;
+                      const wrapperClassName = hasContainerClassName ? subField.containerClassName : subField.className;
 
                       if (wrapperClassName) {
                         return (
                           <div
                             className={wrapperClassName}
-                            data-canbreak={subField.break ? "true" : undefined}
-                            data-has-breakable-content={
-                              subField.break ? "true" : undefined
-                            }
+                            data-canbreak={subField.break ? 'true' : undefined}
+                            data-has-breakable-content={subField.break ? 'true' : undefined}
                           >
                             {inlineContent}
                           </div>
@@ -451,25 +371,18 @@ export function renderTableSection(
                       suggestedUpdates,
                       isThumbnail,
                       undefined,
-                      sectionKey || sectionId
+                      sectionKey || sectionId,
                     );
                   })
-                  .filter(
-                    (element: React.ReactNode) =>
-                      element !== null &&
-                      element !== undefined &&
-                      element !== ""
-                  );
+                  .filter((element: React.ReactNode) => element !== null && element !== undefined && element !== '');
 
                 if (groupItems.length > 0) {
-                  content = (
-                    <div className={column.className}>{groupItems}</div>
-                  );
+                  content = <div className={column.className}>{groupItems}</div>;
                 }
-              } else if (column.type === "link") {
+              } else if (column.type === 'link') {
                 content = renderField(
                   {
-                    type: "link",
+                    type: 'link',
                     path: column.path,
                     href: column.href,
                     className: column.className,
@@ -479,19 +392,18 @@ export function renderTableSection(
                   suggestedUpdates,
                   isThumbnail,
                   undefined,
-                  sectionKey || sectionId
+                  sectionKey || sectionId,
                 );
-              } else if (column.type === "badge-list") {
+              } else if (column.type === 'badge-list') {
                 // Render badges from item path (flatten if needed)
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) =>
-                        v && (typeof v !== "string" || v.trim() !== "")
+                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
                     );
 
                 // Determine fieldName for suggestions
-                const fieldName = column.itemPath || "items";
+                const fieldName = column.itemPath || 'items';
 
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
@@ -499,17 +411,10 @@ export function renderTableSection(
                     const Icon = (LucideIcons as any)[iconName];
                     return Icon || null;
                   };
-                  const IconComponent = column.icon
-                    ? getIconComponent(column.icon)
-                    : null;
+                  const IconComponent = column.icon ? getIconComponent(column.icon) : null;
 
                   content = (
-                    <div
-                      className={cn(
-                        "flex gap-1 flex-wrap",
-                        column.containerClassName
-                      )}
-                    >
+                    <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
                       {badgeItems.map((badgeItem: any, badgeIdx: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
@@ -524,17 +429,10 @@ export function renderTableSection(
                         // Get suggestions for this specific value
                         const valueSuggestions =
                           badgeItemId && fieldName
-                            ? getArrayValueSuggestions(
-                                suggestedUpdates,
-                                badgeItemId,
-                                fieldName,
-                                value
-                              )
+                            ? getArrayValueSuggestions(suggestedUpdates, badgeItemId, fieldName, value)
                             : [];
 
-                        const errorBgColor = isThumbnail
-                          ? ""
-                          : getSuggestionBackgroundColor(valueSuggestions);
+                        const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
 
                         // Create suggestion data attribute
                         const suggestionData =
@@ -544,7 +442,7 @@ export function renderTableSection(
                                 badgeItemId,
                                 fieldName,
                                 valueSuggestions,
-                                isThumbnail
+                                isThumbnail,
                               )
                             : undefined;
 
@@ -552,16 +450,13 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div
-                              key={badgeIdx}
-                              className={column.itemClassName}
-                            >
+                            <div key={badgeIdx} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
                                   column.badgeClassName,
                                   errorBgColor,
-                                  hasClickableSuggestions && "cursor-pointer"
+                                  hasClickableSuggestions && 'cursor-pointer',
                                 )}
                                 data-suggestion={suggestionData}
                               >
@@ -576,7 +471,7 @@ export function renderTableSection(
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
-                              hasClickableSuggestions && "cursor-pointer"
+                              hasClickableSuggestions && 'cursor-pointer',
                             )}
                             data-suggestion={suggestionData}
                           >
@@ -596,30 +491,19 @@ export function renderTableSection(
               <div
                 key={itemIdx}
                 data-item="table-row"
-                data-has-breakable-content={section.break ? "true" : undefined}
-                className={cn("grid", section.rowClassName)}
+                data-has-breakable-content={section.break ? 'true' : undefined}
+                className={cn('grid', section.rowClassName)}
                 style={{ gridTemplateColumns }}
               >
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
-                  <div
-                    className={section.headingColumn.className}
-                    style={{ gridColumn: 1 }}
-                  >
+                  <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
                     {itemIdx === 0 && section.heading && (
                       <>
-                        <p
-                          data-item="heading"
-                          className={section.heading.className}
-                        >
-                          {resolvePath(
-                            data,
-                            section.heading.path,
-                            section.heading.fallback
-                          )}
+                        <p data-item="heading" className={section.heading.className}>
+                          {resolvePath(data, section.heading.path, section.heading.fallback)}
                         </p>
-                        {section.heading?.divider &&
-                          renderDivider(section.heading.divider)}
+                        {section.heading?.divider && renderDivider(section.heading.divider)}
                       </>
                     )}
                   </div>
@@ -630,14 +514,10 @@ export function renderTableSection(
                   <div
                     key={`${itemIdx}-${colIdx}`}
                     className={column.className}
-                    data-canbreak={column.break ? "true" : undefined}
-                    data-has-breakable-content={
-                      column.break ? "true" : undefined
-                    }
+                    data-canbreak={column.break ? 'true' : undefined}
+                    data-has-breakable-content={column.break ? 'true' : undefined}
                     style={{
-                      gridColumn: section.headingColumn
-                        ? colIdx + 2
-                        : colIdx + 1,
+                      gridColumn: section.headingColumn ? colIdx + 2 : colIdx + 1,
                     }}
                   >
                     {renderColumnContent(column)}

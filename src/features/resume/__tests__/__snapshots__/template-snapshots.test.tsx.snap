@@ -117,6 +117,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -205,6 +206,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-tight"
@@ -265,6 +267,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-tight"
@@ -428,6 +431,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-tight"
@@ -498,8 +502,8 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -627,6 +631,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -719,6 +724,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-tight"
@@ -783,6 +789,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-tight"
@@ -958,6 +965,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-tight"
@@ -1181,26 +1189,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           data-item="content"
         >
           <div
-            class="text-xs mb-3.5"
-          >
-            <span>
-              <span
-                class="text-xs text-neutral-800"
-              >
-                JavaScript/TypeScript
-              </span>
-              <span>
-                , 
-              </span>
-            </span>
-            <span>
-              <span
-                class="text-xs text-neutral-800"
-              >
-                React.js & Next.js
-              </span>
-            </span>
-          </div>
+            class="flex flex-col gap-1 text-xs mb-3.5"
+          />
         </div>
       </div>
     </div>
@@ -1238,6 +1228,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           class="flex flex-col gap-5"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -1320,6 +1311,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         <div
           class="flex flex-col gap-3"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -1367,6 +1359,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col leading-none"
@@ -1498,8 +1491,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
     </div>
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed break-words whitespace-pre-wrap"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(270px - 0px) calc(calc(100% - 270px) - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed break-words whitespace-pre-wrap"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(270px - 0px) calc(calc(100% - 270px) - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col bg-[#E8DCC8] tracking-wide text-neutral-800 px-6 py-8"
@@ -1660,26 +1653,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             data-item="content"
           >
             <div
-              class="text-xs mb-3.5"
-            >
-              <span>
-                <span
-                  class="text-xs text-neutral-800"
-                >
-                  JavaScript/TypeScript
-                </span>
-                <span>
-                  , 
-                </span>
-              </span>
-              <span>
-                <span
-                  class="text-xs text-neutral-800"
-                >
-                  React.js & Next.js
-                </span>
-              </span>
-            </div>
+              class="flex flex-col gap-1 text-xs mb-3.5"
+            />
           </div>
         </div>
       </div>
@@ -1725,6 +1700,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             class="flex flex-col gap-5"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -1811,6 +1787,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           <div
             class="flex flex-col gap-3"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -1862,6 +1839,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col leading-none"
@@ -2077,6 +2055,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
           class="flex flex-col gap-6"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -2149,6 +2128,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -2222,6 +2202,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -2270,6 +2251,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -2469,8 +2451,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
     </div>
   </div>
   <div
-    class="grid mb-5 leading-relaxed break-words whitespace-pre-wrap"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(50% - 0px) calc(50% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: auto 1fr;"
+    class="grid leading-relaxed break-words whitespace-pre-wrap"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(50% - 0px) calc(50% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: auto 1fr;"
   >
     <div
       style="grid-column: 1 / -1; grid-row: 1; margin-left: -24px; margin-right: -24px; margin-top: -24px;"
@@ -2541,6 +2523,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
             class="flex flex-col gap-6"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -2617,6 +2600,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -2694,6 +2678,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -2746,6 +2731,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template2' template c
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -3046,6 +3032,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
           class="flex flex-col gap-6"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -3118,6 +3105,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -3191,6 +3179,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -3239,6 +3228,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
           class="flex flex-col gap-4"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -3434,8 +3424,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
     </div>
   </div>
   <div
-    class="grid mb-5 leading-relaxed break-words whitespace-pre-wrap"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(50% - 0px) calc(50% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: auto 1fr;"
+    class="grid leading-relaxed break-words whitespace-pre-wrap"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(50% - 0px) calc(50% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; grid-template-rows: auto 1fr;"
   >
     <div
       style="grid-column: 1 / -1; grid-row: 1; margin-left: -24px; margin-right: -24px; margin-top: -24px;"
@@ -3519,6 +3509,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
             class="flex flex-col gap-6"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -3595,6 +3586,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -3672,6 +3664,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -3724,6 +3717,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template3' template c
             class="flex flex-col gap-4"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -4556,8 +4550,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
     />
   </div>
   <div
-    class="grid mb-5 text-[12px] text-slate-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-[12px] text-slate-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -5390,7 +5384,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
         <p
           class="text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1 mt-1"
         >
-          SUMMARY
+          Summary
         </p>
         <div
           class="text-xs text-white font-normal leading-relaxed whitespace-pre-wrap"
@@ -5414,6 +5408,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           class="space-y-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="mb-5 flex flex-col"
@@ -5494,6 +5489,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="mb-3 flex flex-col"
@@ -5605,6 +5601,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           class="space-y-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="mb-5 flex flex-col"
@@ -5667,6 +5664,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           class="space-y-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="mb-3 flex flex-col"
@@ -5793,8 +5791,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
     </div>
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(272px - 0px) calc(calc(100% - 272px) - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(272px - 0px) calc(calc(100% - 272px) - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="bg-[#D58D40] text-white p-8 flex flex-col"
@@ -5978,7 +5976,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           <p
             class="text-sm font-bold text-white uppercase tracking-wide border-b-2 border-white pb-1 mt-1"
           >
-            SUMMARY
+            Summary
           </p>
           <div
             class="text-xs text-white font-normal leading-relaxed whitespace-pre-wrap"
@@ -6006,6 +6004,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
             class="space-y-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="mb-5 flex flex-col"
@@ -6090,6 +6089,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="mb-3 flex flex-col"
@@ -6209,6 +6209,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
             class="space-y-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="mb-5 flex flex-col"
@@ -6275,6 +6276,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
             class="space-y-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="mb-3 flex flex-col"
@@ -6601,6 +6603,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
         <div
           class="space-y-0"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -6660,6 +6663,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
           class="divide-y divide-neutral-200"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -6797,6 +6801,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
           class="divide-y divide-neutral-200"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 pt-3"
@@ -6858,6 +6863,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
           class="space-y-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -6952,8 +6958,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
     </div>
   </div>
   <div
-    class="grid mb-5 text-xs text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(66% - 24px) calc(34% - 24px); gap: 24px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, sans-serif; grid-template-rows: auto 1fr;"
+    class="grid text-xs text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(66% - 24px) calc(34% - 24px); gap: 24px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter, sans-serif; grid-template-rows: auto 1fr;"
   >
     <div
       style="grid-column: 1 / -1; grid-row: 1; margin-left: -24px; margin-right: -24px; margin-top: -24px;"
@@ -7144,6 +7150,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
           <div
             class="space-y-0"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -7207,6 +7214,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
             class="divide-y divide-neutral-200"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -7356,6 +7364,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
             class="divide-y divide-neutral-200"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 pt-3"
@@ -7421,6 +7430,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
             class="space-y-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -7599,6 +7609,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -7667,6 +7678,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -7797,6 +7809,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-3"
@@ -7955,6 +7968,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-3 leading-none"
@@ -8011,8 +8025,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
     />
   </div>
   <div
-    class="grid mb-5 text-black leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Lora; grid-template-rows: 1fr;"
+    class="grid text-black leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Lora; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -8092,6 +8106,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -8168,6 +8183,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -8306,6 +8322,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-3"
@@ -8476,6 +8493,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-3 leading-none"
@@ -8672,6 +8690,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         <div
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-2"
@@ -8837,6 +8856,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-2"
@@ -8915,6 +8935,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-2"
@@ -9021,6 +9042,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-2"
@@ -9073,8 +9095,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
     </div>
   </div>
   <div
-    class="grid mb-5 text-black leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(30% - 12px) calc(70% - 12px); gap: 12px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-black leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(30% - 12px) calc(70% - 12px); gap: 12px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col bg-[rgb(56,76,65)] text-black p-8"
@@ -9214,6 +9236,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
           <div
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-2"
@@ -9395,6 +9418,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-2"
@@ -9477,6 +9501,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-2"
@@ -9591,6 +9616,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-2"
@@ -9768,6 +9794,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 mt-3"
@@ -9876,6 +9903,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
         </div>
         <div
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -10017,6 +10045,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-tight"
@@ -10087,8 +10116,8 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -10221,6 +10250,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 mt-3"
@@ -10333,6 +10363,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
           </div>
           <div
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -10486,6 +10517,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-tight"
@@ -10730,6 +10762,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row gap-4 items-start w-full mt-4"
@@ -10802,6 +10835,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row gap-4 items-start w-full mt-4"
@@ -10886,6 +10920,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
         <div
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row gap-4 items-start w-full mt-4"
@@ -10926,6 +10961,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
           class="grid grid-cols-2 gap-x-8 gap-y-3 mt-4"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row justify-between gap-4"
@@ -11135,6 +11171,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row gap-4 items-start w-full mt-4"
@@ -11193,8 +11230,8 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -11372,6 +11409,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row gap-4 items-start w-full mt-4"
@@ -11448,6 +11486,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row gap-4 items-start w-full mt-4"
@@ -11536,6 +11575,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
           <div
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row gap-4 items-start w-full mt-4"
@@ -11580,6 +11620,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
             class="grid grid-cols-2 gap-x-8 gap-y-3 mt-4"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row justify-between gap-4"
@@ -11801,6 +11842,7 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row gap-4 items-start w-full mt-4"
@@ -12033,6 +12075,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1"
@@ -12116,6 +12159,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -12186,6 +12230,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
           class="flex flex-col"
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-row justify-between items-start mt-3"
@@ -12357,6 +12402,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col leading-tight"
@@ -12411,8 +12457,8 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -12590,6 +12636,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1"
@@ -12677,6 +12724,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -12751,6 +12799,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
             class="flex flex-col"
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-row justify-between items-start mt-3"
@@ -12938,6 +12987,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col leading-tight"
@@ -13186,6 +13236,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           class="flex flex-col gap-3 mt-2"
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col leading-none mt-1"
@@ -13328,6 +13379,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           class="flex flex-col gap-3 mt-1"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col leading-none"
@@ -13410,6 +13462,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           class="flex flex-col gap-3 mt-1"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -13524,6 +13577,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           class="flex flex-col"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -13578,8 +13632,8 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
     </div>
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(300px - 0px) calc(calc(100% - 300px) - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Calibri; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(300px - 0px) calc(calc(100% - 300px) - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Calibri; grid-template-rows: 1fr;"
   >
     <div
       class="bg-[rgb(56,76,65)] text-black px-6 py-6 flex flex-col"
@@ -13781,6 +13835,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
             class="flex flex-col gap-3 mt-2"
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col leading-none mt-1"
@@ -13935,6 +13990,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
             class="flex flex-col gap-3 mt-1"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col leading-none"
@@ -14021,6 +14077,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
             class="flex flex-col gap-3 mt-1"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -14143,6 +14200,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
             class="flex flex-col"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -14414,6 +14472,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           class="flex flex-col gap-3 mt-2"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -14526,6 +14585,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           class="flex flex-col gap-3 mt-2"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col leading-none"
@@ -14606,6 +14666,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
         <div
           class="flex flex-col gap-3 mt-2"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -14651,6 +14712,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           class="flex flex-col gap-6 mt-2"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -14754,8 +14816,8 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
     </div>
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(300px - 0px) calc(calc(100% - 300px) - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Merriweather, "PT Serif", Georgia, serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(300px - 0px) calc(calc(100% - 300px) - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Merriweather, "PT Serif", Georgia, serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col bg-[#C9D6EC] text-white p-10"
@@ -14980,6 +15042,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
             class="flex flex-col gap-3 mt-2"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -15100,6 +15163,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
             class="flex flex-col gap-3 mt-2"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col leading-none"
@@ -15184,6 +15248,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           <div
             class="flex flex-col gap-3 mt-2"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -15233,6 +15298,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
             class="flex flex-col gap-6 mt-2"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -15382,6 +15448,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           class="flex flex-col gap-4 mt-2"
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -15420,6 +15487,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           class="flex flex-col mb-6"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -15651,6 +15719,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           class="flex flex-col gap-6 mt-2"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col pt-2 px-8"
@@ -15735,6 +15804,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           class="flex flex-col gap-3 mt-2"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col pt-1 px-8"
@@ -15792,6 +15862,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           class="flex flex-col gap-3 mt-1 pb-6"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col px-8"
@@ -15877,8 +15948,8 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
     </div>
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(30% - 0px) calc(70% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(30% - 0px) calc(70% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col bg-[rgb(24,37,58)] text-black p-8"
@@ -15920,6 +15991,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
             class="flex flex-col gap-4 mt-2"
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -15962,6 +16034,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
             class="flex flex-col mb-6"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -16213,6 +16286,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
             class="flex flex-col gap-6 mt-2"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col pt-2 px-8"
@@ -16301,6 +16375,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
             class="flex flex-col gap-3 mt-2"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col pt-1 px-8"
@@ -16362,6 +16437,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
             class="flex flex-col gap-3 mt-1 pb-6"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col px-8"
@@ -16676,6 +16752,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-none"
@@ -16746,6 +16823,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-none"
@@ -16891,6 +16969,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           class=""
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3 leading-none"
@@ -16955,6 +17034,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         </div>
         <div
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -17004,8 +17084,8 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: "Lato", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: "Lato", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -17238,6 +17318,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-none"
@@ -17312,6 +17393,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-none"
@@ -17469,6 +17551,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
             class=""
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3 leading-none"
@@ -17537,6 +17620,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           </div>
           <div
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -17706,7 +17790,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           Summary
         </p>
         <div
-          class="text-sm text-neutral-900 leading-relaxed  [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap"
+          class="text-sm text-neutral-900 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap"
         >
           Passionate software engineer with 5+ years of experience
         </div>
@@ -17728,6 +17812,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         </div>
         <div
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-0.5 mt-2 leading-none"
@@ -17772,6 +17857,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-1 leading-none mt-3"
@@ -17842,6 +17928,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col mt-3"
@@ -17996,6 +18083,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         <div
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-0.5 mt-3 leading-none"
@@ -18102,8 +18190,8 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: "Playfair Display", serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: "Playfair Display", serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -18223,7 +18311,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
             Summary
           </p>
           <div
-            class="text-sm text-neutral-900 leading-relaxed  [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap"
+            class="text-sm text-neutral-900 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 [&_strong]:font-bold whitespace-pre-wrap"
           >
             Passionate software engineer with 5+ years of experience
           </div>
@@ -18249,6 +18337,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           </div>
           <div
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-0.5 mt-2 leading-none"
@@ -18297,6 +18386,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-1 leading-none mt-3"
@@ -18371,6 +18461,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col mt-3"
@@ -18537,6 +18628,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           <div
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-0.5 mt-3 leading-none"
@@ -18834,6 +18926,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
               class="flex flex-col mt-2"
               data-canbreak="true"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -18908,6 +19001,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
             <div
               class="flex flex-col mt-2"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -19044,6 +19138,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
             <div
               class="flex flex-col mt-2"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -19128,6 +19223,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
             <div
               class="flex flex-col mt-3 gap-4"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col"
@@ -19165,8 +19261,8 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Roboto, sans-serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Roboto, sans-serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -19353,6 +19449,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
                 class="flex flex-col mt-2"
                 data-canbreak="true"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -19427,6 +19524,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
               <div
                 class="flex flex-col mt-2"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -19563,6 +19661,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
               <div
                 class="flex flex-col mt-2"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col pb-5 mb-5 border-b-2 border-dashed border-neutral-300 last:border-0 last:pb-0 last:mb-0"
@@ -19647,6 +19746,7 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
               <div
                 class="flex flex-col mt-3 gap-4"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col"
@@ -19738,6 +19838,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -19811,6 +19912,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-3"
@@ -19869,6 +19971,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-3"
@@ -19945,6 +20048,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-3"
@@ -20167,8 +20271,8 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
     </div>
   </div>
   <div
-    class="grid mb-5 text-black leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(calc(100% - 250px) - 15px) calc(300px - 15px); gap: 15px; min-height: 29.7cm; background-color: rgb(20, 20, 20); font-family: Lora; grid-template-rows: 1fr;"
+    class="grid text-black leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(calc(100% - 250px) - 15px) calc(300px - 15px); gap: 15px; height: 29.7cm; background-color: rgb(20, 20, 20); font-family: Lora; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col px-3 pt-3 gap-3"
@@ -20226,6 +20330,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -20303,6 +20408,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-3"
@@ -20365,6 +20471,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-3"
@@ -20445,6 +20552,7 @@ exports[`Full Template Rendering Snapshots > renders 'template10' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-3"
@@ -20737,6 +20845,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
           class="flex flex-col gap-4"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -20810,6 +20919,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-2.5"
@@ -20868,6 +20978,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-3"
@@ -20944,6 +21055,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col gap-3"
@@ -21166,8 +21278,8 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
     </div>
   </div>
   <div
-    class="grid mb-5 text-black leading-relaxed"
-    style="width: 21cm; padding: 24px; grid-template-columns: calc(calc(100% - 250px) - 15px) calc(300px - 15px); gap: 15px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Lora; grid-template-rows: 1fr;"
+    class="grid text-black leading-relaxed"
+    style="width: 21cm; padding: 24px; grid-template-columns: calc(calc(100% - 250px) - 15px) calc(300px - 15px); gap: 15px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Lora; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col px-3 pt-3 gap-3"
@@ -21225,6 +21337,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
             class="flex flex-col gap-4"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -21302,6 +21415,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-2.5"
@@ -21364,6 +21478,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-3"
@@ -21444,6 +21559,7 @@ exports[`Full Template Rendering Snapshots > renders 'template11' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col gap-3"
@@ -21720,6 +21836,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             <div
               class="flex flex-col gap-5"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col gap-1"
@@ -21766,6 +21883,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             <div
               class="flex flex-col gap-1"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col"
@@ -21991,6 +22109,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             <div
               class="flex flex-col gap-5 mt-3 px-6"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col gap-1"
@@ -22059,6 +22178,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             <div
               class="flex flex-col gap-5 mt-3 px-6"
               data-item="content"
+              id="teacher-content"
             >
               <div
                 class="flex flex-col gap-1"
@@ -22142,8 +22262,8 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
     />
   </div>
   <div
-    class="grid mb-5 text-neutral-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Arial, Helvetica, sans-serif; grid-template-rows: 1fr;"
+    class="grid text-neutral-900 leading-relaxed"
+    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Arial, Helvetica, sans-serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -22177,6 +22297,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
               <div
                 class="flex flex-col gap-5"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col gap-1"
@@ -22223,6 +22344,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
               <div
                 class="flex flex-col gap-1"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col"
@@ -22448,6 +22570,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
               <div
                 class="flex flex-col gap-5 mt-3 px-6"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col gap-1"
@@ -22516,6 +22639,7 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
               <div
                 class="flex flex-col gap-5 mt-3 px-6"
                 data-item="content"
+                id="teacher-content"
               >
                 <div
                   class="flex flex-col gap-1"
@@ -22718,6 +22842,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -22798,6 +22923,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           class="flex flex-col gap-3"
           data-canbreak="false"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -22838,6 +22964,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           class="flex flex-col "
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -22905,6 +23032,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
+          id="teacher-content"
         >
           <div
             class="flex flex-col"
@@ -23048,8 +23176,8 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
     />
   </div>
   <div
-    class="grid mb-5 text-[#2C5F5F] leading-relaxed"
-    style="width: 21cm; padding: 48px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; min-height: 29.7cm; background-color: rgb(243, 246, 241); font-family: Georgia, serif; grid-template-rows: 1fr;"
+    class="grid text-[#2C5F5F] leading-relaxed"
+    style="width: 21cm; padding: 48px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(243, 246, 241); font-family: Georgia, serif; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -23176,6 +23304,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -23260,6 +23389,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
             class="flex flex-col gap-3"
             data-canbreak="false"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -23304,6 +23434,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
             class="flex flex-col "
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"
@@ -23375,6 +23506,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
             class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
+            id="teacher-content"
           >
             <div
               class="flex flex-col"

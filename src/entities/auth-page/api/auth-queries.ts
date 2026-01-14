@@ -1,5 +1,6 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetch } from '@shared/api';
+import { clearGuestEmail } from '@shared/lib/guest-email';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 interface EmailCheckResponse {
@@ -158,6 +159,8 @@ export const useRegisterUser = () => {
   return useMutation({
     mutationFn: registerUserAPI,
     onSuccess: () => {
+      // Clear guest email after successful registration
+      clearGuestEmail();
       // Invalidate userProfile query to refetch user data
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
@@ -170,6 +173,8 @@ export const useLoginUser = () => {
   return useMutation({
     mutationFn: loginUserAPI,
     onSuccess: () => {
+      // Clear guest email after successful login
+      clearGuestEmail();
       // Invalidate userProfile query to refetch user data
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },

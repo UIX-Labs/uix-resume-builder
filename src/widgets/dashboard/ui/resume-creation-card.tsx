@@ -1,15 +1,16 @@
 import { createResume } from '@entities/resume';
-import { useMutation } from '@tanstack/react-query';
-import { Upload } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@shared/ui/components/button';
-import { FileUpload } from '@widgets/resumes/file-upload';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
-import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { Button } from '@shared/ui/components/button';
+import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
+import { useMutation } from '@tanstack/react-query';
+import { FileUpload } from '@widgets/resumes/file-upload';
+import { Upload } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import BuilderIntelligenceModal from './builder-intelligence-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -64,7 +65,12 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       method: 'from_scratch',
     });
 
-    if (!user.data?.id) {
+    // For guest users, create guest email for API tracking
+    if (!user.data?.isLoggedIn) {
+      getOrCreateGuestEmail();
+    }
+
+    if (!user.data?.id && user.data?.isLoggedIn) {
       setShowScanningOverlay(false);
       releaseOptions();
       return;
@@ -74,7 +80,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       const data = await createResumeMutation.mutateAsync({
         title: 'Frontend Engineer Resume',
         userInfo: {
-          userId: user.data.id,
+          userId: user.data?.id ?? '',
         },
       });
 
@@ -122,6 +128,13 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       source: 'dashboard_card',
       method: 'tailored_with_jd',
     });
+
+    // Guest users must login for Tailored JD flow
+    if (!user.data?.isLoggedIn) {
+      localStorage.setItem('openJDModal', 'true');
+      window.location.href = '/auth?callbackUrl=' + encodeURIComponent('/dashboard');
+      return;
+    }
 
     lockOptions('tailoredJD');
     setShowResumeUpload(false);
@@ -285,6 +298,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
                     trackEvent('upload_resume_click', {
                       source: 'dashboard_card',
                     });
+                    // For guest users, create guest email for API tracking
+                    if (!user.data?.isLoggedIn) {
+                      getOrCreateGuestEmail();
+                    }
                   }}
                 />
               </div>

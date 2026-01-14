@@ -12,10 +12,11 @@ import { HomeIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
-  const { data: user } = useUserProfile();
+  const { data: user, isLoading: isUserLoading } = useUserProfile();
   const { data: templates } = useGetAllTemplates();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -36,19 +37,15 @@ export default function GetAllResumesPage() {
   };
 
   const handleTemplateSelect = async (templateId: string) => {
-    if (!user?.id) {
-      return;
-    }
-
     try {
       const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      const userName = `${user.firstName} ${user.lastName || ''}`.trim();
+      const userName = user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Guest User';
       const title = `${userName}-Resume-${currentDate}`;
 
       const data = await createResumeMutation.mutateAsync({
         title,
         userInfo: {
-          userId: user.id,
+          userId: user?.id ?? '',
         },
       });
 
@@ -102,16 +99,18 @@ export default function GetAllResumesPage() {
               </div>
 
               <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[45px] w-[45px] sm:h-[53px] sm:w-[53px]">
-                <span className="text-lg sm:text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
+                <span className="text-lg sm:text-xl font-bold text-gray-600">
+                  {isUserLoading ? '' : (user?.firstName?.charAt(0) ?? 'G')}
+                </span>
               </div>
 
               <div className="flex flex-col">
                 <span className="text-black leading-[1.375em] tracking-[-1.125%] text-sm sm:text-base font-normal">
-                  {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
+                  {isUserLoading ? 'Loading...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
                 </span>
 
                 <span className="text-[11px] sm:text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {user?.email ?? 'Loading...'}
+                  {isUserLoading ? 'Loading...' : user?.email}
                 </span>
               </div>
             </div>
@@ -125,7 +124,9 @@ export default function GetAllResumesPage() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={`${user?.firstName ?? ''} ${user?.lastName ?? ''}`} />
+              <WelcomeHeader
+                userName={isUserLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
+              />
 
               <div className="flex gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
                 {templates?.map((template) => (

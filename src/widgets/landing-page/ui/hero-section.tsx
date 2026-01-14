@@ -59,7 +59,7 @@ const HeroSection = () => {
   }, [currentStats?.latestUsers]);
 
   const handleNavigate = () => {
-    router.push(user ? '/dashboard' : '/auth');
+    router.push('/dashboard');
   };
 
   const overlays = [
@@ -125,11 +125,6 @@ const HeroSection = () => {
   const handleLinkedInUnified = () => {
     if (isMobile) {
       setShowMobileView(true);
-      return;
-    }
-
-    if (!user) {
-      router.push('/auth');
       return;
     }
 
@@ -204,7 +199,7 @@ const HeroSection = () => {
             {!user && (
               <button
                 type="button"
-                className="absolute -left-1/4 -top-1/4 z-100 flex-shrink-0 flex items-center gap-1/2 md:gap-2 px-3 py-1.5 md:px-5 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold text-white cursor-pointer transition-opacity hover:opacity-90"
+                className="absolute -left-1/4 -top-1/4 z-50 flex-shrink-0 flex items-center gap-1/2 md:gap-2 px-3 py-1.5 md:px-5 md:py-2 rounded-lg text-[10px] md:text-sm font-semibold text-white cursor-pointer transition-opacity hover:opacity-90"
                 style={{
                   background: 'linear-gradient(135deg, #ADE4DB 0%, #5DC4E4 50%, #28A5EE 100%)',
                 }}

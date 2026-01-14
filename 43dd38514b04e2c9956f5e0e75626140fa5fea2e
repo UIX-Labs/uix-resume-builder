@@ -1,0 +1,105 @@
+src/app/resumes/page.tsx
+  e4d445fb25c9461e 19,84,88,103
+  46ffe0139f41b4b5 16,32-36,44,50
+src/app/resume/[id]/page.tsx
+  46ffe0139f41b4b5 9,112,114,116
+src/app/dashboard/page.tsx
+  e4d445fb25c9461e 21,94,98
+  22ea4de7616453eb 113
+src/widgets/dashboard/ui/dashboard-sidebar.tsx
+  e4d445fb25c9461e 13,20,26,60-66,164,173-184,187
+src/app/get-all-resumes/page.tsx
+  e4d445fb25c9461e 15,19,42,48,109,113,128
+src/app/auth/linkedin/callback/linkedin-callback-client.tsx
+  46ffe0139f41b4b5 7,59
+src/widgets/landing-page/ui/template-carousel.tsx
+  e4d445fb25c9461e 19,81
+src/middleware.ts
+  dc3d6448beabbf22 42,53-58,61-63,66-69
+src/app/roast/page.tsx
+  46ffe0139f41b4b5 17,40-41
+src/app/auth/google/callback/google-callback-client.tsx
+  46ffe0139f41b4b5 7,49
+src/shared/api/index.ts
+  3e9f12173b8ccc17 2
+src/widgets/auth-page/index.tsx
+  46ffe0139f41b4b5 23,43
+src/widgets/dashboard/ui/linkedin-integration-card.tsx
+  e4d445fb25c9461e 4,42-43
+src/widgets/landing-page/ui/header-section.tsx
+  e4d445fb25c9461e 42-47
+src/widgets/dashboard/ui/resume-creation-card.tsx
+  e4d445fb25c9461e 301-304
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.31",
+  "base_commit_sha": "43dd38514b04e2c9956f5e0e75626140fa5fea2e",
+  "prompts": {
+    "22ea4de7616453eb": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363637",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "3e9f12173b8ccc17": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363519",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 59,
+      "total_deletions": 4,
+      "accepted_lines": 1,
+      "overriden_lines": 2
+    },
+    "46ffe0139f41b4b5": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363796",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 50,
+      "total_deletions": 13,
+      "accepted_lines": 31,
+      "overriden_lines": 3
+    },
+    "dc3d6448beabbf22": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363534",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 31,
+      "total_deletions": 19,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    },
+    "e4d445fb25c9461e": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363543",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 103,
+      "total_deletions": 63,
+      "accepted_lines": 54,
+      "overriden_lines": 1
+    }
+  }
+}

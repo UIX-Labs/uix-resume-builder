@@ -4,7 +4,6 @@ import Script from 'next/script';
 import '../app/globals.css';
 
 import { Providers } from './providers';
-import { Toaster } from 'sonner';
 
 import { UserTracker } from '@/shared/lib/analytics/user-tracker';
 import { AnalyticsProvider } from '@shared/lib/analytics/mixpnel-provider';
@@ -164,7 +163,7 @@ export default function RootLayout({
           <UserTracker />
           {children}
         </Providers>
-        <Toaster />
+        {/* <Toaster /> */}
       </body>
     </html>
   );

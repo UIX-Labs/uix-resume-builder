@@ -240,9 +240,34 @@ const enzoTemplate1 = {
       },
     },
 
+    // {
+    //   id: 'skills',
+    //   type: 'inline-list-section', // ✅ important
+    //   column: 'left',
+    //   break: true,
+    //   className: 'pl-6 mb-4',
+    //   heading: {
+    //     path: 'skills.heading',
+    //     fallback: 'SKILLS',
+    //     className: 'text-sm font-bold text-[#C9A961] mb-1 tracking-wide uppercase pt-3 border-t border-[#C9A961]',
+    //   },
+    //   listPath: 'skills.items',
+    //   containerClassName: 'flex flex-col gap-1 text-xs mb-3.5',
+    //   itemTemplate: {
+    //     break: true,
+    //     fields: [
+    //       {
+    //         prefix: '• ',
+    //         path: 'name',
+    //         className: 'text-xs text-neutral-800 leading-none py-0.5',
+    //       },
+    //     ],
+    //   },
+    // },
+
     {
       id: 'skills',
-      type: 'inline-list-section', // ✅ important
+      type: 'inline-list-section',
       column: 'left',
       break: true,
       className: 'pl-6 mb-4',
@@ -252,38 +277,12 @@ const enzoTemplate1 = {
         className: 'text-sm font-bold text-[#C9A961] mb-1 tracking-wide uppercase pt-3 border-t border-[#C9A961]',
       },
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-1 text-xs mb-3.5',
-      itemTemplate: {
-        break: true,
-        fields: [
-          {
-            prefix: '• ',
-            path: 'name',
-            className: 'text-xs text-neutral-800 leading-none py-0.5',
-          },
-        ],
-      },
+      itemPath: 'name',
+      itemSeparator: ', ',
+      showBullet: false,
+      containerClassName: 'text-xs mb-3.5',
+      itemClassName: 'text-xs text-neutral-800',
     },
-
-    // {
-    //   id: "skills",
-    //   break: true,
-    //   breakable: true,
-    //   type: "inline-list-section",
-    //   column: "left",
-    //   className: "pt-6 border-t border-[#C9A961]",
-    //   heading: {
-    //     path: "skills.heading",
-    //     fallback: "SKILLS",
-    //     className:
-    //       "text-sm font-bold text-[#C9A961] mb-3 tracking-wide uppercase pt-6 border-t border-[#C9A961]",
-    //   },
-    //   listPath: "skills.items",
-    //   itemPath: "name",
-    //   itemClassName: "text-xs text-neutral-800",
-    //   containerClassName: "flex flex-col text-xs",
-    //   itemSeparator: ", ",
-    // },
 
     // Header Section - Right Column
     {

@@ -1,0 +1,47 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.31",
+  "base_commit_sha": "dd38bbe9541cac4ac648c98c8947a29e99703226",
+  "prompts": {
+    "47740e2c11b184ff": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363083",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 39,
+      "total_deletions": 37,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "9aedfe006634a501": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363097",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "f66eaf1790642e3d": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363106",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 2,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}

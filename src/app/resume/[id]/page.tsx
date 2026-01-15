@@ -1,6 +1,7 @@
 'use client';
 
 import { type ResumeDataKey, useResumeData } from '@entities/resume';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
 import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
 import { useFormDataStore, TRANSITION_TEXTS } from '@widgets/form-page-builder/models/store';
@@ -18,6 +19,7 @@ export default function FormPage() {
   const id = params.id as string;
 
   const queryClient = useQueryClient();
+  const { data: user } = useUserProfile();
 
   const { data: resumeData, isLoading } = useResumeData(id);
 
@@ -124,6 +126,12 @@ export default function FormPage() {
                 <Button
                   onClick={() => {
                     setAnalyzerError(false);
+                    if (!user?.isLoggedIn) {
+                      localStorage.setItem('pending_analyzer_resume_id', id);
+                      const callbackUrl = encodeURIComponent(window.location.pathname);
+                      window.location.href = `/auth?callbackUrl=${callbackUrl}`;
+                      return;
+                    }
                     handleBuilderIntelligence();
                   }}
                   className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"

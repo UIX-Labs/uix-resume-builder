@@ -10,6 +10,7 @@ import { FileUpload } from '@widgets/resumes/file-upload';
 import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
@@ -39,6 +40,8 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   });
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState('');
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
@@ -130,9 +133,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     });
 
     // Guest users must login for Tailored JD flow
-    if (!user.data?.isLoggedIn) {
+    if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      window.location.href = '/auth?callbackUrl=' + encodeURIComponent('/dashboard');
+      setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
+      setIsAuthModalOpen(true);
       return;
     }
 
@@ -336,6 +340,13 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       </div>
 
       {builderIntelligenceModal}
+      <AuthRedirectModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        redirectUrl={authRedirectUrl}
+        title="Login Required"
+        description="You need to login to use Tailored with JD."
+      />
     </>
   );
 }

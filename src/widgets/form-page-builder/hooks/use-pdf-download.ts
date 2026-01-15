@@ -1,5 +1,6 @@
 import { useUserProfile } from '@shared/hooks/use-user';
 import { startTimedEvent, trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface UsePdfDownloadParams {
@@ -8,6 +9,9 @@ interface UsePdfDownloadParams {
 }
 
 export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) {
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState('');
+
   // const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   // const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
   //   useState(false);
@@ -36,7 +40,8 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
         localStorage.setItem('pending_download_resume_id', resumeId);
         // Redirect to auth with callback to current page
         const callbackUrl = encodeURIComponent(window.location.pathname + '?download=true');
-        window.location.href = `/auth?callbackUrl=${callbackUrl}`;
+        setAuthRedirectUrl(`/auth?callbackUrl=${callbackUrl}`);
+        setIsAuthModalOpen(true);
         return;
       }
       startTimedEvent('resume_download');
@@ -77,5 +82,8 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
     // setIsWishlistSuccessModalOpen,
     // handleWaitlistJoinSuccess,
     handleDownloadPDF,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    authRedirectUrl,
   };
 }

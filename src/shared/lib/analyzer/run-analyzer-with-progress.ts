@@ -28,7 +28,6 @@ export async function runAnalyzerWithProgress({
   setIsAnalyzing,
   setAnalyzerError,
   successMessage = 'Builder Intelligence analysis complete!',
-  errorMessage = 'Failed to fix resume',
 }: AnalyzerRunParams): Promise<void> {
   setIsAnalyzing(true);
   setAnalyzerError(false);
@@ -109,7 +108,6 @@ export async function runAnalyzerWithProgress({
     }
 
     setAnalyzerError(true);
-    toast.error(errorMessage);
   } finally {
     if (progressIntervalId) {
       clearInterval(progressIntervalId);

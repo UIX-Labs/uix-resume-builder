@@ -44,6 +44,7 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { formatTimeAgo } from '../lib/time-helpers';
 import { useSuggestionClickHandler } from '../hooks/use-suggestion-click-handler';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 
 /**
  * Checks if a field value is empty
@@ -252,7 +253,10 @@ export function FormPageBuilder() {
     resumeId,
   });
 
-  const { handleDownloadPDF } = usePdfDownload({ resumeId, generatePDF });
+  const { handleDownloadPDF, isAuthModalOpen, setIsAuthModalOpen, authRedirectUrl } = usePdfDownload({
+    resumeId,
+    generatePDF,
+  });
 
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
   // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes
@@ -938,6 +942,13 @@ export function FormPageBuilder() {
           resumeData={cleanedDataForModal}
         />
       )}
+      <AuthRedirectModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        redirectUrl={authRedirectUrl}
+        title="Login Required"
+        description="You need to login to download the PDF."
+      />
     </div>
   );
 }

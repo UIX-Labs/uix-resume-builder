@@ -19,7 +19,10 @@ export const useUserProfile = () => {
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile,
     retry: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 };
 

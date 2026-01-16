@@ -186,12 +186,6 @@ export function renderField(
     const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, '&');
     const hasActualImage = actualSrc && actualSrc.trim() !== '';
 
-    // When skipImageFallbacks is true (during PDF generation), don't use fallback
-    // This hides the profile image section if no real image is uploaded
-    if (skipImageFallbacks && !hasActualImage) {
-      return null;
-    }
-
     const src = hasActualImage ? actualSrc : field.fallback;
     if (!src) return null;
 

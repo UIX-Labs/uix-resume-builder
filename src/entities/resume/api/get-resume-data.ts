@@ -1,4 +1,5 @@
 import { fetch } from '@shared/api';
+import { getGuestEmail, getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 import type { ResumeData } from '../types/resume-data';
 
@@ -11,7 +12,15 @@ export interface ResumeDataResponse extends ResumeData {
 }
 
 export async function getResumeData(id: string) {
-  const data = await fetch<ResumeDataResponse>(`resume/${id}`);
+  const guestEmail = getGuestEmail();
+
+  const data = await fetch<ResumeDataResponse>(`resume/${id}`, {
+    options: {
+      headers: {
+        ...(guestEmail && { 'guest-email': guestEmail }),
+      },
+    },
+  });
 
   return data;
 }

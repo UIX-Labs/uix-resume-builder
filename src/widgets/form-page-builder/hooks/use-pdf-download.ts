@@ -1,6 +1,7 @@
 import { useUserProfile } from '@shared/hooks/use-user';
 import { startTimedEvent, trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 interface UsePdfDownloadParams {
@@ -11,6 +12,8 @@ interface UsePdfDownloadParams {
 export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authRedirectUrl, setAuthRedirectUrl] = useState('');
+  const searchParams = useSearchParams();
+  const processedRef = useRef(false);
 
   // const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   // const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
@@ -74,6 +77,25 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
       });
     }
   };
+
+  useEffect(() => {
+    if (user?.isLoggedIn && !processedRef.current) {
+      const pendingId = localStorage.getItem('pending_download_resume_id');
+      const isDownloadParam = searchParams?.get('download') === 'true';
+
+      if (pendingId === resumeId || isDownloadParam) {
+        processedRef.current = true;
+        localStorage.removeItem('pending_download_resume_id');
+
+        if (isDownloadParam) {
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, '', newUrl);
+        }
+
+        handleDownloadPDF();
+      }
+    }
+  }, [user?.isLoggedIn, resumeId, searchParams, handleDownloadPDF]);
 
   return {
     // isWishlistModalOpen,

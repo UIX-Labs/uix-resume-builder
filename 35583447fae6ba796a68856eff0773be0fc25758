@@ -1,0 +1,79 @@
+src/entities/resume/api/get-resume-data.ts
+  b65a84a5253f173b 15-23
+src/features/template-form/ui/profile-picture.tsx
+  0632b18df66187bb 109,158,175
+src/widgets/form-page-builder/hooks/use-pdf-download.ts
+  ece77aa2f5927623 3-4,15-16,81-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.31",
+  "base_commit_sha": "35583447fae6ba796a68856eff0773be0fc25758",
+  "prompts": {
+    "05a8d67b9c75f944": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364144",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 15,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    },
+    "0632b18df66187bb": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364153",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 19,
+      "total_deletions": 18,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "774428084ed89cc7": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364162",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 33,
+      "total_deletions": 15,
+      "accepted_lines": 25,
+      "overriden_lines": 0
+    },
+    "b65a84a5253f173b": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364325",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 1,
+      "accepted_lines": 9,
+      "overriden_lines": 1
+    },
+    "ece77aa2f5927623": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364140",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 23,
+      "total_deletions": 1,
+      "accepted_lines": 23,
+      "overriden_lines": 0
+    }
+  }
+}

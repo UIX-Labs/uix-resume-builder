@@ -1,0 +1,31 @@
+src/widgets/dashboard/ui/dashboard-header.tsx
+  06be3ece9f76de85 1-50
+src/shared/hooks/use-user.ts
+  06be3ece9f76de85 4
+src/app/dashboard/page.tsx
+  06be3ece9f76de85 11,71
+src/app/resumes/page.tsx
+  06be3ece9f76de85 7,11,64
+src/app/get-all-resumes/page.tsx
+  06be3ece9f76de85 6,79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "cbc363fea1d87029c02008d1cffa95fe50a5d1ea",
+  "prompts": {
+    "06be3ece9f76de85": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364490",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 58,
+      "total_deletions": 111,
+      "accepted_lines": 58,
+      "overriden_lines": 0
+    }
+  }
+}

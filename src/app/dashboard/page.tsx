@@ -3,14 +3,12 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { HomeIcon } from 'lucide-react';
-
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
-import { Button } from '@shared/ui';
 
 import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';
+import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import LinkedinIntegrationCard from '@widgets/dashboard/ui/linkedin-integration-card';
 import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
@@ -70,36 +68,7 @@ function DashboardContent() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <header className="flex justify-end items-center bg-[rgba(245,248,250,1)] p-4 rounded-3xl">
-            <div className="flex items-center gap-3 ">
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
-                >
-                  <HomeIcon className="w-full h-full" />
-                </Button>
-              </div>
-
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">
-                  {isLoading ? '' : (user?.firstName?.charAt(0) ?? 'G')}
-                </span>
-              </div>
-
-              <div className="flex flex-col">
-                <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
-                  {isLoading ? 'Loading...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
-                </span>
-
-                <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {isLoading ? 'Loading...' : user?.email}
-                </span>
-              </div>
-            </div>
-          </header>
+          <DashboardHeader user={user} />
 
           <main className="flex bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

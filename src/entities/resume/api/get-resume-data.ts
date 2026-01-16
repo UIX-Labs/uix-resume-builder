@@ -1,5 +1,5 @@
 import { fetch } from '@shared/api';
-import { getGuestEmail, getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 import type { ResumeData } from '../types/resume-data';
 
@@ -11,16 +11,15 @@ export interface ResumeDataResponse extends ResumeData {
   isAnalyzed?: boolean;
 }
 
-export async function getResumeData(id: string) {
-  const guestEmail = getGuestEmail();
+export async function getResumeData(id: string, isLoggedIn = false) {
+  // biome-ignore lint/correctness/noUnusedVariables: <explanation>
+  let guestEmail: string | null = null;
 
-  const data = await fetch<ResumeDataResponse>(`resume/${id}`, {
-    options: {
-      headers: {
-        ...(guestEmail && { 'guest-email': guestEmail }),
-      },
-    },
-  });
+  if (!isLoggedIn) {
+    guestEmail = getOrCreateGuestEmail();
+  }
+
+  const data = await fetch<ResumeDataResponse>(`resume/${id}`);
 
   return data;
 }

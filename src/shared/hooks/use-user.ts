@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetch } from '@shared/api';
 
-interface User {
+export interface User {
   id: string;
   email: string;
   firstName: string;

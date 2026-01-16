@@ -1,4 +1,5 @@
 import { useFetch } from '@/shared/api/hooks/useFetch';
+import { useUserProfile } from '@shared/hooks/use-user';
 
 import {
   getResumeSchema,
@@ -24,9 +25,12 @@ export function useTemplateFormSchema() {
 }
 
 export function useResumeData(id: string) {
+  const { data: user } = useUserProfile();
+  const isLoggedIn = user?.isLoggedIn ?? false;
+
   return useFetch({
-    queryKey: ['resume-data', id],
-    queryFn: () => fetchAndMergeResumeData(id),
+    queryKey: ['resume-data', id, isLoggedIn],
+    queryFn: () => fetchAndMergeResumeData(id, isLoggedIn),
   });
 }
 

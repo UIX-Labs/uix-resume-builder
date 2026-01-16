@@ -56,8 +56,8 @@ function mergeResumeData(actualData: any, emptyData: any): ResumeData & { isAnal
   return mergedRes;
 }
 
-export async function fetchAndMergeResumeData(id: string) {
-  const [actualData, emptyData] = await Promise.all([getResumeData(id), getResumeEmptyData()]);
+export async function fetchAndMergeResumeData(id: string, isLoggedIn = false) {
+  const [actualData, emptyData] = await Promise.all([getResumeData(id, isLoggedIn), getResumeEmptyData()]);
 
   return mergeResumeData(actualData, emptyData);
 }

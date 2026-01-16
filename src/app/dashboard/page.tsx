@@ -83,21 +83,23 @@ function DashboardContent() {
                 </Button>
               </div>
 
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">
-                  {isLoading ? '' : (user?.firstName?.charAt(0) ?? 'G')}
-                </span>
-              </div>
+              {user && (
+                <>
+                  <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
+                    <span className="text-xl font-bold text-gray-600">{user.firstName?.charAt(0)}</span>
+                  </div>
 
-              <div className="flex flex-col">
-                <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
-                  {isLoading ? 'Loading...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
-                </span>
+                  <div className="flex flex-col">
+                    <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
+                      {`${user.firstName} ${user.lastName ?? ''}`}
+                    </span>
 
-                <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {isLoading ? 'Loading...' : user?.email}
-                </span>
-              </div>
+                    <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
+                      {user.email}
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
           </header>
 

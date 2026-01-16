@@ -1,0 +1,53 @@
+src/app/dashboard/page.tsx
+  075ac7c6eb3d8e7c 86-87,90,96,100
+src/app/get-all-resumes/page.tsx
+  075ac7c6eb3d8e7c 101-102,105,111,115
+src/app/resumes/page.tsx
+  075ac7c6eb3d8e7c 76-77,80,90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.31",
+  "base_commit_sha": "ca383e905180e5557b5def4808f3d2a69cfe83cd",
+  "prompts": {
+    "075ac7c6eb3d8e7c": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364451",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 51,
+      "total_deletions": 39,
+      "accepted_lines": 21,
+      "overriden_lines": 0
+    },
+    "3a2467164a915c22": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364415",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 7,
+      "accepted_lines": 15,
+      "overriden_lines": 0
+    },
+    "b65a84a5253f173b": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364325",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 9,
+      "total_deletions": 6,
+      "accepted_lines": 4,
+      "overriden_lines": 1
+    }
+  }
+}

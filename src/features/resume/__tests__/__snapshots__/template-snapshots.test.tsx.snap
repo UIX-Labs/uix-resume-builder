@@ -1243,7 +1243,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         data-section="experience"
       >
         <div
-          class="flex flex-col gap-5"
+          class="flex flex-col gap-3"
           data-canbreak="true"
           data-item="content"
           id="teacher-content"
@@ -1371,6 +1371,69 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         class=""
         data-canbreak="true"
         data-item="list-section"
+        data-section="projects"
+      >
+        <div
+          class="flex flex-col gap-3 mt-1"
+          data-canbreak="true"
+          data-item="content"
+          id="teacher-content"
+        >
+          <div
+            class="flex flex-col"
+            data-canbreak="true"
+            data-has-breakable-content="true"
+            style="scroll-margin-top: 20px;"
+          >
+            <div
+              class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1.5 mt-2"
+            >
+              <p
+                data-item="heading"
+              >
+                projects
+              </p>
+            </div>
+            <div
+              data-canbreak="true"
+              data-has-breakable-content="true"
+            >
+              <div>
+                <div
+                  class="flex flex-row justify-between items-baseline gap-2 flex-wrap"
+                >
+                  <span
+                    class="text-sm font-bold text-neutral-900 break-words flex-1 min-w-0"
+                  >
+                    AI Resume Builder
+                  </span>
+                  <span
+                    class="text-xs text-neutral-600"
+                  >
+                    Mar 2024 - Nov 2024
+                  </span>
+                </div>
+              </div>
+              <div
+                data-canbreak="true"
+                data-has-breakable-content="true"
+              >
+                <div
+                  class="text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words"
+                  data-canbreak="true"
+                  data-has-breakable-content="true"
+                >
+                  Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class=""
+        data-canbreak="true"
+        data-item="list-section"
         data-section="certifications"
       >
         <div
@@ -1463,47 +1526,43 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
       </div>
       <div
         class=""
-        data-break="true"
         data-canbreak="true"
         data-has-breakable-content="true"
+        data-item="section"
         data-section="achievements"
         style="scroll-margin-top: 20px;"
       >
         <div
-          class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2"
+          class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2 -mb-1"
         >
           <p
             data-item="heading"
           >
-            ACHIEVEMENTS
+            achievements
           </p>
         </div>
         <div
-          data-break="true"
+          class="flex flex-col gap-2 mt-2"
           data-canbreak="true"
-          data-item="content"
         >
-          <div
-            class="flex flex-col gap-1 mt-1 text-xs"
+          <span
+            data-canbreak="true"
           >
-            <span>
-              <span
-                class="text-xs text-neutral-800"
-              >
-                Winner of Google Cloud Hackathon 2023
-              </span>
-              <span>
-                , 
-              </span>
+            <span
+              class="block w-full text-xs text-neutral-800 break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere"
+            >
+              • Winner of Google Cloud Hackathon 2023
             </span>
-            <span>
-              <span
-                class="text-xs text-neutral-800"
-              >
-                Published 3 research papers on Machine Learning
-              </span>
+          </span>
+          <span
+            data-canbreak="true"
+          >
+            <span
+              class="block w-full text-xs text-neutral-800 break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere"
+            >
+              • Published 3 research papers on Machine Learning
             </span>
-          </div>
+          </span>
         </div>
       </div>
     </div>
@@ -1733,7 +1792,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           data-section="experience"
         >
           <div
-            class="flex flex-col gap-5"
+            class="flex flex-col gap-3"
             data-canbreak="true"
             data-item="content"
             id="teacher-content"
@@ -1869,6 +1928,73 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           class=""
           data-canbreak="true"
           data-item="list-section"
+          data-section="projects"
+        >
+          <div
+            class="flex flex-col gap-3 mt-1"
+            data-canbreak="true"
+            data-item="content"
+            id="teacher-content"
+          >
+            <div
+              class="flex flex-col"
+              data-canbreak="true"
+              data-has-breakable-content="true"
+              style="scroll-margin-top: 20px;"
+            >
+              <div
+                class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1.5 mt-2"
+              >
+                <p
+                  data-item="heading"
+                >
+                  projects
+                </p>
+              </div>
+              <div
+                data-canbreak="true"
+                data-has-breakable-content="true"
+              >
+                <div>
+                  <div
+                    class="flex flex-row justify-between items-baseline gap-2 flex-wrap"
+                  >
+                    <span
+                      class="text-sm font-bold text-neutral-900 break-words flex-1 min-w-0"
+                    >
+                      AI Resume Builder
+                    </span>
+                    <span
+                      class="text-xs text-neutral-600"
+                    >
+                      Mar 2024 - Nov 2024
+                    </span>
+                  </div>
+                </div>
+                <div
+                  data-canbreak="true"
+                  data-has-breakable-content="true"
+                >
+                  <div
+                    class="text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words"
+                    data-canbreak="true"
+                    data-has-breakable-content="true"
+                  >
+                    Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: block;"
+      >
+        <div
+          class=""
+          data-canbreak="true"
+          data-item="list-section"
           data-section="certifications"
         >
           <div
@@ -1969,47 +2095,43 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
       >
         <div
           class=""
-          data-break="true"
           data-canbreak="true"
           data-has-breakable-content="true"
+          data-item="section"
           data-section="achievements"
           style="scroll-margin-top: 20px;"
         >
           <div
-            class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2"
+            class="flex flex-col text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2 -mb-1"
           >
             <p
               data-item="heading"
             >
-              ACHIEVEMENTS
+              achievements
             </p>
           </div>
           <div
-            data-break="true"
+            class="flex flex-col gap-2 mt-2"
             data-canbreak="true"
-            data-item="content"
           >
-            <div
-              class="flex flex-col gap-1 mt-1 text-xs"
+            <span
+              data-canbreak="true"
             >
-              <span>
-                <span
-                  class="text-xs text-neutral-800"
-                >
-                  Winner of Google Cloud Hackathon 2023
-                </span>
-                <span>
-                  , 
-                </span>
+              <span
+                class="block w-full text-xs text-neutral-800 break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere"
+              >
+                • Winner of Google Cloud Hackathon 2023
               </span>
-              <span>
-                <span
-                  class="text-xs text-neutral-800"
-                >
-                  Published 3 research papers on Machine Learning
-                </span>
+            </span>
+            <span
+              data-canbreak="true"
+            >
+              <span
+                class="block w-full text-xs text-neutral-800 break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere"
+              >
+                • Published 3 research papers on Machine Learning
               </span>
-            </div>
+            </span>
           </div>
         </div>
       </div>

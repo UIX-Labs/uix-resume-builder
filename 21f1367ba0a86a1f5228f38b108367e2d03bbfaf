@@ -1,0 +1,36 @@
+src/widgets/templates-page/ui/preview-modal.tsx
+  8b65ce22674717de 10,23,30,35-36,39,57,84,87-89,91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "21f1367ba0a86a1f5228f38b108367e2d03bbfaf",
+  "prompts": {
+    "1ba6cb806d9a9e9a": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364766",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 2,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    },
+    "8b65ce22674717de": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364767",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 55,
+      "total_deletions": 19,
+      "accepted_lines": 12,
+      "overriden_lines": 0
+    }
+  }
+}

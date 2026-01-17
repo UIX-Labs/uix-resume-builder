@@ -459,6 +459,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
               '[&_.ProseMirror_p.is-editor-empty:first-child::before]:h-0',
               '[&_ul]:list-disc [&_ol]:list-decimal [&_li]:list-item',
               '[&_ul]:ml-0 [&_ol]:ml-0 [&_li]:ml-0',
+              isToolbarVisible ? 'pb-18' : 'pb-2',
             )}
           />
         </div>

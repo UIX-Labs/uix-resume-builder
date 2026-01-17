@@ -83,6 +83,20 @@ export function renderField(
 
     if (!value) return null;
     const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+
+    const hasHtmlTags = /<[a-z][\s\S]*>/i.test(text);
+
+    if (hasHtmlTags) {
+      return (
+        <span
+          className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
+          data-suggestion={suggestionData}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      );
+    }
+
     return (
       <span
         className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
@@ -392,6 +406,20 @@ export function renderField(
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+
+  const hasHtmlTags = /<[a-z][\s\S]*>/i.test(text);
+
+  if (hasHtmlTags) {
+    return (
+      <span
+        className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
+        data-suggestion={suggestionData}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    );
+  }
+
   return (
     <span
       className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}

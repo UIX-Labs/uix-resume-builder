@@ -7,6 +7,7 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 import { cn } from '@shared/lib/cn';
 import { Dialog, DialogOverlay, DialogPortal, DialogTitle } from '@shared/ui/dialog';
 import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import mockData from '../../../../mock-data.json';
 import { CloseIcon } from '../../../shared/icons/close-icon';
@@ -19,18 +20,23 @@ interface PreviewModalProps {
 }
 
 export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewModalProps) {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const [showRedirect, setShowRedirect] = useState(false);
 
   if (!template) return null;
 
+  const handleClose = () => {
+    if (isMobile) {
+      setShowRedirect(true);
+    }
+    onClose();
+  };
+
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      if (isMobile) {
-        setShowRedirect(true);
-      }
-      onClose();
+      handleClose();
     }
   };
 
@@ -48,12 +54,12 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
             <DialogTitle className="sr-only">Resume Preview</DialogTitle>
             <button
               type="button"
-              onClick={onClose}
-              className="absolute top-2 right-2 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors"
+              onClick={handleClose}
+              className="absolute top-2 right-4 md:right-2 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors"
             >
-              <CloseIcon className="h-10 w-10" />
+              <CloseIcon className="h-6 w-6 md:h-10 md:w-10" />
             </button>
-            <div ref={containerRef} className="h-full overflow-y-auto relative pt-0 pb-0 bg-white">
+            <div ref={containerRef} className="h-full overflow-y-auto relative pt-0 pb-0">
               <div
                 className="flex flex-col items-center [&>div]:border-b-2 [&>div]:border-gray-300 [&>div:last-child]:border-b-0"
                 style={{
@@ -74,7 +80,15 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
           </DialogPrimitive.Content>
         </DialogPortal>
       </Dialog>
-      {isMobile && <MobileTextView isOpen={showRedirect} onClose={() => setShowRedirect(false)} />}
+
+      {isMobile && (
+        <MobileTextView
+          isOpen={showRedirect}
+          onClose={() => {
+            router.push('/');
+          }}
+        />
+      )}
     </>
   );
 }

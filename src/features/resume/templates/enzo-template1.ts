@@ -281,7 +281,7 @@ const enzoTemplate1 = {
       itemSeparator: ', ',
       showBullet: false,
       containerClassName: 'text-xs mb-3.5',
-      itemClassName: 'text-xs text-neutral-800',
+      itemClassName: 'text-xs text-neutral-800 leading-relaxed',
     },
 
     // Header Section - Right Column

@@ -1193,7 +1193,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           >
             <span>
               <span
-                class="text-xs text-neutral-800"
+                class="text-xs text-neutral-800 leading-relaxed"
               >
                 JavaScript/TypeScript
               </span>
@@ -1203,7 +1203,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             </span>
             <span>
               <span
-                class="text-xs text-neutral-800"
+                class="text-xs text-neutral-800 leading-relaxed"
               >
                 React.js & Next.js
               </span>
@@ -1734,7 +1734,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
             >
               <span>
                 <span
-                  class="text-xs text-neutral-800"
+                  class="text-xs text-neutral-800 leading-relaxed"
                 >
                   JavaScript/TypeScript
                 </span>
@@ -1744,7 +1744,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
               </span>
               <span>
                 <span
-                  class="text-xs text-neutral-800"
+                  class="text-xs text-neutral-800 leading-relaxed"
                 >
                   React.js & Next.js
                 </span>

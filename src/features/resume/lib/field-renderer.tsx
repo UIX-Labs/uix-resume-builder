@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
+import { isHtml } from '@shared/lib/markdown';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 import type { SuggestedUpdates } from '@entities/resume';
@@ -84,7 +85,7 @@ export function renderField(
     if (!value) return null;
     const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
 
-    const hasHtmlTags = /<[a-z][\s\S]*>/i.test(text);
+    const hasHtmlTags = isHtml(text);
 
     if (hasHtmlTags) {
       return (
@@ -407,7 +408,7 @@ export function renderField(
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
 
-  const hasHtmlTags = /<[a-z][\s\S]*>/i.test(text);
+  const hasHtmlTags = isHtml(text);
 
   if (hasHtmlTags) {
     return (

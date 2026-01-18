@@ -281,7 +281,7 @@ const enzoTemplate1 = {
       itemSeparator: ', ',
       showBullet: false,
       containerClassName: 'text-xs mb-3.5',
-      itemClassName: 'text-xs text-neutral-800',
+      itemClassName: 'text-xs text-neutral-800 leading-relaxed',
     },
 
     // Header Section - Right Column
@@ -319,7 +319,7 @@ const enzoTemplate1 = {
         className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase',
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-5',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
         className: 'flex flex-col gap-1',
         break: true,
@@ -424,6 +424,51 @@ const enzoTemplate1 = {
       },
     },
 
+    {
+      id: 'projects',
+      type: 'list-section',
+      column: 'right',
+      break: true,
+      heading: {
+        path: 'projects.title',
+        fallback: 'Projects',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mb-1.5 mt-2',
+      },
+      listPath: 'projects.items',
+      containerClassName: 'flex flex-col gap-3 mt-1',
+      itemTemplate: {
+        className: 'flex flex-col',
+        break: true,
+        fields: [
+          {
+            type: 'horizontal-group',
+            className: 'flex flex-row justify-between items-baseline gap-2 flex-wrap',
+            items: [
+              {
+                path: 'title',
+                href: 'link.link',
+                fallback: 'Project Title',
+                className: 'text-sm font-bold text-neutral-900 break-words flex-1 min-w-0',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-neutral-600',
+              },
+            ],
+          },
+
+          {
+            type: 'html',
+            path: 'description',
+            break: true,
+            className:
+              'text-xs text-neutral-700 leading-relaxed mt-2 break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 [&_*]:break-words',
+          },
+        ],
+      },
+    },
+
     // Certifications Section - Right Column
     {
       id: 'certifications',
@@ -477,20 +522,20 @@ const enzoTemplate1 = {
     // Achievements Section - Left Column
     {
       id: 'achievements',
+      type: 'badge-section',
+      column: 'right',
       break: true,
       breakable: true,
-      type: 'inline-list-section',
-      column: 'right',
-      className: 'pt-6 border-t border-[#C9A961]',
       heading: {
-        path: 'achievements.heading',
-        fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2',
+        path: 'achievements.title',
+        fallback: 'Achievements',
+        className: 'text-sm font-bold text-[#C9A961] tracking-wide uppercase mt-2 -mb-1',
       },
       listPath: 'achievements.items[0].items',
-      itemClassName: 'text-xs text-neutral-800',
-      containerClassName: 'flex flex-col gap-1 mt-1 text-xs',
-      itemSeparator: ', ',
+      itemPath: '',
+      itemPrefix: '• ',
+      badgeClassName:
+        'block w-full text-xs text-neutral-800 break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere',
     },
   ],
 };

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
+import { isHtml } from '@shared/lib/markdown';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
 import type { SuggestedUpdates } from '@entities/resume';
@@ -83,6 +84,20 @@ export function renderField(
 
     if (!value) return null;
     const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+
+    const hasHtmlTags = isHtml(text);
+
+    if (hasHtmlTags) {
+      return (
+        <span
+          className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
+          data-suggestion={suggestionData}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
+      );
+    }
+
     return (
       <span
         className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
@@ -392,6 +407,20 @@ export function renderField(
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+
+  const hasHtmlTags = isHtml(text);
+
+  if (hasHtmlTags) {
+    return (
+      <span
+        className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
+        data-suggestion={suggestionData}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+        dangerouslySetInnerHTML={{ __html: text }}
+      />
+    );
+  }
+
   return (
     <span
       className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}

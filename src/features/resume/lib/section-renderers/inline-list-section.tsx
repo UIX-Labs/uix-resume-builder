@@ -1,9 +1,10 @@
-import type React from 'react';
-import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
-import { renderDivider } from '../components/Divider';
-import { hasPendingSuggestions, flattenAndFilterItemsWithContext, extractRenderableValue } from '../section-utils';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { cn } from '@shared/lib/cn';
+import { normalizeMarkdownContent } from '@shared/lib/markdown';
+import type React from 'react';
+import { renderDivider } from '../components/Divider';
+import { resolvePath } from '../resolve-path';
+import { extractRenderableValue, flattenAndFilterItemsWithContext, hasPendingSuggestions } from '../section-utils';
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderInlineListSection(
@@ -105,6 +106,7 @@ export function renderInlineListSection(
               if (actualValue === null) {
                 return null;
               }
+              const html = normalizeMarkdownContent(actualValue);
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier
@@ -145,9 +147,9 @@ export function renderInlineListSection(
                     'list-item',
                   )}
                   data-suggestion={suggestionData}
-                >
-                  {actualValue}
-                </li>
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
               );
             })}
           </ul>
@@ -161,6 +163,8 @@ export function renderInlineListSection(
               if (actualValue === null) {
                 return null;
               }
+
+              const html = normalizeMarkdownContent(actualValue);
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier
@@ -194,9 +198,9 @@ export function renderInlineListSection(
                   <span
                     className={cn(section.itemClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                     data-suggestion={suggestionData}
-                  >
-                    {actualValue}
-                  </span>
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+                    dangerouslySetInnerHTML={{ __html: html }}
+                  />
                   {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                     <span>{section.itemSeparator}</span>
                   )}

@@ -133,7 +133,7 @@ export function renderContentSection(
 
       {section.divider && renderDivider(section.divider)}
 
-      {section.content.type === 'html' ? (
+      {section.content.type === 'html' || (typeof value === 'string' && /<[a-z][\s\S]*>/i.test(value)) ? (
         <div
           className={cn(section.content.className, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering

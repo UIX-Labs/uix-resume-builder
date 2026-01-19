@@ -1,21 +1,21 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { FormSchema, ResumeDataKey, ResumeData, SuggestedUpdates } from '@entities/resume';
+import type { FormSchema, ResumeData, ResumeDataKey, SuggestedUpdates } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
+import { Button } from '@shared/ui/button';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
+import { Eye, EyeOff } from 'lucide-react';
+import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
 import { Draggable } from './draggable';
-import { UrlInput } from './url';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
-import { TagsInput } from './tags-input';
-import { LinksInput } from './links-input';
-import { StringsInput } from './strings-input';
 import { FieldErrorBadges } from './error-badges';
-import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
-import { ProfilePictureInput } from './profile-picture';
+import { LinksInput } from './links-input';
 import { PhoneInput } from './phone-input';
-import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '@shared/ui/button';
+import { ProfilePictureInput } from './profile-picture';
+import { StringsInput } from './strings-input';
+import { TagsInput } from './tags-input';
+import { UrlInput } from './url';
 
 export function TemplateForm({
   formSchema,
@@ -87,6 +87,7 @@ export function TemplateForm({
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
               '[&_.ProseMirror]:pb-18',
+              '[&>div]:!ml-0',
             )}
             onChange={(_value, html) => {
               onChange(html);

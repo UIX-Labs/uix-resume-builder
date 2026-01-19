@@ -19,6 +19,8 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { MobileTextView } from './mobile-text-view';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -58,6 +60,8 @@ export function TemplateCarousel() {
   const router = useRouter();
   const isMobile = useIsMobile();
   const [showMobileView, setShowMobileView] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -174,6 +178,12 @@ export function TemplateCarousel() {
                               />
                             </div>
 
+                            {/* Preview Button */}
+                            <PreviewButton onClick={() => {
+                              setPreviewTemplate(template);
+                              setIsPreviewOpen(true);
+                            }} />
+
                             <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-9 gap-2 transition-colors duration-500">
                               <Button
                                 variant="secondary"
@@ -286,6 +296,13 @@ export function TemplateCarousel() {
 
       {/* Mobile Text View */}
       {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
+
+      {/* Preview Modal */}
+      <PreviewModal
+        template={previewTemplate}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+      />
     </div>
   );
 }

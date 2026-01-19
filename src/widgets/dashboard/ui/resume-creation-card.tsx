@@ -168,7 +168,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   );
 
   const handleCloseBuilderIntelligence = useCallback(() => {
-    closeBuilderIntelligenceModal();
+    closeBuilderIntelligenceModal(false);
   }, [closeBuilderIntelligenceModal]);
 
   const handleBuilderIntelligenceSubmittingChange = useCallback(
@@ -180,7 +180,6 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       }
 
       setShowScanningOverlay(false);
-      releaseOptions();
     },
     [closeBuilderIntelligenceModal, releaseOptions],
   );
@@ -213,10 +212,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   }, [builderIntelligenceModalProps, shouldRenderBuilderIntelligenceModal]);
 
   // Show NewProgressBar only for upload action
-  const showProgressBar = showScanningOverlay && activeAction === 'upload';
+  const showProgressBar = showScanningOverlay && (activeAction === 'upload' || activeAction === 'tailoredJD');
 
   // Show spinner overlay for other actions
-  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload';
+  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload' && activeAction !== 'tailoredJD';
 
   const overlayConfig = {
     create: {

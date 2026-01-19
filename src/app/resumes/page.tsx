@@ -150,7 +150,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
 
         <button
           type="button"
-          className="rounded-2xl rounded-b-none absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>

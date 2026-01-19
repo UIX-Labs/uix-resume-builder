@@ -1,0 +1,23 @@
+src/features/resume/lib/section-renderers/content-section.tsx
+  14ebaec717483af3 3,137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "dc3ba2ab640b7dd02e40dba56d8673695e6aa5ab",
+  "prompts": {
+    "14ebaec717483af3": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "364841",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 1,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}

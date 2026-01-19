@@ -86,6 +86,7 @@ export function TemplateForm({
               'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
               'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
               'bg-[#FAFBFC]',
+              '[&_.ProseMirror]:pb-18',
             )}
             onChange={(_value, html) => {
               onChange(html);

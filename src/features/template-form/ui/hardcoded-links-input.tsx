@@ -49,13 +49,17 @@ function LinkTypeButton({ linkType, onClick }: { linkType: LinkType; onClick?: (
   );
 }
 
-function LinkSelector({ currentType, availableTypes, onSelect }: {
+function LinkSelector({
+  currentType,
+  availableTypes,
+  onSelect,
+}: {
   currentType: LinkType;
   availableTypes: LinkType[];
   onSelect: (newKey: string) => void;
 }) {
   const Icon = currentType.Icon;
-  
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -81,7 +85,7 @@ function LinkSelector({ currentType, availableTypes, onSelect }: {
 
 export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps) {
   const initialData = data && typeof data === 'object' ? data : {};
-  
+
   const [linksData, setLinksData] = useState<Record<string, LinkData>>(initialData);
   const [linksOrder, setLinksOrder] = useState<string[]>(Object.keys(initialData));
 
@@ -114,7 +118,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
 
   const deleteLink = (key: string) => {
     const isLastLink = Object.keys(linksData).length === 1;
-    
+
     if (isLastLink) {
       setLinksData((prev) => ({ ...prev, [key]: { ...prev[key], link: '' } }));
     } else {
@@ -136,7 +140,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
 
   const changeLinkType = (oldKey: string, newKey: string) => {
     if (oldKey === newKey) return;
-    
+
     const oldLink = linksData[oldKey]?.link || '';
 
     setLinksData((prev) => {
@@ -159,7 +163,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
           key={linkType.key}
           className={cn(
             'relative flex items-center w-full border border-[#959DA8] rounded-lg',
-            'bg-[#FAFBFC] focus-within:border-[#0059ED] transition-colors overflow-hidden'
+            'bg-[#FAFBFC] focus-within:border-[#0059ED] transition-colors overflow-hidden',
           )}
         >
           <LinkSelector
@@ -167,7 +171,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
             availableTypes={LINK_TYPES.filter((lt) => lt.key !== linkType.key)}
             onSelect={(newKey) => changeLinkType(linkType.key, newKey)}
           />
-          
+
           <input
             type="text"
             placeholder="Paste link"
@@ -175,10 +179,10 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
             onChange={(e) => updateLink(linkType.key, e.target.value)}
             className={cn(
               'flex-1 h-[42px] px-4 pr-14 bg-transparent border-0 outline-none',
-              'placeholder:text-[#CFD4DB] text-sm text-[#0C1118] font-normal min-w-0'
+              'placeholder:text-[#CFD4DB] text-sm text-[#0C1118] font-normal min-w-0',
             )}
           />
-          
+
           <button
             type="button"
             onClick={() => deleteLink(linkType.key)}

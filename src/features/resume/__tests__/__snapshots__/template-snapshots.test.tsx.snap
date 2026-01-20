@@ -22781,7 +22781,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           class="flex flex-col items-baseline gap-1 mb-2"
         >
           <p
-            class="text-4xl font-normal text-[#2C5F5F] after:content-[","] after:mr-2 whitespace-nowrap"
+            class="text-4xl font-normal text-[#2C5F5F] whitespace-nowrap"
           >
             John Doe
           </p>
@@ -23231,7 +23231,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
             class="flex flex-col items-baseline gap-1 mb-2"
           >
             <p
-              class="text-4xl font-normal text-[#2C5F5F] after:content-[","] after:mr-2 whitespace-nowrap"
+              class="text-4xl font-normal text-[#2C5F5F] whitespace-nowrap"
             >
               John Doe
             </p>

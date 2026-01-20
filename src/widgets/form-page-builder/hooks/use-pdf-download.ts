@@ -75,6 +75,7 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
         error: error instanceof Error ? error.message : 'Unknown error',
         resumeId,
       });
+      throw error;
     }
   };
 

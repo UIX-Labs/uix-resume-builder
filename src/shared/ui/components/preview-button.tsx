@@ -13,7 +13,7 @@ export function PreviewButton({ onClick }: PreviewButtonProps) {
         type="button"
         onClick={onClick}
         className="group/preview h-10 w-10 rounded-lg bg-[#CBE7FF] hover:bg-[#005FF2] flex items-center justify-center shadow-lg transition-colors border-0 cursor-pointer p-0"
-        >
+      >
         <Eye className="h-5 w-5 text-blue-500 group-hover/preview:text-white transition-colors" />
       </button>
     </div>

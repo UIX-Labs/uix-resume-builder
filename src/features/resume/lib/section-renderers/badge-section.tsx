@@ -1,5 +1,6 @@
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
+import { normalizeMarkdownContent } from '@shared/lib/markdown';
 import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
@@ -142,6 +143,7 @@ export function renderBadgeSection(
           const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
 
           const displayValue = `${section.itemPrefix || ''}${actualValue}${section.itemSuffix || ''}`;
+          const html = normalizeMarkdownContent(displayValue);
 
           // Use sectionKey (which maps to formData) - same pattern as list-section
           // e.g., "interests", "achievements" which matches formData keys
@@ -169,9 +171,9 @@ export function renderBadgeSection(
                 <span
                   className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                   data-suggestion={suggestionData}
-                >
-                  {displayValue}
-                </span>
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+                  dangerouslySetInnerHTML={{ __html: html }}
+                />
               </div>
             );
           }
@@ -182,9 +184,9 @@ export function renderBadgeSection(
               <span
                 className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                 data-suggestion={suggestionData}
-              >
-                {displayValue}
-              </span>
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
 
               {idx < flattenedItemsWithContext.length - 1 && section.itemSeparator && (
                 <span>{section.itemSeparator}</span>

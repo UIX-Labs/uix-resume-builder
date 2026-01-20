@@ -1,5 +1,6 @@
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
+import { isHtml } from '@shared/lib/markdown';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
@@ -133,7 +134,7 @@ export function renderContentSection(
 
       {section.divider && renderDivider(section.divider)}
 
-      {section.content.type === 'html' ? (
+      {section.content.type === 'html' || (typeof value === 'string' && isHtml(value)) ? (
         <div
           className={cn(section.content.className, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering

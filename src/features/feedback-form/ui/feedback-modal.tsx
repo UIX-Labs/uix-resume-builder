@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckCircle2, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { submitFeedback } from '@entities/feedback-form/api/submit-feedback';
@@ -9,10 +9,10 @@ import { Checkbox } from '@shared/ui/checkbox';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@shared/ui/radio-group';
 import Image from 'next/image';
+import { IMPROVEMENT_OPTIONS, POSITIVE_FEEDBACK_OPTIONS, PRICING_OPTIONS, RATING_MESSAGES } from '../constants';
+import { FeedbackActionButtons } from './feedback-action-buttons';
 import { FeedbackCarousel } from './feedback-carousel';
 import { StarRating } from './star-rating';
-import { FeedbackActionButtons } from './feedback-action-buttons';
-import { RATING_MESSAGES, IMPROVEMENT_OPTIONS, POSITIVE_FEEDBACK_OPTIONS, PRICING_OPTIONS } from '../constants';
 
 interface FeedbackModalProps {
   open: boolean;
@@ -113,10 +113,11 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="p-0 gap-0 max-w-[900px] overflow-hidden border-none sm:rounded-4xl"
+        className="p-0 gap-0 overflow-hidden border-none rounded-[36px] md:max-w-[1035px]"
+        style={{ boxShadow: '0 4px 50px 0 rgba(0, 0, 0, 0.19)' }}
         showCloseButton={false}
       >
-        <div className="grid md:grid-cols-[0.40fr_0.60fr] min-h-[650px]">
+        <div className="grid md:grid-cols-[0.40fr_0.60fr] min-h-[600px]">
           <div className="bg-[#1C5DB5] p-6 flex flex-col justify-between text-white relative overflow-hidden">
             <Image
               src="/images/feedback-bg.svg"
@@ -128,28 +129,42 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
               className="absolute -top-1 right-0 pointer-events-none select-none"
             />
 
-            <div className="space-y-6 relative z-10">
-              <div className="inline-flex items-center text-[#1D3F6D] gap-2 bg-white backdrop-blur-sm px-4 py-1.5 rounded-full text-2xl font-medium border border-white/10">
+            <Image
+              src="/images/feedback-bg.svg"
+              alt=""
+              aria-hidden
+              width={100}
+              height={50}
+              priority={false}
+              className="absolute
+    -bottom-20
+    left-10
+    pointer-events-none
+    select-none rotate-90 z-50"
+            />
+
+            <div className="space-y-14 relative z-10">
+              <div className="inline-flex items-center text-[#1D3F6D] gap-2 bg-[#F8F8F8] backdrop-blur-sm px-4 py-1.5 rounded-full text-2xl font-medium border border-white/10">
                 <Image src="/images/checkmark.svg" alt="" aria-hidden width={28} height={28} />
                 Feedback
               </div>
 
               <div className="space-y-3">
-                <h2 className="text-2xl md:text-3xl font-bold leading-tight">
+                <h2 className="text-2xl font-semibold leading-tight">
                   We're doing a quick final check and saving your resume in a downloadable format.
                 </h2>
-                <p className="text-blue-100 text-lg leading-relaxed">
+                <p className="text-blue-100 text-base leading-relaxed">
                   While that's happening, could you spare 10 seconds to share your experience?
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 relative z-10">
+            <div className="">
               <FeedbackCarousel />
             </div>
           </div>
 
-          <div className="bg-white p-8 md:p-10 flex flex-col relative">
+          <div className="bg-[#F8F8F8] p-8 md:p-10 flex flex-col relative">
             <button
               type="button"
               onClick={() => onOpenChange(false)}
@@ -161,13 +176,13 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
             {step !== 'thanks' && (
               <div className="flex gap-2 mb-12 mt-2 px-4">
                 <div
-                  className={`h-1.5 flex-1 rounded-full transition-colors ${step === 'rating' ? 'bg-blue-600' : 'bg-gray-300'}`}
+                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'rating' ? 'bg-blue-600' : 'bg-gray-300'}`}
                 />
                 <div
-                  className={`h-1.5 flex-1 rounded-full transition-colors ${step === 'feedback' ? 'bg-blue-600' : step === 'pricing' ? 'bg-gray-300' : 'bg-gray-100'}`}
+                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'feedback' ? 'bg-blue-600' : step === 'pricing' ? 'bg-gray-300' : 'bg-[#CCD4DF]'}`}
                 />
                 <div
-                  className={`h-1.5 flex-1 rounded-full transition-colors ${step === 'pricing' ? 'bg-blue-600' : 'bg-gray-100'}`}
+                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'pricing' ? 'bg-blue-600' : 'bg-[#CCD4DF]'}`}
                 />
               </div>
             )}
@@ -175,14 +190,18 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
             {step === 'thanks' ? (
               <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
                 <div className="relative">
-                  <div className="size-32 rounded-full bg-blue-600 flex items-center justify-center animate-in zoom-in duration-500">
-                    <div className="size-20 rounded-full bg-white flex items-center justify-center">
-                      <CheckCircle2
-                        className="size-14 text-blue-600 animate-in zoom-in duration-700 delay-200"
-                        strokeWidth={3}
-                      />
-                    </div>
+                  {/* <div className="size-32 rounded-full bg-blue-600 flex items-center justify-center animate-in zoom-in duration-500"> */}
+                  <div className="size-50 rounded-full bg-white flex items-center justify-center">
+                    <Image
+                      src="/images/thanks.svg"
+                      alt=""
+                      aria-hidden
+                      width={230}
+                      height={230}
+                      className=" text-blue-600 animate-in zoom-in duration-700"
+                    />
                   </div>
+                  {/* </div> */}
                 </div>
 
                 <div className="space-y-3 animate-in fade-in duration-500 delay-300">

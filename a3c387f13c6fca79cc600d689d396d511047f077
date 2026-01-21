@@ -1,0 +1,23 @@
+src/features/feedback-form/ui/feedback-modal.tsx
+  0bbab9c4b9b29ed0 242-245,259,264,272-278,282-285,293-299,303,318,325-328,332,345-346,352,361-366
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "a3c387f13c6fca79cc600d689d396d511047f077",
+  "prompts": {
+    "0bbab9c4b9b29ed0": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "366224",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 137,
+      "total_deletions": 120,
+      "accepted_lines": 40,
+      "overriden_lines": 0
+    }
+  }
+}

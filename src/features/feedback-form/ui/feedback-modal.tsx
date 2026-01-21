@@ -3,7 +3,7 @@
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { submitFeedback } from '@entities/feedback-form/api/submit-feedback';
+import { useSubmitFeedback } from '@entities/feedback-form/api/use-submit-feedback';
 import { Button } from '@shared/ui/button';
 import { Checkbox } from '@shared/ui/checkbox';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
@@ -20,12 +20,43 @@ interface FeedbackModalProps {
   onComplete?: () => void;
 }
 
+const getStepColor = (currentStep: 'rating' | 'feedback' | 'pricing' | 'thanks', stepNumber: number): string => {
+  switch (stepNumber) {
+    case 1:
+      switch (currentStep) {
+        case 'rating':
+          return 'bg-blue-600';
+        default:
+          return 'bg-gray-300';
+      }
+    case 2:
+      switch (currentStep) {
+        case 'feedback':
+          return 'bg-blue-600';
+        case 'pricing':
+          return 'bg-gray-300';
+        default:
+          return 'bg-[#CCD4DF]';
+      }
+    case 3:
+      switch (currentStep) {
+        case 'pricing':
+          return 'bg-blue-600';
+        default:
+          return 'bg-[#CCD4DF]';
+      }
+    default:
+      return 'bg-gray-300';
+  }
+};
+
 export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalProps) {
   const [step, setStep] = useState<'rating' | 'feedback' | 'pricing' | 'thanks'>('rating');
   const [rating, setRating] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [pricingOption, setPricingOption] = useState<string>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { mutateAsync: submitFeedbackMutation, isPending: isSubmitting } = useSubmitFeedback();
 
   const resetForm = () => {
     setStep('rating');
@@ -44,8 +75,6 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
   }, [open]);
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-
     try {
       const questions = [];
 
@@ -70,7 +99,7 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
         });
       }
 
-      await submitFeedback({
+      await submitFeedbackMutation({
         feedbacks: [
           {
             rating,
@@ -83,8 +112,6 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
       setStep('thanks');
     } catch (error) {
       console.error('Failed to submit feedback:', error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -206,15 +233,9 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
 
             {step !== 'thanks' && (
               <div className="flex gap-2 mb-12 mt-2 px-4">
-                <div
-                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'rating' ? 'bg-blue-600' : 'bg-gray-300'}`}
-                />
-                <div
-                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'feedback' ? 'bg-blue-600' : step === 'pricing' ? 'bg-gray-300' : 'bg-[#CCD4DF]'}`}
-                />
-                <div
-                  className={`h-1 flex-1 rounded-[20px] transition-colors ${step === 'pricing' ? 'bg-blue-600' : 'bg-[#CCD4DF]'}`}
-                />
+                <div className={`h-1 flex-1 rounded-[20px] transition-colors ${getStepColor(step, 1)}`} />
+                <div className={`h-1 flex-1 rounded-[20px] transition-colors ${getStepColor(step, 2)}`} />
+                <div className={`h-1 flex-1 rounded-[20px] transition-colors ${getStepColor(step, 3)}`} />
               </div>
             )}
 

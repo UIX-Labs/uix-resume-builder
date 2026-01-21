@@ -239,114 +239,137 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
               </div>
             )}
 
-            {step === 'thanks' ? (
-              <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
-                <div className="relative">
-                  <div className="size-50 rounded-full bg-white flex items-center justify-center">
-                    <Image
-                      src="/images/thanks.svg"
-                      alt=""
-                      aria-hidden
-                      width={230}
-                      height={230}
-                      className=" text-blue-600 animate-in zoom-in duration-700"
-                    />
-                  </div>
-                </div>
+            {(() => {
+              switch (step) {
+                case 'thanks':
+                  return (
+                    <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
+                      <div className="relative">
+                        <div className="size-50 rounded-full bg-white flex items-center justify-center">
+                          <Image
+                            src="/images/thanks.svg"
+                            alt=""
+                            aria-hidden
+                            width={230}
+                            height={230}
+                            className=" text-blue-600 animate-in zoom-in duration-700"
+                          />
+                        </div>
+                      </div>
 
-                <div className="space-y-3 animate-in fade-in duration-500 delay-300">
-                  <h3 className="text-4xl font-bold text-gray-900">THANKS!</h3>
-                  <p className="text-lg text-gray-600">Your feedback helps us make better resumes.</p>
-                </div>
+                      <div className="space-y-3 animate-in fade-in duration-500 delay-300">
+                        <h3 className="text-4xl font-bold text-gray-900">THANKS!</h3>
+                        <p className="text-lg text-gray-600">Your feedback helps us make better resumes.</p>
+                      </div>
 
-                <Button
-                  className="w-full max-w-xs h-12 text-base bg-blue-600 hover:bg-blue-700 shadow-blue-200 shadow-lg animate-in fade-in duration-500 delay-500"
-                  onClick={() => {
-                    onComplete?.();
-                    onOpenChange(false);
-                  }}
-                >
-                  Done
-                </Button>
-              </div>
-            ) : step === 'rating' ? (
-              <>
-                <div className="flex-1 flex flex-col items-center text-center space-y-10">
-                  <h3 className="text-3xl font-bold text-gray-900">How was your resume creation experience?</h3>
-
-                  <div className="space-y-6 mt-6">
-                    <StarRating value={rating} onChange={setRating} className="justify-center gap-3" />
-
-                    {rating > 0 && (
-                      <p className="text-blue-600 font-medium text-lg animate-in fade-in duration-200">
-                        {RATING_MESSAGES[rating]}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <FeedbackActionButtons onSkip={handleSkip} onNext={handleRatingNext} disabled={rating === 0} />
-              </>
-            ) : step === 'feedback' ? (
-              <>
-                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-10 px-4">
-                  <h3 className="text-3xl font-bold text-gray-900">{feedbackTitle}</h3>
-
-                  <div className="space-y-6 mx-auto w-fit">
-                    {feedbackOptions.map((option) => (
-                      <label key={option.id} htmlFor={option.id} className="flex items-center gap-4 cursor-pointer">
-                        <Checkbox
-                          id={option.id}
-                          checked={selectedOptions.includes(option.id)}
-                          onCheckedChange={() => toggleOption(option.id)}
-                          className="border-black"
-                        />
-                        <span className="text-gray-700 font-medium">{option.label}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-
-                <FeedbackActionButtons
-                  onSkip={handleSkip}
-                  onNext={handleFeedbackNext}
-                  disabled={selectedOptions.length === 0}
-                />
-              </>
-            ) : (
-              <>
-                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-8 px-4">
-                  <h3 className="text-3xl font-bold text-black">What would you expect to pay for a tool like this?</h3>
-
-                  <RadioGroup
-                    value={pricingOption}
-                    onValueChange={setPricingOption}
-                    className="space-y-3 mx-auto w-fit"
-                  >
-                    {PRICING_OPTIONS.map((option) => (
-                      <label
-                        key={option.id}
-                        htmlFor={option.id}
-                        className={`flex items-center gap-4 cursor-pointer ${
-                          pricingOption === option.id ? 'border-blue-600' : 'border-black hover:bg-gray-50'
-                        }`}
+                      <Button
+                        className="w-full max-w-xs h-12 text-base bg-blue-600 hover:bg-blue-700 shadow-blue-200 shadow-lg animate-in fade-in duration-500 delay-500"
+                        onClick={() => {
+                          onComplete?.();
+                          onOpenChange(false);
+                        }}
                       >
-                        <RadioGroupItem value={option.id} className="border-black cursor-pointer" />
-                        <span className="text-gray-900 font-medium text-left flex-1">{option.label}</span>
-                      </label>
-                    ))}
-                  </RadioGroup>
-                </div>
+                        Done
+                      </Button>
+                    </div>
+                  );
 
-                <FeedbackActionButtons
-                  onSkip={handleSkip}
-                  onNext={handleSubmit}
-                  nextLabel="Submit"
-                  isLoading={isSubmitting}
-                  disabled={!pricingOption || isSubmitting}
-                />
-              </>
-            )}
+                case 'rating':
+                  return (
+                    <>
+                      <div className="flex-1 flex flex-col items-center text-center space-y-10">
+                        <h3 className="text-3xl font-bold text-gray-900">How was your resume creation experience?</h3>
+
+                        <div className="space-y-6 mt-6">
+                          <StarRating value={rating} onChange={setRating} className="justify-center gap-3" />
+
+                          {rating > 0 && (
+                            <p className="text-blue-600 font-medium text-lg animate-in fade-in duration-200">
+                              {RATING_MESSAGES[rating]}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <FeedbackActionButtons onSkip={handleSkip} onNext={handleRatingNext} disabled={rating === 0} />
+                    </>
+                  );
+
+                case 'feedback':
+                  return (
+                    <>
+                      <div className="flex-1 flex flex-col justify-start items-center text-center space-y-10 px-4">
+                        <h3 className="text-3xl font-bold text-gray-900">{feedbackTitle}</h3>
+
+                        <div className="space-y-6 mx-auto w-fit">
+                          {feedbackOptions.map((option) => (
+                            <label
+                              key={option.id}
+                              htmlFor={option.id}
+                              className="flex items-center gap-4 cursor-pointer"
+                            >
+                              <Checkbox
+                                id={option.id}
+                                checked={selectedOptions.includes(option.id)}
+                                onCheckedChange={() => toggleOption(option.id)}
+                                className="border-black"
+                              />
+                              <span className="text-gray-700 font-medium">{option.label}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+
+                      <FeedbackActionButtons
+                        onSkip={handleSkip}
+                        onNext={handleFeedbackNext}
+                        disabled={selectedOptions.length === 0}
+                      />
+                    </>
+                  );
+
+                case 'pricing':
+                  return (
+                    <>
+                      <div className="flex-1 flex flex-col justify-start items-center text-center space-y-8 px-4">
+                        <h3 className="text-3xl font-bold text-black">
+                          What would you expect to pay for a tool like this?
+                        </h3>
+
+                        <RadioGroup
+                          value={pricingOption}
+                          onValueChange={setPricingOption}
+                          className="space-y-3 mx-auto w-fit"
+                        >
+                          {PRICING_OPTIONS.map((option) => (
+                            <label
+                              key={option.id}
+                              htmlFor={option.id}
+                              className={`flex items-center gap-4 cursor-pointer ${
+                                pricingOption === option.id ? 'border-blue-600' : 'border-black hover:bg-gray-50'
+                              }`}
+                            >
+                              <RadioGroupItem value={option.id} className="border-black cursor-pointer" />
+                              <span className="text-gray-900 font-medium text-left flex-1">{option.label}</span>
+                            </label>
+                          ))}
+                        </RadioGroup>
+                      </div>
+
+                      <FeedbackActionButtons
+                        onSkip={handleSkip}
+                        onNext={handleSubmit}
+                        nextLabel="Submit"
+                        isLoading={isSubmitting}
+                        disabled={!pricingOption || isSubmitting}
+                      />
+                    </>
+                  );
+
+                default:
+                  return null;
+              }
+            })()}
           </div>
         </div>
       </DialogContent>

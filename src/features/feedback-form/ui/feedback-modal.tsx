@@ -1,18 +1,16 @@
 'use client';
 
-import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
 import { useSubmitFeedback } from '@entities/feedback-form/api/use-submit-feedback';
-import { Button } from '@shared/ui/button';
-import { Checkbox } from '@shared/ui/checkbox';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
-import { RadioGroup, RadioGroupItem } from '@shared/ui/radio-group';
 import Image from 'next/image';
-import { IMPROVEMENT_OPTIONS, POSITIVE_FEEDBACK_OPTIONS, PRICING_OPTIONS, RATING_MESSAGES } from '../constants';
-import { FeedbackActionButtons } from './feedback-action-buttons';
+import { IMPROVEMENT_OPTIONS, POSITIVE_FEEDBACK_OPTIONS, PRICING_OPTIONS } from '../constants';
 import { FeedbackCarousel } from './feedback-carousel';
-import { StarRating } from './star-rating';
+import { FeedbackThanksStep } from './feedback-thanks-step';
+import { FeedbackRatingStep } from './feedback-rating-step';
+import { FeedbackOptionsStep } from './feedback-options-step';
+import { FeedbackPricingStep } from './feedback-pricing-step';
+import { X } from 'lucide-react';
 
 interface FeedbackModalProps {
   open: boolean;
@@ -242,128 +240,40 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
             {(() => {
               switch (step) {
                 case 'thanks':
-                  return (
-                    <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
-                      <div className="relative">
-                        <div className="size-50 rounded-full bg-white flex items-center justify-center">
-                          <Image
-                            src="/images/thanks.svg"
-                            alt=""
-                            aria-hidden
-                            width={230}
-                            height={230}
-                            className=" text-blue-600 animate-in zoom-in duration-700"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-3 animate-in fade-in duration-500 delay-300">
-                        <h3 className="text-4xl font-bold text-gray-900">THANKS!</h3>
-                        <p className="text-lg text-gray-600">Your feedback helps us make better resumes.</p>
-                      </div>
-
-                      <Button
-                        className="w-full max-w-xs h-12 text-base bg-blue-600 hover:bg-blue-700 shadow-blue-200 shadow-lg animate-in fade-in duration-500 delay-500"
-                        onClick={() => {
-                          onComplete?.();
-                          onOpenChange(false);
-                        }}
-                      >
-                        Done
-                      </Button>
-                    </div>
-                  );
+                  return <FeedbackThanksStep onComplete={onComplete} onOpenChange={onOpenChange} />;
 
                 case 'rating':
                   return (
-                    <>
-                      <div className="flex-1 flex flex-col items-center text-center space-y-10">
-                        <h3 className="text-3xl font-bold text-gray-900">How was your resume creation experience?</h3>
-
-                        <div className="space-y-6 mt-6">
-                          <StarRating value={rating} onChange={setRating} className="justify-center gap-3" />
-
-                          {rating > 0 && (
-                            <p className="text-blue-600 font-medium text-lg animate-in fade-in duration-200">
-                              {RATING_MESSAGES[rating]}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <FeedbackActionButtons onSkip={handleSkip} onNext={handleRatingNext} disabled={rating === 0} />
-                    </>
+                    <FeedbackRatingStep
+                      rating={rating}
+                      onRatingChange={setRating}
+                      onSkip={handleSkip}
+                      onNext={handleRatingNext}
+                    />
                   );
 
                 case 'feedback':
                   return (
-                    <>
-                      <div className="flex-1 flex flex-col justify-start items-center text-center space-y-10 px-4">
-                        <h3 className="text-3xl font-bold text-gray-900">{feedbackTitle}</h3>
-
-                        <div className="space-y-6 mx-auto w-fit">
-                          {feedbackOptions.map((option) => (
-                            <label
-                              key={option.id}
-                              htmlFor={option.id}
-                              className="flex items-center gap-4 cursor-pointer"
-                            >
-                              <Checkbox
-                                id={option.id}
-                                checked={selectedOptions.includes(option.id)}
-                                onCheckedChange={() => toggleOption(option.id)}
-                                className="border-black"
-                              />
-                              <span className="text-gray-700 font-medium">{option.label}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
-
-                      <FeedbackActionButtons
-                        onSkip={handleSkip}
-                        onNext={handleFeedbackNext}
-                        disabled={selectedOptions.length === 0}
-                      />
-                    </>
+                    <FeedbackOptionsStep
+                      title={feedbackTitle}
+                      options={feedbackOptions}
+                      selectedOptions={selectedOptions}
+                      onToggleOption={toggleOption}
+                      onSkip={handleSkip}
+                      onNext={handleFeedbackNext}
+                    />
                   );
 
                 case 'pricing':
                   return (
-                    <>
-                      <div className="flex-1 flex flex-col justify-start items-center text-center space-y-8 px-4">
-                        <h3 className="text-3xl font-bold text-black">
-                          What would you expect to pay for a tool like this?
-                        </h3>
-
-                        <RadioGroup
-                          value={pricingOption}
-                          onValueChange={setPricingOption}
-                          className="space-y-3 mx-auto w-fit"
-                        >
-                          {PRICING_OPTIONS.map((option) => (
-                            <label
-                              key={option.id}
-                              htmlFor={option.id}
-                              className={`flex items-center gap-4 cursor-pointer ${
-                                pricingOption === option.id ? 'border-blue-600' : 'border-black hover:bg-gray-50'
-                              }`}
-                            >
-                              <RadioGroupItem value={option.id} className="border-black cursor-pointer" />
-                              <span className="text-gray-900 font-medium text-left flex-1">{option.label}</span>
-                            </label>
-                          ))}
-                        </RadioGroup>
-                      </div>
-
-                      <FeedbackActionButtons
-                        onSkip={handleSkip}
-                        onNext={handleSubmit}
-                        nextLabel="Submit"
-                        isLoading={isSubmitting}
-                        disabled={!pricingOption || isSubmitting}
-                      />
-                    </>
+                    <FeedbackPricingStep
+                      pricingOptions={PRICING_OPTIONS}
+                      selectedOption={pricingOption}
+                      onOptionChange={setPricingOption}
+                      onSkip={handleSkip}
+                      onSubmit={handleSubmit}
+                      isLoading={isSubmitting}
+                    />
                   );
 
                 default:

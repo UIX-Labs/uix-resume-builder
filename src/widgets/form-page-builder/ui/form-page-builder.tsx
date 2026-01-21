@@ -45,6 +45,7 @@ import { normalizeStringsFields } from '@entities/resume/models/use-resume-data'
 import { formatTimeAgo } from '../lib/time-helpers';
 import { useSuggestionClickHandler } from '../hooks/use-suggestion-click-handler';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { FeedbackModal } from '@features/feedback-form/ui/feedback-modal';
 
 /**
  * Checks if a field value is empty
@@ -237,6 +238,8 @@ export function FormPageBuilder() {
     formDataSectionKey?: string;
   } | null>(null);
 
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
   const { selectedTemplate, selectedTemplateId, handleTemplateSelect } = useTemplateManagement({
@@ -253,10 +256,26 @@ export function FormPageBuilder() {
     resumeId,
   });
 
-  const { handleDownloadPDF, isAuthModalOpen, setIsAuthModalOpen, authRedirectUrl } = usePdfDownload({
+  const {
+    handleDownloadPDF: originalHandleDownloadPDF,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    authRedirectUrl,
+  } = usePdfDownload({
     resumeId,
     generatePDF,
   });
+
+  const handleDownloadPDF = async () => {
+    try {
+      await originalHandleDownloadPDF();
+      setTimeout(() => {
+        setIsFeedbackModalOpen(true);
+      }, 1500);
+    } catch (error) {
+      console.error('PDF download failed:', error);
+    }
+  };
 
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
   // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes
@@ -949,6 +968,7 @@ export function FormPageBuilder() {
         title="Login Required"
         description="You need to login to download the PDF."
       />
+      <FeedbackModal open={isFeedbackModalOpen} onOpenChange={setIsFeedbackModalOpen} />
     </div>
   );
 }

@@ -89,8 +89,37 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
   };
 
   const handleSkip = () => {
-    onComplete?.();
-    onOpenChange(false);
+    if (step === 'rating') {
+      onComplete?.();
+      onOpenChange(false);
+      return;
+    }
+
+    if (step === 'feedback') {
+      setStep('pricing');
+      return;
+    }
+
+    if (step === 'pricing') {
+      handleSubmit();
+    }
+  };
+
+  const hasFeedbackData = rating > 0 || selectedOptions.length > 0 || Boolean(pricingOption);
+
+  const handleClose = () => {
+    if (isSubmitting) return;
+
+    if (!hasFeedbackData) {
+      onComplete?.();
+      onOpenChange(false);
+      return;
+    }
+
+    handleSubmit().finally(() => {
+      onComplete?.();
+      onOpenChange(false);
+    });
   };
 
   const handleRatingNext = () => {
@@ -116,6 +145,8 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
         className="p-0 gap-0 overflow-hidden border-none rounded-[36px] md:max-w-[1035px]"
         style={{ boxShadow: '0 4px 50px 0 rgba(0, 0, 0, 0.19)' }}
         showCloseButton={false}
+        onInteractOutside={(e) => e.preventDefault()}
+        onEscapeKeyDown={(e) => e.preventDefault()}
       >
         <div className="grid md:grid-cols-[0.40fr_0.60fr] min-h-[600px]">
           <div className="bg-[#1C5DB5] p-6 flex flex-col justify-between text-white relative overflow-hidden">
@@ -167,7 +198,7 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
           <div className="bg-[#F8F8F8] p-8 md:p-10 flex flex-col relative">
             <button
               type="button"
-              onClick={() => onOpenChange(false)}
+              onClick={handleClose}
               className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
             >
               <X className="size-6" />
@@ -190,7 +221,6 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
             {step === 'thanks' ? (
               <div className="flex-1 flex flex-col justify-center items-center text-center space-y-8">
                 <div className="relative">
-                  {/* <div className="size-32 rounded-full bg-blue-600 flex items-center justify-center animate-in zoom-in duration-500"> */}
                   <div className="size-50 rounded-full bg-white flex items-center justify-center">
                     <Image
                       src="/images/thanks.svg"
@@ -201,7 +231,6 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
                       className=" text-blue-600 animate-in zoom-in duration-700"
                     />
                   </div>
-                  {/* </div> */}
                 </div>
 
                 <div className="space-y-3 animate-in fade-in duration-500 delay-300">
@@ -239,7 +268,7 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
               </>
             ) : step === 'feedback' ? (
               <>
-                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-6 px-4">
+                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-10 px-4">
                   <h3 className="text-3xl font-bold text-gray-900">{feedbackTitle}</h3>
 
                   <div className="space-y-6 mx-auto w-fit">
@@ -265,13 +294,13 @@ export function FeedbackModal({ open, onOpenChange, onComplete }: FeedbackModalP
               </>
             ) : (
               <>
-                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-6 px-4">
+                <div className="flex-1 flex flex-col justify-start items-center text-center space-y-8 px-4">
                   <h3 className="text-3xl font-bold text-black">What would you expect to pay for a tool like this?</h3>
 
                   <RadioGroup
                     value={pricingOption}
                     onValueChange={setPricingOption}
-                    className="space-y-4 mx-auto w-fit"
+                    className="space-y-3 mx-auto w-fit"
                   >
                     {PRICING_OPTIONS.map((option) => (
                       <label

@@ -26,3 +26,29 @@ export const PRICING_OPTIONS = [
   { id: '500_999', label: '₹500–₹999' },
   { id: 'more_if_improves', label: 'More if it improves my chances' },
 ];
+
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    name: 'Akshat Bhargav',
+    role: 'TikTok • Senior Software Engineer',
+    quote:
+      'Pika intelligence helped me build my resume according to the JD. It was ready very quickly and presented my skills clearly.',
+    image: '',
+  },
+  {
+    id: 2,
+    name: 'Shivam S.',
+    role: 'Uber • Senior Product Designer',
+    quote:
+      '"Pika Resume made my work easier with LinkedIn import. My resume was ready in 3 minutes with good formatting and clear structure.',
+    image: '',
+  },
+  {
+    id: 3,
+    name: 'Rohan K.',
+    role: 'Google • Software Engineer',
+    quote: 'If you want to grab a recruiter’s attention, Pika Resume is the way to go.',
+    image: '',
+  },
+];

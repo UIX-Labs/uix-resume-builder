@@ -4,33 +4,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Star } from 'lucide-react';
 import React from 'react';
-
-const TESTIMONIALS = [
-  {
-    id: 1,
-    name: 'Akshat Bhargav',
-    role: 'TikTok • Senior Software Engineer',
-    quote:
-      'Pika intelligence helped me build my resume according to the JD. It was ready very quickly and presented my skills clearly.',
-    image: '',
-  },
-  {
-    id: 2,
-    name: 'Shivam S.',
-    role: 'Uber • Senior Product Designer',
-    quote:
-      'Pika intelligence helped me build my resume according to the JD. It was ready very quickly and presented my skills clearly.',
-    image: '',
-  },
-  {
-    id: 3,
-    name: 'Rohan K.',
-    role: 'Google • Software Engineer',
-    quote:
-      'Pika intelligence helped me build my resume according to the JD. It was ready very quickly and presented my skills clearly.',
-    image: '',
-  },
-];
+import { TESTIMONIALS } from '../constants';
 
 export function FeedbackCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 3000 })]);
@@ -68,7 +42,7 @@ export function FeedbackCarousel() {
         <div className="w-[300px] flex -ml-4">
           {TESTIMONIALS.map((testimonial) => (
             <div key={testimonial.id} className="shrink-0 grow-0 basis-full pl-4">
-              <div className="bg-white rounded-xl p-5 shadow-sm">
+              <div className="bg-white rounded-xl p-5 shadow-sm h-[170px] flex flex-col justify-between">
                 <div className="flex items-center gap-3 mb-3">
                   <Avatar className="size-10">
                     <AvatarImage src={testimonial.image} />
@@ -82,7 +56,7 @@ export function FeedbackCarousel() {
                 </div>
 
                 <p className="text-[10px] text-gray-600 leading-relaxed mb-4">"{testimonial.quote}"</p>
-                <div className="flex gap-0.5">
+                <div className="flex gap-0.5 justify-end">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <Star key={i} className="size-4 fill-blue-600 text-blue-600" />
                   ))}

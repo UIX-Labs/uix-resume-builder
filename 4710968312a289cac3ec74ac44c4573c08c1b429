@@ -1,0 +1,31 @@
+src/features/feedback-form/ui/feedback-options-step.tsx
+  0bbab9c4b9b29ed0 1-49
+src/features/feedback-form/ui/feedback-thanks-step.tsx
+  0bbab9c4b9b29ed0 1-41
+src/features/feedback-form/ui/feedback-pricing-step.tsx
+  0bbab9c4b9b29ed0 1-56
+src/features/feedback-form/ui/feedback-modal.tsx
+  0bbab9c4b9b29ed0 9-13,243,247-249,257-261,269-272,274
+src/features/feedback-form/ui/feedback-rating-step.tsx
+  0bbab9c4b9b29ed0 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "4710968312a289cac3ec74ac44c4573c08c1b429",
+  "prompts": {
+    "0bbab9c4b9b29ed0": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "366224",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 207,
+      "total_deletions": 117,
+      "accepted_lines": 197,
+      "overriden_lines": 0
+    }
+  }
+}

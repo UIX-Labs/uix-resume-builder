@@ -179,10 +179,12 @@ export function TemplateCarousel() {
                             </div>
 
                             {/* Preview Button */}
-                            <PreviewButton onClick={() => {
-                              setPreviewTemplate(template);
-                              setIsPreviewOpen(true);
-                            }} />
+                            <PreviewButton
+                              onClick={() => {
+                                setPreviewTemplate(template);
+                                setIsPreviewOpen(true);
+                              }}
+                            />
 
                             <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-9 gap-2 transition-colors duration-500">
                               <Button
@@ -298,11 +300,7 @@ export function TemplateCarousel() {
       {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
 
       {/* Preview Modal */}
-      <PreviewModal
-        template={previewTemplate}
-        isOpen={isPreviewOpen}
-        onClose={() => setIsPreviewOpen(false)}
-      />
+      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </div>
   );
 }

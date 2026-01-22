@@ -1,4 +1,6 @@
+import { arrayMove } from '@dnd-kit/sortable';
 import { cn } from '@shared/lib/cn';
+import { DragDropContext, DragOverlay, SortableItem, SortableList } from '@shared/ui/components/sortable';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderSection } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
@@ -13,6 +15,8 @@ export type RenderProps = {
   hasSuggestions?: boolean;
   isThumbnail?: boolean;
   skipImageFallbacks?: boolean;
+  isReorderMode?: boolean;
+  onReorderSections?: (sections: any[]) => void;
 };
 
 function ResumeRendererComponent({
@@ -23,9 +27,18 @@ function ResumeRendererComponent({
   hasSuggestions = false,
   isThumbnail = false,
   skipImageFallbacks = false,
+  isReorderMode = false,
+  onReorderSections,
 }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
+
+  const [activeReorderMode, setActiveReorderMode] = useState(isReorderMode);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  useLayoutEffect(() => {
+    setActiveReorderMode(isReorderMode);
+  }, [isReorderMode]);
 
   const { page } = template;
 
@@ -292,8 +305,53 @@ function ResumeRendererComponent({
   const baseStyle = {
     width: '21cm',
     padding: PAGE_PADDING,
-    gridTemplateColumns: `calc(${leftWidth} - ${spacing}) calc(${rightWidth} - ${spacing})`,
-    gap: spacing,
+    gridTemplateColumns: spacing
+      ? `calc(${leftWidth} - ${spacing}) calc(${rightWidth} - ${spacing})`
+      : `${leftWidth} ${rightWidth}`,
+    gap: spacing || '0px',
+  };
+
+  const handleDragStart = (event: any) => {
+    setActiveId(event.active.id);
+  };
+
+  const handleDragOver = (event: any) => {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    if (activeId === overId) return;
+
+    const activeIndex = template.sections.findIndex((s: any) => s.id === activeId);
+    const overIndex = template.sections.findIndex((s: any) => s.id === overId);
+
+    // If moving between columns or within columns
+    if (activeIndex !== -1 && overIndex !== -1) {
+      const activeSection = template.sections[activeIndex];
+      const overSection = template.sections[overIndex];
+
+      if (activeSection.column !== overSection.column) {
+        const newSections = [...template.sections];
+        newSections[activeIndex] = { ...activeSection, column: overSection.column };
+        onReorderSections?.(newSections);
+      }
+    }
+  };
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    setActiveId(null);
+    if (!over) return;
+
+    if (active.id !== over.id) {
+      const oldIndex = template.sections.findIndex((s: any) => s.id === active.id);
+      const newIndex = template.sections.findIndex((s: any) => s.id === over.id);
+
+      const newSections = arrayMove(template.sections, oldIndex, newIndex);
+      onReorderSections?.(newSections);
+    }
   };
 
   return (
@@ -337,7 +395,13 @@ function ResumeRendererComponent({
         return (
           <div
             key={index}
-            className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
+            className={cn(
+              'grid group/page relative',
+              !skipImageFallbacks && 'mb-5',
+              page.className,
+              className,
+              activeReorderMode && 'hidden',
+            )}
             style={{
               ...baseStyle,
               [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
@@ -357,9 +421,13 @@ function ResumeRendererComponent({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>
+                  <div
+                    key={i}
+                    className="cursor-pointer hover:bg-blue-50/30 transition-colors duration-200"
+                    onClick={() => setActiveReorderMode(true)}
+                  >
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
-                  </React.Fragment>
+                  </div>
                 ))}
               </div>
             )}
@@ -369,9 +437,15 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {leftColumn.map((node: any, i) => (
+              {leftColumn.map((node: any, i: number) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={i}
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                  className="cursor-pointer hover:bg-blue-50/30 transition-colors duration-200"
+                  onClick={() => setActiveReorderMode(true)}
+                />
               ))}
             </div>
             <div
@@ -380,14 +454,111 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {rightColumn.map((node: any, i) => (
+              {rightColumn.map((node: any, i: number) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={i}
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                  className="cursor-pointer hover:bg-blue-50/30 transition-colors duration-200"
+                  onClick={() => setActiveReorderMode(true)}
+                />
               ))}
             </div>
+            {index === 0 && (
+              <div className="absolute top-6 right-6 z-[120]">
+                <div className="bg-blue-600 text-white text-[10px] uppercase font-bold tracking-wider px-4 py-2 rounded-full shadow-xl animate-in fade-in zoom-in duration-300">
+                  Click any section to reorder
+                </div>
+              </div>
+            )}
           </div>
         );
       })}
+
+      {activeReorderMode && (
+        <div className="relative group/reorder">
+          <button
+            onClick={() => setActiveReorderMode(false)}
+            className="cursor-pointer absolute top-6 right-6 bg-blue-600 text-white text-[10px] uppercase font-bold tracking-wider px-4 py-2 rounded-full shadow-xl hover:bg-blue-700 transition-all z-[130] animate-in fade-in zoom-in duration-300 hover:scale-105 active:scale-95"
+          >
+            Done Reordering
+          </button>
+          <DragDropContext onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+            <div
+              className={cn(
+                'grid p-8 border-4 border-blue-200/50 rounded-2xl bg-blue-50/5 ring-4 ring-blue-100/20 shadow-2xl transition-all duration-300',
+                page.className,
+                className,
+              )}
+              style={{
+                ...baseStyle,
+                minHeight: '29.7cm',
+                backgroundColor: page.background || 'white',
+                fontFamily: page.fontFamily,
+              }}
+            >
+              {bannerItems.length > 0 && (
+                <div style={{ gridColumn: '1 / -1' }} className="mb-4">
+                  <SortableList items={bannerItems} getId={(s: any) => s.id} id="banner">
+                    {bannerItems.map((section: any) => (
+                      <SortableItem
+                        key={section.id}
+                        id={section.id}
+                        className="mb-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 ring-1 ring-black/5 hover:ring-blue-400/50"
+                      >
+                        {renderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+                      </SortableItem>
+                    ))}
+                  </SortableList>
+                </div>
+              )}
+
+              <div className={cn('flex flex-col gap-2', leftColumnClassName)}>
+                <SortableList items={leftItems} getId={(s: any) => s.id} id="left">
+                  {leftItems.map((section: any) => (
+                    <SortableItem
+                      key={section.id}
+                      id={section.id}
+                      className="mb-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 ring-1 ring-black/5 hover:ring-blue-400/50"
+                    >
+                      {renderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+                    </SortableItem>
+                  ))}
+                </SortableList>
+              </div>
+
+              <div className={cn('flex flex-col gap-2', rightColumnClassName)}>
+                <SortableList items={rightItems} getId={(s: any) => s.id} id="right">
+                  {rightItems.map((section: any) => (
+                    <SortableItem
+                      key={section.id}
+                      id={section.id}
+                      className="mb-4 p-4 border border-gray-100 rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 ring-1 ring-black/5 hover:ring-blue-400/50"
+                    >
+                      {renderSection(section, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+                    </SortableItem>
+                  ))}
+                </SortableList>
+              </div>
+            </div>
+            <DragOverlay>
+              {activeId ? (
+                <div className="p-4 border-2 border-blue-400 rounded-xl bg-white shadow-2xl scale-[1.02] opacity-90 ring-4 ring-blue-500/20">
+                  {renderSection(
+                    template.sections.find((s: any) => s.id === activeId),
+                    data,
+                    currentSection,
+                    hasSuggestions,
+                    isThumbnail,
+                    skipImageFallbacks,
+                  )}
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DragDropContext>
+        </div>
+      )}
     </>
   );
 }

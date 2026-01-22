@@ -38,9 +38,7 @@ export default function DashboardHeader({ user, className = '' }: DashboardHeade
                 {`${user.firstName} ${user.lastName ?? ''}`}
               </span>
 
-              <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                {user.email}
-              </span>
+              <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">{user.email}</span>
             </div>
           </>
         )}

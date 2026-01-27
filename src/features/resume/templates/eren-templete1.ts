@@ -60,7 +60,7 @@ const enjiTemplate = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'inline-flex items-center gap-1',
+                  className: 'inline-flex items-center gap-1 max-w-[280px]',
                   items: [
                     {
                       type: 'icon',
@@ -71,7 +71,7 @@ const enjiTemplate = {
                     {
                       path: 'personalDetails.items[0].address',
                       fallback: 'Bandung',
-                      className: 'text-[12px] text-black',
+                      className: 'text-[12px] text-black break-words whitespace-normal',
                     },
                   ],
                 },
@@ -247,14 +247,14 @@ const enjiTemplate = {
       columns: [
         {
           type: 'inline-group',
-          containerClassName: 'flex items-center gap-5',
+          containerClassName: 'flex items-baseline gap-3',
           className: 'flex-1',
           items: [
             {
               type: 'text',
               path: 'institution',
               fallback: 'STMIK Indonesia Mandiri',
-              className: 'font-semibold text-slate-900',
+              className: 'font-semibold text-slate-900 whitespace-nowrap',
             },
             {
               type: 'text',
@@ -273,8 +273,8 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-8 pb-8',
-      containerClassName: 'space-y-4',
-      rowClassName: 'items-baseline px-16 py-2',
+      containerClassName: 'space-y-4 pb-2',
+      rowClassName: 'items-baseline px-16',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -356,7 +356,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
       // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      rowClassName: 'items-start px-16 pt-4 pb-1',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -381,7 +381,7 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-1',
+          className: 'flex-1 space-y-1.5',
           break: true,
           items: [
             {
@@ -414,8 +414,8 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      // containerClassName: 'space-y-4',
+      rowClassName: 'items-start px-16 pt-4 pb-1',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -443,10 +443,10 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'name',
           break: true,
+          className: 'flex-1 col-start-2',
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
@@ -477,19 +477,19 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-0.5 flex gap-1',
+          className: 'flex-1 flex flex-col gap-0.5',
           items: [
             {
               type: 'text',
               path: 'title',
               fallback: 'Certification Title',
-              className: 'text-[12px] font-semibold text-slate-900',
+              className: 'text-[12px] font-semibold text-slate-900 break-words whitespace-normal',
             },
             {
               type: 'text',
               path: 'issuer',
               fallback: 'Issuer',
-              className: 'text-[12px] text-slate-600',
+              className: 'text-[12px] text-slate-600 leading-tight',
             },
             {
               type: 'link',
@@ -507,8 +507,8 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: '',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      containerClassName: 'pb-1',
+      rowClassName: 'items-start px-16 pt-4 pb-1',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -536,10 +536,10 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'items',
           break: true,
+          className: 'flex-1 col-start-2',
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
@@ -576,7 +576,7 @@ const enjiTemplate = {
           badgeClassName:
             'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium line-clamp-2 break-all',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
+          className: 'flex-1 col-start-2',
         },
       ],
       gridTemplateColumns: '128px 1fr',

@@ -247,14 +247,14 @@ const enjiTemplate = {
       columns: [
         {
           type: 'inline-group',
-          containerClassName: 'flex items-baseline gap-3',
+          containerClassName: 'flex flex-col',
           className: 'flex-1',
           items: [
             {
               type: 'text',
               path: 'institution',
               fallback: 'STMIK Indonesia Mandiri',
-              className: 'font-semibold text-slate-900 whitespace-nowrap',
+              className: 'font-semibold text-slate-900',
             },
             {
               type: 'text',
@@ -304,12 +304,12 @@ const enjiTemplate = {
           items: [
             {
               type: 'inline-group',
-              containerClassName: 'flex items-center justify-between gap-1',
+              containerClassName: 'flex items-baseline justify-between gap-1',
               className: '',
               items: [
                 {
                   type: 'inline-group',
-                  containerClassName: 'flex items-center gap-1',
+                  containerClassName: 'flex flex-col gap-1 leading-tight',
                   break: true,
                   className: '',
                   items: [
@@ -347,11 +347,6 @@ const enjiTemplate = {
             },
           ],
         },
-        // {
-        //   type: "duration",
-        //   path: "duration",
-        //   className: "text-[12px] text-slate-500 whitespace-nowrap ml-4",
-        // },
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
@@ -359,7 +354,7 @@ const enjiTemplate = {
       rowClassName: 'items-start px-16 pt-4 pb-1',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-1',
       },
     },
     /**
@@ -415,10 +410,10 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-8',
       // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-1',
+      rowClassName: 'items-start px-16 pt-4',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-2',
       },
     },
     /**
@@ -508,10 +503,10 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
       containerClassName: 'pb-1',
-      rowClassName: 'items-start px-16 pt-4 pb-1',
+      rowClassName: 'items-start px-16 pt-4',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-2',
       },
     },
     /**

@@ -55,7 +55,7 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
             <button
               type="button"
               onClick={handleClose}
-              className="absolute top-2 right-4 md:right-2 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors"
+              className="absolute top-2 right-4 md:right-5 md:top-1 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors"
             >
               <CloseIcon className="h-6 w-6 md:h-10 md:w-10" />
             </button>

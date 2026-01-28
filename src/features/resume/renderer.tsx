@@ -1,6 +1,6 @@
 import { cn } from '@shared/lib/cn';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { renderSection } from './lib/section-renderers';
+import { renderSection, willSectionRender } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
@@ -317,18 +317,44 @@ function ResumeRendererComponent({
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
-          {leftItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
-            </React.Fragment>
-          ))}
+          {leftItems.map((s: any, i: number) => {
+            const hasNextSection =
+              i < leftItems.length - 1 &&
+              leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+            return (
+              <React.Fragment key={i}>
+                {renderSection(
+                  s,
+                  data,
+                  currentSection,
+                  hasSuggestions,
+                  isThumbnail,
+                  skipImageFallbacks,
+                  hasNextSection,
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
-          {rightItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
-            </React.Fragment>
-          ))}
+          {rightItems.map((s: any, i: number) => {
+            const hasNextSection =
+              i < rightItems.length - 1 &&
+              rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+            return (
+              <React.Fragment key={i}>
+                {renderSection(
+                  s,
+                  data,
+                  currentSection,
+                  hasSuggestions,
+                  isThumbnail,
+                  skipImageFallbacks,
+                  hasNextSection,
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
 

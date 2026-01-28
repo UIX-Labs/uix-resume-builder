@@ -228,6 +228,45 @@ const enjiTemplate = {
         },
       },
     },
+
+    /**
+     * SUMMARY
+     */
+    {
+      id: 'summary',
+      type: 'table-section',
+      break: true,
+      heading: {
+        path: 'professionalSummary.heading',
+        fallback: 'Summary',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+      },
+      listPath: 'professionalSummary.items',
+      headingColumn: {
+        className: 'w-32',
+      },
+      columns: [
+        {
+          type: 'group',
+          className: 'flex-1',
+          items: [
+            {
+              type: 'html',
+              path: 'summary',
+              fallback: 'description',
+              className: 'text-[12px] text-slate-700 leading-relaxed break-words whitespace-pre-wrap',
+            },
+          ],
+        },
+      ],
+      gridTemplateColumns: '128px 1fr',
+      className: 'px-16 pt-6 pb-6',
+      rowClassName: 'items-start px-16 pb-2.5',
+      divider: {
+        variant: 'line',
+        className: 'border-b border-slate-200',
+      },
+    },
     /**
      * EDUCATION
      */
@@ -273,7 +312,7 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-8 pb-8',
-      containerClassName: 'space-y-4 pb-2',
+      containerClassName: 'space-y-4 pb-2.5 pt-4',
       rowClassName: 'items-baseline px-16',
       divider: {
         variant: 'line',
@@ -351,7 +390,7 @@ const enjiTemplate = {
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
       // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-1',
+      rowClassName: 'items-start px-16 pt-4 pb-1.5',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200 mt-1',
@@ -413,7 +452,7 @@ const enjiTemplate = {
       rowClassName: 'items-start px-16 pt-4',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200 mt-2',
+        className: 'border-b border-slate-200 mt-2.5',
       },
     },
     /**

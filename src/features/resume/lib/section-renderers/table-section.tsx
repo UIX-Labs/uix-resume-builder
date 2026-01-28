@@ -1,11 +1,11 @@
-import React from 'react';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
-import { resolvePath } from '../resolve-path';
+import React from 'react';
 import { renderDivider } from '../components/Divider';
-import { hasPendingSuggestions, flattenAndFilterItemsWithContext, extractRenderableValue } from '../section-utils';
 import { renderField } from '../field-renderer';
-import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { resolvePath } from '../resolve-path';
+import { extractRenderableValue, flattenAndFilterItemsWithContext, hasPendingSuggestions } from '../section-utils';
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 // Table section renderer (row-based layout with configurable columns)
@@ -15,18 +15,26 @@ export function renderTableSection(
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
+  hasNextSection?: boolean,
 ): React.ReactNode {
-  const items = resolvePath(data, section.listPath, []);
+  let items = resolvePath(data, section.listPath, []);
+  const columns = section.columns || [];
 
+  if (section.id === 'summary' && (!Array.isArray(items) || items.length === 0)) {
+    const value = resolvePath(data, 'personalDetails.items[0].description');
+    items = value ? [{ summary: value }] : [];
+  }
   // Return null if items is not an array or is empty
   if (!Array.isArray(items) || items.length === 0) return null;
 
   // Filter out items where all values are empty, null, or undefined
   const validItems = items.filter((item: any) => {
-    if (!item || typeof item !== 'object') return false;
+    if (!item || typeof item !== 'object') {
+      return false;
+    }
 
     // Check if at least one field has a non-empty value
-    return Object.values(item).some((value: any) => {
+    const hasContent = Object.values(item).some((value: any) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
@@ -35,6 +43,8 @@ export function renderTableSection(
       }
       return true;
     });
+
+    return hasContent;
   });
 
   // Return null if no valid items after filtering
@@ -69,8 +79,6 @@ export function renderTableSection(
     }),
   };
 
-  // Get column configuration
-  const columns = section.columns || [];
   const numColumns = columns.length + (section.headingColumn ? 1 : 0);
   const gridTemplateColumns = section.gridTemplateColumns || `repeat(${numColumns}, 1fr)`;
 
@@ -86,7 +94,6 @@ export function renderTableSection(
       style={wrapperStyle}
     >
       {/* {shouldHighlight && <SparkleIndicator />} */}
-
       <div
         data-item="content"
         data-canbreak={section.break ? 'true' : undefined}
@@ -230,18 +237,20 @@ export function renderTableSection(
                 );
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
-                  .map((subField: any, subIdx: number) => ({
-                    idx: subIdx,
-                    element: renderField(
-                      { ...subField, path: subField.path },
-                      item,
-                      itemId,
-                      suggestedUpdates,
-                      isThumbnail,
-                      undefined,
-                      sectionKey || sectionId,
-                    ),
-                  }))
+                  .map((subField: any, subIdx: number) => {
+                    return {
+                      idx: subIdx,
+                      element: renderField(
+                        { ...subField, path: subField.path },
+                        item,
+                        itemId,
+                        suggestedUpdates,
+                        isThumbnail,
+                        undefined,
+                        sectionKey || sectionId,
+                      ),
+                    };
+                  })
                   .filter(
                     ({ element }: { element: React.ReactNode }) =>
                       element !== null && element !== undefined && element !== '',
@@ -315,18 +324,20 @@ export function renderTableSection(
                     // Handle inline-group specially to preserve inline layout
                     if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
-                        .map((inlineSubField: any, idx: number) => ({
-                          idx,
-                          element: renderField(
-                            { ...inlineSubField, path: inlineSubField.path },
-                            item,
-                            itemId,
-                            suggestedUpdates,
-                            isThumbnail,
-                            undefined,
-                            sectionKey || sectionId,
-                          ),
-                        }))
+                        .map((inlineSubField: any, idx: number) => {
+                          return {
+                            idx,
+                            element: renderField(
+                              { ...inlineSubField, path: inlineSubField.path },
+                              item,
+                              itemId,
+                              suggestedUpdates,
+                              isThumbnail,
+                              undefined,
+                              sectionKey || sectionId,
+                            ),
+                          };
+                        })
                         .filter(
                           ({ element }: { element: React.ReactNode }) =>
                             element !== null && element !== undefined && element !== '',
@@ -528,8 +539,8 @@ export function renderTableSection(
           })
         )}
       </div>
-      {/* Render optional section divider */}
-      {section.divider && renderDivider(section.divider)}
+      {/* Render optional section divider at the bottom */}
+      {section.divider && hasNextSection && <div className="px-16">{renderDivider(section.divider)}</div>}
     </div>
   );
 }

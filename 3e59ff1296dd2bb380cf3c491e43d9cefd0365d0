@@ -1,0 +1,36 @@
+src/features/resume/renderer.tsx
+  a65fbc60001d9651 185-189,233-237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.37",
+  "base_commit_sha": "3e59ff1296dd2bb380cf3c491e43d9cefd0365d0",
+  "prompts": {
+    "9cce2f98e39ba446": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "368854",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 0,
+      "accepted_lines": 7,
+      "overriden_lines": 0
+    },
+    "a65fbc60001d9651": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "368845",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 12,
+      "total_deletions": 0,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    }
+  }
+}

@@ -182,6 +182,11 @@ function ResumeRendererComponent({
           if ((canBreak || hasBreakableContent) && child.children.length > 0) {
             // Create empty wrapper and add to current page
             const wrapper = child.cloneNode(false) as HTMLElement;
+            
+            if (wrapper.classList) {
+              wrapper.classList.remove('border-b', 'border-t', 'border-l', 'border-r', 'border');
+            }
+            
             addToPage(wrapper);
 
             // Push to stack
@@ -225,6 +230,11 @@ function ResumeRendererComponent({
             }
 
             const wrapper = child.cloneNode(false) as HTMLElement;
+            
+            if (wrapper.classList) {
+              wrapper.classList.remove('border-b', 'border-t', 'border-l', 'border-r', 'border');
+            }
+            
             addToPage(wrapper);
             containerStack.push(wrapper);
             processChildren(child);

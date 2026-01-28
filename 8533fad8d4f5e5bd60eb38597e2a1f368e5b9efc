@@ -1,0 +1,47 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.37",
+  "base_commit_sha": "8533fad8d4f5e5bd60eb38597e2a1f368e5b9efc",
+  "prompts": {
+    "29afa93dd1437389": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "367939",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 326,
+      "total_deletions": 1,
+      "accepted_lines": 285,
+      "overriden_lines": 27
+    },
+    "a5ff2446cf57aaf3": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "367986",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 1,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    },
+    "f7b4cbd967fc9ada": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e23f1f81-5207-46ba-8b8e-3991c3d7354c",
+        "model": "default"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 10,
+      "total_deletions": 1,
+      "accepted_lines": 9,
+      "overriden_lines": 0
+    }
+  }
+}

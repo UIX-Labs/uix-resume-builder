@@ -6,7 +6,7 @@ const enjiTemplate = {
     background: '#ffffff',
     className: 'text-[12px] text-slate-900 leading-relaxed',
     fontFamily: 'Inter',
-    padding: 0,
+    padding: -65,
   },
   sections: [
     /**

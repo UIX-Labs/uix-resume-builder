@@ -37,6 +37,15 @@ export default function GetAllResumesPage() {
 
   const handleTemplateSelect = async (templateId: string) => {
     try {
+      // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
+      let guestEmail: string | undefined;
+
+      if (!user?.isLoggedIn) {
+        guestEmail = getOrCreateGuestEmail();
+      } else if (!user) {
+        return;
+      }
+
       const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
       const userName = user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Guest User';
       const title = `${userName}-Resume-${currentDate}`;

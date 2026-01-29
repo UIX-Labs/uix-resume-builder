@@ -7,9 +7,10 @@ import { toast } from 'sonner';
 interface UsePdfDownloadParams {
   resumeId: string;
   generatePDF: () => Promise<void>;
+  onDownloadSuccess?: () => void;
 }
 
-export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) {
+export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: UsePdfDownloadParams) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authRedirectUrl, setAuthRedirectUrl] = useState('');
   const searchParams = useSearchParams();
@@ -61,6 +62,9 @@ export function usePdfDownload({ resumeId, generatePDF }: UsePdfDownloadParams) 
       //   });
       // } else {
       await generatePDF();
+
+      onDownloadSuccess?.();
+
       trackEvent('resume_download', {
         status: 'success',
         format: 'pdf',

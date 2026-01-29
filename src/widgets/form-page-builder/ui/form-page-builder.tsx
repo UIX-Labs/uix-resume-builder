@@ -1,51 +1,49 @@
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
-import { useFormPageBuilder } from '../models/ctx';
-import { ResumeRenderer } from '@features/resume/renderer';
-import { useFormDataStore } from '../models/store';
-import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
-import TemplateButton from './change-template-button';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Button } from '@shared/ui/button';
-import { Download, GripVertical } from 'lucide-react';
-import { TemplateForm } from '@features/template-form';
-import { camelToHumanString } from '@shared/lib/string';
-import { data as formSchemaData } from '@entities/resume/api/schema-data';
-import { usePdfGeneration } from '../hooks/use-pdf-generation';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
-import { useTemplateManagement } from '../hooks/use-template-management';
-import { usePdfDownload } from '../hooks/use-pdf-download';
-import { useAutoThumbnail } from '../hooks/use-auto-thumbnail';
-import { useSaveAndNext } from '../hooks/use-save-and-next';
-import { useAutoSave } from '../hooks/use-auto-save';
-import { useResizablePanel } from '../hooks/use-resizable-panel';
-import { useSaveResumeForm } from '@entities/resume';
-import { getResumeEmptyData, type ResumeData } from '@entities/resume';
-import { deepMerge } from '@entities/resume/models/use-resume-data';
-import mockData from '../../../../mock-data.json';
-import { toast } from 'sonner';
-import { debounce } from '@shared/lib/utils';
 import type { SuggestedUpdate, SuggestionType } from '@entities/resume';
+import { getResumeEmptyData, useSaveResumeForm, type ResumeData } from '@entities/resume';
+import { data as formSchemaData } from '@entities/resume/api/schema-data';
+import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
+import { FeedbackModal } from '@features/feedback-form/ui/feedback-modal';
+import { ResumeRenderer } from '@features/resume/renderer';
+import { TemplateForm } from '@features/template-form';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { camelToHumanString } from '@shared/lib/string';
+import { debounce } from '@shared/lib/utils';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import { Button } from '@shared/ui/button';
+import AnalyzerModal from '@shared/ui/components/analyzer-modal';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useQueryClient } from '@tanstack/react-query';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
+import { Download, GripVertical } from 'lucide-react';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import mockData from '../../../../mock-data.json';
+import { useAutoSave } from '../hooks/use-auto-save';
+import { useAutoThumbnail } from '../hooks/use-auto-thumbnail';
+import { usePdfDownload } from '../hooks/use-pdf-download';
+import { usePdfGeneration } from '../hooks/use-pdf-generation';
+import { useResizablePanel } from '../hooks/use-resizable-panel';
+import { useSaveAndNext } from '../hooks/use-save-and-next';
+import { useSuggestionClickHandler } from '../hooks/use-suggestion-click-handler';
+import { useTemplateManagement } from '../hooks/use-template-management';
+import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
+import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
+import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
+import { isSectionEmpty } from '../lib/section-utils';
 import {
-  findItemById,
-  applySuggestionsToFieldValue,
   applySuggestionsToArrayField,
+  applySuggestionsToFieldValue,
+  findItemById,
   removeAppliedSuggestions,
   updateItemFieldValue,
 } from '../lib/suggestion-helpers';
-import { isSectionEmpty } from '../lib/section-utils';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { useQueryClient } from '@tanstack/react-query';
-import AnalyzerModal from '@shared/ui/components/analyzer-modal';
-import { useAnalyzerStore } from '@shared/stores/analyzer-store';
-import { normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { formatTimeAgo } from '../lib/time-helpers';
-import { useSuggestionClickHandler } from '../hooks/use-suggestion-click-handler';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import { FeedbackModal } from '@features/feedback-form/ui/feedback-modal';
+import { useFormPageBuilder } from '../models/ctx';
+import { useFormDataStore } from '../models/store';
+import TemplateButton from './change-template-button';
 
 /**
  * Checks if a field value is empty
@@ -239,6 +237,7 @@ export function FormPageBuilder() {
   } | null>(null);
 
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const feedbackShownRef = useRef(false);
 
   const nextStepIndex = navs.findIndex((item) => item.name === currentStep) + 1;
 
@@ -256,26 +255,19 @@ export function FormPageBuilder() {
     resumeId,
   });
 
-  const {
-    handleDownloadPDF: originalHandleDownloadPDF,
-    isAuthModalOpen,
-    setIsAuthModalOpen,
-    authRedirectUrl,
-  } = usePdfDownload({
+  const { handleDownloadPDF, isAuthModalOpen, setIsAuthModalOpen, authRedirectUrl } = usePdfDownload({
     resumeId,
     generatePDF,
-  });
+    onDownloadSuccess: () => {
+      if (feedbackShownRef.current) return;
 
-  const handleDownloadPDF = async () => {
-    try {
-      await originalHandleDownloadPDF();
+      feedbackShownRef.current = true;
+
       setTimeout(() => {
         setIsFeedbackModalOpen(true);
-      }, 1500);
-    } catch (error) {
-      console.error('PDF download failed:', error);
-    }
-  };
+      }, 800);
+    },
+  });
 
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
   // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes

@@ -78,6 +78,15 @@ export function TemplateCarousel() {
       templateId: template.id,
     });
 
+    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
+    let guestEmail: string | undefined;
+
+    if (!user?.isLoggedIn) {
+      guestEmail = getOrCreateGuestEmail();
+    } else if (!user) {
+      return;
+    }
+
     try {
       const data = await createResumeMutation.mutateAsync({
         title: 'New Resume',

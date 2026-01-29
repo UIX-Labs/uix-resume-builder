@@ -87,7 +87,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       fieldOfStudy: string;
       startDate: string;
       endDate: string;
-      grade: string;
+      grade: string | { value: string };
       ongoing: boolean;
     }>;
     suggestedUpdates?: SuggestedUpdates;

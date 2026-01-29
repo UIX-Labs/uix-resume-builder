@@ -4090,7 +4090,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
 <div>
   <div
     class="mb-5 grid"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; position: absolute; visibility: hidden;"
+    style="width: 21cm; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; position: absolute; visibility: hidden;"
   >
     <div
       class="flex flex-col"
@@ -4155,7 +4155,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </span>
             <span>
               <div
-                class="inline-flex items-center gap-1"
+                class="inline-flex items-center gap-1 max-w-[280px]"
               >
                 <span
                   class="text-black"
@@ -4184,10 +4184,10 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                   </svg>
                 </span>
                 <span
-                  class="text-[12px] text-black"
+                  class="text-[12px] text-black break-words whitespace-normal"
                 >
                   <span
-                    class="text-[12px] text-black"
+                    class="text-[12px] text-black break-words whitespace-normal"
                   >
                     123 Main Street, San Francisco, CA 94102
                   </span>
@@ -4250,16 +4250,71 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
         class=""
         data-canbreak="true"
         data-item="table-section"
-        data-section="education"
+        data-section="summary"
         style="scroll-margin-top: 20px;"
       >
         <div
-          class="space-y-4"
           data-canbreak="true"
           data-item="content"
         >
           <div
-            class="grid items-baseline px-16 py-2"
+            class="grid items-start px-16 pb-2.5"
+            data-has-breakable-content="true"
+            data-item="table-row"
+            style="grid-template-columns: 128px 1fr;"
+          >
+            <div
+              class="w-32"
+              style="grid-column: 1;"
+            >
+              <p
+                class="text-[12px] font-semibold tracking-wide text-slate-500 uppercase"
+                data-item="heading"
+              >
+                Summary
+              </p>
+            </div>
+            <div
+              class="flex-1"
+              style="grid-column: 2;"
+            >
+              <div
+                class="flex-1"
+              >
+                <div
+                  class="text-[12px] text-slate-700 leading-relaxed break-words whitespace-pre-wrap"
+                  data-canbreak="true"
+                  data-has-breakable-content="true"
+                >
+                  Experienced Senior Software Engineer with 5+ years in full-stack development. Specialized in building scalable web applications using modern JavaScript frameworks. Proven track record of leading teams and delivering high-quality software solutions.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200"
+            data-item="divider"
+          />
+        </div>
+      </div>
+      <div
+        class=""
+        data-canbreak="true"
+        data-item="table-section"
+        data-section="education"
+        style="scroll-margin-top: 20px;"
+      >
+        <div
+          class="space-y-4 pb-2.5 pt-4"
+          data-canbreak="true"
+          data-item="content"
+        >
+          <div
+            class="grid items-baseline px-16"
             data-has-breakable-content="true"
             data-item="table-row"
             style="grid-template-columns: 128px 1fr auto;"
@@ -4280,7 +4335,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               style="grid-column: 2;"
             >
               <div
-                class="flex items-center gap-5"
+                class="flex flex-col"
               >
                 <span>
                   <span
@@ -4311,9 +4366,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4327,7 +4386,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           data-item="content"
         >
           <div
-            class="grid items-start px-16 pt-4 pb-4"
+            class="grid items-start px-16 pt-4 pb-1.5"
             data-has-breakable-content="true"
             data-item="table-row"
             style="grid-template-columns: 128px 1fr auto;"
@@ -4353,11 +4412,11 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 class="flex-1 space-y-1.5"
               >
                 <div
-                  class="flex items-center justify-between gap-1"
+                  class="flex items-baseline justify-between gap-1"
                 >
                   <span>
                     <div
-                      class="flex items-center gap-1"
+                      class="flex flex-col gap-1 leading-tight"
                       data-canbreak="true"
                       data-has-breakable-content="true"
                     >
@@ -4397,9 +4456,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-1"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4409,12 +4472,11 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
         style="scroll-margin-top: 20px;"
       >
         <div
-          class="space-y-4"
           data-canbreak="true"
           data-item="content"
         >
           <div
-            class="grid items-start px-16 pt-4 pb-4"
+            class="grid items-start px-16 pt-4"
             data-has-breakable-content="true"
             data-item="table-row"
             style="grid-template-columns: 128px 1fr;"
@@ -4431,13 +4493,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </p>
             </div>
             <div
-              class="flex-1 space-y-1"
+              class="flex-1 space-y-1.5"
               data-canbreak="true"
               data-has-breakable-content="true"
               style="grid-column: 2;"
             >
               <div
-                class="flex-1 space-y-1"
+                class="flex-1 space-y-1.5"
               >
                 <span
                   class="text-[12px] font-semibold text-slate-900"
@@ -4469,9 +4531,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-2.5"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4500,7 +4566,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </p>
             </div>
             <div
-              class="flex-1"
+              class="flex-1 col-start-2"
               data-canbreak="true"
               data-has-breakable-content="true"
             >
@@ -4522,9 +4588,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4534,12 +4604,12 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
         style="scroll-margin-top: 20px;"
       >
         <div
-          class=""
+          class="pb-1"
           data-canbreak="true"
           data-item="content"
         >
           <div
-            class="grid items-start px-16 pt-4 pb-4"
+            class="grid items-start px-16 pt-4"
             data-has-breakable-content="true"
             data-item="table-row"
             style="grid-template-columns: 128px 1fr auto;"
@@ -4556,19 +4626,19 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </p>
             </div>
             <div
-              class="flex-1 space-y-0.5 flex gap-1"
+              class="flex-1 flex flex-col gap-0.5"
               style="grid-column: 2;"
             >
               <div
-                class="flex-1 space-y-0.5 flex gap-1"
+                class="flex-1 flex flex-col gap-0.5"
               >
                 <span
-                  class="text-[12px] font-semibold text-slate-900"
+                  class="text-[12px] font-semibold text-slate-900 break-words whitespace-normal"
                 >
                   AWS Certified Solutions Architect
                 </span>
                 <span
-                  class="text-[12px] text-slate-600"
+                  class="text-[12px] text-slate-600 leading-tight"
                 >
                   Amazon Web Services
                 </span>
@@ -4595,9 +4665,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-2"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4626,7 +4700,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </p>
             </div>
             <div
-              class="flex-1"
+              class="flex-1 col-start-2"
               data-canbreak="true"
               data-has-breakable-content="true"
             >
@@ -4648,9 +4722,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           </div>
         </div>
         <div
-          class="w-full bg-zinc-200 h-px border-b border-slate-200"
-          data-item="divider"
-        />
+          class="px-16"
+        >
+          <div
+            class="w-full bg-zinc-200 h-px border-b border-slate-200"
+            data-item="divider"
+          />
+        </div>
       </div>
       <div
         class=""
@@ -4679,7 +4757,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </p>
             </div>
             <div
-              class="flex-1"
+              class="flex-1 col-start-2"
               data-canbreak="true"
               data-has-breakable-content="true"
             >
@@ -4709,7 +4787,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
   </div>
   <div
     class="grid text-[12px] text-slate-900 leading-relaxed"
-    style="width: 21cm; padding: 0px; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
+    style="width: 21cm; grid-template-columns: calc(100% - 0px) calc(0% - 0px); gap: 0px; height: 29.7cm; background-color: rgb(255, 255, 255); font-family: Inter; grid-template-rows: 1fr;"
   >
     <div
       class="flex flex-col"
@@ -4777,7 +4855,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
               </span>
               <span>
                 <div
-                  class="inline-flex items-center gap-1"
+                  class="inline-flex items-center gap-1 max-w-[280px]"
                 >
                   <span
                     class="text-black"
@@ -4806,10 +4884,10 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                     </svg>
                   </span>
                   <span
-                    class="text-[12px] text-black"
+                    class="text-[12px] text-black break-words whitespace-normal"
                   >
                     <span
-                      class="text-[12px] text-black"
+                      class="text-[12px] text-black break-words whitespace-normal"
                     >
                       123 Main Street, San Francisco, CA 94102
                     </span>
@@ -4876,16 +4954,75 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           class=""
           data-canbreak="true"
           data-item="table-section"
-          data-section="education"
+          data-section="summary"
           style="scroll-margin-top: 20px;"
         >
           <div
-            class="space-y-4"
             data-canbreak="true"
             data-item="content"
           >
             <div
-              class="grid items-baseline px-16 py-2"
+              class="grid items-start px-16 pb-2.5"
+              data-has-breakable-content="true"
+              data-item="table-row"
+              style="grid-template-columns: 128px 1fr;"
+            >
+              <div
+                class="w-32"
+                style="grid-column: 1;"
+              >
+                <p
+                  class="text-[12px] font-semibold tracking-wide text-slate-500 uppercase"
+                  data-item="heading"
+                >
+                  Summary
+                </p>
+              </div>
+              <div
+                class="flex-1"
+                style="grid-column: 2;"
+              >
+                <div
+                  class="flex-1"
+                >
+                  <div
+                    class="text-[12px] text-slate-700 leading-relaxed break-words whitespace-pre-wrap"
+                    data-canbreak="true"
+                    data-has-breakable-content="true"
+                  >
+                    Experienced Senior Software Engineer with 5+ years in full-stack development. Specialized in building scalable web applications using modern JavaScript frameworks. Proven track record of leading teams and delivering high-quality software solutions.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200"
+              data-item="divider"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: block;"
+      >
+        <div
+          class=""
+          data-canbreak="true"
+          data-item="table-section"
+          data-section="education"
+          style="scroll-margin-top: 20px;"
+        >
+          <div
+            class="space-y-4 pb-2.5 pt-4"
+            data-canbreak="true"
+            data-item="content"
+          >
+            <div
+              class="grid items-baseline px-16"
               data-has-breakable-content="true"
               data-item="table-row"
               style="grid-template-columns: 128px 1fr auto;"
@@ -4906,7 +5043,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 style="grid-column: 2;"
               >
                 <div
-                  class="flex items-center gap-5"
+                  class="flex flex-col"
                 >
                   <span>
                     <span
@@ -4937,9 +5074,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -4957,7 +5098,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             data-item="content"
           >
             <div
-              class="grid items-start px-16 pt-4 pb-4"
+              class="grid items-start px-16 pt-4 pb-1.5"
               data-has-breakable-content="true"
               data-item="table-row"
               style="grid-template-columns: 128px 1fr auto;"
@@ -4983,11 +5124,11 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                   class="flex-1 space-y-1.5"
                 >
                   <div
-                    class="flex items-center justify-between gap-1"
+                    class="flex items-baseline justify-between gap-1"
                   >
                     <span>
                       <div
-                        class="flex items-center gap-1"
+                        class="flex flex-col gap-1 leading-tight"
                         data-canbreak="true"
                         data-has-breakable-content="true"
                       >
@@ -5027,9 +5168,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-1"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -5043,12 +5188,11 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           style="scroll-margin-top: 20px;"
         >
           <div
-            class="space-y-4"
             data-canbreak="true"
             data-item="content"
           >
             <div
-              class="grid items-start px-16 pt-4 pb-4"
+              class="grid items-start px-16 pt-4"
               data-has-breakable-content="true"
               data-item="table-row"
               style="grid-template-columns: 128px 1fr;"
@@ -5065,13 +5209,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 </p>
               </div>
               <div
-                class="flex-1 space-y-1"
+                class="flex-1 space-y-1.5"
                 data-canbreak="true"
                 data-has-breakable-content="true"
                 style="grid-column: 2;"
               >
                 <div
-                  class="flex-1 space-y-1"
+                  class="flex-1 space-y-1.5"
                 >
                   <span
                     class="text-[12px] font-semibold text-slate-900"
@@ -5103,9 +5247,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-2.5"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -5138,7 +5286,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 </p>
               </div>
               <div
-                class="flex-1"
+                class="flex-1 col-start-2"
                 data-canbreak="true"
                 data-has-breakable-content="true"
               >
@@ -5160,9 +5308,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -5176,12 +5328,12 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
           style="scroll-margin-top: 20px;"
         >
           <div
-            class=""
+            class="pb-1"
             data-canbreak="true"
             data-item="content"
           >
             <div
-              class="grid items-start px-16 pt-4 pb-4"
+              class="grid items-start px-16 pt-4"
               data-has-breakable-content="true"
               data-item="table-row"
               style="grid-template-columns: 128px 1fr auto;"
@@ -5198,19 +5350,19 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 </p>
               </div>
               <div
-                class="flex-1 space-y-0.5 flex gap-1"
+                class="flex-1 flex flex-col gap-0.5"
                 style="grid-column: 2;"
               >
                 <div
-                  class="flex-1 space-y-0.5 flex gap-1"
+                  class="flex-1 flex flex-col gap-0.5"
                 >
                   <span
-                    class="text-[12px] font-semibold text-slate-900"
+                    class="text-[12px] font-semibold text-slate-900 break-words whitespace-normal"
                   >
                     AWS Certified Solutions Architect
                   </span>
                   <span
-                    class="text-[12px] text-slate-600"
+                    class="text-[12px] text-slate-600 leading-tight"
                   >
                     Amazon Web Services
                   </span>
@@ -5237,9 +5389,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200 mt-2"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -5272,7 +5428,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 </p>
               </div>
               <div
-                class="flex-1"
+                class="flex-1 col-start-2"
                 data-canbreak="true"
                 data-has-breakable-content="true"
               >
@@ -5294,9 +5450,13 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
             </div>
           </div>
           <div
-            class="w-full bg-zinc-200 h-px border-b border-slate-200"
-            data-item="divider"
-          />
+            class="px-16"
+          >
+            <div
+              class="w-full bg-zinc-200 h-px border-b border-slate-200"
+              data-item="divider"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -5329,7 +5489,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template1' template c
                 </p>
               </div>
               <div
-                class="flex-1"
+                class="flex-1 col-start-2"
                 data-canbreak="true"
                 data-has-breakable-content="true"
               >

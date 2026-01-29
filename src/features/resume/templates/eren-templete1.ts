@@ -6,7 +6,7 @@ const enjiTemplate = {
     background: '#ffffff',
     className: 'text-[12px] text-slate-900 leading-relaxed',
     fontFamily: 'Inter',
-    padding: 0,
+    padding: -65,
   },
   sections: [
     /**
@@ -60,7 +60,7 @@ const enjiTemplate = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'inline-flex items-center gap-1',
+                  className: 'inline-flex items-center gap-1 max-w-[280px]',
                   items: [
                     {
                       type: 'icon',
@@ -71,7 +71,7 @@ const enjiTemplate = {
                     {
                       path: 'personalDetails.items[0].address',
                       fallback: 'Bandung',
-                      className: 'text-[12px] text-black',
+                      className: 'text-[12px] text-black break-words whitespace-normal',
                     },
                   ],
                 },
@@ -228,6 +228,45 @@ const enjiTemplate = {
         },
       },
     },
+
+    /**
+     * SUMMARY
+     */
+    {
+      id: 'summary',
+      type: 'table-section',
+      break: true,
+      heading: {
+        path: 'professionalSummary.heading',
+        fallback: 'Summary',
+        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+      },
+      listPath: 'professionalSummary.items',
+      headingColumn: {
+        className: 'w-32',
+      },
+      columns: [
+        {
+          type: 'group',
+          className: 'flex-1',
+          items: [
+            {
+              type: 'html',
+              path: 'summary',
+              fallback: 'description',
+              className: 'text-[12px] text-slate-700 leading-relaxed break-words whitespace-pre-wrap',
+            },
+          ],
+        },
+      ],
+      gridTemplateColumns: '128px 1fr',
+      className: 'px-16 pt-6 pb-6',
+      rowClassName: 'items-start px-16 pb-2.5',
+      divider: {
+        variant: 'line',
+        className: 'border-b border-slate-200',
+      },
+    },
     /**
      * EDUCATION
      */
@@ -247,7 +286,7 @@ const enjiTemplate = {
       columns: [
         {
           type: 'inline-group',
-          containerClassName: 'flex items-center gap-5',
+          containerClassName: 'flex flex-col',
           className: 'flex-1',
           items: [
             {
@@ -273,8 +312,8 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-8 pb-8',
-      containerClassName: 'space-y-4',
-      rowClassName: 'items-baseline px-16 py-2',
+      containerClassName: 'space-y-4 pb-2.5 pt-4',
+      rowClassName: 'items-baseline px-16',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -304,12 +343,12 @@ const enjiTemplate = {
           items: [
             {
               type: 'inline-group',
-              containerClassName: 'flex items-center justify-between gap-1',
+              containerClassName: 'flex items-baseline justify-between gap-1',
               className: '',
               items: [
                 {
                   type: 'inline-group',
-                  containerClassName: 'flex items-center gap-1',
+                  containerClassName: 'flex flex-col gap-1 leading-tight',
                   break: true,
                   className: '',
                   items: [
@@ -347,19 +386,14 @@ const enjiTemplate = {
             },
           ],
         },
-        // {
-        //   type: "duration",
-        //   path: "duration",
-        //   className: "text-[12px] text-slate-500 whitespace-nowrap ml-4",
-        // },
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
       // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      rowClassName: 'items-start px-16 pt-4 pb-1.5',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-1',
       },
     },
     /**
@@ -381,7 +415,7 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-1',
+          className: 'flex-1 space-y-1.5',
           break: true,
           items: [
             {
@@ -414,11 +448,11 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      // containerClassName: 'space-y-4',
+      rowClassName: 'items-start px-16 pt-4',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-2.5',
       },
     },
     /**
@@ -443,10 +477,10 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'name',
           break: true,
+          className: 'flex-1 col-start-2',
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
@@ -477,19 +511,19 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-0.5 flex gap-1',
+          className: 'flex-1 flex flex-col gap-0.5',
           items: [
             {
               type: 'text',
               path: 'title',
               fallback: 'Certification Title',
-              className: 'text-[12px] font-semibold text-slate-900',
+              className: 'text-[12px] font-semibold text-slate-900 break-words whitespace-normal',
             },
             {
               type: 'text',
               path: 'issuer',
               fallback: 'Issuer',
-              className: 'text-[12px] text-slate-600',
+              className: 'text-[12px] text-slate-600 leading-tight',
             },
             {
               type: 'link',
@@ -507,11 +541,11 @@ const enjiTemplate = {
       ],
       gridTemplateColumns: '128px 1fr auto',
       className: 'px-16 pt-6 pb-8',
-      containerClassName: '',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      containerClassName: 'pb-1',
+      rowClassName: 'items-start px-16 pt-4',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mt-2',
       },
     },
     /**
@@ -536,10 +570,10 @@ const enjiTemplate = {
           type: 'badge-list',
           itemPath: 'items',
           break: true,
+          className: 'flex-1 col-start-2',
           badgeClassName:
             'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
         },
       ],
       gridTemplateColumns: '128px 1fr',
@@ -576,7 +610,7 @@ const enjiTemplate = {
           badgeClassName:
             'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium line-clamp-2 break-all',
           containerClassName: 'gap-1.5',
-          className: 'flex-1',
+          className: 'flex-1 col-start-2',
         },
       ],
       gridTemplateColumns: '128px 1fr',

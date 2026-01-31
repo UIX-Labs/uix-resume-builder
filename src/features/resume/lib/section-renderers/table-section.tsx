@@ -538,9 +538,12 @@ export function renderTableSection(
             );
           })
         )}
+        {section.divider && hasNextSection && (
+          <div className="px-8 my-2" data-canbreak="true" data-item="divider">
+            {renderDivider(section.divider)}
+          </div>
+        )}
       </div>
-      {/* Render optional section divider at the bottom */}
-      {section.divider && hasNextSection && <div className="px-16">{renderDivider(section.divider)}</div>}
     </div>
   );
 }

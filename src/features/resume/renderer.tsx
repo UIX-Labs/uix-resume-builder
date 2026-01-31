@@ -48,7 +48,7 @@ function ResumeRendererComponent({
     // On the first page, the columns are in a grid row below the banner.
     // The banner's negative top margin means it occupies space starting from the top.
     // However, the column content is still subject to the page's bottom padding.
-    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX;
+    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX - 15;
     const pageMaxOther = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
 
     const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
@@ -76,6 +76,8 @@ function ResumeRendererComponent({
       testContainer.style.letterSpacing = columnStyles.letterSpacing;
       testContainer.style.wordSpacing = columnStyles.wordSpacing;
       testContainer.className = columnEl.className;
+      testContainer.style.boxSizing = 'border-box';
+      testContainer.style.padding = '0';
 
       document.body.appendChild(testContainer);
 
@@ -164,8 +166,6 @@ function ResumeRendererComponent({
 
           const currentHeight = getPageHeight();
           const max = getCurrentPageMax();
-
-          // If it fits, keep it and continue
           if (currentHeight <= max) {
             continue;
           }
@@ -376,10 +376,13 @@ function ResumeRendererComponent({
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
-              [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
+              // [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
+              height: '29.7cm',
+              overflow: 'hidden',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
-              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
+              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto auto' : 'auto',
+              alignContent: 'start',
             }}
           >
             {index === 0 && bannerItems.length > 0 && (

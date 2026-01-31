@@ -4,9 +4,9 @@ const enjiTemplate = {
     // The actual resume page in the app is already inside a gradient shell,
     // so keep the sheet itself clean and white.
     background: '#ffffff',
-    className: 'text-[12px] text-slate-900 leading-relaxed',
+    className: 'text-[12px] text-slate-900 leading-[14px]',
     fontFamily: 'Inter',
-    padding: -65,
+    padding: 24,
   },
   sections: [
     /**
@@ -18,7 +18,7 @@ const enjiTemplate = {
       id: 'header',
       type: 'header',
       className:
-        'flex flex-col items-center text-center gap-1 pb-6 pt-8 mb-4 bg-no-repeat bg-cover bg-center bg-[linear-gradient(to_right,#E9D5FF,#DBEAFE,#F0F9FF)]',
+        'flex flex-col items-center text-center gap-1 pb-6 pt-8 mb-4 bg-no-repeat bg-cover bg-center bg-[linear-gradient(to_right,#E9D5FF,#DBEAFE,#F0F9FF)] -mt-6 -mx-6 ',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
@@ -28,7 +28,7 @@ const enjiTemplate = {
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Front-End Developer · UI/UX Designer',
-          className: 'text-[12px] font-medium text-slate-600 leading-none tracking-normal',
+          className: 'text-[12px] font-medium text-slate-600 leading-[14px] tracking-normal mt-2',
         },
         contact: {
           type: 'contact-grid',
@@ -38,7 +38,7 @@ const enjiTemplate = {
             // Top line: Location and Email
             {
               type: 'inline-group',
-              className: 'flex items-center gap-3 text-[12px] text-black',
+              className: 'flex items-center gap-3 text-[12px] leading-[14px] text-black',
               separator: '',
               items: [
                 {
@@ -54,7 +54,7 @@ const enjiTemplate = {
                     {
                       path: 'personalDetails.items[0].phone',
                       fallback: '12332344',
-                      className: 'text-[12px] text-black',
+                      className: 'text-[12px] leading-[14px] text-black',
                     },
                   ],
                 },
@@ -71,7 +71,7 @@ const enjiTemplate = {
                     {
                       path: 'personalDetails.items[0].address',
                       fallback: 'Bandung',
-                      className: 'text-[12px] text-black break-words whitespace-normal',
+                      className: 'text-[12px] leading-[14px] text-black break-words whitespace-normal',
                     },
                   ],
                 },
@@ -90,7 +90,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'mail@enji.dev',
-                      className: 'text-[12px] text-black',
+                      className: 'text-[12px] leading-[14px] text-black',
                     },
                   ],
                 },
@@ -118,7 +118,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: '/enjidev',
-                      className: 'text-[12px] text-blue-900',
+                      className: 'text-[12px] leading-[14px] text-blue-900',
                     },
                   ],
                 },
@@ -138,7 +138,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.github.title',
                       href: 'personalDetails.items[0].links.github.link',
                       fallback: '/enjidev',
-                      className: 'text-[12px] text-gray-900',
+                      className: 'text-[12px] leading-[14px] text-gray-900',
                     },
                   ],
                 },
@@ -158,7 +158,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.website.title',
                       href: 'personalDetails.items[0].links.website.link',
                       fallback: '',
-                      className: 'text-[12px] text-gray-900',
+                      className: 'text-[12px] leading-[14px] text-gray-900',
                     },
                   ],
                 },
@@ -178,7 +178,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.youtube.title',
                       href: 'personalDetails.items[0].links.youtube.link',
                       fallback: '',
-                      className: 'text-[12px] text-red-900',
+                      className: 'text-[12px] leading-[14px] text-red-900',
                     },
                   ],
                 },
@@ -198,7 +198,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.dribble.title',
                       href: 'personalDetails.items[0].links.dribble.link',
                       fallback: '',
-                      className: 'text-[12px] text-pink-900',
+                      className: 'text-[12px] leading-[14px] text-pink-900',
                     },
                   ],
                 },
@@ -218,7 +218,7 @@ const enjiTemplate = {
                       path: 'personalDetails.items[0].links.behance.title',
                       href: 'personalDetails.items[0].links.behance.link',
                       fallback: '',
-                      className: 'text-[12px] text-blue-900',
+                      className: 'text-[12px] leading-[14px] text-blue-900',
                     },
                   ],
                 },
@@ -239,7 +239,7 @@ const enjiTemplate = {
       heading: {
         path: 'professionalSummary.heading',
         fallback: 'Summary',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'professionalSummary.items',
       headingColumn: {
@@ -254,14 +254,14 @@ const enjiTemplate = {
               type: 'html',
               path: 'summary',
               fallback: 'description',
-              className: 'text-[12px] text-slate-700 leading-relaxed break-words whitespace-pre-wrap',
+              className: 'text-[12px] text-slate-700 leading-[14px] break-words whitespace-pre-wrap',
             },
           ],
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-6',
-      rowClassName: 'items-start px-16 pb-2.5',
+      className: 'px-8 pt-6 pb-6',
+      rowClassName: 'items-start px-8 pb-2.5',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -277,7 +277,7 @@ const enjiTemplate = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'education.items',
       headingColumn: {
@@ -307,21 +307,18 @@ const enjiTemplate = {
           type: 'duration',
           path: 'duration',
           fallback: 'Oct 2018 - Present',
-          className: 'text-[12px] text-slate-500 whitespace-nowrap ml-auto',
+          className: 'text-[12px] leading-[14px] text-slate-500 whitespace-nowrap ml-auto',
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-8 pb-8',
-      containerClassName: 'space-y-4 pb-2.5 pt-4',
-      rowClassName: 'items-baseline px-16',
+      className: 'px-8 pt-8 pb-8',
+      containerClassName: 'pb-2 pt-2.5',
+      rowClassName: 'items-baseline px-8 pb-2',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200',
+        className: 'border-b border-slate-200 mb-2.5',
       },
     },
-    /**
-     * EXPERIENCE
-     */
     {
       id: 'experience',
       type: 'table-section',
@@ -329,7 +326,7 @@ const enjiTemplate = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'experience.items',
       headingColumn: {
@@ -338,24 +335,21 @@ const enjiTemplate = {
       columns: [
         {
           type: 'group',
-          className: 'flex-1 space-y-1.5',
+          className: 'flex-1 space-y-1',
           break: true,
           items: [
             {
               type: 'inline-group',
               containerClassName: 'flex items-baseline justify-between gap-1',
-              className: '',
               items: [
                 {
                   type: 'inline-group',
-                  containerClassName: 'flex flex-col gap-1 leading-tight',
-                  break: true,
-                  className: '',
+                  containerClassName: 'flex flex-col gap-0.5 leading-[14px]',
                   items: [
                     {
                       type: 'text',
                       path: 'company',
-                      className: 'text-[12px] font-semibold text-slate-900',
+                      className: 'text-[12px] leading-[14px] font-semibold text-slate-900',
                     },
                     {
                       type: 'text',
@@ -367,35 +361,34 @@ const enjiTemplate = {
                 {
                   type: 'duration',
                   path: 'duration',
-                  className: 'text-[12px] text-slate-500 whitespace-nowrap ml-auto',
+                  className: 'text-[12px] leading-[14px] text-slate-500 whitespace-nowrap ml-auto',
                 },
               ],
             },
             {
               type: 'text',
               path: 'techStack',
-              fallback: '',
-              className: 'text-[12px] text-slate-500 italic',
+              className: 'text-[12px] leading-[14px] text-slate-500 italic',
             },
             {
               type: 'html',
               path: 'description',
               break: true,
               className:
-                'text-xs text-slate-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                'text-xs text-slate-700 leading-[14px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-0.5 break-words whitespace-pre-wrap',
             },
           ],
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-6 pb-8',
-      // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4 pb-1.5',
+      className: 'px-8 pt-2 pb-6',
+      rowClassName: 'items-start px-8 pb-2',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200 mt-1',
+        className: 'border-b border-slate-200 mb-4',
       },
     },
+
     /**
      * PROJECTS
      */
@@ -406,7 +399,7 @@ const enjiTemplate = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'projects.items',
       headingColumn: {
@@ -422,37 +415,37 @@ const enjiTemplate = {
               type: 'text',
               path: 'title',
               fallback: 'SPKJS',
-              className: 'text-[12px] font-semibold text-slate-900',
+              className: 'text-[12px] leading-[14px] font-semibold text-slate-900',
             },
             {
               type: 'text',
               path: 'techStack',
               fallback: '',
-              className: 'text-[12px] text-slate-500 italic',
+              className: 'text-[12px] leading-[14px] text-slate-500 italic',
             },
             {
               type: 'html',
               path: 'description',
               break: true,
               className:
-                'text-xs text-slate-700 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+                'text-xs text-slate-700 leading-[14px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
             },
             {
               type: 'link',
               path: 'link.title',
               href: 'link.link',
-              className: 'text-[12px] text-blue-600 hover:underline mt-1',
+              className: 'text-[12px] leading-[14px] text-blue-600 hover:underline mt-1',
             },
           ],
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-8',
+      className: 'px-8 pt-6 pb-8',
       // containerClassName: 'space-y-4',
-      rowClassName: 'items-start px-16 pt-4',
+      rowClassName: 'items-start px-8 pb-2',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200 mt-2.5',
+        className: 'border-b border-slate-200',
       },
     },
     /**
@@ -466,7 +459,7 @@ const enjiTemplate = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills & Tools',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'skills.items',
       headingColumn: {
@@ -479,14 +472,14 @@ const enjiTemplate = {
           break: true,
           className: 'flex-1 col-start-2',
           badgeClassName:
-            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
+            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] leading-[14px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-8',
+      className: 'px-8 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      rowClassName: 'items-start px-8 pt-2 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -502,7 +495,7 @@ const enjiTemplate = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'certifications.items',
       headingColumn: {
@@ -517,35 +510,35 @@ const enjiTemplate = {
               type: 'text',
               path: 'title',
               fallback: 'Certification Title',
-              className: 'text-[12px] font-semibold text-slate-900 break-words whitespace-normal',
+              className: 'text-[12px] leading-[14px] font-semibold text-slate-900 break-words whitespace-normal',
             },
             {
               type: 'text',
               path: 'issuer',
               fallback: 'Issuer',
-              className: 'text-[12px] text-slate-600 leading-tight',
+              className: 'text-[12px] text-slate-600 leading-[14px]',
             },
             {
               type: 'link',
               path: 'link.title',
               href: 'link.link',
-              className: 'text-[12px] text-blue-600 hover:underline',
+              className: 'text-[12px] leading-[14px] text-blue-600 hover:underline',
             },
           ],
         },
         {
           type: 'duration',
           path: 'duration',
-          className: 'text-[12px] text-slate-500',
+          className: 'text-[12px] leading-[14px] text-slate-500',
         },
       ],
       gridTemplateColumns: '128px 1fr auto',
-      className: 'px-16 pt-6 pb-8',
-      containerClassName: 'pb-1',
-      rowClassName: 'items-start px-16 pt-4',
+      className: 'px-8 pt-6 pb-8',
+      containerClassName: '',
+      rowClassName: 'items-start px-8 pt-2.5 pb-2',
       divider: {
         variant: 'line',
-        className: 'border-b border-slate-200 mt-2',
+        className: 'border-b border-slate-200',
       },
     },
     /**
@@ -559,7 +552,7 @@ const enjiTemplate = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'interests.items',
       headingColumn: {
@@ -572,14 +565,14 @@ const enjiTemplate = {
           break: true,
           className: 'flex-1 col-start-2',
           badgeClassName:
-            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium',
+            'px-2 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-[12px] leading-[14px] text-slate-700 font-medium',
           containerClassName: 'gap-1.5',
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-8',
+      className: 'px-8 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      rowClassName: 'items-start px-8 pt-2 pb-4',
       divider: {
         variant: 'line',
         className: 'border-b border-slate-200',
@@ -596,7 +589,7 @@ const enjiTemplate = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-[12px] font-semibold tracking-wide text-slate-500 uppercase',
+        className: 'text-[12px] leading-[14px] font-semibold tracking-wide text-slate-500 uppercase',
       },
       listPath: 'achievements.items',
       headingColumn: {
@@ -608,15 +601,15 @@ const enjiTemplate = {
           itemPath: 'items',
           break: true,
           badgeClassName:
-            'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] text-slate-700 font-medium line-clamp-2 break-all',
+            'px-3 py-1 rounded-full border border-slate-200 bg-slate-50 text-[12px] leading-[14px] text-slate-700 font-medium line-clamp-2 break-all',
           containerClassName: 'gap-1.5',
           className: 'flex-1 col-start-2',
         },
       ],
       gridTemplateColumns: '128px 1fr',
-      className: 'px-16 pt-6 pb-8',
+      className: 'px-8 pt-6 pb-8',
       containerClassName: '',
-      rowClassName: 'items-start px-16 pt-4 pb-4',
+      rowClassName: 'items-start px-8 pt-2 pb-4',
       // No divider for the last section
     },
   ],

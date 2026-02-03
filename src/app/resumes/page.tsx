@@ -1,24 +1,58 @@
 'use client';
+import { createResume, useGetAllResumes, type Resume, useResumeData } from '@entities/resume';
+import { useGetTemplateById, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
-import { SidebarProvider } from '@shared/ui/sidebar';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { Button } from '@shared/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
+import { SidebarProvider } from '@shared/ui/sidebar';
+import { useMutation } from '@tanstack/react-query';
 import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
+import Header from '@widgets/landing-page/ui/header-section';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { MoreVertical, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { ResumeCardMobile } from '@widgets/resumes/ui/resume-card-mobile';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { MoreVertical, Trash2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { useState, useCallback } from 'react';
 
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
   const { data: resumes } = useGetAllResumes();
+  const isMobile = useIsMobile();
+  const [previewResumeId, setPreviewResumeId] = useState<string | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
+  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
+  const [optionsLocked, setOptionsLocked] = useState(false);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
+
+  const { data: previewResumeData } = useResumeData(previewResumeId || '');
+
+  const { data: fetchedTemplate } = useGetTemplateById(previewResumeData?.templateId || null);
+
+  const handleResumePreview = (resumeId: string) => {
+    setPreviewResumeId(resumeId);
+    setIsPreviewOpen(true);
+  };
+
+  const lockOptions = useCallback((action: 'create' | 'upload' | 'tailoredJD') => {
+    setActiveAction(action);
+    setOptionsLocked(true);
+  }, []);
+
+  const releaseOptions = useCallback(() => {
+    setActiveAction(null);
+    setOptionsLocked(false);
+  }, []);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -57,16 +91,18 @@ export default function AllResumePage() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-screen bg-white">
-        <DashboardSidebar />
+      <div className="flex min-h-screen w-screen bg-white relative">
+        <div className="hidden lg:block">
+          <DashboardSidebar />
+        </div>
 
-        <div className="flex-1 flex flex-col min-w-0 m-3">
-          <DashboardHeader user={user} />
+        <div className="flex-1 flex flex-col min-w-0 m-3 sm:m-3">
+          {isMobile ? <Header /> : <DashboardHeader user={user} />}
 
-          <main className="flex bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4 h-full">
+          <main className="flex bg-[rgb(245,248,250)] mt-2 sm:mt-3 rounded-[36px] sm:rounded-[36px] overflow-hidden pb-4 h-full">
             <div className="flex-1">
-              <div className="flex text-start w-full">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-25px] ml-[-10px]">
+              <div className="flex text-start w-full px-2 sm:px-0">
+                <h1 className="text-[rgb(231,238,243)] font-semibold text-[44px] md:text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-12px] md:mt-[-25px] ml-[-10px] mb-1 md:mb-0">
                   YOUR RESUMES
                 </h1>
               </div>
@@ -75,25 +111,85 @@ export default function AllResumePage() {
                 userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
               />
 
-              <div className="flex gap-6 mt-6 mx-4 flex-wrap">
-                <button
-                  type="button"
-                  className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
-                  onClick={handleCreateResume}
-                >
-                  <div className="text-center">
-                    <span className="text-3xl text-gray-500">+</span>
-                    <p className="text-gray-600 font-medium mt-1">New resume</p>
+              {isMobile && (
+                <div className="mx-4 mt-4 flex justify-start">
+                  <div className="rounded-2xl border-2 border-blue-300 p-[2.5px]">
+                    <Button
+                      onClick={() => setIsCreationModalOpen(true)}
+                      className="
+                        w-44
+                        bg-blue-600 hover:bg-blue-700
+                        text-white
+                        rounded-lg
+                        px-10 py-3
+                        flex items-center gap-2
+                        font-medium
+                      "
+                    >
+                      Create Resume
+                      <ChevronDown className="w-4 h-4" />
+                    </Button>
                   </div>
-                </button>
+                </div>
+              )}
 
-                {sortedResumes?.map((resume, index) => (
-                  <ResumeCard key={resume.id} resume={resume} index={index} />
-                ))}
+              <div
+                className="flex flex-col gap-3 mt-4 mx-2 justify-center items-center
+                sm:flex-row sm:flex-wrap sm:gap-6 sm:mt-6 sm:mx-4 sm:justify-start"
+              >
+                {!isMobile && (
+                  <button
+                    type="button"
+                    className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
+                    onClick={handleCreateResume}
+                  >
+                    <div className="text-center">
+                      <span className="text-3xl text-gray-500">+</span>
+                      <p className="text-gray-600 font-medium mt-1">New resume</p>
+                    </div>
+                  </button>
+                )}
+
+                {sortedResumes?.map((resume, index) =>
+                  isMobile ? (
+                    <ResumeCardMobile
+                      key={resume.id}
+                      resume={resume}
+                      onPreview={() => handleResumePreview(resume.id)}
+                    />
+                  ) : (
+                    <ResumeCardDesktop key={resume.id} resume={resume} index={index} />
+                  ),
+                )}
               </div>
             </div>
           </main>
         </div>
+        {isPreviewOpen && (
+          <PreviewModal
+            isOpen={isPreviewOpen}
+            onClose={() => {
+              setIsPreviewOpen(false);
+              setPreviewResumeId(null);
+            }}
+            template={fetchedTemplate ? fetchedTemplate : null}
+            resumeData={previewResumeData}
+          />
+        )}
+
+        <ResumeCreationModal
+          isOpen={isCreationModalOpen}
+          onClose={() => setIsCreationModalOpen(false)}
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
+          onJDModalOpen={() => {}}
+          onLinkedInClick={() => setIsLinkedInModalOpen(true)}
+          onActionLock={lockOptions}
+          onActionRelease={releaseOptions}
+          activeAction={activeAction}
+          optionsLocked={optionsLocked}
+        />
+
+        <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
       </div>
     </SidebarProvider>
   );
@@ -104,7 +200,7 @@ interface ResumeCardProps {
   index: number;
 }
 
-function ResumeCard({ resume }: ResumeCardProps) {
+function ResumeCardDesktop({ resume }: ResumeCardProps) {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 

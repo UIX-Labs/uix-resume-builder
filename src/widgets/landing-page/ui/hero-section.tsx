@@ -121,13 +121,7 @@ const HeroSection = () => {
     },
   ];
 
-  // Unified LinkedIn Autofill handler (MOBILE -> MobileView | DESKTOP -> Modal/Login)
   const handleLinkedInUnified = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
-
     setIsModalOpen(true);
 
     trackEvent('create_resume_click', {
@@ -136,13 +130,7 @@ const HeroSection = () => {
     });
   };
 
-  // Upload resume handler (mobile & desktop logic preserved)
   const handleUploadClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
-
     handleNavigate();
 
     trackEvent('create_resume_click', {

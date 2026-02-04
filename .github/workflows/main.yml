@@ -1,4 +1,4 @@
-#Deploy pikaresume-fe-service
+#Deploy pikaresume-fe-service for Staging
 name: deploy pikaresume-fe-service
 on:
   push:

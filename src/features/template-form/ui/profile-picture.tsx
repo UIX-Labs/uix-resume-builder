@@ -13,13 +13,17 @@ export const ProfilePictureInput = ({
   personalDetailItemId: string;
   section: any;
 }) => {
-  const DEFAULT_PROFILE_IMAGE = '/images/profileimg.jpeg';
-
-  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl || DEFAULT_PROFILE_IMAGE);
+  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl || '');
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (data?.profilePicturePublicUrl !== imageUrl) {
+      setImageUrl(data?.profilePicturePublicUrl || '');
+    }
+  }, [data?.profilePicturePublicUrl]);
 
   useEffect(() => {
     if (imageUrl) {
@@ -106,7 +110,8 @@ export const ProfilePictureInput = ({
   };
 
   const handleDelete = () => {
-    setImageUrl(DEFAULT_PROFILE_IMAGE);
+    setImageUrl('');
+    onChange({ profilePicturePublicUrl: '' });
     setError(null);
     // Reset file input
     if (fileInputRef.current) {
@@ -155,24 +160,22 @@ export const ProfilePictureInput = ({
               >
                 Change
               </button>
-              {imageUrl !== DEFAULT_PROFILE_IMAGE && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                  }}
-                  disabled={isUploading}
-                  className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                    'bg-red-50 text-red-600 border border-red-200',
-                    'hover:bg-red-600 hover:text-white',
-                    isUploading && 'opacity-50 cursor-not-allowed',
-                  )}
-                >
-                  Delete
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                disabled={isUploading}
+                className={cn(
+                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
+                  'bg-red-50 text-red-600 border border-red-200',
+                  'hover:bg-red-600 hover:text-white',
+                  isUploading && 'opacity-50 cursor-not-allowed',
+                )}
+              >
+                Delete
+              </button>
             </div>
           </div>
         ) : (

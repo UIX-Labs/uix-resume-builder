@@ -1,4 +1,5 @@
 import { fetch } from '@shared/api';
+import { clearGuestEmail } from '@shared/lib/guest-email';
 
 export const getLinkedInAuthUrl = () => {
   const state = Math.random().toString(36).substring(2, 15);
@@ -35,6 +36,8 @@ export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: strin
         }),
       },
     });
+
+    clearGuestEmail();
 
     return response;
   } catch (error) {

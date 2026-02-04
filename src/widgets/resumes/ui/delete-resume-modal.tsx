@@ -38,7 +38,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md bg-[rgba(245,248,250,1)]">
+      <DialogContent className="md:max-w-md bg-[rgba(245,248,250,1)]">
         <DialogHeader>
           <DialogTitle className="text-center">Delete Resume</DialogTitle>
           <DialogDescription>
@@ -62,7 +62,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
             disabled={deleteResumeMutation.isPending}
             className="w-1/2 rounded-4xl cursor-pointer"
           >
-            {deleteResumeMutation.isPending ? <>Deleting...</> : <>Delete Resume</>}
+            {deleteResumeMutation.isPending ? 'Deleting...' : 'Delete Resume'}
           </Button>
         </div>
       </DialogContent>

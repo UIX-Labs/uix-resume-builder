@@ -28,12 +28,12 @@ const template5 = {
       id: 'header',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col text-center gap-2',
+      className: 'flex flex-col text-start gap-2',
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Divyam Malik',
-          className: 'text-3xl font-bold text-[#1a1a1a]',
+          className: 'text-2xl break-words font-bold text-[#1a1a1a]',
         },
         title: {
           path: 'personalDetails.items[0].jobTitle',
@@ -68,7 +68,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'Noida',
-                  className: 'text-sm text-[#1a1a1a] font-normal',
+                  className: 'text-xs text-[#1a1a1a] font-normal',
                 },
               ],
             },
@@ -86,7 +86,7 @@ const template5 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '+918527886118',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline',
                 },
               ],
             },
@@ -106,7 +106,7 @@ const template5 = {
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'divyam.malik@gmail.com',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline break-all whitespace-normal',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline break-all whitespace-normal',
                 },
               ],
             },
@@ -126,7 +126,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline',
                 },
               ],
             },
@@ -145,7 +145,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -164,7 +164,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.website.title',
                   href: 'personalDetails.items[0].links.website.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -183,7 +183,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.youtube.title',
                   href: 'personalDetails.items[0].links.youtube.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -202,7 +202,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.dribble.title',
                   href: 'personalDetails.items[0].links.dribble.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -221,7 +221,7 @@ const template5 = {
                   path: 'personalDetails.items[0].links.behance.title',
                   href: 'personalDetails.items[0].links.behance.link',
                   fallback: '',
-                  className: 'text-sm text-[#1a1a1a] font-normal underline mt-1',
+                  className: 'text-xs text-[#1a1a1a] font-normal underline mt-1',
                 },
               ],
             },
@@ -233,35 +233,28 @@ const template5 = {
     // Skills Section - Left Column
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       column: 'left',
       break: true,
+      breakable: true,
       className: 'mt-6',
+
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'text-base font-bold text-[#5b7fc7] mt-7.5',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1 mb-2',
         },
       },
+
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col gap-2 mt-2',
-      itemTemplate: {
-        className: "flex flex-col leading-none",
-        break: true,
-        fields: [
-          {
-            path: 'name',
-            className: 'text-sm font-regular text-[#1a1a1a] mb-1',
-          },
-          {
-            path: 'level',
-            className: 'text-xs text-[#1a1a1a] font-normal mb-2',
-          },
-        ],
-      },
+
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'block text-[#1a1a1a]',
+      badgeClassName: 'text-xs text-[#1a1a1a] leading-relaxed',
     },
 
     // Certifications Section - Left Column
@@ -274,7 +267,7 @@ const template5 = {
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
-        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-3',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1 mb-2',
@@ -283,23 +276,23 @@ const template5 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         fields: [
           {
             path: 'title',
             fallback: 'Certification Title',
-            className: 'text-sm font-bold text-[#1a1a1a]',
+            className: 'text-xs font-bold text-[#1a1a1a]',
           },
           {
             path: 'issuer',
             fallback: 'Issuer',
-            className: 'text-sm text-[#1a1a1a] font-normal mb-3',
+            className: 'text-xs text-[#1a1a1a] font-normal mb-3',
           },
           {
             type: 'duration',
             path: 'duration',
-            className: 'text-sm text-[#1a1a1a]',
+            className: 'text-xs text-[#1a1a1a]',
           },
         ],
       },
@@ -307,25 +300,33 @@ const template5 = {
 
     // Interests Section - Left Column
     {
-      id: "interests",
-      type: "badge-section",
-      column: "left",
+      id: 'interests',
+      type: 'badge-section',
+      column: 'left',
       break: true,
       breakable: true,
-      className: "mt-6",
+      className: 'mt-6',
+
       heading: {
         path: 'interests.title',
         fallback: 'Interests',
-        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-4',
+        className: 'capitalize text-base font-bold text-[#5b7fc7] mt-5',
         divider: {
           variant: 'line',
           className: 'bg-[#5b7fc7] w-full h-[1px] mt-1',
         },
       },
+
       listPath: 'interests.items[0].items',
+
+      // 🔑 REQUIRED FOR COMMA SEPARATION
       itemPath: '',
-      badgeClassName: 'text-sm text-[#1a1a1a] leading-none',
-      containerClassName: 'flex flex-col gap-2 mt-2',
+      itemSeparator: ', ',
+
+      // 🔑 SINGLE LINE FLOW
+      containerClassName: 'block mt-2 text-black',
+
+      badgeClassName: 'text-xs text-[#1a1a1a] leading-none',
     },
 
     // Experience Section - Right Column
@@ -344,9 +345,9 @@ const template5 = {
         },
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
-        className: "flex flex-col leading-none",
+        className: 'flex flex-col leading-none',
         break: true,
         rows: [
           {
@@ -354,12 +355,12 @@ const template5 = {
             cells: [
               {
                 path: 'company',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] leading-none max-w-[65%] min-w-0 break-words',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] leading-none whitespace-nowrap',
               },
             ],
           },
@@ -367,7 +368,7 @@ const template5 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-sm font-normal text-[rgb(0,0,0)]',
+                className: 'text-xs font-normal text-[rgb(0,0,0)]',
               },
             ],
           },
@@ -377,7 +378,7 @@ const template5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-xs text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -390,7 +391,7 @@ const template5 = {
       id: 'projects',
       type: 'list-section',
       column: 'right',
-      break: true,
+      // break: true,
       className: 'mt-6',
       heading: {
         path: 'projects.title',
@@ -402,9 +403,9 @@ const template5 = {
         },
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-6 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -414,23 +415,23 @@ const template5 = {
                 path: 'title',
                 href: 'link.link',
                 fallback: 'Project Title',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] hover:underline',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] hover:underline',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] whitespace-nowrap',
               },
             ],
           },
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
-                  'text-sm text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
+                  'text-xs text-[rgb(0,0,0)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words mt-1 whitespace-pre-wrap',
               },
             ],
           },
@@ -464,7 +465,7 @@ const template5 = {
             cells: [
               {
                 path: 'institution',
-                className: 'text-sm font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
+                className: 'text-xs font-bold text-[rgb(0,0,0)] break-words whitespace-normal max-w-[55%]',
               },
               {
                 type: 'inline-group',
@@ -473,11 +474,11 @@ const template5 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-sm font-bold text-[rgb(0,0,0)] whitespace-nowrap',
+                    className: 'text-xs font-bold text-[rgb(0,0,0)] whitespace-nowrap',
                   },
                   {
                     path: 'degree',
-                    className: 'text-sm font-normal text-[rgb(0,0,0)] text-right',
+                    className: 'text-xs font-normal text-[rgb(0,0,0)] text-right',
                   },
                 ],
               },
@@ -494,7 +495,7 @@ const template5 = {
       column: 'right',
       break: true,
       breakable: true,
-      className: "mt-6",
+      className: 'mt-6',
       heading: {
         path: 'achievements.title',
         fallback: 'Achievements',
@@ -506,7 +507,7 @@ const template5 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      badgeClassName: 'text-sm text-black',
+      badgeClassName: 'text-xs text-black',
       containerClassName: 'flex flex-col gap-2 mt-2',
       itemPrefix: '• ',
     },

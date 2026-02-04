@@ -87,7 +87,7 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
       fieldOfStudy: string;
       startDate: string;
       endDate: string;
-      grade: string;
+      grade: string | { value: string };
       ongoing: boolean;
     }>;
     suggestedUpdates?: SuggestedUpdates;
@@ -123,6 +123,34 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
   };
 
   templateId: string;
+  updatedAt: string;
+  template?: {
+    id: string;
+    name: string;
+    json: {
+      columns: {
+        left: {
+          width: number;
+          className?: string;
+        };
+        right: {
+          width: number;
+          className?: string;
+        };
+        spacing?: number;
+      };
+      name: string;
+      page: {
+        background?: string;
+        className?: string;
+        fontFamily?: string;
+        height?: string;
+        padding?: string;
+        width?: string;
+      };
+    };
+    previewImageUrl?: { url: string };
+  };
 }
 
 export type ResumeDataKey =

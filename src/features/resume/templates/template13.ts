@@ -27,18 +27,18 @@ const template13 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Henrietta Mitchell',
-          className: 'text-4xl font-normal text-[#2C5F5F] after:content-[","] after:mr-2 whitespace-nowrap',
+          className: 'text-4xl font-normal text-[#2C5F5F] whitespace-nowrap',
         },
 
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Business Analyst',
-          className: 'text-4xl font-normal text-[#2C5F5F]',
+          className: 'text-xl font-normal text-[#2C5F5F]',
         },
 
         contact: {
           type: 'inline-group',
-          className: 'text-sm text-[#2C5F5F] flex flex-row flex-wrap gap-1 mb-1',
+          className: 'text-sm text-[#2C5F5F] flex flex-row flex-wrap gap-2 mb-1',
           separator: '• ',
           items: [
             {
@@ -96,7 +96,7 @@ const template13 = {
     {
       id: 'summary',
       type: 'content-section',
-      className: 'flex flex-col mt-3',
+      className: 'flex flex-col',
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
@@ -108,33 +108,22 @@ const template13 = {
     // Key Skills Section
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       break: false,
       className: 'flex flex-col mt-6',
+
       heading: {
         path: 'skills.heading',
         fallback: 'Key Skills',
         className: 'text-[#2C5F5F] text-2xl font-normal mb-1 border-t-2 border-dotted border-[#1a3c34] pt-6 mt-6',
       },
-      listPath: 'skills.items',
-      containerClassName: 'grid grid-cols-3 w-full',
 
-      itemTemplate: {
-        className: "flex items-start",
-        break: true,
-        rows: [
-          {
-            cells: [
-              {
-                prefix: '• ',
-                path: 'name',
-                className: 'text-sm text-[#2C5F5F]',
-                // type: 'text',
-              },
-            ],
-          },
-        ],
-      },
+      listPath: 'skills.items',
+
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'block w-full',
+      badgeClassName: 'text-sm text-[#2C5F5F]',
     },
     // Professional Experience Section
     {
@@ -152,9 +141,9 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-4',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col mb-4",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -184,11 +173,11 @@ const template13 = {
             className: 'flex flex-col',
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
-                  "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
+                  'text-sm text-[#2C5F5F] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -212,7 +201,7 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-2',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
         className: 'flex flex-col',
         rows: [
@@ -261,7 +250,7 @@ const template13 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col ',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         fields: [
           {
@@ -309,9 +298,9 @@ const template13 = {
         className: 'border-t-2 border-dotted border-[#1a3c34] w-full mt-1 mb-3',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-4',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -333,11 +322,10 @@ const template13 = {
             className: 'flex flex-col mt-1',
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
-                className:
-                  "text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap",
+                className: 'text-sm text-[#2C5F5F] leading-relaxed whitespace-pre-wrap',
               },
             ],
           },
@@ -347,11 +335,11 @@ const template13 = {
 
     // Interests Section
     {
-      id: "interests",
-      type: "badge-section",
+      id: 'interests',
+      type: 'badge-section',
       break: true,
       breakable: true,
-      className: "flex flex-col mt-6",
+      className: 'flex flex-col mt-6',
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -374,7 +362,7 @@ const template13 = {
       type: 'badge-section',
       break: true,
       breakable: true,
-      className: "flex flex-col mt-6",
+      className: 'flex flex-col mt-6',
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',

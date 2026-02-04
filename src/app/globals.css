@@ -585,6 +585,30 @@
   transform: rotate3d(1, 0, 0, 180deg);
 }
 
+.video-container--mobile {
+  --h: 30vh;
+  --s: 30px;
+  --r: 40px;
+
+  height: var(--h);
+  background: linear-gradient(60deg, #c02942, #542437);
+  border-radius: var(--r) 0 0 var(--r);
+  --_a: atan2(var(--s), var(--h));
+  clip-path: shape(
+    from 0 0,
+    line to calc(100% - var(--s) - var(--r)) 0,
+    curve by calc(var(--r) * (1 + sin(var(--_a)))) calc(var(--r) * cos(var(--_a))) with var(--r) 0,
+    line to calc(100% - var(--r) * sin(var(--_a))) calc(100% - var(--r) * cos(var(--_a))),
+    curve to calc(100% - var(--r)) 100% with 100% 100%,
+    line to 0 100%
+  );
+  transform: rotateX(180deg) !important;
+}
+
+.video-container--mobile video {
+  transform: rotateX(180deg);
+}
+
 .highlighted-gradient-text {
   background: linear-gradient(63deg, #fbb183 28.04%, #a45b2f 113.47%);
   -webkit-background-clip: text;
@@ -599,7 +623,7 @@
   color: transparent;
 }
 
-page[size="A4"] {
+.page-a4 {
   display: block;
   margin: 0 auto;
 }

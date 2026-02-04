@@ -17,10 +17,11 @@ export function resolvePath({
 
       const regex = /([^[\]]+)|\[(\d+)\]/g;
 
-      let match: RegExpExecArray | null;
+      let match: RegExpExecArray | null = regex.exec(segment);
 
-      while ((match = regex.exec(segment))) {
+      while (match) {
         parts.push(match[1] ?? match[2]);
+        match = regex.exec(segment);
       }
 
       return parts;

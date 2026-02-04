@@ -8,16 +8,19 @@ import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, Template } from '@entities/template-page/api/template-data';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { MobileTextView } from './mobile-text-view';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -57,6 +60,8 @@ export function TemplateCarousel() {
   const router = useRouter();
   const isMobile = useIsMobile();
   const [showMobileView, setShowMobileView] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -73,8 +78,12 @@ export function TemplateCarousel() {
       templateId: template.id,
     });
 
-    if (!user) {
-      router.push('/auth');
+    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
+    let guestEmail: string | undefined;
+
+    if (!user?.isLoggedIn) {
+      guestEmail = getOrCreateGuestEmail();
+    } else if (!user) {
       return;
     }
 
@@ -82,7 +91,7 @@ export function TemplateCarousel() {
       const data = await createResumeMutation.mutateAsync({
         title: 'New Resume',
         userInfo: {
-          userId: user.id,
+          userId: user?.id ?? '',
         },
       });
 
@@ -177,6 +186,14 @@ export function TemplateCarousel() {
                                 unoptimized
                               />
                             </div>
+
+                            {/* Preview Button */}
+                            <PreviewButton
+                              onClick={() => {
+                                setPreviewTemplate(template);
+                                setIsPreviewOpen(true);
+                              }}
+                            />
 
                             <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-9 gap-2 transition-colors duration-500">
                               <Button
@@ -290,6 +307,9 @@ export function TemplateCarousel() {
 
       {/* Mobile Text View */}
       {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
+
+      {/* Preview Modal */}
+      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
     </div>
   );
 }

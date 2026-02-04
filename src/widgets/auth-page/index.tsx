@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   useCheckEmailExists,
   useLoginUser,
@@ -20,10 +20,46 @@ import GoogleSignInButton from '@shared/ui/components/google-signin-button';
 import { cn } from '@shared/lib/utils';
 import LinkedInSignInButton from '@shared/ui/components/linkedIn-signin-button';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { clearGuestEmail } from '@shared/lib/guest-email';
 
-export default function AuthPageWidget() {
+export default function DesktopAuthLayout() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [guestEmail, setGuestEmail] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const callbackUrl = searchParams.get('callbackUrl');
+    if (callbackUrl) {
+      localStorage.setItem('auth_callback_url', callbackUrl);
+    }
+  }, [searchParams]);
+
+  const handleAuthSuccessRedirect = () => {
+    const storedCallbackUrl = localStorage.getItem('auth_callback_url');
+    const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+    const shouldOpenJDModal = localStorage.getItem('openJDModal');
+
+    localStorage.removeItem('auth_callback_url');
+    clearGuestEmail();
+
+    if (pendingResumeId) {
+      router.push(`/resume/${pendingResumeId}`);
+      return;
+    }
+
+    if (shouldOpenJDModal === 'true') {
+      localStorage.removeItem('openJDModal');
+      router.push('/dashboard?openModal=jd');
+      return;
+    }
+
+    if (storedCallbackUrl) {
+      router.push(storedCallbackUrl);
+      return;
+    }
+
+    router.push('/dashboard');
+  };
 
   useEffect(() => {
     const storedGuestEmail = localStorage.getItem('pending_analyzer_guest_email');
@@ -116,7 +152,7 @@ export default function AuthPageWidget() {
             }, 100);
           }
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ email: 'Failed to process email. Please try again.' });
         },
       },
@@ -134,27 +170,11 @@ export default function AuthPageWidget() {
     loginMutation.mutate(
       { email, password, guestEmail },
       {
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
           trackEvent('login_success', { method: 'email' });
-
-          localStorage.removeItem('pending_analyzer_guest_email');
-
-          const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
-          if (pendingResumeId) {
-            router.push(`/resume/${pendingResumeId}`);
-            return;
-          }
-
-          const shouldOpenJDModal = localStorage.getItem('openJDModal');
-          if (shouldOpenJDModal === 'true') {
-            localStorage.removeItem('openJDModal');
-            router.push('/dashboard?openModal=jd');
-            return;
-          }
-
-          router.push('/dashboard');
+          handleAuthSuccessRedirect();
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ password: 'Invalid password. Please try again.' });
         },
       },
@@ -180,7 +200,7 @@ export default function AuthPageWidget() {
         onSuccess: () => {
           setStep('register');
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ code: 'Invalid or expired OTP. Please try again.' });
         },
       },
@@ -220,27 +240,11 @@ export default function AuthPageWidget() {
         guestEmail,
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (_data) => {
           trackEvent('registration_success', { method: 'email' });
-
-          localStorage.removeItem('pending_analyzer_guest_email');
-
-          const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
-          if (pendingResumeId) {
-            router.push(`/resume/${pendingResumeId}`);
-            return;
-          }
-
-          const shouldOpenJDModal = localStorage.getItem('openJDModal');
-          if (shouldOpenJDModal === 'true') {
-            localStorage.removeItem('openJDModal');
-            router.push('/dashboard?openModal=jd');
-            return;
-          }
-
-          router.push('/dashboard');
+          handleAuthSuccessRedirect();
         },
-        onError: (error) => {
+        onError: (_error) => {
           setErrors({ submit: 'Registration failed. Please try again.' });
         },
       },
@@ -353,6 +357,7 @@ export default function AuthPageWidget() {
                 <p className="text-neutral-500 text-center text-sm">
                   Welcome back! Please enter your password for {email}
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     disabled={isLoading}
                     className="font-semibold hover:underline ml-1 text-blue-600"
@@ -412,6 +417,7 @@ export default function AuthPageWidget() {
                 <p className="text-neutral-500 text-center whitespace-nowrap">
                   We sent a temporary login code to {email} <br />
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     disabled={isLoading}
                     className="font-semibold hover:underline ml-1"
@@ -456,7 +462,13 @@ export default function AuthPageWidget() {
               <div className="flex flex-col items-center justify-center gap-6 text-sm leading-5 -tracking-[0.02px]">
                 <div className="text-center space-y-4">
                   <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg
+                      className="w-8 h-8 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -490,6 +502,7 @@ export default function AuthPageWidget() {
                   </div>
 
                   <button
+                    type="button"
                     onClick={() => setStep('email')}
                     className="text-blue-600 hover:underline text-sm font-semibold"
                   >

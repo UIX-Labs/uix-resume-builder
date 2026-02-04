@@ -1,7 +1,6 @@
-import React from 'react';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
-import { SparkleIndicator } from '../components/SparkleIndicator';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
@@ -19,7 +18,11 @@ export function renderListSection(
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
-  const sectionSuggestedUpdates = data[sectionId]?.suggestedUpdates;
+
+  // Get section key from listPath (e.g., "experience.items" -> "experience")
+  // This is needed for checking suggestions correctly
+  const sectionKey = section.listPath?.split('.')[0];
+  const sectionSuggestedUpdates = sectionKey ? data[sectionKey]?.suggestedUpdates : undefined;
   const hasValidSuggestions = hasPendingSuggestions(sectionSuggestedUpdates);
 
   const shouldBlur = !isThumbnail && hasSuggestions && currentSection && !isActive && hasValidSuggestions;
@@ -54,11 +57,8 @@ export function renderListSection(
   const itemWrapperStyle = section.break ? wrapperStyle : {};
   const containerWrapperStyle = section.break ? {} : wrapperStyle;
 
-  // Get section key from listPath (e.g., "experience.items" -> "experience")
-  const sectionKey = section.listPath?.split('.')[0];
-
-  // Get suggestedUpdates from the data for this section
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  // Use the sectionSuggestedUpdates already defined above
+  const suggestedUpdates = sectionSuggestedUpdates;
 
   return (
     <div
@@ -71,29 +71,33 @@ export function renderListSection(
       {/* {shouldHighlight && <SparkleIndicator />} */}
       {!section.break && <RenderListSectionHeading />}
 
-      <div data-item="content" data-canbreak={section.break} className={section.containerClassName}>
+      <div
+        data-item="content"
+        data-canbreak={section.break}
+        className={section.containerClassName}
+        id="teacher-content"
+      >
         {items.map((item: any, idx: number) => {
           const itemId = item.itemId || item.id;
 
+          // Use sectionKey (from listPath) instead of sectionId because sectionKey matches formData keys
+          // e.g., "skills.items" -> "skills" which matches formData.skills
+          const formDataSectionKey = sectionKey || sectionId;
+
           const content = section.itemTemplate.rows
-            ? renderItemWithRows(
-              section.itemTemplate,
-              item,
-              itemId,
-              suggestedUpdates,
-              isThumbnail
-            )
+            ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)
             : renderItemWithFields(
-              section.itemTemplate,
-              item,
-              itemId,
-              suggestedUpdates,
-              isThumbnail
-            );
+                section.itemTemplate,
+                item,
+                itemId,
+                suggestedUpdates,
+                isThumbnail,
+                formDataSectionKey,
+              );
 
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
-          if (isItemBreakable && idx === 0) {
+          if (section.break && idx === 0) {
             return (
               <div
                 key={idx}
@@ -125,9 +129,7 @@ export function renderListSection(
               key={idx}
               className={cn(
                 section.itemTemplate.className,
-                isItemBreakable && shouldBlur
-                  ? "blur-[2px] pointer-events-none"
-                  : ""
+                isItemBreakable && shouldBlur ? 'blur-[2px] pointer-events-none' : '',
               )}
               style={itemWrapperStyle}
               data-canbreak={isItemBreakable ? 'true' : undefined}

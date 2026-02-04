@@ -1,10 +1,7 @@
 'use client';
 
 import { Dialog, DialogContent } from '@shared/ui/dialog';
-import { cn } from '@shared/lib/cn';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import React, { useState } from 'react';
 
 interface TeamMember {
   id: number;
@@ -30,13 +27,13 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < allMembers.length - 1;
 
-  const handlePrevious = () => {
+  const _handlePrevious = () => {
     if (hasPrev && onNavigate) {
       onNavigate(allMembers[currentIndex - 1]);
     }
   };
 
-  const handleNext = () => {
+  const _handleNext = () => {
     if (hasNext && onNavigate) {
       onNavigate(allMembers[currentIndex + 1]);
     }

@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
@@ -21,7 +21,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
 
   const handleNavigate = () => {
-    router.push(user ? '/dashboard' : '/auth');
+    router.push('/dashboard');
   };
 
   const handleMenuClick = () => {
@@ -39,7 +39,12 @@ function Header({ variant = 'default' }: HeaderProps) {
   };
 
   const handleDashboardClick = () => {
-    handleNavigate();
+    if (user) {
+      router.push('/dashboard');
+    } else {
+      const callbackUrl = encodeURIComponent(pathname + window.location.search);
+      router.push(`/auth?callbackUrl=${callbackUrl}`);
+    }
     trackEvent('navigation_click', {
       source: 'landing_header',
       destination: user ? 'dashboard' : 'auth',

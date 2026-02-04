@@ -75,12 +75,31 @@ const PDF_STYLES = `
 `;
 
 /**
+ * Converts proxy image URLs back to original S3 URLs
+ * The proxy URL format is: /api/proxy-image?url=<encoded-original-url>
+ * Backend can fetch S3 images directly without CORS issues
+ */
+function convertProxyUrlsToOriginal(html: string): string {
+  // Match both relative and absolute proxy URLs
+  // Format: src="/api/proxy-image?url=<encoded-url>" or src="http.../api/proxy-image?url=<encoded-url>"
+  return html.replace(/src="(?:https?:\/\/[^"]*)?\/api\/proxy-image\?url=([^"]+)"/g, (_match, encodedUrl) => {
+    try {
+      const originalUrl = decodeURIComponent(encodedUrl);
+      return `src="${originalUrl}"`;
+    } catch {
+      // If decoding fails, keep the original match
+      return _match;
+    }
+  });
+}
+
+/**
  * Prepares HTML content for PDF generation
+ * Converts proxy URLs back to original S3 URLs so backend can fetch directly
  */
 export function prepareHtmlForPdf(htmlContent: string): string {
-  // Convert relative proxy URLs to absolute URLs for backend PDF generation
-  const currentOrigin = window.location.origin;
-  const processedHtml = htmlContent.replace(/src="\/api\/proxy-image/g, `src="${currentOrigin}/api/proxy-image`);
+  // Convert proxy URLs to original S3 URLs - backend fetches directly without CORS issues
+  const processedHtml = convertProxyUrlsToOriginal(htmlContent);
 
   return PDF_STYLES.replace('{content}', processedHtml);
 }

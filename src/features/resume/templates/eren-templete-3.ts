@@ -5,7 +5,7 @@ const erenTemplate3 = {
     width: 794,
     height: 1122,
     background: '#ffffff',
-    className: 'text-[11px] text-neutral-900 leading-relaxed',
+    className: 'text-xs text-neutral-900 leading-relaxed',
     fontFamily: 'Inter, sans-serif',
   },
 
@@ -228,7 +228,7 @@ const erenTemplate3 = {
       className: 'flex flex-col',
       heading: {
         path: 'summary.heading',
-        fallback: 'SUMMARY',
+        fallback: 'Summary',
         className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       content: {
@@ -236,30 +236,36 @@ const erenTemplate3 = {
         path: 'personalDetails.items[0].description',
         fallback:
           'With over 15 years in customer experience management, I excel in creating impactful strategies that enhance journeys. Proven record includes achieving a 30% increase in customer satisfaction through innovative initiatives, all backed by strong analytical skills and leadership in dynamic environments.',
-        className: 'text-[11px] text-neutral-800 mt-3 whitespace-pre-wrap',
+        className: 'text-xs text-neutral-800 mt-3 whitespace-pre-wrap',
       },
     },
 
     /**
      * EXPERIENCE - Left Column
      */
+
     {
       id: 'experience',
       type: 'list-section',
       column: 'left',
-      break: true,
+      // break: true,
       heading: {
         path: 'experience.heading',
         fallback: 'EXPERIENCE',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 mt-3 mb-3',
       },
+      // divider: {
+      //   variant: "line",
+      //   className: "border-t-2 border-[#D58D40] mt-1 mb-4",
+      // },
       listPath: 'experience.items',
       itemTemplate: {
-        className: "flex flex-col gap-2 pt-4",
+        className: 'flex flex-col',
         break: true,
         rows: [
+          // 🔹 ROW 1: Position (LEFT) | Date (RIGHT)
           {
-            className: "flex flex-col gap-1 text-[11px] font-semibold text-neutral-900",
+            className: 'flex justify-between items-baseline',
             cells: [
               {
                 path: 'position',
@@ -267,37 +273,40 @@ const erenTemplate3 = {
                 className: 'font-bold text-neutral-900 text-sm',
               },
               {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-[10px] text-neutral-600 whitespace-nowrap',
+              },
+            ],
+          },
+
+          // 🔹 ROW 2: Company, Location
+          {
+            className: 'flex justify-between items-baseline',
+            cells: [
+              {
                 path: 'company',
                 fallback: 'TechForward Solutions',
                 className: 'text-[#1F91FF] font-semibold text-[12px]',
               },
-            ],
-          },
-          {
-            className: "flex flex-wrap items-center gap-2 text-[10px] text-neutral-600",
-            cells: [
               {
-                type: 'duration',
-                path: 'duration',
-                fallback: '01/2020 – Present',
-              },
-              {
-                path: "location",
-                prefix: " • ",
+                path: 'location',
+                fallback: 'New York, NY',
+                className: 'text-[10px] text-neutral-600 whitespace-nowrap',
               },
             ],
           },
+
+          // 🔹 ROW 3: Description
           {
             break: true,
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
-                  "text-[11px] text-neutral-800 leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap border-b border-dashed border-neutral-300 pb-2",
-                fallback:
-                  "<ul><li>Developed and implemented an extensive customer experience strategy that achieved a 40% increase in Net Promoter Score (NPS) within the first year, directly influencing customer retention and loyalty.</li><li>Led a cross-functional team to enhance customer journey mappings, increasing conversion rates by 25% through informed insights derived from extensive customer feedback assessments.</li><li>Collaborated closely with product and marketing teams, resulting in a 30% reduction in customer complaints by aligning service offerings with customer expectations.</li><li>Conducted in-depth data analyses of customer interactions, identifying critical bottlenecks which led to a 20% increase in customer engagement metrics over two quarters.</li><li>Served as the voice of the customer during executive strategy meetings, advocating for customer interests and ensuring alignment across all departments.</li><li>Designed and rolled out new employee training programs that improved service delivery, resulting in a notable 15% improvement in frontline customer satisfaction scores.</li></ul>",
+                  'text-xs text-neutral-800 leading-relaxed mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap pb-2',
               },
             ],
           },
@@ -320,7 +329,7 @@ const erenTemplate3 = {
         className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
       },
       listPath: 'achievements.items[0].items',
-      itemClassName: 'text-[11px] text-neutral-800 leading-relaxed',
+      itemClassName: 'text-xs text-neutral-800 leading-relaxed',
       containerClassName: 'grid grid-cols-1 gap-2 pt-3 pl-3',
     },
 
@@ -335,11 +344,11 @@ const erenTemplate3 = {
       heading: {
         path: 'skills.heading',
         fallback: 'SKILLS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 mt-3',
       },
       listPath: 'skills.items',
       itemPath: 'name',
-      itemClassName: 'text-[11px] text-neutral-800',
+      itemClassName: 'text-xs text-neutral-800',
       containerClassName: 'flex flex-wrap gap-1 pt-2',
       itemSeparator: ', ',
     },
@@ -355,7 +364,7 @@ const erenTemplate3 = {
       heading: {
         path: 'education.heading',
         fallback: 'EDUCATION',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 mt-1 mb-2',
       },
       listPath: 'education.items',
       itemTemplate: {
@@ -369,22 +378,13 @@ const erenTemplate3 = {
           {
             path: 'institution',
             fallback: 'University of Chicago',
-            className: 'text-[11px] text-[#1F91FF] font-semibold',
+            className: 'text-xs text-[#1F91FF] font-semibold',
           },
           {
             type: 'inline-group',
             separator: ' • ',
             className: 'flex flex-wrap items-center gap-1 text-[10px] text-neutral-600',
-            items: [
-              {
-                type: 'duration',
-                path: 'duration',
-                fallback: '2012 - 2014',
-              },
-              {
-                path: 'location',
-              },
-            ],
+            items: [{ type: 'duration', path: 'duration', fallback: '2012 - 2014' }, { path: 'location' }],
           },
         ],
       },
@@ -397,19 +397,18 @@ const erenTemplate3 = {
     {
       id: 'projects',
       type: 'list-section',
-      column: 'right',
+      column: 'left',
       break: true,
       heading: {
         path: 'projects.title',
         fallback: 'PROJECTS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 mb-2',
       },
       listPath: 'projects.items',
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: 'flex flex-col',
         fields: [
           {
-            type: 'link',
             path: 'title',
             href: 'link.link',
             fallback: 'Project Title',
@@ -424,7 +423,7 @@ const erenTemplate3 = {
             type: 'html',
             path: 'description',
             className:
-              'text-[11px] text-neutral-800 leading-relaxed mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
+              'text-xs text-neutral-800 leading-relaxed mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
           },
         ],
       },
@@ -442,7 +441,7 @@ const erenTemplate3 = {
       heading: {
         path: 'certifications.title',
         fallback: 'CERTIFICATIONS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 mt-3 mb-2',
       },
       listPath: 'certifications.items',
       itemTemplate: {
@@ -485,10 +484,10 @@ const erenTemplate3 = {
       heading: {
         path: 'interests.title',
         fallback: 'INTERESTS',
-        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 pt-1',
+        className: 'text-base font-semibold uppercase tracking-wide border-b-4 border-black pb-2 pt-1 mt-3 mb-2',
       },
       listPath: 'interests.items[0].items',
-      itemClassName: 'text-[11px] text-neutral-800 leading-relaxed',
+      itemClassName: 'text-xs text-neutral-800 leading-relaxed',
       containerClassName: 'flex flex-wrap gap-1 pt-2',
       itemSeparator: ', ',
     },

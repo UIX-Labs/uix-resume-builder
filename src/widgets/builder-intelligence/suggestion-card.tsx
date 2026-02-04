@@ -1,4 +1,5 @@
 import { Checkbox } from '@shared/ui/checkbox';
+import { Button } from '@shared/ui/components/button';
 import { Label } from '@shared/ui/label';
 import { RadioGroupItem } from '@shared/ui/radio-group';
 import { useId } from 'react';
@@ -73,12 +74,25 @@ export const SuggestionCard = ({
     </div>
 
     {isGroup ? (
-      <div className="flex flex-col gap-2 mt-2">{children}</div>
+      <div className="flex flex-col gap-2 mt-2 w-full">{children}</div>
     ) : (
-      <div className="flex flex-row items-start gap-3 mt-2">
-        <Checkbox checked={checked} onCheckedChange={onChange} className="mt-1 bg-white" />
-        <HtmlContent as="p" className="text-sm text-gray-900 flex-1" content={htmlContent ?? ''} />
-      </div>
+      <Button
+        className="flex flex-row items-start gap-3 mt-2 px-4 pt-3 pb-6
+ cursor-pointer bg-transparent hover:bg-transparent text-left max-w-full overflow-y-auto h-16"
+        onClick={() => onChange?.(!checked)}
+      >
+        <Checkbox
+          checked={checked}
+          onCheckedChange={onChange}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-1 bg-white cursor-pointer"
+        />
+        <HtmlContent
+          as="p"
+          className="text-sm text-gray-900 flex-1 break-words whitespace-normal w-full"
+          content={htmlContent ?? ''}
+        />
+      </Button>
     )}
   </div>
 );

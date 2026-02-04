@@ -4,13 +4,18 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { sendAuthCodeToBackend } from '@/shared/lib/google-auth';
+import { clearGuestEmail } from '@shared/lib/guest-email';
+import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 export default function GoogleCallbackClient() {
   const searchParams = useSearchParams();
+  const isMobile = useIsMobile();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showMobileRestricted, setShowMobileRestricted] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -41,12 +46,21 @@ export default function GoogleCallbackClient() {
         const authResponse = (await sendAuthCodeToBackend(code, guestEmail)) as any;
         if (authResponse.status === 'success') {
           setSuccess('Authentication successful! Redirecting...');
-          localStorage.removeItem('pending_analyzer_guest_email');
+          clearGuestEmail();
           queryClient.invalidateQueries({ queryKey: ['user'] });
           queryClient.invalidateQueries({ queryKey: ['userProfile'] });
 
           setTimeout(() => {
+            if (isMobile) {
+              setShowMobileRestricted(true);
+              return;
+            }
+
             const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
+            const shouldOpenJDModal = localStorage.getItem('openJDModal');
+            const storedCallbackUrl = localStorage.getItem('auth_callback_url');
+
+            localStorage.removeItem('auth_callback_url');
 
             // 1. Analyzer flow (highest priority)
             if (pendingResumeId) {
@@ -55,14 +69,19 @@ export default function GoogleCallbackClient() {
             }
 
             // 2. JD section flow
-            const shouldOpenJDModal = localStorage.getItem('openJDModal');
             if (shouldOpenJDModal === 'true') {
               localStorage.removeItem('openJDModal');
               router.push('/dashboard?openModal=jd');
               return;
             }
 
-            // 3. Default fallback
+            // 3. Callback URL flow
+            if (storedCallbackUrl) {
+              router.push(storedCallbackUrl);
+              return;
+            }
+
+            // 4. Default fallback
             router.push('/dashboard');
           }, 1000);
         } else {
@@ -93,12 +112,15 @@ export default function GoogleCallbackClient() {
 
   if (success) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center text-green-600">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p>{success}</p>
+      <>
+        <div className="flex justify-center items-center min-h-screen">
+          <div className="text-center text-green-600">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+            <p>{success}</p>
+          </div>
         </div>
-      </div>
+        <MobileTextView isOpen={showMobileRestricted} onClose={() => router.push('/')} />
+      </>
     );
   }
 

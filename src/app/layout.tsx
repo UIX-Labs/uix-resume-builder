@@ -4,7 +4,6 @@ import Script from 'next/script';
 import '../app/globals.css';
 
 import { Providers } from './providers';
-import { Toaster } from 'sonner';
 
 import { UserTracker } from '@/shared/lib/analytics/user-tracker';
 import { AnalyticsProvider } from '@shared/lib/analytics/mixpnel-provider';
@@ -136,6 +135,7 @@ export default function RootLayout({
         <Script
           id="structured-data"
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
@@ -163,7 +163,7 @@ export default function RootLayout({
           <UserTracker />
           {children}
         </Providers>
-        <Toaster />
+        {/* <Toaster /> */}
       </body>
     </html>
   );

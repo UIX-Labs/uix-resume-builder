@@ -1,8 +1,7 @@
 'use client';
 
 import { useParseLinkedInProfile } from '@entities/resume';
-import { Button } from '@shared/ui';
-import { Input } from '@shared/ui/components/input';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -39,6 +38,9 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     }
 
     setError(null);
+
+    // Ensure guest email exists for API tracking if user is not logged in
+    getOrCreateGuestEmail();
 
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
       onSuccess: (response) => {

@@ -21,10 +21,26 @@ export async function saveFormData<T extends ResumeDataKey>({ type, data }: { ty
     url = 'achievements';
   }
 
-  const res = await fetch(`${url}/${data.id}`, {
+  let normalizedData = data;
+  if (type === 'education' && (data as any).items) {
+    normalizedData = {
+      ...data,
+      items: (data as any).items.map((item: any) => {
+        if (item.grade && typeof item.grade === 'object' && 'value' in item.grade) {
+          return {
+            ...item,
+            grade: typeof item.grade.value === 'string' ? item.grade.value : String(item.grade.value),
+          };
+        }
+        return item;
+      }),
+    };
+  }
+
+  const res = await fetch(`${url}/${normalizedData.id}`, {
     options: {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify(normalizedData),
     },
   });
 

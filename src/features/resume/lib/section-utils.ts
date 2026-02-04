@@ -1,5 +1,37 @@
 import { resolvePath } from './resolve-path';
 
+/**
+ * Checks if a value is a renderable primitive (string, number, boolean).
+ * Complex objects should not be rendered directly as React children.
+ */
+export function isRenderablePrimitive(value: any): boolean {
+  const type = typeof value;
+  return type === 'string' || type === 'number' || type === 'boolean';
+}
+
+/**
+ * Extracts a renderable value from a potentially complex object.
+ * If the value is a primitive, returns it as a string.
+ * If it's an object with a 'value' property, extracts that.
+ * Otherwise returns null to indicate it cannot be rendered.
+ */
+export function extractRenderableValue(value: any): string | null {
+  if (value == null) return null;
+
+  // If it's already a renderable primitive, convert to string
+  if (isRenderablePrimitive(value)) {
+    return String(value);
+  }
+
+  // If it's an object with a 'value' property, extract it
+  if (typeof value === 'object' && 'value' in value) {
+    return extractRenderableValue(value.value);
+  }
+
+  // Complex object that can't be rendered directly
+  return null;
+}
+
 export function flattenAndFilterItemsWithContext(
   items: any[],
   itemPath?: string,

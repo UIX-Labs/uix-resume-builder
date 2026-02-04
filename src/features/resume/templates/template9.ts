@@ -36,7 +36,12 @@ const template9 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-2',
               items: [
-                { type: 'icon', name: 'MapPin', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'icon',
+                  name: 'MapPin',
+                  size: 14,
+                  className: 'text-[rgb(17,9,128)]',
+                },
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: '123 Main Street, Paris, France',
@@ -48,7 +53,12 @@ const template9 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-2',
               items: [
-                { type: 'icon', name: 'Mail', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'icon',
+                  name: 'Mail',
+                  size: 14,
+                  className: 'text-[rgb(17,9,128)]',
+                },
                 {
                   path: 'personalDetails.items[0].email',
                   fallback: 'anna@field.com',
@@ -60,7 +70,12 @@ const template9 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-2',
               items: [
-                { type: 'icon', name: 'Phone', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'icon',
+                  name: 'Phone',
+                  size: 14,
+                  className: 'text-[rgb(17,9,128)]',
+                },
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '+11 23434546',
@@ -72,7 +87,12 @@ const template9 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-2',
               items: [
-                { type: 'icon', name: 'Linkedin', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'icon',
+                  name: 'Linkedin',
+                  size: 14,
+                  className: 'text-[rgb(17,9,128)]',
+                },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.linkedin.title',
@@ -86,7 +106,12 @@ const template9 = {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-2',
               items: [
-                { type: 'icon', name: 'Github', size: 14, className: 'text-[rgb(17,9,128)]' },
+                {
+                  type: 'icon',
+                  name: 'Github',
+                  size: 14,
+                  className: 'text-[rgb(17,9,128)]',
+                },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.github.title',
@@ -116,7 +141,7 @@ const template9 = {
             className: 'flex flex-col',
             heading: {
               path: 'summary.heading',
-              fallback: 'SUMMARY',
+              fallback: 'Summary',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
             },
             divider: { variant: 'line', className: 'border-black border-t-3' },
@@ -137,7 +162,10 @@ const template9 = {
               path: 'experience.heading',
               fallback: 'EXPERIENCE',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'experience.items',
             containerClassName: 'flex flex-col mt-2',
@@ -191,7 +219,10 @@ const template9 = {
               path: 'projects.title',
               fallback: 'PROJECTS',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'projects.items',
             containerClassName: 'flex flex-col mt-2',
@@ -240,7 +271,10 @@ const template9 = {
               path: 'achievements.heading',
               fallback: 'KEY ACHIEVEMENTS',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-2' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-2',
+              },
             },
             listPath: 'achievements.items[0].items',
             icon: 'Crown',
@@ -260,7 +294,10 @@ const template9 = {
               path: 'education.heading',
               fallback: 'EDUCATION',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'education.items',
             containerClassName: 'flex flex-col mt-2',
@@ -315,7 +352,10 @@ const template9 = {
               path: 'skills.heading',
               fallback: 'SKILLS',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'skills.items',
             itemPath: 'name',
@@ -332,7 +372,10 @@ const template9 = {
               path: 'interests.title',
               fallback: 'INTERESTS',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'interests.items[0].items',
             containerClassName: 'flex flex-wrap gap-2 mt-3',
@@ -347,7 +390,10 @@ const template9 = {
               path: 'certifications.heading',
               fallback: 'CERTIFICATIONS',
               className: 'uppercase tracking-wide text-lg font-bold text-black',
-              divider: { variant: 'line', className: 'border-black border-t-3' },
+              divider: {
+                variant: 'line',
+                className: 'border-black border-t-3',
+              },
             },
             listPath: 'certifications.items',
             containerClassName: 'flex flex-col mt-3 gap-4',

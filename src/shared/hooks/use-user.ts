@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetch } from '@shared/api';
 
-interface User {
+export interface User {
   id: string;
   email: string;
   firstName: string;
@@ -19,7 +19,10 @@ export const useUserProfile = () => {
     queryKey: ['userProfile'],
     queryFn: fetchUserProfile,
     retry: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   });
 };
 

@@ -10,12 +10,12 @@ const template10 = {
   columns: {
     spacing: '15px',
     left: {
-      width: 'calc(100% - 200px)',
+      width: 'calc(100% - 250px)',
       className: 'px-3 pt-3 gap-3',
     },
     right: {
       width: '300px',
-      className: 'pb-10 pl-6 pt-3 max-w-[200px]',
+      className: 'pb-10 pt-3 w-full pr-12',
     },
   },
 
@@ -130,25 +130,29 @@ const template10 = {
         },
       },
     },
-
     {
       id: 'skills',
       type: 'inline-list-section',
       column: 'right',
-      showBullet: true,
       break: true,
       breakable: true,
+
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-white uppercase tracking-normal mb-3 leading-[1.21]',
+        className: 'text-base font-bold text-white uppercase tracking-normal mb-1.5 leading-[1.21] mt-4',
       },
-      listPath: 'skills.items',
-      itemPath: 'name',
-      itemClassName: 'text-[13px] text-[#D1D5DB] inline-block',
-      containerClassName: 'grid grid-cols-1 gap-3',
-    },
 
+      listPath: 'skills.items',
+
+      // 🔑 KEY CHANGES
+      itemPath: 'name',
+      itemSeparator: ', ',
+      showBullet: false,
+
+      itemClassName: 'text-[13px] text-[#D1D5DB]',
+      containerClassName: 'block text-white',
+    },
     // Work Experience Section - Left Column
     {
       id: 'experience',
@@ -162,9 +166,9 @@ const template10 = {
         className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mb-3',
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-4',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -196,8 +200,8 @@ const template10 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -224,26 +228,29 @@ const template10 = {
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
         className: 'flex flex-col gap-3',
+
         rows: [
+          // Row 1: Institution (left) | Degree (right)
           {
-            className: 'flex flex-col leading-none',
+            className: 'flex gap-3 items-baseline leading-none',
             cells: [
               {
-                type: 'inline-group',
-                className: 'flex flex-col gap-2 whitespace-nowrap',
-                items: [
-                  {
-                    path: 'institution',
-                    fallback: 'University of Design',
-                    className: 'text-base font-semibold text-white leading-[1.21]',
-                  },
-                  {
-                    path: 'degree',
-                    fallback: 'BSc(HCI)',
-                    className: 'text-sm font-normal text-[#D1D5DB] leading-[1.21]',
-                  },
-                ],
+                path: 'institution',
+                fallback: 'University of Design',
+                className: 'text-base font-semibold text-white leading-[1.21]',
               },
+              {
+                path: 'degree',
+                fallback: 'BSc (HCI)',
+                className: 'text-sm font-normal text-[#D1D5DB] leading-[1.21] whitespace-nowrap',
+              },
+            ],
+          },
+
+          // Row 2: Date (below)
+          {
+            className: 'flex leading-none',
+            cells: [
               {
                 type: 'duration',
                 path: 'duration',
@@ -251,6 +258,8 @@ const template10 = {
               },
             ],
           },
+
+          // Row 3: Description
           {
             cells: [
               {
@@ -271,7 +280,7 @@ const template10 = {
       type: 'list-section',
       column: 'left',
       break: true,
-      className: 'mt-7',
+      // className: "mt-7",
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
@@ -280,7 +289,7 @@ const template10 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {
@@ -307,8 +316,8 @@ const template10 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#D1D5DB] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -339,12 +348,12 @@ const template10 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mt-4',
+        className: 'text-base font-bold text-white tracking-normal uppercase leading-[1.21] mt-2',
       },
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {
@@ -392,19 +401,25 @@ const template10 = {
       id: 'interests',
       type: 'inline-list-section',
       column: 'right',
-      showBullet: true,
       break: true,
       breakable: true,
       className: 'mt-8',
+
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-base font-bold text-white uppercase tracking-normal mb-3 leading-[1.21] mt-5',
+        className: 'text-base font-bold text-white uppercase tracking-normal mb-1.5 leading-[1.21] mt-5',
       },
+
       listPath: 'interests.items[0].items',
+
+      // 🔑 REQUIRED CHANGES
       itemPath: '',
-      itemClassName: 'text-sm text-[#D1D5DB] inline-block',
-      containerClassName: 'flex flex-col gap-3 w-full',
+      itemSeparator: ', ',
+      showBullet: false,
+
+      itemClassName: 'text-sm text-[#D1D5DB]',
+      containerClassName: 'block w-full text-white',
     },
 
     // Achievements Section - Right Column
@@ -423,7 +438,7 @@ const template10 = {
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      itemClassName: 'text-sm text-[#D1D5DB] inline-block break-words',
+      itemClassName: 'text-sm text-[#D1D5DB] inline-block break-words -ml-4',
       containerClassName: 'flex flex-col gap-3 w-full',
     },
   ],

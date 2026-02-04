@@ -7,6 +7,7 @@ export function CloseIcon({ className }: { className?: string }) {
       viewBox="0 0 48 48"
       fill="none"
       className={className}
+      aria-hidden="true"
     >
       <mask id="path-1-inside-1_2907_8501" fill="white">
         <path d="M0 24C0 10.7452 10.7452 0 24 0C37.2548 0 48 10.7452 48 24C48 37.2548 37.2548 48 24 48C10.7452 48 0 37.2548 0 24Z" />

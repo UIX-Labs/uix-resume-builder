@@ -10,18 +10,20 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from '@shared/ui/sidebar';
-import { Home, FileText, LogOut, Sparkles, LayoutGrid } from 'lucide-react';
+import { Home, FileText, LogOut, LayoutGrid, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import PikaResume from '@shared/icons/pika-resume';
 import { useRouter } from 'next/navigation';
+import { useUserProfile } from '@shared/hooks/use-user';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const logoutMutation = useLogoutUser();
   const router = useRouter();
+  const { data: user } = useUserProfile();
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -51,6 +53,13 @@ export default function DashboardSidebar() {
   const handleLogoutClick = () => {
     handleLogout();
     trackEvent('logout_click', {
+      source: 'dashboard_sidebar',
+    });
+  };
+
+  const handleSignInClick = () => {
+    router.push('/auth');
+    trackEvent('signin_click', {
       source: 'dashboard_sidebar',
     });
   };
@@ -152,17 +161,30 @@ export default function DashboardSidebar() {
           <SidebarGroupContent>
             <SidebarMenu className="">
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  asChild
-                  onClick={handleLogoutClick}
-                  disabled={logoutMutation.isPending}
-                  className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
-                >
-                  <div className="flex items-center">
-                    <LogOut className="w-5 h-5" />
-                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
-                  </div>
-                </SidebarMenuButton>
+                {user?.isLoggedIn ? (
+                  <SidebarMenuButton
+                    asChild
+                    onClick={handleLogoutClick}
+                    disabled={logoutMutation.isPending}
+                    className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
+                  >
+                    <div className="flex items-center">
+                      <LogOut className="w-5 h-5" />
+                      {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                    </div>
+                  </SidebarMenuButton>
+                ) : (
+                  <SidebarMenuButton
+                    asChild
+                    onClick={handleSignInClick}
+                    className="h-9 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
+                  >
+                    <div className="flex items-center">
+                      <LogIn className="w-5 h-5" />
+                      Sign In
+                    </div>
+                  </SidebarMenuButton>
+                )}
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

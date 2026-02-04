@@ -1,7 +1,17 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-const PUBLIC_ROUTES = ['/', '/auth/google/callback', '/auth/linkedin/callback', '/about-us', '/roast'];
+const PUBLIC_ROUTES = [
+  '/',
+  '/auth/google/callback',
+  '/auth/linkedin/callback',
+  '/about-us',
+  '/roast',
+  '/dashboard',
+  '/resume',
+  '/resumes',
+  '/get-all-resumes',
+];
 
 async function checkAuth(request: NextRequest): Promise<boolean> {
   try {
@@ -29,25 +39,35 @@ async function checkAuth(request: NextRequest): Promise<boolean> {
 }
 
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const isAuthRoute = pathname === '/auth';
-  const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(route + '/'));
+  try {
+    const { pathname } = request.nextUrl;
+    const isAuthRoute = pathname === '/auth';
+    const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
 
-  if (isPublicRoute) {
+    if (isPublicRoute) {
+      return NextResponse.next();
+    }
+
+    const isAuthenticated = await checkAuth(request);
+
+    if (isAuthenticated && isAuthRoute) {
+      const callbackUrl = request.nextUrl.searchParams.get('callbackUrl');
+      if (callbackUrl) {
+        return NextResponse.redirect(new URL(callbackUrl, request.url));
+      }
+      return NextResponse.redirect(new URL('/dashboard', request.url));
+    }
+
+    if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
+      const callbackUrl = encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search);
+      return NextResponse.redirect(new URL(`/auth?callbackUrl=${callbackUrl}`, request.url));
+    }
+
+    return NextResponse.next();
+  } catch (error) {
+    console.error('Middleware execution error:', error);
     return NextResponse.next();
   }
-
-  const isAuthenticated = await checkAuth(request);
-
-  if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
-
-  if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
-    return NextResponse.redirect(new URL('/auth', request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {

@@ -62,9 +62,9 @@ const enzoTemplate2 = {
             },
             // Contact Info
             {
-              id: "header",
-              type: "group",
-              className: "flex flex-col gap-3 items-end pt-1",
+              id: 'header',
+              type: 'group',
+              className: 'flex flex-col gap-3 items-end pt-1',
               items: [
                 {
                   type: 'link',
@@ -144,14 +144,14 @@ const enzoTemplate2 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-6',
       itemTemplate: {
-        className: "flex flex-col gap-1",
+        className: 'flex flex-col gap-1',
         break: true,
         rows: [
           {
             cells: [
               {
                 path: 'position',
-                className: 'text-sm font-bold pt-4',
+                className: 'text-xs font-bold pt-4',
               },
             ],
           },
@@ -172,8 +172,8 @@ const enzoTemplate2 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
@@ -205,7 +205,7 @@ const enzoTemplate2 = {
             cells: [
               {
                 path: 'degree',
-                className: 'text-sm font-bold',
+                className: 'text-xs font-bold',
               },
             ],
           },
@@ -264,7 +264,7 @@ const enzoTemplate2 = {
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -302,7 +302,7 @@ const enzoTemplate2 = {
       listPath: 'projects.items',
       containerClassName: 'flex flex-col',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -310,7 +310,7 @@ const enzoTemplate2 = {
               {
                 path: 'title',
                 fallback: 'Project Title',
-                className: 'text-sm font-bold',
+                className: 'text-xs font-bold',
               },
             ],
           },
@@ -338,8 +338,8 @@ const enzoTemplate2 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-xs leading-relaxed whitespace-pre-wrap break-words [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
@@ -352,12 +352,12 @@ const enzoTemplate2 = {
 
     // Skills Section - Right Column
     {
-      id: "skills",
+      id: 'skills',
       break: true,
       breakable: true,
-      type: "inline-list-section",
-      column: "right",
-      className: "",
+      type: 'inline-list-section',
+      column: 'right',
+      className: '',
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
@@ -372,12 +372,12 @@ const enzoTemplate2 = {
 
     // Interests Section - Right Column
     {
-      id: "interests",
+      id: 'interests',
       break: true,
       breakable: true,
-      type: "inline-list-section",
-      column: "right",
-      className: "",
+      type: 'inline-list-section',
+      column: 'right',
+      className: '',
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
@@ -391,12 +391,12 @@ const enzoTemplate2 = {
 
     // Achievements Section - Right Column
     {
-      id: "achievements",
+      id: 'achievements',
       break: true,
       breakable: true,
-      type: "inline-list-section",
-      column: "right",
-      className: "",
+      type: 'inline-list-section',
+      column: 'right',
+      className: '',
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',

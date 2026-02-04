@@ -1,10 +1,14 @@
+import { getGuestEmail } from '@shared/lib/guest-email';
+
 async function fetcher<T>(url: string, { options }: { options?: RequestInit } = {}): Promise<T> {
   const isFormData = options?.body instanceof FormData;
+  const guestEmail = typeof window !== 'undefined' ? getGuestEmail() : null;
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/${url}`, {
     ...(options ?? {}),
     headers: {
       ...(!isFormData && { 'Content-Type': 'application/json' }),
+      ...(guestEmail && { 'guest-email': guestEmail }),
       ...(options?.headers ?? {}),
     },
     credentials: 'include',

@@ -1,15 +1,17 @@
 import { createResume } from '@entities/resume';
-import { useMutation } from '@tanstack/react-query';
-import { Upload } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { Button } from '@shared/ui/components/button';
-import { FileUpload } from '@widgets/resumes/file-upload';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
-import BuilderIntelligenceModal from './builder-intelligence-modal';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { Button } from '@shared/ui/components/button';
+import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
+import { useMutation } from '@tanstack/react-query';
+import { FileUpload } from '@widgets/resumes/file-upload';
+import { Upload } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import BuilderIntelligenceModal from './builder-intelligence-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -38,6 +40,8 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   });
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState('');
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
@@ -64,7 +68,12 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       method: 'from_scratch',
     });
 
-    if (!user.data?.id) {
+    // For guest users, create guest email for API tracking
+    if (!user.data?.isLoggedIn) {
+      getOrCreateGuestEmail();
+    }
+
+    if (!user.data?.id && user.data?.isLoggedIn) {
       setShowScanningOverlay(false);
       releaseOptions();
       return;
@@ -74,7 +83,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       const data = await createResumeMutation.mutateAsync({
         title: 'Frontend Engineer Resume',
         userInfo: {
-          userId: user.data.id,
+          userId: user.data?.id ?? '',
         },
       });
 
@@ -123,6 +132,14 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       method: 'tailored_with_jd',
     });
 
+    // Guest users must login for Tailored JD flow
+    if (!user.data?.id || !user.data?.isLoggedIn) {
+      localStorage.setItem('openJDModal', 'true');
+      setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     lockOptions('tailoredJD');
     setShowResumeUpload(false);
     setShowJDUpload(true);
@@ -151,7 +168,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   );
 
   const handleCloseBuilderIntelligence = useCallback(() => {
-    closeBuilderIntelligenceModal();
+    closeBuilderIntelligenceModal(false);
   }, [closeBuilderIntelligenceModal]);
 
   const handleBuilderIntelligenceSubmittingChange = useCallback(
@@ -163,7 +180,6 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       }
 
       setShowScanningOverlay(false);
-      releaseOptions();
     },
     [closeBuilderIntelligenceModal, releaseOptions],
   );
@@ -196,10 +212,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   }, [builderIntelligenceModalProps, shouldRenderBuilderIntelligenceModal]);
 
   // Show NewProgressBar only for upload action
-  const showProgressBar = showScanningOverlay && activeAction === 'upload';
+  const showProgressBar = showScanningOverlay && (activeAction === 'upload' || activeAction === 'tailoredJD');
 
   // Show spinner overlay for other actions
-  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload';
+  const showSpinnerOverlay = showScanningOverlay && activeAction !== 'upload' && activeAction !== 'tailoredJD';
 
   const overlayConfig = {
     create: {
@@ -285,6 +301,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
                     trackEvent('upload_resume_click', {
                       source: 'dashboard_card',
                     });
+                    // For guest users, create guest email for API tracking
+                    if (!user.data?.isLoggedIn) {
+                      getOrCreateGuestEmail();
+                    }
                   }}
                 />
               </div>
@@ -319,6 +339,13 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       </div>
 
       {builderIntelligenceModal}
+      <AuthRedirectModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        redirectUrl={authRedirectUrl}
+        title="Login Required"
+        description="You need to login to use Tailored with JD."
+      />
     </>
   );
 }

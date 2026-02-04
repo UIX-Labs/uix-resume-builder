@@ -1,5 +1,5 @@
 import { cn } from '@shared/lib/cn';
-import React from 'react';
+import type React from 'react';
 
 // Render divider (horizontal line under headings)
 export function renderDivider(divider: any): React.ReactNode {

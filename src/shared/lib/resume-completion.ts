@@ -96,12 +96,44 @@ function calculateSectionWeight(value: any) {
   return Object.keys(value).filter((key) => !ignoredFields.includes(key)).length;
 }
 
-function calculateItemWeight(value: any) {
-  if (typeof value !== 'object') {
-    return value ? 1 : 0;
+/**
+ * Checks if a value has actual content (not just structure)
+ */
+function hasActualContent(value: any): boolean {
+  if (value === null || value === undefined) return false;
+
+  // Empty string is not content
+  if (typeof value === 'string') {
+    return value.trim().length > 0;
   }
 
-  return Object.entries(value).filter(([key, value]) => !ignoredFields.includes(key) && value).length;
+  // Numbers and booleans are content
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return true;
+  }
+
+  // Empty array is not content
+  if (Array.isArray(value)) {
+    return value.length > 0 && value.some((item) => hasActualContent(item));
+  }
+
+  // For objects, check if any nested value has actual content
+  if (typeof value === 'object') {
+    return Object.entries(value).some(([key, val]) => {
+      if (ignoredFields.includes(key)) return false;
+      return hasActualContent(val);
+    });
+  }
+
+  return Boolean(value);
+}
+
+function calculateItemWeight(value: any) {
+  if (typeof value !== 'object') {
+    return hasActualContent(value) ? 1 : 0;
+  }
+
+  return Object.entries(value).filter(([key, val]) => !ignoredFields.includes(key) && hasActualContent(val)).length;
 }
 
 /**

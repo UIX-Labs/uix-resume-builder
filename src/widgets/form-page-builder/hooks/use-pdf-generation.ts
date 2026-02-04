@@ -1,4 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { generatePdfFromHtml } from '../lib/pdf-helpers';
 import dayjs from 'dayjs';
 import type { ResumeData } from '@entities/resume';

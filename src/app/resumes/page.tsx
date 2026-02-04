@@ -4,19 +4,21 @@ import { formatDate } from '@shared/lib/date-time';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
 import { Button } from '@shared/ui/button';
+import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { HomeIcon, MoreVertical, Search, Trash2 } from 'lucide-react';
+import { MoreVertical, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 export default function AllResumePage() {
-  const { data: user } = useUserProfile();
-  const { data: resumes } = useGetAllResumes({ userId: user?.id as string });
+  const { data: user, isLoading } = useUserProfile();
+  const { data: resumes } = useGetAllResumes();
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -27,18 +29,26 @@ export default function AllResumePage() {
   const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   async function handleCreateResume() {
-    if (!user) {
+    // biome-ignore lint/correctness/noUnusedVariables: <explanation>
+    let guestEmail: string | undefined;
+
+    if (!user?.isLoggedIn) {
+      guestEmail = getOrCreateGuestEmail();
+    } else if (!user) {
       return;
     }
 
-    const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-    const userName = `${user.firstName} ${user.lastName || ''}`.trim();
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      month: 'short',
+      year: 'numeric',
+    });
+    const userName = user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Guest User';
     const title = `${userName}-Resume-${currentDate}`;
 
     const data = await createResumeMutation.mutateAsync({
       title: title,
       userInfo: {
-        userId: user.id,
+        userId: user?.id ?? '',
       },
     });
 
@@ -51,34 +61,7 @@ export default function AllResumePage() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <header className="flex justify-end items-center p-4 rounded-3xl bg-[rgba(245,248,250,1)]">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => router.push('/')}
-                  className="border-none bg-transparent hover:bg-transparent cursor-pointer"
-                >
-                  <HomeIcon className="w-full h-full" />
-                </Button>
-              </div>
-
-              <div className="flex items-center justify-center bg-blue-200 rounded-full overflow-hidden h-[53px] w-[53px]">
-                <span className="text-xl font-bold text-gray-600">{user?.firstName?.charAt(0)}</span>
-              </div>
-
-              <div className="flex flex-col">
-                <span className="text-black leading-[1.375em] tracking-[-1.125%] text-base font-normal">
-                  {user ? `${user.firstName} ${user.lastName ?? ''}` : 'Loading...'}
-                </span>
-
-                <span className="text-[13px] font-normal leading-[1.385em] text-[rgb(149,157,168)]">
-                  {user?.email ?? 'Loading...'}
-                </span>
-              </div>
-            </div>
-          </header>
+          <DashboardHeader user={user} />
 
           <main className="flex bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4 h-full">
             <div className="flex-1">
@@ -88,7 +71,9 @@ export default function AllResumePage() {
                 </h1>
               </div>
 
-              <WelcomeHeader userName={(user?.firstName ?? '') + ' ' + (user?.lastName ?? '')} />
+              <WelcomeHeader
+                userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
+              />
 
               <div className="flex gap-6 mt-6 mx-4 flex-wrap">
                 <button
@@ -165,7 +150,7 @@ function ResumeCard({ resume }: ResumeCardProps) {
 
         <button
           type="button"
-          className="rounded-2xl absolute inset-0 h-[270px] bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>

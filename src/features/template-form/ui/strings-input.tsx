@@ -42,7 +42,7 @@ export function StringInput({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold text-[#0C1118]">Skill</span>
+        {/* <span className="text-sm font-semibold text-[#0C1118]">Skill</span> */}
         {hasErrors && onOpenAnalyzerModal && parentItemId && (
           <FieldErrorBadges
             spellingCount={errorCounts.spellingCount}
@@ -80,12 +80,13 @@ export function StringsInput({
   suggestedUpdates?: any;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
 }) {
-  const [localData, setLocalData] = useState(data?.items || []);
+  const initialData = data?.items?.length > 0 ? data.items : [''];
+  const [localData, setLocalData] = useState(initialData);
 
   // Sync local data when parent data changes (e.g., after applying suggestions)
   useEffect(() => {
     if (data?.items) {
-      setLocalData(data.items);
+      setLocalData(data.items.length > 0 ? data.items : ['']);
     }
   }, [data]);
 
@@ -106,19 +107,32 @@ export function StringsInput({
     setLocalData(newData);
   }
 
+  const wrappedData = localData.map((item, index) => ({
+    originalItem: item,
+    uniqueId: typeof item === 'string' ? `string-item-${index}` : item.itemId || item.id || `item-${index}`,
+  }));
+
   return (
     <div className="flex flex-col gap-2">
-      <Sortable data={localData} getId={(item) => item.itemId || item.id} onDragEnd={handleDragEnd}>
+      <Sortable
+        data={wrappedData}
+        getId={(wrappedItem) => wrappedItem.uniqueId}
+        onDragEnd={(newWrappedItems) => {
+          const unwrappedItems = newWrappedItems.map((wrapped) => wrapped.originalItem);
+          handleDragEnd(unwrappedItems);
+        }}
+      >
         {
-          ((items: any[]) => (
+          ((wrappedItems: any[]) => (
             <>
-              {items.map((item, index) => {
-                const itemId = item.itemId || item.id || `item-${index}`;
+              {wrappedItems.map((wrappedItem, index) => {
+                const item = wrappedItem.originalItem;
+                const itemId = wrappedItem.uniqueId;
 
                 return (
                   <SortableItem id={itemId} key={itemId} className="group">
                     <StringInput
-                      data={item.name || item}
+                      data={typeof item === 'object' ? item.name || item : item}
                       suggestions={suggestionsArray}
                       parentItemId={data.itemId}
                       onOpenAnalyzerModal={onOpenAnalyzerModal}

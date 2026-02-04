@@ -12,12 +12,12 @@ const template11 = {
   columns: {
     spacing: '15px',
     left: {
-      width: 'calc(100% - 200px)',
+      width: 'calc(100% - 250px)',
       className: 'px-3 pt-3 gap-3',
     },
     right: {
       width: '300px',
-      className: 'pb-10 pl-6 pt-3 max-w-[200px]',
+      className: 'pb-10 pt-3 w-full pr-12',
     },
   },
 
@@ -126,22 +126,29 @@ const template11 = {
     },
 
     // Skills Section - Right Column (after contact)
+
     {
       id: 'skills',
       type: 'inline-list-section',
       column: 'right',
-      showBullet: true,
       break: true,
       breakable: true,
+
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal  mb-3 leading-[1.21]',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal  mb-2 leading-[1.21]',
       },
+
       listPath: 'skills.items',
+
+      // 🔑 KEY CHANGES
       itemPath: 'name',
-      itemClassName: 'text-[13px] text-neutral-900 inline-block',
-      containerClassName: 'grid grid-cols-1 gap-3',
+      itemSeparator: ', ',
+      showBullet: false,
+
+      itemClassName: 'text-[13px] text-[#4A4A4A] inline-block',
+      containerClassName: 'block text-[#4A4A4A]',
     },
 
     // Work Experience Section - Left Column
@@ -159,7 +166,7 @@ const template11 = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col',
         break: true,
         rows: [
           {
@@ -191,8 +198,8 @@ const template11 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#4A4A4A] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -217,28 +224,32 @@ const template11 = {
       },
       listPath: 'education.items',
       containerClassName: 'flex flex-col gap-3',
+
       itemTemplate: {
-        className: 'flex flex-col gap-3',
+        className: 'flex flex-col gap-2.5',
+
         rows: [
+          // Row 1: Institution (left) | Degree (right)
           {
-            className: 'flex flex-col leading-none',
+            className: 'flex gap-3 items-baseline leading-none',
             cells: [
               {
-                type: 'inline-group',
-                className: 'flex flex-col',
-                items: [
-                  {
-                    path: 'institution',
-                    fallback: 'University of Design',
-                    className: 'text-base font-semibold text-[#2B6CB0]',
-                  },
-                  {
-                    path: 'degree',
-                    fallback: 'BSc(HCI)',
-                    className: 'text-sm font-normal text-[#1A1A1A]',
-                  },
-                ],
+                path: 'institution',
+                fallback: 'University of Design',
+                className: 'text-base font-semibold text-[#2B6CB0]',
               },
+              {
+                path: 'degree',
+                fallback: 'BSc (HCI)',
+                className: 'text-sm font-normal text-[#1A1A1A]',
+              },
+            ],
+          },
+
+          // Row 2: Date (below)
+          {
+            className: 'flex leading-none',
+            cells: [
               {
                 type: 'duration',
                 path: 'duration',
@@ -246,6 +257,8 @@ const template11 = {
               },
             ],
           },
+
+          // Row 3: Description
           {
             cells: [
               {
@@ -270,12 +283,12 @@ const template11 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2.5',
       },
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {
@@ -302,8 +315,8 @@ const template11 = {
           {
             cells: [
               {
-                type: "html",
-                path: "description",
+                type: 'html',
+                path: 'description',
                 break: true,
                 className:
                   'text-sm leading-[1.6] text-[#4A4A4A] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc [&_li]:mb-1',
@@ -334,12 +347,12 @@ const template11 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-4',
+        className: 'text-base font-bold text-[#1A1A1A] tracking-normal uppercase leading-[1.21] mt-2.5',
       },
       listPath: 'certifications.items',
       containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: "flex flex-col gap-3",
+        className: 'flex flex-col gap-3',
         break: true,
         rows: [
           {
@@ -381,24 +394,29 @@ const template11 = {
         ],
       },
     },
-
     {
       id: 'interests',
       type: 'inline-list-section',
       column: 'right',
-      showBullet: true,
       break: true,
       breakable: true,
-      className: 'mt-7',
+      className: 'mt-8',
+
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-3 leading-[1.21] mt-4',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-2 leading-[1.21] mt-4.5',
       },
+
       listPath: 'interests.items[0].items',
+
+      // 🔑 REQUIRED CHANGES
       itemPath: '',
-      itemClassName: 'text-sm text-neutral-900 inline-block',
-      containerClassName: 'flex flex-col gap-3 w-full',
+      itemSeparator: ', ',
+      showBullet: false,
+
+      itemClassName: 'text-sm text-[#4A4A4A] inline-block',
+      containerClassName: 'block w-full text-[#4A4A4A]',
     },
 
     // Achievements Section - Right Column
@@ -413,11 +431,11 @@ const template11 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-3 leading-[1.21] mt-4',
+        className: 'text-base font-bold text-[#1A1A1A] uppercase tracking-normal mb-2.5 leading-[1.21] mt-4.5',
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
-      itemClassName: 'text-sm text-neutral-900 break-words',
+      itemClassName: 'text-sm text-[#4A4A4A] break-words -ml-4',
       containerClassName: 'flex flex-col gap-3 w-full',
     },
   ],

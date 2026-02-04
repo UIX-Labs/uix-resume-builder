@@ -1,7 +1,7 @@
 import { useFetch } from '@/shared/api/hooks/useFetch';
+import { useUserProfile } from '@shared/hooks/use-user';
 
 import {
-  getResumeData,
   getResumeSchema,
   getResumeEmptyData,
   parseLinkedInProfile,
@@ -14,91 +14,23 @@ import {
 
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import type { ResumeData, ResumeDataKey } from '../types/resume-data';
+import { fetchAndMergeResumeData } from '../lib/merge-resume-data';
 
 export function useTemplateFormSchema() {
   return useFetch({
     queryKey: ['resume-schema'],
     queryFn: getResumeSchema,
+    staleTime: Infinity, // Cache forever since schema is static data
   });
 }
 
 export function useResumeData(id: string) {
+  const { data: user } = useUserProfile();
+  const isLoggedIn = user?.isLoggedIn ?? false;
+
   return useFetch({
-    queryKey: ['resume-data', id],
-    queryFn: async () => {
-      const promisesArray = [getResumeData(id), getResumeEmptyData()];
-      const [actualData, emptyData] = await Promise.all(promisesArray);
-
-      // Enhanced deep merge function to recursively check all nested object fields
-      const deepMerge = (target: any, source: any): any => {
-        // If source is null/undefined, return target as-is
-        if (source === null || source === undefined) {
-          return target;
-        }
-        // If target is null/undefined, return source (provides missing structure)
-        if (target === null || target === undefined) {
-          return source;
-        }
-
-        // Start with target's existing values
-        const result = { ...target };
-
-        // Recursively check every property in source
-        for (const key in source) {
-          if (key in source) {
-            const sourceValue = source[key];
-            const targetValue = result[key];
-
-            if (key === 'items' && Array.isArray(sourceValue)) {
-              // Special handling for items arrays
-              if (!targetValue || !Array.isArray(targetValue) || targetValue.length === 0) {
-                // If target has no items, use source items (default empty items)
-                result[key] = sourceValue;
-              } else {
-                // Merge each existing item with the empty item template to fill missing fields
-                const emptyItemTemplate = sourceValue[0];
-                result[key] = targetValue.map((item: any) => {
-                  // For string arrays (interests/achievements), don't merge
-                  if (typeof emptyItemTemplate === 'string') {
-                    return item;
-                  }
-                  // For object items, recursively merge to fill missing nested fields
-                  return deepMerge(item, emptyItemTemplate);
-                });
-              }
-            } else if (Array.isArray(sourceValue)) {
-              // Handle other arrays - use target if exists, otherwise source
-              if (targetValue === undefined || targetValue === null) {
-                result[key] = sourceValue;
-              }
-            } else if (typeof sourceValue === 'object' && sourceValue !== null) {
-              // Recursively merge nested objects
-              result[key] = deepMerge(targetValue, sourceValue);
-            } else {
-              // For primitive values, only use source if target is missing/null
-              if (targetValue === undefined || targetValue === null) {
-                result[key] = sourceValue;
-              }
-            }
-          }
-        }
-
-        return result;
-      };
-
-      const mergedRes: ResumeData & { isAnalyzed?: boolean } = {
-        ...actualData,
-        templateId: (actualData as any).templateId || '', // Ensure templateId is always present
-        isAnalyzed: (actualData as any).isAnalyzed, // Preserve isAnalyzed flag from API response
-      };
-
-      Object.keys(emptyData).forEach((key) => {
-        const resumeKey = key as keyof typeof emptyData;
-        mergedRes[resumeKey] = deepMerge(actualData[resumeKey], emptyData[resumeKey]);
-      });
-
-      return mergedRes;
-    },
+    queryKey: ['resume-data', id, isLoggedIn],
+    queryFn: () => fetchAndMergeResumeData(id, isLoggedIn),
   });
 }
 
@@ -137,10 +69,10 @@ export const useParseLinkedInProfile = () => {
   });
 };
 
-export const useGetAllResumes = ({ userId }: { userId: string }) => {
+export const useGetAllResumes = () => {
   return useFetch({
-    queryKey: ['resumes', userId],
-    queryFn: () => fetchAllResumes(userId),
+    queryKey: ['resumes'],
+    queryFn: () => fetchAllResumes(),
     staleTime: 0,
   });
 };

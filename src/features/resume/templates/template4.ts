@@ -14,11 +14,11 @@ const brianWayneTemplate = {
     spacing: '0px',
     left: {
       width: '300px',
-      className: 'bg-[rgb(56,76,65)] text-black px-6 pt-8 flex flex-col',
+      className: 'bg-[rgb(56,76,65)] text-black px-6 py-6 flex flex-col',
     },
     right: {
       width: 'calc(100% - 300px)',
-      className: 'px-8 pl-8 pt-10 flex flex-col min-w-0',
+      className: 'px-8 pl-8 py-8 flex flex-col min-w-0',
     },
   },
 
@@ -33,7 +33,7 @@ const brianWayneTemplate = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Brian T. Wayne',
-          className: 'text-2xl font-bold text-white',
+          className: 'text-2xl break-words font-bold text-white',
         },
       },
     },
@@ -58,14 +58,14 @@ const brianWayneTemplate = {
                   type: 'icon',
                   name: 'Mail',
                   size: 16,
-                  className: 'text-white',
+                  className: 'text-white text-xs',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'brian@wayne.com',
-                  className: 'text-sm text-white',
+                  className: 'text-xs text-white',
                 },
               ],
             },
@@ -83,7 +83,7 @@ const brianWayneTemplate = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '12332344',
-                  className: 'text-sm text-white',
+                  className: 'text-xs text-white',
                 },
               ],
             },
@@ -101,7 +101,7 @@ const brianWayneTemplate = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: '22611 Pacific Coast Hwy,\nMalibu, California, 9032, USA',
-                  className: 'text-sm text-white leading-relaxed',
+                  className: 'text-xs text-white leading-relaxed',
                 },
               ],
             },
@@ -121,7 +121,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -141,7 +141,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -160,7 +160,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.website.title',
                   href: 'personalDetails.items[0].links.website.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -179,7 +179,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.youtube.title',
                   href: 'personalDetails.items[0].links.youtube.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -199,7 +199,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.dribble.title',
                   href: 'personalDetails.items[0].links.dribble.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -219,7 +219,7 @@ const brianWayneTemplate = {
                   path: 'personalDetails.items[0].links.behance.title',
                   href: 'personalDetails.items[0].links.behance.link',
                   fallback: '',
-                  className: 'text-sm text-white hover:text-green-200',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
@@ -237,14 +237,14 @@ const brianWayneTemplate = {
       heading: {
         path: 'personDetails.title',
         fallback: 'Profile',
-        className: 'text-lg font-bold text-white border-b border-white pb-1',
+        className: 'text-sm font-bold text-white border-b border-white pb-1 -mt-1.5',
       },
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Summary',
         className:
-          'text-sm text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+          'text-xs text-white leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
       },
     },
 
@@ -257,24 +257,24 @@ const brianWayneTemplate = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-lg font-bold text-white mt-4',
+        className: 'text-sm font-bold text-white mt-4',
         divider: {
           variant: 'line',
           className: 'bg-white w-full h-[1px] mt-1',
         },
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-4 mt-2',
+      containerClassName: 'flex flex-col gap-3 mt-2',
       itemTemplate: {
-        className: 'flex flex-col gap-1 leading-none mt-1',
+        className: 'flex flex-col leading-none mt-1',
         fields: [
           {
             path: 'degree',
-            className: 'text-sm font-bold text-white',
+            className: 'text-xs font-bold text-white',
           },
           {
             path: 'institution',
-            className: 'text-sm text-green-200 italic',
+            className: 'text-xs text-green-200',
           },
           {
             type: 'inline-group',
@@ -283,11 +283,11 @@ const brianWayneTemplate = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-white',
+                className: 'text-xs text-white italic',
               },
               {
                 path: 'location',
-                className: 'text-sm text-white',
+                className: 'text-xs text-white',
               },
             ],
           },
@@ -302,19 +302,24 @@ const brianWayneTemplate = {
       column: 'left',
       break: true,
       breakable: true,
+
       heading: {
         path: 'interests.title',
         fallback: 'Interests',
-        className: 'capitalize text-lg font-bold text-white mt-4',
+        className: 'capitalize text-sm font-bold text-white mt-4.5',
         divider: {
           variant: 'line',
-          className: 'bg-white w-full h-[1px] mt-1',
+          className: 'bg-white w-full h-[1px] mt-1 mb-1.5',
         },
       },
+
       listPath: 'interests.items[0].items',
+
+      // 🔑 KEY PART
       itemPath: '',
-      itemPrefix: '• ',
-      badgeClassName: 'text-sm text-white',
+      itemSeparator: ', ',
+      containerClassName: 'block text-white',
+      badgeClassName: 'text-xs text-white leading-relaxed break-words whitespace-normal',
     },
 
     {
@@ -326,17 +331,17 @@ const brianWayneTemplate = {
       heading: {
         path: 'achievements.title',
         fallback: 'Achievements',
-        className: 'capitalize text-lg font-bold text-white mt-4',
+        className: 'capitalize text-sm font-bold text-white mt-4',
         divider: {
           variant: 'line',
-          className: 'bg-white w-full h-[1px] mt-1 mb-2',
+          className: 'bg-white w-full h-[1px] mt-1 mb-1',
         },
       },
       listPath: 'achievements.items[0].items',
       itemPath: '',
       itemPrefix: '• ',
       badgeClassName:
-        'block w-full text-sm text-white break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere mt-1.5',
+        'block w-full text-xs text-white break-words whitespace-pre-wrap leading-relaxed overflow-wrap-anywhere',
     },
 
     // Experience Section - Right Column
@@ -348,41 +353,47 @@ const brianWayneTemplate = {
       heading: {
         path: 'experience.heading',
         fallback: 'Professional Experience',
-        className: 'text-xl font-semibold text-[rgb(56,76,65)]',
+        className: 'text-sm font-semibold text-[rgb(56,76,65)]',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-3',
         },
       },
       listPath: 'experience.items',
-      containerClassName: 'flex flex-col gap-6 mt-1',
+      containerClassName: 'flex flex-col gap-3 mt-1',
       itemTemplate: {
-        className: "flex flex-col mb-3",
+        className: 'flex flex-col leading-none',
         break: true,
         fields: [
           {
-            path: 'duration',
-            type: 'duration',
-            className: 'text-sm text-[rgb(56,76,65)]',
-          },
-          {
-            path: 'position',
-            fallback: 'Position Title',
-            className: 'text-base font-semibold text-[rgb(56,76,65)] mt-1',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'position',
+                fallback: 'Position Title',
+                className: 'text-xs text-[rgb(56,76,65)] font-medium',
+              },
+              {
+                path: 'duration',
+                type: 'duration',
+                className: 'text-xs text-[rgb(56,76,65)] italic whitespace-nowrap',
+              },
+            ],
           },
           {
             type: 'horizontal-group',
-            className: 'flex gap-1 mt-0.5',
+            className: 'flex justify-between items-baseline',
             items: [
               {
                 path: 'company',
                 fallback: 'Company Name',
-                className: 'text-sm text-[rgb(56,76,65)] font-semibold',
+                className: 'text-xs text-[rgb(56,76,65)] font-semibold',
               },
               {
                 path: 'location',
                 fallback: 'Location',
-                className: 'text-sm text-[rgb(56,76,65)]',
+                className: 'text-xs text-[rgb(56,76,65)]',
               },
             ],
           },
@@ -406,35 +417,42 @@ const brianWayneTemplate = {
       heading: {
         path: 'projects.title',
         fallback: 'Projects',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'capitalize text-sm font-semibold text-[rgb(56,76,65)] mt-2',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-3',
         },
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-6 mt-1',
+      containerClassName: 'flex flex-col gap-3 mt-1',
       itemTemplate: {
-        className: "flex flex-col mb-2",
+        className: 'flex flex-col',
         break: true,
         fields: [
           {
-            path: 'title',
-            href: 'link.link',
-            fallback: 'Project Title',
-            className: 'text-base font-semibold text-[rgb(56,76,65)] hover:underline',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
+            items: [
+              {
+                path: 'title',
+                href: 'link.link',
+                fallback: 'Project Title',
+                className: 'text-xs font-semibold text-[rgb(56,76,65)] hover:underline',
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-[rgb(56,76,65)] italic whitespace-nowrap',
+              },
+            ],
           },
+
           {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-sm text-[rgb(56,76,65)]',
-          },
-          {
-            type: "html",
-            path: "description",
+            type: 'html',
+            path: 'description',
             break: true,
             className:
-              'text-sm text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
+              'text-xs text-[rgb(56,76,65)] leading-relaxed [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 break-words whitespace-pre-wrap',
           },
         ],
       },
@@ -443,33 +461,24 @@ const brianWayneTemplate = {
     // Skills Section - Right Column
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       column: 'right',
       break: true,
+      breakable: true,
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'text-sm font-semibold text-[rgb(56,76,65)] mt-4',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-0.5',
         },
       },
-      listPath: "skills.items",
-      containerClassName: "flex flex-col gap-2 mt-2 mb-2.5",
-      itemTemplate: {
-        break: true,
-        className: "flex flex-col items-start gap-2",
-        fields: [
-          {
-            prefix: "• ",
-            path: "name",
-            breakable: true,
-            break: true,
-            className: "text-sm text-[rgb(56,76,65)]",
-          },
-        ],
-      },
+      listPath: 'skills.items',
+      itemPath: 'name',
+      itemSeparator: ', ',
+      containerClassName: 'flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1',
+      badgeClassName: 'text-xs text-[rgb(56,76,65)]',
     },
 
     // Certifications Section - Right Column
@@ -481,39 +490,38 @@ const brianWayneTemplate = {
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
-        className: 'capitalize text-xl font-semibold text-[rgb(56,76,65)] mt-4',
+        className: 'capitalize text-sm font-semibold text-[rgb(56,76,65)] -mt-1',
         divider: {
           variant: 'line',
-          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-2',
+          className: 'bg-gray-800 w-full h-[2px] mt-1 mb-3',
         },
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-3 mt-1',
+      containerClassName: 'flex flex-col',
       itemTemplate: {
-        className: "flex flex-col",
+        className: 'flex flex-col mt-3',
         break: true,
         fields: [
           {
-            path: 'title',
-            fallback: 'Certification Title',
-            className: 'text-sm font-semibold text-[rgb(56,76,65)]',
-          },
-          {
-            type: 'inline-group',
-            className: 'flex flex-row items-baseline gap-1 leading-none',
+            type: 'horizontal-group',
+            className: 'flex justify-between items-baseline',
             items: [
               {
-                path: 'issuer',
-                fallback: 'Issuer',
-                className: 'text-sm text-[rgb(56,76,65)] italic',
-                suffix: ', ',
+                path: 'title',
+                fallback: 'Certification Title',
+                className: 'text-xs font-semibold text-[rgb(56,76,65)]',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-[rgb(56,76,65)]',
+                className: 'text-xs text-[rgb(56,76,65)] italic whitespace-nowrap',
               },
             ],
+          },
+          {
+            path: 'issuer',
+            fallback: 'Issuer',
+            className: 'text-xs text-[rgb(56,76,65)] mt-0.5',
           },
         ],
       },

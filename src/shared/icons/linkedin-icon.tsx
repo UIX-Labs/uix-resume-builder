@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface LinkedInIconProps {
   className?: string;
@@ -21,6 +21,7 @@ export const LinkedInIcon: React.FC<LinkedInIconProps> = ({
       viewBox="0 0 20 20"
       fill="none"
       className={className}
+      aria-hidden="true"
     >
       <g clipPath="url(#clip0_633_27241)">
         <path

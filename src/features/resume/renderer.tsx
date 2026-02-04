@@ -1,7 +1,6 @@
 import { cn } from '@shared/lib/cn';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import React from 'react';
-import { renderSection } from './lib/section-renderers';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { renderSection, willSectionRender } from './lib/section-renderers';
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
@@ -13,15 +12,17 @@ export type RenderProps = {
   currentSection?: string;
   hasSuggestions?: boolean;
   isThumbnail?: boolean;
+  skipImageFallbacks?: boolean;
 };
 
-export function ResumeRenderer({
+function ResumeRendererComponent({
   template,
   data,
   className,
   currentSection,
   hasSuggestions = false,
   isThumbnail = false,
+  skipImageFallbacks = false,
 }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
@@ -33,11 +34,12 @@ export function ResumeRenderer({
 
   // NEW: dynamic max height per column
   const PAGE_PADDING_PX = PAGE_PADDING;
-  const COLUMN_MAX_DEFAULT = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
+  const _COLUMN_MAX_DEFAULT = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
 
   useLayoutEffect(() => {
     const container = dummyContentRef.current;
     if (!container) return;
+    // Note: skipImageFallbacks is used to hide profile pictures when no image is set during PDF generation
 
     // Get the actual computed height of the banner as it appears in the grid
     const bannerEl = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
@@ -46,8 +48,8 @@ export function ResumeRenderer({
     // On the first page, the columns are in a grid row below the banner.
     // The banner's negative top margin means it occupies space starting from the top.
     // However, the column content is still subject to the page's bottom padding.
-    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX;
-    const pageMaxOther = PAGE_HEIGHT - (PAGE_PADDING_PX * 2);
+    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX - 15;
+    const pageMaxOther = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
 
     const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
     const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
@@ -55,20 +57,28 @@ export function ResumeRenderer({
     const leftPages: React.ReactNode[][] = [];
     const rightPages: React.ReactNode[][] = [];
 
-    function paginateOneColumn(
-      columnEl: HTMLElement,
-      columnName: 'left' | 'right',
-      outPages: React.ReactNode[][],
-    ) {
+    function paginateOneColumn(columnEl: HTMLElement, _columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
       const pageMax = pageMaxOther;
 
       // Create a test container to measure actual heights
       const testContainer = document.createElement('div');
       testContainer.style.position = 'absolute';
       testContainer.style.visibility = 'hidden';
-      testContainer.style.width = columnEl.style.width || getComputedStyle(columnEl).width;
       testContainer.style.left = '-9999px';
+      testContainer.style.top = '0';
+
+      // Copy all computed styles from the column to ensure accurate measurements
+      const columnStyles = getComputedStyle(columnEl);
+      testContainer.style.width = columnStyles.width;
+      testContainer.style.fontFamily = columnStyles.fontFamily;
+      testContainer.style.fontSize = columnStyles.fontSize;
+      testContainer.style.lineHeight = columnStyles.lineHeight;
+      testContainer.style.letterSpacing = columnStyles.letterSpacing;
+      testContainer.style.wordSpacing = columnStyles.wordSpacing;
       testContainer.className = columnEl.className;
+      testContainer.style.boxSizing = 'border-box';
+      testContainer.style.padding = '0';
+
       document.body.appendChild(testContainer);
 
       // State management
@@ -143,7 +153,7 @@ export function ResumeRenderer({
 
         for (const child of children) {
           const tagName = child.tagName?.toLowerCase();
-          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div', 'li'].includes(tagName);
+          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div'].includes(tagName);
           const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
           const hasBreakableContent =
             child.querySelector('[data-canbreak="true"]') !== null ||
@@ -156,15 +166,13 @@ export function ResumeRenderer({
 
           const currentHeight = getPageHeight();
           const max = getCurrentPageMax();
-
-          // If it fits, keep it and continue
           if (currentHeight <= max) {
             continue;
           }
 
           // It doesn't fit - remove it
           const container = getCurrentContainer();
-          if (container && container.contains(clone)) {
+          if (container?.contains(clone)) {
             container.removeChild(clone);
           } else {
             outPages[currentPageIndex].pop();
@@ -174,6 +182,11 @@ export function ResumeRenderer({
           if ((canBreak || hasBreakableContent) && child.children.length > 0) {
             // Create empty wrapper and add to current page
             const wrapper = child.cloneNode(false) as HTMLElement;
+
+            if (wrapper.classList) {
+              wrapper.classList.remove('border-b', 'border-t', 'border-l', 'border-r', 'border');
+            }
+
             addToPage(wrapper);
 
             // Push to stack
@@ -210,13 +223,18 @@ export function ResumeRenderer({
           if (newHeight > newMax && (canBreak || hasBreakableContent) && child.children.length > 0) {
             // Still doesn't fit on new page - must break it
             const container = getCurrentContainer();
-            if (container && container.contains(newClone)) {
+            if (container?.contains(newClone)) {
               container.removeChild(newClone);
             } else {
               outPages[currentPageIndex].pop();
             }
 
             const wrapper = child.cloneNode(false) as HTMLElement;
+
+            if (wrapper.classList) {
+              wrapper.classList.remove('border-b', 'border-t', 'border-l', 'border-r', 'border');
+            }
+
             addToPage(wrapper);
             containerStack.push(wrapper);
             processChildren(child);
@@ -303,24 +321,50 @@ export function ResumeRenderer({
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
               <React.Fragment key={i}>
-                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
               </React.Fragment>
             ))}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
-          {leftItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
-            </React.Fragment>
-          ))}
+          {leftItems.map((s: any, i: number) => {
+            const hasNextSection =
+              i < leftItems.length - 1 &&
+              leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+            return (
+              <React.Fragment key={i}>
+                {renderSection(
+                  s,
+                  data,
+                  currentSection,
+                  hasSuggestions,
+                  isThumbnail,
+                  skipImageFallbacks,
+                  hasNextSection,
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
-          {rightItems.map((s: any, i: number) => (
-            <React.Fragment key={i}>
-              {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
-            </React.Fragment>
-          ))}
+          {rightItems.map((s: any, i: number) => {
+            const hasNextSection =
+              i < rightItems.length - 1 &&
+              rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+            return (
+              <React.Fragment key={i}>
+                {renderSection(
+                  s,
+                  data,
+                  currentSection,
+                  hasSuggestions,
+                  isThumbnail,
+                  skipImageFallbacks,
+                  hasNextSection,
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
       </div>
 
@@ -329,13 +373,16 @@ export function ResumeRenderer({
         return (
           <div
             key={index}
-            className={cn('grid mb-5', page.className, className)}
+            className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
+              // [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
               height: '29.7cm',
+              overflow: 'hidden',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
-              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
+              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto auto' : 'auto',
+              alignContent: 'start',
             }}
           >
             {index === 0 && bannerItems.length > 0 && (
@@ -350,25 +397,31 @@ export function ResumeRenderer({
               >
                 {bannerItems.map((s: any, i: number) => (
                   <React.Fragment key={i}>
-                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail)}
+                    {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
                 ))}
               </div>
             )}
             <div
               className={cn('flex flex-col', leftColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {leftColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
             <div
               className={cn('flex flex-col', rightColumnClassName)}
-              style={{ gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1' }}
+              style={{
+                gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
+              }}
             >
               {rightColumn.map((node: any, i) => (
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'contents' }} />
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
               ))}
             </div>
           </div>
@@ -377,3 +430,7 @@ export function ResumeRenderer({
     </>
   );
 }
+
+// Wrap with React.memo to prevent unnecessary re-renders
+// Uses shallow comparison for all props - parent should memoize data prop
+export const ResumeRenderer = React.memo(ResumeRendererComponent);

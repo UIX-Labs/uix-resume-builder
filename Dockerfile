@@ -1,35 +1,37 @@
+# -------- Builder --------
 FROM node:18-alpine AS builder
 
 WORKDIR /app
+
 # Install pnpm
 RUN npm install -g pnpm
+
 # Copy package files
 COPY package.json pnpm-lock.yaml* ./
-# Install deps
+
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
+# Copy source code
 COPY . .
 
-# Inject correct env file
+# Inject correct env file (build-time only)
 ARG ENV_FILE
 COPY ${ENV_FILE} .env
-
-# Optional sanity check
-RUN echo "===== ENV CHECK =====" && \
-    cat .env && \
-    echo "====================="
 
 # Build Next.js app
 ENV NODE_ENV=staging
 RUN pnpm build
 
-# -------- Runtime Image --------
+# -------- Runtime --------
 FROM node:18-alpine AS runner
+
 WORKDIR /app
 
+# Install pnpm
 RUN npm install -g pnpm
 
-# Copy only built output + node_modules from builder
+# Copy runtime artifacts only
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public

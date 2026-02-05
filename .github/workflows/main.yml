@@ -1,4 +1,5 @@
 name: Deploy Frontend (Staging)
+
 on:
   push:
     branches:
@@ -17,6 +18,7 @@ jobs:
   deploy:
     name: Deploy to ECS (Staging)
     runs-on: ubuntu-22.04
+    environment: ENV_STAGING   
 
     steps:
       # 1️⃣ Checkout code
@@ -36,7 +38,24 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      # 4️⃣ Build & push Docker image (uses .env.staging)
+      # 4️⃣ Create .env.staging from Environment secrets
+      - name: Create .env.staging
+        run: |
+          cat <<EOF > .env.staging
+          NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+          NEXT_PUBLIC_DOMAIN_URL=${{ secrets.NEXT_PUBLIC_DOMAIN_URL }}
+          NEXT_PUBLIC_ENV=${{ secrets.NEXT_PUBLIC_ENV }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+          NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }}
+          NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}
+          NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }}
+          NEXT_PUBLIC_MIXPANEL_TOKEN=${{ secrets.NEXT_PUBLIC_MIXPANEL_TOKEN }}
+          NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ secrets.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }}
+          NEXT_PUBLIC_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_REDIRECT_URI }}
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+          EOF
+
+      # 5️⃣ Build & push Docker image (unchanged logic)
       - name: Build, tag, and push image to ECR
         id: build-image
         env:
@@ -51,14 +70,14 @@ jobs:
 
           echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:staging-${IMAGE_TAG}" >> $GITHUB_OUTPUT
 
-      # 5️⃣ Download existing task definition
+      # 6️⃣ Download ECS task definition
       - name: Download ECS task definition
         run: |
           aws ecs describe-task-definition \
             --task-definition ${{ env.TASK_DEFINITION_NAME }} \
             --query taskDefinition > task-def.json
 
-      # 6️⃣ Clean task definition (AWS adds extra fields)
+      # 7️⃣ Clean task definition
       - name: Clean task definition
         run: |
           jq 'del(
@@ -71,7 +90,7 @@ jobs:
             .registeredBy
           )' task-def.json > cleaned-task-def.json
 
-      # 7️⃣ Inject new image into task definition
+      # 8️⃣ Inject new image
       - name: Render new task definition
         id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
@@ -80,7 +99,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      # 8️⃣ Deploy to ECS service
+      # 9️⃣ Deploy to ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:

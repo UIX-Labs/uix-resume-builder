@@ -1,12 +1,18 @@
 'use client';
 
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { useMutation } from '@tanstack/react-query';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function DashboardCarousel() {
@@ -14,6 +20,16 @@ export default function DashboardCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 4000, stopOnInteraction: false })]);
 
   const [_selectedIndex, setSelectedIndex] = useState(0);
+  const user = useCachedUser();
+  const router = useRouter();
+
+  const createResumeMutation = useMutation({
+    mutationFn: createResume,
+  });
+
+  const updateTemplateMutation = useMutation({
+    mutationFn: updateResumeTemplate,
+  });
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -25,11 +41,47 @@ export default function DashboardCarousel() {
   const { data: templates } = useGetAllTemplates();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+
   useEffect(() => {
     if (!emblaApi) return;
     onSelect(emblaApi);
     emblaApi.on('select', () => onSelect(emblaApi));
   }, [emblaApi, onSelect]);
+
+  const handleUseTemplate = async (templateId: string) => {
+    trackEvent('create_resume_click', {
+      source: 'dashboard_card',
+      method: 'use_template',
+      templateId,
+    });
+
+    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
+    let guestEmail: string | undefined;
+
+    if (!user?.isLoggedIn) {
+      guestEmail = getOrCreateGuestEmail();
+    } else if (!user) {
+      return;
+    }
+
+    try {
+      const data = await createResumeMutation.mutateAsync({
+        title: 'New Resume',
+        userInfo: {
+          userId: user?.id ?? '',
+        },
+      });
+
+      await updateTemplateMutation.mutateAsync({
+        resumeId: data.id,
+        templateId,
+      });
+
+      router.push(`/resume/${data.id}`);
+    } catch (error) {
+      console.error('Failed to create resume:', error);
+    }
+  };
 
   return (
     <>
@@ -69,6 +121,7 @@ export default function DashboardCarousel() {
                 key={template.id}
                 template={template}
                 isDashboard={true}
+                onClick={() => handleUseTemplate(template.id)}
                 onPreviewClick={() => {
                   setPreviewTemplate(template);
                   setIsPreviewOpen(true);

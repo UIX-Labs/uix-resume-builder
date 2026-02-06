@@ -205,7 +205,7 @@ export function TemplateCarousel() {
                                   'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl',
                                 )}
                               >
-                               
+                                Use This Template
                               </Button>
                             </div>
                           </div>

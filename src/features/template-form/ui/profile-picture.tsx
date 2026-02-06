@@ -109,13 +109,27 @@ export const ProfilePictureInput = ({
     }
   };
 
-  const handleDelete = () => {
-    setImageUrl('');
-    onChange({ profilePicturePublicUrl: '' });
-    setError(null);
-    // Reset file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+  const handleDelete = async () => {
+    try {
+      setIsUploading(true);
+      setError(null);
+
+      await uploadProfilePicture({
+        personalDetailItemId,
+        base64: '',
+      });
+
+      setImageUrl('');
+      onChange({ profilePicturePublicUrl: '' });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (err) {
+      console.error('Failed to delete profile picture:', err);
+      setError('Failed to delete profile picture');
+    } finally {
+      setIsUploading(false);
     }
   };
 

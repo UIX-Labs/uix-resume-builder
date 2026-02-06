@@ -67,10 +67,11 @@ export default function Testimonials() {
                   duration={1}
                   className="count-up-text"
                 />
+                +
               </h3>
 
               <p className="text-[18px] sm:text-[22px] md:text-[28px] lg:text-[32px] font-normal leading-tight tracking-tight text-[rgb(242,242,242)]">
-                Resumes delivered
+                Resumes created
               </p>
             </div>
 

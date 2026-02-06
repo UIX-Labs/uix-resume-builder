@@ -1,11 +1,11 @@
-import { MonthYearPicker } from '@shared/ui/month-year-picker';
-import { Input } from '@shared/ui/components/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
-import { useEffect, useState } from 'react';
+import { disableFutureDates } from '@features/resume/lib/dateRule';
 import { cn } from '@shared/lib/cn';
 import { Checkbox } from '@shared/ui/checkbox';
+import { Input } from '@shared/ui/components/input';
+import { MonthYearPicker } from '@shared/ui/month-year-picker';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import dayjs from 'dayjs';
-
+import { useEffect, useState } from 'react';
 interface DurationProps {
   data: {
     startDate: string;
@@ -78,7 +78,11 @@ export function Duration({ data, onChange }: DurationProps) {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto p-0" align="start">
-            <MonthYearPicker selected={startDate} onSelect={(date) => setStartDate(date)} />
+            <MonthYearPicker
+              selected={startDate}
+              onSelect={(date) => setStartDate(date)}
+              disabled={(date) => disableFutureDates(date)}
+            />
           </PopoverContent>
         </Popover>
       </div>

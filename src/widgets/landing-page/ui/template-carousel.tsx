@@ -3,24 +3,24 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useMutation } from '@tanstack/react-query';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { useCallback, useEffect, useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -205,7 +205,7 @@ export function TemplateCarousel() {
                                   'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl',
                                 )}
                               >
-                                Use This Template
+                               
                               </Button>
                             </div>
                           </div>

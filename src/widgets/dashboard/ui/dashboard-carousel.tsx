@@ -68,7 +68,6 @@ export default function DashboardCarousel() {
               <TemplateCard
                 key={template.id}
                 template={template}
-                onClick={() => undefined}
                 isDashboard={true}
                 onPreviewClick={() => {
                   setPreviewTemplate(template);

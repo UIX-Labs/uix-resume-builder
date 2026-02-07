@@ -2,6 +2,7 @@ import { uploadProfilePicture } from '@entities/resume/api/upload-profile-pictur
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 import { Input } from '@shared/ui/components/input';
+import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -20,6 +21,25 @@ export const ProfilePictureInput = ({
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const profilePictureMutation = useMutation({
+    mutationFn: uploadProfilePicture,
+    onSuccess: (response) => {
+      if (response?.url) {
+        setImageUrl(response.url);
+        return;
+      }
+
+      setImageUrl('');
+      onChange({ profilePicturePublicUrl: '' });
+    },
+    onError: () => {
+      setError('Failed to upload profile picture');
+    },
+    onSettled: () => {
+      setIsUploading(false);
+    },
+  });
 
   useEffect(() => {
     if (data?.profilePicturePublicUrl !== imageUrl) {
@@ -65,21 +85,12 @@ export const ProfilePictureInput = ({
       setIsUploading(true);
       const base64 = await convertToBase64(file);
 
-      const response = await uploadProfilePicture({
+      profilePictureMutation.mutate({
         personalDetailItemId,
         base64,
       });
-
-      if (response) {
-        setImageUrl(response.url);
-      } else {
-        const errorMsg = 'Failed to upload image - API returned success: false';
-        console.error(errorMsg, response);
-        setError(errorMsg);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
+    } catch {
+      setError('Failed to process image');
       setIsUploading(false);
     }
   };
@@ -111,27 +122,17 @@ export const ProfilePictureInput = ({
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      setIsUploading(true);
-      setError(null);
+  const handleDelete = () => {
+    setIsUploading(true);
+    setError(null);
 
-      await uploadProfilePicture({
-        personalDetailItemId,
-        base64: '',
-      });
+    profilePictureMutation.mutate({
+      personalDetailItemId,
+      base64: '',
+    });
 
-      setImageUrl('');
-      onChange({ profilePicturePublicUrl: '' });
-
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    } catch (err) {
-      console.error('Failed to delete profile picture:', err);
-      setError('Failed to delete profile picture');
-    } finally {
-      setIsUploading(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 

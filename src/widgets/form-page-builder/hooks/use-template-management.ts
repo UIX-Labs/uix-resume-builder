@@ -4,6 +4,7 @@ import type { Template } from '@entities/template-page/api/template-data';
 import { toast } from 'sonner';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import aniketTemplate from '@features/resume/templates/standard';
+import template7 from '@features/resume/templates/template-7';
 
 interface UseTemplateManagementParams {
   resumeId: string;
@@ -19,7 +20,7 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   useEffect(() => {
     if (initialTemplate) {
-      setSelectedTemplate(initialTemplate);
+      setSelectedTemplate(template7);
     }
   }, [initialTemplate]);
 

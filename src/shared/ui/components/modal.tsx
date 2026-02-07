@@ -11,7 +11,6 @@ export interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  width?: string;
   showCloseButton?: boolean;
   closeButtonVariant?: 'default' | 'custom';
   className?: string;
@@ -22,7 +21,6 @@ export function Modal({
   onClose,
   title,
   children,
-  width = 'w-full max-w-md',
   showCloseButton = true,
   closeButtonVariant = 'default',
   className = '',
@@ -30,7 +28,7 @@ export function Modal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
-        className={cn(width, 'p-0 rounded-3xl overflow-hidden flex flex-col', className)}
+        className={cn('w-full max-w-md p-0 rounded-3xl overflow-hidden flex flex-col', className)}
         showCloseButton={closeButtonVariant === 'default'}
       >
         {/* Header */}
@@ -64,7 +62,7 @@ export interface ModalHeaderProps {
 
 export function ModalHeader({ title, onClose, showCloseButton = true, className = '' }: ModalHeaderProps) {
   return (
-    <div className={`flex items-center justify-between px-6 py-4 border-b ${className}`}>
+    <div className={cn('flex items-center justify-between px-6 py-4 border-b', className)}>
       <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
       {showCloseButton && onClose && (
         <button
@@ -86,14 +84,7 @@ export interface ModalBodyProps {
 }
 
 export function ModalBody({ children, className = '' }: ModalBodyProps) {
-  return (
-    <div
-      className={`px-4 sm:px-6 pb-4 sm:pb-6
- ${className}`}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn('px-4 sm:px-6 pb-4 sm:pb-6', className)}>{children}</div>;
 }
 
 export interface ModalFooterProps {
@@ -102,5 +93,5 @@ export interface ModalFooterProps {
 }
 
 export function ModalFooter({ children, className = '' }: ModalFooterProps) {
-  return <div className={`px-6 py-4 border-t ${className}`}>{children}</div>;
+  return <div className={cn('px-6 py-4 border-t', className)}>{children}</div>;
 }

@@ -9,13 +9,13 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 
 import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';
-import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import LinkedinIntegrationCard from '@widgets/dashboard/ui/linkedin-integration-card';
 import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import Header from '@widgets/landing-page/ui/header-section';
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
+import ResponsiveHeader from '@widgets/dashboard/ui/header';
 
 function DashboardContent() {
   const { data: user, isLoading } = useUserProfile();
@@ -26,7 +26,6 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [shouldOpenJDModal, setShouldOpenJDModal] = useState(false);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     // Check if we should open the JD modal
@@ -71,15 +70,11 @@ function DashboardContent() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          {isMobile ? <Header /> : <DashboardHeader user={user} />}
+          <ResponsiveHeader user={user} />
 
-          <main className="flex flex-col md:flex-row bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4">
+          <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
-              <div className="flex text-start w-full">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[58px] md:text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-17px] md:mt-[-25px] ml-[-10px] mb-1 md:mb-0">
-                  DASHBOARD
-                </h1>
-              </div>
+              <PageHeading title="DASHBOARD" />
 
               <WelcomeHeader
                 userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
@@ -94,13 +89,13 @@ function DashboardContent() {
               </div>
 
               <div className="lg:hidden mt-4 px-4 h-[470px]">
-                <div className="bg-[rgb(235,241,244)] p-4 rounded-[20px] shadow">
+                <div className="bg-dashboard-card-bg p-4 rounded-[20px] shadow">
                   <DashboardCarousel />
                 </div>
               </div>
             </div>
 
-            <div className="hidden lg:block w-110 bg-[rgb(235,241,244)] p-4 mt-[54px] mr-4 rounded-[20px] shadow">
+            <div className="hidden lg:block w-110 bg-dashboard-card-bg p-4 mt-[54px] mr-4 rounded-[20px] shadow">
               <DashboardCarousel />
             </div>
           </main>

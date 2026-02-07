@@ -1,20 +1,18 @@
 'use client';
 import { createResume, useGetAllResumes, type Resume, useResumeData } from '@entities/resume';
+import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useGetTemplateById, useGetAllTemplates } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { Button } from '@shared/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
-import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
-import Header from '@widgets/landing-page/ui/header-section';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
 import { ResumeCardMobile } from '@widgets/resumes/ui/resume-card-mobile';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
@@ -22,6 +20,9 @@ import { MoreVertical, Trash2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
+import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import { Button } from '@shared/ui/components/button';
 
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
@@ -31,7 +32,7 @@ export default function AllResumePage() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
-  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
+  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
@@ -44,10 +45,13 @@ export default function AllResumePage() {
     setIsPreviewOpen(true);
   };
 
-  const lockOptions = useCallback((action: 'create' | 'upload' | 'tailoredJD') => {
-    setActiveAction(action);
-    setOptionsLocked(true);
-  }, []);
+  const lockOptions = useCallback(
+    (action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_JD) => {
+      setActiveAction(action);
+      setOptionsLocked(true);
+    },
+    [],
+  );
 
   const releaseOptions = useCallback(() => {
     setActiveAction(null);
@@ -96,16 +100,12 @@ export default function AllResumePage() {
           <DashboardSidebar />
         </div>
 
-        <div className="flex-1 flex flex-col min-w-0 m-3 sm:m-3">
-          {isMobile ? <Header /> : <DashboardHeader user={user} />}
+        <div className="flex-1 flex flex-col min-w-0 m-3">
+          <ResponsiveHeader user={user} />
 
-          <main className="flex bg-[rgb(245,248,250)] mt-2 sm:mt-3 rounded-[36px] sm:rounded-[36px] overflow-hidden pb-4 h-full">
+          <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
-              <div className="flex text-start w-full px-2 sm:px-0">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[44px] md:text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-12px] md:mt-[-25px] ml-[-10px] mb-1 md:mb-0">
-                  YOUR RESUMES
-                </h1>
-              </div>
+              <PageHeading title="YOUR RESUMES" className="text-[44px] -mt-3" />
 
               <WelcomeHeader
                 userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
@@ -127,7 +127,7 @@ export default function AllResumePage() {
                       "
                     >
                       Create Resume
-                      <ChevronDown className="w-4 h-4" />
+                      <ChevronDown className="size-4" />
                     </Button>
                   </div>
                 </div>
@@ -244,13 +244,13 @@ function ResumeCardDesktop({ resume }: ResumeCardProps) {
           </div>
         </div>
 
-        <button
+        <Button
           type="button"
           className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>
-        </button>
+        </Button>
       </div>
 
       <DeleteResumeModal isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} resume={resume} />

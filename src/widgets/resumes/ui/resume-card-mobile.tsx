@@ -61,8 +61,8 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
     <>
       <div className="w-[85vw] bg-white rounded-2xl p-4 shadow-sm h-[160px] flex flex-col justify-between">
         <div className="flex">
-          <div className="flex-1">
-            <h3 className="text-base font-semibold">{getMobileTitle(resume.title)}</h3>
+          <div className="flex-1 max-w-[80%]">
+            <h3 className="text-base font-semibold truncate">{getMobileTitle(resume.title)}</h3>
             <p className="text-xs text-[#959DA8] mt-1">Last modified · {formatDate(resume.updatedAt)}</p>
             <p className="text-xs text-[#959DA8]">Created · {formatDate(resume.createdAt)}</p>
           </div>

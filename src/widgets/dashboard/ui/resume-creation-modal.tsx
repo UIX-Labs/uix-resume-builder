@@ -1,6 +1,7 @@
 'use client';
 
 import { createResume, updateResumeTemplate } from '@entities/resume';
+import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useUserProfile } from '@shared/hooks/use-user';
 import type { Template } from '@entities/template-page/api/template-data';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
@@ -20,9 +21,11 @@ interface ResumeCreationModalProps {
   onClose: () => void;
   onJDModalOpen: () => void;
   onLinkedInClick: () => void;
-  onActionLock: (action: 'create' | 'upload' | 'tailoredJD') => void;
+  onActionLock: (
+    action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_JD,
+  ) => void;
   onActionRelease: () => void;
-  activeAction: 'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null;
+  activeAction: ResumeCreationActionType;
   optionsLocked: boolean;
   template?: Template | null;
 }
@@ -51,6 +54,16 @@ export default function ResumeCreationModal({
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [showMobileView, setShowMobileView] = useState(false);
 
+  const getTitle = () => {
+    if (template) {
+      const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+      const userName = user.data ? `${user.data.firstName} ${user.data.lastName || ''}`.trim() : 'Guest User';
+      return `${userName}-Resume-${currentDate}`;
+    }
+
+    return 'Frontend Engineer Resume';
+  };
+
   const resumeCreateHandler = async () => {
     if (isMobile) {
       setShowMobileView(true);
@@ -64,7 +77,7 @@ export default function ResumeCreationModal({
       return;
     }
 
-    onActionLock('create');
+    onActionLock(ResumeCreationAction.CREATE);
     onClose();
 
     trackEvent('create_resume_click', {
@@ -84,12 +97,7 @@ export default function ResumeCreationModal({
     }
 
     try {
-      let title = 'Frontend Engineer Resume';
-      if (template) {
-        const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-        const userName = user.data ? `${user.data.firstName} ${user.data.lastName || ''}`.trim() : 'Guest User';
-        title = `${userName}-Resume-${currentDate}`;
-      }
+      const title = getTitle();
 
       const data = await createResumeMutation.mutateAsync({
         title,
@@ -176,7 +184,7 @@ export default function ResumeCreationModal({
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        width="w-[300px] sm:w-[380px]"
+        className="w-[300px] sm:w-[380px]"
         showCloseButton={true}
         closeButtonVariant="custom"
         title="Create Resume"
@@ -186,7 +194,7 @@ export default function ResumeCreationModal({
             {/* From Scratch */}
             <Button
               onClick={resumeCreateHandler}
-              disabled={optionsLocked && activeAction !== 'create'}
+              disabled={optionsLocked && activeAction !== ResumeCreationAction.CREATE}
               className="w-full flex items-center justify-start gap-3 px-0 pb-6 transition-colors bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-left text-base"
             >
               {/* <FileText className="w-5 h-5 text-gray-500 flex-shrink-0" /> */}
@@ -251,7 +259,7 @@ export default function ResumeCreationModal({
             {/* Tailored with JD - Recommended */}
             <Button
               onClick={resumeCreateHandler}
-              disabled={optionsLocked && activeAction !== 'tailoredJD'}
+              disabled={optionsLocked && activeAction !== ResumeCreationAction.TAILORED_JD}
               className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
             >
               <Image src="/images/file_open.svg" alt="" width={24} height={24} />

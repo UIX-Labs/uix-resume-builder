@@ -1,4 +1,4 @@
-import { disableFutureDates } from '@features/resume/lib/dateRule';
+import { disableFutureDates } from '@features/resume/lib/date-rule';
 import { cn } from '@shared/lib/cn';
 import { Checkbox } from '@shared/ui/checkbox';
 import { Input } from '@shared/ui/components/input';

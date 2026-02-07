@@ -1,0 +1,23 @@
+src/features/template-form/ui/profile-picture.tsx
+  abb622a6af89a663 144,146,148-149,156,164,166-167,173,176-177,179-180,188,208
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "36363d4be8286306dc8d6e85b6b99e4e5f55aed8",
+  "prompts": {
+    "abb622a6af89a663": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "373545",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 22,
+      "accepted_lines": 15,
+      "overriden_lines": 1
+    }
+  }
+}

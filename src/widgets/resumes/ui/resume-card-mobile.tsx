@@ -9,9 +9,9 @@ import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
 import { usePdfGeneration } from '@widgets/form-page-builder/hooks/use-pdf-generation';
 import { usePdfDownload } from '@widgets/form-page-builder/hooks/use-pdf-download';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
 import { toast } from 'sonner';
 import { ResumeRenderer } from '@features/resume/renderer';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   resume: Resume;
@@ -30,8 +30,8 @@ function getMobileTitle(title: string) {
 
 export function ResumeCardMobile({ resume, onPreview }: Props) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [showMobileView, setShowMobileView] = useState(false);
   const thumbnailRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const { data: resumeData } = useResumeData(resume.id);
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
@@ -55,7 +55,7 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
   };
 
   const handleEditClick = () => {
-    setShowMobileView(true);
+    router.push(`/resume/${resume.id}?openForm=true`);
   };
   return (
     <>
@@ -138,8 +138,6 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
           )}
         </div>
       </div>
-
-      <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />
     </>
   );
 }

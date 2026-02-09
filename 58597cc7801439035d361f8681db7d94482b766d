@@ -1,0 +1,23 @@
+src/app/resumes/page.tsx
+  7ee34c66a32c0c03 144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "58597cc7801439035d361f8681db7d94482b766d",
+  "prompts": {
+    "7ee34c66a32c0c03": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374303",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 5,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    }
+  }
+}

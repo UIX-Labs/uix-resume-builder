@@ -13,6 +13,7 @@ import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
 import { useBuilderIntelligence } from '@widgets/form-page-builder/hooks/use-builder-intelligence';
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { useQueryClient } from '@tanstack/react-query';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 export default function FormPage() {
   const params = useParams();
@@ -20,6 +21,7 @@ export default function FormPage() {
 
   const queryClient = useQueryClient();
   const { data: user } = useUserProfile();
+  const isMobile = useIsMobile();
 
   const { data: resumeData, isLoading } = useResumeData(id);
 
@@ -105,8 +107,8 @@ export default function FormPage() {
         onBuilderIntelligence: handleBuilderIntelligence,
       }}
     >
-      <div className="flex pl-4 ">
-        <Sidebar />
+      <div className={'flex pl-0 md:pl-4'}>
+        {!isMobile && <Sidebar />}
 
         <div className="relative flex w-full overflow-hidden">
           {analyzerError && (

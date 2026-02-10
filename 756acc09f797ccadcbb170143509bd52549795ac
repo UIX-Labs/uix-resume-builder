@@ -1,0 +1,23 @@
+src/widgets/form-page-builder/hooks/use-template-management.ts
+  98bc445ccd6a7976 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.1",
+  "base_commit_sha": "756acc09f797ccadcbb170143509bd52549795ac",
+  "prompts": {
+    "98bc445ccd6a7976": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374677",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 46,
+      "total_deletions": 0,
+      "accepted_lines": 46,
+      "overriden_lines": 0
+    }
+  }
+}

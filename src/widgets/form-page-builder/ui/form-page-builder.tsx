@@ -1,4 +1,4 @@
-import type { SuggestedUpdate, SuggestionType } from '@entities/resume';
+import type { ResumeDataKey, SuggestedUpdate, SuggestionType } from '@entities/resume';
 import { getResumeEmptyData, useSaveResumeForm, type ResumeData } from '@entities/resume';
 import { data as formSchemaData } from '@entities/resume/api/schema-data';
 import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
@@ -828,17 +828,7 @@ export function FormPageBuilder() {
     return (
       <>
         <div
-          style={{
-            position: 'absolute',
-            left: '-9999px',
-            top: 0,
-            width: '794px',
-            height: '0',
-            overflow: 'hidden',
-            pointerEvents: 'none',
-            visibility: 'hidden',
-            zIndex: -1,
-          }}
+          className="absolute -left-[9999px] top-0 w-[794px] h-0 overflow-hidden pointer-events-none invisible -z-10"
           aria-hidden="true"
         >
           <div ref={thumbnailRef}>

@@ -35,7 +35,7 @@ import { useTemplateManagement } from '../hooks/use-template-management';
 import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
 import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
 import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { isSectionEmpty, SECTION_ICONS } from '../lib/section-utils';
+import { isSectionEmpty } from '../lib/section-utils';
 import {
   applySuggestionsToArrayField,
   applySuggestionsToFieldValue,
@@ -47,8 +47,8 @@ import { formatTimeAgo } from '../lib/time-helpers';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import TemplateButton from './change-template-button';
-import { MobileSectionList } from './mobile-section-list';
 import { MobileFooter } from './mobile-footer';
+import { MobileSectionList } from './mobile-section-list';
 
 /**
  * Checks if a field value is empty
@@ -317,7 +317,7 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail,
   });
 
-  // Auto-save functionality - saves current section after 25s of inactivity
+  // // Auto-save functionality - saves current section after 25s of inactivity
   useAutoSave({
     currentStep,
     formData,

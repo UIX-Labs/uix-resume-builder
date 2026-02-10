@@ -2,6 +2,9 @@
 
 import { cn } from '@shared/lib/cn';
 import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
+import { Modal, ModalBody } from '@shared/ui/components/modal';
+import { Button } from '@shared/ui/button';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useEffect, useState } from 'react';
 import { Link2, ChevronDown, Trash2 } from 'lucide-react';
 import { LinkedInIcon, GithubIcon, DribbleIcon, BehanceIcon, YoutubeIcon, WebsiteIcon } from '@shared/icons';
@@ -38,14 +41,15 @@ const getLinkType = (key: string) => LINK_TYPES.find((lt) => lt.key === key);
 function LinkTypeButton({ linkType, onClick }: { linkType: LinkType; onClick?: () => void }) {
   const Icon = linkType.Icon;
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
-      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer"
+      variant="ghost"
+      className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-100 transition-colors text-left cursor-pointer justify-start h-auto"
     >
       {Icon && <Icon width={16} height={16} className="object-contain" />}
       <span className="text-sm text-[#0C1118]">{linkType.label}</span>
-    </button>
+    </Button>
   );
 }
 
@@ -63,14 +67,14 @@ function LinkSelector({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button
+        <Button
           type="button"
-          className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[#005FF2] text-white rounded-lg min-w-[100px] justify-center cursor-pointer hover:bg-[#0051d4] transition-colors ml-2"
+          className="relative z-10 flex items-center gap-1.5 px-3 py-1.5 bg-[#005FF2] text-white rounded-lg min-w-[100px] justify-center cursor-pointer hover:bg-[#0051d4] transition-colors ml-2 h-auto"
         >
           {Icon && <Icon width={16} height={16} className="object-contain" color="white" />}
           <span className="text-xs font-semibold whitespace-nowrap">{currentType.label}</span>
           <ChevronDown className="w-3 h-3 text-white" />
-        </button>
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2" align="start">
         <div className="flex flex-col gap-1">
@@ -85,9 +89,11 @@ function LinkSelector({
 
 export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps) {
   const initialData = data && typeof data === 'object' ? data : {};
+  const isMobile = useIsMobile();
 
   const [linksData, setLinksData] = useState<Record<string, LinkData>>(initialData);
   const [linksOrder, setLinksOrder] = useState<string[]>(Object.keys(initialData));
+  const [isAddLinkModalOpen, setIsAddLinkModalOpen] = useState(false);
 
   useEffect(() => {
     if (data && typeof data === 'object') {
@@ -136,6 +142,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
       [key]: { title: getLinkType(key)?.label || key, link: '' },
     }));
     setLinksOrder((prev) => [...prev, key]);
+    setIsAddLinkModalOpen(false);
   };
 
   const changeLinkType = (oldKey: string, newKey: string) => {
@@ -183,37 +190,68 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
             )}
           />
 
-          <button
+          <Button
             type="button"
             onClick={() => deleteLink(linkType.key)}
+            variant="ghost"
+            size="icon"
             className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-md bg-white z-20 hover:bg-gray-100 transition-colors cursor-pointer text-gray-500 hover:text-red-500"
             aria-label="Delete link"
           >
             <Trash2 className="w-4 h-4" />
-          </button>
+          </Button>
         </div>
       ))}
 
-      {canAddMore && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <button
+      {canAddMore &&
+        (isMobile ? (
+          <>
+            <Button
               type="button"
-              className="flex items-center gap-2 text-[#005FF2] text-sm font-medium hover:text-[#0051d4] transition-colors cursor-pointer self-end"
+              onClick={() => setIsAddLinkModalOpen(true)}
+              variant="ghost"
+              className="flex items-center gap-2 text-[#005FF2] text-sm font-medium hover:text-[#0051d4] transition-colors cursor-pointer self-end h-auto px-0"
             >
               <Link2 className="w-4 h-4" />
               <span>Add new link</span>
-            </button>
-          </PopoverTrigger>
-          <PopoverContent className="w-56 p-2" align="end">
-            <div className="flex flex-col gap-1">
-              {availableLinks.map((linkType) => (
-                <LinkTypeButton key={linkType.key} linkType={linkType} onClick={() => addLink(linkType.key)} />
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-      )}
+            </Button>
+            <Modal
+              isOpen={isAddLinkModalOpen}
+              onClose={() => setIsAddLinkModalOpen(false)}
+              title="Add new link"
+              className="z-[150] w-[300px] sm:w-[380px]"
+              overlayClassName="z-100"
+            >
+              <ModalBody className="pt-4">
+                <div className="flex flex-col gap-1">
+                  {availableLinks.map((linkType) => (
+                    <LinkTypeButton key={linkType.key} linkType={linkType} onClick={() => addLink(linkType.key)} />
+                  ))}
+                </div>
+              </ModalBody>
+            </Modal>
+          </>
+        ) : (
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                className="flex items-center gap-2 text-[#005FF2] text-sm font-medium hover:text-[#0051d4] transition-colors cursor-pointer self-end h-auto px-0"
+              >
+                <Link2 className="w-4 h-4" />
+                <span>Add new link</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-2" align="end">
+              <div className="flex flex-col gap-1">
+                {availableLinks.map((linkType) => (
+                  <LinkTypeButton key={linkType.key} linkType={linkType} onClick={() => addLink(linkType.key)} />
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        ))}
     </div>
   );
 }

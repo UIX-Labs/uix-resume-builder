@@ -1,0 +1,36 @@
+src/widgets/form-page-builder/ui/form-page-builder.tsx
+  1eed8bb0b2f44737 831
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "af7fbe2b2563c2d85f42184754b91e1cfad20899",
+  "prompts": {
+    "1eed8bb0b2f44737": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374596",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 113,
+      "total_deletions": 289,
+      "accepted_lines": 110,
+      "overriden_lines": 0
+    },
+    "7ee34c66a32c0c03": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374303",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 238,
+      "total_deletions": 200,
+      "accepted_lines": 237,
+      "overriden_lines": 0
+    }
+  }
+}

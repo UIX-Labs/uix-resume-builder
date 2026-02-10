@@ -1,8 +1,7 @@
+import CategoriesSection from '@/widgets/blog/categories-section';
+import { getAllPosts } from '@shared/lib/blog';
+import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
 import type { Metadata } from 'next';
-import { getAllPosts, getAllTags } from '@shared/lib/blog';
-import { BlogList } from '@widgets/blog/blog-list';
-import { BlogHeader } from '@widgets/blog/blog-header';
-
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 export const metadata: Metadata = {
@@ -42,12 +41,37 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllPosts();
-  const tags = getAllTags();
+  // const tags = getAllTags();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <BlogHeader />
-      <BlogList posts={posts} tags={tags} />
-    </div>
+    <>
+      <main className="min-h-screen">
+        <div className="w-full">
+          <BlogHero
+            title="The Pika"
+            highlightWord="Journal"
+            description="Blogs to power up your resume, job search, and career growth."
+            highlightColor="#2563EB"
+            image="/images/blog/hero-section/hero-section.png"
+          />
+
+          <div className="mt-[35px] w-full px-2">
+            <FeaturedSection />
+          </div>
+
+          <div className="mt-[35px] w-full px-2">
+            <CategoriesSection />
+          </div>
+
+          <div className="mt-[35px] w-full max-w-[1395px] mx-auto">
+            <BlogGrid />
+          </div>
+
+          {/* <div className="mt-10">
+            <BlogList posts={posts} tags={tags} />
+          </div> */}
+        </div>
+      </main>
+    </>
   );
 }

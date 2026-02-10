@@ -1,0 +1,21 @@
+import FeaturedBigCard from './feature-big-card';
+import FeaturedSmallCard from './feature-small-card';
+
+export default function FeaturedSection() {
+  return (
+    <section className="w-full max-w-[1395px] mx-auto mt-10">
+      <div className="grid lg:grid-cols-2 gap-8">
+        {/* LEFT - BIG CARD */}
+        <div className="h-full h-full border-white border-[7px] rounded-xl">
+          <FeaturedBigCard />
+        </div>
+
+        {/* RIGHT - TWO SMALL CARDS */}
+        <div className="flex flex-col gap-8 h-full">
+          <FeaturedSmallCard />
+          <FeaturedSmallCard />
+        </div>
+      </div>
+    </section>
+  );
+}

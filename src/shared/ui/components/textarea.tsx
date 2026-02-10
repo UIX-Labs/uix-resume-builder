@@ -1,17 +1,17 @@
 'use client';
 
+import type { SuggestionType } from '@entities/resume/types';
 import { cn } from '@shared/lib/cn';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import { convertMarkdownToHtml } from '@shared/lib/markdown';
+import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import { Bold, Italic, List, ListOrdered, Underline as UnderlineIcon, Link as LinkIcon } from 'lucide-react';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { Bold, Italic, Link as LinkIcon, List, ListOrdered, Underline as UnderlineIcon } from 'lucide-react';
 import * as React from 'react';
-import { ErrorHighlight } from './textarea-extensions/error-highlight';
 import { useEffect } from 'react';
-import type { SuggestionType } from '@entities/resume/types';
-import { convertMarkdownToHtml } from '@shared/lib/markdown';
+import { ErrorHighlight } from './textarea-extensions/error-highlight';
 
 interface ErrorSuggestion {
   old?: string;
@@ -186,6 +186,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     // Flag to prevent onChange from firing during highlight application
     const isApplyingHighlightsRef = React.useRef(false);
 
+    // Flag to prevent onChange from firing until the user has interacted with the editor. This is to prevent the normalizeContent conversion (plain text → HTML) from propagating back to formData during component initialization.
+    const hasUserInteractedRef = React.useRef(false);
+
     const normalizedDefaultValue = React.useMemo(() => normalizeContent(defaultValue), [defaultValue]);
 
     const editor = useEditor({
@@ -243,6 +246,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       onUpdate: ({ editor }) => {
         // Skip onChange during highlight application to prevent infinite re-renders
         if (isApplyingHighlightsRef.current) return;
+        // Skip onChange until user has focused the editor to prevent
+        // initialization-time normalizeContent conversion from mutating formData
+        if (!hasUserInteractedRef.current) return;
 
         const html = editor.getHTML();
         const value = editor.getText();
@@ -250,6 +256,7 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         onChange?.(value, !value ? '' : html);
       },
       onFocus: () => {
+        hasUserInteractedRef.current = true;
         setIsToolbarVisible(true);
       },
       onBlur: () => {

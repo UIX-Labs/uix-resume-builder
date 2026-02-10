@@ -915,6 +915,7 @@ export function FormPageBuilder() {
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
                 skipImageFallbacks={isGeneratingPDF}
+                version={resumeData?.renderVersion}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -927,7 +928,7 @@ export function FormPageBuilder() {
               position: 'absolute',
               left: '0',
               top: '0',
-              width: '794px',
+              width: '21cm',
               height: '0',
               overflow: 'hidden',
               pointerEvents: 'none',
@@ -936,7 +937,7 @@ export function FormPageBuilder() {
             }}
             aria-hidden="true"
           >
-            <div ref={thumbnailRef}>
+            <div ref={thumbnailRef} style={{ width: '21cm' }}>
               {selectedTemplate && (
                 <ResumeRenderer
                   template={selectedTemplate}
@@ -945,6 +946,7 @@ export function FormPageBuilder() {
                   hasSuggestions={false}
                   isThumbnail={true}
                   skipImageFallbacks={isGeneratingPDF}
+                  version={resumeData?.renderVersion}
                 />
               )}
             </div>
@@ -1044,7 +1046,7 @@ export function FormPageBuilder() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-auto px-5 py-5 scroll-hidden flex-1">
+        <div className="overflow-auto px-5 py-5 scroll-hidden flex-1 relative">
           <TemplateForm
             formSchema={formSchemaData ?? {}}
             currentStep={currentStep}

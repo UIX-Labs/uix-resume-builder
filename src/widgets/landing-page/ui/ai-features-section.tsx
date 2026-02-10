@@ -47,17 +47,16 @@ export function AiFeaturesSection() {
           className="mb-8 sm:mb-12 md:mb-16 text-center text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight"
         >
           Create your resume with{' '}
-          <span className="text-[#2e75f3]">
+          <span className="text-[#2e75f3] inline-flex items-center gap-1 sm:gap-2">
             Pika Intelligence
-            <Image
-              src="/images/sparkles.svg"
-              alt=""
-              width={32}
-              height={32}
-              className="inline-block ml-1 sm:ml-2 align-middle w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 color-[#2e75f3]"
-              priority
-              aria-hidden="true"
-            />
+            <span
+              className="inline-block w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 relative"
+              style={{
+                filter: 'invert(37%) sepia(93%) saturate(4528%) hue-rotate(209deg) brightness(97%) contrast(91%)',
+              }}
+            >
+              <Image src="/images/sparkles.svg" alt="" fill className="object-contain" priority aria-hidden="true" />
+            </span>
           </span>
         </h2>
 

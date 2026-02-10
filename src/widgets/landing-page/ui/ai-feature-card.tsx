@@ -134,10 +134,27 @@ export function AiFeatureCard({
         <span
           className={cn(
             'inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-2 sm:px-3 md:px-4 py-0.5 sm:py-1 md:py-1.5 text-[9px] sm:text-xs md:text-sm font-semibold mb-2 sm:mb-4 md:mb-6 w-fit',
-            isExpanded ? 'bg-white/20 text-white' : isBlue ? 'bg-blue-600 text-white' : 'bg-green-500 text-white',
+            isExpanded
+              ? isBlue
+                ? 'bg-white text-blue-600'
+                : 'bg-white text-green-600'
+              : isBlue
+                ? 'bg-blue-600 text-white'
+                : 'bg-green-500 text-white',
           )}
         >
-          <Image src="/images/sparkles.svg" alt="" width={12} height={12} className="sm:w-4 sm:h-4" />
+          <div
+            className="w-3 h-3 sm:w-4 sm:h-4 relative"
+            style={{
+              filter: isExpanded
+                ? isBlue
+                  ? 'invert(37%) sepia(93%) saturate(4528%) hue-rotate(209deg) brightness(97%) contrast(91%)'
+                  : 'invert(64%) sepia(71%) saturate(2247%) hue-rotate(85deg) brightness(95%) contrast(87%)'
+                : 'brightness(0) invert(1)',
+            }}
+          >
+            <Image src="/images/sparkles.svg" alt="" fill className="object-contain" />
+          </div>
           {badge}
         </span>
 

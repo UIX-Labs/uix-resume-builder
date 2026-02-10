@@ -1,15 +1,12 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import { Button } from '@/shared/ui/components/button';
-import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
-import { cn } from '@shared/lib/cn';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
+import { ReusableMobileSidebar } from '@shared/ui/components/reusable-mobile-sidebar';
+import type { NavItem } from '@shared/ui/components/reusable-mobile-sidebar';
 
 export interface MobileSidebarProps {
   isOpen: boolean;
@@ -24,7 +21,6 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
 
   const handleNavigation = (path: string, eventName: string, destination: string) => {
     router.push(path);
-    onClose();
     trackEvent(eventName, {
       source: 'mobile_sidebar',
       destination,
@@ -44,31 +40,18 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   };
 
   const handleDashboardClick = () => {
-    if (!user) {
-      handleNavigation('/auth', 'navigation_click', 'sign_in');
-      return;
-    }
-
-    const destination = 'dashboard';
-    setShowMobileTextView(true);
-    trackEvent('navigation_click', {
-      source: 'mobile_sidebar',
-      destination,
-      action: 'dashboard',
-      blocked: 'mobile_device',
-    });
+    handleNavigation('/dashboard', 'navigation_click', 'dashboard');
   };
 
   const handleCreateResumeClick = () => {
-    setShowMobileTextView(true);
-    trackEvent('create_resume_click', {
-      source: 'mobile_sidebar',
-      method: 'create_my_resume',
-      blocked: 'mobile_device',
-    });
+    handleNavigation('/dashboard', 'create_resume_click', 'dashboard');
   };
 
-  const navItems = [
+  const handleLogoClick = () => {
+    handleNavigation('/', 'navigation_click', 'home');
+  };
+
+  const navItems: NavItem[] = [
     {
       label: 'Home',
       onClick: handleHomeClick,
@@ -91,91 +74,19 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     },
   ];
 
-  const handleLogoClick = () => {
-    handleNavigation('/', 'navigation_click', 'home');
-  };
-
   return (
     <>
-      <AnimatePresence>
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/50 z-40"
-              onClick={onClose}
-            />
-
-            {/* Sidebar */}
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-[280px] bg-white z-50 shadow-2xl"
-            >
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                  <button className="flex items-center gap-2" onClick={handleLogoClick} type="button">
-                    <Image src="/images/Pika-Resume.png" alt="Pika Resume" width={40} height={40} />
-                    <div className="flex flex-col">
-                      <div className="flex flex-row">
-                        <span className="font-bold text-[#005FF2] text-xl">Pika</span>
-                        <span className="font-normal text-[#21344F] text-xl">Resume</span>
-                      </div>
-                    </div>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* Navigation Items */}
-                <nav className="flex-1 p-4">
-                  <ul className="space-y-2">
-                    {navItems.map((item) => (
-                      <li key={item.label}>
-                        <button
-                          type="button"
-                          onClick={item.onClick}
-                          className={cn(
-                            'w-full text-left px-4 py-3 rounded-xl font-medium text-base transition-colors',
-                            item.isActive ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100',
-                          )}
-                        >
-                          {item.label}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-
-                {/* Create Resume Button */}
-                <div className="p-4 border-t border-gray-100">
-                  <Button
-                    variant="default"
-                    size="lg"
-                    onClick={handleCreateResumeClick}
-                    className="w-full bg-blue-900 hover:bg-blue-700 text-white font-semibold py-4 rounded-xl shadow-sm"
-                  >
-                    Create My Resume
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+      <ReusableMobileSidebar
+        isOpen={isOpen}
+        onClose={onClose}
+        navItems={navItems}
+        onLogoClick={handleLogoClick}
+        ctaButton={{
+          label: 'Create My Resume',
+          onClick: handleCreateResumeClick,
+          className: 'bg-blue-900 hover:bg-blue-700 text-white',
+        }}
+      />
 
       {/* Mobile Text View - Shows when user tries to access desktop-only features */}
       <MobileTextView isOpen={showMobileTextView} onClose={() => setShowMobileTextView(false)} />

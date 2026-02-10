@@ -3,6 +3,8 @@ import type { Template } from '@entities/template-page/api/template-data';
 import enzoTemplate1 from '@features/resume/templates/enzo-template1';
 import { default as standardTemplate } from '@features/resume/templates/standard';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import aniketTemplate from '@features/resume/templates/standard';
+import template7 from '@features/resume/templates/template-7';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -20,7 +22,7 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   useEffect(() => {
     if (initialTemplate) {
-      setSelectedTemplate(initialTemplate);
+      setSelectedTemplate(template7);
     }
   }, [initialTemplate]);
 

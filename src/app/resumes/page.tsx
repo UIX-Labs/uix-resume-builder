@@ -1,24 +1,62 @@
 'use client';
+import { createResume, useGetAllResumes, type Resume, useResumeData } from '@entities/resume';
+import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
+import { useGetTemplateById, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
-import { SidebarProvider } from '@shared/ui/sidebar';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
-import { Button } from '@shared/ui/button';
-import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
+import { SidebarProvider } from '@shared/ui/sidebar';
+import { useMutation } from '@tanstack/react-query';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { MoreVertical, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { ResumeCardMobile } from '@widgets/resumes/ui/resume-card-mobile';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { MoreVertical, Trash2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { useGetAllResumes, createResume, type Resume } from '@entities/resume';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { useState, useCallback } from 'react';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
+import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import { Button } from '@shared/ui/components/button';
 
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
   const { data: resumes } = useGetAllResumes();
+  const isMobile = useIsMobile();
+  const [previewResumeId, setPreviewResumeId] = useState<string | null>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
+  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
+  const [optionsLocked, setOptionsLocked] = useState(false);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
+
+  const { data: previewResumeData } = useResumeData(previewResumeId || '');
+
+  const { data: fetchedTemplate } = useGetTemplateById(previewResumeData?.templateId || null);
+
+  const handleResumePreview = (resumeId: string) => {
+    setPreviewResumeId(resumeId);
+    setIsPreviewOpen(true);
+  };
+
+  const lockOptions = useCallback(
+    (action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_JD) => {
+      setActiveAction(action);
+      setOptionsLocked(true);
+    },
+    [],
+  );
+
+  const releaseOptions = useCallback(() => {
+    setActiveAction(null);
+    setOptionsLocked(false);
+  }, []);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -57,43 +95,102 @@ export default function AllResumePage() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-screen bg-white">
-        <DashboardSidebar />
+      <div className="flex min-h-screen w-screen bg-white relative">
+        <div className="hidden lg:block">
+          <DashboardSidebar />
+        </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <DashboardHeader user={user} />
+          <ResponsiveHeader user={user} />
 
-          <main className="flex bg-[rgb(245,248,250)] mt-3 rounded-[36px] overflow-hidden pb-4 h-full">
+          <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
-              <div className="flex text-start w-full">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[90px] leading-tight -tracking-[3%] h-[77px] truncate mt-[-25px] ml-[-10px]">
-                  YOUR RESUMES
-                </h1>
-              </div>
+              <PageHeading title={isMobile ? 'RESUMES' : 'YOUR RESUMES'} />
 
               <WelcomeHeader
                 userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
               />
 
-              <div className="flex gap-6 mt-6 mx-4 flex-wrap">
-                <button
-                  type="button"
-                  className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
-                  onClick={handleCreateResume}
-                >
-                  <div className="text-center">
-                    <span className="text-3xl text-gray-500">+</span>
-                    <p className="text-gray-600 font-medium mt-1">New resume</p>
+              {isMobile && (
+                <div className="mx-4 mt-4 flex justify-start">
+                  <div className="rounded-2xl border-2 border-blue-300 p-[2.5px]">
+                    <Button
+                      onClick={() => setIsCreationModalOpen(true)}
+                      className="
+                        w-44
+                        bg-blue-600 hover:bg-blue-700
+                        text-white
+                        rounded-lg
+                        px-10 py-3
+                        flex items-center gap-2
+                        font-medium
+                      "
+                    >
+                      Create Resume
+                      <ChevronDown className="size-4" />
+                    </Button>
                   </div>
-                </button>
+                </div>
+              )}
 
-                {sortedResumes?.map((resume, index) => (
-                  <ResumeCard key={resume.id} resume={resume} index={index} />
-                ))}
+              <div
+                className="flex flex-col gap-3 mt-4 mx-2 justify-center items-center
+                sm:flex-row sm:flex-wrap sm:gap-6 sm:mt-6 sm:mx-4 sm:justify-start"
+              >
+                {!isMobile && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 hover:border-purple-500 transition"
+                    onClick={handleCreateResume}
+                  >
+                    <div className="text-center">
+                      <span className="text-3xl text-gray-500">+</span>
+                      <p className="text-gray-600 font-medium mt-1">New resume</p>
+                    </div>
+                  </Button>
+                )}
+
+                {sortedResumes?.map((resume, index) =>
+                  isMobile ? (
+                    <ResumeCardMobile
+                      key={resume.id}
+                      resume={resume}
+                      onPreview={() => handleResumePreview(resume.id)}
+                    />
+                  ) : (
+                    <ResumeCardDesktop key={resume.id} resume={resume} index={index} />
+                  ),
+                )}
               </div>
             </div>
           </main>
         </div>
+        {isPreviewOpen && (
+          <PreviewModal
+            isOpen={isPreviewOpen}
+            onClose={() => {
+              setIsPreviewOpen(false);
+              setPreviewResumeId(null);
+            }}
+            template={fetchedTemplate ? fetchedTemplate : null}
+            resumeData={previewResumeData}
+          />
+        )}
+
+        <ResumeCreationModal
+          isOpen={isCreationModalOpen}
+          onClose={() => setIsCreationModalOpen(false)}
+          // biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
+          onJDModalOpen={() => {}}
+          onLinkedInClick={() => setIsLinkedInModalOpen(true)}
+          onActionLock={lockOptions}
+          onActionRelease={releaseOptions}
+          activeAction={activeAction}
+          optionsLocked={optionsLocked}
+        />
+
+        <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
       </div>
     </SidebarProvider>
   );
@@ -104,7 +201,7 @@ interface ResumeCardProps {
   index: number;
 }
 
-function ResumeCard({ resume }: ResumeCardProps) {
+function ResumeCardDesktop({ resume }: ResumeCardProps) {
   const router = useRouter();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -121,8 +218,8 @@ function ResumeCard({ resume }: ResumeCardProps) {
           </div>
 
           <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">
-            <div>
-              <h3 className="font-medium text-sm">{resume.title}</h3>
+            <div className="max-w-[90%]">
+              <h3 className="font-medium text-sm truncate">{resume.title}</h3>
               <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
             </div>
 
@@ -148,13 +245,14 @@ function ResumeCard({ resume }: ResumeCardProps) {
           </div>
         </div>
 
-        <button
+        <Button
+          variant="ghost"
           type="button"
-          className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          className="absolute inset-0 rounded-2xl bg-white/70 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-70 cursor-pointer text-black h-[85%] rounded-b-none"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>
-        </button>
+        </Button>
       </div>
 
       <DeleteResumeModal isOpen={showDeleteDialog} onClose={() => setShowDeleteDialog(false)} resume={resume} />

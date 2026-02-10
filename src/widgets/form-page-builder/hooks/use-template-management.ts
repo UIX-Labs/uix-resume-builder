@@ -20,17 +20,17 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
-  useEffect(() => {
-    if (initialTemplate) {
-      setSelectedTemplate(template7);
-    }
-  }, [initialTemplate]);
+  //  useEffect(() => {
+  //   if (initialTemplate) {
+  //     setSelectedTemplate(initialTemplate);
+  //   }
+  // }, [initialTemplate]);
 
-  useEffect(() => {
-    if (initialTemplateId) {
-      setSelectedTemplateId(initialTemplateId);
-    }
-  }, [initialTemplateId]);
+  // useEffect(() => {
+  //   if (initialTemplateId) {
+  //     setSelectedTemplateId(initialTemplateId);
+  //   }
+  // }, [initialTemplateId]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {

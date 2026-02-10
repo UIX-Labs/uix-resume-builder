@@ -1,11 +1,12 @@
-import { MonthYearPicker } from '@shared/ui/month-year-picker';
-import { Input } from '@shared/ui/components/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
-import { useEffect, useState } from 'react';
 import { cn } from '@shared/lib/cn';
 import { Checkbox } from '@shared/ui/checkbox';
+import { Input } from '@shared/ui/components/input';
+import { MonthYearPicker } from '@shared/ui/month-year-picker';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
+import { isAfter, startOfToday } from 'date-fns';
 import dayjs from 'dayjs';
 
+import { useEffect, useState } from 'react';
 interface DurationProps {
   data: {
     startDate: string;
@@ -26,7 +27,7 @@ export function Duration({ data, onChange }: DurationProps) {
     return undefined;
   });
 
-  const [endDate, setEndDate] = useState<Date | undefined>(() => {
+  const [endDate, _setEndDate] = useState<Date | undefined>(() => {
     if (data?.endDate) {
       return dayjs(data.endDate).toDate();
     }
@@ -78,7 +79,11 @@ export function Duration({ data, onChange }: DurationProps) {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto p-0" align="start">
-            <MonthYearPicker selected={startDate} onSelect={(date) => setStartDate(date)} />
+            <MonthYearPicker
+              selected={startDate}
+              onSelect={(date) => setStartDate(date)}
+              disabled={(date) => isAfter(date, startOfToday())}
+            />
           </PopoverContent>
         </Popover>
       </div>
@@ -114,13 +119,9 @@ export function Duration({ data, onChange }: DurationProps) {
             </div>
 
             <MonthYearPicker
-              selected={isOngoing ? undefined : endDate}
-              onSelect={(date) => {
-                if (!date) return;
-                setIsOngoing(false);
-                setEndDate(date);
-              }}
-              disabled={(date) => (startDate ? dayjs(date).isBefore(dayjs(startDate), 'month') : false)}
+              selected={startDate}
+              onSelect={(date) => setStartDate(date)}
+              disabled={(date) => isAfter(date, startOfToday())}
             />
           </PopoverContent>
         </Popover>

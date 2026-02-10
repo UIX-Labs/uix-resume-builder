@@ -201,6 +201,10 @@ export function renderField(
     const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, '&');
     const hasActualImage = actualSrc && actualSrc.trim() !== '';
 
+    if (field.skipIfNoActualValue && !hasActualImage) {
+      return null;
+    }
+
     const src = hasActualImage ? actualSrc : field.fallback;
     if (!src) return null;
 

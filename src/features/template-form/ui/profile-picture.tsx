@@ -1,5 +1,8 @@
 import { uploadProfilePicture } from '@entities/resume/api/upload-profile-picture';
 import { cn } from '@shared/lib/cn';
+import { Button } from '@shared/ui/components/button';
+import { Input } from '@shared/ui/components/input';
+import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
@@ -13,13 +16,36 @@ export const ProfilePictureInput = ({
   personalDetailItemId: string;
   section: any;
 }) => {
-  const DEFAULT_PROFILE_IMAGE = '/images/profileimg.jpeg';
-
-  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl || DEFAULT_PROFILE_IMAGE);
+  const [imageUrl, setImageUrl] = useState<string>(data?.profilePicturePublicUrl || '');
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const profilePictureMutation = useMutation({
+    mutationFn: uploadProfilePicture,
+    onSuccess: (response) => {
+      if (response?.url) {
+        setImageUrl(response.url);
+        return;
+      }
+
+      setImageUrl('');
+      onChange({ profilePicturePublicUrl: '' });
+    },
+    onError: () => {
+      setError('Failed to upload profile picture');
+    },
+    onSettled: () => {
+      setIsUploading(false);
+    },
+  });
+
+  useEffect(() => {
+    if (data?.profilePicturePublicUrl !== imageUrl) {
+      setImageUrl(data?.profilePicturePublicUrl || '');
+    }
+  }, [data?.profilePicturePublicUrl]);
 
   useEffect(() => {
     if (imageUrl) {
@@ -59,21 +85,12 @@ export const ProfilePictureInput = ({
       setIsUploading(true);
       const base64 = await convertToBase64(file);
 
-      const response = await uploadProfilePicture({
+      profilePictureMutation.mutate({
         personalDetailItemId,
         base64,
       });
-
-      if (response) {
-        setImageUrl(response.url);
-      } else {
-        const errorMsg = 'Failed to upload image - API returned success: false';
-        console.error(errorMsg, response);
-        setError(errorMsg);
-      }
-    } catch (err) {
-      console.log(err);
-    } finally {
+    } catch {
+      setError('Failed to process image');
       setIsUploading(false);
     }
   };
@@ -106,9 +123,14 @@ export const ProfilePictureInput = ({
   };
 
   const handleDelete = () => {
-    setImageUrl(DEFAULT_PROFILE_IMAGE);
+    setIsUploading(true);
     setError(null);
-    // Reset file input
+
+    profilePictureMutation.mutate({
+      personalDetailItemId,
+      base64: '',
+    });
+
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -120,18 +142,19 @@ export const ProfilePictureInput = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <button
+      <Button
         type="button"
+        variant="outline"
         className={cn(
-          'relative border-2 border-dashed rounded-[8px] p-4 transition-colors',
-          'flex flex-col items-center justify-center cursor-pointer',
+          'relative border-2 border-dashed rounded-[8px] p-4 h-auto',
+          'flex flex-col items-center justify-center',
           isDragging ? 'border-[#0059ED] bg-[#CBE7FF]' : 'border-[#959DA8] bg-[#FAFBFC]',
-          isUploading && 'opacity-50 cursor-not-allowed',
         )}
         onClick={() => !isUploading && !imageUrl && fileInputRef.current?.click()}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
+        disabled={isUploading}
       >
         {imageUrl ? (
           <div className="flex flex-col items-center gap-3">
@@ -139,40 +162,31 @@ export const ProfilePictureInput = ({
               <Image src={imageUrl} alt="Profile" fill className="object-cover" unoptimized />
             </div>
             <div className="flex gap-2">
-              <button
+              <Button
                 type="button"
+                variant="outline"
+                size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleChange();
                 }}
                 disabled={isUploading}
-                className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                  'bg-[#E9F4FF] text-[#005FF2] border border-[#CBE7FF]',
-                  'hover:bg-[#005FF2] hover:text-white',
-                  isUploading && 'opacity-50 cursor-not-allowed',
-                )}
+                className="bg-[#E9F4FF] text-[#005FF2] border-[#CBE7FF] hover:bg-[#005FF2] hover:text-white"
               >
                 Change
-              </button>
-              {imageUrl !== DEFAULT_PROFILE_IMAGE && (
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete();
-                  }}
-                  disabled={isUploading}
-                  className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                    'bg-red-50 text-red-600 border border-red-200',
-                    'hover:bg-red-600 hover:text-white',
-                    isUploading && 'opacity-50 cursor-not-allowed',
-                  )}
-                >
-                  Delete
-                </button>
-              )}
+              </Button>
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+                disabled={isUploading}
+              >
+                Delete
+              </Button>
             </div>
           </div>
         ) : (
@@ -184,7 +198,7 @@ export const ProfilePictureInput = ({
             <div className="text-xs text-[#959DA8] mt-1">Max size: 5MB</div>
           </div>
         )}
-        <input
+        <Input
           ref={fileInputRef}
           type="file"
           accept="image/*"
@@ -192,7 +206,7 @@ export const ProfilePictureInput = ({
           onChange={handleFileChange}
           disabled={isUploading}
         />
-      </button>
+      </Button>
       {error && <div className="text-sm text-red-500">{error}</div>}
     </div>
   );

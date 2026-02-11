@@ -1,15 +1,16 @@
+import ArticleHeader from '@/widgets/blog/slug/article-header';
+import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import Script from 'next/script';
-import { Calendar, Clock, ArrowLeft, User } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import remarkGfm from 'remark-gfm';
-import rehypeSlug from 'rehype-slug';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import Script from 'next/script';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
-import { getAllSlugs, getPostBySlug, getAllPosts, extractHeadings } from '@shared/lib/blog';
-import { TagBadge, TableOfContents, ShareButton } from '@shared/ui/blog';
+import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
+import { TableOfContents, TagBadge } from '@shared/ui/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
@@ -17,6 +18,7 @@ const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com
 /* ------------------------------------------------------------------ */
 /*  Static params                                                      */
 /* ------------------------------------------------------------------ */
+
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
 }
@@ -145,23 +147,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </Link>
 
         {/* Article header */}
-        <header className="mb-10">
-          {/* Tags */}
+        {/*   <header className="mb-10">
+          
           <div className="mb-4 flex flex-wrap gap-2">
             {frontmatter.tags.map((tag) => (
               <TagBadge key={tag} tag={tag} size="md" />
             ))}
           </div>
 
-          {/* Title */}
+        
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
             {frontmatter.title}
           </h1>
 
-          {/* Description */}
+        
           <p className="mt-4 text-lg leading-relaxed text-gray-600">{frontmatter.description}</p>
 
-          {/* Meta bar */}
+         
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-4">
             <div className="flex flex-wrap items-center gap-5 text-sm text-gray-500">
               <span className="flex items-center gap-1.5">
@@ -182,6 +184,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <ShareButton title={frontmatter.title} url={`${DOMAIN_URL}/blog/${slug}`} />
           </div>
         </header>
+        */}
+        <ArticleHeader
+          title={frontmatter.title}
+          description={frontmatter.description}
+          author={frontmatter.author}
+          authorRole={frontmatter.authorRole}
+          date={formatDate(frontmatter.date)}
+          readingTime={readingTime}
+          tags={frontmatter.tags}
+        />
 
         {/* Content + Sidebar */}
         <div className="flex gap-10 lg:gap-14">

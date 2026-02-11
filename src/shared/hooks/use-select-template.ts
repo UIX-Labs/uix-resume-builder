@@ -11,7 +11,7 @@ interface UseTemplateOptions {
   method?: string;
 }
 
-export function useUseTemplate() {
+export function useSelectTemplate() {
   const router = useRouter();
   const user = useCachedUser();
 

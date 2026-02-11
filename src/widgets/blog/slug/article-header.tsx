@@ -20,7 +20,24 @@ export default function ArticleHeader({
   tags,
 }: ArticleHeaderProps) {
   return (
-    <div className=" mb-10 bg-[url('/images/blog/hero-section/Dot-bg.png')] w-full rounded-2xl border-4 border-white relative overflow-hidden group p-8 flex justify-between max-w-[1395px] mx-auto">
+   <div
+  className="
+    mb-10
+    bg-[url('/images/blog/hero-section/Dot-bg.png')]
+    w-full
+    rounded-2xl
+    border-4 border-white
+    relative overflow-hidden
+    group
+    p-6 sm:p-8
+    flex
+    flex-col
+    lg:flex-row
+    gap-8
+    lg:justify-between
+  "
+>
+
       {/* <div className="mb-4 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <span
@@ -32,8 +49,10 @@ export default function ArticleHeader({
         ))}
       </div> */}
 
+      
+
       {/* TITLE */}
-      <div>
+      <div className="order-2 lg:order-1 w-full">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">{title}</h1>
 
         {/* DESCRIPTION */}
@@ -59,9 +78,13 @@ export default function ArticleHeader({
         </div>
       </div>
 
-      <div>
-        <img src="/images/blog/slug/header-img.png" alt="" className="w-[350px] h-[256px]" />
+
+
+      <div className='order-1 lg:order-2  w-full max-w-[350px] h-auto mx-auto lg:mx-0'>
+        <img src="/images/blog/slug/header-img.png" alt=""  className="w-full max-w-[350px] h-auto mx-auto lg:mx-0" />
       </div>
+
+      
     </div>
   );
 }

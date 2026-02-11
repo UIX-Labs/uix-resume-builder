@@ -69,9 +69,9 @@ export default function BlogPage() {
             <BlogGrid />
           </div>
 
-          {/* <div className="mt-10">
+           {/* <div className="mt-10">
             <BlogList posts={posts} tags={tags} />
-          </div> */}
+          </div>  */}
         </div>
       </main>
     </>

@@ -12,13 +12,11 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
         opacity-20%
       "
     >
-     
-        <Header />
-    
+      <Header />
 
       {/* Blog Content */}
       <div className="mt-5">
-      <main>{children}</main>
+        <main>{children}</main>
       </div>
 
       {/* Footer */}

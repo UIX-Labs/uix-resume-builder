@@ -1,7 +1,6 @@
-import { Clock } from "lucide-react";
+import { Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-
 
 interface BlogCardProps {
   image: string;
@@ -36,15 +35,13 @@ export default function BlogCard({ image, category, title, author, date, slug = 
           <div className="flex items-center gap-2 text-sm text-gray-500">
             <img src="https://picsum.photos/200" className="w-6 h-6 rounded-full" alt="" />
 
-            <span>By {author}</span>
+            <span>By {author} &nbsp;|&nbsp;</span>
 
-            <span>|</span>
+            <Clock className="w-4 h-4 text-gray-500" />
 
-           <Clock className="w-4 h-4 text-gray-500" />
+  <span>&nbsp;{date}</span>
+</div>
 
-
-            <span>{date}</span>
-          </div>
         </div>
       </div>
     </Link>

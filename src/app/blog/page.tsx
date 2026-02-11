@@ -1,4 +1,3 @@
-import { BlogList } from '@/widgets/blog/blog-list';
 import CategoriesSection from '@/widgets/blog/categories-section';
 import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
@@ -70,9 +69,9 @@ export default function BlogPage() {
             <BlogGrid />
           </div>
 
-          <div className="mt-10">
+          {/* <div className="mt-10">
             <BlogList posts={posts} tags={tags} />
-          </div>
+          </div> */}
         </div>
       </main>
     </>

@@ -17,13 +17,13 @@ export default function CategoryPage({ params }: PageProps) {
 
   return (
     <div>
-     
-    <BlogHero description={category.hero.description} image={category.hero.image}>
-     <span className="font-bold" style={{ color: category.color }}>
-     {category.title}</span>{" "}
-    <span className="text-black">{category.hero.suffix}</span>
-    </BlogHero>
-    
+      <BlogHero description={category.hero.description} image={category.hero.image}>
+        <span className="font-bold" style={{ color: category.color }}>
+          {category.title}
+        </span>{' '}
+        <span className="text-black">{category.hero.suffix}</span>
+      </BlogHero>
+
       <div className="flex items-center justify-between mt-12 mb-6 max-w-[1395px] mx-auto">
         {/* LEFT — BLOG COUNT */}
         <h1 className="text-[36px] text-[#17171A] font-semibold">Collection of 61+ blogs</h1>

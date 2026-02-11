@@ -1,5 +1,4 @@
-import { Clock } from "lucide-react";
-
+import { Clock } from 'lucide-react';
 
 export default function FeaturedBigCard() {
   return (
@@ -14,9 +13,7 @@ export default function FeaturedBigCard() {
         <div>
           <span className="text-xs font-semibold text-white uppercase bg-orange-500 px-2 py-1 rounded-md">Resume</span>
 
-          <h1 className="text-[25px] font-bold mt-4 max-w-[350px]">
-            How to write a resume: Expert guide & examples
-          </h1>
+          <h1 className="text-2xl font-bold mt-4 max-w-[350px]">How to write a resume: Expert guide & examples</h1>
 
           <div className="flex items-center gap-3 mt-4">
             <img

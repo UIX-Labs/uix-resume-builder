@@ -1,7 +1,7 @@
 import CountUp from '@shared/ui/count-up';
 import { motion } from 'framer-motion';
-import { Target } from 'lucide-react';
 import Image from 'next/image';
+
 export default function HeroImgSection() {
   const fadeScaleIn = {
     hidden: {
@@ -94,8 +94,8 @@ export default function HeroImgSection() {
         variants={fadeScaleIn}
         className="absolute bottom-[180px] right-0 z-30 bg-[rgba(59,130,246,0.18)] backdrop-blur-[2px]  border-blue-200 px-6 py-4 rounded-xl shadow-md flex items-center gap-2"
       >
-        <span className=" inline-flex items-center gap-2 font-semibold text-gray-900">
-          ATS Perfect+ <Target className="w-4 h-4" />
+        <span className="font-semibold text-gray-900">
+          ATS Perfect+ <Image src="/images/target-blue.png" alt="ATS Perfect " width={20} height={20} />
         </span>
       </motion.div>
 

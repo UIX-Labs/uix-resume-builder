@@ -6,4 +6,3 @@ export { default as BlogHero } from './components/blog-hero';
 export { default as CategoryCard } from './components/category-card';
 export { default as FeaturedSection } from './components/feature-parent-card';
 export { default as FeatureBigCard } from './components/feature-primary-card';
-

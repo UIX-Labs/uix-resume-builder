@@ -434,7 +434,6 @@
 //   );
 // }
 
-
 'use client';
 
 import { cn } from '@shared/lib/utils';
@@ -467,7 +466,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       {
         rootMargin: '-80px 0px -80% 0px',
         threshold: 0,
-      }
+      },
     );
 
     headings.forEach((heading) => {
@@ -482,8 +481,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   useEffect(() => {
     const onScroll = () => {
       const top = window.scrollY;
-      const max =
-        document.documentElement.scrollHeight - window.innerHeight;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
 
       setReadProgress(max > 0 ? Math.min(top / max, 1) : 0);
     };
@@ -496,19 +494,13 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-
       {/* Progress Bar */}
       <div className="mb-4 h-[3px] w-full rounded-full bg-gray-200 overflow-hidden">
-        <div
-          className="h-full bg-[#22C55E] transition-all duration-300"
-          style={{ width: `${readProgress * 100}%` }}
-        />
+        <div className="h-full bg-[#22C55E] transition-all duration-300" style={{ width: `${readProgress * 100}%` }} />
       </div>
 
       {/* Title */}
-      <h3 className="text-sm font-semibold text-gray-900 mb-4">
-        In this Article
-      </h3>
+      <h3 className="text-sm font-semibold text-gray-900 mb-4">In this Article</h3>
 
       {/* Links */}
       <ul className="space-y-2">
@@ -527,9 +519,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                 'block text-sm transition-colors',
                 heading.level === 3 && 'pl-3',
                 heading.level === 4 && 'pl-6',
-                activeId === heading.id
-                  ? 'text-black font-medium'
-                  : 'text-gray-400 hover:text-gray-700'
+                activeId === heading.id ? 'text-black font-medium' : 'text-gray-400 hover:text-gray-700',
               )}
             >
               {heading.text}
@@ -540,5 +530,3 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     </nav>
   );
 }
-
-

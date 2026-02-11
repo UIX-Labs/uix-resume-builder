@@ -20,8 +20,8 @@ export default function ArticleHeader({
   tags,
 }: ArticleHeaderProps) {
   return (
-   <div
-  className="
+    <div
+      className="
     mb-10
     bg-[url('/images/blog/hero-section/Dot-bg.png')]
     w-full
@@ -36,8 +36,7 @@ export default function ArticleHeader({
     gap-8
     lg:justify-between
   "
->
-
+    >
       {/* <div className="mb-4 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <span
@@ -48,8 +47,6 @@ export default function ArticleHeader({
           </span>
         ))}
       </div> */}
-
-      
 
       {/* TITLE */}
       <div className="order-2 lg:order-1 w-full">
@@ -78,13 +75,9 @@ export default function ArticleHeader({
         </div>
       </div>
 
-
-
-      <div className='order-1 lg:order-2  w-full max-w-[350px] h-auto mx-auto lg:mx-0'>
-        <img src="/images/blog/slug/header-img.png" alt=""  className="w-full max-w-[350px] h-auto mx-auto lg:mx-0" />
+      <div className="order-1 lg:order-2  w-full max-w-[350px] h-auto mx-auto lg:mx-0">
+        <img src="/images/blog/slug/header-img.png" alt="" className="w-full max-w-[350px] h-auto mx-auto lg:mx-0" />
       </div>
-
-      
     </div>
   );
 }

@@ -26,9 +26,7 @@ export default function JDCTACard() {
       {/* Title */}
       <h3 className="text-lg font-semibold text-gray-900 text-center">
         Upgrade Your Resume with
-        <span className="block text-green-600 font-bold">
-          Job Description
-        </span>
+        <span className="block text-green-600 font-bold">Job Description</span>
       </h3>
 
       {/* Description */}

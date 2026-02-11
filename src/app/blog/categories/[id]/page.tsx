@@ -20,9 +20,12 @@ export default function CategoryPage({ params }: PageProps) {
       <BlogHero description={category.hero.description} image={category.hero.image}>
         <span className="font-bold" style={{ color: category.color }}>
           {category.title}
-        </span>{' '}
-        <span className="text-black">{category.hero.suffix}</span>
+        </span>&nbsp;
+        <span className="text-black">
+          {category.hero.suffix}
+        </span>
       </BlogHero>
+
 
       <div className="flex items-center justify-between mt-12 mb-6 max-w-[1395px] mx-auto">
         {/* LEFT — BLOG COUNT */}

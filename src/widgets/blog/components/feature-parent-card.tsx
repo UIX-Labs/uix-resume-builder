@@ -1,5 +1,5 @@
-import FeaturedBigCard from './feature-big-card';
-import FeaturedSmallCard from './feature-small-card';
+import FeaturedPrimaryCard from './feature-primary-card';
+import FeaturedSecondaryCard from './feature-secondary';
 
 export default function FeaturedSection() {
   return (
@@ -7,13 +7,13 @@ export default function FeaturedSection() {
       <div className="grid lg:grid-cols-2 gap-8">
         {/* LEFT - BIG CARD */}
         <div className="h-full h-full border-white border-[7px] rounded-xl">
-          <FeaturedBigCard />
+          <FeaturedPrimaryCard />
         </div>
 
         {/* RIGHT - TWO SMALL CARDS */}
         <div className="flex flex-col gap-8 h-full">
-          <FeaturedSmallCard />
-          <FeaturedSmallCard />
+          <FeaturedSecondaryCard />
+          <FeaturedSecondaryCard />
         </div>
       </div>
     </section>

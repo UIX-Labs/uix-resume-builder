@@ -1,6 +1,6 @@
 import { Clock } from 'lucide-react';
 
-export default function FeaturedBigCard() {
+export default function FeaturedPrimaryCard() {
   return (
     <div className="h-full bg-[url('/images/blog/hero-section/Dot-bg.png')] rounded-2xl relative overflow-hidden">
       {/* Right Image */}

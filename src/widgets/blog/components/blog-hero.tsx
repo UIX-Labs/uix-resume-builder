@@ -15,9 +15,9 @@ export default function BlogHero({ description, image, children }: BlogHeroProps
         <div className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl p-8 min-h-[280px] overflow-hidden">
           {/* LEFT */}
           <div className="relative z-10 w-full flex flex-col justify-center px-4 lg:px-10">
-            <h1 className="text-3xl sm:text-4xl font-semibold leading-tight">{children}</h1>
+            <h1 className="text-3xl sm:text-4xl lg:text-[63px] font-semibold leading-tight">{children}</h1>
 
-            <p className="mt-4 text-base sm:text-lg lg:text-xl max-w-[480px] text-gray-600">{description}</p>
+            <p className="mt-4 text-base sm:text-lg lg:text-2xl max-w-[480px] text-gray-600">{description}</p>
           </div>
 
           {/* RIGHT IMAGE */}

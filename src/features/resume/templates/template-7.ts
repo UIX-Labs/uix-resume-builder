@@ -12,14 +12,14 @@ const template7 = {
     {
       id: 'header',
       type: 'header',
-      className: 'pt-6 pr-8 flex flex-row gap-6 item-start mb-2',
+      className: 'pr-8 flex flex-row gap-6 items-start mb-2',
       break: true,
       fields: {
         profilePhoto: {
           type: 'image',
           path: 'personalDetails.items[0].profilePicturePublicUrl',
-          fallback: '/images/profileimg.jpeg',
           className: 'w-32 h-32 rounded-full bg-gray-200 shrink-0 overflow-hidden object-cover',
+          skipIfNoActualValue: true,
         },
         nameTitleBlock: {
           type: 'group',

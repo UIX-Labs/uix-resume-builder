@@ -150,28 +150,28 @@ function calculateItemWeight(value: any) {
  * @returns Completion percentage (0-100)
  */
 export function calculateResumeCompletion(resumeData: ResumeData, mockData?: Record<string, any>) {
-  // If no mockData provided, use old logic (backward compatibility)
+  // If no mockData: section-based completion. 100% when every section has at least one item with content.
   if (!mockData) {
-    const { total, filled } = Object.entries(resumeData).reduce(
-      (acc, cur) => {
-        const key = cur[0] as ResumeDataKey;
-        const value = cur[1] as ResumeData[ResumeDataKey];
+    let sectionsWithContent = 0;
+    const totalSections = whiteList.length;
 
-        if (!whiteList.includes(key)) return acc;
+    for (const key of whiteList) {
+      const value = resumeData[key as ResumeDataKey];
+      const items = value?.items ?? [];
 
-        const items = value?.items || [];
+      if (items.length === 0) continue;
 
-        if (items.length > 0) {
-          acc.total += calculateSectionWeight(items[0]);
-          acc.filled += items.reduce((acc, item) => Math.max(acc, calculateItemWeight(item)), 0);
-        }
+      const hasContent =
+        typeof items[0] === 'string'
+          ? (items as string[]).some((s) => hasActualContent(s))
+          : (items as Record<string, unknown>[]).some((item) => calculateItemWeight(item) > 0);
 
-        return acc;
-      },
-      { total: 0, filled: 0 },
-    );
+      if (hasContent) sectionsWithContent += 1;
+    }
 
-    return total === 0 ? 0 : (filled / total) * 100;
+    if (totalSections === 0) return 0;
+    const percentage = (sectionsWithContent / totalSections) * 100;
+    return Math.min(100, Math.round(percentage * 10) / 10);
   }
 
   // New logic: Field-by-field comparison with mockData

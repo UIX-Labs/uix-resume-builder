@@ -1,4 +1,5 @@
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
+import { isSectionEmpty } from './section-utils';
 
 /**
  * Removes background-color styles from HTML span tags
@@ -44,6 +45,13 @@ export const getCleanDataForRenderer = (
       // Keep suggestedUpdates only when not generating PDF
       if (isGeneratingPdf && sectionData.suggestedUpdates) {
         delete sectionData.suggestedUpdates;
+      }
+
+      if (isGeneratingPdf) {
+        const sectionIsEmpty = isSectionEmpty(section);
+        if (sectionIsEmpty) {
+          sectionData.isHidden = true;
+        }
       }
 
       if (Array.isArray(sectionData.items)) {

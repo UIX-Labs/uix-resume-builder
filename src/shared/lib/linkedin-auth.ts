@@ -9,7 +9,7 @@ export const getLinkedInAuthUrl = () => {
     response_type: 'code',
     client_id: process.env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID || '',
     redirect_uri: process.env.NEXT_PUBLIC_REDIRECT_URI || '',
-    scope: 'openid profile email',
+    scope: 'openid email r_basicprofile',
     state: state,
   });
 

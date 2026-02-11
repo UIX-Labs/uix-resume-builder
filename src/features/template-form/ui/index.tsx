@@ -177,27 +177,24 @@ export function TemplateForm({
             {currentSchema?.label}
             <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
           </div>
-          {currentStep !== 'personalDetails' && (
-            <Button
-              type="button"
-              onClick={handleToggleHide}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2 text-sm self-start sm:self-auto"
-            >
-              {isHidden ? (
-                <>
-                  <Eye className="w-4 h-4" />
-                  Unhide
-                </>
-              ) : (
-                <>
-                  <EyeOff className="w-4 h-4" />
-                  Hide
-                </>
-              )}
-            </Button>
-          )}
+          {currentStep !== 'personalDetails' &&
+            (() => {
+              const Icon = isHidden ? Eye : EyeOff;
+              const label = isHidden ? 'Unhide' : 'Hide';
+
+              return (
+                <Button
+                  type="button"
+                  onClick={handleToggleHide}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-sm self-start sm:self-auto"
+                >
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </Button>
+              );
+            })()}
         </div>
       )}
 

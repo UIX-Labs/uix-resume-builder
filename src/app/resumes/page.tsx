@@ -105,7 +105,7 @@ export default function AllResumePage() {
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
-              <PageHeading title="YOUR RESUMES" className="text-[44px] -mt-3" />
+              <PageHeading title={isMobile ? 'RESUMES' : 'YOUR RESUMES'} />
 
               <WelcomeHeader
                 userName={isLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
@@ -138,16 +138,17 @@ export default function AllResumePage() {
                 sm:flex-row sm:flex-wrap sm:gap-6 sm:mt-6 sm:mx-4 sm:justify-start"
               >
                 {!isMobile && (
-                  <button
+                  <Button
                     type="button"
-                    className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 cursor-pointer hover:border-purple-500 transition"
+                    variant="outline"
+                    className="w-[260px] h-[320px] flex items-center justify-center rounded-2xl border-2 border-dashed border-gray-400 hover:border-purple-500 transition"
                     onClick={handleCreateResume}
                   >
                     <div className="text-center">
                       <span className="text-3xl text-gray-500">+</span>
                       <p className="text-gray-600 font-medium mt-1">New resume</p>
                     </div>
-                  </button>
+                  </Button>
                 )}
 
                 {sortedResumes?.map((resume, index) =>
@@ -217,8 +218,8 @@ function ResumeCardDesktop({ resume }: ResumeCardProps) {
           </div>
 
           <div className="absolute bottom-0 px-3 py-2 flex justify-between items-center bg-white p-8 w-full">
-            <div>
-              <h3 className="font-medium text-sm">{resume.title}</h3>
+            <div className="max-w-[90%]">
+              <h3 className="font-medium text-sm truncate">{resume.title}</h3>
               <p className="text-xs text-gray-500">{formatDate(resume.updatedAt)}</p>
             </div>
 
@@ -245,8 +246,9 @@ function ResumeCardDesktop({ resume }: ResumeCardProps) {
         </div>
 
         <Button
+          variant="ghost"
           type="button"
-          className="absolute top-0 left-0 right-0 bottom-[60px] rounded-t-2xl bg-white/40 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer text-black"
+          className="absolute inset-0 rounded-2xl bg-white/70 backdrop-blur-sm flex flex-col justify-center items-center gap-6 text-center transition-all duration-300 opacity-0 group-hover:opacity-70 cursor-pointer text-black h-[85%] rounded-b-none"
           onClick={() => router.push(`/resume/${resume.id}`)}
         >
           <span className="hover:text-blue-500 transition-all duration-300">VIEW RESUME →</span>

@@ -28,7 +28,7 @@ export default function CategoryCard({ category }: { category: Category }) {
             />
           </div>
 
-          <p className="absolute bottom-0 text-sm font-semibold text-center w-full" style={{ color: category.color }}>
+          <p className="absolute bottom-0 text-md text-[16px] font-semibold text-center w-full" style={{ color: category.color }}>
             {category.title}
           </p>
         </div>

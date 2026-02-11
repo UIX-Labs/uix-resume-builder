@@ -49,11 +49,14 @@ export default function BlogPage() {
       <main className="min-h-screen">
         <div className="w-full">
           <BlogHero
-            title="The Pika"
-            highlightWord="Journal"
-            description="Blogs to power up your resume, job search, and career growth."
             image="/images/blog/hero-section/hero-section.png"
-          />
+            description="Blogs to power up your resume, job search, and career growth."
+          >
+            <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
+              The <span className="text-blue-600 font-bold">Pika Journal</span>
+            </span>
+          </BlogHero>
+
 
           <div className="mt-[35px] w-full px-2">
             <FeaturedSection />

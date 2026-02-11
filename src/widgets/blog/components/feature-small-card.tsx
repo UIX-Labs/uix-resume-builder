@@ -1,3 +1,4 @@
+import { Clock } from 'lucide-react';
 import Image from 'next/image';
 
 export default function FeaturedSmallCard() {
@@ -15,11 +16,11 @@ export default function FeaturedSmallCard() {
 
       {/* RIGHT CONTENT */}
       <div className="flex-1 flex flex-col justify-center">
-        <span className="inline-block w-fit bg-[#8B5CF6] text-white text-[10px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">
+        <span className="inline-block w-fit bg-[#8B5CF6] text-white text-[12px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">
           CAREER
         </span>
 
-        <h3 className="text-base md:text-lg font-bold mt-2 leading-tight text-[#0B0A09]">
+        <h3 className="text-base md:text-lg font-bold mt-2 leading-tight text-[#0B0A09] text-[24px]">
           How to Add Your Best Professional Affiliations
         </h3>
 
@@ -28,7 +29,7 @@ export default function FeaturedSmallCard() {
             <Image src="/images/blog/avatar.png" alt="avatar" fill className="object-cover" />
           </div>
           <span className="truncate">John Doe</span>
-          <img src="/images/blog/blog-card/clock.png" alt="avatar" className="w-[17px] h-[17px]" />
+          <Clock className="w-4 h-4 text-gray-500" />
           <span className="whitespace-nowrap">8 min read</span>
         </div>
       </div>

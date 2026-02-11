@@ -13,7 +13,6 @@ const blogs = Array.from({ length: 15 }, (_, index) => ({
   title: 'How to Add Your Best Professional Affiliations',
   author: 'John Doe',
   date: todayDate,
- 
 }));
 
 export default function BlogGrid() {
@@ -28,8 +27,6 @@ export default function BlogGrid() {
             title={blog.title}
             author={blog.author}
             date={blog.date}
-          
-           
           />
         ))}
       </div>

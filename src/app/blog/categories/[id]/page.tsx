@@ -23,11 +23,8 @@ export default function CategoryPage({ params }: PageProps) {
         description={category.heroDescription}
         image={category.heroImage}
         highlightColor={category.color}
-       
       />
 
-     
-      
       <div className="flex items-center justify-between mt-12 mb-6 max-w-[1395px] mx-auto">
         {/* LEFT — BLOG COUNT */}
         <h1 className="text-[36px] text-[#17171A] font-semibold">Collection of 61+ blogs</h1>

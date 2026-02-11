@@ -1,19 +1,18 @@
 'use client';
 
-import { createResume, updateResumeTemplate } from '@entities/resume';
 import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useUserProfile } from '@shared/hooks/use-user';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { Button } from '@shared/ui/components/button';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { useMutation } from '@tanstack/react-query';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import Image from 'next/image';
-import { useIsMobile } from '@shared/hooks/use-mobile';
 
 interface ResumeCreationModalProps {
   isOpen: boolean;
@@ -189,7 +188,13 @@ export default function ResumeCreationModal({
             {/* Upload Resume */}
             <div className="relative">
               <Button
-                onClick={resumeCreateHandler}
+                onClick={() => {
+                  trackEvent('upload_resume_click', {
+                    source: template ? 'template_modal' : 'dashboard_modal',
+                    device: 'mobile',
+                  });
+                  router.push('/upload-resume');
+                }}
                 className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors hover:bg-gray-50 bg-white text-left text-base"
               >
                 <Image src="/images/file_upload.svg" alt="" width={24} height={24} />

@@ -1,18 +1,29 @@
 export default function FeaturedBigCard() {
   return (
     <div className="min-h-[300px] md:h-full bg-[url('/images/blog/hero-section/Dot-bg.png')] rounded-2xl relative overflow-hidden">
+
       {/* Right Image */}
       <div className="absolute top-0 right-0 w-[50%] md:w-[60%] h-full ">
-        <img src="/images/blog/features/pencil.png" alt="" className="w-full h-full object-contain object-right-top" />
+        <img
+          src="/images/blog/features/pencil.png"
+          alt=""
+          className="w-full h-full object-contain object-right-top"
+        />
       </div>
 
+      
+     
+
       {/* Content */}
-      <div className="absolute inset-y-0 left-0 flex flex-col justify-end ml-7 mb-7">
-        <div>
-          <span className="text-xs font-semibold text-white uppercase bg-orange-500 px-2 py-1 rounded-md">Resume</span>
+   <div className="absolute inset-y-0 left-0 flex flex-col justify-end ml-7 mb-7">
+      <div>
+          <span className="text-xs font-semibold text-white uppercase bg-orange-500 px-2 py-1 rounded-md">
+            Resume
+          </span>
 
           <h1 className="text-[20px] text-32px font-bold text-gray-900 leading-tight mt-4 max-w-[500px]">
-            How to write a resume: Expert guide & examples
+            How to write a resume: Expert 
+            guide & examples
           </h1>
 
           <div className="flex items-center gap-3 mt-4">
@@ -23,14 +34,25 @@ export default function FeaturedBigCard() {
             />
 
             <div className="flex flex-row gap-2 justify-center items-center">
-              <span className="text-sm font-medium text-gray-700">Srishti Chandra</span>
+              <span className="text-sm font-medium text-gray-700">
+                Srishti Chandra
+              </span>
 
               <img src="/images/blog/blog-card/clock.png" alt="avatar" />
-              <span className="text-xs text-gray-500 font-medium text-[14px]">8 min read</span>
+              <span className="text-xs text-gray-500 font-medium text-[14px]">
+                8 min read
+              </span>
             </div>
           </div>
         </div>
+
       </div>
+
     </div>
   );
 }
+
+
+
+
+

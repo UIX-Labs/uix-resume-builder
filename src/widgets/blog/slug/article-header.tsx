@@ -20,7 +20,7 @@ export default function ArticleHeader({
   tags,
 }: ArticleHeaderProps) {
   return (
-    <div className=" mb-10 bg-[url('/images/blog/hero-section/Dot-bg.png')] w-full rounded-2xl border-4 border-white relative overflow-hidden group p-8 flex justify-between">
+    <div className=" mb-10 bg-[url('/images/blog/hero-section/Dot-bg.png')] w-full rounded-2xl border-4 border-white relative overflow-hidden group p-8 flex justify-between max-w-[1395px] mx-auto">
       {/* <div className="mb-4 flex flex-wrap gap-2">
         {tags.map((tag) => (
           <span

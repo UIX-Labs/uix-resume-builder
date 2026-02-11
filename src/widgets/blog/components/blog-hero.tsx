@@ -8,6 +8,7 @@ interface BlogHeroProps {
   highlightColor?: string;
   description: string;
   image: string;
+  
 }
 
 export default function BlogHero({ title, highlightWord, highlightColor, description, image }: BlogHeroProps) {

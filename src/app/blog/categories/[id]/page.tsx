@@ -18,12 +18,16 @@ export default function CategoryPage({ params }: PageProps) {
   return (
     <div>
       <BlogHero
-        title="The Pika"
-        highlightWord="Journal"
-        highlightColor="#2563EB"
-        description="Blogs to power up your resume, job search, and career growth."
-        image="/images/blog/hero-section/hero-section.png"
+        title={category.heroTitle}
+        highlightWord={category.heroHighlight}
+        description={category.heroDescription}
+        image={category.heroImage}
+        highlightColor={category.color}
+       
       />
+
+     
+      
       <div className="flex items-center justify-between mt-12 mb-6 max-w-[1395px] mx-auto">
         {/* LEFT — BLOG COUNT */}
         <h1 className="text-[36px] text-[#17171A] font-semibold">Collection of 61+ blogs</h1>

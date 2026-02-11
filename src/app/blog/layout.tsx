@@ -15,7 +15,7 @@ export default function BlogLayout({ children }: { children: React.ReactNode }) 
       <Header />
 
       {/* Blog Content */}
-      <main>{children}</main>
+      <main className="max-w-[1395px] mx-auto">{children}</main>
 
       {/* Footer */}
       <FooterSection />

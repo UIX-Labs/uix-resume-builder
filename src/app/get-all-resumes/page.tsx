@@ -1,11 +1,11 @@
 'use client';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useUseTemplate } from '@shared/hooks/use-use-template';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useState } from 'react';

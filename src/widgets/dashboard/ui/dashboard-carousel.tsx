@@ -1,7 +1,7 @@
 'use client';
 
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { useUseTemplate } from '@shared/hooks/use-use-template';
+import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
@@ -33,8 +33,6 @@ export default function DashboardCarousel() {
     onSelect(emblaApi);
     emblaApi.on('select', () => onSelect(emblaApi));
   }, [emblaApi, onSelect]);
-
-
 
   return (
     <>

@@ -5,9 +5,9 @@ import { Button } from '@shared/ui/components/button';
 
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useUseTemplate } from '@shared/hooks/use-use-template';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaOptionsType } from 'embla-carousel';

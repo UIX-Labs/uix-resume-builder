@@ -1,7 +1,7 @@
 import ArticleHeader from '@/widgets/blog/slug/article-header';
 
+import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
-import { TableOfContents } from '@shared/ui/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';

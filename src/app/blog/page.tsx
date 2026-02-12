@@ -43,10 +43,15 @@ export default function BlogPage() {
   const posts = getAllPosts();
   const tags = getAllTags();
 
+
+  const primaryPost = posts[0];
+  const secondaryPosts = posts.slice(1, 3);
+  const remainingPosts = posts.slice(3);
+
   return (
     <>
       <main className="min-h-screen">
-        <div className="w-full">
+        <div className="w-full p-2">
           <BlogHero
             image="/images/blog/hero-section/hero-section.png"
             description="Blogs to power up your resume, job search, and career growth."
@@ -57,7 +62,7 @@ export default function BlogPage() {
           </BlogHero>
 
           <div className="mt-[35px] w-full px-2">
-            <FeaturedSection />
+            <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
           </div>
 
           <div className="mt-[35px] w-full px-2">
@@ -65,7 +70,7 @@ export default function BlogPage() {
           </div>
 
           <div className="mt-[35px] w-full">
-            <BlogGrid />
+            <BlogGrid/>
           </div>
 
           {/* <div className="mt-10">

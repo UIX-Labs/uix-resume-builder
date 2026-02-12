@@ -494,22 +494,33 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+
+
+{/* mobile view*/}
+      <div className="mb-4 flex flex-row justify-between">
+        <h3 className="text-sm font-semibold text-gray-900">
+            In this Article
+        </h3>
+
+        <p className="block lg:hidden text-xs text-gray-500">
+            Keep It Clear and Easy to Scan
+        </p>
+        </div>  
+
       {/* Progress Bar */}
       <div className="mb-4 h-[3px] w-full rounded-full bg-gray-200 overflow-hidden">
         <div className="h-full bg-[#22C55E] transition-all duration-300" style={{ width: `${readProgress * 100}%` }} />
       </div>
 
-      {/* Title */}
-      <h3 className="text-sm font-semibold text-gray-900 mb-4">In this Article</h3>
-
       {/* Links */}
-      <ul className="space-y-2">
+      <ul className="hidden lg:block space-y-2">
+         {/* Title */}
+      {/* <h3 className="text-sm font-semibold text-gray-900 mb-4">In this Article</h3> */}
         {headings.map((heading) => (
           <li key={heading.id}>
-            <a
-              href={`#${heading.id}`}
+            <button
+             type="button"
               onClick={(e) => {
-                e.preventDefault();
                 const el = document.getElementById(heading.id);
                 if (el) {
                   el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -523,10 +534,11 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
               )}
             >
               {heading.text}
-            </a>
+            </button>
           </li>
         ))}
       </ul>
+     
     </nav>
   );
 }

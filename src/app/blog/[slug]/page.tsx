@@ -3,6 +3,7 @@ import ArticleHeader from '@/widgets/blog/slug/article-header';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { TableOfContents } from '@shared/ui/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
+import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
 import { ArrowLeft } from 'lucide-react';
@@ -11,11 +12,10 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
-
-import { BlogGrid } from '@widgets/blog';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
@@ -201,19 +201,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Content + Sidebar */}
 
-        <div className="flex gap-10 lg:gap-14">
+        <div className="flex gap-10 lg:gap-14 flex-col lg:flex-row">
           {/* Sidebar - TOC */}
-          {/* LEFT - TOC + CTA */}
           {headings.length > 0 && (
-            <aside className="hidden lg:block w-64 shrink-0 space-y-6">
-              {/* TOC */}
-              <div className="sticky top-20 space-y-6">
+            <aside className="w-64 lg:block">
+              <div className="block sticky top-20">
                 <TableOfContents headings={headings} />
-                <JDCTACard />
+                <div className="hidden md:block mt-10"><JDCTACard /></div>         
               </div>
             </aside>
-          )}
-
+    )}
           {/* Main content */}
           <div className="min-w-0 flex-1">
             <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
@@ -268,7 +265,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </span>
 
           <div className="flex mt-10 justify-center p-2">
-            <BlogGrid />
+            <BlogGrid/>
           </div>
         </div>
       </article>

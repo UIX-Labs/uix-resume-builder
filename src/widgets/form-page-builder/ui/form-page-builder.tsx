@@ -898,7 +898,7 @@ export function FormPageBuilder() {
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-auto px-5 py-5 scroll-hidden flex-1">
+        <div className="overflow-auto px-5 py-5 scroll-hidden flex-1 relative">
           <TemplateForm
             formSchema={formSchemaData ?? {}}
             currentStep={currentStep}

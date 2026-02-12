@@ -10226,6 +10226,78 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
       </div>
       <div
         class=""
+        data-canbreak="true"
+        data-item="list-section"
+        data-section="projects"
+      >
+        <div
+          data-canbreak="true"
+          data-item="content"
+          id="teacher-content"
+        >
+          <div
+            class="flex flex-col gap-1 mt-3"
+            data-canbreak="true"
+            data-has-breakable-content="true"
+            style="scroll-margin-top: 20px;"
+          >
+            <div
+              class="flex flex-col text-xs font-bold text-black mt-1"
+            >
+              <p
+                data-item="heading"
+              >
+                Projects
+              </p>
+              <div
+                class="bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5"
+                data-item="divider"
+              />
+            </div>
+            <div
+              data-canbreak="true"
+              data-has-breakable-content="true"
+            >
+              <div
+                class="flex flex-row flex-wrap justify-start gap-2 text-xs text-black"
+              >
+                <span
+                  class=""
+                >
+                  <span>
+                    <span
+                      class="font-semibold"
+                    >
+                      AI Resume Builder
+                    </span>
+                  </span>
+                  <span>
+                     | 
+                  </span>
+                  <span>
+                    <span
+                      class="text-xs text-neutral-600 italic"
+                    >
+                      Mar 2024 - Nov 2024
+                    </span>
+                  </span>
+                </span>
+              </div>
+              <div>
+                <div
+                  class="text-xs text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap"
+                  data-canbreak="true"
+                  data-has-breakable-content="true"
+                >
+                  Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class=""
         data-item="list-section"
         data-section="education"
         style="scroll-margin-top: 20px;"
@@ -10663,6 +10735,82 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
                         class="text-xs text-neutral-600 italic"
                       >
                         Jun 2021 - Nov 2024
+                      </span>
+                    </span>
+                  </span>
+                </div>
+                <div>
+                  <div
+                    class="text-xs text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap"
+                    data-canbreak="true"
+                    data-has-breakable-content="true"
+                  >
+                    Led development of microservices architecture serving 1M+ users Implemented CI/CD pipeline reducing deployment time by 60% Mentored team of 5 junior developers
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        style="display: block;"
+      >
+        <div
+          class=""
+          data-canbreak="true"
+          data-item="list-section"
+          data-section="projects"
+        >
+          <div
+            data-canbreak="true"
+            data-item="content"
+            id="teacher-content"
+          >
+            <div
+              class="flex flex-col gap-1 mt-3"
+              data-canbreak="true"
+              data-has-breakable-content="true"
+              style="scroll-margin-top: 20px;"
+            >
+              <div
+                class="flex flex-col text-xs font-bold text-black mt-1"
+              >
+                <p
+                  data-item="heading"
+                >
+                  Projects
+                </p>
+                <div
+                  class="bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5"
+                  data-item="divider"
+                />
+              </div>
+              <div
+                data-canbreak="true"
+                data-has-breakable-content="true"
+              >
+                <div
+                  class="flex flex-row flex-wrap justify-start gap-2 text-xs text-black"
+                >
+                  <span
+                    class=""
+                  >
+                    <span>
+                      <span
+                        class="font-semibold"
+                      >
+                        AI Resume Builder
+                      </span>
+                    </span>
+                    <span>
+                       | 
+                    </span>
+                    <span>
+                      <span
+                        class="text-xs text-neutral-600 italic"
+                      >
+                        Mar 2024 - Nov 2024
                       </span>
                     </span>
                   </span>
@@ -16883,7 +17031,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
       data-column="left"
     >
       <div
-        class="pt-6 pr-8 flex flex-row gap-6 item-start mb-2"
+        class="pr-8 flex flex-row gap-6 items-start mb-2"
         data-section="header"
         style="scroll-margin-top: 20px;"
       >
@@ -17437,7 +17585,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         style="display: block;"
       >
         <div
-          class="pt-6 pr-8 flex flex-row gap-6 item-start mb-2"
+          class="pr-8 flex flex-row gap-6 items-start mb-2"
           data-section="header"
           style="scroll-margin-top: 20px;"
         >

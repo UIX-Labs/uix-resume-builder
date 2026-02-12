@@ -1,4 +1,4 @@
-import { AITailorSection } from './ai-tailored-section';
+import { AiFeaturesSection } from './ai-features-section';
 import FooterSection from './footer-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
@@ -24,6 +24,8 @@ export function LandingPage() {
       >
         <HeroSection />
       </div>
+
+      <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />

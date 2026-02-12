@@ -39,9 +39,8 @@ export default function BlogCard({ image, category, title, author, date, slug = 
 
             <Clock className="w-4 h-4 text-gray-500" />
 
-  <span>&nbsp;{date}</span>
-</div>
-
+            <span>&nbsp;{date}</span>
+          </div>
         </div>
       </div>
     </Link>

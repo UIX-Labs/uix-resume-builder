@@ -1,6 +1,6 @@
-import React from 'react';
-import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 import { CodeBlock } from './code-block';
 
 /* ------------------------------------------------------------------ */
@@ -99,7 +99,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-0.5 font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors hover:text-blue-800 hover:decoration-blue-500"
+          className="inline-flex items-center gap-0.5 font-medium text-black underline decoration-black underline-offset-2 transition-colors hover:text-black hover:decoration-black"
           {...props}
         >
           {children}
@@ -110,7 +110,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
     return (
       <Link
         href={href || '#'}
-        className="font-medium text-blue-600 underline decoration-blue-300 underline-offset-2 transition-colors hover:text-blue-800 hover:decoration-blue-500"
+        className="font-medium text-black underline decoration-black underline-offset-2 transition-colors hover:text-black hover:decoration-black"
         {...props}
       >
         {children}

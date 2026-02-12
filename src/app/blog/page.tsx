@@ -56,7 +56,6 @@ export default function BlogPage() {
             </span>
           </BlogHero>
 
-
           <div className="mt-[35px] w-full px-2">
             <FeaturedSection />
           </div>
@@ -71,7 +70,7 @@ export default function BlogPage() {
 
           {/* <div className="mt-10">
             <BlogList posts={posts} tags={tags} />
-          </div> */}
+          </div>  */}
         </div>
       </main>
     </>

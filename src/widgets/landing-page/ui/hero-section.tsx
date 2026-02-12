@@ -52,65 +52,6 @@ const HeroSection = () => {
     router.push('/dashboard');
   };
 
-  const overlays = [
-    {
-      id: 'custom-templates',
-      content: (
-        <div className="overlay-item overflow-hidden z-10 rounded-3xl glass-card1">
-          <img src="images/templates.svg" alt="Template 1" />
-        </div>
-      ),
-      desktopPosition: { top: '80%', left: '-7%' },
-      mobilePosition: { top: '110%', left: '-50%' },
-      width: 420,
-      mobileWidth: 420,
-      rotate: 12,
-      initial: { rotate: 12, x: -400, y: 200, opacity: 0 },
-    },
-
-    {
-      id: 'resume-score',
-      content: (
-        <div className="overlay-item z-10 opacity-100">
-          <img src="images/resume-score-img.svg" alt="Hired at Meta" className="w-full h-auto" />
-        </div>
-      ),
-      desktopPosition: { top: '-30%', left: '-6%' },
-      mobilePosition: { top: '-22%', left: '-40%' },
-      mobileWidth: 320,
-      initial: { x: -300, y: -300, opacity: 0 },
-    },
-
-    {
-      id: 'colors',
-      content: (
-        <div className="glass-card overlay-item bg-white/20 rounded-2xl">
-          <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
-        </div>
-      ),
-      desktopPosition: { top: '-22%', right: '-8%' },
-      mobilePosition: { top: '-18%', right: '-28%' },
-      width: 250,
-      mobileWidth: 250,
-      initial: { rotate: 25, x: 400, y: -200, opacity: 0 },
-    },
-
-    {
-      id: 'hired',
-      content: (
-        <div className="overlay-item">
-          <img src="images/image-hired.svg" alt="Hired at Meta" className="w-full h-auto" />
-        </div>
-      ),
-      desktopPosition: { top: '80%', right: '-7%' },
-      mobilePosition: { top: '90%', right: '-50%' },
-      width: 300,
-      mobileWidth: 350,
-      rotate: -15,
-      initial: { rotate: -15, x: 400, y: 300, opacity: 0 },
-    },
-  ];
-
   // Unified LinkedIn Autofill handler (MOBILE -> MobileView | DESKTOP -> Modal/Login)
   const handleLinkedInUnified = () => {
     if (isMobile) {
@@ -142,125 +83,103 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative w-full h-full px-4 md:px-0">
-      {/* Background blobs (left side only) */}
-      <div className="absolute inset-y-0 left-0 w-[35%] pointer-events-none overflow-hidden -z-10"></div>
-
+    <section className="relative w-full  h-auto min-h-screen px-4 md:px-0">
+      {/* Background blobs */}
+      <div className="absolute top-0 left-0 w-full h-full md:inset-y-0 md:w-[45%] overflow-hidden pointer-events-none -z-10"></div>
       <HeroConfetti />
+
       <div className="max-w-7xl mx-auto relative">
-        <section className="relative w-full h-full px-4 md:px-0">
-          <div className="max-w-7xl mx-auto relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              {/* LEFT COLUMN */}
-              <div className="-mt-16 md:-mt-25 ">
-                <div className="flex items-center gap-3 mt-16 md:mt-0">
-                  {/* Avatars */}
-                  <div className="flex flex-col md:flex-row items-start gap-2 md:gap-4 mt-2 md:mt-16">
-                    <div className="flex -space-x-2">
-                      {userAvatars.map((avatar) => (
-                        <Avatar key={avatar.key} className="w-9 h-9 md:w-12 md:h-12 border-2 border-white">
-                          <AvatarImage src="/placeholder.svg" />
-                          <AvatarFallback className="text-black">{avatar.initials}</AvatarFallback>
-                        </Avatar>
-                      ))}
-                    </div>
-
-                    <span className="font-semibold flex items-center text-base md:text-lg text-gray-900 mt-2">
-                      Trusted by{' '}
-                      <span className="inline-block tabular-nums min-w-[80px] text-center">
-                        <CountUp from={10} to={currentStats?.totalUsers ?? 0} separator="," duration={1} />+
-                      </span>{' '}
-                      professionals
-                    </span>
-                  </div>
-                </div>
-                {/* Heading */}
-                <div className="mt-1">
-                  <h1 className="text-2xl md:text-[80px] leading-[0.5] tracking-[-0.03em]">
-                    <span className="inline-flex items-baseline whitespace-nowrap">
-                      <span className="font-semibold text-2xl md:text-[80px]">Build a</span>{' '}
-                      <span className="ml-2 text-blue-800 font-[800] text-5xl md:text-[80px]"> Professional</span>
-                    </span>
-                    <span className="font-geist text-green-600 font-[800]">Resume</span>{' '}
-                    <span className="align-middle text-2xl md:text-[37px] font-semibold">in under 3 minutes</span>
-                  </h1>
+        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] mt-6 md:mt-0 gap-12 items-start md:items-center">
+          {/* LEFT COLUMN */}
+          <div className="w-full flex flex-col items-center md:items-start md:-mt-2 md:-translate-y-6">
+            <div className="w-full max-w-[360px] md:max-w-none">
+              {/* Avatars + Trusted */}
+              <div className="flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-4 md:mt-16 text-center md:text-left">
+                <div className="flex -space-x-2 justify-center md:justify-start">
+                  {userAvatars.map((avatar) => (
+                    <Avatar key={avatar.key} className=" md:w-12 md:h-12 border-2 border-white">
+                      <AvatarImage src="/placeholder.svg" />
+                      <AvatarFallback className="text-black">{avatar.initials}</AvatarFallback>
+                    </Avatar>
+                  ))}
                 </div>
 
-                {/* Buttons */}
-                <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                  <Button
-                    onClick={handleLinkedInUnified}
-                    className="w-[303px] h-[68px] 
-             px-[40px] 
-             flex items-center justify-center gap-[10px]
-             bg-blue-900 text-white 
-             text-[24px] font-semibold 
-             rounded-[12px]
-             border border-blue-800
-             
-             hover:bg-blue-800
-             transition-all duration-300"
-                  >
-                    Auto-fill via LinkedIn
-                  </Button>
-
-                  <Button
-                    onClick={handleUploadClick}
-                    className="w-[303px] h-[68px] 
-             px-[50px] 
-             py-[20px]
-             text-[24px]
-             flex items-center justify-center gap-[10px]
-             bg-white text-black 
-             font-semibold 
-             rounded-[12px]
-            hover:text-blue-800
-             hover:bg-white
-             transition-all"
-                  >
-                    Upload existing resume
-                  </Button>
-                </div>
+                <span className="font-semibold text-base md:text-lg text-gray-900">
+                  Trusted by{' '}
+                  <span className="inline-block tabular-nums min-w-[80px] text-center">
+                    <CountUp from={10} to={currentStats?.totalUsers ?? 0} separator="," duration={1} />+
+                  </span>{' '}
+                  professionals
+                </span>
               </div>
 
-              {/* RIGHT COLUMN */}
-              <div className="hidden md:flex justify-end relative">
-                <div className="max-w-[480px] w-full">
-                  <HeroImgSection />
-                </div>
+              {/* Heading */}
+              <div className="mt-4">
+                {/* Desktop */}
+                <h1 className="hidden md:block text-left tracking-[-0.03em] leading-tight">
+                  {/* Line 1 */}
+                  <div className="flex items-baseline gap-3">
+                    <span className="font-geist font-semibold text-7xl">Build a</span>
+
+                    <span className="text-blue-800 font-[800] text-7xl">Professional</span>
+                  </div>
+
+                  {/* Line 2 */}
+                  <div className="flex items-baseline gap-4">
+                    <span className="text-green-600 font-[800] text-7xl">Resume</span>
+
+                    <span className="text-4xl font-semibold">in under 3 minutes</span>
+                  </div>
+                </h1>
+
+                {/* Mobile */}
+                <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight">
+                  {/* Line 1 */}
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="font-geist font-semibold text-2xl">Build a</span>
+
+                    <span className="text-blue-800 font-[800] text-5xl">Professional</span>
+                  </div>
+
+                  {/* Line 2 */}
+                  <div className="flex flex-col items-center gap-1">
+                    <span className="text-green-600 font-[800] text-5xl">Resume</span>
+
+                    <span className="text-2xl font-semibold">in under 3 minutes</span>
+                  </div>
+                </h1>
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center md:items-start">
+                <Button
+                  onClick={handleLinkedInUnified}
+                  className="w-[280px] md:w-[303px] h-[56px] md:h-[68px] text-[18px] md:text-[24px] px-5 flex items-center justify-center bg-blue-900 text-white font-semibold rounded-[12px] border border-blue-800 hover:bg-blue-800 transition-all duration-300"
+                >
+                  Auto-fill via LinkedIn
+                </Button>
+
+                <Button
+                  onClick={handleUploadClick}
+                  className="w-[260px] md:w-[303px] h-[50px] md:h-[68px] text-[16px] md:text-[24px] px-4 flex items-center justify-center bg-white text-black font-semibold rounded-[12px] hover:text-blue-800 transition-all hover:bg-white"
+                >
+                  Upload existing resume
+                </Button>
               </div>
             </div>
           </div>
-        </section>
 
-        {/* Mobile Overlays */}
-        <div className="block md:hidden">
-          {overlays.map((overlay, _i) => (
-            <motion.div
-              key={`${overlay.id}-mobile`}
-              className="overlay-item absolute scale-[0.4] md:scale-100"
-              style={{
-                top: overlay.mobilePosition.top,
-                left: overlay.mobilePosition.left,
-                right: overlay.mobilePosition.right,
-                width: overlay.mobileWidth ? `${overlay.mobileWidth}px` : overlay.width ? `${overlay.width}px` : 'auto',
-              }}
-              initial={overlay.initial}
-              animate={{ x: 0, y: 0, opacity: 1 }}
-              transition={{
-                duration: 1,
-                ease: 'easeOut',
-              }}
-            >
-              {overlay.content}
-            </motion.div>
-          ))}
+          {/* RIGHT COLUMN */}
+          <div className="flex justify-center md:justify-end mt-4 md:mt-10 md:-translate-x-6">
+            <div className="max-w-[480px] w-full">
+              <HeroImgSection />
+            </div>
+          </div>
         </div>
       </div>
 
       <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      {/* Mobile Text View */}
       {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );

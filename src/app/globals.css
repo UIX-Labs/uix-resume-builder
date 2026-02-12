@@ -375,6 +375,30 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  --animate-floatBlob: floatBlob 1s linear infinite;
+
+  @keyframes floatBlob {
+    0% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+
+    25% {
+      transform: translate(calc(var(--float-x) * 0.6), calc(var(--float-y) * 0.6)) rotate(6deg) scale(1.04);
+    }
+
+    50% {
+      transform: translate(var(--float-x), var(--float-y)) rotate(12deg) scale(1.08);
+    }
+
+    75% {
+      transform: translate(calc(var(--float-x) * 0.4), calc(var(--float-y) * 0.4)) rotate(4deg) scale(1.03);
+    }
+
+    100% {
+      transform: translate(0px, 0px) rotate(0deg) scale(1);
+    }
+  }
 }
 
 .dark {
@@ -626,4 +650,8 @@
 .page-a4 {
   display: block;
   margin: 0 auto;
+}
+
+.float-blob-animation {
+  animation: floatBlob linear infinite;
 }

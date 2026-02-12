@@ -494,18 +494,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-
-
-{/* mobile view*/}
+      {/* mobile view*/}
       <div className="mb-4 flex flex-row justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">
-            In this Article
-        </h3>
+        <h3 className="text-sm font-semibold text-gray-900">In this Article</h3>
 
-        <p className="block lg:hidden text-xs text-gray-500">
-            Keep It Clear and Easy to Scan
-        </p>
-        </div>  
+        <p className="block lg:hidden text-xs text-gray-500">Keep It Clear and Easy to Scan</p>
+      </div>
 
       {/* Progress Bar */}
       <div className="mb-4 h-[3px] w-full rounded-full bg-gray-200 overflow-hidden">
@@ -514,12 +508,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
       {/* Links */}
       <ul className="hidden lg:block space-y-2">
-         {/* Title */}
-      {/* <h3 className="text-sm font-semibold text-gray-900 mb-4">In this Article</h3> */}
+        {/* Title */}
+        {/* <h3 className="text-sm font-semibold text-gray-900 mb-4">In this Article</h3> */}
         {headings.map((heading) => (
           <li key={heading.id}>
             <button
-             type="button"
+              type="button"
               onClick={(e) => {
                 const el = document.getElementById(heading.id);
                 if (el) {
@@ -538,7 +532,6 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           </li>
         ))}
       </ul>
-     
     </nav>
   );
 }

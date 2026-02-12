@@ -16,7 +16,6 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 /* ------------------------------------------------------------------ */
@@ -100,9 +99,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   // Find related posts (same tags, excluding current)
   const allPosts = getAllPosts();
-  const relatedPosts = allPosts
-    .filter((p) => p.slug !== slug && p.frontmatter.tags.some((t) => frontmatter.tags.includes(t)))
-    .slice(0, 3);
+  //const relatedPosts = allPosts
+  // .filter((p) => p.slug !== slug && p.frontmatter.tags.some((t) => frontmatter.tags.includes(t)))
+  // .slice(0, 3);
 
   // Article structured data
   const articleJsonLd = {
@@ -207,10 +206,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <aside className="w-64 lg:block">
               <div className="block sticky top-20">
                 <TableOfContents headings={headings} />
-                <div className="hidden md:block mt-10"><JDCTACard /></div>         
+                <div className="hidden md:block mt-10">
+                  <JDCTACard />
+                </div>
               </div>
             </aside>
-    )}
+          )}
           {/* Main content */}
           <div className="min-w-0 flex-1">
             <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
@@ -265,7 +266,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </span>
 
           <div className="flex mt-10 justify-center p-2">
-            <BlogGrid/>
+            <BlogGrid />
           </div>
         </div>
       </article>

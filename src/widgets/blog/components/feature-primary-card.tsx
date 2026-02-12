@@ -11,7 +11,6 @@ export default function FeaturedPrimaryCard({ post }: FeaturedPrimaryCardProps) 
   return (
     <Link href={`/blog/${post.slug}`}>
       <div className="h-full bg-[url('/images/blog/hero-section/Dot-bg.png')] rounded-2xl relative overflow-hidden cursor-pointer">
-
         {/* Right Image */}
         <div className="absolute top-0 right-0 w-[50%] md:w-[60%] h-full">
           <img
@@ -28,9 +27,7 @@ export default function FeaturedPrimaryCard({ post }: FeaturedPrimaryCardProps) 
               {post.frontmatter.tags?.[0]}
             </span>
 
-            <h1 className="text-2xl font-semibold mt-4 max-w-[400px]">
-              {post.frontmatter.title}
-            </h1>
+            <h1 className="text-2xl font-semibold mt-4 max-w-[400px]">{post.frontmatter.title}</h1>
 
             <div className="flex items-center gap-3 mt-4">
               <img
@@ -40,14 +37,10 @@ export default function FeaturedPrimaryCard({ post }: FeaturedPrimaryCardProps) 
               />
 
               <div className="flex flex-row gap-2 items-center">
-                <span className="text-sm font-medium text-gray-700">
-                  {post.frontmatter.author}
-                </span>
+                <span className="text-sm font-medium text-gray-700">{post.frontmatter.author}</span>
 
                 <Clock className="w-4 h-4 text-gray-500" />
-                <span className="text-md text-gray-500 font-medium">
-                  {post.readingTime}
-                </span>
+                <span className="text-md text-gray-500 font-medium">{post.readingTime}</span>
               </div>
             </div>
           </div>

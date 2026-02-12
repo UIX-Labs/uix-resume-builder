@@ -43,10 +43,9 @@ export default function BlogPage() {
   const posts = getAllPosts();
   const tags = getAllTags();
 
-
   const primaryPost = posts[0];
   const secondaryPosts = posts.slice(1, 3);
-  const remainingPosts = posts.slice(3);
+  //const remainingPosts = posts.slice(3);
 
   return (
     <>
@@ -70,7 +69,7 @@ export default function BlogPage() {
           </div>
 
           <div className="mt-[35px] w-full">
-            <BlogGrid/>
+            <BlogGrid />
           </div>
 
           {/* <div className="mt-10">

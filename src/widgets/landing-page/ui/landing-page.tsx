@@ -1,6 +1,7 @@
-import HeroSection from './hero-section';
 import Image from 'next/image';
+import { AiFeaturesSection } from './ai-features-section';
 import Header from './header-section';
+import HeroSection from './hero-section';
 
 function LandingPage() {
   return (
@@ -18,6 +19,7 @@ function LandingPage() {
         {' '}
         <HeroSection />
       </div>
+      <AiFeaturesSection />
     </div>
   );
 }

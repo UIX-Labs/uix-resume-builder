@@ -17,6 +17,8 @@ import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
@@ -54,6 +56,10 @@ export default function GetAllResumesPage() {
     setActiveAction(null);
     setOptionsLocked(false);
   };
+
+  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
 
   const handleTemplateClick = (template: Template) => {
     setPreviewTemplate(template);
@@ -104,10 +110,6 @@ export default function GetAllResumesPage() {
 
   const handleCreationModalClose = () => {
     setIsCreationModalOpen(false);
-  };
-
-  const handleJDModalOpen = () => {
-    console.log('todo - handle JD modal');
   };
 
   const handleLinkedInModalOpen = () => {
@@ -188,6 +190,12 @@ export default function GetAllResumesPage() {
         template={creationTemplate}
       />
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={handleLinkedInModalClose} />
+
+      <JDUploadMobileModal
+        isOpen={isJDModalOpen}
+        onClose={handleJDModalClose}
+        onSubmittingChange={handleJDSubmittingChange}
+      />
     </SidebarProvider>
   );
 }

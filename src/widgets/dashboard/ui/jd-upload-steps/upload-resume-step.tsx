@@ -19,8 +19,6 @@ export function UploadResumeStep({
   const [isYourResumesModalOpen, setIsYourResumesModalOpen] = useState(false);
 
   const handleResumeSelect = (resumeId: string) => {
-    console.log('Selected resume ID:', resumeId);
-
     setIsYourResumesModalOpen(false);
 
     if (onResumeSelected) {

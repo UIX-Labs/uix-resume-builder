@@ -10,6 +10,10 @@ import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { Check, Eye } from 'lucide-react';
 import { useState } from 'react';
 
+function sortResumesByUpdatedDate(resumes: Resume[] | undefined): Resume[] | undefined {
+  return resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+}
+
 interface YourResumesModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,7 +26,7 @@ export function YourResumesModal({ isOpen, onClose, onSelect }: YourResumesModal
   const [previewResumeId, setPreviewResumeId] = useState<string | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  const sortedResumes = sortResumesByUpdatedDate(resumes);
 
   const { data: previewResumeData } = useResumeData(previewResumeId || '');
   const { data: fetchedTemplate } = useGetTemplateById(previewResumeData?.templateId || null);

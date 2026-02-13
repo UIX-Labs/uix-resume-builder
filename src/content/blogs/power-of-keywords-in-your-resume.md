@@ -5,9 +5,8 @@ date: "2026-01-03"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "Keywords"
+  - "job"
   - "ATS"
-  - "Resume Tips"
   - "Job Search"
 published: true
 coverImage: ""

@@ -5,7 +5,7 @@ date: "2026-02-05"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "Job Search"
+  - "resume"
   - "Resume Tips"
   - "Professional Development"
 published: true

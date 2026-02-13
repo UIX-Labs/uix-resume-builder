@@ -1,6 +1,8 @@
+import { categories } from '@/data/categories';
 import { BlogPost } from '@/shared/lib/blog';
 import FeaturedPrimaryCard from './feature-primary-card';
 import FeaturedSecondaryCard from './feature-secondary';
+
 
 interface FeaturedSectionProps {
   primaryPost: BlogPost;
@@ -10,29 +12,42 @@ interface FeaturedSectionProps {
 export default function FeaturedSection({ primaryPost, secondaryPosts }: FeaturedSectionProps) {
   const featureImages = ['/images/blog/features/image.png', '/images/blog/features/feature-img.png'];
 
-  const badgeColors = ['bg-pink-500', 'bg-purple-700'];
+
+
+  function getBadgeColorFromPost(post: BlogPost) {
+  const tag = post.frontmatter.tags[0]?.toLowerCase();
+  const category = categories.find((cat) => cat.id === tag);
+  return category?.color || "#999";
+}
+
+
+
+
+  const primaryBadgeColor = getBadgeColorFromPost(primaryPost);
+
+
 
   return (
     <section className="w-full mx-auto mt-10">
       <div className="grid lg:grid-cols-2 gap-8">
         {/* LEFT - BIG CARD */}
         <div className="h-[400px] md:h-full border-white border-4 rounded-xl">
-          <FeaturedPrimaryCard post={primaryPost} />
+          <FeaturedPrimaryCard post={primaryPost} badgeColor={primaryBadgeColor} />
         </div>
 
         {/* RIGHT - TWO SMALL CARDS */}
         <div className="flex flex-col gap-8">
-          {secondaryPosts.map((post, index) => {
-            console.log('INDEX:', index);
-            return (
-              <FeaturedSecondaryCard
+              {secondaryPosts.map((post, index) => {
+              const badgeColor = getBadgeColorFromPost(post);
+
+                return (
+                <FeaturedSecondaryCard
                 key={post.slug}
                 post={post}
-                featureImage={featureImages[index] || featureImages[0]}
-                badgeColor={badgeColors[index]}
-              />
-            );
-          })}
+                featureImage={featureImages[index]}
+                badgeColor={badgeColor}/>);})}
+
+
         </div>
       </div>
     </section>

@@ -57,12 +57,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   if (headings.length === 0) return null;
 
   return (
-    <nav className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+    <nav className="rounded-xl border-2 border-white bg-[url('/images/blog/hero-section/Dot-bg.png')] p-5 shadow-sm">
       {/* mobile view*/}
       <div className="mb-4 flex flex-row justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">In this Article</h3>
+        <h3 className="text-lg font-semibold text-gray-900">In this Article</h3>
 
-        <p className="block lg:hidden text-xs text-gray-500">Keep It Clear and Easy to Scan</p>
+        <p className="block lg:hidden text-lg text-gray-500">Keep It Clear and Easy to Scan</p>
       </div>
 
       {/* Progress Bar */}
@@ -85,7 +85,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                 }
               }}
               className={cn(
-                'block text-sm transition-colors',
+                'block text-lg transition-colors text-left mt-4',
                 heading.level === 3 && 'pl-3',
                 heading.level === 4 && 'pl-6',
                 activeId === heading.id ? 'text-black font-medium' : 'text-gray-400 hover:text-gray-700',

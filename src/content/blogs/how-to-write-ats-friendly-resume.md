@@ -5,9 +5,9 @@ date: "2026-02-01"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "Resume Tips"
+  - "interview"
   - "ATS"
-  - "Job Search"
+  - "job search"
 published: true
 coverImage: ""
 ---

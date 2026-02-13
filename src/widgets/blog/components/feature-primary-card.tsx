@@ -5,9 +5,10 @@ import Link from 'next/link';
 
 interface FeaturedPrimaryCardProps {
   post: BlogPost;
+  badgeColor: string
 }
 
-export default function FeaturedPrimaryCard({ post }: FeaturedPrimaryCardProps) {
+export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimaryCardProps) {
   return (
     <Link href={`/blog/${post.slug}`}>
       <div className="h-full bg-[url('/images/blog/hero-section/Dot-bg.png')] rounded-2xl relative overflow-hidden cursor-pointer">
@@ -23,7 +24,10 @@ export default function FeaturedPrimaryCard({ post }: FeaturedPrimaryCardProps) 
         {/* Content */}
         <div className="absolute inset-y-0 left-0 flex flex-col justify-end ml-7 mb-4">
           <div>
-            <span className="text-xs font-semibold text-white uppercase bg-orange-500 px-2 py-1 rounded-md">
+            <span
+              className="text-sm font-semibold text-white uppercase px-4 py-1 rounded-md"
+              style={{ backgroundColor: badgeColor }}
+            >
               {post.frontmatter.tags?.[0]}
             </span>
 

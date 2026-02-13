@@ -5,9 +5,9 @@ date: "2026-01-10"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "Career Change"
-  - "Resume Tips"
-  - "Career Advice"
+  - "job"
+  - "resume-tips"
+  - "career-advice"
 published: true
 coverImage: ""
 ---

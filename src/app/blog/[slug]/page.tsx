@@ -139,7 +139,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 max-w-[1395px]">
+      <article className="mx-auto px-4 py-10 sm:px-6 max-w-[1395px]">
         {/* Back link */}
         <Link
           href="/blog"
@@ -203,7 +203,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="flex gap-10 lg:gap-14 flex-col lg:flex-row">
           {/* Sidebar - TOC */}
           {headings.length > 0 && (
-            <aside className="w-64 lg:block">
+            <aside className="w-md lg:block">
               <div className="block sticky top-20">
                 <TableOfContents headings={headings} />
                 <div className="hidden md:block mt-10">
@@ -266,7 +266,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </span>
 
           <div className="flex mt-10 justify-center p-2">
-            <BlogGrid />
+            <BlogGrid posts={allPosts}/>
           </div>
         </div>
       </article>

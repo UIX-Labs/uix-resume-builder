@@ -23,16 +23,18 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
         </div>
 
         {/* RIGHT CONTENT */}
-        <div className="flex-1 flex flex-col justify-center">
+        <div className="flex-1 flex flex-col justify-center gap-3">
           {/* BADGE */}
-          <span
-            className={`inline-block w-fit text-white text-[12px] font-bold px-3 py-1 rounded-md uppercase tracking-wider ${badgeColor}`}
-          >
-            {post.frontmatter.tags[0]}
-          </span>
+          <div>
+            <span
+              className="text-sm font-semibold text-white uppercase px-4 py-1 rounded-md"
+              style={{ backgroundColor: badgeColor }}>
+              {post.frontmatter.tags[0]}
+            </span>
+          </div>
 
           {/* TITLE */}
-          <h3 className="text-base md:text-lg font-bold mt-2 leading-tight text-[#0B0A09]">{post.frontmatter.title}</h3>
+          <h3 className="text-base md:text-xl font-bold mt-2 leading-tight text-[#0B0A09]">{post.frontmatter.title}</h3>
 
           {/* META */}
           <div className="flex items-center gap-2 mt-3 text-[12px] md:text-[13px] text-[#4B5563] font-medium">

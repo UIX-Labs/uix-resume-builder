@@ -60,6 +60,20 @@ export default function BlogPage() {
             </span>
           </BlogHero>
 
+
+
+          <div className="flex items-center justify-between mt-[35px] max-w-[1395px] mx-auto">
+        {/* LEFT — BLOG COUNT */}
+        <h1 className="text-4xl text-[#17171A] font-semibold pl-8">Popular Articles</h1>
+
+        {/* RIGHT — SEARCH INPUT */}
+        <input
+          type="text"
+          placeholder="Search blogs"
+          className="w-[260px] px-2 py-2 text-base border border-gray-300 rounded-md outline-none focus:border-blue-500 mr-8"
+        />
+      </div>
+
           <div className="mt-[35px] w-full px-2">
             <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
           </div>
@@ -69,7 +83,7 @@ export default function BlogPage() {
           </div>
 
           <div className="mt-[35px] w-full">
-            <BlogGrid />
+           <BlogGrid posts={posts} />
           </div>
 
           {/* <div className="mt-10">

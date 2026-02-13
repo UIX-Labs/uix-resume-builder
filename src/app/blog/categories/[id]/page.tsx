@@ -1,15 +1,26 @@
 import { categories } from '@/data/categories';
 import BlogGrid from '@/widgets/blog/blog-Grid';
 import BlogHero from '@/widgets/blog/components/blog-hero';
+import { getAllPosts } from '@shared/lib/blog';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage(props: PageProps) {
+  const params = await props.params;
   const category = categories.find((category) => category.id === params.id);
+
+  const allPosts = getAllPosts();
+
+const filteredPosts = allPosts.filter((post) =>
+  post.frontmatter.tags.includes(params.id)
+);
+
+
+
 
   if (!category) {
     return <p>Category not found</p>;
@@ -36,7 +47,7 @@ export default function CategoryPage({ params }: PageProps) {
         />
       </div>
 
-      <BlogGrid />
+      <BlogGrid posts={filteredPosts} />
     </div>
   );
 }

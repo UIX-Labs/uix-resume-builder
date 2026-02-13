@@ -5,9 +5,9 @@ date: "2026-01-18"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "AI Tools"
-  - "Resume Tips"
-  - "Job Search"
+  - "job"
+  - "ATS"
+  - "job search"
 published: true
 coverImage: ""
 ---

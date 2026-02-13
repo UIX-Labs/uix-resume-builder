@@ -1,6 +1,7 @@
 import { Button } from '@shared/ui/components/button';
 import { CloudUpload } from 'lucide-react';
 import Image from 'next/image';
+import { UploadErrorType } from '../lib/upload-state';
 
 interface SelectStateProps {
   uploadError: string | null;
@@ -9,9 +10,9 @@ interface SelectStateProps {
 
 export function SelectState({ uploadError, onSelectResume }: SelectStateProps) {
   const getErrorMessage = () => {
-    if (uploadError === 'file_size') {
+    if (uploadError === UploadErrorType.FILE_SIZE) {
       return 'Upload failed! Please upload a file under 5 MB.';
-    } else if (uploadError === 'file_format') {
+    } else if (uploadError === UploadErrorType.FILE_FORMAT) {
       return 'Upload failed! Please upload a PDF file.';
     } else if (uploadError) {
       return 'Upload failed! Please try again.';
@@ -28,7 +29,7 @@ export function SelectState({ uploadError, onSelectResume }: SelectStateProps) {
             <p className="text-lg text-[#72847F]">Upload your resume to auto-fill your details instantly</p>
           </div>
           <div className="opacity-20">
-            <Image src="/images/file_upload.svg" alt="" width={48} height={48} />
+            <Image src="/images/file_upload.svg" alt="file upload" width={48} height={48} />
           </div>
         </div>
       </div>
@@ -55,7 +56,13 @@ export function SelectState({ uploadError, onSelectResume }: SelectStateProps) {
             className="bg-[#005FF2] hover:bg-[#0047b3] text-[#F2F2F2] font-semibold text-base px-4 py-2 rounded-xl flex items-center gap-2 shadow-sm"
           >
             <span>Select Resume</span>
-            <Image src="/images/file_upload.svg" alt="" width={24} height={24} className="brightness-0 invert" />
+            <Image
+              src="/images/file_upload.svg"
+              alt="file upload"
+              width={24}
+              height={24}
+              className="brightness-0 invert"
+            />
           </Button>
         </div>
       </div>

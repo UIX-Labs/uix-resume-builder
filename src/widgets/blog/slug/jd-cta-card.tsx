@@ -36,6 +36,7 @@ export default function JDCTACard() {
 
       {/* Button */}
       <button
+        type="button"
         onClick={handleUploadClick}
         className="mt-4 w-full rounded-lg bg-green-600 py-3 text-sm font-semibold text-white transition hover:bg-green-700"
       >

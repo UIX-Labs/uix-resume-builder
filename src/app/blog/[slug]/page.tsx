@@ -1,6 +1,6 @@
 import ArticleHeader from '@/widgets/blog/slug/article-header';
 
-import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
+import { extractHeadings, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { TableOfContents } from '@shared/ui/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
@@ -98,12 +98,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
-  // Find related posts (same tags, excluding current)
-  const allPosts = getAllPosts();
-  const relatedPosts = allPosts
-    .filter((p) => p.slug !== slug && p.frontmatter.tags.some((t) => frontmatter.tags.includes(t)))
-    .slice(0, 3);
-
   // Article structured data
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -152,22 +146,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Article header */}
         {/*   <header className="mb-10">
-          
+
           <div className="mb-4 flex flex-wrap gap-2">
             {frontmatter.tags.map((tag) => (
               <TagBadge key={tag} tag={tag} size="md" />
             ))}
           </div>
 
-        
+
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
             {frontmatter.title}
           </h1>
 
-        
+
           <p className="mt-4 text-lg leading-relaxed text-gray-600">{frontmatter.description}</p>
 
-         
+
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-4">
             <div className="flex flex-wrap items-center gap-5 text-sm text-gray-500">
               <span className="flex items-center gap-1.5">

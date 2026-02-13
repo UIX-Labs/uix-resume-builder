@@ -23,6 +23,8 @@ import { useState, useCallback } from 'react';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResponsiveHeader from '@widgets/dashboard/ui/header';
 import { Button } from '@shared/ui/components/button';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
@@ -57,6 +59,10 @@ export default function AllResumePage() {
     setActiveAction(null);
     setOptionsLocked(false);
   }, []);
+
+  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -181,8 +187,7 @@ export default function AllResumePage() {
         <ResumeCreationModal
           isOpen={isCreationModalOpen}
           onClose={() => setIsCreationModalOpen(false)}
-          // biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
-          onJDModalOpen={() => {}}
+          onJDModalOpen={handleJDModalOpen}
           onLinkedInClick={() => setIsLinkedInModalOpen(true)}
           onActionLock={lockOptions}
           onActionRelease={releaseOptions}
@@ -191,6 +196,12 @@ export default function AllResumePage() {
         />
 
         <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+
+        <JDUploadMobileModal
+          isOpen={isJDModalOpen}
+          onClose={handleJDModalClose}
+          onSubmittingChange={handleJDSubmittingChange}
+        />
       </div>
     </SidebarProvider>
   );

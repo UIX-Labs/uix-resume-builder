@@ -31,6 +31,7 @@ interface ResumeCreationModalProps {
 export default function ResumeCreationModal({
   isOpen,
   onClose,
+  onJDModalOpen,
   onLinkedInClick,
   onActionLock,
   onActionRelease,
@@ -143,24 +144,23 @@ export default function ResumeCreationModal({
   //   }
   // };
 
-  // const handleOpenTailoredWithJD = () => {
-  //   trackEvent('create_resume_click', {
-  //     source: template ? 'template_modal' : 'dashboard_modal',
-  //     method: 'tailored_with_jd',
-  //   });
+  const handleOpenTailoredWithJD = () => {
+    trackEvent('create_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      method: 'tailored_with_jd',
+    });
 
-  //   // Guest users must login for Tailored JD flow
-  //   if (!user.data?.id || !user.data?.isLoggedIn) {
-  //     localStorage.setItem('openJDModal', 'true');
-  //     setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
-  //     setIsAuthModalOpen(true);
-  //     return;
-  //   }
+    // Guest users must login for Tailored JD flow
+    if (!user.data?.id || !user.data?.isLoggedIn) {
+      localStorage.setItem('openJDModal', 'true');
+      setIsAuthModalOpen(true);
+      return;
+    }
 
-  //   onActionLock('tailoredJD');
-  //   onClose();
-  //   onJDModalOpen();
-  // };
+    onActionLock(ResumeCreationAction.TAILORED_JD);
+    onClose();
+    onJDModalOpen();
+  };
 
   return (
     <>
@@ -247,7 +247,7 @@ export default function ResumeCreationModal({
 
             {/* Tailored with JD - Recommended */}
             <Button
-              onClick={resumeCreateHandler}
+              onClick={handleOpenTailoredWithJD}
               disabled={optionsLocked && activeAction !== ResumeCreationAction.TAILORED_JD}
               className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
             >

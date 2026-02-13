@@ -15,6 +15,8 @@ import BuilderIntelligenceModal from './builder-intelligence-modal';
 import ResumeCreationModal from './resume-creation-modal';
 import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationMobileCard from './resume-creation-mobile-card';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -63,6 +65,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     setActiveAction(null);
     setOptionsLocked(false);
   }, []);
+
+  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
 
   const resumeCreateHandler = async () => {
     lockOptions('create');
@@ -150,12 +156,6 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     setShowJDUpload(true);
     setIsBuilderIntelligenceModalOpen(true);
   };
-
-  // const handleJDModalOpen = () => {
-  //   setShowResumeUpload(false);
-  //   setShowJDUpload(true);
-  //   setIsBuilderIntelligenceModalOpen(true);
-  // };
 
   // Handle opening JD modal from external trigger (e.g., from landing page JD section)
   useEffect(() => {
@@ -269,9 +269,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       <ResumeCreationModal
         isOpen={isCreationModalOpen}
         onClose={() => setIsCreationModalOpen(false)}
-        // biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
-        onJDModalOpen={() => {}}
-        // onJDModalOpen={handleJDModalOpen}
+        onJDModalOpen={handleJDModalOpen}
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
@@ -280,6 +278,12 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       />
 
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+
+      <JDUploadMobileModal
+        isOpen={isJDModalOpen}
+        onClose={handleJDModalClose}
+        onSubmittingChange={handleJDSubmittingChange}
+      />
 
       <div className="relative hidden md:block min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">

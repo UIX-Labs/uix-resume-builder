@@ -17,6 +17,8 @@ import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
 import ResumeCreationModal from './resume-creation-modal';
 import { LinkedInModal } from './linkedin-integration-card';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function DashboardCarousel() {
   const router = useRouter();
@@ -64,6 +66,10 @@ export default function DashboardCarousel() {
     setActiveAction(null);
     setOptionsLocked(false);
   };
+
+  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
 
   const handleMobileUseTemplate = (template: Template) => {
     setCreationTemplate(template);
@@ -172,8 +178,7 @@ export default function DashboardCarousel() {
       <ResumeCreationModal
         isOpen={isCreationModalOpen}
         onClose={() => setIsCreationModalOpen(false)}
-        // biome-ignore lint/suspicious/noEmptyBlockStatements: <explanation>
-        onJDModalOpen={() => {}}
+        onJDModalOpen={handleJDModalOpen}
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
@@ -182,6 +187,12 @@ export default function DashboardCarousel() {
         template={creationTemplate}
       />
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+
+      <JDUploadMobileModal
+        isOpen={isJDModalOpen}
+        onClose={handleJDModalClose}
+        onSubmittingChange={handleJDSubmittingChange}
+      />
     </>
   );
 }

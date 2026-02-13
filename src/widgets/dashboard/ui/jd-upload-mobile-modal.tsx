@@ -89,41 +89,47 @@ export default function JDUploadMobileModal({ isOpen, onClose, onSubmittingChang
           </div>
 
           <div className="relative flex-1 flex flex-col">
-            {currentStep === ModalStep.UPLOAD_JD && (
-              <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />
-            )}
+            {(() => {
+              switch (currentStep) {
+                case ModalStep.UPLOAD_JD:
+                  return <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />;
 
-            {currentStep === ModalStep.UPLOADING_JD && (
-              <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} />
-            )}
+                case ModalStep.UPLOADING_JD:
+                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} />;
 
-            {currentStep === ModalStep.UPLOAD_RESUME && (
-              <UploadResumeStep
-                jdFile={jdFile}
-                resumeFileInputRef={resumeFileInputRef}
-                onResumeFileSelect={handleResumeFileSelect}
-                onRemoveJD={handleRemoveJD}
-                onRetryJD={handleRetryJD}
-                onResumeSelected={handleResumeSelected}
-              />
-            )}
+                case ModalStep.UPLOAD_RESUME:
+                  return (
+                    <UploadResumeStep
+                      jdFile={jdFile}
+                      resumeFileInputRef={resumeFileInputRef}
+                      onResumeFileSelect={handleResumeFileSelect}
+                      onRemoveJD={handleRemoveJD}
+                      onRetryJD={handleRetryJD}
+                      onResumeSelected={handleResumeSelected}
+                    />
+                  );
 
-            {currentStep === ModalStep.UPLOADING_RESUME && (
-              <UploadingResumeStep uploadProgress={uploadProgress} onRemoveResume={handleRemoveResume} />
-            )}
+                case ModalStep.UPLOADING_RESUME:
+                  return <UploadingResumeStep uploadProgress={uploadProgress} onRemoveResume={handleRemoveResume} />;
 
-            {currentStep === ModalStep.READY_TO_ANALYZE && (
-              <ReadyToAnalyzeStep
-                jdFile={jdFile}
-                resumeFile={resumeFile}
-                onRemoveJD={handleRemoveJD}
-                onRemoveResume={handleRemoveResume}
-                onRetryJD={handleRetryJD}
-                onRetryResume={handleRetryResume}
-                onRunPikaIntelligence={handleAnalyze}
-                // isSubmitting={isSubmitting}
-              />
-            )}
+                case ModalStep.READY_TO_ANALYZE:
+                  return (
+                    <ReadyToAnalyzeStep
+                      jdFile={jdFile}
+                      resumeFile={resumeFile}
+                      onRemoveJD={handleRemoveJD}
+                      onRemoveResume={handleRemoveResume}
+                      onRetryJD={handleRetryJD}
+                      onRetryResume={handleRetryResume}
+                      onRunPikaIntelligence={handleAnalyze}
+                      // isSubmitting={isSubmitting}
+                    />
+                  );
+
+                default:
+                  return null;
+              }
+            })()}
           </div>
         </div>
       </Modal>

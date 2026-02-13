@@ -9,14 +9,15 @@ export default function BlogCreateResume() {
   const { handleUseTemplate } = useSelectTemplate();
   return (
     <>
-      <div className="flex flex-col justify-center md:h-[298px] items-center gap-4 pr-8 md:gap-2 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-green-600 relative overflow-hidden group mt-10 p-2">
-        <img src="/images/blog/slug/Avatar.png" alt="" className="absolute bottom-0 -left-4  h-12 md:h-50" />
-        <img src="/images/blog/slug/avatar-img.png" alt="" className="absolute bottom-0 -right-4  h-12 md:h-50" />
+      <div className="flex flex-col justify-center md:min-h-[298px]
+ items-center gap-4 pr-8 md:gap-2 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-green-600 relative overflow-hidden group mt-10 p-2">
+        <img src="/images/blog/slug/Avatar.png" alt="" className="absolute bottom-0 -left-4  h-20 md:h-40 pointer-events-none select-none" />
+        <img src="/images/blog/slug/avatar-img.png" alt="" className="absolute bottom-0 -right-4  h-20 md:h-40 pointer-events-none select-none" />
 
-        <div className="text-[46px] font-semibold">
+        <div className="text-3xl md:text-5xl font-semibold">
           Create your <span className="text-green-600">Resume</span>
         </div>
-        <div className="text-[24px] max-w-[486px] text-center">
+        <div className="text-lg md:text-2xl max-w-[486px] text-center">
           Your resume is an extension of you. Make it truly yours.
         </div>
 

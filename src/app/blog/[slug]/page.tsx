@@ -203,7 +203,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="flex gap-10 lg:gap-14 flex-col lg:flex-row">
           {/* Sidebar - TOC */}
           {headings.length > 0 && (
-            <aside className="w-md lg:block">
+            <aside className="lg:block shrink-0 w-full md:w-[320px] lg:w-[400px]">
               <div className="block sticky top-20">
                 <TableOfContents headings={headings} />
                 <div className="hidden md:block mt-10">

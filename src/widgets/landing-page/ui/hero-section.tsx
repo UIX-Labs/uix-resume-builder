@@ -7,7 +7,6 @@ import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import CountUp from '@shared/ui/count-up';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
-import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import getCurrentStatsQuery from '../api/query';
@@ -83,7 +82,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative w-full  h-auto min-h-screen px-4 md:px-0">
+    <section className="relative w-full h-auto min-h-screen px-4 md:px-0">
       {/* Background blobs */}
       <div className="absolute top-0 left-0 w-full h-full md:inset-y-0 md:w-[45%] overflow-hidden pointer-events-none -z-10"></div>
       <HeroConfetti />
@@ -92,7 +91,7 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-[60%_40%] mt-6 md:mt-0 gap-12 items-start md:items-center">
           {/* LEFT COLUMN */}
           <div className="w-full flex flex-col items-center md:items-start md:-mt-2 md:-translate-y-6">
-            <div className="w-full max-w-[360px] md:max-w-none">
+            <div className="w-full max-w-[420px] md:max-w-none">
               {/* Avatars + Trusted */}
               <div className="flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-4 md:mt-16 text-center md:text-left">
                 <div className="flex -space-x-2 justify-center md:justify-start">
@@ -133,19 +132,19 @@ const HeroSection = () => {
                 </h1>
 
                 {/* Mobile */}
-                <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight">
+                <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2">
                   {/* Line 1 */}
                   <div className="flex flex-col items-center gap-1">
                     <span className="font-geist font-semibold text-2xl">Build a</span>
 
-                    <span className="text-blue-800 font-[800] text-5xl">Professional</span>
+                    <span className="text-blue-800 font-[800] text-3xl sm:text-4xl">Professional</span>
                   </div>
 
                   {/* Line 2 */}
-                  <div className="flex flex-col items-center gap-1">
-                    <span className="text-green-600 font-[800] text-5xl">Resume</span>
+                  <div className="flex flex-col items-center gap-1 mt-1">
+                    <span className="text-green-600 font-[800] text-3xl sm:text-4xl">Resume</span>
 
-                    <span className="text-2xl font-semibold">in under 3 minutes</span>
+                    <span className="text-xl sm:text-2xl font-semibold">in under 3 minutes</span>
                   </div>
                 </h1>
               </div>

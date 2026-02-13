@@ -23,7 +23,7 @@ export default function HeroImgSection() {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] md:max-w-[520px] h-auto md:h-[620px] mx-auto md:mb-10">
+    <div className="relative w-full max-w-[340px] md:max-w-[520px] h-[400px] md:h-[620px] mx-auto md:mb-10">
       {/* Green circle behind profile photo */}
       <motion.div initial="hidden" animate="visible" variants={fadeScaleIn}>
         <div

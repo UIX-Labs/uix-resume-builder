@@ -26,12 +26,6 @@ export function AiFeaturesSection() {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (isInView && isTouch && isMounted) {
-      setHoveredId('left');
-    }
-  }, [isInView, isTouch, isMounted]);
-
   // Stable callbacks with proper dependencies
   const hoverLeft = useCallback(() => setHoveredId('left'), []);
   const hoverRight = useCallback(() => setHoveredId('right'), []);

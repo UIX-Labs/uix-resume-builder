@@ -12,7 +12,7 @@ import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface ResumeCreationModalProps {
   isOpen: boolean;
@@ -50,6 +50,23 @@ export default function ResumeCreationModal({
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleUploadResumeClick = useCallback(() => {
+    trackEvent('upload_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      device: 'mobile',
+    });
+    router.push('/upload-resume');
+  }, [template, router]);
+
+  const handleLinkedInClick = useCallback(() => {
+    trackEvent('create_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      method: 'linkedin_autofill',
+    });
+    onLinkedInClick();
+    onClose();
+  }, [template, onLinkedInClick, onClose]);
 
   const getTitle = () => {
     if (template) {
@@ -188,13 +205,7 @@ export default function ResumeCreationModal({
             {/* Upload Resume */}
             <div className="relative">
               <Button
-                onClick={() => {
-                  trackEvent('upload_resume_click', {
-                    source: template ? 'template_modal' : 'dashboard_modal',
-                    device: 'mobile',
-                  });
-                  router.push('/upload-resume');
-                }}
+                onClick={handleUploadResumeClick}
                 className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors hover:bg-gray-50 bg-white text-left text-base"
               >
                 <Image src="/images/file_upload.svg" alt="" width={24} height={24} />
@@ -230,14 +241,7 @@ export default function ResumeCreationModal({
 
             {/* Auto-fill via LinkedIn */}
             <Button
-              onClick={() => {
-                trackEvent('create_resume_click', {
-                  source: template ? 'template_modal' : 'dashboard_modal',
-                  method: 'linkedin_autofill',
-                });
-                onLinkedInClick();
-                onClose();
-              }}
+              onClick={handleLinkedInClick}
               className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
             >
               <Image src="/images/auto_mode.svg" alt="" width={24} height={24} />

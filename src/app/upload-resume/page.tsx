@@ -14,12 +14,7 @@ import { SelectState } from '@widgets/upload-resume/ui/select-state';
 import { UploadingState } from '@widgets/upload-resume/ui/uploading-state';
 import { SuccessState } from '@widgets/upload-resume/ui/success-state';
 import { DeleteModal } from '@widgets/upload-resume/ui/delete-modal';
-
-enum UploadState {
-  SELECT = 'select',
-  UPLOADING = 'uploading',
-  SUCCESS = 'success',
-}
+import { UploadState } from '@widgets/upload-resume/lib/upload-state';
 
 export default function UploadResumePage() {
   const router = useRouter();
@@ -27,12 +22,14 @@ export default function UploadResumePage() {
   const isMobile = useIsMobile();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [uploadState, setUploadState] = useState<UploadState>(UploadState.SELECT);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [resumeId, setResumeId] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [state, setState] = useState({
+    uploadState: UploadState.SELECT,
+    uploadProgress: 0,
+    uploadedFile: null as File | null,
+    showDeleteModal: false,
+    resumeId: null as string | null,
+    uploadError: null as string | null,
+  });
 
   const { mutate: parsePdfResume } = useParsePdfResume();
 
@@ -44,28 +41,30 @@ export default function UploadResumePage() {
   }, [isMobile]);
 
   const uploadResume = (file: File) => {
-    setUploadState(UploadState.UPLOADING);
-    setUploadProgress(0);
-    setUploadError(null);
+    setState((prev) => ({
+      ...prev,
+      uploadState: UploadState.UPLOADING,
+      uploadProgress: 0,
+      uploadError: null,
+    }));
 
     const progressInterval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 90) {
+      setState((prev) => {
+        if (prev.uploadProgress >= 90) {
           clearInterval(progressInterval);
-          return 90;
+          return prev;
         }
-        return prev + 10;
+        return { ...prev, uploadProgress: prev.uploadProgress + 10 };
       });
     }, 300);
 
     parsePdfResume(file, {
       onSuccess: (data: any) => {
         clearInterval(progressInterval);
-        setUploadProgress(100);
-        setResumeId(data.resumeId);
+        setState((prev) => ({ ...prev, uploadProgress: 100, resumeId: data.resumeId }));
 
         setTimeout(() => {
-          setUploadState(UploadState.SUCCESS);
+          setState((prev) => ({ ...prev, uploadState: UploadState.SUCCESS }));
           trackEvent('resume_upload_success', {
             source: 'upload_resume_page',
             file_name: file.name,
@@ -78,9 +77,12 @@ export default function UploadResumePage() {
       onError: (error: any) => {
         clearInterval(progressInterval);
         const errorMessage = error?.message || 'Upload failed. Please try again.';
-        setUploadError(errorMessage);
-        setUploadState(UploadState.SELECT);
-        setUploadProgress(0);
+        setState((prev) => ({
+          ...prev,
+          uploadError: errorMessage,
+          uploadState: UploadState.SELECT,
+          uploadProgress: 0,
+        }));
 
         trackEvent('resume_upload_error', {
           source: 'upload_resume_page',
@@ -99,7 +101,7 @@ export default function UploadResumePage() {
     const validation = validateFile(file);
 
     if (!validation.valid) {
-      setUploadError(validation.error || 'unknown');
+      setState((prev) => ({ ...prev, uploadError: validation.error || 'unknown' }));
       trackEvent('resume_upload_error', {
         source: 'upload_resume_page',
         error: validation.error,
@@ -108,7 +110,7 @@ export default function UploadResumePage() {
       return;
     }
 
-    setUploadedFile(file);
+    setState((prev) => ({ ...prev, uploadedFile: file }));
 
     if (!user.data?.isLoggedIn) {
       getOrCreateGuestEmail();
@@ -125,7 +127,7 @@ export default function UploadResumePage() {
   };
 
   const handleSelectResume = () => {
-    setUploadError(null);
+    setState((prev) => ({ ...prev, uploadError: null }));
 
     trackEvent('select_resume_click', {
       source: 'upload_resume_page',
@@ -136,15 +138,18 @@ export default function UploadResumePage() {
   };
 
   const handleDeleteClick = () => {
-    setShowDeleteModal(true);
+    setState((prev) => ({ ...prev, showDeleteModal: true }));
   };
 
   const handleCloseUpload = () => {
-    setUploadState(UploadState.SELECT);
-    setUploadProgress(0);
-    setUploadedFile(null);
-    setResumeId(null);
-    setUploadError(null);
+    setState((prev) => ({
+      ...prev,
+      uploadState: UploadState.SELECT,
+      uploadProgress: 0,
+      uploadedFile: null,
+      resumeId: null,
+      uploadError: null,
+    }));
 
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -152,12 +157,14 @@ export default function UploadResumePage() {
   };
 
   const handleDeleteConfirm = () => {
-    setShowDeleteModal(false);
-    setUploadState(UploadState.SELECT);
-    setUploadProgress(0);
-    setUploadedFile(null);
-    setResumeId(null);
-    setUploadError(null);
+    setState({
+      uploadState: UploadState.SELECT,
+      uploadProgress: 0,
+      uploadedFile: null,
+      showDeleteModal: false,
+      resumeId: null,
+      uploadError: null,
+    });
 
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -165,40 +172,40 @@ export default function UploadResumePage() {
 
     trackEvent('resume_upload_deleted', {
       source: 'upload_resume_page',
-      resume_id: resumeId,
+      resume_id: state.resumeId,
       user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
     });
   };
 
   const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
+    setState((prev) => ({ ...prev, showDeleteModal: false }));
   };
 
   const handleRetryUpload = () => {
-    if (uploadedFile) {
-      uploadResume(uploadedFile);
+    if (state.uploadedFile) {
+      uploadResume(state.uploadedFile);
       trackEvent('resume_upload_retry', {
         source: 'upload_resume_page',
-        file_name: uploadedFile.name,
+        file_name: state.uploadedFile.name,
         user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
       });
     }
   };
 
   const handleAutoFillResume = () => {
-    if (!resumeId) {
+    if (!state.resumeId) {
       console.error('No resume ID available');
       return;
     }
 
     trackEvent('auto_fill_resume_click', {
       source: 'upload_resume_page',
-      file_name: uploadedFile?.name || '',
-      resume_id: resumeId,
+      file_name: state.uploadedFile?.name || '',
+      resume_id: state.resumeId,
       user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
     });
 
-    router.push(`/resume/${resumeId}`);
+    router.push(`/resume/${state.resumeId}`);
   };
 
   const handleBackClick = () => {
@@ -209,8 +216,8 @@ export default function UploadResumePage() {
     return null;
   }
 
-  const displayFileName = uploadedFile?.name || '';
-  const displayFileSize = uploadedFile ? formatFileSize(uploadedFile.size) : '';
+  const displayFileName = state.uploadedFile?.name || '';
+  const displayFileSize = state.uploadedFile ? formatFileSize(state.uploadedFile.size) : '';
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -225,20 +232,20 @@ export default function UploadResumePage() {
       <Header />
 
       <main className="flex-1 bg-[#F5F8FA] px-4 py-6 rounded-2xl m-3">
-        {uploadState !== UploadState.UPLOADING && <Breadcrumb onBackClick={handleBackClick} />}
+        {state.uploadState !== UploadState.UPLOADING && <Breadcrumb onBackClick={handleBackClick} />}
 
-        {uploadState === UploadState.SELECT && (
-          <SelectState uploadError={uploadError} onSelectResume={handleSelectResume} />
+        {state.uploadState === UploadState.SELECT && (
+          <SelectState uploadError={state.uploadError} onSelectResume={handleSelectResume} />
         )}
-        {uploadState === UploadState.UPLOADING && (
+        {state.uploadState === UploadState.UPLOADING && (
           <UploadingState
             fileName={displayFileName}
             fileSize={displayFileSize}
-            uploadProgress={uploadProgress}
+            uploadProgress={state.uploadProgress}
             onCloseUpload={handleCloseUpload}
           />
         )}
-        {uploadState === UploadState.SUCCESS && (
+        {state.uploadState === UploadState.SUCCESS && (
           <SuccessState
             fileName={displayFileName}
             fileSize={displayFileSize}
@@ -249,7 +256,7 @@ export default function UploadResumePage() {
         )}
       </main>
 
-      <DeleteModal isOpen={showDeleteModal} onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} />
+      <DeleteModal isOpen={state.showDeleteModal} onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} />
     </div>
   );
 }

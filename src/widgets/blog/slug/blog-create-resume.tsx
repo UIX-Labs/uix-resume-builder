@@ -37,7 +37,10 @@ export default function BlogCreateResume() {
             <Star className="fill-yellow-300" />
             <Star className="fill-yellow-300" />
           </div>
-          <div>Average: 4.75/5 rated by 50+ people in last 7 days, <span className="text-gray-500">click to rate this article.</span></div>
+          <div>
+            Average: 4.75/5 rated by 50+ people in last 7 days,{' '}
+            <span className="text-gray-500">click to rate this article.</span>
+          </div>
         </div>
 
         <div className="flex gap-2 h-full justify-center items-center">

@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 interface FeaturedPrimaryCardProps {
   post: BlogPost;
-  badgeColor: string
+  badgeColor: string;
 }
 
 export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimaryCardProps) {

@@ -266,7 +266,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </span>
 
           <div className="flex mt-10 justify-center p-2">
-            <BlogGrid posts={allPosts}/>
+            <BlogGrid posts={allPosts} />
           </div>
         </div>
       </article>

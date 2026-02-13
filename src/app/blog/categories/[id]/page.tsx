@@ -15,12 +15,7 @@ export default async function CategoryPage(props: PageProps) {
 
   const allPosts = getAllPosts();
 
-const filteredPosts = allPosts.filter((post) =>
-  post.frontmatter.tags.includes(params.id)
-);
-
-
-
+  const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(params.id));
 
   if (!category) {
     return <p>Category not found</p>;

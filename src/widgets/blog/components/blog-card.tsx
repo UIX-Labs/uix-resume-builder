@@ -28,7 +28,6 @@ export default function BlogCard({
         transition-all duration-300 hover:shadow-md hover:bg-[var(--card-color)]"
         style={{ ['--card-color' as any]: badgeColor }}
       >
-
         {/* IMAGE */}
         <div className="relative w-full h-[255px] rounded-md overflow-hidden">
           <Image src={image} alt={title} fill className="object-cover" />
@@ -36,7 +35,6 @@ export default function BlogCard({
 
         {/* CONTENT */}
         <div className="p-4 flex flex-col gap-4 mt-2">
-
           {/* BADGE */}
           <span
             className="
@@ -47,9 +45,7 @@ export default function BlogCard({
               group-hover:bg-white
             "
           >
-            <span className="group-hover:text-[var(--card-color)]">
-              {category}
-            </span>
+            <span className="group-hover:text-[var(--card-color)]">{category}</span>
           </span>
 
           {/* TITLE */}
@@ -74,21 +70,15 @@ export default function BlogCard({
             <img src="https://picsum.photos/200" className="w-6 h-6 rounded-full" alt="" />
 
             <span>
-              By{' '}
-              <span className="font-semibold text-black group-hover:text-white">
-                {author}
-              </span>{' '}
-              &nbsp;|&nbsp;
+              By <span className="font-semibold text-black group-hover:text-white">{author}</span> &nbsp;|&nbsp;
             </span>
 
             <Clock className="w-4 h-4 group-hover:text-white" />
 
             <span>&nbsp;{date}</span>
           </div>
-
         </div>
       </div>
     </Link>
   );
 }
-

@@ -70,7 +70,7 @@ export default function BlogPage() {
 
           {/* <div className="mt-10">
             <BlogList posts={posts} tags={tags} />
-          </div> */}
+          </div>  */}
         </div>
       </main>
     </>

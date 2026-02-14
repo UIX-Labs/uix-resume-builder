@@ -1,17 +1,21 @@
 import ArticleHeader from '@/widgets/blog/slug/article-header';
+
+import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
+import { TableOfContents } from '@shared/ui/blog';
+import { mdxComponents } from '@shared/ui/blog/mdx-components';
+import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
+import JDCTACard from '@widgets/blog/slug/jd-cta-card';
 import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
+
+import { BlogGrid } from '@widgets/blog';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
-
-import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
-import { TableOfContents, TagBadge } from '@shared/ui/blog';
-import { mdxComponents } from '@shared/ui/blog/mdx-components';
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
@@ -136,7 +140,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 max-w-[1395px]">
         {/* Back link */}
         <Link
           href="/blog"
@@ -196,10 +200,23 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         />
 
         {/* Content + Sidebar */}
+
         <div className="flex gap-10 lg:gap-14">
+          {/* Sidebar - TOC */}
+          {/* LEFT - TOC + CTA */}
+          {headings.length > 0 && (
+            <aside className="hidden lg:block w-64 shrink-0 space-y-6">
+              {/* TOC */}
+              <div className="sticky top-20 space-y-6">
+                <TableOfContents headings={headings} />
+                <JDCTACard />
+              </div>
+            </aside>
+          )}
+
           {/* Main content */}
           <div className="min-w-0 flex-1">
-            <div className="prose prose-lg prose-gray max-w-none prose-headings:scroll-mt-24 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100">
+            <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
               <MDXRemote
                 source={content}
                 components={mdxComponents}
@@ -214,20 +231,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 }}
               />
             </div>
+            <BlogCreateResume />
           </div>
-
-          {/* Sidebar - TOC */}
-          {headings.length > 0 && (
-            <aside className="hidden w-64 shrink-0 lg:block">
-              <div className="sticky top-20">
-                <TableOfContents headings={headings} />
-              </div>
-            </aside>
-          )}
         </div>
 
         {/* Related Posts */}
-        {relatedPosts.length > 0 && (
+        {/* {relatedPosts.length > 0 && (
           <section className="mt-16 border-t border-gray-100 pt-12">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">Related Articles</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -249,8 +258,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </Link>
               ))}
             </div>
-          </section>
-        )}
+          </section> */}
+
+        {/* )} */}
+        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white relative overflow-hidden group">
+          <div className="text-[36px] font-bold text-center p-2">Continue Reading</div>
+          <span className="text-[20px] text-gray-500 text-center block">
+            Check more recommended readings to get the job of your dreams.
+          </span>
+
+          <div className="flex mt-10 justify-center p-2">
+            <BlogGrid />
+          </div>
+        </div>
       </article>
     </>
   );

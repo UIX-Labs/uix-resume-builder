@@ -57,7 +57,7 @@ export default function GetAllResumesPage() {
     setOptionsLocked(false);
   };
 
-  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
     onRelease: releaseOptions,
   });
 
@@ -181,7 +181,7 @@ export default function GetAllResumesPage() {
       <ResumeCreationModal
         isOpen={isCreationModalOpen}
         onClose={handleCreationModalClose}
-        onJDModalOpen={handleJDModalOpen}
+        onJDModalOpen={() => handleJDModal(true)}
         onLinkedInClick={handleLinkedInModalOpen}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
@@ -193,7 +193,7 @@ export default function GetAllResumesPage() {
 
       <JDUploadMobileModal
         isOpen={isJDModalOpen}
-        onClose={handleJDModalClose}
+        onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
       />
     </SidebarProvider>

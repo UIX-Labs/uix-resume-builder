@@ -66,7 +66,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     setOptionsLocked(false);
   }, []);
 
-  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
     onRelease: releaseOptions,
   });
 
@@ -269,7 +269,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
       <ResumeCreationModal
         isOpen={isCreationModalOpen}
         onClose={() => setIsCreationModalOpen(false)}
-        onJDModalOpen={handleJDModalOpen}
+        onJDModalOpen={() => handleJDModal(true)}
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
@@ -281,7 +281,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
 
       <JDUploadMobileModal
         isOpen={isJDModalOpen}
-        onClose={handleJDModalClose}
+        onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
       />
 

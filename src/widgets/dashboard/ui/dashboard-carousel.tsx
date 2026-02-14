@@ -67,7 +67,7 @@ export default function DashboardCarousel() {
     setOptionsLocked(false);
   };
 
-  const { isJDModalOpen, handleJDModalOpen, handleJDModalClose, handleJDSubmittingChange } = useJDModal({
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
     onRelease: releaseOptions,
   });
 
@@ -180,7 +180,7 @@ export default function DashboardCarousel() {
       <ResumeCreationModal
         isOpen={isCreationModalOpen}
         onClose={() => setIsCreationModalOpen(false)}
-        onJDModalOpen={handleJDModalOpen}
+        onJDModalOpen={() => handleJDModal(true)}
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
@@ -192,7 +192,7 @@ export default function DashboardCarousel() {
 
       <JDUploadMobileModal
         isOpen={isJDModalOpen}
-        onClose={handleJDModalClose}
+        onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
       />
     </>

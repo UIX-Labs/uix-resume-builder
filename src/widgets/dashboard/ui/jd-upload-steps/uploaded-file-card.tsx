@@ -1,4 +1,5 @@
 import { formatFileSize } from '@entities/resume/lib/file-upload-utils';
+import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/components/button';
 import { Check, RotateCw, Trash2 } from 'lucide-react';
 
@@ -20,7 +21,7 @@ export function UploadedFileCard({
   showBorder = true,
 }: UploadedFileCardProps) {
   return (
-    <div className={showBorder ? 'w-full rounded-[20px] border border-dashed border-[#6AC095] p-3' : 'w-full'}>
+    <div className={cn('w-full', showBorder && 'rounded-[20px] border border-dashed border-[#6AC095] p-3')}>
       <div className="relative w-full h-18">
         <div className="absolute top-0 left-0 flex items-center justify-center gap-1 bg-[#063B1F] rounded-t-2xl px-3 py-1 h-5">
           <span className="text-white text-[10px] font-semibold leading-[1.2em]">{badgeText}</span>

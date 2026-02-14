@@ -22,10 +22,8 @@ const HeroSection = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showMobileView, setShowMobileView] = useState(false);
 
-  // Get latest users and generate initials
   const userAvatars = useMemo(() => {
     const latestUsers = currentStats?.latestUsers || [];
-    // Take first 3 users or use default initials if not enough users
     const defaultInitials = ['JD', 'SM', 'AR'];
 
     return Array.from({ length: 3 }, (_, i) => {
@@ -37,7 +35,6 @@ const HeroSection = () => {
           key: `${user.firstName || ''}-${user.lastName || ''}-${i}`,
         };
       }
-      // Use default initials if not enough users
       return {
         initials: defaultInitials[i] || 'U',
         key: `default-${i}`,
@@ -49,10 +46,8 @@ const HeroSection = () => {
     router.push('/dashboard');
   };
 
-  // Unified LinkedIn Autofill handler (MOBILE -> MobileView | DESKTOP -> Modal/Login)
   const handleLinkedInUnified = () => {
     setIsModalOpen(true);
-
     trackEvent('create_resume_click', {
       source: 'landing_hero',
       method: 'linkedin_autofill',
@@ -61,7 +56,6 @@ const HeroSection = () => {
 
   const handleUploadClick = () => {
     handleNavigate();
-
     trackEvent('create_resume_click', {
       source: 'landing_hero',
       method: 'upload_existing',
@@ -69,19 +63,19 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative w-full h-auto min-h-screen px-4 md:px-0">
+    <section className="relative w-full min-h-screen flex items-center justify-center px-4 md:px-12 py-12 md:py-0">
       {/* Background blobs */}
       <div className="absolute top-0 left-0 w-full h-full md:inset-y-0 md:w-[45%] overflow-hidden pointer-events-none -z-10"></div>
       <HeroConfetti />
 
-      <div className="max-w-7xl mx-auto relative">
-        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] mt-6 md:mt-0 gap-12 items-start md:items-center">
+      <div className="max-w-7xl mx-auto w-full relative">
+        <div className="grid grid-cols-1 md:grid-cols-[58%_42%] gap-12 items-center">
           {/* LEFT COLUMN */}
-          <div className="w-full flex flex-col items-center md:items-start md:-mt-2 md:-translate-y-6">
-            <div className="w-full max-w-[420px] md:max-w-none">
+          <div className="w-full flex flex-col items-center md:items-start">
+            <div className="w-full">
               {/* Avatars + Trusted */}
-              <div className="flex flex-col md:flex-row items-center md:items-center gap-3 md:gap-4 md:mt-16 text-center md:text-left">
-                <div className="flex -space-x-2 justify-center md:justify-start">
+              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-6 text-center md:text-left">
+                <div className="flex -space-x-2">
                   {userAvatars.map((avatar) => (
                     <Avatar key={avatar.key} className=" md:w-12 md:h-12 border-2 border-white">
                       <AvatarImage src="/placeholder.svg" />
@@ -100,54 +94,44 @@ const HeroSection = () => {
               </div>
 
               {/* Heading */}
-              <div className="mt-4">
-                {/* Desktop */}
-                <h1 className="hidden md:block text-left tracking-[-0.03em] leading-tight">
-                  {/* Line 1 */}
-                  <div className="flex items-baseline gap-3">
-                    <span className="font-geist font-semibold text-7xl">Build a</span>
-
-                    <span className="text-blue-800 font-[800] text-7xl">Professional</span>
+              <div>
+                {/* Desktop View: Adjusted to match Figma 2-line layout */}
+                <h1 className="hidden md:block tracking-[-0.03em]">
+                  <div className="block whitespace-nowrap leading-[1]">
+                    <span className="font-geist font-semibold text-[#171717] text-6xl lg:text-7xl">Build a </span>
+                    <span className="text-[#005FF2] font-[800] text-6xl lg:text-7xl">Professional</span>
                   </div>
 
-                  {/* Line 2 */}
-                  <div className="flex items-baseline gap-4">
-                    <span className="text-green-600 font-[800] text-7xl">Resume</span>
-
-                    <span className="text-4xl font-semibold">in under 3 minutes</span>
+                  <div className="block mt-6 lg:mt-4 leading-[1.2]">
+                    <span className="text-[#00BA34] font-[800] text-6xl lg:text-7xl">Resume </span>
+                    <span className="text-[#171717] font-semibold text-3xl lg:text-4xl">in under 3 minutes</span>
                   </div>
                 </h1>
-
-                {/* Mobile */}
+                {/* Mobile View: Kept original logic */}
                 <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2">
-                  {/* Line 1 */}
                   <div className="flex flex-col items-center gap-1">
                     <span className="font-geist font-semibold text-2xl">Build a</span>
-
                     <span className="text-blue-800 font-[800] text-3xl sm:text-4xl">Professional</span>
                   </div>
-
-                  {/* Line 2 */}
                   <div className="flex flex-col items-center gap-1 mt-1">
                     <span className="text-green-600 font-[800] text-3xl sm:text-4xl">Resume</span>
-
                     <span className="text-xl sm:text-2xl font-semibold">in under 3 minutes</span>
                   </div>
                 </h1>
               </div>
 
               {/* Buttons */}
-              <div className="mt-8 flex flex-col sm:flex-row gap-4 items-center md:items-start">
+              <div className="mt-10 flex flex-col sm:flex-row gap-4 items-center md:items-start">
                 <Button
                   onClick={handleLinkedInUnified}
-                  className="w-[280px] md:w-[303px] h-[56px] md:h-[68px] text-[18px] md:text-[24px] px-5 flex items-center justify-center bg-blue-900 text-white font-semibold rounded-[12px] border border-blue-800 hover:bg-blue-800 transition-all duration-300"
+                  className="w-[280px] md:w-[300px] h-[56px] md:h-[64px] text-[18px] md:text-[20px] bg-[#005FF2] text-white font-bold rounded-[12px] hover:bg-blue-700 transition-all duration-300 shadow-sm"
                 >
                   Auto-fill via LinkedIn
                 </Button>
 
                 <Button
                   onClick={handleUploadClick}
-                  className="w-[260px] md:w-[303px] h-[50px] md:h-[68px] text-[16px] md:text-[24px] px-4 flex items-center justify-center bg-white text-black font-semibold rounded-[12px] hover:text-blue-800 transition-all hover:bg-white"
+                  className="w-[260px] md:w-[300px] h-[56px] md:h-[64px] text-[16px] md:text-[20px] bg-white text-[#171717] font-bold rounded-[12px] border border-gray-200 hover:bg-gray-50 hover:text-[#005FF2] transition-all duration-300"
                 >
                   Upload existing resume
                 </Button>
@@ -156,8 +140,8 @@ const HeroSection = () => {
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="flex justify-center md:justify-end mt-4 md:mt-10 md:-translate-x-6">
-            <div className="max-w-[480px] w-full">
+          <div className="flex justify-center md:justify-end w-full lg:pl-4 md:pb-8 md:pt-2 pl-4">
+            <div className="relative w-full max-w-[420px] md:max-w-[440px] lg:max-w-[560px] aspect-square md:aspect-auto transition-all duration-500 pr-8 pt-6 pb-6">
               <HeroImgSection />
             </div>
           </div>
@@ -165,7 +149,6 @@ const HeroSection = () => {
       </div>
 
       <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
       {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );

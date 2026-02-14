@@ -232,7 +232,11 @@ function Header({ variant = 'default' }: HeaderProps) {
         (isDashboardRoute ? (
           <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
         ) : (
-          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} onExpertReviewClick={() => setShowExpertReviewModal(true)} />
+          <MobileSidebar
+            isOpen={showMobileSidebar}
+            onClose={() => setShowMobileSidebar(false)}
+            onExpertReviewClick={() => setShowExpertReviewModal(true)}
+          />
         ))}
       <ExpertReviewModal isOpen={showExpertReviewModal} onClose={() => setShowExpertReviewModal(false)} />
     </>

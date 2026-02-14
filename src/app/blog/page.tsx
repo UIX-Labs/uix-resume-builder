@@ -40,8 +40,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const posts = getAllPosts();
-  const tags = getAllTags();
+  // const posts = getAllPosts();
+  // const tags = getAllTags();
 
   return (
     <>

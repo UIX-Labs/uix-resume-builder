@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { Slot } from 'radix-ui';
+import type * as React from 'react';
 
 import { cn } from '@shared/lib/utils';
 
@@ -41,6 +41,7 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: <explanation>
     <span
       data-slot="breadcrumb-page"
       role="link"
@@ -83,10 +84,10 @@ function BreadcrumbEllipsis({ className, ...props }: React.ComponentProps<'span'
 
 export {
   Breadcrumb,
-  BreadcrumbList,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
 };

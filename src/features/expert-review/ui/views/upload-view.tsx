@@ -45,7 +45,9 @@ export function UploadView({ onUpload, onSignIn, onClose }: UploadViewProps) {
               className="text-expert-heading font-semibold leading-[1.1] tracking-[-0.18px] max-w-lg"
               style={GEIST_FONT}
             >
-              <span className="text-[28px] sm:text-[36px] md:text-[44px] block md:whitespace-nowrap">Stop Guessing.</span>
+              <span className="text-[28px] sm:text-[36px] md:text-[44px] block md:whitespace-nowrap">
+                Stop Guessing.
+              </span>
               <span className="text-[32px] sm:text-[44px] md:text-[56px] block md:whitespace-nowrap">
                 Get Expert Feedback.
               </span>

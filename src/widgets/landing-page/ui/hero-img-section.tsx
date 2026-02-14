@@ -23,7 +23,7 @@ export default function HeroImgSection() {
   };
 
   return (
-    <div className="relative w-full max-w-[340px] md:max-w-[520px] h-[400px] md:h-[620px] mx-auto md:mb-10">
+    <div className="relative w-full max-w-[340px]  md:max-w-[520px] h-[400px] md:h-[620px] mx-auto md:mb-10">
       {/* Green circle behind profile photo */}
       <motion.div initial="hidden" animate="visible" variants={fadeScaleIn}>
         <div
@@ -37,8 +37,8 @@ export default function HeroImgSection() {
         />
         {/* Light blue quarter circle */}
         <div
-          className="absolute bottom-20  top-75 md:top-118 md:bottom-[120px] w-[80px] h-[60px] md:w-[140px] md:h-[130px]
- bg-[#6FB1FF] rounded-tl-full"
+          className="absolute bottom-20  top-69  md:top-118 md:bottom-[120px] w-[80px] h-[60px] md:w-[140px] md:h-[130px]
+ bg-[#6FB1FF] rounded-tl-full "
         />
       </motion.div>
 

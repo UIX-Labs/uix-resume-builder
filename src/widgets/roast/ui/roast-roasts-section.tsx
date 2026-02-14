@@ -71,8 +71,8 @@ export const RoastRoastsSection = () => {
       </div>
 
       <div className="relative z-10 w-full max-w-[1200px] px-4 flex flex-col md:flex-row md:justify-center md:gap-24 items-center mt-14 gap-10">
-        {users.map((user, userIndex) => (
-          <div key={userIndex} className="relative w-full flex flex-col items-center">
+        {users.map((user) => (
+          <div key={user.name} className="relative w-full flex flex-col items-center">
             {/* User Header */}
             <div className="flex items-center gap-2 mb-4 absolute z-20 self-start pl-2 -top-12 md:left-15">
               <Avatar className="w-18 h-18 border-2 border-white/20 shadow-lg">

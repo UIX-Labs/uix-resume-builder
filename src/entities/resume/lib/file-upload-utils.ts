@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 const FILE_SIZE = 1024;
 const MAX_FILE_SIZE = 5 * FILE_SIZE * FILE_SIZE;
 
@@ -8,7 +9,10 @@ export const formatFileSize = (bytes: number): string => {
   return `${parseFloat((bytes / FILE_SIZE ** i).toFixed(2))} ${sizes[i]}`;
 };
 
-export const validateFile = (file: File): { valid: boolean; error?: string } => {
+export const validateFile = (file: File | undefined): { valid: boolean; error?: string } => {
+  if (!file) {
+    return { valid: false, error: 'No file selected' };
+  }
   const allowedTypes = ['application/pdf'];
   if (!allowedTypes.includes(file.type)) {
     return { valid: false, error: 'Please upload only PDF files.' };
@@ -19,4 +23,12 @@ export const validateFile = (file: File): { valid: boolean; error?: string } => 
   }
 
   return { valid: true };
+};
+
+export const validateFileWithToast = (file: File | undefined): boolean => {
+  const { valid, error } = validateFile(file);
+  if (!valid && error) {
+    toast.error(error);
+  }
+  return valid;
 };

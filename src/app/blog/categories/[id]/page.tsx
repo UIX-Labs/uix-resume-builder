@@ -15,37 +15,23 @@ export default async function CategoryPage({ params }: PageProps) {
     return <p>Category not found</p>;
   }
 
- 
   const allPosts = getAllPosts();
 
-  
-  const filteredPosts = allPosts.filter((post) =>
-    post.frontmatter.tags.includes(id)
-  );
+  const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(id));
 
   return (
     <div>
       {/* HERO */}
-      <BlogHero
-        description={category.hero.description}
-        image={category.hero.image}
-      >
+      <BlogHero description={category.hero.description} image={category.hero.image}>
         {/* Same classes as "The Pika Journal" */}
         <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
-          <span style={{ color: category.color }}>
-            {category.title}
-          </span>{' '}
+          <span style={{ color: category.color }}>{category.title}</span>{' '}
           <span className="text-black">{category.hero.suffix}</span>
         </span>
       </BlogHero>
 
       {/* CLIENT PART */}
-      <CategoryPageClient
-        posts={filteredPosts}
-        title="Collection of 61+ blogs"
-        placeholder="Search blogs"
-      />
+      <CategoryPageClient posts={filteredPosts} title="Collection of 61+ blogs" placeholder="Search blogs" />
     </div>
   );
 }
-

@@ -21,12 +21,7 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
       >
         {/* LEFT IMAGE - Fixed ratio for mobile, 1/3 for desktop */}
         <div className="w-[130px] sm:w-1/3 shrink-0 relative">
-          <Image
-            src={featureImage}
-            alt="feature"
-            fill
-            className="object-cover"
-          />
+          <Image src={featureImage} alt="feature" fill className="object-cover" />
         </div>
 
         {/* RIGHT CONTENT */}
@@ -57,9 +52,7 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
               />
             </div>
 
-            <span className="truncate max-w-[60px] sm:max-w-none">
-                {post.frontmatter.author}
-            </span>
+            <span className="truncate max-w-[60px] sm:max-w-none">{post.frontmatter.author}</span>
 
             <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
 

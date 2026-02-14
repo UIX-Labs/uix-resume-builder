@@ -11,7 +11,6 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
   return (
     <Link href={`/blog/${post.slug}`}>
       <div className="h-full min-h-[250px] sm:min-h-[400px] bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl relative overflow-hidden cursor-pointer border-4 border-white">
-        
         {/* Right Image - Edge to Edge Top Right */}
         <div className="absolute top-0 right-0 w-[60%] md:w-[60%]">
           <img
@@ -47,12 +46,12 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
 
               <div className="flex flex-row gap-2 items-center">
                 <span className="text-[11px] sm:text-sm font-medium text-gray-700 truncate max-w-[70px] sm:max-w-none">
-                    {post.frontmatter.author}
+                  {post.frontmatter.author}
                 </span>
 
                 <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
                 <span className="text-[11px] sm:text-md text-gray-500 font-medium whitespace-nowrap">
-                    {post.readingTime}
+                  {post.readingTime}
                 </span>
               </div>
             </div>

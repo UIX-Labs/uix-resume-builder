@@ -10,11 +10,6 @@ export function AiFeaturesSection() {
   const [isMounted, setIsMounted] = useState(false);
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(sectionRef, {
-    once: true,
-    margin: '-120px',
-  });
-
   // Memoize touch detection to avoid recalculation
   const isTouch = useMemo(() => {
     if (typeof window === 'undefined') return false;

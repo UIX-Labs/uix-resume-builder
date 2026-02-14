@@ -17,7 +17,7 @@ export default function CategoryCard({ category }: { category: Category }) {
         hover:-translate-y-1 
         w-[210px] h-[210px] overflow-hidden flex flex-col items-center justify-center p-4"
       >
-        <div className="relative h-full flex items-center justify-center w-full">
+        <div className="relative h-full flex items-center justify-center w-full ">
           <div className="relative w-full h-full">
             <Image
               src={category.image}

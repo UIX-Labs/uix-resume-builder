@@ -1,48 +1,51 @@
 import { categories } from '@/data/categories';
-import BlogGrid from '@/widgets/blog/blog-Grid';
+import CategoryPageClient from '@/widgets/blog/Category-page-client';
 import BlogHero from '@/widgets/blog/components/blog-hero';
 import { getAllPosts } from '@shared/lib/blog';
 
 interface PageProps {
-  params: Promise<{
-    id: string;
-  }>;
+  params: Promise<{ id: string }>;
 }
 
-export default async function CategoryPage(props: PageProps) {
-  const params = await props.params;
-  const category = categories.find((category) => category.id === params.id);
-
-  const allPosts = getAllPosts();
-
-  const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(params.id));
+export default async function CategoryPage({ params }: PageProps) {
+  const { id } = await params;
+  const category = categories.find((c) => c.id === id);
 
   if (!category) {
     return <p>Category not found</p>;
   }
+
+ 
+  const allPosts = getAllPosts();
+
+  
+  const filteredPosts = allPosts.filter((post) =>
+    post.frontmatter.tags.includes(id)
+  );
+
   return (
     <div>
-      <BlogHero description={category.hero.description} image={category.hero.image}>
-        <span className="font-bold" style={{ color: category.color }}>
-          {category.title}
+      {/* HERO */}
+      <BlogHero
+        description={category.hero.description}
+        image={category.hero.image}
+      >
+        {/* Same classes as "The Pika Journal" */}
+        <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
+          <span style={{ color: category.color }}>
+            {category.title}
+          </span>{' '}
+          <span className="text-black">{category.hero.suffix}</span>
         </span>
-        &nbsp;
-        <span className="text-black">{category.hero.suffix}</span>
       </BlogHero>
 
-      <div className="flex items-center justify-between mt-12 mb-6 max-w-[1395px] mx-auto">
-        {/* LEFT — BLOG COUNT */}
-        <h1 className="text-[36px] text-[#17171A] font-semibold">Collection of 61+ blogs</h1>
-
-        {/* RIGHT — SEARCH INPUT */}
-        <input
-          type="text"
-          placeholder="Search blogs"
-          className="w-[260px] px-4 py-2 text-sm border border-gray-300 rounded-md outline-none focus:border-blue-500"
-        />
-      </div>
-
-      <BlogGrid posts={filteredPosts} />
+      {/* CLIENT PART */}
+      <CategoryPageClient
+        posts={filteredPosts}
+        title="Collection of 61+ blogs"
+        placeholder="Search blogs"
+      />
     </div>
   );
 }
+

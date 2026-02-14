@@ -21,9 +21,9 @@ export default function FeaturedSection({ primaryPost, secondaryPosts }: Feature
 
   return (
     <section className="w-full mx-auto mt-10">
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-8 items-stretch">
         {/* LEFT - BIG CARD */}
-        <div className="h-[400px] md:h-full border-white border-4 rounded-xl">
+        <div className="h-full">
           <FeaturedPrimaryCard post={primaryPost} badgeColor={primaryBadgeColor} />
         </div>
 

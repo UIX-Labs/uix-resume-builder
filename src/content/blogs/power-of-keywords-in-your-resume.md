@@ -5,7 +5,7 @@ date: "2026-01-03"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
 tags:
-  - "job"
+  - "cover-letter"
   - "ATS"
   - "Job Search"
 published: true

@@ -22,7 +22,7 @@ export default function BlogCreateResume() {
         </div>
 
         <button
-          className="bg-green-600 text-white px-8 py-4 rounded-md mb-2 md:mb-0 mt-2"
+          className="bg-green-600 text-white px-8 py-4 rounded-md mb-2 md:mb-0 mt-2 hover:bg-green-700 transition-colors duration-300 cursor-pointer"
           onClick={() => handleUseTemplate('template1')}
         >
           Create your Resume

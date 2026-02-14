@@ -285,7 +285,7 @@ export default function ResumeCreationModal({
       <AuthRedirectModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        redirectUrl=""
+        redirectUrl="/auth"
         title="Login Required"
         description="You need to login to use Tailored with JD."
       />

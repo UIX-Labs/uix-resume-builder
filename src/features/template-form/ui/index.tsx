@@ -130,7 +130,7 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} />;
+        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} isMobile={isMobile} />;
       }
 
       default: {
@@ -219,6 +219,7 @@ export function TemplateForm({
               getItem={getItem}
               suggestedUpdates={currentData.suggestedUpdates}
               onOpenAnalyzerModal={onOpenAnalyzerModal}
+              isMobile={isMobile}
             />
           </div>
         ) : currentSchema.itemsType === 'strings' ? (
@@ -235,6 +236,7 @@ export function TemplateForm({
                 section={currentSchema}
                 suggestedUpdates={currentData.suggestedUpdates}
                 onOpenAnalyzerModal={onOpenAnalyzerModal}
+                isMobile={isMobile}
               />
             ))}
           </div>

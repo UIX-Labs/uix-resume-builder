@@ -46,7 +46,7 @@ export function ReadyToAnalyzeStep({
 
       <Button
         onClick={onRunPikaIntelligence}
-        className="flex items-center justify-center gap-2 px-4 py-3 bg-[#02A44F] border-2 border-white rounded-xl mt-[60px] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15)]"
+        className="flex items-center justify-center gap-2 px-4 py-3 bg-pika-intelligence border-2 border-background-white rounded-xl mt-[60px] h-12 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15)]"
         variant="default"
       >
         <span className="text-white text-[20px] font-semibold leading-[1.2em] tracking-[-0.02em]">

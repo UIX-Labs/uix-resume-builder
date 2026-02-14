@@ -208,7 +208,7 @@ function Header({ variant = 'default' }: HeaderProps) {
           )}
           aria-label="Open menu"
         >
-          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-6 h-6')} />
+          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-8 h-8')} />
         </button>
       </header>
 

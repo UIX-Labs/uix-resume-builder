@@ -130,9 +130,11 @@ export default function DashboardCarousel() {
       <div className="relative w-full h-full mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex-1">
-            <h2 className="font-normal text-sm sm:text-base">Choose ATS friendly templates</h2>
+            <h2 className="font-semibold text-2xl sm:text-base sm:font-normal leading-none">
+              Choose ATS friendly templates
+            </h2>
 
-            <p className="text-[rgb(149,157,168)] font-normal text-xs mt-1">
+            <p className="text-[rgb(149,157,168)] font-normal text-base sm:text-xs mt-3 sm:mt-1">
               Videos to help you avoid mistakes, boost scores, and land more interviews.
             </p>
           </div>

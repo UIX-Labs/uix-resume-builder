@@ -11,7 +11,7 @@ export function DashboardChip({ className }: DashboardChipProps) {
     <div className={cn('absolute top-3 z-20 left-1/2 -translate-x-1/2', className)}>
       <Link
         href="/dashboard"
-        className="bg-[#253130] rounded-xl px-3 py-1 flex items-center gap-1 hover:bg-[#2d3a39] transition-colors cursor-pointer"
+        className="bg-[#253130] rounded-[12px] px-3 py-1 h-8 w-25 flex items-center gap-1 hover:bg-[#2d3a39] transition-colors cursor-pointer"
       >
         <HomeIcon size={16} className="text-white" />
         <span className="text-white text-[10px] font-semibold leading-[1.2em]">Dashboard</span>

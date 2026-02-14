@@ -224,7 +224,10 @@ export default function UploadResumePage() {
 
       <Header />
 
-      <main className="flex-1 bg-[#F5F8FA] px-4 py-6 rounded-2xl m-3">
+      <main
+        className="flex-1 bg-[#F5F8FA] px-4 py-6 rounded-[36px] m-3 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/images/bg.png)' }}
+      >
         {uploadState !== UploadState.UPLOADING && <Breadcrumb onBackClick={handleBackClick} />}
 
         {uploadState === UploadState.SELECT && (

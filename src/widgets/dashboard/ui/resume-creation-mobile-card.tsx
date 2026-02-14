@@ -35,7 +35,7 @@ export default function ResumeCreationMobileCard({ onClick }: ResumeCreationMobi
             src="/images/resume-creation-bg2.png"
             alt="Resume preview"
             width={90}
-            height={120}
+            height={140}
             className="
               absolute
               left-1/2 top-1/2
@@ -61,7 +61,7 @@ export default function ResumeCreationMobileCard({ onClick }: ResumeCreationMobi
             src="/images/resume-creation-bg.png"
             alt="Resume preview"
             width={90}
-            height={120}
+            height={140}
             className="
               absolute
               left-1/2 top-1/2
@@ -82,11 +82,11 @@ export default function ResumeCreationMobileCard({ onClick }: ResumeCreationMobi
           rounded-lg
           px-10 py-3
           flex items-center gap-2
-          font-medium h-11
+          font-medium h-11 text-lg
         "
             >
               Create Resume
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className="size-4" />
             </Button>
           </div>
         </div>

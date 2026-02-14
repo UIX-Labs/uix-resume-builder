@@ -104,6 +104,7 @@ export function Draggable({
   getItem,
   suggestedUpdates,
   onOpenAnalyzerModal,
+  isMobile = false,
 }: {
   data: any[];
   section: any;
@@ -111,6 +112,7 @@ export function Draggable({
   getItem: (section: any, data: any, onChange: (data: any[]) => void) => void;
   suggestedUpdates?: SuggestedUpdates;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
+  isMobile?: boolean;
 }) {
   const [collapsed, setCollapsed] = useState<boolean[]>([]);
 
@@ -193,8 +195,9 @@ export function Draggable({
                 <button
                   type="button"
                   className={cn(
-                    'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
+                    'absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
                     'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300',
+                    isMobile ? 'flex' : 'hidden group-hover:flex',
                   )}
                   onClick={() => handlePlusClick(index)}
                 >

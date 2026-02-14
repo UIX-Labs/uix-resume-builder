@@ -27,7 +27,7 @@ export function Duration({ data, onChange }: DurationProps) {
     return undefined;
   });
 
-  const [endDate, setEndDate] = useState<Date | undefined>(() => {
+  const [endDate, _setEndDate] = useState<Date | undefined>(() => {
     if (data?.endDate) {
       return dayjs(data.endDate).toDate();
     }

@@ -1,19 +1,18 @@
 'use client';
 
-import { createResume, updateResumeTemplate } from '@entities/resume';
 import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useUserProfile } from '@shared/hooks/use-user';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { Button } from '@shared/ui/components/button';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import Image from 'next/image';
-import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 interface ResumeCreationModalProps {
   isOpen: boolean;
@@ -50,6 +49,23 @@ export default function ResumeCreationModal({
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleUploadResumeClick = useCallback(() => {
+    trackEvent('upload_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      device: 'mobile',
+    });
+    router.push('/upload-resume');
+  }, [template, router]);
+
+  const handleLinkedInClick = useCallback(() => {
+    trackEvent('create_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      method: 'linkedin_autofill',
+    });
+    onLinkedInClick();
+    onClose();
+  }, [template, onLinkedInClick, onClose]);
 
   const getTitle = () => {
     if (template) {
@@ -189,7 +205,7 @@ export default function ResumeCreationModal({
             {/* Upload Resume */}
             <div className="relative">
               <Button
-                onClick={resumeCreateHandler}
+                onClick={handleUploadResumeClick}
                 className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors hover:bg-gray-50 bg-white text-left text-base"
               >
                 <Image src="/images/file_upload.svg" alt="" width={24} height={24} />
@@ -225,14 +241,7 @@ export default function ResumeCreationModal({
 
             {/* Auto-fill via LinkedIn */}
             <Button
-              onClick={() => {
-                trackEvent('create_resume_click', {
-                  source: template ? 'template_modal' : 'dashboard_modal',
-                  method: 'linkedin_autofill',
-                });
-                onLinkedInClick();
-                onClose();
-              }}
+              onClick={handleLinkedInClick}
               className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
             >
               <Image src="/images/auto_mode.svg" alt="" width={24} height={24} />

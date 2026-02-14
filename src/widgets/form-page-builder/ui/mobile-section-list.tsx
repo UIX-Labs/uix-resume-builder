@@ -73,7 +73,7 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
   };
 
   return (
-    <div className="flex-1 overflow-y-auto overflow-x-hidden bg-[#F9FAFB] pb-20 max-w-full">
+    <div className="flex-1 overflow-y-auto overflow-x-hidden bg-dashboard-bg pb-20 max-w-full">
       <div className="flex items-start px-4 pt-4">
         <Button
           type="button"
@@ -86,8 +86,8 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
         </Button>
 
         <div className="flex-1">
-          <h1 className="text-[18px] font-semibold text-[#111827]">Your resume is ready</h1>
-          <p className="text-[13px] text-[#6B7280]">
+          <h1 className="text-[18px] font-semibold text-section-text-primary">Your resume is ready</h1>
+          <p className="text-[13px] text-section-text-secondary">
             We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit, improve,
             or personalize it anytime.
           </p>
@@ -106,10 +106,10 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
             // biome-ignore lint/a11y/noStaticElementInteractions: Mobile-only touch interface
             <div
               key={nav.name}
-              className="space-y-3 p-5 rounded-2xl shadow-sm border border-gray-100 bg-white cursor-pointer"
+              className="space-y-3 p-5 rounded-2xl bg-white cursor-pointer"
               onClick={() => onSectionClick(nav.name as ResumeDataKey)}
               style={{
-                background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+                backgroundImage: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
                 backgroundSize: '20px 20px',
               }}
             >
@@ -117,13 +117,13 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
                 <div
                   className={cn(
                     'size-8 rounded-full flex items-center justify-center flex-shrink-0 font-semibold text-white',
-                    isCompleted ? 'bg-[#10B981]' : 'bg-[#1F2937]',
+                    isCompleted ? 'bg-section-success' : 'bg-section-dark',
                   )}
                 >
                   {isCompleted ? <CheckCircle2 className="w-6 h-6" /> : <Icon className="w-6 h-6 text-white" />}
                 </div>
-                <h3 className="text-sm text-[#111827]">{nav.label}</h3>
-                {isCompleted && <CheckCircle2 className="w-5 h-5 text-[#10B981] ml-auto" />}
+                <h3 className="text-sm text-section-text-primary">{nav.label}</h3>
+                {isCompleted && <CheckCircle2 className="w-5 h-5 text-section-success ml-auto" />}
               </div>
 
               {/* Section Items */}
@@ -137,11 +137,13 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
                         key={item?.id || item?.itemId || itemIndex}
                         type="button"
                         variant="outline"
-                        className="w-full rounded-md bg-white border border-[#D1D5DB] p-3 text-left h-auto justify-start shadow-[0_0_0_4px_#F6F6F6] whitespace-normal"
+                        className="w-full rounded-md bg-white border border-section-border p-3 text-left h-auto justify-start shadow-[0_0_0_4px_var(--color-section-shadow)] whitespace-normal"
                       >
                         <div className="flex flex-col items-start">
-                          {primary && <h4 className="text-sm font-semibold text-[#111827] mb-1">{primary}</h4>}
-                          {secondary && <p className="text-sm text-[#6B7280]">{secondary}</p>}
+                          {primary && (
+                            <h4 className="text-sm font-semibold text-section-text-primary mb-1">{primary}</h4>
+                          )}
+                          {secondary && <p className="text-sm text-section-text-secondary">{secondary}</p>}
                         </div>
                       </Button>
                     );
@@ -150,9 +152,9 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full rounded-[12px] bg-white border border-[#D1D5DB] p-3 text-left h-auto justify-start shadow-[0_0_0_4px_#F6F6F6]"
+                    className="w-full rounded-[12px] bg-white border border-section-border-light p-3 text-left h-auto justify-start shadow-[0_0_0_4px_var(--color-section-shadow)]"
                   >
-                    <p className="text-sm text-[#9CA3AF]">Add {nav.label}</p>
+                    <p className="text-sm text-section-text-muted">Add {nav.label}</p>
                   </Button>
                 )}
               </div>

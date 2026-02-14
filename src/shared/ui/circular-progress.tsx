@@ -32,8 +32,12 @@ export function CircularProgress({
   if (variant === 'green') {
     return (
       <div className={cn('relative flex items-center justify-center', className)} style={{ width: size, height: size }}>
-        <svg className="absolute inset-0 w-full h-full rotate-90" viewBox={`0 0 ${size} ${size}`}>
-          <title>Circular progress indicator</title>
+        <svg
+          className="absolute inset-0 w-full h-full -rotate-90"
+          viewBox={`0 0 ${size} ${size}`}
+          aria-label={`Progress: ${progress}%`}
+        >
+          <title>Circular progress indicator showing {progress}% completion</title>
           <circle cx={center} cy={center} r={center} fill={backgroundColor} />
 
           <circle
@@ -46,8 +50,6 @@ export function CircularProgress({
             strokeDasharray={strokeDasharray}
             strokeDashoffset={strokeDashoffset}
             className="transition-all duration-300 ease-out"
-            transform="scale(-1, 1)"
-            style={{ transformOrigin: 'center' }}
           />
         </svg>
 
@@ -67,7 +69,8 @@ export function CircularProgress({
 
   return (
     <div className={cn('relative flex items-center justify-center', className)} style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none" aria-hidden="true">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} fill="none" aria-label={`Progress: ${progress}%`}>
+        <title>Circular progress indicator showing {progress}% completion</title>
         <g filter="url(#filter0_i_progress)">
           <circle cx={center} cy={center} r={outerRadius} fill="#F0F7FF" />
           <circle cx={center} cy={center} r={innerRadius} fill="white" />

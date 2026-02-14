@@ -78,97 +78,116 @@ export const ReusableMobileSidebar = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-[280px] bg-white z-50 shadow-2xl overflow-y-auto"
+            className="fixed right-0 top-0 h-full w-[269px] bg-white z-50 shadow-2xl overflow-y-auto"
           >
             <div className="flex flex-col min-h-full">
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
-                <button className="flex items-center gap-2" onClick={handleLogoClick} type="button">
+                <Button
+                  variant="ghost"
+                  className="flex items-center gap-2 hover:bg-transparent p-0"
+                  onClick={handleLogoClick}
+                >
                   <Image src={logoSrc} alt={logoAlt} width={40} height={40} />
                   <div className="flex flex-col">
                     <div className="flex flex-row">
-                      <span className="font-bold text-[#005FF2] text-xl">{brandName.primary}</span>
-                      <span className="font-normal text-[#21344F] text-xl">{brandName.secondary}</span>
+                      <span className="font-bold text-sidebar-brand-primary text-xl">{brandName.primary}</span>
+                      <span className="font-normal text-sidebar-brand-secondary text-xl">{brandName.secondary}</span>
                     </div>
                   </div>
-                </button>
-                <button
-                  type="button"
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={onClose}
-                  className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg"
                   aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
-                </button>
+                </Button>
               </div>
 
               {/* Navigation Items */}
-              <nav className="flex-1 p-4">
-                {menuSections && menuSections.length > 0 ? (
-                  // Render sections with labels
-                  <div className="space-y-6">
-                    {menuSections.map((section, sectionIndex) => (
-                      <div key={sectionIndex}>
-                        {section.label && (
-                          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">
-                            {section.label}
-                          </h3>
-                        )}
-                        <ul className="space-y-1.5">
-                          {section.items.map((item, itemIndex) => {
-                            const Icon = item.icon;
-                            const isActive = item.isActive ?? item.label === pathname;
+              <nav className="flex-1 mt-2 mx-4 mb-4 flex flex-col">
+                <div className="bg-[var(--color-sidebar-nav-bg)] rounded-[36px] px-[33px] py-9 relative flex-1">
+                  {menuSections && menuSections.length > 0 ? (
+                    // Render sections with labels
+                    <div className="space-y-8">
+                      {menuSections.map((section, sectionIndex) => (
+                        <div key={sectionIndex}>
+                          {section.label && (
+                            <h3 className="text-xs font-normal text-sidebar-section-label mb-4 tracking-[-0.00167em] leading-[1.667em]">
+                              {section.label}
+                            </h3>
+                          )}
+                          <ul className="space-y-4">
+                            {section.items.map((item, itemIndex) => {
+                              const Icon = item.icon;
+                              const isActive = item.isActive ?? item.label === pathname;
 
-                            return (
-                              <li key={`${sectionIndex}-${itemIndex}`}>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    item.onClick();
-                                    onClose();
-                                  }}
-                                  className={cn(
-                                    'w-full text-left px-4 py-3 rounded-xl font-medium text-base transition-colors flex items-center gap-3',
-                                    isActive ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100',
+                              return (
+                                <li key={`${sectionIndex}-${itemIndex}`} className="relative">
+                                  {isActive && (
+                                    <div className="absolute -left-[33px] top-1/2 -translate-y-1/2 w-[10px] h-[33px] bg-sidebar-brand-primary rounded-r-[12px]" />
                                   )}
-                                >
-                                  {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
-                                  <span>{item.label}</span>
-                                </button>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <ul className="space-y-2">
-                    {navItems.map((item, index) => {
-                      const Icon = item.icon;
-                      const isActive = item.isActive ?? false;
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      item.onClick();
+                                      onClose();
+                                    }}
+                                    className={cn(
+                                      'w-full text-left flex items-center gap-2 transition-colors',
+                                      isActive
+                                        ? 'text-sidebar-nav-active font-semibold'
+                                        : 'text-sidebar-nav-inactive font-normal',
+                                    )}
+                                  >
+                                    {Icon && <Icon className="w-6 h-6 flex-shrink-0" />}
+                                    <span className="text-base leading-[1.25em] tracking-[-0.00125em]">
+                                      {item.label}
+                                    </span>
+                                  </button>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <ul className="space-y-4">
+                      {navItems.map((item, index) => {
+                        const Icon = item.icon;
+                        const isActive = item.isActive ?? false;
 
-                      return (
-                        <li key={index}>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              item.onClick();
-                              onClose();
-                            }}
-                            className={cn(
-                              'w-full text-left px-4 py-3 rounded-xl font-medium text-base transition-colors flex items-center gap-3',
-                              isActive ? 'bg-blue-100 text-blue-900' : 'text-gray-700 hover:bg-gray-100',
+                        return (
+                          <li key={index} className="relative">
+                            {isActive && (
+                              <div className="absolute -left-[33px] top-1/2 -translate-y-1/2 w-[10px] h-[33px] bg-sidebar-brand-primary rounded-r-[12px]" />
                             )}
-                          >
-                            {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
-                            <span>{item.label}</span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                )}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                item.onClick();
+                                onClose();
+                              }}
+                              className={cn(
+                                'w-full text-left flex items-center gap-2 transition-colors',
+                                isActive
+                                  ? 'text-sidebar-nav-active font-semibold'
+                                  : 'text-sidebar-nav-inactive font-normal',
+                              )}
+                            >
+                              {Icon && <Icon className="w-6 h-6 flex-shrink-0" />}
+                              <span className="text-base leading-[1.25em] tracking-[-0.00125em]">{item.label}</span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
               </nav>
 
               {ctaButton && (

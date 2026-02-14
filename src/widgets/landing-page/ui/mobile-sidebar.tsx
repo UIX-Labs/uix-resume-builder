@@ -1,12 +1,12 @@
 'use client';
 
-import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import type { NavItem } from '@shared/ui/components/reusable-mobile-sidebar';
+import { ReusableMobileSidebar } from '@shared/ui/components/reusable-mobile-sidebar';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
-import { ReusableMobileSidebar } from '@shared/ui/components/reusable-mobile-sidebar';
-import type { NavItem } from '@shared/ui/components/reusable-mobile-sidebar';
 
 export interface MobileSidebarProps {
   isOpen: boolean;
@@ -63,9 +63,9 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/roast',
     },
     {
-      label: user ? 'Dashboard' : 'Sign In',
+      label: 'Dashboard',
       onClick: handleDashboardClick,
-      isActive: pathname === '/dashboard' || pathname === '/auth',
+      isActive: pathname === '/dashboard',
     },
     {
       label: 'About Us',

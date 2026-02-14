@@ -13,9 +13,15 @@ interface UseJDModalReturn {
 export function useJDModal(options?: UseJDModalOptions): UseJDModalReturn {
   const [isJDModalOpen, setIsJDModalOpen] = useState(false);
 
-  const handleJDModal = useCallback((isOpen: boolean) => {
-    setIsJDModalOpen(isOpen);
-  }, []);
+  const handleJDModal = useCallback(
+    (isOpen: boolean) => {
+      setIsJDModalOpen(isOpen);
+      if (!isOpen && options?.onRelease) {
+        options.onRelease();
+      }
+    },
+    [options],
+  );
 
   const handleJDSubmittingChange = useCallback(
     (isSubmitting: boolean, hasError?: boolean) => {

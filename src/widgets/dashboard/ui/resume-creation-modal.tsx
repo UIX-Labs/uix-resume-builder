@@ -188,6 +188,7 @@ export default function ResumeCreationModal({
         showCloseButton={true}
         closeButtonVariant="custom"
         title="Create Resume"
+        overlayClassName="backdrop-blur-md"
       >
         <ModalBody className="">
           <div className="divide-y divide-gray-100">
@@ -195,7 +196,7 @@ export default function ResumeCreationModal({
             <Button
               onClick={resumeCreateHandler}
               disabled={optionsLocked && activeAction !== ResumeCreationAction.CREATE}
-              className="w-full flex items-center justify-start gap-3 px-0 pb-6 transition-colors bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-left text-base"
+              className="w-full flex items-center justify-start gap-3 px-0 pb-6 transition-colors bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-left text-base mt-3"
             >
               {/* <FileText className="w-5 h-5 text-gray-500 flex-shrink-0" /> */}
               <Image src="/images/from-scratch.svg" alt="" width={24} height={24} />
@@ -284,7 +285,7 @@ export default function ResumeCreationModal({
       <AuthRedirectModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        redirectUrl=""
+        redirectUrl="/auth"
         title="Login Required"
         description="You need to login to use Tailored with JD."
       />

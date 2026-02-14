@@ -80,7 +80,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
 
             <div className="w-full max-w-[539px] flex flex-col items-center justify-center gap-4 md:gap-0 md:p-2 md:bg-[#0C1118] md:border md:border-[#959DA8] md:rounded-[20px] md:shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
               <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0">
-                <div className="flex items-center px-4 py-5 gap-3 h-[56px] bg-white rounded-[16px] md:rounded-none md:bg-transparent flex-1">
+                <div className="flex items-center px-4 py-5 gap-3 h-[56px] bg-white rounded-[16px] md:bg-transparent flex-1 p-[2px] border border-blue-900 shadow-[0_0_0_4px_#CBE7FF] md:p-0 md:border-0 md:shadow-none">
                   <Image src="/images/linkedin.svg" alt="img" height={24} width={24} className="flex-shrink-0" />
 
                   <input
@@ -101,7 +101,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isLoading || !linkedinUrl.trim()}
-                  className="flex items-center justify-center gap-2 bg-[#005FF2] border-2 border-amber-50 md:border-none md:bg-[#0066FF] text-white rounded-[16px] md:rounded-xl px-4 py-3 h-[56px] md:h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer font-semibold text-lg"
+                  className="flex items-center justify-center gap-2 bg-blue-900 border-2 border-amber-50 md:border-none md:bg-[#0066FF] text-white rounded-[12px] md:rounded-xl px-4 py-3 h-[48px] md:h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer font-semibold text-lg w-[216px] md:w-auto mx-auto md:mx-0"
                 >
                   <span className="text-lg font-semibold leading-[1.333em] tracking-tight">
                     {isLoading ? 'Processing...' : 'Convert to Resume'}
@@ -170,7 +170,7 @@ export default function LinkedinIntegrationCard() {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center bg-[rgb(0,95,242)] text-white rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 h-10 sm:h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)] cursor-pointer w-full sm:w-auto"
+              className="flex items-center justify-center bg-blue-900 text-white rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)] cursor-pointer w-[213px] sm:w-auto"
             >
               <span className="text-base sm:text-lg font-semibold leading-[1.333em] tracking-tight">
                 Auto-fill via Linkedin

@@ -793,7 +793,7 @@ export function FormPageBuilder() {
         />
       )}
 
-      <FeedbackModal open={isFeedbackModalOpen} onOpenChange={setIsFeedbackModalOpen} />
+      {!isMobile && <FeedbackModal open={isFeedbackModalOpen} onOpenChange={setIsFeedbackModalOpen} />}
 
       {selectedTemplate && (
         <PreviewModal

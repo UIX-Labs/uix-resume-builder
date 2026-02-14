@@ -155,7 +155,7 @@ function ResumeListItem({ resume, isSelected, onSelect, onPreview }: ResumeListI
           onClick={onPreview}
           className="w-8 h-8 flex items-center justify-center flex-shrink-0 mt-1 p-0 bg-transparent hover:opacity-70 transition-opacity"
         >
-          <Eye className="size-4.5 text-[#656A72]" />
+          <Eye className="size-5 text-black" />
         </Button>
       </div>
 

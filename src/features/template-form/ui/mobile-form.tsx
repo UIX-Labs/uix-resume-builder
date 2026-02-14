@@ -80,7 +80,7 @@ export function MobileForm({
 
       <div className="flex-1 overflow-y-auto overflow-x-hidden w-full bg-[#F5F8FA] px-4 py-6">
         <div
-          className="relative rounded-[36px] shadow-sm px-4 py-6 bg-[#F8F8F8]"
+          className="relative rounded-[36px] shadow-sm px-4 py-6 bg-white"
           style={{
             backgroundImage: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
             backgroundSize: '20px 20px',

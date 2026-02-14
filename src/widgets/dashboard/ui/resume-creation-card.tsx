@@ -17,6 +17,7 @@ import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationMobileCard from './resume-creation-mobile-card';
 import JDUploadMobileModal from './jd-upload-mobile-modal';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -40,6 +41,7 @@ interface ResumeCreationCardProps {
 export default function ResumeCreationCard({ shouldOpenJDModal = false }: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
+  const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
@@ -152,9 +154,14 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     }
 
     lockOptions('tailoredJD');
-    setShowResumeUpload(false);
-    setShowJDUpload(true);
-    setIsBuilderIntelligenceModalOpen(true);
+
+    if (isMobile) {
+      handleJDModal(true);
+    } else {
+      setShowResumeUpload(false);
+      setShowJDUpload(true);
+      setIsBuilderIntelligenceModalOpen(true);
+    }
   };
 
   // Handle opening JD modal from external trigger (e.g., from landing page JD section)

@@ -4,6 +4,7 @@ description: "Switching careers? Learn how to reframe your experience, highlight
 date: "2026-01-10"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: ""
 tags:
   - "job"
   - "resume-tips"

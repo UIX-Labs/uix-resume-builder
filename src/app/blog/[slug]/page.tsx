@@ -99,9 +99,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   // Find related posts (same tags, excluding current)
   const allPosts = getAllPosts();
-  //const relatedPosts = allPosts
-  // .filter((p) => p.slug !== slug && p.frontmatter.tags.some((t) => frontmatter.tags.includes(t)))
-  // .slice(0, 3);
 
   // Article structured data
   const articleJsonLd = {
@@ -139,11 +136,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <article className="mx-auto px-4 py-10 sm:px-6 max-w-[1395px]">
+      <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
         {/* Back link */}
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to all articles
@@ -205,7 +202,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {headings.length > 0 && (
             <aside className="lg:block shrink-0 w-full md:w-[320px] lg:w-[400px]">
               <div className="block sticky top-20">
-                <TableOfContents headings={headings} />
+                <div className="hidden lg:block">
+                  <TableOfContents headings={headings} />
+                </div>
                 <div className="hidden md:block mt-10">
                   <JDCTACard />
                 </div>
@@ -214,20 +213,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           )}
           {/* Main content */}
           <div className="min-w-0 flex-1">
-            <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
-              <MDXRemote
-                source={content}
-                components={mdxComponents}
-                options={{
-                  mdxOptions: {
-                    remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'no-underline' } }],
-                    ],
-                  },
-                }}
-              />
+            <div className="relative">
+              {/* Mobile sticky */}
+              <div className="lg:hidden sticky top-0 mb-6 bg-[#F5F5F7] z-50">
+                <TableOfContents headings={headings} />
+              </div>
+
+              <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
+                <MDXRemote
+                  source={content}
+                  components={mdxComponents}
+                  options={{
+                    mdxOptions: {
+                      remarkPlugins: [remarkGfm],
+                      rehypePlugins: [
+                        rehypeSlug,
+                        [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'no-underline' } }],
+                      ],
+                    },
+                  }}
+                />
+              </div>
             </div>
             <BlogCreateResume />
           </div>
@@ -259,7 +265,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </section> */}
 
         {/* )} */}
-        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white relative overflow-hidden group">
+        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white">
           <div className="text-[36px] font-bold text-center p-2">Continue Reading</div>
           <span className="text-[20px] text-gray-500 text-center block">
             Check more recommended readings to get the job of your dreams.

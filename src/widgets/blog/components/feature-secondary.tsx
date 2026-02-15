@@ -15,49 +15,55 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
   return (
     <Link href={`/blog/${post.slug}`}>
       <div
-        className="flex flex-row min-h-[160px] sm:min-h-[220px] items-stretch 
+        className="flex flex-row min-h-[150px] sm:min-h-[200px] items-stretch 
       bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] 
-      rounded-2xl border-2 sm:border-4 border-white relative overflow-hidden group"
+      rounded-2xl border-2 sm:border-4 border-white relative overflow-hidden group transition-all hover:shadow-sm"
       >
-        {/* LEFT IMAGE - Fixed ratio for mobile, 1/3 for desktop */}
-        <div className="w-[130px] sm:w-1/3 shrink-0 relative">
+       
+        <div className="w-[120px] sm:w-[35%] shrink-0 relative">
           <Image src={featureImage} alt="feature" fill className="object-cover" />
         </div>
 
-        {/* RIGHT CONTENT */}
-        <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-3 p-3 sm:p-4">
-          {/* BADGE */}
+        <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-2 p-3 sm:p-5">
           <div>
             <span
-              className="text-[10px] sm:text-sm font-semibold text-white uppercase px-2 sm:px-4 py-0.5 sm:py-1 rounded-md"
+              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-2 py-1 rounded-sm"
               style={{ backgroundColor: badgeColor }}
             >
               {post.frontmatter.tags[0]}
             </span>
           </div>
 
-          {/* TITLE */}
-          <h3 className="text-sm sm:text-base md:text-xl font-semibold mt-1 sm:mt-2 leading-tight text-[#0B0A09] line-clamp-2">
+          <h3 className="text-md sm:text-xl font-semibold mt-1 leading-tight text-[#17171A] line-clamp-2">
             {post.frontmatter.title}
           </h3>
 
-          {/* META */}
-          <div className="flex items-center gap-2 mt-2 sm:mt-3 text-[10px] md:text-[13px] text-[#4B5563] font-medium">
-            <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-gray-200 overflow-hidden relative border border-gray-100">
-              <Image
-                src={post.frontmatter.coverImage || '/images/blog/features/Group 119.png'}
-                alt="avatar"
-                fill
-                className="object-cover"
-              />
+            {/* META ROW: Color updated to #8A8C99 */}
+             <div className="flex items-center gap-3 mt-4">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
+                <img
+                  src={post.frontmatter.authorImage || "https://picsum.photos/200"}
+                  className="w-full h-full object-cover"
+                  alt={post.frontmatter.author}
+                />
+              </div>
+
+              <div 
+                className="flex items-center text-[10px] sm:text-[12px] font-medium" 
+                style={{ color: '#8A8C99' }}
+              >
+                <span className="truncate max-w-[80px] sm:max-w-none">
+                  {post.frontmatter.author}
+                </span>
+                
+                <span className="mx-3 opacity-50">|</span>
+
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
+                  <Clock className="w-3.5 h-3.5" stroke="currentColor" />
+                  <span>{post.readingTime}</span>
+                </div>
+              </div>
             </div>
-
-            <span className="truncate max-w-[60px] sm:max-w-none">{post.frontmatter.author}</span>
-
-            <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-
-            <span className="whitespace-nowrap">{post.readingTime}</span>
-          </div>
         </div>
       </div>
     </Link>

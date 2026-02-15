@@ -9,7 +9,7 @@ interface FeaturedSectionProps {
 }
 
 export default function FeaturedSection({ primaryPost, secondaryPosts }: FeaturedSectionProps) {
-  const featureImages = ['/images/blog/features/image.png', '/images/blog/features/feature-img.png'];
+  const featureImages = ['/images/blog/features/feature-one.png', '/images/blog/features/feature-img.png'];
 
   function getBadgeColorFromPost(post: BlogPost) {
     const tag = post.frontmatter.tags[0]?.toLowerCase();

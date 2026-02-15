@@ -4,6 +4,7 @@ description: "Discover the most common resume mistakes that get your application
 date: "2026-01-25"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: ""
 tags:
   - "career"
   - "resume-tips"

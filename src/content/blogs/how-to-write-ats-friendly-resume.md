@@ -4,6 +4,7 @@ description: "Learn the exact strategies to craft a resume that passes Applicant
 date: "2026-02-01"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: ""
 tags:
   - "interview"
   - "ATS"

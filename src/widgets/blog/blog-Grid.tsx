@@ -22,7 +22,7 @@ export default function BlogGrid({ posts, badgeColor }: BlogGridProps) {
               <BlogCard
                 key={blog.slug}
                 image={blog.frontmatter.coverImage || '/images/blog/blog-card/blog-card.png'}
-                category={category?.title || categoryId}
+                category={categoryId}
                 title={blog.frontmatter.title}
                 author={blog.frontmatter.author}
                 date={blog.frontmatter.date}

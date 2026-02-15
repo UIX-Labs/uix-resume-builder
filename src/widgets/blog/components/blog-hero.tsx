@@ -19,10 +19,10 @@ export default function BlogHero({ description, image, children }: BlogHeroProps
         <div className="w-full lg:w-[55%] px-4 lg:px-10 text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center py-8 lg:py-0">
           <h1 className="text-2xl sm:text-3xl lg:text-[45px] font-semibold leading-tight">{children}</h1>
 
-          <p className="mt-2 text-md sm:text-base lg:text-lg max-w-[480px] text-black mx-auto lg:mx-0">{description}</p>
+          <p className=" mt-2 text-base sm:text-lg lg:text-[22px] leading-relaxed max-w-[520px] text-[#1A1A1A] mx-auto lg:mx-0 font-medium">{description}</p>
         </div>
 
-        {/* IMAGE - Covering full width/height of its section */}
+        
         <div className="w-full lg:w-[45%] relative min-h-[200px] lg:min-h-full order-1 lg:order-2">
           <Image src={image} alt="hero" fill priority className="object-cover object-center lg:object-right" />
         </div>

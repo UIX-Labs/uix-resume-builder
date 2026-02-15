@@ -4,6 +4,7 @@ description: "Everything you need to know about AI-powered resume builders — h
 date: "2026-01-18"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: "" 
 tags:
   - "job"
   - "ATS"

@@ -4,6 +4,7 @@ description: "Just like websites need SEO to rank on Google, your resume needs k
 date: "2026-01-03"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: ""
 tags:
   - "cover-letter"
   - "ATS"

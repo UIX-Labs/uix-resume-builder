@@ -4,6 +4,7 @@ description: "Remote work is here to stay. Learn how to tailor your resume to st
 date: "2026-02-05"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: ""
 tags:
   - "resume"
   - "Resume Tips"

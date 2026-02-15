@@ -1,0 +1,471 @@
+src/shared/ui/components/modal.tsx
+  3c494ddd2ea82b35 39
+  b5ab8b3e27a1a2fb 82,116
+  7ee34c66a32c0c03 49,52-54,57-58,69,119,122-123,127
+src/widgets/dashboard/ui/resume-creation-card.tsx
+  2aba6004a97da8d7 18
+  47d49a8c4609f315 20,44,158-160,164
+  3c494ddd2ea82b35 71,279,291
+  e4d445fb25c9461e 343-346
+  dfea527a8c9469d7 19,72-74,289-290,292-293
+  0bcdc9378688a785 13,50-51,151-152,381-387
+  27ebcb3c65a3754d 189
+src/features/template-form/ui/draggable/draggable.tsx
+  6d0c0d8b50a5329e 107,115,198,200
+src/widgets/dashboard/ui/resume-creation-mobile-card.tsx
+  47d49a8c4609f315 16-18
+src/widgets/dashboard/ui/linkedin-integration-card.tsx
+  3c494ddd2ea82b35 83
+  e4d445fb25c9461e 5,43-44
+src/widgets/form-page-builder/ui/form-page-builder.tsx
+  47d49a8c4609f315 796
+  1eed8bb0b2f44737 831
+  7ee34c66a32c0c03 783-784,795,797,812,819-822,829-830,832-848,851-856,859-862,865-877,879-880,1076
+  30b5d7c9c02205f8 245,247,272-273
+  78055cff0c8ca61c 51
+  4d07e5b06e9660b2 266
+src/widgets/dashboard/ui/resume-creation-modal.tsx
+  2aba6004a97da8d7 177,255
+  47d49a8c4609f315 288
+  aba40a932cba055a 3,22,24
+  3c494ddd2ea82b35 191
+  ddf70a8a3a7845c0 15,54,58-62,69-70,209,245
+  c6a80472fa381b12 34
+src/shared/ui/components/reusable-mobile-sidebar.tsx
+  b6f42ebdf8daf8ae 86-88,94-95,98-101,107,119,131,142,167,178
+src/middleware.ts
+  47d49a8c4609f315 15
+  dc3d6448beabbf22 44,55-60,63-65,68-71
+src/entities/jd-modal-mobile/hooks/use-jd-modal.ts
+  3c494ddd2ea82b35 9,40
+  dfea527a8c9469d7 1-8,10-15,25-39,41-43
+  47d49a8c4609f315 19-21
+src/app/upload-resume/page.tsx
+  ca54f88b841eace1 25-32,45-49,53,55,57,81-85,146-152,160-167,175,185-186,189,196,203-204,208,219-220,238,240-241,243,247,251,262
+  c364937e62a6d9d6 17
+  e31e2562e5da5d84 235-236
+src/shared/ui/circular-progress.tsx
+  47d49a8c4609f315 38-40,72-73
+  2cc5ed7760bdcc5a 1-34,41-51,53-64,66-71,74-187
+  e31e2562e5da5d84 36
+src/features/template-form/ui/strings-input.tsx
+  569f02b6a86e5ce4 85-86,91
+  6d0c0d8b50a5329e 77,83,156,158
+  71a7dc0f8901516a 112-116,119-124,126,130,132
+src/app/globals.css
+  47d49a8c4609f315 350-359
+  874aff32c88ee611 318-320
+  b6f42ebdf8daf8ae 343-349
+src/widgets/dashboard/ui/jd-upload-steps/ready-to-analyze-step.tsx
+  47d49a8c4609f315 49
+  8cfca78cc47746cd 6-11,14,16-17,19,21-29,36,44-46,48,51-52,54,57,59-61,65-69
+  2cc5ed7760bdcc5a 2,4,18,30-34,38-42,47,50,56
+  8ce9ef42fc23b5ec 53
+  dfea527a8c9469d7 12-13,35,43,55
+src/features/template-form/ui/index.tsx
+  5f5ae6614bc7a924 141
+  78055cff0c8ca61c 12,247-250,252-267,275,277-284,288-291,293-299
+  6d0c0d8b50a5329e 222,239
+src/widgets/form-page-builder/ui/mobile-section-list.tsx
+  7ee34c66a32c0c03 6,25,30,32-42,44-46,48,53,58,60-61,67-68,78,81-82,86,136,139,142,147-148,152,154,158
+  47d49a8c4609f315 76,89-90,120,125-126,140,144,146,155,157
+  78055cff0c8ca61c 1-4,8-24,26-29,31,43,47,50-52,54-57,59,62-66,69-75,79-80,84,87-88,91-105,107-108,110,115-119,121-124,127-131,133-135,137-138,141,149-151,153,156,159-167
+  f00c068216abc65e 106
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.3",
+  "base_commit_sha": "c52ea0055c383a1352e5c68310f0866ae4fe92f0",
+  "prompts": {
+    "0bcdc9378688a785": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363983",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 58,
+      "total_deletions": 30,
+      "accepted_lines": 12,
+      "overriden_lines": 0
+    },
+    "1eed8bb0b2f44737": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374596",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "27ebcb3c65a3754d": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "371412",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 116,
+      "total_deletions": 80,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "2aba6004a97da8d7": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "375304",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 302,
+      "total_deletions": 54,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "2cc5ed7760bdcc5a": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "375693",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 700,
+      "total_deletions": 909,
+      "accepted_lines": 193,
+      "overriden_lines": 0
+    },
+    "30b5d7c9c02205f8": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "365733",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 82,
+      "total_deletions": 61,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    },
+    "3c494ddd2ea82b35": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376971",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 11,
+      "total_deletions": 10,
+      "accepted_lines": 8,
+      "overriden_lines": 0
+    },
+    "47d49a8c4609f315": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "377101",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 19,
+      "total_deletions": 6,
+      "accepted_lines": 42,
+      "overriden_lines": 0
+    },
+    "4d07e5b06e9660b2": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363973",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 78,
+      "total_deletions": 2,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "569f02b6a86e5ce4": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "365929",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 14,
+      "total_deletions": 6,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "5f5ae6614bc7a924": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4a919dd0-ac9e-4ca5-a922-df175eb96f25",
+        "model": "default"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "6d0c0d8b50a5329e": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "377150",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 12,
+      "total_deletions": 4,
+      "accepted_lines": 10,
+      "overriden_lines": 0
+    },
+    "71a7dc0f8901516a": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "365932",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 37,
+      "total_deletions": 10,
+      "accepted_lines": 14,
+      "overriden_lines": 0
+    },
+    "78055cff0c8ca61c": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374275",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 147,
+      "overriden_lines": 0
+    },
+    "7ee34c66a32c0c03": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374303",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 101,
+      "overriden_lines": 0
+    },
+    "874aff32c88ee611": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "373447",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 0,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "8ce9ef42fc23b5ec": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376312",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 21,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "8cfca78cc47746cd": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "375678",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 248,
+      "total_deletions": 720,
+      "accepted_lines": 36,
+      "overriden_lines": 0
+    },
+    "aba40a932cba055a": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "373457",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 57,
+      "total_deletions": 27,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "b5ab8b3e27a1a2fb": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "373475",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 13,
+      "total_deletions": 18,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    },
+    "b6f42ebdf8daf8ae": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "377095",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 37,
+      "total_deletions": 244,
+      "accepted_lines": 22,
+      "overriden_lines": 0
+    },
+    "c364937e62a6d9d6": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376958",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 12,
+      "total_deletions": 11,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "c6a80472fa381b12": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "375308",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 107,
+      "total_deletions": 103,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "ca54f88b841eace1": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376959",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 65,
+      "total_deletions": 52,
+      "accepted_lines": 53,
+      "overriden_lines": 0
+    },
+    "dc3d6448beabbf22": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363534",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 31,
+      "total_deletions": 19,
+      "accepted_lines": 14,
+      "overriden_lines": 0
+    },
+    "ddf70a8a3a7845c0": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376954",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 26,
+      "total_deletions": 21,
+      "accepted_lines": 11,
+      "overriden_lines": 0
+    },
+    "dfea527a8c9469d7": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "376016",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 671,
+      "total_deletions": 206,
+      "accepted_lines": 45,
+      "overriden_lines": 0
+    },
+    "e31e2562e5da5d84": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "377086",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 5,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    },
+    "e4d445fb25c9461e": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "363543",
+        "model": "GEMINI_3_PRO"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 103,
+      "total_deletions": 63,
+      "accepted_lines": 7,
+      "overriden_lines": 0
+    },
+    "f00c068216abc65e": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "374353",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}

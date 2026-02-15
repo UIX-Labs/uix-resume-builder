@@ -38,7 +38,6 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
             {post.frontmatter.title}
           </h3>
 
-            {/* META ROW: Color updated to #8A8C99 */}
              <div className="flex items-center gap-3 mt-4">
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
                 <img

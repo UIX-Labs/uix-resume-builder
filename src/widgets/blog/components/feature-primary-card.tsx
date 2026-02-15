@@ -25,7 +25,6 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
         {/* CONTENT */}
         <div className="absolute bottom-0 left-0 w-full p-4 sm:p-10 flex flex-col justify-end z-10">
           <div className="max-w-[75%] sm:max-w-[480px]">
-            
             <div className="mb-4">
               <span
                 className="inline-flex items-center justify-center text-white text-sm font-semibold px-3 py-1 rounded-md w-fit uppercase tracking-wide"

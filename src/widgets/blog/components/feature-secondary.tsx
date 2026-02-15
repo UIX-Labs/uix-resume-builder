@@ -37,14 +37,14 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
             {post.frontmatter.title}
           </h3>
 
-             <div className="flex items-center gap-3 mt-4">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
-                <img
-                  src={post.frontmatter.authorImage || "https://picsum.photos/200"}
-                  className="w-full h-full object-cover"
-                  alt={post.frontmatter.author}
-                />
-              </div>
+          <div className="flex items-center gap-3 mt-4">
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
+              <img
+                src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
+                className="w-full h-full object-cover"
+                alt={post.frontmatter.author}
+              />
+            </div>
 
             <div className="flex items-center text-[10px] sm:text-[12px] font-medium" style={{ color: '#8A8C99' }}>
               <span className="truncate max-w-[80px] sm:max-w-none">{post.frontmatter.author}</span>

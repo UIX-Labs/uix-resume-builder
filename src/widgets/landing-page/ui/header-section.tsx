@@ -1,4 +1,5 @@
 'use client';
+import { ExpertReviewModal } from '@/features/expert-review/ui/expert-review-modal';
 import { Button } from '@/shared/ui/components/button';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useCachedUser } from '@shared/hooks/use-user';
@@ -22,6 +23,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
+  const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
 
   const handleNavigate = () => {
     router.push('/dashboard');
@@ -143,6 +145,19 @@ function Header({ variant = 'default' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => setShowExpertReviewModal(true)}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              'text-blue-900 hover:text-gray-900',
+              isRoast ? 'text-white' : '',
+            )}
+          >
+            Expert Review
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleRoastClick}
             className={cn(
               'font-semibold text-lg cursor-pointer',
@@ -244,8 +259,13 @@ function Header({ variant = 'default' }: HeaderProps) {
         (isDashboardRoute ? (
           <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
         ) : (
-          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+          <MobileSidebar
+            isOpen={showMobileSidebar}
+            onClose={() => setShowMobileSidebar(false)}
+            onExpertReviewClick={() => setShowExpertReviewModal(true)}
+          />
         ))}
+      <ExpertReviewModal isOpen={showExpertReviewModal} onClose={() => setShowExpertReviewModal(false)} />
     </>
   );
 }

@@ -19,10 +19,6 @@ const PDF_STYLES = `
         href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
         rel="stylesheet"
       />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet"
-      />
 
       <style>
         /* Global reset */
@@ -57,40 +53,11 @@ const PDF_STYLES = `
           filter: none !important;
         }
 
-        /* Resume page breaks — each .resume-page is one PDF page */
-        .resume-page {
-          page-break-after: always;
-          break-after: page;
-        }
-        .resume-page:last-child {
-          page-break-after: auto;
-          break-after: auto;
-        }
-
         /* Print rules */
         @media print {
           @page {
             size: A4;
             margin: 0;
-          }
-
-          * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-          }
-
-          body {
-            width: 21cm;
-            min-height: 100vh;
-          }
-
-          .resume-page {
-            page-break-after: always;
-            break-after: page;
-          }
-          .resume-page:last-child {
-            page-break-after: auto;
-            break-after: auto;
           }
 
           .resume-highlight {

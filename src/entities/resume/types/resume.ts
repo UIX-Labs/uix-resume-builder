@@ -23,5 +23,4 @@ export interface Resume {
   items: ResumeItem[];
   template: any | null;
   isAnalyzed?: boolean;
-  renderVersion?: string;
 }

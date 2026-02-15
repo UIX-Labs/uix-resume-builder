@@ -151,7 +151,6 @@ export interface ResumeData extends Record<ResumeDataKey, any> {
     };
     previewImageUrl?: { url: string };
   };
-  renderVersion?: string;
 }
 
 export type ResumeDataKey =

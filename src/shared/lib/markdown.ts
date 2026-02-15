@@ -27,8 +27,6 @@ export function isHtml(content: string): boolean {
   return /<\/?[a-z][\s\S]*>/i.test(content.trim());
 }
 
-export const cleanHtml = (text: string): string => text.replace(/<[^>]*>/g, '').trim();
-
 /**
  * Normalizes content by converting markdown to HTML if needed
  * If content is already HTML, returns as-is

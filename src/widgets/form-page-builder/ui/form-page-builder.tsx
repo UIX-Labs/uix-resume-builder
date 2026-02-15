@@ -1,12 +1,10 @@
-import type { ResumeDataKey, SuggestedUpdate, SuggestionType } from '@entities/resume';
+import type { SuggestedUpdate, SuggestionType } from '@entities/resume';
 import { getResumeEmptyData, useSaveResumeForm, type ResumeData } from '@entities/resume';
 import { data as formSchemaData } from '@entities/resume/api/schema-data';
 import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { FeedbackModal } from '@features/feedback-form/ui/feedback-modal';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { TemplateForm } from '@features/template-form';
-import { MobileForm } from '@features/template-form/ui/mobile-form';
-import { useIsMobile } from '@shared/hooks/use-mobile';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { camelToHumanString } from '@shared/lib/string';
 import { debounce } from '@shared/lib/utils';
@@ -16,7 +14,6 @@ import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 import { useQueryClient } from '@tanstack/react-query';
-import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import { Download, GripVertical } from 'lucide-react';
@@ -35,7 +32,7 @@ import { useTemplateManagement } from '../hooks/use-template-management';
 import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
 import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
 import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { isSectionEmpty, SECTION_ICONS } from '../lib/section-utils';
+import { isSectionEmpty } from '../lib/section-utils';
 import {
   applySuggestionsToArrayField,
   applySuggestionsToFieldValue,
@@ -47,8 +44,6 @@ import { formatTimeAgo } from '../lib/time-helpers';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import TemplateButton from './change-template-button';
-import { MobileSectionList } from './mobile-section-list';
-import { MobileFooter } from './mobile-footer';
 
 /**
  * Checks if a field value is empty
@@ -213,7 +208,6 @@ export function FormPageBuilder() {
   const setIsCreateMode = useFormDataStore((state) => state.setIsCreateMode);
   const queryClient = useQueryClient();
   const { analyzedData, resumeId: analyzerResumeId } = useAnalyzerStore();
-  const isMobile = useIsMobile();
 
   const searchParams = useSearchParams();
 
@@ -265,7 +259,7 @@ export function FormPageBuilder() {
     resumeId,
     generatePDF,
     onDownloadSuccess: () => {
-      if (isMobile || feedbackShownRef.current) return;
+      if (feedbackShownRef.current) return;
 
       feedbackShownRef.current = true;
 
@@ -698,45 +692,8 @@ export function FormPageBuilder() {
     return formatTimeAgo(lastSaveTime);
   }, [lastSaveTime, refreshKey]);
 
-  const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
-  const [mobileCurrentStep, setMobileCurrentStep] = useState<ResumeDataKey>('personalDetails');
-
-  const handleMobileStepClick = useCallback((step: ResumeDataKey) => {
-    setMobileCurrentStep(step);
-    setIsMobileFormOpen(true);
-  }, []);
-
-  const handleMobileFormClose = useCallback(() => {
-    setIsMobileFormOpen(false);
-  }, []);
-
-  const handleMobileSave = useCallback(() => {
-    handleSaveResume();
-  }, [handleSaveResume]);
-
-  const handleMobileNext = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
-    if (currentIndex < navs.length - 1) {
-      setMobileCurrentStep(navs[currentIndex + 1].name as ResumeDataKey);
-    } else {
-      setIsMobileFormOpen(false);
-    }
-  }, [mobileCurrentStep, navs]);
-
-  const handleMobileBack = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
-    if (currentIndex > 0) {
-      setMobileCurrentStep(navs[currentIndex - 1].name as ResumeDataKey);
-    }
-  }, [mobileCurrentStep, navs]);
-
-  const handleMobileBackToResume = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ['resume', resumeId] });
-    window.history.back();
-  }, [queryClient, resumeId]);
-
+  // Auto-scroll to section when currentStep changes
   useEffect(() => {
-    if (isMobile) return;
     if (!targetRef.current || !currentStep) return;
 
     // Map step names to template section IDs
@@ -778,111 +735,8 @@ export function FormPageBuilder() {
     }, 100);
 
     return () => clearTimeout(scrollTimer);
-  }, [currentStep, isMobile]);
+  }, [currentStep]);
 
-  const sharedComponents = (
-    <>
-      {analyzerModalData && (
-        <AnalyzerModal
-          open={analyzerModalOpen}
-          onOpenChange={setAnalyzerModalOpen}
-          suggestions={analyzerModalData.suggestions}
-          suggestionType={analyzerModalData.suggestionType}
-          onApply={handleApplySuggestions}
-          resumeId={resumeId}
-        />
-      )}
-
-      <FeedbackModal open={isFeedbackModalOpen} onOpenChange={setIsFeedbackModalOpen} />
-
-      {selectedTemplate && (
-        <PreviewModal
-          template={{
-            id: selectedTemplateId ?? '',
-            json: selectedTemplate,
-            publicImageUrl: '',
-            createdAt: '',
-            updatedAt: '',
-          }}
-          isOpen={isPreviewModalOpen}
-          onClose={() => setIsPreviewModalOpen(false)}
-          resumeData={cleanedDataForModal}
-        />
-      )}
-
-      <AuthRedirectModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        redirectUrl={authRedirectUrl}
-        title="Login Required"
-        description="You need to login to download PDF."
-      />
-    </>
-  );
-
-  if (isMobile) {
-    const currentMobileIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
-    const hasNext = currentMobileIndex < navs.length - 1;
-    const hasPrevious = currentMobileIndex > 0;
-
-    return (
-      <>
-        <div
-          className="absolute -left-[9999px] top-0 w-[794px] h-0 overflow-hidden pointer-events-none invisible -z-10"
-          aria-hidden="true"
-        >
-          <div ref={thumbnailRef}>
-            {selectedTemplate && (
-              <ResumeRenderer
-                template={selectedTemplate}
-                data={cleanedDataForThumbnail}
-                currentSection={undefined}
-                hasSuggestions={false}
-                isThumbnail={true}
-                skipImageFallbacks={isGeneratingPDF}
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col min-h-screen bg-white">
-          <Header />
-
-          <MobileSectionList
-            navs={navs}
-            formData={formData ?? {}}
-            formSchema={formSchemaData ?? {}}
-            onSectionClick={handleMobileStepClick}
-            onBackClick={handleMobileBackToResume}
-          />
-
-          <MobileFooter
-            onDownloadPDF={handleDownloadPDF}
-            onPreview={() => setIsPreviewModalOpen(true)}
-            isGeneratingPDF={isGeneratingPDF}
-          />
-
-          <MobileForm
-            formSchema={formSchemaData ?? {}}
-            values={formData ?? {}}
-            onChange={(data) => setFormData(data, resumeId)}
-            currentStep={mobileCurrentStep}
-            isOpen={isMobileFormOpen}
-            onClose={handleMobileFormClose}
-            onNext={handleMobileNext}
-            onBack={handleMobileBack}
-            hasNext={hasNext}
-            hasPrevious={hasPrevious}
-            onOpenAnalyzerModal={handleOpenAnalyzerModal}
-            onSave={handleMobileSave}
-          />
-        </div>
-        {sharedComponents}
-      </>
-    );
-  }
-
-  // Desktop view rendering
   return (
     <div ref={containerRef} className="flex w-full h-full relative">
       <div
@@ -915,7 +769,6 @@ export function FormPageBuilder() {
                 hasSuggestions={isGeneratingPDF ? false : hasSuggestions}
                 isThumbnail={false}
                 skipImageFallbacks={isGeneratingPDF}
-                version={resumeData?.renderVersion}
               />
             ) : (
               <div className="flex items-center justify-center h-full min-h-[800px]">
@@ -928,7 +781,7 @@ export function FormPageBuilder() {
               position: 'absolute',
               left: '0',
               top: '0',
-              width: '21cm',
+              width: '794px',
               height: '0',
               overflow: 'hidden',
               pointerEvents: 'none',
@@ -937,7 +790,7 @@ export function FormPageBuilder() {
             }}
             aria-hidden="true"
           >
-            <div ref={thumbnailRef} style={{ width: '21cm' }}>
+            <div ref={thumbnailRef}>
               {selectedTemplate && (
                 <ResumeRenderer
                   template={selectedTemplate}
@@ -946,7 +799,6 @@ export function FormPageBuilder() {
                   hasSuggestions={false}
                   isThumbnail={true}
                   skipImageFallbacks={isGeneratingPDF}
-                  version={resumeData?.renderVersion}
                 />
               )}
             </div>
@@ -1075,7 +927,40 @@ export function FormPageBuilder() {
           )}
         </div>
       </div>
-      {sharedComponents}
+      {/* Analyzer Modal */}
+      {analyzerModalData && (
+        <AnalyzerModal
+          open={analyzerModalOpen}
+          onOpenChange={setAnalyzerModalOpen}
+          suggestions={analyzerModalData.suggestions}
+          suggestionType={analyzerModalData.suggestionType}
+          onApply={handleApplySuggestions}
+          resumeId={resumeId}
+        />
+      )}
+      {/* Resume Preview Modal */}
+      {selectedTemplate && (
+        <PreviewModal
+          template={{
+            id: selectedTemplateId ?? '',
+            json: selectedTemplate,
+            publicImageUrl: '',
+            createdAt: '',
+            updatedAt: '',
+          }}
+          isOpen={isPreviewModalOpen}
+          onClose={() => setIsPreviewModalOpen(false)}
+          resumeData={cleanedDataForModal}
+        />
+      )}
+      <AuthRedirectModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        redirectUrl={authRedirectUrl}
+        title="Login Required"
+        description="You need to login to download the PDF."
+      />
+      <FeedbackModal open={isFeedbackModalOpen} onOpenChange={setIsFeedbackModalOpen} />
     </div>
   );
 }

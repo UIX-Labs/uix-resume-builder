@@ -1,13 +1,12 @@
 'use client';
 
 import { useParseLinkedInProfile } from '@entities/resume';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
 
 interface LinkedInModalProps {
   isOpen: boolean;
@@ -17,10 +16,8 @@ interface LinkedInModalProps {
 export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [showMobileView, setShowMobileView] = useState(false);
   const router = useRouter();
   const isMobile = useIsMobile();
-
   const parseLinkedInMutation = useParseLinkedInProfile();
 
   const isLoading = parseLinkedInMutation.isPending;
@@ -30,11 +27,6 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const displayError = error || mutationError;
 
   const handleSubmit = async () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
-
     if (!linkedinUrl.trim()) {
       setError('Please enter a valid LinkedIn profile URL');
       return;
@@ -54,7 +46,8 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     parseLinkedInMutation.mutate(linkedinUrl.trim(), {
       onSuccess: (response) => {
         onClose();
-        router.push(`/resume/${response.resumeId}`);
+        const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;
+        router.push(url);
         setLinkedinUrl('');
       },
       onError: (err) => {
@@ -64,81 +57,78 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   };
 
   return (
-    <>
-      <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />
-      <Dialog open={isOpen} onOpenChange={onClose}>
-        <DialogContent className="md:max-w-[1035px] w-full max-w-[calc(100vw-2rem)] h-[80vh] md:h-[653px] rounded-[24px] md:rounded-[36px] bg-[#0C1118] border-none p-0 overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -left-[340px] -top-[125px] w-[1028px] h-[1028px] rounded-full opacity-100 bg-[linear-gradient(136deg,rgba(37,122,255,1)_30%,rgba(12,17,24,1)_68%)] blur-[100px]" />
-          </div>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="md:max-w-[1035px] w-full max-w-[calc(100vw-2rem)] h-[80vh] md:h-[653px] rounded-[24px] md:rounded-[36px] bg-[#0C1118] border-none p-0 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute -left-[340px] -top-[125px] w-[1028px] h-[1028px] rounded-full opacity-100 bg-[linear-gradient(136deg,rgba(37,122,255,1)_30%,rgba(12,17,24,1)_68%)] blur-[100px]" />
+        </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute top-4 right-4 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border-2 border-white hover:bg-[#1a2230] transition-colors cursor-pointer"
-            aria-label="Close"
-          >
-            <Image src="/images/close.svg" alt="close-icon" width={24} height={24} className="rotate-45" />
-          </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border-2 border-white hover:bg-[#1a2230] transition-colors cursor-pointer"
+          aria-label="Close"
+        >
+          <Image src="/images/close.svg" alt="close-icon" width={24} height={24} className="rotate-45" />
+        </button>
 
-          <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 py-12 md:px-[198px] md:py-[176px]">
-            <div className="flex flex-col items-center justify-center gap-6 md:gap-5 w-full max-w-[640px]">
-              <h2 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
-                From LinkedIn to Resume
-              </h2>
+        <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 py-12 md:px-[198px] md:py-[176px]">
+          <div className="flex flex-col items-center justify-center gap-6 md:gap-5 w-full max-w-[640px]">
+            <h2 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
+              From LinkedIn to Resume
+            </h2>
 
-              <div className="w-full max-w-[539px] flex flex-col items-center justify-center gap-4 md:gap-0 md:p-2 md:bg-[#0C1118] md:border md:border-[#959DA8] md:rounded-[20px] md:shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
-                <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0">
-                  <div className="flex items-center px-4 py-5 gap-3 h-[56px] bg-white rounded-[16px] md:rounded-none md:bg-transparent flex-1">
-                    <Image src="/images/linkedin.svg" alt="img" height={24} width={24} className="flex-shrink-0" />
+            <div className="w-full max-w-[539px] flex flex-col items-center justify-center gap-4 md:gap-0 md:p-2 md:bg-[#0C1118] md:border md:border-[#959DA8] md:rounded-[20px] md:shadow-[0px_0px_0px_4px_rgba(82,82,82,1)]">
+              <div className="w-full flex flex-col md:flex-row items-stretch md:items-center gap-4 md:gap-0">
+                <div className="flex items-center px-4 py-5 gap-3 h-[56px] bg-white rounded-[16px] md:rounded-none md:bg-transparent flex-1">
+                  <Image src="/images/linkedin.svg" alt="img" height={24} width={24} className="flex-shrink-0" />
 
-                    <input
-                      type="text"
-                      id="linkedin-url"
-                      placeholder="linkedin.com/in/your.name"
-                      value={linkedinUrl}
-                      onChange={(e) => {
-                        setLinkedinUrl(e.target.value);
-                        setError(null);
-                      }}
-                      disabled={isLoading}
-                      className="flex-1 bg-transparent border-none outline-none text-[#8B8B8B] md:text-[#CCD4DF] text-base font-medium leading-[1.375em] tracking-[-0.011em] placeholder:text-[#8B8B8B] md:placeholder:text-neutral-500 min-w-0"
-                    />
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isLoading || !linkedinUrl.trim()}
-                    className="flex items-center justify-center gap-2 bg-[#005FF2] border-2 border-amber-50 md:border-none md:bg-[#0066FF] text-white rounded-[16px] md:rounded-xl px-4 py-3 h-[56px] md:h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer font-semibold text-lg"
-                  >
-                    <span className="text-lg font-semibold leading-[1.333em] tracking-tight">
-                      {isLoading ? 'Processing...' : 'Convert to Resume'}
-                    </span>
-                  </button>
+                  <input
+                    type="text"
+                    id="linkedin-url"
+                    placeholder="linkedin.com/in/your.name"
+                    value={linkedinUrl}
+                    onChange={(e) => {
+                      setLinkedinUrl(e.target.value);
+                      setError(null);
+                    }}
+                    disabled={isLoading}
+                    className="flex-1 bg-transparent border-none outline-none text-[#8B8B8B] md:text-[#CCD4DF] text-base font-medium leading-[1.375em] tracking-[-0.011em] placeholder:text-[#8B8B8B] md:placeholder:text-neutral-500 min-w-0"
+                  />
                 </div>
+
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={isLoading || !linkedinUrl.trim()}
+                  className="flex items-center justify-center gap-2 bg-[#005FF2] border-2 border-amber-50 md:border-none md:bg-[#0066FF] text-white rounded-[16px] md:rounded-xl px-4 py-3 h-[56px] md:h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer font-semibold text-lg"
+                >
+                  <span className="text-lg font-semibold leading-[1.333em] tracking-tight">
+                    {isLoading ? 'Processing...' : 'Convert to Resume'}
+                  </span>
+                </button>
               </div>
-
-              <h3 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
-                in one click
-              </h3>
-
-              <p className="text-white/80 font-normal text-base leading-[1.5] tracking-[-0.011em] text-center max-w-[380px] px-4">
-                Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
-              </p>
-
-              <div className="flex flex-col items-center gap-3 mt-2 px-4">
-                <div className="flex items-center justify-center gap-3">
-                  <span className="w-60 md:max-w-[520px] h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-40" />
-                </div>
-              </div>
-
-              {displayError && <p className="text-red-400 text-sm text-center px-4">{displayError}</p>}
             </div>
+
+            <h3 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
+              in one click
+            </h3>
+
+            <p className="text-white/80 font-normal text-base leading-[1.5] tracking-[-0.011em] text-center max-w-[380px] px-4">
+              Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
+            </p>
+
+            <div className="flex flex-col items-center gap-3 mt-2 px-4">
+              <div className="flex items-center justify-center gap-3">
+                <span className="w-60 md:max-w-[520px] h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-40" />
+              </div>
+            </div>
+
+            {displayError && <p className="text-red-400 text-sm text-center px-4">{displayError}</p>}
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 

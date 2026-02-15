@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import Image from 'next/image';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
 
 interface ResumeCreationModalProps {
   isOpen: boolean;
@@ -42,7 +41,6 @@ export default function ResumeCreationModal({
 }: ResumeCreationModalProps) {
   const router = useRouter();
   const user = useUserProfile();
-  const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
@@ -52,7 +50,6 @@ export default function ResumeCreationModal({
   });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [showMobileView, setShowMobileView] = useState(false);
 
   const getTitle = () => {
     if (template) {
@@ -65,18 +62,6 @@ export default function ResumeCreationModal({
   };
 
   const resumeCreateHandler = async () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      onClose();
-      trackEvent('create_resume_click', {
-        source: template ? 'template_modal' : 'dashboard_modal',
-        method: 'from_scratch',
-        blocked: 'mobile_device',
-        ...(template && { templateId: template.id }),
-      });
-      return;
-    }
-
     onActionLock(ResumeCreationAction.CREATE);
     onClose();
 
@@ -112,7 +97,6 @@ export default function ResumeCreationModal({
           templateId: template.id,
         });
       }
-
       router.push(`/resume/${data.id}`);
     } catch (error) {
       console.error('Failed to create resume:', error);
@@ -295,8 +279,6 @@ export default function ResumeCreationModal({
         title="Login Required"
         description="You need to login to use Tailored with JD."
       />
-
-      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </>
   );
 }

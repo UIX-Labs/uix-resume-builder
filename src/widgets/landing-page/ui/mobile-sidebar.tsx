@@ -1,22 +1,23 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 import { Button } from '@/shared/ui/components/button';
-import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
-import { cn } from '@shared/lib/cn';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { cn } from '@shared/lib/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
 
 export interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  onExpertReviewClick: () => void;
 }
 
-export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
+export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const user = useCachedUser();
@@ -41,6 +42,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
 
   const handleAboutUsClick = () => {
     handleNavigation('/about-us', 'navigation_click', 'about_us');
+  };
+
+  const handleExpertReviewClick = () => {
+    onClose();
+    onExpertReviewClick();
   };
 
   const handleDashboardClick = () => {
@@ -78,6 +84,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       label: 'Roast',
       onClick: handleRoastClick,
       isActive: pathname === '/roast',
+    },
+    {
+      label: 'Expert Review',
+      onClick: handleExpertReviewClick,
+      isActive: false,
     },
     {
       label: user ? 'Dashboard' : 'Sign In',

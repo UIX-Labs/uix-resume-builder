@@ -121,9 +121,9 @@ export function AiFeatureCard({
         isExpanded
           ? cn('shadow-xl border-transparent', isBlue ? 'bg-blue-600' : 'bg-green-500', 'md:flex-[1.3]')
           : cn(
-            'bg-[#F3F4F8] bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] border-gray-200/60',
-            isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
-          ),
+              'bg-[#F3F4F8] bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] border-gray-200/60',
+              isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
+            ),
       )}
     >
       {/* TEXT CONTENT */}

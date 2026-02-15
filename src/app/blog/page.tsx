@@ -1,6 +1,6 @@
 
 import { getAllPosts, getAllTags } from '@/shared/lib/blog';
-import BlogPageClient from '@widgets/blog/blog-page-client';
+import BlogPageContent from '@/widgets/blog/blog-page';
 import type { Metadata } from 'next';
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
@@ -42,8 +42,9 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
     const posts = getAllPosts();
+    const tags = getAllTags();
  
   return (
-      <BlogPageClient  posts={posts} tags={getAllTags()}/>
+        <BlogPageContent posts={posts} tags={tags}/>
   );
 }

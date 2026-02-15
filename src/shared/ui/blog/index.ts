@@ -5,4 +5,3 @@ export { CopyButton } from './copy-button';
 export { mdxComponents } from './mdx-components';
 export { ShareButton } from './share-button';
 export { TagBadge } from './tag-badge';
-

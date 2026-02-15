@@ -6,7 +6,7 @@ import { Search } from 'lucide-react';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
 
-export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
+export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
@@ -20,7 +20,6 @@ export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tag
     <>
       <main className="min-h-screen">
         <div className="w-full p-2 md:p-5">
-          
           <BlogHero
             image="/images/blog/hero-section/hero-section.png"
             description="Blogs to power up your resume, job search, and career growth."
@@ -30,7 +29,6 @@ export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tag
             </span>
           </BlogHero>
 
-         
           <div className="flex flex-row justify-between items-center gap-2 sm:gap-4 mt-6 sm:mt-10 px-2 sm:px-0">
             <div className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold whitespace-nowrap sm:ml-8">
               <p>Popular Articles</p>
@@ -40,7 +38,7 @@ export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tag
               <div className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               </div>
-              
+
               <input
                 type="text"
                 placeholder="Search Articles"
@@ -58,7 +56,6 @@ export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tag
             </div>
           </div>
 
-          
           <div className="mt-8 sm:mt-10">
             <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
           </div>
@@ -75,4 +72,3 @@ export default function BlogPageClient({ posts, tags }: { posts: BlogPost[]; tag
     </>
   );
 }
-

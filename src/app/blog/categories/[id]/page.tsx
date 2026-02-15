@@ -1,7 +1,7 @@
 import { categories } from '@/data/categories';
-import CategoryPageClient from '@/widgets/blog/Category-page-client';
 import BlogHero from '@/widgets/blog/components/blog-hero';
 import { getAllPosts } from '@shared/lib/blog';
+import CategoryPageContent from '@widgets/blog/category-page';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -31,7 +31,7 @@ export default async function CategoryPage({ params }: PageProps) {
       </BlogHero>
 
       {/* CLIENT PART */}
-      <CategoryPageClient posts={filteredPosts} title="Collection of 61+ blogs" placeholder="Search blogs" />
+      <CategoryPageContent posts={filteredPosts} title="Collection of 61+ blogs" placeholder="Search blogs" />
     </div>
   );
 }

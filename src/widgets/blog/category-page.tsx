@@ -11,7 +11,7 @@ interface Props {
   placeholder: string;
 }
 
-export default function CategoryPageClient({ posts, title, placeholder }: Props) {
+export default function CategoryPageContent({ posts, title, placeholder }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>

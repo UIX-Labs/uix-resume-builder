@@ -17,7 +17,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   const [activeId, setActiveId] = useState('');
   const [readProgress, setReadProgress] = useState(0);
 
-  const activeHeadingText = headings.find(h => h.id === activeId)?.text || headings[0]?.text;
+  const activeHeadingText = headings.find((h) => h.id === activeId)?.text || headings[0]?.text;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -57,7 +57,6 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="relative top-0 lg:static w-full rounded-xl border-2 border-white bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 lg:p-5 bg-gray-100">
-      
       <div className="mb-2 lg:mb-4 flex flex-row justify-between items-center gap-4">
         <h3 className="text-sm lg:text-lg font-semibold text-gray-900 shrink-0">In this Article</h3>
 
@@ -67,10 +66,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
       </div>
 
       <div className="mb-2 lg:mb-4 h-[3px] w-full rounded-full bg-gray-200 overflow-hidden">
-        <div 
-          className="h-full bg-[#22C55E] transition-all duration-300" 
-          style={{ width: `${readProgress * 100}%` }} 
-        />
+        <div className="h-full bg-[#22C55E] transition-all duration-300" style={{ width: `${readProgress * 100}%` }} />
       </div>
 
       <ul className="hidden lg:block space-y-2 max-h-[70vh] overflow-y-auto scrollbar-hide">
@@ -89,7 +85,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
                   window.scrollTo({
                     top: offsetPosition,
-                    behavior: 'smooth'
+                    behavior: 'smooth',
                   });
                 }
               }}

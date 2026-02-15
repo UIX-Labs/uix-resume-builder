@@ -19,7 +19,6 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
       bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] 
       rounded-2xl border-2 sm:border-4 border-white relative overflow-hidden group transition-all hover:shadow-sm"
       >
-       
         <div className="w-[120px] sm:w-[35%] shrink-0 relative">
           <Image src={featureImage} alt="feature" fill className="object-cover" />
         </div>
@@ -47,22 +46,17 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
                 />
               </div>
 
-              <div 
-                className="flex items-center text-[10px] sm:text-[12px] font-medium" 
-                style={{ color: '#8A8C99' }}
-              >
-                <span className="truncate max-w-[80px] sm:max-w-none">
-                  {post.frontmatter.author}
-                </span>
-                
-                <span className="mx-3 opacity-50">|</span>
+            <div className="flex items-center text-[10px] sm:text-[12px] font-medium" style={{ color: '#8A8C99' }}>
+              <span className="truncate max-w-[80px] sm:max-w-none">{post.frontmatter.author}</span>
 
-                <div className="flex items-center gap-1.5 whitespace-nowrap">
-                  <Clock className="w-3.5 h-3.5" stroke="currentColor" />
-                  <span>{post.readingTime}</span>
-                </div>
+              <span className="mx-3 opacity-50">|</span>
+
+              <div className="flex items-center gap-1.5 whitespace-nowrap">
+                <Clock className="w-3.5 h-3.5" stroke="currentColor" />
+                <span>{post.readingTime}</span>
               </div>
             </div>
+          </div>
         </div>
       </div>
     </Link>

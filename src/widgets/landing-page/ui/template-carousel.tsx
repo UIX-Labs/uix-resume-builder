@@ -3,24 +3,20 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { MobileTextView } from './mobile-text-view';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -56,20 +52,12 @@ export function TemplateCarousel() {
   }, [emblaApi, onSelect]);
 
   const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
-  const user = useCachedUser();
-  const router = useRouter();
   const isMobile = useIsMobile();
   const [showMobileView, setShowMobileView] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
-  const createResumeMutation = useMutation({
-    mutationFn: createResume,
-  });
-
-  const updateTemplateMutation = useMutation({
-    mutationFn: updateResumeTemplate,
-  });
+  const { handleUseTemplate } = useUseTemplate();
 
   const handleTemplateSelect = async (template: Template) => {
     trackEvent('create_resume_click', {
@@ -78,32 +66,10 @@ export function TemplateCarousel() {
       templateId: template.id,
     });
 
-    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
-    let guestEmail: string | undefined;
-
-    if (!user?.isLoggedIn) {
-      guestEmail = getOrCreateGuestEmail();
-    } else if (!user) {
-      return;
-    }
-
-    try {
-      const data = await createResumeMutation.mutateAsync({
-        title: 'New Resume',
-        userInfo: {
-          userId: user?.id ?? '',
-        },
-      });
-
-      await updateTemplateMutation.mutateAsync({
-        resumeId: data.id,
-        templateId: template.id,
-      });
-
-      router.push(`/resume/${data.id}`);
-    } catch (error) {
-      console.error('Failed to create resume:', error);
-    }
+    await handleUseTemplate(template.id, {
+      source: 'landing_carousel',
+      method: 'use_template',
+    });
   };
 
   const handleMobileButtonClick = () => {

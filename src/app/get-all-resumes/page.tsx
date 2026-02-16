@@ -1,71 +1,25 @@
 'use client';
-import { useState } from 'react';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { TemplateCard } from '@widgets/templates-page/ui/template-card';
+import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
+import { useState } from 'react';
 
 export default function GetAllResumesPage() {
-  const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
   const { data: templates } = useGetAllTemplates();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-
-  const createResumeMutation = useMutation({
-    mutationFn: createResume,
-  });
-
-  const updateTemplateMutation = useMutation({
-    mutationFn: updateResumeTemplate,
-  });
-
-  const isLoading = createResumeMutation.isPending || updateTemplateMutation.isPending;
+  const { handleUseTemplate, isLoading } = useUseTemplate();
 
   const handleTemplateClick = (template: Template) => {
     setPreviewTemplate(template);
     setIsPreviewOpen(true);
-  };
-
-  const handleTemplateSelect = async (templateId: string) => {
-    try {
-      // biome-ignore lint/correctness/noUnusedVariables: guestEmail is used to ensure localStorage has guest email for API calls
-      let guestEmail: string | undefined;
-
-      if (!user?.isLoggedIn) {
-        guestEmail = getOrCreateGuestEmail();
-      } else if (!user) {
-        return;
-      }
-
-      const currentDate = new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-      const userName = user ? `${user.firstName} ${user.lastName || ''}`.trim() : 'Guest User';
-      const title = `${userName}-Resume-${currentDate}`;
-
-      const data = await createResumeMutation.mutateAsync({
-        title,
-        userInfo: {
-          userId: user?.id ?? '',
-        },
-      });
-
-      await updateTemplateMutation.mutateAsync({
-        resumeId: data.id,
-        templateId,
-      });
-
-      router.push(`/resume/${data.id}`);
-    } catch (error) {
-      console.error('Failed to create resume:', error);
-    }
   };
 
   return (
@@ -104,7 +58,12 @@ export default function GetAllResumesPage() {
                   <TemplateCard
                     key={template.id}
                     template={template}
-                    onClick={() => handleTemplateSelect(template.id)}
+                    onClick={() =>
+                      handleUseTemplate(template.id, {
+                        source: 'get_all_resumes_page',
+                        method: 'use_template',
+                      })
+                    }
                     onPreviewClick={() => handleTemplateClick(template)}
                   />
                 ))}

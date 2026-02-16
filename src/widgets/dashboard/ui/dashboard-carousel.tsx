@@ -16,6 +16,7 @@ export default function DashboardCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 4000, stopOnInteraction: false })]);
 
   const [_selectedIndex, setSelectedIndex] = useState(0);
+  const { handleUseTemplate } = useUseTemplate();
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -27,6 +28,7 @@ export default function DashboardCarousel() {
   const { data: templates } = useGetAllTemplates();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+
   useEffect(() => {
     if (!emblaApi) return;
     onSelect(emblaApi);
@@ -70,8 +72,13 @@ export default function DashboardCarousel() {
               <TemplateCard
                 key={template.id}
                 template={template}
-                onClick={() => handleUseTemplate(template.id)}
                 isDashboard={true}
+                onClick={() =>
+                  handleUseTemplate(template.id, {
+                    source: 'dashboard_card',
+                    method: 'use_template',
+                  })
+                }
                 onPreviewClick={() => {
                   setPreviewTemplate(template);
                   setIsPreviewOpen(true);

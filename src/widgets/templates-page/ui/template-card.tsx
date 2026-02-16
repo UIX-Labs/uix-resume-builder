@@ -1,14 +1,14 @@
 'use client';
 
-import Image from 'next/image';
-import { Button } from '@shared/ui/components/button';
+import { type Template } from '@entities/template-page/api/template-data';
 import { cn } from '@shared/lib/cn';
-import type { Template } from '@entities/template-page/api/template-data';
+import { Button } from '@shared/ui/components/button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
+import Image from 'next/image';
 
 interface TemplateCardProps {
   template: Template;
-  onClick: () => void;
+  onClick?: () => void;
   isDashboard?: boolean;
   onPreviewClick?: () => void;
 }

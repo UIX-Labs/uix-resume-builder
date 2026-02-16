@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog';
+import { useState } from 'react';
 import { PreviewModal } from './preview-modal';
 import { TemplateCard } from './template-card';
 
@@ -27,20 +27,23 @@ export function TemplatesDialog({ children, onTemplateSelect }: TemplatesDialogP
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger asChild>{children}</DialogTrigger>
-        <DialogContent className="min-w-[1300px] h-[90%] p-0 bg-gradient-to-l from-black/80 to-[rgb(36,114,235)] border-none flex flex-col overflow-y-auto [&>button]:text-white [&>button]:bg-black">
-          <DialogHeader className="px-6 pt-6 pb-4">
-            <DialogTitle className="mt-6 flex items-center justify-center gap-3">
-              <span className="w-32 h-[1px] bg-gradient-to-r from-transparent to-gray-100 opacity-40"></span>
+        <DialogContent className="max-w-[90vw] md:min-w-[1300px] h-[85vh] md:h-[90%] max-h-[85vh] md:max-h-none p-0 bg-gradient-to-l from-black-80 to-template-dialog-blue border-none flex flex-col overflow-y-auto [&>button]:text-background-white [&>button]:bg-black rounded-2xl md:rounded-[10px]">
+          <DialogHeader className="px-4 md:px-6 pt-4 md:pt-6 pb-3 md:pb-4">
+            <DialogTitle className="mt-2 md:mt-6 flex items-center justify-center gap-2 md:gap-3">
+              <span className="w-8 md:w-32 h-[1px] bg-gradient-to-r from-transparent to-gray-100 opacity-40"></span>
 
-              <span className="text-4xl font-semibold text-gray-100 whitespace-nowrap">Resume Templates</span>
+              <span className="text-lg md:text-4xl font-semibold text-gray-100 whitespace-nowrap">
+                <span className="md:hidden">Templates</span>
+                <span className="hidden md:inline">Resume Templates</span>
+              </span>
 
-              <span className="w-32 h-[1px] bg-gradient-to-l from-transparent to-gray-100 opacity-40"></span>
+              <span className="w-8 md:w-32 h-[1px] bg-gradient-to-l from-transparent to-gray-100 opacity-40"></span>
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex flex-col">
-            <div className="flex-1 overflow-y-auto p-6">
-              <div className="flex flex-wrap justify-center gap-8">
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex-1 overflow-y-auto p-3 md:p-6">
+              <div className="flex flex-col md:flex-row md:flex-wrap items-center justify-center gap-4 md:gap-8">
                 {templates?.map((template) => (
                   <TemplateCard
                     key={template.id}

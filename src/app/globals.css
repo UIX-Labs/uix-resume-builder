@@ -364,6 +364,10 @@
   --color-form-text-dark: rgba(12, 17, 24, 1);
   --color-form-placeholder: rgba(207, 212, 219, 1);
   --color-form-focus-ring: rgba(203, 231, 255, 1);
+
+  --color-black: rgba(0, 0, 0, 1);
+  --color-black-80: rgba(0, 0, 0, 0.8);
+  --color-template-dialog-blue: rgba(36, 114, 235, 1);
 }
 
 @theme inline {

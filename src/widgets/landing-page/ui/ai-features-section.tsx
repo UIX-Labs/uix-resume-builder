@@ -6,8 +6,17 @@ import { AiFeatureCard } from './ai-feature-card';
 
 export function AiFeaturesSection() {
   const [hoveredId, setHoveredId] = useState<'left' | 'right' | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [_isMounted, setIsMounted] = useState(false);
 
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Memoize touch detection to avoid recalculation
+  const isTouch = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(hover: none)').matches;
+  }, []);
+
+  // Handle hydration
   useEffect(() => {
     setIsMounted(true);
   }, []);

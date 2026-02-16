@@ -6,7 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import { isAfter, startOfToday } from 'date-fns';
 import dayjs from 'dayjs';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 interface DurationProps {
   data: {
     startDate: string;
@@ -19,6 +19,7 @@ interface DurationProps {
 
 export function Duration({ data, onChange }: DurationProps) {
   const [isOngoing, setIsOngoing] = useState(data?.ongoing || false);
+  const isInitialMount = useRef(true);
 
   const [startDate, setStartDate] = useState<Date | undefined>(() => {
     if (data?.startDate) {
@@ -35,6 +36,13 @@ export function Duration({ data, onChange }: DurationProps) {
   });
 
   useEffect(() => {
+    // Skip the initial mount to avoid transforming data (e.g. date format, empty string → null)
+    // before the user has actually interacted with the duration fields
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     const updatedData = {
       startDate: startDate ? dayjs(startDate).format('YYYY-MM') : null,
       endDate: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM') : null,

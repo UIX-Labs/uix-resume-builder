@@ -7,4 +7,3 @@ export { TwitterIcon } from './twitter-icon';
 export { WebsiteIcon } from './website-icon';
 export { WhatsappIcon } from './whatsapp-icon';
 export { YoutubeIcon } from './youtube-icon';
-

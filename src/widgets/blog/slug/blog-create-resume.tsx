@@ -4,7 +4,6 @@ import { useSelectTemplate } from '@shared/hooks/use-select-template';
 import { FacebookIcon, LinkedInIcon, TwitterIcon, WhatsappIcon } from '@shared/icons';
 import { Star } from 'lucide-react';
 
-
 export default function BlogCreateResume() {
   const { handleUseTemplate } = useSelectTemplate();
   return (
@@ -64,7 +63,7 @@ export default function BlogCreateResume() {
         <div className="flex gap-4 h-full justify-center items-center">
           <TwitterIcon className="w-6 h-6 text-black" />
           <LinkedInIcon className="w-6 h-6 text-black" />
-           <WhatsappIcon className="w-6 h-6 text-black" />
+          <WhatsappIcon className="w-6 h-6 text-black" />
           <FacebookIcon className="w-6 h-6 text-black" />
         </div>
       </div>

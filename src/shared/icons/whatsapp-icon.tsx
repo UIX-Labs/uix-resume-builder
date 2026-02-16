@@ -1,4 +1,3 @@
-
 import type { SVGProps } from 'react';
 
 export function WhatsappIcon(props: SVGProps<SVGSVGElement>) {

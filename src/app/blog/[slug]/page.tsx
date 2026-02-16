@@ -220,8 +220,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 <TableOfContents headings={headings} />
               </div>
 
-              <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
-prose-a:text-blue-500w-full">
+              <div
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
+prose-a:text-blue-500w-full"
+              >
                 <MDXRemote
                   source={content}
                   components={mdxComponents}

@@ -21,22 +21,17 @@ export default function ArticleHeader({
   tags,
   highlightWord,
 }: ArticleHeaderProps) {
-   
   const formattedTitle = highlightWord
-  ? title.split(new RegExp(`(${highlightWord})`, 'gi')).map((part, index) =>
-      part.toLowerCase() === highlightWord.toLowerCase() ? (
-        <span key={index} className="text-blue-600">
-          {part}
-        </span>
-      ) : (
-        part
+    ? title.split(new RegExp(`(${highlightWord})`, 'gi')).map((part, index) =>
+        part.toLowerCase() === highlightWord.toLowerCase() ? (
+          <span key={index} className="text-blue-600">
+            {part}
+          </span>
+        ) : (
+          part
+        ),
       )
-    )
-  : title;
-
-
-
-
+    : title;
 
   return (
     <div

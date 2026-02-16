@@ -180,6 +180,54 @@ const aniketTemplate2 = {
       },
     },
 
+    // Projects Section
+    {
+      id: 'projects',
+      type: 'list-section',
+      break: true,
+      heading: {
+        path: 'projects.heading',
+        fallback: 'Projects',
+        className: 'text-xs font-bold text-black mt-1',
+        divider: {
+          variant: 'line',
+          className: 'bg-neutral-400 w-full h-[2px] mt-0.5 mb-1.5',
+        },
+      },
+      listPath: 'projects.items',
+      itemTemplate: {
+        className: 'flex flex-col gap-1 mt-3',
+        rows: [
+          {
+            className: 'flex flex-row flex-wrap justify-start gap-2 text-xs text-black',
+            cells: [
+              {
+                type: 'inline-group',
+                separator: ' | ',
+                items: [
+                  { path: 'title', className: 'font-semibold' },
+                  {
+                    type: 'duration',
+                    path: 'duration',
+                    className: 'text-xs text-neutral-600 italic',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            cells: [
+              {
+                type: 'html',
+                path: 'description',
+                className: 'text-xs text-black break-words [&_ul]:ml-3 [&_li]:list-disc whitespace-pre-wrap',
+              },
+            ],
+          },
+        ],
+      },
+    },
+
     // Education Section
     {
       id: 'education',

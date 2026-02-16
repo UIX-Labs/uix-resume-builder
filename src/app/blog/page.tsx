@@ -44,35 +44,33 @@ export default function BlogPage() {
   // const tags = getAllTags();
 
   return (
-    <>
-      <main className="min-h-screen">
-        <div className="w-full">
-          <BlogHero
-            image="/images/blog/hero-section/hero-section.png"
-            description="Blogs to power up your resume, job search, and career growth."
-          >
-            <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
-              The <span className="text-blue-600 font-bold">Pika Journal</span>
-            </span>
-          </BlogHero>
+    <main className="min-h-screen">
+      <div className="w-full">
+        <BlogHero
+          image="/images/blog/hero-section/hero-section.png"
+          description="Blogs to power up your resume, job search, and career growth."
+        >
+          <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
+            The <span className="text-blue-600 font-bold">Pika Journal</span>
+          </span>
+        </BlogHero>
 
-          <div className="mt-[35px] w-full px-2">
-            <FeaturedSection />
-          </div>
+        <div className="mt-[35px] w-full px-2">
+          <FeaturedSection />
+        </div>
 
-          <div className="mt-[35px] w-full px-2">
-            <CategoriesSection />
-          </div>
+        <div className="mt-[35px] w-full px-2">
+          <CategoriesSection />
+        </div>
 
-          <div className="mt-[35px] w-full">
-            <BlogGrid />
-          </div>
+        <div className="mt-[35px] w-full">
+          <BlogGrid />
+        </div>
 
-          {/* <div className="mt-10">
+        {/* <div className="mt-10">
             <BlogList posts={posts} tags={tags} />
           </div>  */}
-        </div>
-      </main>
-    </>
+      </div>
+    </main>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { useUserProfile } from '@shared/hooks/use-user';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import getCurrentStatsQuery from '../api/query';
 
@@ -9,8 +9,8 @@ export const TopAnnouncementStrip = () => {
   const { data: user, isLoading } = useUserProfile();
   const router = useRouter();
   const { data: currentStats } = getCurrentStatsQuery();
-
-  const spotsLeft = Math.max(0, 1000 - (currentStats?.totalUsers ?? 0));
+  const MAX_USERS = 2500;
+  const spotsLeft = Math.max(0, MAX_USERS - (currentStats?.totalUsers ?? 0));
 
   const handleSignUpClick = () => {
     router.push('/auth');
@@ -33,7 +33,7 @@ export const TopAnnouncementStrip = () => {
           <Image src="/images/crown.svg" alt="Crown" width={24} height={24} className="md:w-9 md:h-9" />
 
           <span className="text-xs md:text-lg text-start md:text-left leading-tight">
-            Free lifetime access for the first <span className="font-semibold">1,000 users</span>.
+            Free lifetime access for the first <span className="font-semibold">{MAX_USERS} users</span>.
             <button type="button" onClick={handleSignUpClick} className="underline cursor-pointer whitespace-nowrap">
               Sign up now
             </button>

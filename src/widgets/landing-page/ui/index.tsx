@@ -17,7 +17,7 @@ export function LandingPage() {
       </div>
 
       <div
-        className="h-[724px] border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
+        className="h-auto border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
         style={{
           background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -25,6 +25,8 @@ export function LandingPage() {
       >
         <HeroSection />
       </div>
+
+      <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />

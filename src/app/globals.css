@@ -341,6 +341,29 @@
   --color-blue-900: rgba(0, 95, 242, 1);
   --color-blue-1000: rgba(0, 35, 89, 1);
 
+  /* Expert review / popup modal */
+  --color-expert-heading: #f1f7ff;
+  --color-expert-subheading: #ccd4df;
+  --color-expert-bg: #0c1118;
+  --color-expert-bg-hover: #1a2230;
+  --color-expert-primary: #0a70f8;
+  --color-expert-primary-hover: #0960dd;
+  --color-expert-border: #005ff2;
+  --color-expert-card: #1a1c26;
+  --color-expert-card-text: #9ea3ae;
+  --color-expert-card-name: #ffffff;
+  --color-expert-logo-bg: #bf0711;
+  --color-expert-progress-muted: #6b7280;
+  --color-expert-gradient-start: rgba(37, 122, 255, 1);
+  --color-expert-gradient-end: rgba(12, 17, 24, 1);
+  --radius-expert-modal: 36px;
+  --radius-expert-modal-mobile: 1rem;
+  --radius-expert-card: 24px;
+  --radius-expert-button: 1rem;
+  --color-expert-button-ring: rgba(255, 255, 255, 0.1);
+  --expert-card-width: 265px;
+  --expert-card-height: 214px;
+  --expert-card-gradient: linear-gradient(113.21deg, #91baf8 -14.58%, #2d4160 21.17%, #000000 93.2%);
   --color-sidebar-brand-primary: rgba(0, 95, 242, 1);
   --color-sidebar-brand-secondary: rgba(33, 52, 79, 1);
   --color-sidebar-nav-bg: rgba(245, 248, 250, 1);

@@ -11,9 +11,10 @@ import { MobileTextView } from './mobile-text-view';
 export interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  onExpertReviewClick: () => void;
 }
 
-export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
+export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const user = useCachedUser();
@@ -37,6 +38,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
 
   const handleAboutUsClick = () => {
     handleNavigation('/about-us', 'navigation_click', 'about_us');
+  };
+
+  const handleExpertReviewClick = () => {
+    onClose();
+    onExpertReviewClick();
   };
 
   const handleDashboardClick = () => {
@@ -63,7 +69,12 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/roast',
     },
     {
-      label: 'Dashboard',
+      label: 'Expert Review',
+      onClick: handleExpertReviewClick,
+      isActive: false,
+    },
+    {
+      label: user ? 'Dashboard' : 'Sign In',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard',
     },

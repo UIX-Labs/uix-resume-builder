@@ -1,6 +1,7 @@
 ---
 title: "Top 10 Resume Mistakes That Cost You Job Interviews"
 description: "Discover the most common resume mistakes that get your application tossed in the reject pile — and learn exactly how to fix each one for more interview callbacks."
+highlightWord: "Resume Mistakes"
 date: "2026-01-25"
 author: "Pika Resume Team"
 authorRole: "Career Experts"

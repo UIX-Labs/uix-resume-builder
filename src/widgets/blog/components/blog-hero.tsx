@@ -18,7 +18,7 @@ export default function BlogHero({ description, image, children }: BlogHeroProps
         <div className="w-full lg:w-[55%] px-4 lg:px-10 text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center py-8 lg:py-0">
           <h1 className="text-2xl sm:text-3xl lg:text-[45px] font-semibold leading-tight">{children}</h1>
 
-          <p className=" mt-2 text-base sm:text-lg lg:text-[22px] leading-relaxed max-w-[520px] text-[#1A1A1A] mx-auto lg:mx-0 font-medium">
+          <p className="mt-2 text-base sm:text-lg lg:text-[24px] max-w-[520px] text-[#1A1A1A] mx-auto lg:mx-0 leading-tight">
             {description}
           </p>
         </div>

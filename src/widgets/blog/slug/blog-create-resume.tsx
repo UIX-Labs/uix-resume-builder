@@ -1,9 +1,9 @@
 'use client';
 
 import { useSelectTemplate } from '@shared/hooks/use-select-template';
-import { LinkedInIcon, WebsiteIcon, YoutubeIcon } from '@shared/icons';
-import { Education } from '@shared/icons/education';
+import { FacebookIcon, LinkedInIcon, TwitterIcon, WhatsappIcon } from '@shared/icons';
 import { Star } from 'lucide-react';
+
 
 export default function BlogCreateResume() {
   const { handleUseTemplate } = useSelectTemplate();
@@ -62,10 +62,10 @@ export default function BlogCreateResume() {
         </div>
 
         <div className="flex gap-4 h-full justify-center items-center">
-          <LinkedInIcon className="w-6 h-6" />
-          <WebsiteIcon className="w-6 h-6" />
-          <YoutubeIcon className="w-6 h-6" />
-          <Education />
+          <TwitterIcon className="w-6 h-6 text-black" />
+          <LinkedInIcon className="w-6 h-6 text-black" />
+           <WhatsappIcon className="w-6 h-6 text-black" />
+          <FacebookIcon className="w-6 h-6 text-black" />
         </div>
       </div>
     </>

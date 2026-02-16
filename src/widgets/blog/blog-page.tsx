@@ -50,7 +50,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
                 py-2 sm:py-3 
                 text-sm sm:text-base 
                 bg-white border border-gray-200
-                rounded-3xl shadow-sm focus:outline-none focus:ring-2 
+                rounded-3xl shadow-md focus:outline-none focus:ring-2 
                 focus:ring-blue-500 transition-all duration-200"
               />
             </div>

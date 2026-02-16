@@ -1,6 +1,7 @@
 ---
 title: "The Power of Keywords in Your Resume: An SEO Approach to Job Applications"
 description: "Just like websites need SEO to rank on Google, your resume needs keyword optimization to rank in hiring systems. Learn the strategic approach to resume keywords that gets results."
+highlightWord: "Keywords"
 date: "2026-01-03"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
@@ -9,6 +10,7 @@ tags:
   - "cover-letter"
   - "ATS"
   - "Job Search"
+  - "Keywords"
 published: true
 coverImage: ""
 ---

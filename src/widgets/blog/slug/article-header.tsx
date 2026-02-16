@@ -8,6 +8,7 @@ interface ArticleHeaderProps {
   date: string;
   readingTime: string;
   tags: string[];
+  highlightWord?: string;
 }
 
 export default function ArticleHeader({
@@ -18,7 +19,25 @@ export default function ArticleHeader({
   date,
   readingTime,
   tags,
+  highlightWord,
 }: ArticleHeaderProps) {
+   
+  const formattedTitle = highlightWord
+  ? title.split(new RegExp(`(${highlightWord})`, 'gi')).map((part, index) =>
+      part.toLowerCase() === highlightWord.toLowerCase() ? (
+        <span key={index} className="text-blue-600">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    )
+  : title;
+
+
+
+
+
   return (
     <div
       className="
@@ -42,7 +61,7 @@ export default function ArticleHeader({
       <div className="order-2 lg:order-1 w-full flex flex-col justify-center">
         {/* TITLE */}
         <h1 className="text-3xl font-bold tracking-tight text-[#0B0A09] sm:text-4xl lg:text-5xl leading-tight">
-          {title}
+          {formattedTitle}
         </h1>
 
         {/* DESCRIPTION */}

@@ -1,6 +1,7 @@
 ---
 title: "How to Write an ATS-Friendly Resume in 2026"
 description: "Learn the exact strategies to craft a resume that passes Applicant Tracking Systems and lands on a recruiter's desk. From keyword optimization to formatting best practices."
+highlightWord: "ATS-Friendly Resume"
 date: "2026-02-01"
 author: "Pika Resume Team"
 authorRole: "Career Experts"

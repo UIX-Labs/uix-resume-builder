@@ -15,6 +15,7 @@ export interface BlogFrontmatter {
   coverImage?: string;
   published: boolean;
   authorImage?: string;
+  highlightWord?: string;
 }
 
 export interface BlogPost {

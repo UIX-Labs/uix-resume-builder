@@ -5,11 +5,11 @@ highlightWord: "ATS-Friendly Resume"
 date: "2026-02-01"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
-authorImage: ""
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
   - "interview"
   - "ATS"
-  - "job search"
+featured: "secondary1"
 published: true
 coverImage: ""
 ---

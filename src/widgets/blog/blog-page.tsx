@@ -13,8 +13,16 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const primaryPost = posts[0];
-  const secondaryPosts = posts.slice(1, 3);
+  const primaryPost = posts.find((p) => p.frontmatter.featured === 'primary') || posts[0];
+  const secondary1 = posts.find((p) => p.frontmatter.featured === 'secondary1');
+  const secondary2 = posts.find((p) => p.frontmatter.featured === 'secondary2');
+
+  const secondaryPosts = [secondary1, secondary2].filter((p): p is BlogPost => !!p);
+
+  // Fallback if secondary posts are not explicitly defined
+  if (secondaryPosts.length === 0) {
+    secondaryPosts.push(...posts.filter((p) => p.slug !== primaryPost.slug).slice(0, 2));
+  }
 
   return (
     <>
@@ -50,7 +58,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
                 py-2 sm:py-3 
                 text-sm sm:text-base 
                 bg-white border border-gray-200
-                rounded-3xl shadow-md focus:outline-none focus:ring-2 
+                rounded-3xl shadow-sm focus:outline-none focus:ring-2 
                 focus:ring-blue-500 transition-all duration-200"
               />
             </div>

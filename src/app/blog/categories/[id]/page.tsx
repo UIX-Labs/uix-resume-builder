@@ -31,7 +31,14 @@ export default async function CategoryPage({ params }: PageProps) {
       </BlogHero>
 
       {/* CLIENT PART */}
-      <CategoryPageContent posts={filteredPosts} title="Collection of 61+ blogs" placeholder="Search blogs" />
+      <CategoryPageContent
+        posts={filteredPosts}
+        title={`Collection of ${filteredPosts.length}+ ${
+          filteredPosts.length === 1 ? 'blog' : 'blogs'
+        }`}
+        placeholder="Search blogs"
+      />
+
     </div>
   );
 }

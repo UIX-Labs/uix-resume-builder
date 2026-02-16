@@ -1,13 +1,13 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 import { Button } from '@/shared/ui/components/button';
-import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
-import { cn } from '@shared/lib/cn';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { cn } from '@shared/lib/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X } from 'lucide-react';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
 
@@ -59,6 +59,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     });
   };
 
+  const handleBlogClick = () => {
+    handleNavigation('/blog', 'navigation_click', 'blog');
+  };
+
   const handleCreateResumeClick = () => {
     setShowMobileTextView(true);
     trackEvent('create_resume_click', {
@@ -83,6 +87,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       label: user ? 'Dashboard' : 'Sign In',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard' || pathname === '/auth',
+    },
+    {
+      label: 'Blog',
+      onClick: handleBlogClick,
+      isActive: pathname === '/blog',
     },
     {
       label: 'About Us',

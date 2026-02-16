@@ -5,12 +5,12 @@ highlightWord: "Keywords"
 date: "2026-01-03"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
-authorImage: ""
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
-  - "cover-letter"
+  - "career"
   - "ATS"
-  - "Job Search"
   - "Keywords"
+featured: "secondary2"
 published: true
 coverImage: ""
 ---

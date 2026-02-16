@@ -5,11 +5,10 @@ highlightWord: "Remote Job Applications"
 date: "2026-02-05"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
-authorImage: ""
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
-  - "resume"
-  - "Resume Tips"
-  - "Professional Development"
+  - "job"
+  - "Remote Work"
 published: true
 coverImage: ""
 ---

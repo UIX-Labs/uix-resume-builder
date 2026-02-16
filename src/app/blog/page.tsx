@@ -40,6 +40,12 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
   const posts = getAllPosts();
+  console.log(
+    posts.map(p => ({
+      title: p.frontmatter.title,
+      date: p.frontmatter.date
+    }))
+  );
   const tags = getAllTags();
 
   return <BlogPageContent posts={posts} tags={tags} />;

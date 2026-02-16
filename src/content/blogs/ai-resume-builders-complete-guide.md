@@ -5,11 +5,11 @@ highlightWord: "AI Resume Builders"
 date: "2026-01-18"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
-authorImage: "" 
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp" 
 tags:
-  - "job"
-  - "ATS"
+  - "resume"
   - "job search"
+featured: "primary"
 published: true
 coverImage: ""
 ---

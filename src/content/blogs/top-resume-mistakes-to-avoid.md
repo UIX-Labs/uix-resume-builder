@@ -1,14 +1,13 @@
 ---
-title: "Top 10 Resume Mistakes That Cost You Job Interviews"
-description: "Discover the most common resume mistakes that get your application tossed in the reject pile — and learn exactly how to fix each one for more interview callbacks."
-highlightWord: "Resume Mistakes"
+title: "Top 7 Cover Letter Mistakes That Cost You the Interview"
+description: "Avoid these common cover letter pitfalls and learn how to write a compelling narrative that gets you noticed by recruiters."
+highlightWord: "Cover Letter Mistakes"
 date: "2026-01-25"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
-authorImage: ""
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
-  - "career"
-  - "resume-tips"
+  - "cover-letter"
   - "job-search"
 published: true
 coverImage: ""

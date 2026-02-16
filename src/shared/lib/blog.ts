@@ -16,6 +16,7 @@ export interface BlogFrontmatter {
   published: boolean;
   authorImage?: string;
   highlightWord?: string;
+  featured?: 'primary' | 'secondary1' | 'secondary2';
 }
 
 export interface BlogPost {

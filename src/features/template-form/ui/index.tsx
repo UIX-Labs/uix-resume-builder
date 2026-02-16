@@ -130,7 +130,15 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} isMobile={isMobile} />;
+        return (
+          <StringsInput
+            data={data}
+            onChange={onChange}
+            section={section}
+            suggestedUpdates={suggestedUpdates}
+            isMobile={isMobile}
+          />
+        );
       }
 
       default: {

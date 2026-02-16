@@ -3,7 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import CountUp from '@shared/ui/count-up';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
@@ -17,7 +16,6 @@ import { MobileTextView } from './mobile-text-view';
 
 const HeroSection = () => {
   const router = useRouter();
-  const user = useCachedUser();
   const isMobile = useIsMobile();
   const { data: currentStats } = getCurrentStatsQuery();
 
@@ -53,11 +51,6 @@ const HeroSection = () => {
 
   // Unified LinkedIn Autofill handler (MOBILE -> MobileView | DESKTOP -> Modal/Login)
   const handleLinkedInUnified = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
-
     setIsModalOpen(true);
 
     trackEvent('create_resume_click', {
@@ -66,13 +59,7 @@ const HeroSection = () => {
     });
   };
 
-  // Upload resume handler (mobile & desktop logic preserved)
   const handleUploadClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
-
     handleNavigate();
 
     trackEvent('create_resume_click', {

@@ -9,6 +9,7 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 import { MobileSidebar } from './mobile-sidebar';
 import { cn } from '@shared/lib/cn';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 interface HeaderProps {
   variant?: 'default' | 'roast';
 }
@@ -19,6 +20,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
 
   const handleNavigate = () => {
     router.push('/dashboard');
@@ -206,12 +208,17 @@ function Header({ variant = 'default' }: HeaderProps) {
           )}
           aria-label="Open menu"
         >
-          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-6 h-6')} />
+          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-8 h-8')} />
         </button>
       </header>
 
       {/* Mobile Sidebar Menu */}
-      {isMobile && <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />}
+      {isMobile &&
+        (isDashboardRoute ? (
+          <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ) : (
+          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ))}
     </>
   );
 }

@@ -38,7 +38,7 @@ export function DeleteResumeModal({ isOpen, onClose, resume, onDeleteSuccess }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="md:max-w-md bg-[rgba(245,248,250,1)]">
+      <DialogContent className="w-[90vw] md:max-w-md bg-[rgba(245,248,250,1)]">
         <DialogHeader>
           <DialogTitle className="text-center">Delete Resume</DialogTitle>
           <DialogDescription>

@@ -1,19 +1,14 @@
 'use client';
 
-import { useInView } from 'framer-motion';
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AiFeatureCard } from './ai-feature-card';
 
 export function AiFeaturesSection() {
   const [hoveredId, setHoveredId] = useState<'left' | 'right' | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
+  const [_isMounted, setIsMounted] = useState(false);
 
   const sectionRef = useRef<HTMLDivElement | null>(null);
-  const isInView = useInView(sectionRef, {
-    once: true,
-    margin: '-120px',
-  });
 
   // Memoize touch detection to avoid recalculation
   const isTouch = useMemo(() => {

@@ -1,4 +1,4 @@
-import { AITailorSection } from './ai-tailored-section';
+import { AiFeaturesSection } from './ai-features-section';
 import FaqSection from './faq-section';
 import FooterSection from './footer-section';
 import Header from './header-section';

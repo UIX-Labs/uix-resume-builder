@@ -29,10 +29,12 @@ export function ExpertCard({ name, company, logo, image }: Expert) {
       className="flex overflow-hidden rounded-tr-[36px] rounded-bl-[36px] shadow-xl"
       style={{
         fontFamily: 'Geist, sans-serif',
-        width: 'var(--expert-card-width)',
-        height: 'var(--expert-card-height)',
+        width: 'var(--expert-card-width, 265px)',
+        height: 'var(--expert-card-height, 214px)',
         background: 'var(--expert-card-gradient)',
         boxShadow: '0 4px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.08)',
+        transform: 'scale(var(--expert-card-scale, 1))',
+        transformOrigin: 'top left',
       }}
     >
       <div className="relative h-full w-[120px] shrink-0 overflow-hidden rounded-bl-[36px]">
@@ -54,11 +56,11 @@ export function ExpertCard({ name, company, logo, image }: Expert) {
             {company}
           </span>
         </p>
-        <div className="mt-1.5 flex items-center">
+        {/* <div className="mt-1.5 flex items-center">
           <div className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-expert-logo-bg">
             <Image src={logo} alt={company} width={14} height={14} className="object-contain" />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
@@ -70,9 +72,9 @@ export function CloseButton({ onClick }: { onClick: () => void }) {
       type="button"
       onClick={onClick}
       aria-label="Close"
-      className="absolute top-4 right-4 sm:top-2 sm:right-2 z-50 min-w-12 min-h-12 w-12 h-12 rounded-full bg-expert-bg border-2 border-white flex items-center justify-center text-white hover:bg-expert-bg-hover active:bg-expert-bg-hover transition-colors touch-manipulation"
+      className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-50 min-w-10 min-h-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-expert-bg border-2 border-white flex items-center justify-center text-white hover:bg-expert-bg-hover active:bg-expert-bg-hover transition-colors touch-manipulation"
     >
-      <X className="w-6 h-6 sm:w-7 sm:h-7" />
+      <X className="w-5 h-5 sm:w-6 sm:h-6" />
     </button>
   );
 }

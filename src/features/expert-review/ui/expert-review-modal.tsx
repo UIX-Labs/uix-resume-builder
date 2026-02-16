@@ -72,7 +72,7 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleReset()}>
       <DialogContent
         showCloseButton={false}
-        className="w-[calc(100vw-2rem)] max-w-[1035px] min-h-[min(100dvh-2rem,653px)] sm:min-h-[653px] p-0 overflow-hidden bg-expert-bg border-none rounded-expert-modal-mobile sm:rounded-expert-modal max-h-[100dvh] overflow-y-auto"
+        className="w-[calc(100vw-2rem)] max-w-[1035px] min-h-[min(100dvh-2rem,653px)] sm:min-h-[653px] p-0 overflow-hidden bg-expert-bg border-none rounded-expert-modal-mobile sm:rounded-expert-modal max-h-[100dvh]"
       >
         {/* Background gradient */}
         <div className="absolute inset-0 pointer-events-none">

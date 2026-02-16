@@ -74,11 +74,13 @@ export function StringsInput({
   onChange,
   suggestedUpdates,
   onOpenAnalyzerModal,
+  isMobile = false,
 }: {
   data: { itemId: string; items: any[] };
   onChange: (data: any) => void;
   suggestedUpdates?: any;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
+  isMobile?: boolean;
 }) {
   const initialData = data?.items?.length > 0 ? data.items : [''];
   const [localData, setLocalData] = useState(initialData);
@@ -151,8 +153,9 @@ export function StringsInput({
                     <button
                       type="button"
                       className={cn(
-                        'hidden group-hover:flex absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
+                        'absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
                         'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300 z-10',
+                        isMobile ? 'flex' : 'hidden group-hover:flex',
                       )}
                       onClick={() => handlePlusClick(index)}
                     >

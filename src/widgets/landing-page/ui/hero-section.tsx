@@ -3,7 +3,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import CountUp from '@shared/ui/count-up';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';

@@ -1,0 +1,5 @@
+export const UPLOAD_PROGRESS = {
+  INTERVAL_MS: 200,
+  INCREMENT: 10,
+  COMPLETE_DELAY_MS: 500,
+} as const;

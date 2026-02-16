@@ -5,11 +5,11 @@ import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/button';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Eye, EyeOff } from 'lucide-react';
-import { getFieldErrors, getFieldSuggestions } from '../lib/get-field-errors';
+import { getFieldSuggestions } from '../lib/get-field-errors';
 import { Draggable } from './draggable';
 import { Dropdown } from './dropdown';
 import { Duration } from './duration';
-import { FieldErrorBadges } from './error-badges';
+import { FormFieldItem } from './form-field-item';
 import { LinksInput } from './links-input';
 import { PhoneInput } from './phone-input';
 import { ProfilePictureInput } from './profile-picture';
@@ -24,6 +24,7 @@ export function TemplateForm({
   currentStep = 'personalDetails',
   onOpenAnalyzerModal,
   onToggleHideSection,
+  isMobile = false,
 }: {
   formSchema: FormSchema | {};
   values: Omit<ResumeData, 'templateId'>;
@@ -31,6 +32,7 @@ export function TemplateForm({
   currentStep: ResumeDataKey;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
+  isMobile?: boolean;
 }) {
   function getItem<T = any>(
     section: any,
@@ -57,10 +59,9 @@ export function TemplateForm({
           <Input
             placeholder={section.placeholder}
             className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
-              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
-              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-              'bg-[#FAFBFC]',
+              isMobile
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
             value={data.value}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
@@ -82,10 +83,9 @@ export function TemplateForm({
             placeholder={section.placeholder}
             errorSuggestions={errorSuggestions}
             className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl',
-              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
-              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-              'bg-[#FAFBFC]',
+              isMobile
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white min-h-[120px]'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
               '[&_.ProseMirror]:pb-18',
               '[&>div]:!ml-0',
             )}
@@ -104,7 +104,7 @@ export function TemplateForm({
             onChange={(phoneValue) => {
               onChange(phoneValue || '');
             }}
-            className="w-full"
+            className={isMobile ? 'w-full h-[48px]' : 'w-full'}
           />
         );
       }
@@ -130,7 +130,15 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} />;
+        return (
+          <StringsInput
+            data={data}
+            onChange={onChange}
+            section={section}
+            suggestedUpdates={suggestedUpdates}
+            isMobile={isMobile}
+          />
+        );
       }
 
       default: {
@@ -138,10 +146,9 @@ export function TemplateForm({
           <Input
             placeholder={section.placeholder}
             className={cn(
-              'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-[8px]',
-              'placeholder:text-[#DBCFD4] text-base text-[#0C1118] font-normal',
-              'focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB]',
-              'bg-[#FAFBFC]',
+              isMobile
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
             value={data}
             onChange={(e) => onChange(e.target.value)}
@@ -170,37 +177,41 @@ export function TemplateForm({
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div className="text-[20px] font-semibold text-gray-1000">
-          {currentSchema?.label}
-          <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
+    <div className={cn('flex flex-col w-full', isMobile ? 'gap-6' : 'gap-4')}>
+      {/* Header - only show on desktop or when not in mobile mode */}
+      {!isMobile && (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="text-[20px] font-semibold text-gray-1000">
+            {currentSchema?.label}
+            <p className="text-[13px] font-normal text-gray-1000">{currentSchema?.subTitle}</p>
+          </div>
+          {currentStep !== 'personalDetails' &&
+            (() => {
+              const Icon = isHidden ? Eye : EyeOff;
+              const label = isHidden ? 'Unhide' : 'Hide';
+
+              return (
+                <Button
+                  type="button"
+                  onClick={handleToggleHide}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-sm self-start sm:self-auto"
+                >
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </Button>
+              );
+            })()}
         </div>
-        {currentStep !== 'personalDetails' && (
-          <Button
-            type="button"
-            onClick={handleToggleHide}
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2 text-sm self-start sm:self-auto"
-          >
-            {isHidden ? (
-              <>
-                <Eye className="w-4 h-4" />
-                Unhide
-              </>
-            ) : (
-              <>
-                <EyeOff className="w-4 h-4" />
-                Hide
-              </>
-            )}
-          </Button>
-        )}
-      </div>
+      )}
 
       <form
-        className={cn('grid grid-cols-1 md:grid-cols-2 gap-4 w-full', isHidden && 'opacity-50 pointer-events-none')}
+        className={cn(
+          'w-full',
+          isMobile ? 'flex flex-col gap-6' : 'grid grid-cols-1 md:grid-cols-2 gap-4',
+          !isMobile && isHidden && 'opacity-50 pointer-events-none',
+        )}
       >
         {currentSchema.itemsType === 'draggable' ? (
           <div className="col-span-1 md:col-span-2">
@@ -216,6 +227,7 @@ export function TemplateForm({
               getItem={getItem}
               suggestedUpdates={currentData.suggestedUpdates}
               onOpenAnalyzerModal={onOpenAnalyzerModal}
+              isMobile={isMobile}
             />
           </div>
         ) : currentSchema.itemsType === 'strings' ? (
@@ -232,6 +244,7 @@ export function TemplateForm({
                 section={currentSchema}
                 suggestedUpdates={currentData.suggestedUpdates}
                 onOpenAnalyzerModal={onOpenAnalyzerModal}
+                isMobile={isMobile}
               />
             ))}
           </div>
@@ -239,58 +252,59 @@ export function TemplateForm({
           currentData.items.map((item, itemIdx) => {
             const itemId = item.id || item.itemId || `item-${itemIdx}`;
 
-            return Object.entries(item).map(([key, value], _i) => {
+            const handleFieldChange = (key: string) => (value: any) => {
+              const items = [...currentData.items];
+              items[itemIdx][key] = value;
+              onChange({
+                ...values,
+                [currentStep]: { ...currentData, items },
+              });
+            };
+
+            const renderFieldInput = (key: string, value: any, section: any) => {
+              return getItem(
+                section,
+                value,
+                handleFieldChange(key),
+                currentData.suggestedUpdates,
+                currentData.items[itemIdx]?.itemId,
+                key,
+              );
+            };
+
+            const fieldItems = Object.entries(item).map(([key, value], _i) => {
               const section = currentSchema[key];
 
               if (!section) {
                 return null;
               }
 
-              const errorCounts = getFieldErrors(currentData.suggestedUpdates, itemId, key);
-
-              const hasBadges =
-                errorCounts.spellingCount > 0 || errorCounts.sentenceCount > 0 || errorCounts.newSummaryCount > 0;
-
               return (
-                <label
+                <FormFieldItem
                   key={key}
-                  className={cn(
-                    'flex flex-col gap-2 w-full min-w-0',
-                    section.fluid && 'col-span-1 md:col-span-2',
-                    !section.fluid && hasBadges && 'col-span-1 md:col-span-2',
-                  )}
-                  htmlFor={key}
-                >
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 w-full min-w-0">
-                    <span className="text-sm text-[#0C1118] font-semibold flex-shrink-0">{section.label}</span>
-                    <div>
-                      <FieldErrorBadges
-                        spellingCount={errorCounts.spellingCount}
-                        sentenceCount={errorCounts.sentenceCount}
-                        newSummaryCount={errorCounts.newSummaryCount}
-                        onBadgeClick={(suggestionType) => onOpenAnalyzerModal?.(itemId, key, suggestionType)}
-                      />
-                    </div>
-                  </div>
-
-                  {getItem(
-                    section,
-                    value,
-                    (value) => {
-                      const items = [...currentData.items];
-                      items[itemIdx][key] = value;
-                      onChange({
-                        ...values,
-                        [currentStep]: { ...currentData, items },
-                      });
-                    },
-                    currentData.suggestedUpdates,
-                    currentData.items[itemIdx]?.itemId,
-                    key,
-                  )}
-                </label>
+                  itemId={itemId}
+                  fieldKey={key}
+                  fieldValue={value}
+                  section={section}
+                  isMobile={isMobile}
+                  suggestedUpdates={currentData.suggestedUpdates}
+                  onOpenAnalyzerModal={onOpenAnalyzerModal}
+                  renderInput={() => renderFieldInput(key, value, section)}
+                />
               );
             });
+
+            // Mobile: Wrap each item's fields in a card
+            if (isMobile) {
+              return (
+                <div key={itemId} className="w-full max-w-full rounded-[16px] space-y-3">
+                  {fieldItems}
+                </div>
+              );
+            }
+
+            // Desktop: Return fields directly for grid layout
+            return fieldItems;
           })
         )}
       </form>

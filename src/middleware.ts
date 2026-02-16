@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   '/resumes',
   '/get-all-resumes',
   '/blog',
+  '/upload-resume',
 ];
 
 async function checkAuth(request: NextRequest): Promise<boolean> {

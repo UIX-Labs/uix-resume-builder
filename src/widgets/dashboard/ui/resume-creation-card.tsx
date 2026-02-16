@@ -12,6 +12,12 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
+import ResumeCreationModal from './resume-creation-modal';
+import { LinkedInModal } from './linkedin-integration-card';
+import ResumeCreationMobileCard from './resume-creation-mobile-card';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -35,6 +41,7 @@ interface ResumeCreationCardProps {
 export default function ResumeCreationCard({ shouldOpenJDModal = false }: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
+  const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
@@ -42,6 +49,8 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authRedirectUrl, setAuthRedirectUrl] = useState('');
+  const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
@@ -58,6 +67,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     setActiveAction(null);
     setOptionsLocked(false);
   }, []);
+
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
 
   const resumeCreateHandler = async () => {
     lockOptions('create');
@@ -141,9 +154,14 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     }
 
     lockOptions('tailoredJD');
-    setShowResumeUpload(false);
-    setShowJDUpload(true);
-    setIsBuilderIntelligenceModalOpen(true);
+
+    if (isMobile) {
+      handleJDModal(true);
+    } else {
+      setShowResumeUpload(false);
+      setShowJDUpload(true);
+      setIsBuilderIntelligenceModalOpen(true);
+    }
   };
 
   // Handle opening JD modal from external trigger (e.g., from landing page JD section)
@@ -168,7 +186,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   );
 
   const handleCloseBuilderIntelligence = useCallback(() => {
-    closeBuilderIntelligenceModal(false);
+    closeBuilderIntelligenceModal(true);
   }, [closeBuilderIntelligenceModal]);
 
   const handleBuilderIntelligenceSubmittingChange = useCallback(
@@ -253,7 +271,28 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
         spinnerSubtitle={spinnerConfig?.description}
       />
 
-      <div className="relative min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
+      <ResumeCreationMobileCard onClick={() => setIsCreationModalOpen(true)} />
+
+      <ResumeCreationModal
+        isOpen={isCreationModalOpen}
+        onClose={() => setIsCreationModalOpen(false)}
+        onJDModalOpen={() => handleJDModal(true)}
+        onLinkedInClick={() => setIsLinkedInModalOpen(true)}
+        onActionLock={lockOptions}
+        onActionRelease={releaseOptions}
+        activeAction={activeAction}
+        optionsLocked={optionsLocked}
+      />
+
+      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+
+      <JDUploadMobileModal
+        isOpen={isJDModalOpen}
+        onClose={() => handleJDModal(false)}
+        onSubmittingChange={handleJDSubmittingChange}
+      />
+
+      <div className="relative hidden md:block min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
           <div className="w-full">
             {/* Options Grid */}

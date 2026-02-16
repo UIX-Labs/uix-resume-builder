@@ -47,6 +47,10 @@ const HeroSection = () => {
   };
 
   const handleLinkedInUnified = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+      return;
+    }
     setIsModalOpen(true);
     trackEvent('create_resume_click', {
       source: 'landing_hero',
@@ -55,6 +59,10 @@ const HeroSection = () => {
   };
 
   const handleUploadClick = () => {
+    if (isMobile) {
+      setShowMobileView(true);
+      return;
+    }
     handleNavigate();
     trackEvent('create_resume_click', {
       source: 'landing_hero',

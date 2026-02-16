@@ -1,13 +1,14 @@
 ---
 title: "How to Optimize Your Resume for Remote Job Applications"
 description: "Remote work is here to stay. Learn how to tailor your resume to stand out in the competitive remote job market — from showcasing remote-ready skills to formatting for virtual hiring processes."
+highlightWord: "Remote Job Applications"
 date: "2026-02-05"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
-  - "Job Search"
-  - "Resume Tips"
-  - "Professional Development"
+  - "job"
+  - "Remote Work"
 published: true
 coverImage: ""
 ---

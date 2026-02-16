@@ -1,15 +1,16 @@
 'use client';
-import { useState } from 'react';
 import { Button } from '@/shared/ui/components/button';
-import Image from 'next/image';
-import { useRouter, usePathname } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { Menu } from 'lucide-react';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileSidebar } from './mobile-sidebar';
-import { cn } from '@shared/lib/cn';
+import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { cn } from '@shared/lib/cn';
 import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
+import { Menu } from 'lucide-react';
+import Image from 'next/image';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { MobileSidebar } from './mobile-sidebar';
+
 interface HeaderProps {
   variant?: 'default' | 'roast';
 }
@@ -37,6 +38,14 @@ function Header({ variant = 'default' }: HeaderProps) {
     trackEvent('navigation_click', {
       source: 'landing_header',
       destination: 'home',
+    });
+  };
+
+  const handleBlogsClick = () => {
+    router.push('/blog');
+    trackEvent('navigation_click', {
+      source: 'landing_header',
+      destination: 'blog',
     });
   };
 
@@ -165,6 +174,24 @@ function Header({ variant = 'default' }: HeaderProps) {
             )}
           >
             {user ? 'Dashboard' : 'Sign In'}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBlogsClick}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              pathname === '/blog'
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
+            )}
+          >
+            Blogs
           </Button>
 
           <Button

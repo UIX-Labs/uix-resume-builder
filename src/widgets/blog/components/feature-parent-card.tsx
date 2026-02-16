@@ -1,19 +1,46 @@
+import { categories } from '@/data/categories';
+import { BlogPost } from '@/shared/lib/blog';
 import FeaturedPrimaryCard from './feature-primary-card';
 import FeaturedSecondaryCard from './feature-secondary';
 
-export default function FeaturedSection() {
+interface FeaturedSectionProps {
+  primaryPost: BlogPost;
+  secondaryPosts: BlogPost[];
+}
+
+export default function FeaturedSection({ primaryPost, secondaryPosts }: FeaturedSectionProps) {
+  const featureImages = ['/images/blog/features/feature-one.png', '/images/blog/features/feature-img.png'];
+
+  function getBadgeColorFromPost(post: BlogPost) {
+    const tag = post.frontmatter.tags[0]?.toLowerCase();
+    const category = categories.find((cat) => cat.id === tag);
+    return category?.color || '#999';
+  }
+
+  const primaryBadgeColor = getBadgeColorFromPost(primaryPost);
+
   return (
-    <section className="w-full max-w-[1395px] mx-auto mt-10">
-      <div className="grid lg:grid-cols-2 gap-8">
+    <section className="w-full mx-auto mt-10">
+      <div className="grid lg:grid-cols-2 gap-8 items-stretch">
         {/* LEFT - BIG CARD */}
-        <div className="h-full h-full border-white border-[7px] rounded-xl">
-          <FeaturedPrimaryCard />
+        <div className="h-full">
+          <FeaturedPrimaryCard post={primaryPost} badgeColor={primaryBadgeColor} />
         </div>
 
         {/* RIGHT - TWO SMALL CARDS */}
-        <div className="flex flex-col gap-8 h-full">
-          <FeaturedSecondaryCard />
-          <FeaturedSecondaryCard />
+        <div className="flex flex-col gap-8">
+          {secondaryPosts.map((post, index) => {
+            const badgeColor = getBadgeColorFromPost(post);
+
+            return (
+              <FeaturedSecondaryCard
+                key={post.slug}
+                post={post}
+                featureImage={featureImages[index]}
+                badgeColor={badgeColor}
+              />
+            );
+          })}
         </div>
       </div>
     </section>

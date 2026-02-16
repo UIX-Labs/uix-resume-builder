@@ -1,36 +1,68 @@
+'use client';
+
+import { BlogPost } from '@/shared/lib/blog';
 import { Clock } from 'lucide-react';
+import Link from 'next/link';
 
-export default function FeaturedPrimaryCard() {
+interface FeaturedPrimaryCardProps {
+  post: BlogPost;
+  badgeColor: string;
+}
+
+export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimaryCardProps) {
   return (
-    <div className="h-full bg-[url('/images/blog/hero-section/Dot-bg.png')] rounded-2xl relative overflow-hidden">
-      {/* Right Image */}
-      <div className="absolute top-0 right-0 w-[50%] md:w-[60%]">
-        <img src="/images/blog/features/pencil.png" alt="" className="object-contain object-right-top" />
-      </div>
+    <Link href={`/blog/${post.slug}`}>
+      <div className="h-full min-h-[280px] sm:min-h-[400px] bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl relative overflow-hidden cursor-pointer border-2 sm:border-4 border-white transition-all hover:shadow-sm group">
+        {/* IMAGE */}
+        <div className="absolute top-0 right-0 w-[55%] h-full">
+          <img
+            src="/images/blog/features/pencil.png"
+            alt={post.frontmatter.title}
+            className="w-full h-full object-contain object-right-top"
+          />
+        </div>
 
-      {/* Content */}
-      <div className="absolute inset-y-0 left-0 flex flex-col justify-end ml-7 mb-7">
-        <div>
-          <span className="text-xs font-semibold text-white uppercase bg-orange-500 px-2 py-1 rounded-md">Resume</span>
+        {/* CONTENT */}
+        <div className="absolute bottom-0 left-0 w-full p-4 sm:p-10 flex flex-col justify-end z-10">
+          <div className="max-w-[75%] sm:max-w-[480px]">
+            <div className="mb-4">
+              <span
+                className="inline-flex items-center justify-center text-white text-sm font-semibold px-3 py-1 rounded-md w-fit uppercase tracking-wide"
+                style={{ backgroundColor: badgeColor }}
+              >
+                {post.frontmatter.tags?.[0]}
+              </span>
+            </div>
 
-          <h1 className="text-2xl font-bold mt-4 max-w-[350px]">How to write a resume: Expert guide & examples</h1>
+            {/* TITLE */}
+            <h1 className="text-base sm:text-2xl md:text-3xl font-semibold text-[#17171A] leading-tight line-clamp-2">
+              {post.frontmatter.title}
+            </h1>
 
-          <div className="flex items-center gap-3 mt-4">
-            <img
-              src="https://picsum.photos/200"
-              className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-              alt="Srishti Chandra"
-            />
+            {/* META ROW: */}
+            <div className="flex items-center gap-3 mt-4">
+              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
+                <img
+                  src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
+                  className="w-full h-full object-cover"
+                  alt={post.frontmatter.author}
+                />
+              </div>
 
-            <div className="flex flex-row gap-2 justify-center items-center">
-              <span className="text-sm font-medium text-gray-700">Srishti Chandra</span>
+              <div className="flex items-center text-[10px] sm:text-[12px] font-medium" style={{ color: '#8A8C99' }}>
+                <span className="truncate max-w-[80px] sm:max-w-none">{post.frontmatter.author}</span>
 
-              <Clock className="w-4 h-4 text-gray-500" />
-              <span className="text-md text-gray-500 font-medium text-[15px]">8 min read</span>
+                <span className="mx-3 opacity-50">|</span>
+
+                <div className="flex items-center gap-1.5 whitespace-nowrap">
+                  <Clock className="w-3.5 h-3.5" stroke="currentColor" />
+                  <span>{post.readingTime}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

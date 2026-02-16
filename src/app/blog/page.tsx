@@ -1,6 +1,5 @@
-import CategoriesSection from '@/widgets/blog/categories-section';
-import { getAllPosts, getAllTags } from '@shared/lib/blog';
-import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
+import { getAllPosts, getAllTags } from '@/shared/lib/blog';
+import BlogPageContent from '@/widgets/blog/blog-page';
 import type { Metadata } from 'next';
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
@@ -40,6 +39,14 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
+<<<<<<< HEAD
+  const posts = getAllPosts();
+  console.log(
+    posts.map(p => ({
+      title: p.frontmatter.title,
+      date: p.frontmatter.date
+    }))
+=======
   // const posts = getAllPosts();
   // const tags = getAllTags();
 
@@ -72,5 +79,9 @@ export default function BlogPage() {
           </div>  */}
       </div>
     </main>
+>>>>>>> main
   );
+  const tags = getAllTags();
+
+  return <BlogPageContent posts={posts} tags={tags} />;
 }

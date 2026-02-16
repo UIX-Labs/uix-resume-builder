@@ -1,6 +1,9 @@
-export { GithubIcon } from './github-icon';
-export { DribbleIcon } from './dribble-icon';
 export { BehanceIcon } from './behance-icon';
-export { YoutubeIcon } from './youtube-icon';
-export { WebsiteIcon } from './website-icon';
+export { DribbleIcon } from './dribble-icon';
+export { FacebookIcon } from './facebook-icon';
+export { GithubIcon } from './github-icon';
 export { LinkedInIcon } from './linkedin-icon';
+export { TwitterIcon } from './twitter-icon';
+export { WebsiteIcon } from './website-icon';
+export { WhatsappIcon } from './whatsapp-icon';
+export { YoutubeIcon } from './youtube-icon';

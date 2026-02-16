@@ -1,6 +1,6 @@
+import matter from 'gray-matter';
 import fs from 'node:fs';
 import path from 'node:path';
-import matter from 'gray-matter';
 import readingTime from 'reading-time';
 
 const BLOG_DIR = path.join(process.cwd(), 'src/content/blogs');
@@ -14,6 +14,9 @@ export interface BlogFrontmatter {
   tags: string[];
   coverImage?: string;
   published: boolean;
+  authorImage?: string;
+  highlightWord?: string;
+  featured?: 'primary' | 'secondary1' | 'secondary2';
 }
 
 export interface BlogPost {
@@ -113,7 +116,9 @@ export function getAllSlugs(): string[] {
  * Extract headings from markdown content for Table of Contents
  */
 export function extractHeadings(content: string): { id: string; text: string; level: number }[] {
-  const headingRegex = /^(#{2,4})\s+(.+)$/gm;
+  // const headingRegex = /^(#{2,4})\s+(.+)$/gm;
+  const headingRegex = /^(#{2})\s+(.+)$/gm;
+
   const headings: { id: string; text: string; level: number }[] = [];
   let match: RegExpExecArray | null;
 

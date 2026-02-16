@@ -10,22 +10,23 @@ interface BlogHeroProps {
 
 export default function BlogHero({ description, image, children }: BlogHeroProps) {
   return (
-    <section className="max-w-[1395px] mx-auto px-2">
-      <div className="border-4 border-white rounded-2xl">
-        <div className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl p-8 min-h-[280px] overflow-hidden">
-          {/* LEFT */}
-          <div className="relative z-10 w-full flex flex-col justify-center px-4 lg:px-10">
-            <h1 className="text-3xl sm:text-4xl lg:text-[63px] font-semibold leading-tight">{children}</h1>
+    <div
+      className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl overflow-hidden max-w-[1395px] mx-auto border-4 
+      border-white min-h-[296px] lg:h-[250px]"
+    >
+      <div className="flex flex-col lg:flex-row items-stretch h-full">
+        <div className="w-full lg:w-[55%] px-4 lg:px-10 text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center py-8 lg:py-0">
+          <h1 className="text-2xl sm:text-3xl lg:text-[45px] font-semibold leading-tight">{children}</h1>
 
-            <p className="mt-4 text-base sm:text-lg lg:text-2xl max-w-[480px] text-gray-600">{description}</p>
-          </div>
+          <p className="mt-2 text-base sm:text-lg lg:text-[24px] max-w-[520px] text-[#1A1A1A] mx-auto lg:mx-0 leading-tight">
+            {description}
+          </p>
+        </div>
 
-          {/* RIGHT IMAGE */}
-          <div className="absolute top-0 right-0 flex items-center justify-end pointer-events-none">
-            <Image src={image} alt="hero" width={600} height={600} className="object-contain max-h-full" />
-          </div>
+        <div className="w-full lg:w-[45%] relative min-h-[200px] lg:min-h-full order-1 lg:order-2">
+          <Image src={image} alt="hero" fill priority className="object-cover object-center lg:object-right" />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

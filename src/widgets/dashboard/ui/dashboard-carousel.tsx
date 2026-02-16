@@ -1,7 +1,7 @@
 'use client';
 
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { useUseTemplate } from '@widgets/templates-page/ui/hooks/use-template-select';
+import { useSelectTemplate } from '@shared/hooks/use-select-template';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
@@ -11,6 +11,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 export default function DashboardCarousel() {
+  const { handleUseTemplate } = useSelectTemplate();
   const options: EmblaOptionsType = { loop: true, align: 'center' };
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 4000, stopOnInteraction: false })]);
 

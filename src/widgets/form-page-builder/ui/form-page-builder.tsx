@@ -311,7 +311,7 @@ export function FormPageBuilder() {
     generateAndSaveThumbnail,
   });
 
-  // Auto-save functionality - saves current section after 25s of inactivity
+  // // Auto-save functionality - saves current section after 25s of inactivity
   useAutoSave({
     currentStep,
     formData,

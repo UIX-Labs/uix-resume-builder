@@ -33,12 +33,9 @@ export default async function CategoryPage({ params }: PageProps) {
       {/* CLIENT PART */}
       <CategoryPageContent
         posts={filteredPosts}
-        title={`Collection of ${filteredPosts.length}+ ${
-          filteredPosts.length === 1 ? 'blog' : 'blogs'
-        }`}
+        title={`Collection of ${filteredPosts.length}+ ${filteredPosts.length === 1 ? 'blog' : 'blogs'}`}
         placeholder="Search blogs"
       />
-
     </div>
   );
 }

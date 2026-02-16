@@ -4,11 +4,13 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { cn } from '@shared/lib/cn';
+import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
+
 interface HeaderProps {
   variant?: 'default' | 'roast';
 }
@@ -19,6 +21,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
 
   const handleNavigate = () => {
     router.push('/dashboard');
@@ -59,8 +62,6 @@ function Header({ variant = 'default' }: HeaderProps) {
       action: user ? 'dashboard' : 'sign_in',
     });
   };
-
-  
 
   const handleAboutUsClick = () => {
     router.push('/about-us');
@@ -175,7 +176,6 @@ function Header({ variant = 'default' }: HeaderProps) {
             {user ? 'Dashboard' : 'Sign In'}
           </Button>
 
-
           <Button
             variant="ghost"
             size="sm"
@@ -235,12 +235,17 @@ function Header({ variant = 'default' }: HeaderProps) {
           )}
           aria-label="Open menu"
         >
-          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-6 h-6')} />
+          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-8 h-8')} />
         </button>
       </header>
 
       {/* Mobile Sidebar Menu */}
-      {isMobile && <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />}
+      {isMobile &&
+        (isDashboardRoute ? (
+          <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ) : (
+          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ))}
     </>
   );
 }

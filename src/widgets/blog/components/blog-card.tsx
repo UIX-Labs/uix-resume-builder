@@ -67,7 +67,11 @@ export default function BlogCard({
               group-hover:text-white
             "
           >
-            <img src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp" className="w-6 h-6 rounded-full" alt="" />
+            <img
+              src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
+              className="w-6 h-6 rounded-full"
+              alt=""
+            />
 
             <span>
               By <span className="font-semibold text-black group-hover:text-white">{author}</span> &nbsp;|&nbsp;

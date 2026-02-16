@@ -86,14 +86,14 @@ const HeroSection = () => {
               <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-4 lg:mb-6 text-center md:text-left">
                 <div className="flex -space-x-2">
                   {userAvatars.map((avatar) => (
-                    <Avatar key={avatar.key} className="w-10 h-10 md:w-12 md:h-12 border-2 border-white">
+                    <Avatar key={avatar.key} className="w-12 h-12 md:w-12 md:h-12 border-2 border-white">
                       <AvatarImage src="/placeholder.svg" />
                       <AvatarFallback className="text-black">{avatar.initials}</AvatarFallback>
                     </Avatar>
                   ))}
                 </div>
 
-                <span className="font-semibold text-sm md:text-base lg:text-lg text-gray-900">
+                <span className="font-semibold text-lg md:text-base lg:text-lg text-gray-800">
                   Trusted by{' '}
                   <span className="inline-block tabular-nums min-w-[70px] text-center">
                     <CountUp from={10} to={currentStats?.totalUsers ?? 0} separator="," duration={1} />+

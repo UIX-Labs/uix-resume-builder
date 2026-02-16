@@ -1,33 +1,36 @@
-import { useState, useEffect } from 'react';
 import { useUpdateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
-import { toast } from 'sonner';
+import enzoTemplate1 from '@features/resume/templates/enzo-template1';
+import { default as standardTemplate } from '@features/resume/templates/standard';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import aniketTemplate from '@features/resume/templates/standard';
+import template7 from '@features/resume/templates/template-7';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface UseTemplateManagementParams {
   resumeId: string;
-  initialTemplate?: any;
-  initialTemplateId?: string;
+  initialTemplate?: unknown;
+  initialTemplateId?: string | null;
 }
 
 export function useTemplateManagement({ resumeId, initialTemplate, initialTemplateId }: UseTemplateManagementParams) {
-  const [selectedTemplate, setSelectedTemplate] = useState<any>(initialTemplate ?? aniketTemplate);
+  const [selectedTemplate, setSelectedTemplate] = useState<any>(initialTemplate ?? standardTemplate);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(initialTemplateId ?? null);
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
-  useEffect(() => {
-    if (initialTemplate) {
-      setSelectedTemplate(initialTemplate);
-    }
-  }, [initialTemplate]);
+  //  useEffect(() => {
+  //   if (initialTemplate) {
+  //     setSelectedTemplate(initialTemplate);
+  //   }
+  // }, [initialTemplate]);
 
-  useEffect(() => {
-    if (initialTemplateId) {
-      setSelectedTemplateId(initialTemplateId);
-    }
-  }, [initialTemplateId]);
+  // useEffect(() => {
+  //   if (initialTemplateId) {
+  //     setSelectedTemplateId(initialTemplateId);
+  //   }
+  // }, [initialTemplateId]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {

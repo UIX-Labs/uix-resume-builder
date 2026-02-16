@@ -17031,7 +17031,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
       data-column="left"
     >
       <div
-        class="pr-8 flex flex-row gap-6 items-start mb-2"
+        class="pt-6 pr-8 flex flex-row gap-6 item-start mb-2"
         data-section="header"
         style="scroll-margin-top: 20px;"
       >
@@ -17585,7 +17585,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         style="display: block;"
       >
         <div
-          class="pr-8 flex flex-row gap-6 items-start mb-2"
+          class="pt-6 pr-8 flex flex-row gap-6 item-start mb-2"
           data-section="header"
           style="scroll-margin-top: 20px;"
         >

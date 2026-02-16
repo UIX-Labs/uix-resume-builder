@@ -5,6 +5,7 @@ import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { cn } from '@shared/lib/cn';
+import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -21,6 +22,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
+  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
 
   const handleNavigate = () => {
     router.push('/dashboard');
@@ -221,20 +223,17 @@ function Header({ variant = 'default' }: HeaderProps) {
           )}
           aria-label="Open menu"
         >
-          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-6 h-6')} />
+          <Menu className={cn(isRoast ? 'w-7 h-7' : 'w-8 h-8')} />
         </button>
       </header>
 
       {/* Mobile Sidebar Menu */}
-      {isMobile && (
-        <MobileSidebar
-          isOpen={showMobileSidebar}
-          onClose={() => setShowMobileSidebar(false)}
-          onExpertReviewClick={() => setShowExpertReviewModal(true)}
-        />
-      )}
-
-      {/* Expert Review Modal */}
+      {isMobile &&
+        (isDashboardRoute ? (
+          <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ) : (
+          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+        ))}
       <ExpertReviewModal isOpen={showExpertReviewModal} onClose={() => setShowExpertReviewModal(false)} />
     </>
   );

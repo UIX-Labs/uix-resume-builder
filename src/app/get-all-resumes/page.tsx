@@ -1,24 +1,39 @@
 'use client';
-import { useState } from 'react';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { SidebarProvider } from '@shared/ui/sidebar';
-import DashboardHeader from '@widgets/dashboard/ui/dashboard-header';
-import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
-import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { TemplateCard } from '@widgets/templates-page/ui/template-card';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
+import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { SidebarProvider } from '@shared/ui/sidebar';
+import { useMutation } from '@tanstack/react-query';
+import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
+import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
+import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplateCard } from '@widgets/templates-page/ui/template-card';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
   const { data: templates } = useGetAllTemplates();
+  const isMobile = useIsMobile();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  // Resume Creation Modal State
+  const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
+  const [creationTemplate, setCreationTemplate] = useState<Template | null>(null);
+  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
+  const [optionsLocked, setOptionsLocked] = useState(false);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
   const createResumeMutation = useMutation({
     mutationFn: createResume,
@@ -30,9 +45,30 @@ export default function GetAllResumesPage() {
 
   const isLoading = createResumeMutation.isPending || updateTemplateMutation.isPending;
 
+  const lockOptions = (
+    action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_JD,
+  ) => {
+    setActiveAction(action);
+    setOptionsLocked(true);
+  };
+
+  const releaseOptions = () => {
+    setActiveAction(null);
+    setOptionsLocked(false);
+  };
+
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
+    onRelease: releaseOptions,
+  });
+
   const handleTemplateClick = (template: Template) => {
     setPreviewTemplate(template);
     setIsPreviewOpen(true);
+  };
+
+  const handleMobileUseTemplate = (template: Template) => {
+    setCreationTemplate(template);
+    setIsCreationModalOpen(true);
   };
 
   const handleTemplateSelect = async (templateId: string) => {
@@ -68,6 +104,22 @@ export default function GetAllResumesPage() {
     }
   };
 
+  const handlePreviewClose = () => {
+    setIsPreviewOpen(false);
+  };
+
+  const handleCreationModalClose = () => {
+    setIsCreationModalOpen(false);
+  };
+
+  const handleLinkedInModalOpen = () => {
+    setIsLinkedInModalOpen(true);
+  };
+
+  const handleLinkedInModalClose = () => {
+    setIsLinkedInModalOpen(false);
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-screen bg-white relative">
@@ -84,37 +136,66 @@ export default function GetAllResumesPage() {
           <DashboardSidebar />
         </div>
 
-        <div className="flex-1 flex flex-col min-w-0 m-2 sm:m-3">
-          <DashboardHeader user={user} />
+        <div className="flex-1 flex flex-col min-w-0 m-3">
+          <ResponsiveHeader user={user} />
 
-          <main className="flex bg-[rgb(245,248,250)] mt-2 sm:mt-3 rounded-2xl sm:rounded-[36px] overflow-hidden pb-4 h-full">
+          <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
-              <div className="flex text-start w-full px-2 sm:px-0">
-                <h1 className="text-[rgb(231,238,243)] font-semibold text-[40px] sm:text-[60px] md:text-[70px] lg:text-[90px] leading-tight -tracking-[3%] h-auto sm:h-[77px] truncate mt-[-10px] sm:mt-[-25px] ml-[-5px] sm:ml-[-10px]">
-                  YOUR RESUMES
-                </h1>
-              </div>
+              <PageHeading title="TEMPLATES" />
 
               <WelcomeHeader
                 userName={isUserLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
               />
 
-              <div className="flex gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
-                {templates?.map((template) => (
-                  <TemplateCard
-                    key={template.id}
-                    template={template}
-                    onClick={() => handleTemplateSelect(template.id)}
-                    onPreviewClick={() => handleTemplateClick(template)}
-                  />
-                ))}
+              <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
+                {templates?.map((template) => {
+                  const handleClick = () => {
+                    if (isMobile) {
+                      handleMobileUseTemplate(template);
+                    } else {
+                      handleTemplateSelect(template.id);
+                    }
+                  };
+
+                  const handlePreview = () => {
+                    handleTemplateClick(template);
+                  };
+
+                  return (
+                    <TemplateCard
+                      key={template.id}
+                      template={template}
+                      onClick={handleClick}
+                      onPreviewClick={handlePreview}
+                    />
+                  );
+                })}
               </div>
             </div>
           </main>
         </div>
       </div>
 
-      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />
+      <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={handlePreviewClose} />
+
+      <ResumeCreationModal
+        isOpen={isCreationModalOpen}
+        onClose={handleCreationModalClose}
+        onJDModalOpen={() => handleJDModal(true)}
+        onLinkedInClick={handleLinkedInModalOpen}
+        onActionLock={lockOptions}
+        onActionRelease={releaseOptions}
+        activeAction={activeAction}
+        optionsLocked={optionsLocked}
+        template={creationTemplate}
+      />
+      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={handleLinkedInModalClose} />
+
+      <JDUploadMobileModal
+        isOpen={isJDModalOpen}
+        onClose={() => handleJDModal(false)}
+        onSubmittingChange={handleJDSubmittingChange}
+      />
     </SidebarProvider>
   );
 }

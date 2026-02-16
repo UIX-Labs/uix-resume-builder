@@ -47,10 +47,10 @@ export function AiFeatureCard({
   const [isMobile, setIsMobile] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Trigger expansion logic when card is significantly in view
+  // amount: 0.6 ensures the card is mostly visible before expanding on mobile
   const isInViewport = useInView(cardRef, {
     once: false,
-    amount: 0.5, // Requires 50% visibility to trigger "expansion"
+    amount: 0.6,
   });
 
   useEffect(() => {
@@ -62,16 +62,20 @@ export function AiFeatureCard({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Handle the scroll-in/scroll-out toggle
+  // MOBILE VIEWPORT LOGIC:
+  // Triggers onHover when entering, onLeave when exiting.
   useEffect(() => {
     if (isMobile) {
       if (isInViewport) {
         onHover();
       } else {
-        onLeave();
+        // Only trigger leave if this specific card was the one active
+        if (isHovered) {
+          onLeave();
+        }
       }
     }
-  }, [isMobile, isInViewport, onHover, onLeave]);
+  }, [isInViewport, isMobile, onHover, onLeave, isHovered]);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -82,7 +86,7 @@ export function AiFeatureCard({
     },
   };
 
-  const isExpanded = isMobile ? isInViewport : isHovered;
+  const isExpanded = isHovered;
 
   return (
     <motion.div
@@ -90,16 +94,22 @@ export function AiFeatureCard({
       role="button"
       tabIndex={0}
       aria-label={`${title} feature`}
-      onMouseEnter={onHover}
-      onMouseLeave={onLeave}
+      // Desktop only hover
+      onMouseEnter={!isMobile ? onHover : undefined}
+      onMouseLeave={!isMobile ? onLeave : undefined}
       onFocus={onHover}
       onBlur={onLeave}
-      // Animation triggers every time it enters/leaves the viewport
       initial="hidden"
       whileInView="visible"
-      // Added margin to ensure it resets cleanly when scrolling away
       viewport={{ once: false, amount: 0.2, margin: '-50px' }}
-      variants={cardVariants}
+      variants={{
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
+        },
+      }}
       className={cn(
         `
         relative overflow-hidden
@@ -125,7 +135,7 @@ export function AiFeatureCard({
           className={cn(
             'inline-flex items-center gap-1.5 sm:gap-2 rounded-full px-2 sm:px-3 md:px-4 py-0.5 sm:py-1 md:py-1.5 text-[9px] sm:text-xs md:text-sm font-semibold mb-2 sm:mb-4 md:mb-6 w-fit',
             isExpanded
-              ? cn('bg-white', isBlue ? 'text-blue-600' : 'text-green-500') // Dynamic color based on variant
+              ? cn('bg-white', isBlue ? 'text-blue-600' : 'text-green-500')
               : isBlue
                 ? 'bg-blue-600 text-white'
                 : 'bg-green-500 text-white',
@@ -168,8 +178,8 @@ export function AiFeatureCard({
         </p>
       </div>
 
-      {/* IMAGE PREVIEW */}
-      {!isOtherHovered && (
+      {/* IMAGE PREVIEW - both cards keep their images on mobile when other is in view; on desktop hide when other hovered */}
+      {(!isOtherHovered || isMobile) && (
         <>
           {id === 'left' && (
             <div
@@ -178,7 +188,7 @@ export function AiFeatureCard({
                 'top-1/2 -translate-y-1/2',
                 TRANSITION,
                 isExpanded
-                  ? 'right-[5px] sm:right-[15px] md:right-[20px] md:top-60'
+                  ? 'right-[5px] sm:right-[15px] md:right-[20px] md:top-70'
                   : 'right-[-40px] sm:right-[-60px] md:right-[-130px]',
               )}
             >

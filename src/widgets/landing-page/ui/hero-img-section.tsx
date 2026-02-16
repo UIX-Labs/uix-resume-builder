@@ -32,7 +32,7 @@ export default function HeroImgSection() {
         />
         {/* yellow square */}
         <div
-          className="absolute top-[140px] right-6 md:right-0.5 w-[80px] h-[80px] md:w-[130px] md:h-[140px]
+          className="absolute md:top-[140px] top-20 right-6 md:right-0.5 w-[80px] h-[80px] md:w-[130px] md:h-[140px]
  bg-[#FFEB3B] rounded-md"
         />
         {/* Light blue quarter circle */}
@@ -71,7 +71,7 @@ export default function HeroImgSection() {
           alt="Profile"
           width={93}
           height={93}
-          className="rounded-full w-[50px] h-[50px] md:w-[93px] md:h-[93px]"
+          className="rounded-full w-[48px] h-[48px] md:w-[93px] md:h-[93px]"
         />
       </motion.div>
 
@@ -99,7 +99,7 @@ export default function HeroImgSection() {
         initial="hidden"
         animate="visible"
         variants={fadeScaleIn}
-        className="absolute top-60 md:top-100 right-0 z-30 bg-[rgba(59,130,246,0.18)] backdrop-blur-[2px] px-3 py-1.5 md:px-6 md:py-4 rounded-md md:rounded-xl shadow-md flex items-center gap-1"
+        className="absolute top-60 md:top-100 right-0 z-30 backdrop-blur-[2px] px-3 py-1.5 md:px-6 md:py-4 rounded-md md:rounded-xl shadow-md flex items-center gap-1 border-[0.5px] border-[rgba(0,95,242,0.40)] bg-[rgba(0,95,242,0.10)]"
       >
         <span className="inline-flex items-center gap-1 font-semibold text-gray-900 text-[10px] md:text-base">
           ATS Perfect+

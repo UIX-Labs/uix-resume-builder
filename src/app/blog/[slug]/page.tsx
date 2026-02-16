@@ -98,6 +98,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
+  // Find related posts (same tags, excluding current)
+  // const allPosts = getAllPosts();
+  // const relatedPosts = allPosts
+  //  .filter((p) => p.slug !== slug && p.frontmatter.tags.some((t) => frontmatter.tags.includes(t)))
+  //  .slice(0, 3);
+
   // Article structured data
   const articleJsonLd = {
     '@context': 'https://schema.org',

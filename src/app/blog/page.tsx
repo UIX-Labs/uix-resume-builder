@@ -40,8 +40,8 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const _posts = getAllPosts();
-  const _tags = getAllTags();
+  // const posts = getAllPosts();
+  // const tags = getAllTags();
 
   return (
     <main className="min-h-screen">

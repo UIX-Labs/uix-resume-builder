@@ -335,13 +335,45 @@ function ResumeRendererComponent({
 
             // --- Orphan prevention ---
             // If the break caused a page change and the wrapper on the starting
-            // page is too small, remove it to eliminate the visual gap.
+            // page is too small, move its content to the next page instead of
+            // leaving a tiny orphan fragment. We do this by removing the wrapper
+            // from the start page, starting a new page at that point, and
+            // re-processing the entire child so all its content lands on later
+            // pages.
             if (currentPageIndex > startPage) {
               const heightAfter = getPageHeightForPage(startPage);
               const wrapperContribution = heightAfter - heightBefore;
 
               if (wrapperContribution > 0 && wrapperContribution < MIN_ORPHAN_HEIGHT) {
+                // Remove all pages that were created during the recursion
+                // (from startPage onwards) and restore to pre-recursion state
+                while (outPages.length > startPage + 1) {
+                  outPages.pop();
+                }
+                // Remove the wrapper from the start page
                 removeWrapperFromPage(wrapper, startPage);
+
+                // Restore page index and start a new page, then re-process
+                // the entire child element so nothing is lost
+                currentPageIndex = startPage;
+                startNewPage();
+
+                const freshClone = child.cloneNode(true) as HTMLElement;
+                addToPage(freshClone);
+
+                // Check if it fits on the fresh page
+                const freshHeight = getPageHeight();
+                const freshMax = getCurrentPageMax();
+                if (freshHeight > freshMax && child.children.length > 0) {
+                  // Still doesn't fit — break it on the new page
+                  removeFromPage(freshClone);
+                  const freshWrapper = child.cloneNode(false) as HTMLElement;
+                  removeBorderClasses(freshWrapper);
+                  addToPage(freshWrapper);
+                  containerStack.push(freshWrapper);
+                  processChildren(child);
+                  containerStack.pop();
+                }
               }
             }
 

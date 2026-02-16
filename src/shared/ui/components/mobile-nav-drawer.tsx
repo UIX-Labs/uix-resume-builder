@@ -1,12 +1,12 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
 import { Button } from '@/shared/ui/components/button';
+import { cn } from '@shared/lib/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import type { LucideIcon } from 'lucide-react';
+import { X } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { cn } from '@shared/lib/cn';
-import type { LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   label: string;
@@ -22,7 +22,7 @@ export interface CTAButton {
   className?: string;
 }
 
-export interface ReusableMobileSidebarProps {
+export interface MobileNavDrawerProps {
   isOpen: boolean;
   onClose: () => void;
   navItems: NavItem[];
@@ -40,7 +40,7 @@ export interface ReusableMobileSidebarProps {
   }[];
 }
 
-export const ReusableMobileSidebar = ({
+export const MobileNavDrawer = ({
   isOpen,
   onClose,
   navItems,
@@ -50,7 +50,7 @@ export const ReusableMobileSidebar = ({
   logoAlt = 'Pika Resume',
   brandName = { primary: 'Pika', secondary: 'Resume' },
   menuSections,
-}: ReusableMobileSidebarProps) => {
+}: MobileNavDrawerProps) => {
   const pathname = usePathname();
 
   const handleLogoClick = () => {
@@ -58,6 +58,33 @@ export const ReusableMobileSidebar = ({
       onLogoClick();
       onClose();
     }
+  };
+
+  const renderNavItem = (item: NavItem, key: string | number) => {
+    const Icon = item.icon;
+    const isActive = item.isActive ?? item.label === pathname;
+
+    return (
+      <li key={key} className="relative">
+        {isActive && (
+          <div className="absolute -left-[33px] top-1/2 -translate-y-1/2 w-[10px] h-[33px] bg-sidebar-brand-primary rounded-r-[12px]" />
+        )}
+        <Button
+          variant="ghost"
+          onClick={() => {
+            item.onClick();
+            onClose();
+          }}
+          className={cn(
+            'w-full justify-start h-auto p-0 hover:bg-transparent transition-colors !px-0',
+            isActive ? 'text-sidebar-nav-active font-semibold' : 'text-sidebar-nav-inactive font-normal',
+          )}
+        >
+          {Icon && <Icon className="size-6 flex-shrink-0" />}
+          <span className="text-base leading-[1.25em] tracking-[-0.00125em]">{item.label}</span>
+        </Button>
+      </li>
+    );
   };
 
   return (
@@ -109,9 +136,8 @@ export const ReusableMobileSidebar = ({
 
               {/* Navigation Items */}
               <nav className="flex-1 mt-2 mx-4 mb-4 flex flex-col">
-                <div className="bg-[var(--color-sidebar-nav-bg)] rounded-[36px] px-[33px] py-9 relative flex-1">
+                <div className="bg-sidebar-nav-bg rounded-[36px] px-[33px] py-9 relative flex-1">
                   {menuSections && menuSections.length > 0 ? (
-                    // Render sections with labels
                     <div className="space-y-8">
                       {menuSections.map((section, sectionIndex) => (
                         <div key={sectionIndex}>
@@ -121,71 +147,15 @@ export const ReusableMobileSidebar = ({
                             </h3>
                           )}
                           <ul className="space-y-4">
-                            {section.items.map((item, itemIndex) => {
-                              const Icon = item.icon;
-                              const isActive = item.isActive ?? item.label === pathname;
-
-                              return (
-                                <li key={`${sectionIndex}-${itemIndex}`} className="relative">
-                                  {isActive && (
-                                    <div className="absolute -left-[33px] top-1/2 -translate-y-1/2 w-[10px] h-[33px] bg-sidebar-brand-primary rounded-r-[12px]" />
-                                  )}
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      item.onClick();
-                                      onClose();
-                                    }}
-                                    className={cn(
-                                      'w-full text-left flex items-center gap-2 transition-colors',
-                                      isActive
-                                        ? 'text-sidebar-nav-active font-semibold'
-                                        : 'text-sidebar-nav-inactive font-normal',
-                                    )}
-                                  >
-                                    {Icon && <Icon className="w-6 h-6 flex-shrink-0" />}
-                                    <span className="text-base leading-[1.25em] tracking-[-0.00125em]">
-                                      {item.label}
-                                    </span>
-                                  </button>
-                                </li>
-                              );
-                            })}
+                            {section.items.map((item, itemIndex) =>
+                              renderNavItem(item, `${sectionIndex}-${itemIndex}`),
+                            )}
                           </ul>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <ul className="space-y-4">
-                      {navItems.map((item, index) => {
-                        const Icon = item.icon;
-                        const isActive = item.isActive ?? false;
-
-                        return (
-                          <li key={index} className="relative">
-                            {isActive && (
-                              <div className="absolute -left-[33px] top-1/2 -translate-y-1/2 w-[10px] h-[33px] bg-sidebar-brand-primary rounded-r-[12px]" />
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => {
-                                item.onClick();
-                                onClose();
-                              }}
-                              className={cn(
-                                'w-full text-left flex items-center gap-2 transition-colors',
-                                isActive
-                                  ? 'text-sidebar-nav-active font-semibold'
-                                  : 'text-sidebar-nav-inactive font-normal',
-                              )}
-                            >
-                              {Icon && <Icon className="w-6 h-6 flex-shrink-0" />}
-                              <span className="text-base leading-[1.25em] tracking-[-0.00125em]">{item.label}</span>
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
+                    <ul className="space-y-4">{navItems.map((item, index) => renderNavItem(item, index))}</ul>
                   )}
                 </div>
               </nav>

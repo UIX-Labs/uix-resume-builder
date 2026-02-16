@@ -60,8 +60,8 @@ export function TemplateForm({
             placeholder={section.placeholder}
             className={cn(
               isMobile
-                ? 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl placeholder:text-[#9CA3AF] text-sm text-[#111827] font-normal focus:border-[#3B82F6] focus:ring-0 bg-white h-[48px] px-4'
-                : 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl text-base text-[#0C1118] font-normal focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB] bg-[#FAFBFC]',
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
             value={data.value}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
@@ -84,8 +84,8 @@ export function TemplateForm({
             errorSuggestions={errorSuggestions}
             className={cn(
               isMobile
-                ? 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl placeholder:text-[#9CA3AF] text-sm text-[#111827] font-normal focus:border-[#3B82F6] focus:ring-0 bg-white min-h-[120px]'
-                : 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl text-base text-[#0C1118] font-normal focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB] bg-[#FAFBFC]',
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white min-h-[120px]'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
               '[&_.ProseMirror]:pb-18',
               '[&>div]:!ml-0',
             )}
@@ -130,7 +130,15 @@ export function TemplateForm({
       }
 
       case 'strings': {
-        return <StringsInput data={data} onChange={onChange} section={section} suggestedUpdates={suggestedUpdates} isMobile={isMobile} />;
+        return (
+          <StringsInput
+            data={data}
+            onChange={onChange}
+            section={section}
+            suggestedUpdates={suggestedUpdates}
+            isMobile={isMobile}
+          />
+        );
       }
 
       default: {
@@ -139,8 +147,8 @@ export function TemplateForm({
             placeholder={section.placeholder}
             className={cn(
               isMobile
-                ? 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl placeholder:text-[#9CA3AF] text-sm text-[#111827] font-normal focus:border-[#3B82F6] focus:ring-0 bg-white h-[48px] px-4'
-                : 'border border-[#959DA8] ring-4 ring-[#f6f6f6] rounded-xl text-base text-[#0C1118] font-normal focus:border-[#0059ED] focus:ring-[#CBE7FF] placeholder:text-[#CFD4DB] bg-[#FAFBFC]',
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
             value={data}
             onChange={(e) => onChange(e.target.value)}
@@ -175,7 +183,7 @@ export function TemplateForm({
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div className="text-[20px] font-semibold text-gray-1000">
             {currentSchema?.label}
-            <p className="text-[13px] font-normal text-[rgba(23, 23, 23, 1)]">{currentSchema?.subTitle}</p>
+            <p className="text-[13px] font-normal text-gray-1000">{currentSchema?.subTitle}</p>
           </div>
           {currentStep !== 'personalDetails' &&
             (() => {

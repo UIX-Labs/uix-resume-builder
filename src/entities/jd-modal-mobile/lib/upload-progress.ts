@@ -2,6 +2,8 @@ import { UPLOAD_PROGRESS } from '@entities/jd-modal-mobile/constants';
 
 export function simulateUploadProgress(onProgress: (progress: number) => void, onComplete: () => void): () => void {
   let progress = 0;
+  let timeoutId: NodeJS.Timeout | null = null;
+
   onProgress(0);
 
   const progressInterval = setInterval(() => {
@@ -11,7 +13,7 @@ export function simulateUploadProgress(onProgress: (progress: number) => void, o
       clearInterval(progressInterval);
       onProgress(100);
 
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         onComplete();
       }, UPLOAD_PROGRESS.COMPLETE_DELAY_MS);
     } else {
@@ -19,5 +21,10 @@ export function simulateUploadProgress(onProgress: (progress: number) => void, o
     }
   }, UPLOAD_PROGRESS.INTERVAL_MS);
 
-  return () => clearInterval(progressInterval);
+  return () => {
+    clearInterval(progressInterval);
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+  };
 }

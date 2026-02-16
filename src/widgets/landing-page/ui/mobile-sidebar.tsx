@@ -2,8 +2,8 @@
 
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import type { NavItem } from '@shared/ui/components/reusable-mobile-sidebar';
-import { ReusableMobileSidebar } from '@shared/ui/components/reusable-mobile-sidebar';
+import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
+import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { MobileTextView } from './mobile-text-view';
@@ -16,7 +16,6 @@ export interface MobileSidebarProps {
 export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  const user = useCachedUser();
   const [showMobileTextView, setShowMobileTextView] = useState(false);
 
   const handleNavigation = (path: string, eventName: string, destination: string) => {
@@ -76,7 +75,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
 
   return (
     <>
-      <ReusableMobileSidebar
+      <MobileNavDrawer
         isOpen={isOpen}
         onClose={onClose}
         navItems={navItems}

@@ -3,8 +3,8 @@
 import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import type { NavItem } from '@shared/ui/components/reusable-mobile-sidebar';
-import { ReusableMobileSidebar } from '@shared/ui/components/reusable-mobile-sidebar';
+import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
+import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
 import { FileText, Home, LayoutGrid, LogIn, LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -103,7 +103,7 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
   ];
 
   return (
-    <ReusableMobileSidebar
+    <MobileNavDrawer
       isOpen={isOpen}
       onClose={onClose}
       navItems={[]}

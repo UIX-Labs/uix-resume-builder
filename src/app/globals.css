@@ -357,6 +357,13 @@
   --color-section-shadow: rgba(246, 246, 246, 1);
   --color-section-dot-pattern: rgba(204, 204, 204, 1);
   --color-pika-intelligence: rgba(2, 164, 79, 1);
+
+  --color-form-border: rgba(149, 157, 168, 1);
+  --color-form-ring-light: rgba(246, 246, 246, 1);
+  --color-form-bg-light: rgba(250, 251, 252, 1);
+  --color-form-text-dark: rgba(12, 17, 24, 1);
+  --color-form-placeholder: rgba(207, 212, 219, 1);
+  --color-form-focus-ring: rgba(203, 231, 255, 1);
 }
 
 @theme inline {

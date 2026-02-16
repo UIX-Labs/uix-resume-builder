@@ -15,7 +15,7 @@ import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
-import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
 
 function DashboardContent() {
   const { data: user, isLoading } = useUserProfile();
@@ -70,7 +70,7 @@ function DashboardContent() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <ResponsiveHeader user={user} />
+          <AdaptiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

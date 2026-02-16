@@ -21,7 +21,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
-import ResponsiveHeader from '@widgets/dashboard/ui/header';
+import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
 import { Button } from '@shared/ui/components/button';
 import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
@@ -42,10 +42,10 @@ export default function AllResumePage() {
 
   const { data: fetchedTemplate } = useGetTemplateById(previewResumeData?.templateId || null);
 
-  const handleResumePreview = (resumeId: string) => {
+  const handleResumePreview = useCallback((resumeId: string) => {
     setPreviewResumeId(resumeId);
     setIsPreviewOpen(true);
-  };
+  }, []);
 
   const lockOptions = useCallback(
     (action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_JD) => {
@@ -72,7 +72,7 @@ export default function AllResumePage() {
 
   const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
-  async function handleCreateResume() {
+  const handleCreateResume = useCallback(async () => {
     // biome-ignore lint/correctness/noUnusedVariables: <explanation>
     let guestEmail: string | undefined;
 
@@ -97,7 +97,31 @@ export default function AllResumePage() {
     });
 
     router.push(`/resume/${data.id}`);
-  }
+  }, [user, createResumeMutation, router]);
+
+  const handleClosePreview = useCallback(() => {
+    setIsPreviewOpen(false);
+    setPreviewResumeId(null);
+  }, []);
+
+  const handleCreationModalClose = useCallback(() => {
+    setIsCreationModalOpen(false);
+  }, []);
+
+  const handleLinkedInModalOpen = useCallback(() => {
+    setIsLinkedInModalOpen(true);
+  }, []);
+
+  const handleLinkedInModalClose = useCallback(() => {
+    setIsLinkedInModalOpen(false);
+  }, []);
+
+  const handleJDModalToggle = useCallback(
+    (isOpen: boolean) => {
+      handleJDModal(isOpen);
+    },
+    [handleJDModal],
+  );
 
   return (
     <SidebarProvider>
@@ -107,7 +131,7 @@ export default function AllResumePage() {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <ResponsiveHeader user={user} />
+          <AdaptiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">
@@ -173,10 +197,7 @@ export default function AllResumePage() {
         {isPreviewOpen && (
           <PreviewModal
             isOpen={isPreviewOpen}
-            onClose={() => {
-              setIsPreviewOpen(false);
-              setPreviewResumeId(null);
-            }}
+            onClose={handleClosePreview}
             template={fetchedTemplate ? fetchedTemplate : null}
             resumeData={previewResumeData}
           />
@@ -184,20 +205,20 @@ export default function AllResumePage() {
 
         <ResumeCreationModal
           isOpen={isCreationModalOpen}
-          onClose={() => setIsCreationModalOpen(false)}
-          onJDModalOpen={() => handleJDModal(true)}
-          onLinkedInClick={() => setIsLinkedInModalOpen(true)}
+          onClose={handleCreationModalClose}
+          onJDModalOpen={handleLinkedInModalOpen}
+          onLinkedInClick={handleLinkedInModalOpen}
           onActionLock={lockOptions}
           onActionRelease={releaseOptions}
           activeAction={activeAction}
           optionsLocked={optionsLocked}
         />
 
-        <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+        <LinkedInModal isOpen={isLinkedInModalOpen} onClose={handleLinkedInModalClose} />
 
         <JDUploadMobileModal
           isOpen={isJDModalOpen}
-          onClose={() => handleJDModal(false)}
+          onClose={handleJDModalToggle}
           onSubmittingChange={handleJDSubmittingChange}
         />
       </div>

@@ -7,7 +7,7 @@ import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { notFound } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { formatFileSize, useParsePdfResume, validateFile } from '@entities/resume';
 import { Breadcrumb } from '@widgets/upload-resume/ui/breadcrumb';
 import { SelectState } from '@widgets/upload-resume/ui/select-state';
@@ -40,93 +40,87 @@ export default function UploadResumePage() {
     }
   }, [isMobile]);
 
-  const uploadResume = (file: File) => {
-    setState((prev) => ({
-      ...prev,
-      uploadState: UploadState.UPLOADING,
-      uploadProgress: 0,
-      uploadError: null,
-    }));
+  const uploadResume = useCallback(
+    (file: File) => {
+      setState((prev) => ({
+        ...prev,
+        uploadState: UploadState.UPLOADING,
+        uploadProgress: 0,
+        uploadError: null,
+      }));
 
-    const progressInterval = setInterval(() => {
-      setState((prev) => {
-        if (prev.uploadProgress >= 90) {
-          clearInterval(progressInterval);
-          return prev;
-        }
-        return { ...prev, uploadProgress: prev.uploadProgress + 10 };
-      });
-    }, 300);
-
-    parsePdfResume(file, {
-      onSuccess: (data: any) => {
-        clearInterval(progressInterval);
-        setState((prev) => ({ ...prev, uploadProgress: 100, resumeId: data.resumeId }));
-
-        setTimeout(() => {
-          setState((prev) => ({ ...prev, uploadState: UploadState.SUCCESS }));
-          trackEvent('resume_upload_success', {
-            source: 'upload_resume_page',
-            file_name: file.name,
-            file_size: file.size,
-            resume_id: data.resumeId,
-            user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
-          });
-        }, 300);
-      },
-      onError: (error: any) => {
-        clearInterval(progressInterval);
-        const errorMessage = error?.message || 'Upload failed. Please try again.';
-        setState((prev) => ({
-          ...prev,
-          uploadError: errorMessage,
-          uploadState: UploadState.SELECT,
-          uploadProgress: 0,
-        }));
-
-        trackEvent('resume_upload_error', {
-          source: 'upload_resume_page',
-          error: errorMessage,
-          file_name: file.name,
-          user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
+      const progressInterval = setInterval(() => {
+        setState((prev) => {
+          if (prev.uploadProgress >= 90) {
+            clearInterval(progressInterval);
+            return prev;
+          }
+          return { ...prev, uploadProgress: prev.uploadProgress + 10 };
         });
-      },
-    });
-  };
+      }, 300);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+      parsePdfResume(file, {
+        onSuccess: (data: any) => {
+          clearInterval(progressInterval);
+          setState((prev) => ({ ...prev, uploadProgress: 100, resumeId: data.resumeId }));
 
-    const validation = validateFile(file);
+          setTimeout(() => {
+            setState((prev) => ({ ...prev, uploadState: UploadState.SUCCESS }));
+            trackEvent('resume_upload_success', {
+              source: 'upload_resume_page',
+              file_name: file.name,
+              file_size: file.size,
+              resume_id: data.resumeId,
+              user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
+            });
+          }, 300);
+        },
+        onError: (error: any) => {
+          clearInterval(progressInterval);
+          const errorMessage = error?.message || 'Upload failed. Please try again.';
+          setState((prev) => ({
+            ...prev,
+            uploadError: errorMessage,
+            uploadState: UploadState.SELECT,
+            uploadProgress: 0,
+          }));
+        },
+      });
+    },
+    [parsePdfResume, user.data?.isLoggedIn],
+  );
 
-    if (!validation.valid) {
-      setState((prev) => ({ ...prev, uploadError: validation.error || 'unknown' }));
-      trackEvent('resume_upload_error', {
+  const handleFileSelect = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const validation = validateFile(file);
+
+      if (!validation.valid) {
+        setState((prev) => ({ ...prev, uploadError: validation.error || 'unknown' }));
+        return;
+      }
+
+      setState((prev) => ({ ...prev, uploadedFile: file }));
+
+      if (!user.data?.isLoggedIn) {
+        getOrCreateGuestEmail();
+      }
+
+      trackEvent('resume_upload_started', {
         source: 'upload_resume_page',
-        error: validation.error,
+        file_name: file.name,
+        file_size: file.size,
         user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
       });
-      return;
-    }
 
-    setState((prev) => ({ ...prev, uploadedFile: file }));
+      uploadResume(file);
+    },
+    [user.data?.isLoggedIn, uploadResume],
+  );
 
-    if (!user.data?.isLoggedIn) {
-      getOrCreateGuestEmail();
-    }
-
-    trackEvent('resume_upload_started', {
-      source: 'upload_resume_page',
-      file_name: file.name,
-      file_size: file.size,
-      user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
-    });
-
-    uploadResume(file);
-  };
-
-  const handleSelectResume = () => {
+  const handleSelectResume = useCallback(() => {
     setState((prev) => ({ ...prev, uploadError: null }));
 
     trackEvent('select_resume_click', {
@@ -135,13 +129,13 @@ export default function UploadResumePage() {
     });
 
     fileInputRef.current?.click();
-  };
+  }, [user.data?.isLoggedIn]);
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = useCallback(() => {
     setState((prev) => ({ ...prev, showDeleteModal: true }));
-  };
+  }, []);
 
-  const handleCloseUpload = () => {
+  const handleCloseUpload = useCallback(() => {
     setState((prev) => ({
       ...prev,
       uploadState: UploadState.SELECT,
@@ -154,9 +148,9 @@ export default function UploadResumePage() {
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, []);
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = useCallback(() => {
     setState({
       uploadState: UploadState.SELECT,
       uploadProgress: 0,
@@ -175,13 +169,13 @@ export default function UploadResumePage() {
       resume_id: state.resumeId,
       user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
     });
-  };
+  }, [state.resumeId, user.data?.isLoggedIn]);
 
-  const handleDeleteCancel = () => {
+  const handleDeleteCancel = useCallback(() => {
     setState((prev) => ({ ...prev, showDeleteModal: false }));
-  };
+  }, []);
 
-  const handleRetryUpload = () => {
+  const handleRetryUpload = useCallback(() => {
     if (state.uploadedFile) {
       uploadResume(state.uploadedFile);
       trackEvent('resume_upload_retry', {
@@ -190,9 +184,9 @@ export default function UploadResumePage() {
         user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
       });
     }
-  };
+  }, [state.uploadedFile, uploadResume, user.data?.isLoggedIn]);
 
-  const handleAutoFillResume = () => {
+  const handleAutoFillResume = useCallback(() => {
     if (!state.resumeId) {
       console.error('No resume ID available');
       return;
@@ -206,11 +200,11 @@ export default function UploadResumePage() {
     });
 
     router.push(`/resume/${state.resumeId}`);
-  };
+  }, [state.resumeId, state.uploadedFile?.name, user.data?.isLoggedIn, router]);
 
-  const handleBackClick = () => {
+  const handleBackClick = useCallback(() => {
     router.back();
-  };
+  }, [router]);
 
   if (!isMobile) {
     return null;
@@ -218,6 +212,37 @@ export default function UploadResumePage() {
 
   const displayFileName = state.uploadedFile?.name || '';
   const displayFileSize = state.uploadedFile ? formatFileSize(state.uploadedFile.size) : '';
+
+  const renderUploadStateContent = () => {
+    switch (state.uploadState) {
+      case UploadState.SELECT:
+        return <SelectState uploadError={state.uploadError} onSelectResume={handleSelectResume} />;
+
+      case UploadState.UPLOADING:
+        return (
+          <UploadingState
+            fileName={displayFileName}
+            fileSize={displayFileSize}
+            uploadProgress={state.uploadProgress}
+            onCloseUpload={handleCloseUpload}
+          />
+        );
+
+      case UploadState.SUCCESS:
+        return (
+          <SuccessState
+            fileName={displayFileName}
+            fileSize={displayFileSize}
+            onRetryUpload={handleRetryUpload}
+            onDeleteClick={handleDeleteClick}
+            onAutoFillResume={handleAutoFillResume}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -237,26 +262,7 @@ export default function UploadResumePage() {
       >
         {state.uploadState !== UploadState.UPLOADING && <Breadcrumb onBackClick={handleBackClick} />}
 
-        {state.uploadState === UploadState.SELECT && (
-          <SelectState uploadError={state.uploadError} onSelectResume={handleSelectResume} />
-        )}
-        {state.uploadState === UploadState.UPLOADING && (
-          <UploadingState
-            fileName={displayFileName}
-            fileSize={displayFileSize}
-            uploadProgress={state.uploadProgress}
-            onCloseUpload={handleCloseUpload}
-          />
-        )}
-        {state.uploadState === UploadState.SUCCESS && (
-          <SuccessState
-            fileName={displayFileName}
-            fileSize={displayFileSize}
-            onRetryUpload={handleRetryUpload}
-            onDeleteClick={handleDeleteClick}
-            onAutoFillResume={handleAutoFillResume}
-          />
-        )}
+        {renderUploadStateContent()}
       </main>
 
       <DeleteModal isOpen={state.showDeleteModal} onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel} />

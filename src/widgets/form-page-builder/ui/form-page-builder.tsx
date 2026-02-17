@@ -14,6 +14,7 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { Button } from '@shared/ui/button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
@@ -35,7 +36,7 @@ import { useTemplateManagement } from '../hooks/use-template-management';
 import { useThumbnailGeneration } from '../hooks/use-thumbnail-generation';
 import { getCleanDataForRenderer, syncMockDataWithActualIds } from '../lib/data-cleanup';
 import { invalidateQueriesIfAllSuggestionsApplied } from '../lib/query-invalidation';
-import { isSectionEmpty, SECTION_ICONS } from '../lib/section-utils';
+import { isSectionEmpty } from '../lib/section-utils';
 import {
   applySuggestionsToArrayField,
   applySuggestionsToFieldValue,
@@ -47,8 +48,8 @@ import { formatTimeAgo } from '../lib/time-helpers';
 import { useFormPageBuilder } from '../models/ctx';
 import { useFormDataStore } from '../models/store';
 import TemplateButton from './change-template-button';
-import { MobileSectionList } from './mobile-section-list';
 import { MobileFooter } from './mobile-footer';
+import { MobileSectionList } from './mobile-section-list';
 
 /**
  * Checks if a field value is empty
@@ -860,7 +861,11 @@ export function FormPageBuilder() {
             onDownloadPDF={handleDownloadPDF}
             onPreview={() => setIsPreviewModalOpen(true)}
             isGeneratingPDF={isGeneratingPDF}
-          />
+          >
+            <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+              <MobileTemplateButton />
+            </TemplatesDialog>
+          </MobileFooter>
 
           <MobileForm
             formSchema={formSchemaData ?? {}}

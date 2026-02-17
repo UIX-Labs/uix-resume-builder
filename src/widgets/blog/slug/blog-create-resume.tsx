@@ -33,6 +33,7 @@ export default function BlogCreateResume() {
         </div>
 
         <button
+          type="button"
           className="bg-green-600 text-white px-8 py-3 md:py-4 rounded-md mb-2 md:mb-0 mt-2 hover:bg-green-700 transition-colors duration-300 cursor-pointer relative z-10 shadow-lg"
           onClick={() => handleUseTemplate('template1')}
         >

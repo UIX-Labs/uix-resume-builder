@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { MobileTextView } from './mobile-text-view';
 
 export default function JDSection() {
   const router = useRouter();
@@ -14,7 +13,6 @@ export default function JDSection() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [inView, setInView] = useState(false);
   const isMobile = useIsMobile();
-  const [showMobileView, setShowMobileView] = useState(false);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -45,18 +43,6 @@ export default function JDSection() {
   }, [inView]);
 
   const handleUploadClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-
-      trackEvent('create_resume_click', {
-        source: 'landing_jd_section',
-        method: 'upload_resume_jd',
-        device: 'mobile',
-      });
-
-      return;
-    }
-
     if (!user) {
       // User not logged in, store intent and redirect to auth page
       localStorage.setItem('openJDModal', 'true');
@@ -65,6 +51,7 @@ export default function JDSection() {
         source: 'landing_jd_section',
         method: 'upload_resume_jd',
         user_status: 'not_logged_in',
+        device: isMobile ? 'mobile' : 'desktop',
       });
 
       router.push('/auth');
@@ -74,6 +61,7 @@ export default function JDSection() {
         source: 'landing_jd_section',
         method: 'upload_resume_jd',
         user_status: 'logged_in',
+        device: isMobile ? 'mobile' : 'desktop',
       });
 
       router.push('/dashboard?openModal=jd');
@@ -170,7 +158,6 @@ export default function JDSection() {
           Upload Resume & JD
         </Button>
       </div>
-      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );
 }

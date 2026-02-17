@@ -1,0 +1,42 @@
+src/widgets/landing-page/ui/template-carousel.tsx
+  238f7458cbc1a1df 286-287,290-295,299-300
+src/widgets/landing-page/ui/jd-section.tsx
+  238f7458cbc1a1df 54,64
+src/widgets/landing-page/ui/navigation-footer.tsx
+  238f7458cbc1a1df 35-37,45
+src/shared/icons/whatsapp-icon.tsx
+  f387f126447191a8 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.3",
+  "base_commit_sha": "9fdc415b3661fe9bbf7b83d652a49005607d2ef3",
+  "prompts": {
+    "238f7458cbc1a1df": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "378301",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 30,
+      "total_deletions": 61,
+      "accepted_lines": 21,
+      "overriden_lines": 0
+    },
+    "f387f126447191a8": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "378339",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 3,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}

@@ -32,7 +32,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
       return;
     }
 
-    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/;
+    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+(\/.*)?(\?.*)?$/;
     if (!linkedinPattern.test(linkedinUrl.trim())) {
       setError('Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/your-profile)');
       return;

@@ -72,7 +72,7 @@ const HeroSection = () => {
 
   return (
     // Changed: Added h-screen and overflow-hidden for desktop to ensure it fits the viewport
-    <section className="relative w-full h-screen min-h-[600px] md:max-h-[900px] flex items-center justify-center px-4 md:px-12 overflow-hidden">
+    <section className="relative w-full h-full min-h-[600px] md:max-h-[900px] flex items-center justify-center px-4 md:px-12 overflow-hidden py-2 md:py-0">
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10"></div>
       <HeroConfetti />
 
@@ -155,7 +155,7 @@ const HeroSection = () => {
           {/* RIGHT COLUMN */}
           <div className="flex justify-center md:justify-end w-full lg:pl-4">
             {/* Changed: Added max-h to prevent the image from pushing the section height too far */}
-            <div className="relative w-full max-w-[400px] md:max-w-[480px] lg:max-w-[540px] xl:max-w-[600px] max-h-[70vh] transition-all duration-500">
+            <div className="relative w-full max-w-[400px] md:max-w-[480px] lg:max-w-[540px] xl:max-w-[600px] max-h-full transition-all duration-500">
               <HeroImgSection />
             </div>
           </div>

@@ -11,7 +11,7 @@ export function LandingPage() {
   return (
     <div className="relative w-full h-full">
       <Header />
-      <div className="mb-3.5 md:mb-5">
+      <div className="mb-2 md:mb-1">
         <TopAnnouncementStrip />
       </div>
 

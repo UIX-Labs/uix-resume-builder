@@ -2,7 +2,6 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/components/button';
-import { useIsMobile } from '@shared/hooks/use-mobile';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import CountUp from '@shared/ui/count-up';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
@@ -12,7 +11,6 @@ import getCurrentStatsQuery from '../api/query';
 import { getUserInitials } from '../lib/user-initials';
 import HeroConfetti from './hero-confetti';
 import HeroImgSection from './hero-img-section';
-import { MobileTextView } from './mobile-text-view';
 
 const HeroSection = () => {
   const router = useRouter();
@@ -62,7 +60,7 @@ const HeroSection = () => {
 
   return (
     // Changed: Added h-screen and overflow-hidden for desktop to ensure it fits the viewport
-    <section className="relative w-full h-full min-h-[600px] md:max-h-[900px] flex items-center justify-center px-4 md:px-12 overflow-hidden py-2 md:py-0">
+    <section className="relative w-full h-full min-h-[600px] md:max-h-[900px] flex items-center justify-center px-4 md:px-12 overflow-hidden py-4 md:py-0">
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10"></div>
       <HeroConfetti />
 

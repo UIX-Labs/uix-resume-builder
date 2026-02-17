@@ -9,6 +9,7 @@ import { TestimonialsModal } from '@widgets/landing-page/ui/testimonials-modal';
 import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 
 interface NavigationLink {
   label: string;
@@ -31,8 +32,9 @@ const FooterNavigation = () => {
   });
 
   const handleTemplateSelect = async (template: Template) => {
-    if (!user) {
-      router.push('/auth');
+    if (!user?.isLoggedIn) {
+      getOrCreateGuestEmail();
+    } else if (!user) {
       return;
     }
 
@@ -40,7 +42,7 @@ const FooterNavigation = () => {
       const data = await createResumeMutation.mutateAsync({
         title: 'New Resume',
         userInfo: {
-          userId: user.id,
+          userId: user?.id ?? '',
         },
       });
 

@@ -62,20 +62,12 @@ export function AiFeatureCard({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // MOBILE VIEWPORT LOGIC:
-  // Triggers onHover when entering, onLeave when exiting.
+  // MOBILE VIEWPORT LOGIC: DISABLE expansion on mobile
   useEffect(() => {
     if (isMobile) {
-      if (isInViewport) {
-        onHover();
-      } else {
-        // Only trigger leave if this specific card was the one active
-        if (isHovered) {
-          onLeave();
-        }
-      }
+      // Logic removed: user wants to remove animation for mobile
     }
-  }, [isInViewport, isMobile, onHover, onLeave, isHovered]);
+  }, [isMobile]);
 
   // const cardVariants = {
   //   hidden: { opacity: 0, y: 30 },
@@ -99,7 +91,7 @@ export function AiFeatureCard({
       onMouseLeave={!isMobile ? onLeave : undefined}
       onFocus={onHover}
       onBlur={onLeave}
-      initial="hidden"
+      initial={isMobile ? 'visible' : 'hidden'}
       whileInView="visible"
       viewport={{ once: false, amount: 0.2, margin: '-50px' }}
       variants={{

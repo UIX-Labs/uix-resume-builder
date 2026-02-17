@@ -16,11 +16,9 @@ import { MobileTextView } from './mobile-text-view';
 
 const HeroSection = () => {
   const router = useRouter();
-  const isMobile = useIsMobile();
   const { data: currentStats } = getCurrentStatsQuery();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showMobileView, setShowMobileView] = useState(false);
 
   const userAvatars = useMemo(() => {
     const latestUsers = currentStats?.latestUsers || [];
@@ -47,10 +45,6 @@ const HeroSection = () => {
   };
 
   const handleLinkedInUnified = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
     setIsModalOpen(true);
     trackEvent('create_resume_click', {
       source: 'landing_hero',
@@ -59,10 +53,6 @@ const HeroSection = () => {
   };
 
   const handleUploadClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-      return;
-    }
     handleNavigate();
     trackEvent('create_resume_click', {
       source: 'landing_hero',
@@ -163,7 +153,6 @@ const HeroSection = () => {
       </div>
 
       <LinkedInModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
     </section>
   );
 };

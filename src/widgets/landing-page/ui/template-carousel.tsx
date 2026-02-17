@@ -59,7 +59,6 @@ export function TemplateCarousel() {
   const user = useCachedUser();
   const router = useRouter();
   const isMobile = useIsMobile();
-  const [showMobileView, setShowMobileView] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
@@ -106,18 +105,8 @@ export function TemplateCarousel() {
     }
   };
 
-  const handleMobileButtonClick = () => {
-    if (isMobile) {
-      setShowMobileView(true);
-    }
-  };
-
   const handleMobileTemplateClick = (template: Template) => {
-    if (isMobile) {
-      setShowMobileView(true);
-    } else {
-      handleTemplateSelect(template);
-    }
+    handleTemplateSelect(template);
   };
 
   const { data: templates } = useGetAllTemplates();
@@ -294,19 +283,23 @@ export function TemplateCarousel() {
 
         {/* Mobile button at bottom - visible only on mobile */}
         <div className="lg:hidden px-6 pb-6">
-          <Button
-            variant="default"
-            size="lg"
-            onClick={handleMobileButtonClick}
-            className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 py-3 h-[52px] text-[20px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full"
-          >
-            Check All Templates
-          </Button>
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <Button
+              variant="default"
+              size="lg"
+              onClick={() => {
+                trackEvent('navigation_click', {
+                  source: 'landing_carousel',
+                  destination: 'all_templates',
+                });
+              }}
+              className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 py-3 h-[52px] text-[20px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full"
+            >
+              Check All Templates
+            </Button>
+          </TemplatesDialog>
         </div>
       </div>
-
-      {/* Mobile Text View */}
-      {isMobile && <MobileTextView isOpen={showMobileView} onClose={() => setShowMobileView(false)} />}
 
       {/* Preview Modal */}
       <PreviewModal template={previewTemplate} isOpen={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} />

@@ -37,6 +37,7 @@ export default function JDCTACard() {
       {/* Button */}
       <div className="flex justify-center w-full">
         <button
+          type="button"
           onClick={handleUploadClick}
           className="mt-4 w-3/4 rounded-lg bg-green-600 py-5 text-lg font-semibold text-white transition hover:bg-green-700"
         >

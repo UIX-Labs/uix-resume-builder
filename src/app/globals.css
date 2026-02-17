@@ -388,8 +388,8 @@
   --radius-expert-card: 24px;
   --radius-expert-button: 1rem;
   --color-expert-button-ring: rgba(255, 255, 255, 0.1);
-  --expert-card-width: 265px;
-  --expert-card-height: 214px;
+  --expert-card-width: 275px;
+  --expert-card-height: 224px;
   --expert-card-gradient: linear-gradient(113.21deg, #91baf8 -14.58%, #2d4160 21.17%, #000000 93.2%);
 }
 

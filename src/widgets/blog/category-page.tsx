@@ -2,7 +2,6 @@
 
 import BlogGrid from '@/widgets/blog/blog-Grid';
 import { BlogPost } from '@shared/lib/blog';
-import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 interface Props {
@@ -27,7 +26,7 @@ export default function CategoryPageContent({ posts, title, placeholder }: Props
           <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold">{title}</h1>
 
           {/* RIGHT SEARCH */}
-          <div className="relative w-full sm:w-[350px] lg:w-[400px]">
+          {/* <div className="relative w-full sm:w-[350px] lg:w-[400px]">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
@@ -40,7 +39,7 @@ export default function CategoryPageContent({ posts, title, placeholder }: Props
                   rounded-3xl shadow-sm focus:outline-none focus:ring-2 
                   focus:ring-blue-500 transition-all duration-200"
             />
-          </div>
+          </div> */}
         </div>
       </div>
 

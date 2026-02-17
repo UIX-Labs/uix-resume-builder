@@ -7,6 +7,12 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+export async function generateStaticParams() {
+  return categories.map((category) => ({
+    id: category.id,
+  }));
+}
+
 export default async function CategoryPage({ params }: PageProps) {
   const { id } = await params;
   const category = categories.find((c) => c.id === id);
@@ -17,7 +23,13 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const allPosts = getAllPosts();
 
-  const filteredPosts = allPosts.filter((post) => post.frontmatter.tags.includes(id));
+  const filteredPosts = allPosts.filter((post) =>
+    post.frontmatter.tags.some((tag) => {
+      const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      const normalizedId = id.toLowerCase().replace(/[^a-z0-9]/g, '-');
+      return normalizedTag === normalizedId || normalizedTag.startsWith(normalizedId + '-');
+    }),
+  );
 
   return (
     <div>
@@ -31,11 +43,15 @@ export default async function CategoryPage({ params }: PageProps) {
       </BlogHero>
 
       {/* CLIENT PART */}
-      <CategoryPageContent
-        posts={filteredPosts}
-        title={`Collection of ${filteredPosts.length}+ ${filteredPosts.length === 1 ? 'blog' : 'blogs'}`}
-        placeholder="Search blogs"
-      />
+      {filteredPosts.length > 0 ? (
+        <CategoryPageContent
+          posts={filteredPosts}
+          title={`Collection of ${filteredPosts.length}+ ${filteredPosts.length === 1 ? 'blog' : 'blogs'}`}
+          placeholder="Search blogs"
+        />
+      ) : (
+        <p className="text-center mt-10 text-[#1A1A1A] font-semibold text-lg">No blogs found</p>
+      )}
     </div>
   );
 }

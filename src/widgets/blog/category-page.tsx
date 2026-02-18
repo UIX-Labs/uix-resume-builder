@@ -22,26 +22,16 @@ export default function CategoryPageContent({ posts, title, placeholder, color }
   return (
     <div className="max-w-[1395px] mx-auto px-4">
       <div className="mt-6 flex flex-col-reverse sm:flex-row justify-between items-center gap-6">
-        
-       
         <div className="flex flex-col items-center sm:items-start max-w-max">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight text-center sm:text-left">
             {title}
           </h1>
-          <div 
-            className="border-2 w-full mt-2 rounded-full" 
-            style={{ borderColor: color || "black" }} 
-          />
+          <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: color || 'black' }} />
         </div>
 
         <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-          <SearchBar
-            setSearchQuery={setSearchQuery}
-            placeholder={placeholder}
-            searchQuery={searchQuery}
-          />
+          <SearchBar setSearchQuery={setSearchQuery} placeholder={placeholder} searchQuery={searchQuery} />
         </div>
-        
       </div>
 
       {/* GRID */}

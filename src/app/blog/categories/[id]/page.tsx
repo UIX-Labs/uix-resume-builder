@@ -35,14 +35,11 @@ export default async function CategoryPage({ params }: PageProps) {
   return (
     <div>
       {/* HERO */}
-      <BlogHero description={category.hero.description} 
-      image={category.hero.image}
-      breadcrumbs= {[
-        {label:'Home',href :'/'},
-        {label:'Blogs',href:'/blog'},
-        {label:category.title}
-
-      ]}>
+      <BlogHero
+        description={category.hero.description}
+        image={category.hero.image}
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs', href: '/blog' }, { label: category.title }]}
+      >
         {/* Same classes as "The Pika Journal" */}
         <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
           <span style={{ color: category.color }}>{category.title}</span>{' '}
@@ -59,10 +56,9 @@ export default async function CategoryPage({ params }: PageProps) {
           color={category.color}
         />
       ) : (
-          <div>
-            <NotFoundPage color={category.color} />
-
-          </div>
+        <div>
+          <NotFoundPage color={category.color} />
+        </div>
       )}
     </div>
   );

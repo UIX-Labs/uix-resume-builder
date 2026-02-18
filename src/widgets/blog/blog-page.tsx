@@ -31,36 +31,23 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
           <BlogHero
             image="/images/blog/hero-section/hero-section-img.png"
             description="Blogs to power up your resume, job search, and career growth."
-            breadcrumbs={[
-            { label: 'Home', href: '/' },
-            { label: 'Blogs' }
-          ]}
+            breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs' }]}
           >
             <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
               The <span className="text-[#005FF2] font-bold">Pika Journal</span>
             </span>
           </BlogHero>
 
-    
-            <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
-  
-           
+          <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
             <div className="flex flex-col items-center sm:items-start max-w-max">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
-            Popular Articles
-            </h1>
-            <div 
-                className="border-2 w-full mt-2 rounded-full" 
-                style={{ borderColor: "#005FF2" }} 
-            />
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
+                Popular Articles
+              </h1>
+              <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
             </div>
 
             <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-                <SearchBar
-                    setSearchQuery={setSearchQuery}
-                    searchQuery={searchQuery}
-                    placeholder="Search Article"
-                />
+              <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} placeholder="Search Article" />
             </div>
           </div>
 

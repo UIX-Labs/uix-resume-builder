@@ -24,8 +24,6 @@ const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com
 
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
-
-
 }
 
 /* ------------------------------------------------------------------ */
@@ -99,7 +97,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
-
   // Find related posts (same tags, excluding current)
   const allPosts = getAllPosts();
 
@@ -130,26 +127,22 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     }),
   };
 
-
-
-   const categoryTag = frontmatter.tags?.[0];
-    const breadcrumbs: BreadcrumbItem[] = [
-      { label: 'Home', href: '/' },
-      { label: 'Blogs', href: '/blog' },
-      ...(categoryTag
-        ? [
-            {
-              label: categoryTag,
-              href: `/blog/categories/${categoryTag.toLowerCase()}`,
-            },
-          ]
-        : []),
-      {
-        label: frontmatter.title,
-      },
-    ];
-
-
+  const categoryTag = frontmatter.tags?.[0];
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: '/' },
+    { label: 'Blogs', href: '/blog' },
+    ...(categoryTag
+      ? [
+          {
+            label: categoryTag,
+            href: `/blog/categories/${categoryTag.toLowerCase()}`,
+          },
+        ]
+      : []),
+    {
+      label: frontmatter.title,
+    },
+  ];
 
   return (
     <>

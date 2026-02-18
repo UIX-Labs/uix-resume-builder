@@ -40,10 +40,13 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
 
     setError(null);
 
+    // Remove UTM parameters
+    const cleanUrl = linkedinUrl.trim().split('?')[0];
+
     // Ensure guest email exists for API tracking if user is not logged in
     getOrCreateGuestEmail();
 
-    parseLinkedInMutation.mutate(linkedinUrl.trim(), {
+    parseLinkedInMutation.mutate(cleanUrl, {
       onSuccess: (response) => {
         onClose();
         const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;

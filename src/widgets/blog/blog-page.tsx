@@ -2,12 +2,11 @@
 
 import { BlogPost } from '@shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
-import { Search } from 'lucide-react';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
 
 export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, _setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -26,7 +25,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
 
   return (
     <>
-      <main className="min-h-screen">
+      <main className="min-h-screen max-w-[1395px] mx-auto">
         <div className="w-full p-2 md:p-5">
           <BlogHero
             image="/images/blog/hero-section/hero-section.png"
@@ -42,7 +41,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
               <p>Popular Articles</p>
             </div>
 
-            <div className="relative w-[150px] xs:w-[200px] sm:w-[350px] lg:w-[450px] sm:mr-2">
+            {/* <div className="relative w-[150px] xs:w-[200px] sm:w-[350px] lg:w-[450px] sm:mr-2">
               <div className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
               </div>
@@ -61,10 +60,10 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
                 rounded-3xl shadow-sm focus:outline-none focus:ring-2 
                 focus:ring-blue-500 transition-all duration-200"
               />
-            </div>
+            </div> */}
           </div>
 
-          <div className="mt-8 sm:mt-10">
+          <div className="mt-8 sm:mt-10 ">
             <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
           </div>
 

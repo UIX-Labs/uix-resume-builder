@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function CategoryPageContent({ posts, title, placeholder }: Props) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, _setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),

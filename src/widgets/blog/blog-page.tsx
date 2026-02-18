@@ -6,7 +6,7 @@ import { useState } from 'react';
 import CategoriesSection from './categories-section';
 
 export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, _setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),

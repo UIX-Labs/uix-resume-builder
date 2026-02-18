@@ -1,4 +1,4 @@
-import ArticleHeader from '@/widgets/blog/slug/article-header';
+import ArticleHeader, { type BreadcrumbItem } from '@/widgets/blog/slug/article-header';
 
 import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
@@ -24,6 +24,8 @@ const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com
 
 export async function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
+
+
 }
 
 /* ------------------------------------------------------------------ */
@@ -97,6 +99,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
+
   // Find related posts (same tags, excluding current)
   const allPosts = getAllPosts();
 
@@ -126,6 +129,27 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       image: frontmatter.coverImage,
     }),
   };
+
+
+
+   const categoryTag = frontmatter.tags?.[0];
+    const breadcrumbs: BreadcrumbItem[] = [
+      { label: 'Home', href: '/' },
+      { label: 'Blogs', href: '/blog' },
+      ...(categoryTag
+        ? [
+            {
+              label: categoryTag,
+              href: `/blog/categories/${categoryTag.toLowerCase()}`,
+            },
+          ]
+        : []),
+      {
+        label: frontmatter.title,
+      },
+    ];
+
+
 
   return (
     <>
@@ -194,6 +218,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           readingTime={readingTime}
           tags={frontmatter.tags}
           highlightWord={frontmatter.highlightWord}
+          breadcrumbs={breadcrumbs}
         />
 
         {/* Content + Sidebar */}

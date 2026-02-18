@@ -1,5 +1,6 @@
 import { categories } from '@/data/categories';
 import BlogHero from '@/widgets/blog/components/blog-hero';
+import NotFoundPage from '@/widgets/blog/slug/not-found-page';
 import { getAllPosts } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
 
@@ -34,7 +35,14 @@ export default async function CategoryPage({ params }: PageProps) {
   return (
     <div>
       {/* HERO */}
-      <BlogHero description={category.hero.description} image={category.hero.image}>
+      <BlogHero description={category.hero.description} 
+      image={category.hero.image}
+      breadcrumbs= {[
+        {label:'Home',href :'/'},
+        {label:'Blogs',href:'/blog'},
+        {label:category.title}
+
+      ]}>
         {/* Same classes as "The Pika Journal" */}
         <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
           <span style={{ color: category.color }}>{category.title}</span>{' '}
@@ -47,10 +55,14 @@ export default async function CategoryPage({ params }: PageProps) {
         <CategoryPageContent
           posts={filteredPosts}
           title={`Collection of ${filteredPosts.length}+ ${filteredPosts.length === 1 ? 'blog' : 'blogs'}`}
-          placeholder="Search blogs"
+          placeholder="Type Something"
+          color={category.color}
         />
       ) : (
-        <p className="text-center mt-10 text-[#1A1A1A] font-semibold text-lg">No blogs found</p>
+          <div>
+            <NotFoundPage color={category.color} />
+
+          </div>
       )}
     </div>
   );

@@ -220,7 +220,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Sidebar - TOC */}
           {headings.length > 0 && (
             <aside className="lg:block shrink-0 w-full md:w-[320px] lg:w-[400px]">
-              <div className="block sticky top-20">
+              <div className="block sticky top-5">
                 <div className="hidden lg:block">
                   <TableOfContents headings={headings} />
                 </div>

@@ -40,7 +40,7 @@ export default function ArticleHeader({
         flex
         flex-col
         lg:flex-row
-        gap-4 sm:gap-8  /* Gap kam kiya mobile ke liye */
+        gap-4 sm:gap-8 
         lg:items-center
         lg:justify-between
       "
@@ -70,7 +70,7 @@ export default function ArticleHeader({
         </div>
       )}
 
-      <div className="order-1 lg:order-2 w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[400px] flex items-center justify-center mx-auto mt-2">
+      <div className="order-1 lg:order-2 w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[400px] flex items-center justify-center mx-auto mt-2 leading-tighter">
         <img
           src="/images/blog/slug/header-img.png"
           alt="article header illustration"
@@ -79,8 +79,7 @@ export default function ArticleHeader({
       </div>
 
       {/* TEXT CONTENT */}
-      {/* mt-4 mobile par breadcrumbs aur image se distance rakhega */}
-      <div className="order-2 lg:order-1 w-full flex flex-col justify-center mt-4 sm:mt-2">
+      <div className="order-2 lg:order-1 w-full flex flex-col justify-center mt-4 sm:mt-2 leading-tighter">
         {/* TITLE */}
         <h1 className="text-2xl font-bold tracking-tight text-[#0B0A09] sm:text-4xl lg:text-5xl leading-tight">
           {title}

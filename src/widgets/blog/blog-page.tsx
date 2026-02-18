@@ -27,7 +27,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
   return (
     <>
       <main className="min-h-screen max-w-[1395px] mx-auto">
-        <div className="w-full p-2 md:p-5">
+        <div className="w-full p-2">
           <BlogHero
             image="/images/blog/hero-section/hero-section-img.png"
             description="Blogs to power up your resume, job search, and career growth."

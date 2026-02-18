@@ -33,7 +33,7 @@ export default async function CategoryPage({ params }: PageProps) {
   );
 
   return (
-    <div>
+    <div className="max-w-[1395px] mx-auto p-2">
       {/* HERO */}
       <BlogHero
         description={category.hero.description}

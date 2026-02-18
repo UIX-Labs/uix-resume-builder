@@ -1,11 +1,12 @@
-import { MonthYearPicker } from '@shared/ui/month-year-picker';
-import { Input } from '@shared/ui/components/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
-import { useEffect, useState } from 'react';
 import { cn } from '@shared/lib/cn';
 import { Checkbox } from '@shared/ui/checkbox';
+import { Input } from '@shared/ui/components/input';
+import { MonthYearPicker } from '@shared/ui/month-year-picker';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
+import { isAfter, startOfToday } from 'date-fns';
 import dayjs from 'dayjs';
 
+import { useEffect, useRef, useState } from 'react';
 interface DurationProps {
   data: {
     startDate: string;
@@ -18,6 +19,7 @@ interface DurationProps {
 
 export function Duration({ data, onChange }: DurationProps) {
   const [isOngoing, setIsOngoing] = useState(data?.ongoing || false);
+  const isInitialMount = useRef(true);
 
   const [startDate, setStartDate] = useState<Date | undefined>(() => {
     if (data?.startDate) {
@@ -26,7 +28,7 @@ export function Duration({ data, onChange }: DurationProps) {
     return undefined;
   });
 
-  const [endDate, setEndDate] = useState<Date | undefined>(() => {
+  const [endDate, _setEndDate] = useState<Date | undefined>(() => {
     if (data?.endDate) {
       return dayjs(data.endDate).toDate();
     }
@@ -34,6 +36,13 @@ export function Duration({ data, onChange }: DurationProps) {
   });
 
   useEffect(() => {
+    // Skip the initial mount to avoid transforming data (e.g. date format, empty string → null)
+    // before the user has actually interacted with the duration fields
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
     const updatedData = {
       startDate: startDate ? dayjs(startDate).format('YYYY-MM') : null,
       endDate: isOngoing ? null : endDate ? dayjs(endDate).format('YYYY-MM') : null,
@@ -78,7 +87,11 @@ export function Duration({ data, onChange }: DurationProps) {
           </PopoverTrigger>
 
           <PopoverContent className="w-auto p-0" align="start">
-            <MonthYearPicker selected={startDate} onSelect={(date) => setStartDate(date)} />
+            <MonthYearPicker
+              selected={startDate}
+              onSelect={(date) => setStartDate(date)}
+              disabled={(date) => isAfter(date, startOfToday())}
+            />
           </PopoverContent>
         </Popover>
       </div>
@@ -114,13 +127,9 @@ export function Duration({ data, onChange }: DurationProps) {
             </div>
 
             <MonthYearPicker
-              selected={isOngoing ? undefined : endDate}
-              onSelect={(date) => {
-                if (!date) return;
-                setIsOngoing(false);
-                setEndDate(date);
-              }}
-              disabled={(date) => (startDate ? dayjs(date).isBefore(dayjs(startDate), 'month') : false)}
+              selected={startDate}
+              onSelect={(date) => setStartDate(date)}
+              disabled={(date) => isAfter(date, startOfToday())}
             />
           </PopoverContent>
         </Popover>

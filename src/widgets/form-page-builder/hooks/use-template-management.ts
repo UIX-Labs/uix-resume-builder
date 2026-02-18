@@ -1,9 +1,8 @@
 import { useUpdateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
-import enzoTemplate1 from '@features/resume/templates/enzo-template1';
 import { default as standardTemplate } from '@features/resume/templates/standard';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface UseTemplateManagementParams {
@@ -18,17 +17,17 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
-  useEffect(() => {
-    if (initialTemplate) {
-      setSelectedTemplate(initialTemplate);
-    }
-  }, [initialTemplate]);
+  //  useEffect(() => {
+  //   if (initialTemplate) {
+  //     setSelectedTemplate(initialTemplate);
+  //   }
+  // }, [initialTemplate]);
 
-  useEffect(() => {
-    if (initialTemplateId) {
-      setSelectedTemplateId(initialTemplateId);
-    }
-  }, [initialTemplateId]);
+  // useEffect(() => {
+  //   if (initialTemplateId) {
+  //     setSelectedTemplateId(initialTemplateId);
+  //   }
+  // }, [initialTemplateId]);
 
   const handleTemplateSelect = async (template: Template) => {
     try {

@@ -1,4 +1,4 @@
-import { AITailorSection } from './ai-tailored-section';
+import { AiFeaturesSection } from './ai-features-section';
 import FooterSection from './footer-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
@@ -11,12 +11,12 @@ export function LandingPage() {
   return (
     <div className="relative w-full h-full">
       <Header />
-      <div className="mb-3.5 md:mb-5">
+      <div className="mb-2 md:mb-1">
         <TopAnnouncementStrip />
       </div>
 
       <div
-        className="h-[724px] border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
+        className="h-auto border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
         style={{
           background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -24,6 +24,8 @@ export function LandingPage() {
       >
         <HeroSection />
       </div>
+
+      <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />

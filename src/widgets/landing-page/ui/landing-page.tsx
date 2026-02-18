@@ -1,6 +1,7 @@
-import HeroSection from './hero-section';
 import Image from 'next/image';
+import { AiFeaturesSection } from './ai-features-section';
 import Header from './header-section';
+import HeroSection from './hero-section';
 
 function LandingPage() {
   return (
@@ -9,7 +10,7 @@ function LandingPage() {
       <Header />
 
       <div
-        className="h-[724px] border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
+        className="h-auto border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
         style={{
           background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
           backgroundSize: '20px 20px',
@@ -18,6 +19,7 @@ function LandingPage() {
         {' '}
         <HeroSection />
       </div>
+      <AiFeaturesSection />
     </div>
   );
 }

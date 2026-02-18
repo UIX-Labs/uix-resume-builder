@@ -27,7 +27,7 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
 
   const handleSignIn = () => {
     const pathname = window.location.pathname;
-    const callbackUrl = encodeURIComponent(pathname + window.location.search);
+    const callbackUrl = encodeURIComponent(`${pathname}?expertReview=open`);
     window.location.href = `/auth?callbackUrl=${callbackUrl}`;
   };
 

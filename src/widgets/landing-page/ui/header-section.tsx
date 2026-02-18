@@ -8,8 +8,8 @@ import { cn } from '@shared/lib/cn';
 import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
 interface HeaderProps {
@@ -19,11 +19,24 @@ interface HeaderProps {
 function Header({ variant = 'default' }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
   const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
+
+  useEffect(() => {
+    const expertReview = searchParams.get('expertReview');
+    if (expertReview !== 'open') return;
+
+    setShowExpertReviewModal(true);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('expertReview');
+    const newSearch = params.toString();
+    router.replace(`${pathname}${newSearch ? `?${newSearch}` : ''}`, { scroll: false });
+  }, []);
 
   const handleNavigate = () => {
     router.push('/dashboard');

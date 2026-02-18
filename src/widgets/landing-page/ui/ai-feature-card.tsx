@@ -48,10 +48,10 @@ export function AiFeatureCard({
   const cardRef = useRef<HTMLDivElement>(null);
 
   // amount: 0.6 ensures the card is mostly visible before expanding on mobile
-  const isInViewport = useInView(cardRef, {
-    once: false,
-    amount: 0.6,
-  });
+  // const isInViewport = useInView(cardRef, {
+  //   once: false,
+  //   amount: 0.6,
+  // });
 
   useEffect(() => {
     const checkMobile = () => {

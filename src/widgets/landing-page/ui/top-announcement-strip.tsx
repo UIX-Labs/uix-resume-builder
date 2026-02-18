@@ -21,7 +21,7 @@ export const TopAnnouncementStrip = () => {
 
   return (
     <div
-      className="w-full h-[44px] md:h-[52px] flex items-center justify-center px-4 mb-3.5 md:mb-5"
+      className="w-full h-[44px] md:h-[52px] flex items-center justify-center px-4"
       style={{
         backgroundImage: "url('/images/bg.svg')",
         backgroundSize: 'cover',

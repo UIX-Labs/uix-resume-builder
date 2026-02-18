@@ -1,8 +1,9 @@
 import ArticleHeader from '@/widgets/blog/slug/article-header';
 
-import { extractHeadings, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
-import { TableOfContents } from '@shared/ui/blog';
+import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
+import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
+import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
 import { ArrowLeft } from 'lucide-react';
@@ -11,8 +12,6 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
-
-import { BlogGrid } from '@widgets/blog';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
@@ -98,6 +97,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
+  // Find related posts (same tags, excluding current)
+  const allPosts = getAllPosts();
+
   // Article structured data
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -134,11 +136,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
       />
 
-      <article className="mx-auto max-w-6xl px-4 py-10 sm:px-6 max-w-[1395px]">
+      <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
         {/* Back link */}
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to all articles
@@ -191,39 +193,51 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           date={formatDate(frontmatter.date)}
           readingTime={readingTime}
           tags={frontmatter.tags}
+          highlightWord={frontmatter.highlightWord}
         />
 
         {/* Content + Sidebar */}
 
-        <div className="flex gap-10 lg:gap-14">
+        <div className="flex gap-10 lg:gap-14 flex-col lg:flex-row">
           {/* Sidebar - TOC */}
-          {/* LEFT - TOC + CTA */}
           {headings.length > 0 && (
-            <aside className="hidden lg:block w-64 shrink-0 space-y-6">
-              {/* TOC */}
-              <div className="sticky top-20 space-y-6">
-                <TableOfContents headings={headings} />
-                <JDCTACard />
+            <aside className="lg:block shrink-0 w-full md:w-[320px] lg:w-[400px]">
+              <div className="block sticky top-20">
+                <div className="hidden lg:block">
+                  <TableOfContents headings={headings} />
+                </div>
+                <div className="hidden md:block mt-10">
+                  <JDCTACard />
+                </div>
               </div>
             </aside>
           )}
-
           {/* Main content */}
           <div className="min-w-0 flex-1">
-            <div className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 w-full">
-              <MDXRemote
-                source={content}
-                components={mdxComponents}
-                options={{
-                  mdxOptions: {
-                    remarkPlugins: [remarkGfm],
-                    rehypePlugins: [
-                      rehypeSlug,
-                      [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'no-underline' } }],
-                    ],
-                  },
-                }}
-              />
+            <div className="relative">
+              {/* Mobile sticky */}
+              <div className="lg:hidden sticky top-0 mb-6 bg-[#F5F5F7] z-50">
+                <TableOfContents headings={headings} />
+              </div>
+
+              <div
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
+prose-a:text-blue-500w-full"
+              >
+                <MDXRemote
+                  source={content}
+                  components={mdxComponents}
+                  options={{
+                    mdxOptions: {
+                      remarkPlugins: [remarkGfm],
+                      rehypePlugins: [
+                        rehypeSlug,
+                        [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'no-underline' } }],
+                      ],
+                    },
+                  }}
+                />
+              </div>
             </div>
             <BlogCreateResume />
           </div>
@@ -255,14 +269,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </section> */}
 
         {/* )} */}
-        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white relative overflow-hidden group">
+        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white">
           <div className="text-[36px] font-bold text-center p-2">Continue Reading</div>
           <span className="text-[20px] text-gray-500 text-center block">
             Check more recommended readings to get the job of your dreams.
           </span>
 
           <div className="flex mt-10 justify-center p-2">
-            <BlogGrid />
+            <BlogGrid posts={allPosts} />
           </div>
         </div>
       </article>

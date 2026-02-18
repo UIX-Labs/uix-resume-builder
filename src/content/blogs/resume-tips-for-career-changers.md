@@ -1,13 +1,15 @@
 ---
 title: "Resume Tips for Career Changers: Making a Smooth Transition"
 description: "Switching careers? Learn how to reframe your experience, highlight transferable skills, and craft a resume that convinces hiring managers you're the right fit — even without direct experience."
+highlightWord: "Career Changers"
 date: "2026-01-10"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
-  - "Career Change"
-  - "Resume Tips"
-  - "Career Advice"
+  - "job"
+  - "resume-tips"
+  - "career-advice"
 published: true
 coverImage: ""
 ---

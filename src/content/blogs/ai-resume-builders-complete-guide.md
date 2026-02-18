@@ -1,13 +1,15 @@
 ---
 title: "AI Resume Builders: A Complete Guide for Job Seekers in 2026"
 description: "Everything you need to know about AI-powered resume builders — how they work, what to look for, and how to use them effectively without losing your personal voice."
+highlightWord: "AI Resume Builders"
 date: "2026-01-18"
 author: "Pika Resume Team"
 authorRole: "Career Experts"
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp" 
 tags:
-  - "AI Tools"
-  - "Resume Tips"
-  - "Job Search"
+  - "resume"
+  - "job search"
+featured: "primary"
 published: true
 coverImage: ""
 ---

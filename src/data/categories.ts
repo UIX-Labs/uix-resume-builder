@@ -3,7 +3,7 @@ export const categories = [
     id: 'resume',
     title: 'Resume',
     image: '/images/blog/categories/resume.svg',
-    color: '#F97316',
+    color: '#EB5E3B',
 
     hero: {
       suffix: 'Help',
@@ -16,7 +16,7 @@ export const categories = [
     id: 'interview',
     title: 'Interview',
     image: '/images/blog/categories/interview.svg',
-    color: '#EC4899',
+    color: '#EB3B84',
 
     hero: {
       suffix: 'Tips',
@@ -29,7 +29,7 @@ export const categories = [
     id: 'career',
     title: 'Career',
     image: '/images/blog/categories/career.svg',
-    color: '#8B5CF6',
+    color: '#933BEB',
 
     hero: {
       suffix: 'Tips',
@@ -43,7 +43,7 @@ export const categories = [
     id: 'cover-letter',
     title: 'Cover Letter',
     image: '/images/blog/categories/cover-letter.svg',
-    color: '#22C55E',
+    color: '#02A44F',
 
     hero: {
       suffix: 'Tips',
@@ -56,7 +56,7 @@ export const categories = [
     id: 'job',
     title: 'Job',
     image: '/images/blog/categories/job.svg',
-    color: '#3B82F6',
+    color: '#005FF2',
 
     hero: {
       suffix: 'Tips',

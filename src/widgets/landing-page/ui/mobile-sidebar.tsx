@@ -1,6 +1,5 @@
 'use client';
 
-import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
 import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
@@ -42,6 +41,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     handleNavigation('/dashboard', 'navigation_click', 'dashboard');
   };
 
+  const handleBlogClick = () => {
+    handleNavigation('/blog', 'navigation_click', 'blog');
+  };
+
   const handleCreateResumeClick = () => {
     handleNavigation('/dashboard', 'create_resume_click', 'dashboard');
   };
@@ -65,6 +68,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       label: 'Dashboard',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard',
+    },
+    {
+      label: 'Blog',
+      onClick: handleBlogClick,
+      isActive: pathname === '/blog',
     },
     {
       label: 'About Us',

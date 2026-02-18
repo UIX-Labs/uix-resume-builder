@@ -6,39 +6,60 @@ import { useEffect, useRef } from 'react';
 type BlobConfig = {
   id: string;
   className: string;
+  color: string;
 };
 
 const BLOBS: BlobConfig[] = [
-  // Top left
-  { id: 'blob-1', className: 'top-[60px] left-[8%] md:top-[16px] md:left-[450px] size-[18px] bg-[#3B82F6]' },
+  // 1. Blue - Top Left
+  {
+    id: 'blue-blob',
+    color: '#46A6FF',
+    className: 'top-[5%] left-[10%] md:top-[100px] md:left-[257px] size-[12px] md:size-[18px]',
+  },
 
-  // Upper right
-  { id: 'blob-2', className: 'top-[140px] right-[10%] md:top-[380px] md:left-[20px] size-[20px] bg-[#22C55E]' },
+  // 2. Yellow - Top Right
+  {
+    id: 'yellow-blob',
+    color: '#FBC05A',
+    className: 'top-[12%] left-[85%] md:top-[200px] md:left-[460px] size-[12px] md:size-[18px]',
+  },
 
-  // Mid left
-  { id: 'blob-3', className: 'top-[260px] left-[12%] md:top-[300px] md:left-[450px] size-[16px] bg-[#F59E0B]' },
+  // 3. Dark Green - Mid Right (now higher on mobile)
+  {
+    id: 'green-blob',
+    color: '#4B7A42',
+    className: 'top-[25%] left-[75%] md:top-[380px] md:left-[600px] size-[12px] md:size-[18px]',
+  },
 
-  // Mid right
-  { id: 'blob-4', className: 'top-[380px] right-[15%] md:top-[550px] md:left-[80%] size-[22px] bg-[#A855F7]' },
+  // 4. Red/Pink - Mid Left (now higher on mobile)
+  {
+    id: 'pink-blob',
+    color: '#D34966',
+    className: 'top-[32%] left-[8%] md:top-[440px] md:left-[65px] size-[12px] md:size-[18px]',
+  },
 
-  // Bottom center
-  { id: 'blob-5', className: 'top-[520px] left-[45%] md:top-[101px] md:left-[257px] size-[18px] bg-[#EF4444]' },
+  // 5. Purple - Center (stays above the fold on mobile)
+  {
+    id: 'purple-blob',
+    color: '#861F97',
+    className: 'top-[40%] left-[45%] md:top-[600px] md:left-[257px] size-[12px] md:size-[18px]',
+  },
 ];
 
 export default function HeroConfetti() {
-  const blobRefs = useRef<HTMLSpanElement[]>([]);
+  const blobRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
   useEffect(() => {
-    const velocities = blobRefs.current.map(() => ({
+    // Increased range to 8px for more noticeable "active" movement
+    const range = 8;
+
+    const velocities = BLOBS.map(() => ({
+      // Increased velocity to 0.15 for more lively motion
       x: (Math.random() - 0.5) * 0.15,
       y: (Math.random() - 0.5) * 0.15,
     }));
 
-    const positions = blobRefs.current.map(() => ({
-      x: 0,
-      y: 0,
-    }));
-
+    const positions = BLOBS.map(() => ({ x: 0, y: 0 }));
     let frameId: number;
 
     const animate = () => {
@@ -48,30 +69,29 @@ export default function HeroConfetti() {
         positions[id].x += velocities[id].x;
         positions[id].y += velocities[id].y;
 
-        // tiny invisible movement boundary
-        if (Math.abs(positions[id].x) > 15) velocities[id].x *= -1;
-        if (Math.abs(positions[id].y) > 15) velocities[id].y *= -1;
+        if (Math.abs(positions[id].x) > range) velocities[id].x *= -1;
+        if (Math.abs(positions[id].y) > range) velocities[id].y *= -1;
 
-        blob.style.transform = `translate(${positions[id].x}px, ${positions[id].y}px)`;
+        blob.style.transform = `translate3d(${positions[id].x}px, ${positions[id].y}px, 0)`;
       });
 
       frameId = requestAnimationFrame(animate);
     };
 
-    animate();
-
+    frameId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frameId);
   }, []);
 
   return (
-    <div className="absolute inset-y-0 left-0 w-[35%] overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
       {BLOBS.map((blob, id) => (
         <span
           key={blob.id}
           ref={(el) => {
-            if (el) blobRefs.current[id] = el;
+            blobRefs.current[id] = el;
           }}
-          className={cn('absolute rounded-full opacity-60 blur-[0.5px] will-change-transform', blob.className)}
+          style={{ backgroundColor: blob.color }}
+          className={cn('absolute rounded-full opacity-100 will-change-transform', blob.className)}
         />
       ))}
     </div>

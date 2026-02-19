@@ -1,0 +1,36 @@
+src/widgets/form-page-builder/hooks/use-pdf-download.ts
+  a65b6cc9c70b7204 79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "ea0a01d769e01df13144b29dc8a77f6b06f5cf48",
+  "prompts": {
+    "2bd4029eca6763a2": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380373",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 7,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    },
+    "a65b6cc9c70b7204": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380408",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 8,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}

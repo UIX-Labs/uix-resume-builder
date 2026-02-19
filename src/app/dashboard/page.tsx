@@ -88,8 +88,8 @@ function DashboardContent() {
                 <LinkedinIntegrationCard />
               </div>
 
-              <div className="lg:hidden mt-4 px-4 max-h-[550px]">
-                <div className="bg-dashboard-card-bg p-4 rounded-[20px] shadow">
+              <div className="lg:hidden mt-4 px-4">
+                <div className="bg-dashboard-card-bg p-4 rounded-[20px] shadow-none md:shadow">
                   <DashboardCarousel />
                 </div>
               </div>

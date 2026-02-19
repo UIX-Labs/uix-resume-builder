@@ -173,7 +173,7 @@ export default function LinkedinIntegrationCard() {
             <button
               type="button"
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center justify-center bg-blue-900 text-white rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)] cursor-pointer w-[213px] sm:w-auto"
+              className="flex items-center justify-center bg-blue-600 text-white rounded-lg sm:rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 h-11 shadow-sm transition-all hover:bg-[rgb(0,81,217)] cursor-pointer w-[213px] sm:w-auto"
             >
               <span className="text-base sm:text-lg font-semibold leading-[1.333em] tracking-tight">
                 Auto-fill via Linkedin

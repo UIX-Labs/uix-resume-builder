@@ -25,14 +25,14 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
         {/* CONTENT */}
         <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex flex-col justify-end">
           <div className="max-w-[75%] sm:max-w-[480px]">
-          <div className="mb-4">
-            <span
-              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-4 py-2 rounded-sm"
-              style={{ backgroundColor: badgeColor }}
-            >
-              {post.frontmatter.tags[0]}
-            </span>
-          </div>
+            <div className="mb-4">
+              <span
+                className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-4 py-2 rounded-sm"
+                style={{ backgroundColor: badgeColor }}
+              >
+                {post.frontmatter.tags[0]}
+              </span>
+            </div>
 
             {/* TITLE */}
             <h1 className="text-base sm:text-2xl md:text-3xl font-semibold text-[#17171A] leading-tight line-clamp-2">

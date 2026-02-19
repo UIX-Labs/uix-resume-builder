@@ -34,7 +34,7 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
               ) : (
                 <span className="text-black font-medium">{item.label}</span>
               )}
-              {index < breadcrumbs.length - 1 && <span className="mx-2 text-gray-400">{">"}</span>}
+              {index < breadcrumbs.length - 1 && <span className="mx-2 text-gray-400">{'>'}</span>}
             </span>
           ))}
         </div>
@@ -55,8 +55,7 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
             alt="hero"
             fill
             priority
-           className="object-cover md:object-[40px_-60px]  object-top w-full h-full"
-
+            className="object-cover md:object-[40px_-60px]  object-top w-full h-full"
           />
         </div>
       </div>

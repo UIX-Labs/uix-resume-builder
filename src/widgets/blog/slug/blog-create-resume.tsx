@@ -62,12 +62,10 @@ export default function BlogCreateResume() {
         </div>
 
         <div className="flex gap-4 h-full justify-center items-center">
-             <img src="/images/WhatsApp.svg" alt=""  className='w-11 h-11 text-black'/>
-           <img src="/images/blog/Facebook.svg" alt="" className='w-11 h-11 text-black'/>
-          <img src="/images/blog/X (1).svg" alt="" className='w-12 h-12 text-black'/>
+          <img src="/images/WhatsApp.svg" alt="" className="w-11 h-11 text-black" />
+          <img src="/images/blog/Facebook.svg" alt="" className="w-11 h-11 text-black" />
+          <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />
           <LinkedInIcon className="w-10 h-10 text-black" />
-        
-         
         </div>
       </div>
     </>

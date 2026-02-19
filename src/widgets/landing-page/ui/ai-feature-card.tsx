@@ -150,24 +150,25 @@ export function AiFeatureCard({
 
         <h3
           className={cn(
-            'font-semibold leading-[120%] mb-1 sm:mb-4 md:mb-[30px]',
-            'text-[19.2px] tracking-[-0.576px] w-[203.1px] sm:w-full',
-            'sm:text-[28px] md:text-[40px] md:tracking-[-0.03em]',
+            'font-semibold !leading-[1.2] sm:mb-4 md:mb-[30px]',
+            'text-xl tracking-[-0.576px] w-[203.1px] sm:w-full',
+            'sm:text-[20px] md:text-[40px] md:tracking-[-0.03em]',
             isExpanded ? 'text-white' : 'text-[#171717]',
           )}
         >
           {title}
         </h3>
-
-        <p
-          className={cn(
-            'text-[15.36px] leading-[19.2px] tracking-[-0.461px] w-[203.1px] sm:w-full',
-            'sm:text-[30px] md:text-[32px] sm:leading-[32px] md:leading-[40px] md:tracking-[-0.03em]',
-            isExpanded ? 'text-white/90' : 'text-[#171717]',
-          )}
-        >
-          {description}
-        </p>
+        <div className="mt-2 md:mt-0">
+          <p
+            className={cn(
+              'text-[16px] font-regular sm:text-lg !leading-[19px] mt-2 md:-mt-2 tracking-[-0.461px] w-[203.1px] sm:w-full',
+              'sm:text-lg  md:text-3xl sm:!leading-[1.5] md:leading-[40px] md:tracking-[-0.03em]',
+              isExpanded ? 'text-white/90' : 'text-[#171717]',
+            )}
+          >
+            {description}
+          </p>
+        </div>
       </div>
 
       {/* IMAGE PREVIEW - both cards keep their images on mobile when other is in view; on desktop hide when other hovered */}
@@ -180,13 +181,13 @@ export function AiFeatureCard({
                 'top-1/2 -translate-y-1/2',
                 TRANSITION,
                 isExpanded
-                  ? 'right-[5px] sm:right-[15px] md:right-[20px] md:top-70'
+                  ? 'right-[10px] sm:right-[15px] md:right-[30px] md:top-60'
                   : 'right-[-40px] sm:right-[-60px] md:right-[-130px]',
               )}
             >
               <div
                 className={cn(
-                  'relative w-[140px] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
+                  'relative w-[60vw] md:left-0 left-[20%] scale-[1.2] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
                   'rotate-[-6deg]',
                   TRANSITION,
                   isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
@@ -200,7 +201,7 @@ export function AiFeatureCard({
                   'absolute w-[180px] sm:w-[290px] md:w-[330px] h-[160px] sm:h-[290px] md:h-[350px]',
                   TRANSITION,
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  isMobile && isExpanded ? 'right-[-10px] top-2' : 'inset-0',
+                  isMobile && isExpanded ? 'right-[-10px] top-2 ' : 'inset-0 scale-90',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain" />
@@ -215,15 +216,16 @@ export function AiFeatureCard({
                 TRANSITION,
                 isExpanded
                   ? 'top-[70px] right-[-10px] sm:top-[70px] md:top-[80px] sm:right-[8px] md:right-[10px]'
-                  : 'top-[40px] sm:top-[35px] md:top-[40px] right-[-50px] sm:right-[-60px] md:right-[-100px]',
+                  : 'top-[40px] sm:top-[35px] md:top-[60px] right-[-40px] sm:right-[-60px] md:right-[-120px] -rotate-[15deg]',
               )}
             >
               <div
                 className={cn(
-                  'relative w-[130px] sm:w-[260px] md:w-[320px] h-[160px] sm:h-[320px] md:h-[400px]',
-                  'rotate-[-8deg]',
+                  // 40% width on mobile, fixed pixels on larger screens
+                  'relative w-[50vw]  md:left-4 left-[15%] scale-120 sm:w-[280px] md:top-6 md:w-[380px] h-auto aspect-square',
+                  'rotate-[-6deg]',
                   TRANSITION,
-                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
+                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100',
                 )}
               >
                 <Image src={images.default} alt="" fill className="object-contain" />

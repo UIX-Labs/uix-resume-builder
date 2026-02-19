@@ -23,17 +23,17 @@ const BLOBS: BlobConfig[] = [
   {
     id: 'green-blob',
     color: '#4B7A42',
-    className: 'top-[25%] left-[75%] md:top-[380px] md:left-[600px] size-[12px] md:size-[18px]',
+    className: 'top-[25%] left-[80%] md:top-[380px] md:left-[600px] size-[12px] md:size-[18px]',
   },
   {
     id: 'pink-blob',
     color: '#D34966',
-    className: 'top-[32%] left-[8%] md:top-[450px] md:left-[65px] size-[12px] md:size-[18px]',
+    className: 'top-[30%] left-[4%] md:top-[400px] md:left-[65px] size-[12px] md:size-[18px]',
   },
   {
     id: 'purple-blob',
     color: '#861F97',
-    className: 'top-[40%] left-[45%] md:top-[500px] md:left-[257px] size-[12px] md:size-[18px]',
+    className: 'top-[30%] left-[45%] md:top-[500px] md:left-[257px] size-[12px] md:size-[18px]',
   },
 ];
 

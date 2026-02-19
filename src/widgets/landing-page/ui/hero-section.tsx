@@ -61,7 +61,7 @@ const HeroSection = () => {
           <div className="w-full flex flex-col items-center md:items-start z-10 md:-mt-10">
             <div className="w-full">
               {/* Avatars */}
-              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-6 lg:mb-8 text-center md:text-left">
+              <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 mb-6 lg:mb-6 text-center md:text-left">
                 <div className="flex -space-x-2">
                   {userAvatars.map((avatar) => (
                     <Avatar key={avatar.key} className="w-10 h-10 md:w-12 md:h-12 border-2 border-white shadow-sm">
@@ -103,12 +103,12 @@ const HeroSection = () => {
                   <div className="flex flex-col items-center gap-0 leading-[0.9]">
                     {/* Changed text-[48px] to text-[12vw] to scale with screen width */}
                     <span className="font-geist font-semibold text-[12vw] sm:text-5xl">Build a</span>
-                    <span className="text-blue-800 font-black text-[12vw] sm:text-[48px]">Professional</span>
+                    <span className="text-[#0059ed] font-black text-[12vw] sm:text-[48px]">Professional</span>
                   </div>
 
                   <div className="flex flex-col items-center -mt-1 leading-none">
-                    <span className="text-green-600 font-[800] text-[12vw] sm:text-5xl">Resume</span>
-                    <span className="text-lg sm:text-xl font-semibold mt-1 tracking-normal">in under 3 minutes</span>
+                    <span className="text-[#008941] font-black text-[12vw] sm:text-5xl">Resume</span>
+                    <span className="text-xl sm:text-xl font-semibold tracking-normal">in under 3 minutes</span>
                   </div>
                 </h1>
               </div>

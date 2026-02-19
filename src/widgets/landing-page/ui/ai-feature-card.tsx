@@ -1,9 +1,9 @@
 'use client';
 
 import { cn } from '@shared/lib/cn';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const TRANSITION = 'transition-all duration-[400ms] [transition-timing-function:cubic-bezier(0.3,0,0.2,1)]';
 
@@ -43,15 +43,7 @@ export function AiFeatureCard({
 }: AiFeatureCardProps) {
   const isBlue = variant === 'blue';
   const images = cardImages[id];
-
   const [isMobile, setIsMobile] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // amount: 0.6 ensures the card is mostly visible before expanding on mobile
-  // const isInViewport = useInView(cardRef, {
-  //   once: false,
-  //   amount: 0.6,
-  // });
 
   useEffect(() => {
     const checkMobile = () => {
@@ -62,46 +54,22 @@ export function AiFeatureCard({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // MOBILE VIEWPORT LOGIC: DISABLE expansion on mobile
-  useEffect(() => {
-    if (isMobile) {
-      // Logic removed: user wants to remove animation for mobile
-    }
-  }, [isMobile]);
-
-  // const cardVariants = {
-  //   hidden: { opacity: 0, y: 30 },
-  //   visible: {
-  //     opacity: 1,
-  //     y: 0,
-  //     transition: { duration: 0.6, ease: 'easeOut' },
-  //   },
-  // };
-
-  const isExpanded = isHovered;
+  // On mobile, we force isExpanded to false so it stays in its default state
+  const isExpanded = !isMobile && isHovered;
 
   return (
     <motion.div
-      ref={cardRef}
       role="button"
       tabIndex={0}
       aria-label={`${title} feature`}
-      // Desktop only hover
+      // Interaction only enabled for desktop
       onMouseEnter={!isMobile ? onHover : undefined}
       onMouseLeave={!isMobile ? onLeave : undefined}
-      onFocus={onHover}
-      onBlur={onLeave}
-      initial={isMobile ? 'visible' : 'hidden'}
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.2, margin: '-50px' }}
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
-        },
-      }}
+      onFocus={!isMobile ? onHover : undefined}
+      onBlur={!isMobile ? onLeave : undefined}
+      // Removed "whileInView" and "viewport" to kill mobile scroll animations
+      // Card is immediately visible or uses a standard initial state
+      initial={{ opacity: 1, y: 0 }}
       className={cn(
         `
         relative overflow-hidden
@@ -112,12 +80,12 @@ export function AiFeatureCard({
         ring-offset-2 focus-visible:ring-2 focus-visible:ring-blue-500
         ${TRANSITION}
         `,
-
         isExpanded
           ? cn('shadow-xl border-transparent', isBlue ? 'bg-blue-600' : 'bg-green-500', 'md:flex-[1.3]')
           : cn(
               'bg-[#F3F4F8] bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] border-gray-200/60',
-              isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
+              // Only apply flex shrinking on desktop when the other card is hovered
+              !isMobile && isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
             ),
       )}
     >
@@ -158,6 +126,7 @@ export function AiFeatureCard({
         >
           {title}
         </h3>
+
         <div className="mt-2 md:mt-0">
           <p
             className={cn(
@@ -171,7 +140,7 @@ export function AiFeatureCard({
         </div>
       </div>
 
-      {/* IMAGE PREVIEW - both cards keep their images on mobile when other is in view; on desktop hide when other hovered */}
+      {/* IMAGE PREVIEW */}
       {(!isOtherHovered || isMobile) && (
         <>
           {id === 'left' && (
@@ -201,7 +170,7 @@ export function AiFeatureCard({
                   'absolute w-[180px] sm:w-[290px] md:w-[330px] h-[160px] sm:h-[290px] md:h-[350px]',
                   TRANSITION,
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  isMobile && isExpanded ? 'right-[-10px] top-2 ' : 'inset-0 scale-90',
+                  'inset-0',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain" />
@@ -221,23 +190,20 @@ export function AiFeatureCard({
             >
               <div
                 className={cn(
-                  // 40% width on mobile, fixed pixels on larger screens
-                  'relative w-[50vw]  md:left-4 left-[15%] scale-120 sm:w-[280px] md:top-6 md:w-[380px] h-auto aspect-square',
+                  'relative w-[80vw] md:left-4 left-[15%] scale-160 sm:w-[280px] md:top-6 md:w-[380px] h-auto aspect-square',
                   'rotate-[-6deg]',
                   TRANSITION,
-                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100',
+                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
                 )}
               >
-                <Image src={images.default} alt="" fill className="object-contain" />
+                <Image src={images.default} alt="" fill className="object-cover" />
               </div>
 
               <div
                 className={cn(
                   'absolute transition-all duration-[400ms]',
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  isMobile
-                    ? 'w-[240px] h-[240px] right-[30px] -top-4'
-                    : 'top-0 w-[150px] sm:w-[360px] md:w-[440px] h-[180px] sm:h-[300px] md:h-[440px] right-[40px] sm:scale-115 md:scale-115',
+                  'top-0 w-[150px] sm:w-[360px] md:w-[440px] h-[180px] sm:h-[300px] md:h-[440px] right-[40px] sm:scale-115 md:scale-115',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain object-right" />

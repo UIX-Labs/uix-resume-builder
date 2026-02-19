@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { Search, X } from 'lucide-react';
+import type { BlogPost } from '@shared/lib/blog';
 import { cn } from '@shared/lib/utils';
 import { BlogCard, TagBadge } from '@shared/ui/blog';
-import type { BlogPost } from '@shared/lib/blog';
+import { Search, X } from 'lucide-react';
+import { useMemo, useState } from 'react';
 
 interface BlogListProps {
   posts: BlogPost[];

@@ -1,10 +1,11 @@
 'use client';
 
-import { useSelectTemplate } from '@shared/hooks/use-select-template';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { Star } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function BlogCreateResume() {
-  const { handleUseTemplate } = useSelectTemplate();
+  const router = useRouter();
   return (
     <>
       <div
@@ -34,7 +35,13 @@ export default function BlogCreateResume() {
         <button
           type="button"
           className="bg-green-600 text-lg lg:text-xl text-white px-4 py-3 md:py-4 font-semibold rounded-md mb-2 md:mb-0 mt-2 hover:bg-green-700 transition-colors duration-300 cursor-pointer relative z-10 shadow-lg"
-          onClick={() => handleUseTemplate('template1')}
+          onClick={() => {
+            router.push('/dashboard');
+            trackEvent('create_resume_click', {
+              source: 'blog',
+              method: 'create_my_resume',
+            });
+          }}
         >
           Create your Resume
         </button>

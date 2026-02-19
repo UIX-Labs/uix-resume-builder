@@ -72,25 +72,11 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
       if (downloadInfo?.referralUrl) {
         setReferralUrl(downloadInfo.referralUrl);
         setIsReferralModalOpen(true);
-
-        trackEvent('resume_download_limit_reached', {
-          resumeId,
-          downloadsAllowed: downloadInfo.downloadsAllowed,
-          downloadsDone: downloadInfo.downloadsDone,
-        });
-
         return;
       }
 
       if (downloadInfo) {
-        queryClient.setQueryData(['userProfile'], (oldData: any) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            downloadsLeft: downloadInfo.downloadsLeft,
-            downloadsAllowed: downloadInfo.downloadsAllowed,
-          };
-        });
+        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
       }
 
       onDownloadSuccess?.();

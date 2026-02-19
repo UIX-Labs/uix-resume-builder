@@ -1,9 +1,9 @@
 'use client';
 
 import { cn } from '@shared/lib/cn';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const TRANSITION = 'transition-all duration-[400ms] [transition-timing-function:cubic-bezier(0.3,0,0.2,1)]';
 
@@ -43,15 +43,7 @@ export function AiFeatureCard({
 }: AiFeatureCardProps) {
   const isBlue = variant === 'blue';
   const images = cardImages[id];
-
   const [isMobile, setIsMobile] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // amount: 0.6 ensures the card is mostly visible before expanding on mobile
-  // const isInViewport = useInView(cardRef, {
-  //   once: false,
-  //   amount: 0.6,
-  // });
 
   useEffect(() => {
     const checkMobile = () => {
@@ -62,46 +54,22 @@ export function AiFeatureCard({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // MOBILE VIEWPORT LOGIC: DISABLE expansion on mobile
-  useEffect(() => {
-    if (isMobile) {
-      // Logic removed: user wants to remove animation for mobile
-    }
-  }, [isMobile]);
-
-  // const cardVariants = {
-  //   hidden: { opacity: 0, y: 30 },
-  //   visible: {
-  //     opacity: 1,
-  //     y: 0,
-  //     transition: { duration: 0.6, ease: 'easeOut' },
-  //   },
-  // };
-
-  const isExpanded = isHovered;
+  // On mobile, we force isExpanded to false so it stays in its default state
+  const isExpanded = !isMobile && isHovered;
 
   return (
     <motion.div
-      ref={cardRef}
       role="button"
       tabIndex={0}
       aria-label={`${title} feature`}
-      // Desktop only hover
+      // Interaction only enabled for desktop
       onMouseEnter={!isMobile ? onHover : undefined}
       onMouseLeave={!isMobile ? onLeave : undefined}
-      onFocus={onHover}
-      onBlur={onLeave}
-      initial={isMobile ? 'visible' : 'hidden'}
-      whileInView="visible"
-      viewport={{ once: false, amount: 0.2, margin: '-50px' }}
-      variants={{
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
-        },
-      }}
+      onFocus={!isMobile ? onHover : undefined}
+      onBlur={!isMobile ? onLeave : undefined}
+      // Removed "whileInView" and "viewport" to kill mobile scroll animations
+      // Card is immediately visible or uses a standard initial state
+      initial={{ opacity: 1, y: 0 }}
       className={cn(
         `
         relative overflow-hidden
@@ -112,12 +80,12 @@ export function AiFeatureCard({
         ring-offset-2 focus-visible:ring-2 focus-visible:ring-blue-500
         ${TRANSITION}
         `,
-
         isExpanded
           ? cn('shadow-xl border-transparent', isBlue ? 'bg-blue-600' : 'bg-green-500', 'md:flex-[1.3]')
           : cn(
               'bg-[#F3F4F8] bg-[radial-gradient(#d1d5db_1px,transparent_1px)] [background-size:16px_16px] border-gray-200/60',
-              isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
+              // Only apply flex shrinking on desktop when the other card is hovered
+              !isMobile && isOtherHovered ? 'md:flex-[0.8]' : 'md:flex-1',
             ),
       )}
     >
@@ -150,27 +118,29 @@ export function AiFeatureCard({
 
         <h3
           className={cn(
-            'font-semibold leading-[120%] mb-1 sm:mb-4 md:mb-[30px]',
-            'text-[19.2px] tracking-[-0.576px] w-[203.1px] sm:w-full',
-            'sm:text-[28px] md:text-[40px] md:tracking-[-0.03em]',
+            'font-semibold !leading-[1.2] sm:mb-4 md:mb-[30px]',
+            'text-xl tracking-[-0.576px] w-[203.1px] sm:w-full',
+            'sm:text-[20px] md:text-[40px] md:tracking-[-0.03em]',
             isExpanded ? 'text-white' : 'text-[#171717]',
           )}
         >
           {title}
         </h3>
 
-        <p
-          className={cn(
-            'text-[15.36px] leading-[19.2px] tracking-[-0.461px] w-[203.1px] sm:w-full',
-            'sm:text-[30px] md:text-[32px] sm:leading-[32px] md:leading-[40px] md:tracking-[-0.03em]',
-            isExpanded ? 'text-white/90' : 'text-[#171717]',
-          )}
-        >
-          {description}
-        </p>
+        <div className="mt-2 md:mt-0">
+          <p
+            className={cn(
+              'text-[16px] font-regular sm:text-lg !leading-[19px] mt-2 md:-mt-2 tracking-[-0.461px] w-[203.1px] sm:w-full',
+              'sm:text-lg  md:text-3xl sm:!leading-[1.5] md:leading-[40px] md:tracking-[-0.03em]',
+              isExpanded ? 'text-white/90' : 'text-[#171717]',
+            )}
+          >
+            {description}
+          </p>
+        </div>
       </div>
 
-      {/* IMAGE PREVIEW - both cards keep their images on mobile when other is in view; on desktop hide when other hovered */}
+      {/* IMAGE PREVIEW */}
       {(!isOtherHovered || isMobile) && (
         <>
           {id === 'left' && (
@@ -180,13 +150,13 @@ export function AiFeatureCard({
                 'top-1/2 -translate-y-1/2',
                 TRANSITION,
                 isExpanded
-                  ? 'right-[5px] sm:right-[15px] md:right-[20px] md:top-70'
+                  ? 'right-[10px] sm:right-[15px] md:right-[30px] md:top-60'
                   : 'right-[-40px] sm:right-[-60px] md:right-[-130px]',
               )}
             >
               <div
                 className={cn(
-                  'relative w-[140px] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
+                  'relative w-[60vw] md:left-0 left-[20%] scale-[1.2] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
                   'rotate-[-6deg]',
                   TRANSITION,
                   isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
@@ -200,7 +170,7 @@ export function AiFeatureCard({
                   'absolute w-[180px] sm:w-[290px] md:w-[330px] h-[160px] sm:h-[290px] md:h-[350px]',
                   TRANSITION,
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  isMobile && isExpanded ? 'right-[-10px] top-2' : 'inset-0',
+                  'inset-0',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain" />
@@ -215,27 +185,25 @@ export function AiFeatureCard({
                 TRANSITION,
                 isExpanded
                   ? 'top-[70px] right-[-10px] sm:top-[70px] md:top-[80px] sm:right-[8px] md:right-[10px]'
-                  : 'top-[40px] sm:top-[35px] md:top-[40px] right-[-50px] sm:right-[-60px] md:right-[-100px]',
+                  : 'top-[40px] sm:top-[35px] md:top-[60px] right-[-40px] sm:right-[-60px] md:right-[-120px] -rotate-[15deg]',
               )}
             >
               <div
                 className={cn(
-                  'relative w-[130px] sm:w-[260px] md:w-[320px] h-[160px] sm:h-[320px] md:h-[400px]',
-                  'rotate-[-8deg]',
+                  'relative w-[80vw] md:left-4 left-[15%] scale-160 sm:w-[280px] md:top-6 md:w-[380px] h-auto aspect-square',
+                  'rotate-[-6deg]',
                   TRANSITION,
                   isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
                 )}
               >
-                <Image src={images.default} alt="" fill className="object-contain" />
+                <Image src={images.default} alt="" fill className="object-cover" />
               </div>
 
               <div
                 className={cn(
                   'absolute transition-all duration-[400ms]',
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  isMobile
-                    ? 'w-[240px] h-[240px] right-[30px] -top-4'
-                    : 'top-0 w-[150px] sm:w-[360px] md:w-[440px] h-[180px] sm:h-[300px] md:h-[440px] right-[40px] sm:scale-115 md:scale-115',
+                  'top-0 w-[150px] sm:w-[360px] md:w-[440px] h-[180px] sm:h-[300px] md:h-[440px] right-[40px] sm:scale-115 md:scale-115',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain object-right" />

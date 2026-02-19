@@ -232,9 +232,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="min-w-0 flex-1">
             <div className="relative">
               {/* Mobile sticky */}
-              <div className="lg:hidden sticky top-2 bg-[#F5F5F7] z-50 mb-10">
+              {/* <div className='bg-[#F2F3F9] lg:hidden sticky top-0  z-50 pb-4'> */}
+              <div className="lg:hidden sticky top-0 bg-[#F5F5F7] z-50">
                 <TableOfContents headings={headings} />
               </div>
+              {/* </div> */}
 
               <div
                 className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500

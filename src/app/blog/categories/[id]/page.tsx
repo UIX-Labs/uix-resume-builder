@@ -57,7 +57,7 @@ export default async function CategoryPage({ params }: PageProps) {
         />
       ) : (
         <div>
-          <NotFoundPage color={category.color} />
+          <NotFoundPage/>
         </div>
       )}
     </div>

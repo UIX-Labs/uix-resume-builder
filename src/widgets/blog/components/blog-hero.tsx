@@ -17,8 +17,8 @@ interface BlogHeroProps {
 export default function BlogHero({ description, image, children, breadcrumbs }: BlogHeroProps) {
   return (
     <div
-      className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl overflow-hidden border-4 
-      border-white min-h-[296px] lg:h-[296px]"
+      className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl overflow-hidden md:border-4 
+      border-white min-h-0 lg:h-[296px] border-2"
     >
       {breadcrumbs && (
         <div
@@ -34,12 +34,12 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
               ) : (
                 <span className="text-black font-medium">{item.label}</span>
               )}
-              {index < breadcrumbs.length - 1 && <span className="mx-2 text-gray-400">{'>'}</span>}
+              {index < breadcrumbs.length - 1 && <span className="mx-2 text-gray-400">{">"}</span>}
             </span>
           ))}
         </div>
       )}
-      <div className="flex flex-col lg:flex-row items-stretch h-full">
+      <div className="flex flex-col lg:flex-row items-stretch h-full w-full">
         {/* LEFT TEXT */}
         <div className="w-full lg:w-[55%] px-4 lg:px-10 text-center lg:text-left order-2 lg:order-1 flex flex-col justify-center py-10 lg:py-0">
           <h1 className="text-2xl sm:text-3xl lg:text-[45px] font-semibold leading-tight">{children}</h1>
@@ -49,13 +49,14 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
           </p>
         </div>
 
-        <div className="w-full lg:w-1/2 relative order-1 h-[200px] sm:h-[250px] lg:h-full">
+        <div className="w-full lg:flex-1 relative order-1 h-[300px] lg:h-[296px] overflow-hidden -mt-8 lg:-mt-2">
           <Image
             src={image}
             alt="hero"
             fill
             priority
-            className="object-cover object-center lg:object-right w-full h-full"
+           className="object-cover md:object-[40px_-60px]  object-top w-full h-full"
+
           />
         </div>
       </div>

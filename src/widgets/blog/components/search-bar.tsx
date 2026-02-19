@@ -19,7 +19,7 @@ export default function SearchBar({ searchQuery, setSearchQuery, placeholder }: 
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         className="w-full pl-5 pr-11 py-2.5 sm:py-3 text-sm sm:text-base 
-                   bg-white border border-gray-100 rounded-[17.85px]
+                   bg-white border border-gray-100 rounded-3xl
                    focus:outline-none focus:ring-2 focus:ring-blue-500 
                    transition-all duration-200
                    shadow-[0_70.763px_19.763px_0_rgba(148,148,148,0),0_45.263px_17.85px_0_rgba(148,148,148,0.01),0_25.5px_15.3px_0_rgba(148,148,148,0.05),0_11.475px_11.475px_0_rgba(148,148,148,0.09),0_2.55px_6.375px_0_rgba(148,148,148,0.1)]"

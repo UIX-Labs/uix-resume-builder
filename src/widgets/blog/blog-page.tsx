@@ -26,10 +26,10 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
 
   return (
     <>
-      <main className="min-h-screen max-w-[1395px] mx-auto">
-        <div className="w-full p-2">
+      <main className="min-h-screen max-w-[1395px] mx-auto p-2">
+        <div className="w-full">
           <BlogHero
-            image="/images/blog/hero-section/hero-section-img.png"
+            image="/images/blog/hero-section-img.svg"
             description="Blogs to power up your resume, job search, and career growth."
             breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs' }]}
           >

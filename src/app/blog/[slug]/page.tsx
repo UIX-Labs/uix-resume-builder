@@ -6,10 +6,8 @@ import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
-import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -155,13 +153,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
         {/* Back link */}
-        <Link
+        {/* <Link
           href="/blog"
           className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to all articles
-        </Link>
+        </Link> */}
 
         {/* Article header */}
         {/*   <header className="mb-10">
@@ -234,7 +232,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="min-w-0 flex-1">
             <div className="relative">
               {/* Mobile sticky */}
-              <div className="lg:hidden sticky top-0 mb-6 bg-[#F5F5F7] z-50">
+              <div className="lg:hidden sticky top-2 bg-[#F5F5F7] z-50 mb-10">
                 <TableOfContents headings={headings} />
               </div>
 
@@ -287,9 +285,9 @@ prose-a:text-blue-500w-full"
           </section> */}
 
         {/* )} */}
-        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white">
+        <div className="mt-10 lg:p-4 lg:mt-25 gap-2  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-white">
           <div className="text-[36px] font-bold text-center p-2">Continue Reading</div>
-          <span className="text-[20px] text-gray-500 text-center block">
+          <span className="text-[20px] text-gray-500 text-center block p-2">
             Check more recommended readings to get the job of your dreams.
           </span>
 

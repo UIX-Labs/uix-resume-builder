@@ -4,9 +4,10 @@ import { BlogPost } from '@shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
+import SearchBar from './components/search-bar';
 
 export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
-  const [searchQuery, _setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -25,53 +26,40 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
 
   return (
     <>
-      <main className="min-h-screen max-w-[1395px] mx-auto">
-        <div className="w-full p-2 md:p-5">
+      <main className="min-h-screen max-w-[1395px] mx-auto p-2">
+        <div className="w-full">
           <BlogHero
-            image="/images/blog/hero-section/hero-section.png"
+            image="/images/blog/hero-section-img.svg"
             description="Blogs to power up your resume, job search, and career growth."
+            breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs' }]}
           >
             <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
               The <span className="text-[#005FF2] font-bold">Pika Journal</span>
             </span>
           </BlogHero>
 
-          <div className="flex flex-row justify-between items-center gap-2 sm:gap-4 mt-6 sm:mt-10 px-2 sm:px-0">
-            <div className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-semibold whitespace-nowrap sm:ml-8">
-              <p>Popular Articles</p>
+          <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
+            <div className="flex flex-col items-center sm:items-start max-w-max">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
+                Popular Articles
+              </h1>
+              <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
             </div>
 
-            {/* <div className="relative w-[150px] xs:w-[200px] sm:w-[350px] lg:w-[450px] sm:mr-2">
-              <div className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
-              </div>
-
-              <input
-                type="text"
-                placeholder="Search Articles"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full 
-                pl-4 sm:pl-5   
-                pr-9 sm:pr-11  
-                py-2 sm:py-3 
-                text-sm sm:text-base 
-                bg-white border border-gray-200
-                rounded-3xl shadow-sm focus:outline-none focus:ring-2 
-                focus:ring-blue-500 transition-all duration-200"
-              />
-            </div> */}
+            <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
+              <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} placeholder="Search Article" />
+            </div>
           </div>
 
-          <div className="mt-8 sm:mt-10 ">
+          <div className="mt-4 md:mt-10">
             <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
           </div>
 
-          <div className="mt-8 sm:mt-10">
+          <div className="mt-6 md:mt-10">
             <CategoriesSection />
           </div>
 
-          <div className="mt-8 sm:mt-10 mb-10">
+          <div className="mt-6 md:mt-10 mb-2 md:mb-4">
             <BlogGrid posts={filteredPosts} />
           </div>
         </div>

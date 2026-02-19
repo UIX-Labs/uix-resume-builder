@@ -14,7 +14,7 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
     <Link href={`/blog/${post.slug}`}>
       <div className="h-full min-h-[280px] sm:min-h-[400px] bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl relative overflow-hidden cursor-pointer border-2 sm:border-4 border-white transition-all hover:shadow-sm group">
         {/* IMAGE */}
-        <div className="absolute top-0 right-0 w-[55%] h-full">
+        <div className="absolute top-0 right-0 w-[60%] md:w-[53%] h-full">
           <img
             src="/images/blog/features/pencil.png"
             alt={post.frontmatter.title}
@@ -23,14 +23,14 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
         </div>
 
         {/* CONTENT */}
-        <div className="absolute bottom-0 left-0 w-full p-4 sm:p-10 flex flex-col justify-end z-10">
+        <div className="absolute bottom-0 left-0 w-full p-4 md:p-6 flex flex-col justify-end">
           <div className="max-w-[75%] sm:max-w-[480px]">
             <div className="mb-4">
               <span
-                className="inline-flex items-center justify-center text-white text-sm font-semibold px-3 py-1 rounded-md w-fit uppercase tracking-wide"
+                className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-4 py-2 rounded-sm"
                 style={{ backgroundColor: badgeColor }}
               >
-                {post.frontmatter.tags?.[0]}
+                {post.frontmatter.tags[0]}
               </span>
             </div>
 

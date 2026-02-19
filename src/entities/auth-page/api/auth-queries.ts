@@ -1,5 +1,6 @@
 import { fetch } from '@shared/api';
 import { clearGuestEmail } from '@shared/lib/guest-email';
+import { clearReferrerUserId } from '@shared/lib/referrer-user-id';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
@@ -161,6 +162,8 @@ export const useRegisterUser = () => {
     onSuccess: () => {
       // Clear guest email after successful registration
       clearGuestEmail();
+      // Clear referrer user ID after successful registration
+      clearReferrerUserId();
       // Invalidate userProfile query to refetch user data
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },
@@ -175,6 +178,8 @@ export const useLoginUser = () => {
     onSuccess: () => {
       // Clear guest email after successful login
       clearGuestEmail();
+      // Clear referrer user ID after successful login
+      clearReferrerUserId();
       // Invalidate userProfile query to refetch user data
       queryClient.invalidateQueries({ queryKey: ['userProfile'] });
     },

@@ -340,6 +340,33 @@
   --color-blue-800: rgba(0, 89, 237, 1);
   --color-blue-900: rgba(0, 95, 242, 1);
   --color-blue-1000: rgba(0, 35, 89, 1);
+  --color-blue-hover: rgba(0, 71, 184, 1);
+  --color-blue-light-border: rgba(203, 231, 255, 1);
+  --color-blue-light-bg: rgba(233, 244, 255, 1);
+  --color-blue-gradient-start: rgba(36, 110, 225, 1);
+  --color-blue-gradient-end: rgba(28, 57, 101, 1);
+  --color-blue-text-light: rgba(241, 247, 255, 1);
+
+  --color-dark-900: rgba(12, 17, 24, 1);
+
+  --color-error-500: rgba(231, 76, 60, 1);
+  --color-error-600: rgba(192, 57, 43, 1);
+
+  --color-referral-modal-bg: rgba(12, 17, 24, 1);
+  --color-referral-modal-bg-alt: rgba(23, 23, 23, 1);
+  --color-referral-link-field-bg: rgba(59, 30, 29, 1);
+  --color-referral-button-bg: rgba(80, 37, 35, 1);
+  --color-referral-button-bg-mobile: rgba(120, 45, 42, 1);
+  --color-referral-button-hover: rgba(126, 52, 49, 1);
+  --color-referral-step-bg: rgba(213, 90, 85, 0.14);
+  --color-referral-icon-bg: rgba(143, 49, 46, 1);
+  --color-referral-text-primary: rgba(241, 247, 255, 1);
+  --color-referral-link-text: rgba(248, 187, 185, 1);
+  --color-referral-button-text: rgba(243, 223, 223, 1);
+  --color-referral-gradient-start: rgba(235, 137, 110, 1);
+  --color-referral-gradient-mid: rgba(233, 59, 54, 1);
+  --color-referral-border-gradient-start: rgba(215, 168, 166, 1);
+  --color-referral-border-gradient-end: rgba(59, 30, 29, 1);
 
   --color-sidebar-brand-primary: rgba(0, 95, 242, 1);
   --color-sidebar-brand-secondary: rgba(33, 52, 79, 1);
@@ -364,6 +391,8 @@
   --color-form-text-dark: rgba(12, 17, 24, 1);
   --color-form-placeholder: rgba(207, 212, 219, 1);
   --color-form-focus-ring: rgba(203, 231, 255, 1);
+
+  --color-tooltip-border: rgba(193, 200, 210, 0.22);
 
   --color-black: rgba(0, 0, 0, 1);
   --color-black-80: rgba(0, 0, 0, 0.8);

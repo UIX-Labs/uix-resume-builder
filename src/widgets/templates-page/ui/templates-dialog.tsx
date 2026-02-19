@@ -66,7 +66,7 @@ export function TemplatesDialog({ children, onTemplateSelect, currentTemplateId 
 
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex-1 overflow-y-auto p-3 md:p-6">
-              <div className="flex flex-col md:flex-row md:flex-wrap items-center justify-center gap-4 md:gap-8">
+              <div className="flex flex-col md:flex-row md:flex-wrap items-center justify-center gap-6 md:gap-8">
                 {templates?.map((template) => (
                   <TemplateCard
                     key={template.id}

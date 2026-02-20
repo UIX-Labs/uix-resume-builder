@@ -43,6 +43,7 @@ export default function BlogCard({
               bg-[var(--card-color)]
               transition-all duration-300
               group-hover:bg-white
+              uppercase
             "
           >
             <span className="group-hover:text-[var(--card-color)]">{category}</span>

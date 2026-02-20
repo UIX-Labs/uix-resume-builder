@@ -1,5 +1,5 @@
+import { categories } from '@/data/categories';
 import ArticleHeader, { type BreadcrumbItem } from '@/widgets/blog/slug/article-header';
-
 import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
@@ -125,15 +125,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     }),
   };
 
-  const categoryTag = frontmatter.tags?.[0];
+
+  const categoryTag = frontmatter.tags?.[0]?.toLowerCase();
+  const categoryInfo = categories.find((c) => c.id === categoryTag);
+  const categoryLabel = categoryInfo ? categoryInfo.title : categoryTag;
+
   const breadcrumbs: BreadcrumbItem[] = [
     { label: 'Home', href: '/' },
     { label: 'Blogs', href: '/blog' },
     ...(categoryTag
       ? [
           {
-            label: categoryTag,
-            href: `/blog/categories/${categoryTag.toLowerCase()}`,
+            label: categoryLabel,
+            href: `/blog/categories/${categoryTag}`,
           },
         ]
       : []),
@@ -239,9 +243,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
 
               <div
-                className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
-prose-a:text-blue-500w-full"
-              >
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-24
+                 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
+                 prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
+                    prose-a:text-blue-500w-full
+                    prose-table:mx-auto
+                    prose-table:w-full
+                    prose-th:text-center
+                    prose-td:text-center
+                    prose-th:px-4
+                    prose-td:px-4
+                    prose-th:py-3
+                    prose-td:py-3" >
                 <MDXRemote
                   source={content}
                   components={mdxComponents}

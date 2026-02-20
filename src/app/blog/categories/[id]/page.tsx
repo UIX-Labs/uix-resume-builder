@@ -23,6 +23,7 @@ export default async function CategoryPage({ params }: PageProps) {
   }
 
   const allPosts = getAllPosts();
+  
 
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {

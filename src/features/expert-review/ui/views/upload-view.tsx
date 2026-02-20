@@ -3,15 +3,8 @@
 import { useCachedUser } from '@shared/hooks/use-user';
 import { Button } from '@shared/ui/button';
 import { Upload } from 'lucide-react';
-import Image from 'next/image';
 import { useRef } from 'react';
 import { CloseButton, ExpertCard, expertCardPositionClasses, experts } from './shared';
-
-const MORE_EXPERTS_LOGO_SOURCES = [
-  '/images/google-logo.svg',
-  '/images/microsoft-logo.svg',
-  '/images/amazon-logo.svg',
-] as const;
 
 const CTA_BUTTON_CLASS =
   'bg-expert-primary hover:bg-expert-primary-hover text-white border border-white font-semibold min-h-12 h-12 px-6 rounded-expert-button text-base shadow-[0_0_0_1px_var(--color-expert-button-ring)] flex items-center justify-center gap-2 w-full sm:w-fit touch-manipulation';
@@ -38,8 +31,8 @@ export function UploadView({ onUpload, onSignIn, onClose }: UploadViewProps) {
     <div className="relative flex w-full min-h-[min(100dvh-2rem,653px)] sm:min-h-[653px] p-6 sm:p-8 md:p-12 bg-transparent text-white overflow-hidden">
       <CloseButton onClick={onClose} />
 
-      <div className="relative z-10 flex w-full flex-1 min-w-0 gap-4 sm:gap-6 md:gap-10">
-        <section className="flex flex-col justify-center gap-6 sm:gap-8 max-w-4xl mx-2 sm:ml-4 md:ml-20 flex-1 min-w-0">
+      <div className="relative z-10 flex w-full flex-1 min-w-0 gap-6 sm:gap-8 md:gap-12">
+        <section className="flex flex-col justify-center gap-6 sm:gap-8 max-w-xl sm:max-w-2xl mx-2 sm:ml-4 md:ml-20 mr-2 sm:mr-0 flex-1 min-w-0 flex-shrink -translate-y-5">
           <div className="flex flex-col gap-4 sm:gap-5">
             <h2
               className="text-expert-heading font-semibold leading-[1] tracking-[-0.18px] max-w-lg"
@@ -89,28 +82,33 @@ export function UploadView({ onUpload, onSignIn, onClose }: UploadViewProps) {
 
 function ExpertCardsSection() {
   return (
-    <div className="hidden md:block relative w-[300px] lg:w-[320px] min-h-[520px] flex-shrink-0 pr-4 lg:pr-8">
+    <div className="hidden sm:block relative w-[340px] md:w-[440px] lg:w-[500px] min-h-[600px] flex-shrink-0 pr-2 md:pr-4 lg:pr-8">
       {experts.map((expert, index) => (
         <div key={`${expert.name}-${expert.company}`} className={expertCardPositionClasses[index] ?? 'absolute'}>
           <ExpertCard {...expert} />
         </div>
       ))}
-      <div className="absolute bottom-0 right-0 flex flex-col items-end gap-1">
-        <div className="flex items-baseline gap-2 flex-wrap justify-end" style={GEIST_FONT}>
-          <span className="text-expert-heading font-bold text-2xl">20+</span>
-          <span className="text-expert-subheading font-normal text-sm leading-[1] tracking-[-0.18px]">
-            more experts from <span className="text-expert-heading">google, zepto, uber</span>
-          </span>
-        </div>
-        <div className="flex -space-x-2 items-center">
-          {MORE_EXPERTS_LOGO_SOURCES.map((src) => (
-            <div
-              key={src}
-              className="w-8 h-8 rounded-full bg-expert-card border-2 border-expert-bg flex items-center justify-center overflow-hidden shrink-0"
+      <div className="absolute md:bottom-5 sm:bottom-0 right-0 flex flex-col items-end gap-1">
+        <div className="flex items-end gap-1" style={GEIST_FONT}>
+          <div className="flex justify-end">
+            <span className="font-black text-5xl leading-[1] tracking-[-0.02px] text-[#E2E2E2]">20+</span>
+          </div>
+          <div className="flex flex-col items-start gap-1">
+            <span
+              className="font-semibold text-[16px] leading-[1] tracking-[-0.02px]"
+              style={{
+                background:
+                  'linear-gradient(92.5deg, #E2E2E2 2.09%, rgba(169, 172, 173, 0.731778) 78.4%, rgba(15, 27, 28, 0) 182.62%)',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
             >
-              <Image src={src} alt="" width={16} height={16} className="object-contain" />
-            </div>
-          ))}
+              more experts
+            </span>
+            <span className="font-normal text-[12px] leading-[1] tracking-[0px] text-[#E0E0E0]">
+              from google, zepto, uber
+            </span>
+          </div>
         </div>
       </div>
     </div>

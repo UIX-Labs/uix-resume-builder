@@ -90,7 +90,7 @@ const HeroSection = () => {
                     </span>
                     <span className="text-[#0059ed] font-black text-5xl lg:text-6xl xl:text-7xl">Professional</span>
                   </div>
-                  <div className="block lg:mt-0 leading-[1.2] -mt-2">
+                  <div className="block lg:-mt-2 leading-[1.2] -mt-2">
                     <span className="text-[#008941] font-black text-5xl lg:text-6xl xl:text-7xl">Resume </span>
                     <span className="text-[#171717] font-semibold text-2xl lg:text-3xl xl:text-4xl">
                       in under 3 minutes

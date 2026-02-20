@@ -11,13 +11,20 @@ interface TemplateCardProps {
   onClick: () => void;
   isDashboard?: boolean;
   onPreviewClick?: () => void;
+  isCurrent?: boolean;
 }
 
-export function TemplateCard({ template, onClick, isDashboard = false, onPreviewClick }: TemplateCardProps) {
+export function TemplateCard({
+  template,
+  onClick,
+  isDashboard = false,
+  onPreviewClick,
+  isCurrent = false,
+}: TemplateCardProps) {
   return (
     <div
       className={cn(
-        'group cursor-pointer rounded-lg transition-all duration-200 flex-shrink-0 hover:shadow-lg mx-auto',
+        'group cursor-pointer transition-all duration-200 flex-shrink-0 hover:shadow-lg mx-auto relative',
         isDashboard
           ? 'w-[280px] h-[400px] sm:w-[320px] sm:h-[460px] lg:w-[380px] lg:h-[547px]'
           : 'w-[75vw] max-w-[420px] h-[420px] sm:w-[260px] sm:h-[360px]',
@@ -31,6 +38,13 @@ export function TemplateCard({ template, onClick, isDashboard = false, onPreview
             : 'w-full h-[420px] sm:w-[260px] sm:h-[360px]',
         )}
       >
+        {isCurrent && (
+          <div className="md:hidden absolute -top-3.5 left-1/2 -translate-x-1/2 z-10">
+            <div className="bg-blue-600 text-white px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap shadow-md">
+              current template
+            </div>
+          </div>
+        )}
         <div className="w-full h-full relative">
           <Image
             src={template.publicImageUrl}

@@ -9,12 +9,15 @@ import { Button } from '@shared/ui/components/button';
 import Header from '@widgets/landing-page/ui/header-section';
 import MobileAuthModal from './mobile-auth-modal';
 import { cn } from '@shared/lib/utils';
+import { useSearchParams } from 'next/navigation';
+import { setReferrerUserId } from '@shared/lib/referrer-user-id';
 
 type Stage = 'intro' | 'shrink' | 'cta';
 
 export default function MobileAuthLayout() {
   const [stage, setStage] = useState<Stage>('intro');
   const [openAuthModal, setOpenAuthModal] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const t1 = setTimeout(() => setStage('shrink'), 600);
@@ -25,6 +28,14 @@ export default function MobileAuthLayout() {
       clearTimeout(t2);
     };
   }, []);
+
+  useEffect(() => {
+    // Capture referrer userId from URL parameters
+    const userId = searchParams.get('userId');
+    if (userId) {
+      setReferrerUserId(userId);
+    }
+  }, [searchParams]);
 
   return (
     <div className={`flex flex-col items-center px-4 ${stage === 'intro' ? 'justify-center' : 'min-h-screen'}`}>

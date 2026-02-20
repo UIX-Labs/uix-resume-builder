@@ -22,7 +22,9 @@ export function usePdfGeneration({ thumbnailRef, formData, resumeId }: UsePdfGen
     return `${formattedName}-${currentMonthYear}.pdf`;
   }, [formData]);
 
-  const generatePDF = useCallback(async () => {
+  const generatePDF = useCallback(async (): Promise<
+    { downloadsLeft: number; downloadsAllowed: number; downloadsDone: number; referralUrl?: string } | undefined
+  > => {
     setIsGeneratingPDF(true);
 
     try {
@@ -42,7 +44,8 @@ export function usePdfGeneration({ thumbnailRef, formData, resumeId }: UsePdfGen
       }
 
       const filename = getResumeFileName();
-      await generatePdfFromHtml(htmlContent, filename, resumeId);
+      const downloadInfo = await generatePdfFromHtml(htmlContent, filename, resumeId);
+      return downloadInfo;
     } catch (error) {
       console.error('PDF generation error:', error);
       throw error;

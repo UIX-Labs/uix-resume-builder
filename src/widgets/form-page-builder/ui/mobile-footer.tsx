@@ -1,26 +1,36 @@
 import { Button } from '@shared/ui/button';
 import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
-import { Download, Eye } from 'lucide-react';
+import { MobileDownloadButton } from '@shared/ui/components/mobile-download-button';
+import { Eye } from 'lucide-react';
 
 interface MobileFooterProps {
   onDownloadPDF: () => void;
   onPreview: () => void;
   isGeneratingPDF: boolean;
+  downloadsLeft?: number;
+  downloadsAllowed?: number;
+  isLoggedIn?: boolean;
   children?: React.ReactNode;
 }
 
-export function MobileFooter({ onDownloadPDF, onPreview, isGeneratingPDF, children }: MobileFooterProps) {
+export function MobileFooter({
+  onDownloadPDF,
+  onPreview,
+  isGeneratingPDF,
+  downloadsLeft = 3,
+  downloadsAllowed = 3,
+  isLoggedIn = false,
+  children,
+}: MobileFooterProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E7EB] px-4 py-3 flex items-center gap-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
-      <Button
-        type="button"
+      <MobileDownloadButton
         onClick={onDownloadPDF}
-        disabled={isGeneratingPDF}
-        className="flex-1 h-12 text-[15px] font-semibold rounded-xl bg-[#005FF2] hover:bg-[#0047B8] text-white flex items-center justify-center gap-2"
-      >
-        <Download className="w-5 h-5" />
-        PDF
-      </Button>
+        downloadsLeft={downloadsLeft}
+        downloadsAllowed={downloadsAllowed}
+        isGenerating={isGeneratingPDF}
+        isLoggedIn={isLoggedIn}
+      />
       {children ? <div className="flex-1 flex items-center justify-center">{children}</div> : <MobileTemplateButton />}
       <Button
         type="button"

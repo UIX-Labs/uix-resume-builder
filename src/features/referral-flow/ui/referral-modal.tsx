@@ -7,7 +7,8 @@ import { X } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { REFERRAL_CONSTANTS } from '../constants';
+import { REFERRAL_CONSTANTS, REFERRAL_STEPS } from '../constants';
+import { CurveDownwardsSvg, CurveUpwardsSvg } from './referral-curve-svg';
 import { ReferralStepsCarousel } from './referral-steps-carousel';
 
 interface ReferralModalProps {
@@ -59,7 +60,7 @@ export function ReferralModal({
 
         <Image
           src="/images/referral-bg.png"
-          alt=""
+          alt="background pattern"
           width={260}
           height={260}
           priority
@@ -68,7 +69,7 @@ export function ReferralModal({
         <div className="absolute -left-20 -top-25 w-80 pointer-events-none opacity-80 sm:hidden">
           <Image
             src="/images/referral-bg.png"
-            alt=""
+            alt="background pattern"
             width={390}
             height={376}
             priority
@@ -87,49 +88,14 @@ export function ReferralModal({
 
           <div className="mb-12 sm:mb-16">
             <div className="sm:hidden">
-              <ReferralStepsCarousel
-                steps={[
-                  {
-                    icon: '/images/chat.svg',
-                    title: REFERRAL_CONSTANTS.STEPS.SEND.title,
-                    description: REFERRAL_CONSTANTS.STEPS.SEND.description,
-                    threadImage: 'single',
-                  },
-                  {
-                    icon: '/images/app_registration.svg',
-                    title: REFERRAL_CONSTANTS.STEPS.REGISTER.title,
-                    description: REFERRAL_CONSTANTS.STEPS.REGISTER.description,
-                    threadImage: 'both',
-                  },
-                  {
-                    icon: '/images/earn-downloads.svg',
-                    title: REFERRAL_CONSTANTS.STEPS.EARN.title,
-                    description: REFERRAL_CONSTANTS.STEPS.EARN.description,
-                    threadImage: 'both',
-                  },
-                ]}
-              />
+              <ReferralStepsCarousel steps={REFERRAL_STEPS} />
             </div>
 
             <div className="hidden sm:flex items-center justify-center gap-26 mb-8 sm:mb-12 relative">
               <div className="flex flex-col items-center gap-2 relative">
                 <div className="w-19 h-19 rounded-full bg-referral-step-bg flex items-center justify-center mb-2 relative">
-                  <Image src="/images/chat.svg" alt="" width={28} height={28} />
-                  <svg
-                    className="absolute -top-[43px] left-25 w-45 h-20 pointer-events-none"
-                    viewBox="0 0 260 80"
-                    fill="none"
-                  >
-                    <title>curve upwards</title>
-                    <path
-                      d="M0 60 
-       C65 10, 195 10, 260 60"
-                      stroke="rgba(255,255,255,0.4)"
-                      strokeWidth="1"
-                      strokeDasharray="10 10"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <Image src="/images/chat.svg" alt="Chat icon" width={28} height={28} />
+                  <CurveUpwardsSvg className="absolute -top-[43px] left-25 w-45 h-20 pointer-events-none" />
                 </div>
                 <h3 className="text-base font-semibold leading-[1.375] tracking-[-0.011em] text-center text-white">
                   {REFERRAL_CONSTANTS.STEPS.SEND.title}
@@ -140,22 +106,8 @@ export function ReferralModal({
               </div>
               <div className="flex flex-col items-center gap-2 relative">
                 <div className="w-[76px] h-[76px] rounded-full bg-referral-step-bg flex items-center justify-center mb-2 relative">
-                  <Image src="/images/app_registration.svg" alt="" width={28} height={28} />
-                  <svg
-                    className="absolute top-[25px] left-[100px] w-[180px] h-[80px] pointer-events-none"
-                    viewBox="0 0 260 80"
-                    fill="none"
-                  >
-                    <title>curve downwards</title>
-                    <path
-                      d="M0 20 
-       C65 70, 195 70, 260 20"
-                      stroke="rgba(255,255,255,0.4)"
-                      strokeWidth="1"
-                      strokeDasharray="10 10"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <Image src="/images/app_registration.svg" alt="Registration icon" width={28} height={28} />
+                  <CurveDownwardsSvg className="absolute top-[25px] left-[100px] w-[180px] h-[80px] pointer-events-none" />
                 </div>
 
                 <h3 className="text-base font-semibold leading-[1.375] tracking-[-0.011em] text-center text-white">
@@ -167,7 +119,7 @@ export function ReferralModal({
               </div>{' '}
               <div className="flex flex-col items-center gap-2">
                 <div className="w-19 h-19 rounded-full bg-referral-step-bg flex items-center justify-center mb-2">
-                  <Image src="/images/earn-downloads.svg" alt="" width={28} height={28} />
+                  <Image src="/images/earn-downloads.svg" alt="Earn downloads icon" width={28} height={28} />
                 </div>
                 <h3 className="text-base font-semibold leading-[1.375] tracking-[-0.011em] text-center text-white">
                   {REFERRAL_CONSTANTS.STEPS.EARN.title}

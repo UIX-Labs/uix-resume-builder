@@ -9,14 +9,20 @@ export const REFERRAL_CONSTANTS = {
     SEND: {
       title: 'Send Invitation',
       description: 'Share your referral link with friends and invite them to try Pika Resume.',
+      icon: '/images/chat.svg',
+      threadImage: 'single' as const,
     },
     REGISTER: {
       title: 'Registration',
       description: 'They sign up using your referral link.',
+      icon: '/images/app_registration.svg',
+      threadImage: 'both' as const,
     },
     EARN: {
       title: 'Earn Downloads',
       description: 'You get 3 free downloads, and your friend gets 1 free download.',
+      icon: '/images/earn-downloads.svg',
+      threadImage: 'both' as const,
     },
   },
 
@@ -29,3 +35,10 @@ export const REFERRAL_CONSTANTS = {
 
   DEFAULT_REFERRAL_LINK: 'pikaresume/referral-2558788',
 } as const;
+
+// Helper to get steps as an array for carousel
+export const REFERRAL_STEPS = [
+  REFERRAL_CONSTANTS.STEPS.SEND,
+  REFERRAL_CONSTANTS.STEPS.REGISTER,
+  REFERRAL_CONSTANTS.STEPS.EARN,
+] as const;

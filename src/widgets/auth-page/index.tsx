@@ -21,16 +21,24 @@ import { cn } from '@shared/lib/utils';
 import LinkedInSignInButton from '@shared/ui/components/linkedIn-signin-button';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { clearGuestEmail } from '@shared/lib/guest-email';
+import { setReferrerUserId, clearReferrerUserId } from '@shared/lib/referrer-user-id';
 
 export default function DesktopAuthLayout() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [guestEmail, setGuestEmail] = useState<string | undefined>(undefined);
+  const [isReferralLogin, setIsReferralLogin] = useState(false);
 
   useEffect(() => {
     const callbackUrl = searchParams.get('callbackUrl');
     if (callbackUrl) {
       localStorage.setItem('auth_callback_url', callbackUrl);
+    }
+
+    const userId = searchParams.get('userId');
+    if (userId) {
+      setReferrerUserId(userId);
+      setIsReferralLogin(true); // Set flag when userId is present
     }
   }, [searchParams]);
 
@@ -41,6 +49,7 @@ export default function DesktopAuthLayout() {
 
     localStorage.removeItem('auth_callback_url');
     clearGuestEmail();
+    clearReferrerUserId();
 
     if (pendingResumeId) {
       router.push(`/resume/${pendingResumeId}`);
@@ -284,11 +293,23 @@ export default function DesktopAuthLayout() {
             className="w-full max-w-sm space-y-8"
           >
             <div className="flex flex-col items-center justify-center">
-              <h2 className="text-[63px] font-semibold text-slate-800 -tracking-[3%] leading-[63px]">Build Your</h2>
-
-              <h2 className="text-[63px] font-black text-slate-800 whitespace-nowrap -tracking-[3%] leading-[63px]">
-                Perfect Resume
-              </h2>
+              {isReferralLogin ? (
+                <>
+                  <h2 className="text-[63px] font-semibold text-slate-800 -tracking-[3%] leading-[63px] whitespace-nowrap">
+                    Sign Up & Get
+                  </h2>
+                  <h2 className="text-[63px] font-black text-slate-800 whitespace-nowrap -tracking-[3%] leading-[63px]">
+                    1 Free Download
+                  </h2>
+                </>
+              ) : (
+                <>
+                  <h2 className="text-[63px] font-semibold text-slate-800 -tracking-[3%] leading-[63px]">Build Your</h2>
+                  <h2 className="text-[63px] font-black text-slate-800 whitespace-nowrap -tracking-[3%] leading-[63px]">
+                    Perfect Resume
+                  </h2>
+                </>
+              )}
             </div>
 
             {(step === 'initial' || step === 'email') && (

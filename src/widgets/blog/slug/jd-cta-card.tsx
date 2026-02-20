@@ -22,7 +22,7 @@ export default function JDCTACard() {
   };
 
   return (
-    <div className="mt-6 rounded-2xl border border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-6 pb-0 shadow-sm">
+    <div className="mt-6 rounded-2xl border-2 border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-6 pb-0 shadow-sm bg-gray-100">
       {/* Title */}
       <h3 className="text-2xl font-semibold text-gray-900 text-center">
         Upgrade Your Resume with
@@ -52,7 +52,7 @@ export default function JDCTACard() {
           alt="Resume preview"
           width={325}
           height={325}
-          className="rounded-lg object-contain"
+          className="rounded-lg object-contain shadow-2xl"
         />
       </div>
     </div>

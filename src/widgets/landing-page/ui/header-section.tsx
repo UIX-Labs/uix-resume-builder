@@ -1,4 +1,5 @@
 'use client';
+import { ExpertReviewModal } from '@/features/expert-review/ui/expert-review-modal';
 import { Button } from '@/shared/ui/components/button';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useCachedUser } from '@shared/hooks/use-user';
@@ -7,8 +8,8 @@ import { cn } from '@shared/lib/cn';
 import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
 interface HeaderProps {
@@ -18,10 +19,24 @@ interface HeaderProps {
 function Header({ variant = 'default' }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
+  const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
+
+  useEffect(() => {
+    const expertReview = searchParams.get('expertReview');
+    if (expertReview !== 'open') return;
+
+    setShowExpertReviewModal(true);
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('expertReview');
+    const newSearch = params.toString();
+    router.replace(`${pathname}${newSearch ? `?${newSearch}` : ''}`, { scroll: false });
+  }, []);
 
   const handleNavigate = () => {
     router.push('/dashboard');
@@ -143,6 +158,19 @@ function Header({ variant = 'default' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => setShowExpertReviewModal(true)}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              'text-blue-900 hover:text-gray-900',
+              isRoast ? 'text-white' : '',
+            )}
+          >
+            Expert Review
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleRoastClick}
             className={cn(
               'font-semibold text-lg cursor-pointer',
@@ -244,10 +272,21 @@ function Header({ variant = 'default' }: HeaderProps) {
         (isDashboardRoute ? (
           <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
         ) : (
-          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
+          <MobileSidebar
+            isOpen={showMobileSidebar}
+            onClose={() => setShowMobileSidebar(false)}
+            onExpertReviewClick={() => setShowExpertReviewModal(true)}
+          />
         ))}
+      <ExpertReviewModal isOpen={showExpertReviewModal} onClose={() => setShowExpertReviewModal(false)} />
     </>
   );
 }
 
-export default Header;
+export default function HeaderWithSuspense(props: HeaderProps) {
+  return (
+    <Suspense fallback={null}>
+      <Header {...props} />
+    </Suspense>
+  );
+}

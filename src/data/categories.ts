@@ -8,7 +8,7 @@ export const categories = [
     hero: {
       suffix: 'Help',
       description: 'Tips, insights, stats, and essential resume advice everything you need, all in one place.',
-      image: '/images/blog/hero-section/resume-hero-ection.png',
+      image: '/images/blog/hero-section/resume-hero-section.svg',
     },
   },
 
@@ -21,7 +21,7 @@ export const categories = [
     hero: {
       suffix: 'Tips',
       description: 'Learn how to present yourself and improve your interview skills with clear, practical tips.',
-      image: '/images/blog/hero-section/interview.png',
+      image: '/images/blog/hero-section/interview-heor-section.svg',
     },
   },
 
@@ -35,7 +35,7 @@ export const categories = [
       suffix: 'Tips',
       description:
         'From job applications to salary negotiations, we break down hiring and career growth simply and clearly.',
-      image: '/images/blog/hero-section/career.png',
+      image: '/images/blog/hero-section/career-img.svg',
     },
   },
 
@@ -48,7 +48,7 @@ export const categories = [
     hero: {
       suffix: 'Tips',
       description: 'Give your application an edge with a personalised cover letter that helps you stand out.',
-      image: '/images/blog/hero-section/cover-letter.png',
+      image: '/images/blog/hero-section/cover-letter-hero-section.svg',
     },
   },
 
@@ -61,7 +61,7 @@ export const categories = [
     hero: {
       suffix: 'Tips',
       description: 'Tips to help you search for jobs, apply confidently, and get hired.',
-      image: '/images/blog/hero-section/jobs.png',
+      image: '/images/blog/hero-section/job-hero-section.svg',
     },
   },
 ];

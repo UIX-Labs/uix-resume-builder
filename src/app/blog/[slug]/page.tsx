@@ -236,11 +236,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="min-w-0 flex-1">
             <div className="relative">
               {/* Mobile sticky */}
-              <div className='bg-[#F2F3F9] lg:hidden sticky top-0  z-50 pb-4'> 
+              {/* <div className='bg-[#F2F3F9] lg:hidden sticky top-0  z-50 pb-4'>  */}
               <div className="lg:hidden sticky top-0 bg-[#F5F5F7] z-50">
                 <TableOfContents headings={headings} />
               </div>
-              </div>
+              {/* </div> */}
 
               <div
                 className="prose prose-lg prose-gray prose-headings:scroll-mt-24
@@ -254,7 +254,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     prose-th:px-4
                     prose-td:px-4
                     prose-th:py-3
-                    prose-td:py-3" >
+                    prose-td:py-3 mt-6" >
                 <MDXRemote
                   source={content}
                   components={mdxComponents}

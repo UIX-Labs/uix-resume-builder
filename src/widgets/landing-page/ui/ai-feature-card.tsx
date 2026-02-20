@@ -156,8 +156,8 @@ export function AiFeatureCard({
             >
               <div
                 className={cn(
-                  'relative w-[60vw] md:left-0 left-[20%] scale-[1.2] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
-                  'rotate-[-6deg]',
+                  'relative w-[60vw] md:left-0 left-[28%] scale-[1.2] sm:w-[280px] md:w-[320px] h-[160px] sm:h-[310px] md:h-[380px]',
+                  'rotate-[-8deg]',
                   TRANSITION,
                   isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
                 )}
@@ -181,29 +181,31 @@ export function AiFeatureCard({
           {id === 'right' && (
             <div
               className={cn(
-                'absolute pointer-events-none',
-                TRANSITION,
+                'absolute pointer-events-none transition-all duration-500',
+
                 isExpanded
-                  ? 'top-[70px] right-[-10px] sm:top-[70px] md:top-[80px] sm:right-[8px] md:right-[10px]'
-                  : 'top-[40px] sm:top-[35px] md:top-[60px] right-[-40px] sm:right-[-60px] md:right-[-120px] -rotate-[15deg]',
+                  ? 'top-[70px] right-4 rotate-0'
+                  : 'top-14 right-0 md:right-0  translate-x-[30%] md:translate-x-[30%] -rotate-[12deg]',
               )}
             >
+              {/* Main Image Container */}
               <div
                 className={cn(
-                  'relative w-[80vw] md:left-4 left-[15%] scale-160 sm:w-[280px] md:top-6 md:w-[380px] h-auto aspect-square',
-                  'rotate-[-6deg]',
+                  'relative w-[50vw] sm:w-[300px] md:w-[400px] h-auto aspect-[3/4]',
+                  'rotate-[-6deg] origin-center',
                   TRANSITION,
-                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-100 drop-shadow-xl',
+                  isExpanded ? 'opacity-0 scale-95' : 'opacity-100 scale-85 drop-shadow-xl',
                 )}
               >
-                <Image src={images.default} alt="" fill className="object-cover" />
+                <Image src={images.default} alt="" fill className="object-contain" priority />
               </div>
 
+              {/* Expanded/Hover Image */}
               <div
                 className={cn(
-                  'absolute transition-all duration-[400ms]',
+                  'absolute transition-all duration-[400ms] top-0 right-0',
                   isExpanded ? 'opacity-100 scale-100 drop-shadow-2xl' : 'opacity-0 scale-90',
-                  'top-0 w-[150px] sm:w-[360px] md:w-[440px] h-[180px] sm:h-[300px] md:h-[440px] right-[40px] sm:scale-115 md:scale-115',
+                  'w-[220px] sm:w-[320px] md:w-[440px] aspect-[3/4]',
                 )}
               >
                 <Image src={images.hovered} alt="" fill className="object-contain object-right" />

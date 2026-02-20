@@ -28,7 +28,6 @@ export default function ArticleHeader({
   return (
     <div
       className="
-        mb-8
         md:mb-10
         bg-[url('/images/blog/hero-section/Dot-bg.png')]
         bg-[#F2F2F233]
@@ -45,26 +44,33 @@ export default function ArticleHeader({
         justify-between
       "
     >
-      {breadcrumbs && (
-        <div
-          className="absolute top-5 left-6 lg:left-12 z-10 
-          flex items-center gap-1 
-          overflow-x-auto no-scrollbar whitespace-nowrap text-xs md:text-[13px] text-gray-500"
-        >
-          {breadcrumbs.map((item, index) => (
-            <span key={index} className="flex items-center flex-shrink-0">
-              {item.href ? (
-                <a href={item.href} className="hover:text-black transition-colors">
-                  {item.label}
-                </a>
-              ) : (
-                <span className="text-black font-medium">{item.label}</span>
-              )}
-              {index < breadcrumbs.length - 1 && <span className="mx-1 text-gray-500">{'>'}</span>}
-            </span>
-          ))}
-        </div>
-      )}
+    {breadcrumbs && (
+  <div
+    className="
+      absolute top-5 left-6 right-6 lg:left-12 z-10 
+      flex items-center gap-1 
+      overflow-x-auto 
+      flex-nowrap 
+      scrollbar-hide
+      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      whitespace-nowrap text-xs md:text-[13px] text-gray-500
+    ">
+    {breadcrumbs.map((item, index) => (
+      <div key={index} className="flex items-center flex-shrink-0">
+        {item.href ? (
+          <a href={item.href} className="hover:text-black transition-colors">
+            {item.label}
+          </a>
+        ) : (
+          <span className="text-black font-medium">{item.label}</span>
+        )}
+        {index < breadcrumbs.length - 1 && (
+          <span className="mx-1 text-gray-500 flex-shrink-0">{'>'}</span>
+        )}
+      </div>
+    ))}
+  </div>
+  )}
 
       <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center text-left">
         <h1 className="text-2xl font-bold tracking-tight text-[#0B0A09] sm:text-4xl lg:text-5xl leading-[1.15]">

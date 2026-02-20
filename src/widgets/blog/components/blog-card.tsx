@@ -29,7 +29,7 @@ export default function BlogCard({
         style={{ ['--card-color' as any]: badgeColor }}
       >
         {/* IMAGE */}
-        <div className="relative w-full h-[255px] rounded-md overflow-hidden">
+        <div className="relative w-full md:h-[255px] h-[200px] rounded-md overflow-hidden">
           <Image src={image} alt={title} fill className="object-cover" />
         </div>
 

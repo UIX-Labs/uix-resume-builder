@@ -35,7 +35,7 @@ export default function HeroImgSection() {
         <div className="absolute md:top-[25%] top-[25%] md:right-[4%] right-[4%] w-[80px] h-[80px] md:w-[130px] md:h-[140px] bg-[#FFEB3B] rounded-md" />
 
         {/* Blue quarter circle - FIX: Positioned relative to the bottom of the container */}
-        <div className="absolute md:bottom-[5%] bottom-[5%] md:left-0 left-[5%] w-[80px] h-[60px] md:w-[130px] md:h-[130px] bg-[#6FB1FF] rounded-tl-full" />
+        <div className="absolute md:bottom-[5%] bottom-[6%] md:left-0 left-[5%] w-[80px] h-[60px] md:w-[130px] md:h-[130px] bg-[#6FB1FF] rounded-tl-full" />
       </motion.div>
 
       {/* MAIN RESUME IMAGE */}

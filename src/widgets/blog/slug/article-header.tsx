@@ -56,9 +56,9 @@ export default function ArticleHeader({
       whitespace-nowrap text-xs md:text-[13px] text-gray-500
     ">
     {breadcrumbs.map((item, index) => (
-      <div key={index} className="flex items-center flex-shrink-0">
+      <div key={index} className="flex items-center flex-shrink-0 sentenceCase">
         {item.href ? (
-          <a href={item.href} className="hover:text-black transition-colors">
+          <a href={item.href} className="hover:text-black transition-colors sentenceCase">
             {item.label}
           </a>
         ) : (

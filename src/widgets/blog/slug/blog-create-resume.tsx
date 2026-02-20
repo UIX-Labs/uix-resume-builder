@@ -45,7 +45,6 @@ export default function BlogCreateResume() {
         >
           Create your Resume
         </button>
-
       </div>
 
       <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
@@ -74,10 +73,6 @@ export default function BlogCreateResume() {
           <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />
           <LinkedInIcon className="w-10 h-10 text-black" />
         </div> */}
-
-
-
-        
       </div>
     </>
   );

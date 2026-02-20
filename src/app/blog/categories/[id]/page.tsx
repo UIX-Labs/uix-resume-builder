@@ -23,7 +23,6 @@ export default async function CategoryPage({ params }: PageProps) {
   }
 
   const allPosts = getAllPosts();
-  
 
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {
@@ -58,7 +57,7 @@ export default async function CategoryPage({ params }: PageProps) {
         />
       ) : (
         <div>
-          <NotFoundPage/>
+          <NotFoundPage />
         </div>
       )}
     </div>

@@ -44,9 +44,9 @@ export default function ArticleHeader({
         justify-between
       "
     >
-    {breadcrumbs && (
-  <div
-    className="
+      {breadcrumbs && (
+        <div
+          className="
       absolute top-5 left-6 right-6 lg:left-12 z-10 
       flex items-center gap-1 
       overflow-x-auto 
@@ -54,23 +54,22 @@ export default function ArticleHeader({
       scrollbar-hide
       [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
       whitespace-nowrap text-xs md:text-[13px] text-gray-500
-    ">
-    {breadcrumbs.map((item, index) => (
-      <div key={index} className="flex items-center flex-shrink-0 sentenceCase">
-        {item.href ? (
-          <a href={item.href} className="hover:text-black transition-colors sentenceCase">
-            {item.label}
-          </a>
-        ) : (
-          <span className="text-black font-medium">{item.label}</span>
-        )}
-        {index < breadcrumbs.length - 1 && (
-          <span className="mx-1 text-gray-500 flex-shrink-0">{'>'}</span>
-        )}
-      </div>
-    ))}
-  </div>
-  )}
+    "
+        >
+          {breadcrumbs.map((item, index) => (
+            <div key={index} className="flex items-center flex-shrink-0 sentenceCase">
+              {item.href ? (
+                <a href={item.href} className="hover:text-black transition-colors sentenceCase">
+                  {item.label}
+                </a>
+              ) : (
+                <span className="text-black font-medium">{item.label}</span>
+              )}
+              {index < breadcrumbs.length - 1 && <span className="mx-1 text-gray-500 flex-shrink-0">{'>'}</span>}
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center text-left">
         <h1 className="text-2xl font-bold tracking-tight text-[#0B0A09] sm:text-4xl lg:text-5xl leading-[1.15]">

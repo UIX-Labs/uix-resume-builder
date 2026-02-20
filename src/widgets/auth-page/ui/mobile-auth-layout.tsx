@@ -17,6 +17,7 @@ type Stage = 'intro' | 'shrink' | 'cta';
 export default function MobileAuthLayout() {
   const [stage, setStage] = useState<Stage>('intro');
   const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [isReferralLogin, setIsReferralLogin] = useState(false);
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function MobileAuthLayout() {
     const userId = searchParams.get('userId');
     if (userId) {
       setReferrerUserId(userId);
+      setIsReferralLogin(true);
     }
   }, [searchParams]);
 
@@ -65,7 +67,15 @@ export default function MobileAuthLayout() {
           className="w-full max-w-[360px] mt-6 space-y-4 text-center"
         >
           <h1 className="text-center text-4xl font-semibold leading-none">
-            Build Your <p className="font-black">Perfect Resume</p>
+            {isReferralLogin ? (
+              <>
+                Sign Up & Get <p className="font-black">1 Free Download</p>
+              </>
+            ) : (
+              <>
+                Build Your <p className="font-black">Perfect Resume</p>
+              </>
+            )}
           </h1>
 
           <LinkedInSignInButton />

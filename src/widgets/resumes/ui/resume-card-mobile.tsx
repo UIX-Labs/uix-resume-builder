@@ -9,6 +9,7 @@ import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
 import { usePdfGeneration } from '@widgets/form-page-builder/hooks/use-pdf-generation';
 import { usePdfDownload } from '@widgets/form-page-builder/hooks/use-pdf-download';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { ReferralModal } from '@features/referral-flow/ui/referral-modal';
 import { toast } from 'sonner';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { useRouter } from 'next/navigation';
@@ -40,7 +41,15 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
     resumeId: resume.id,
   });
 
-  const { handleDownloadPDF, isAuthModalOpen, setIsAuthModalOpen, authRedirectUrl } = usePdfDownload({
+  const {
+    handleDownloadPDF,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    authRedirectUrl,
+    isReferralModalOpen,
+    setIsReferralModalOpen,
+    referralUrl,
+  } = usePdfDownload({
     resumeId: resume.id,
     generatePDF,
   });
@@ -121,6 +130,12 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
         redirectUrl={authRedirectUrl}
         title="Login Required"
         description="You need to login to download PDF."
+      />
+
+      <ReferralModal
+        isOpen={isReferralModalOpen}
+        onClose={() => setIsReferralModalOpen(false)}
+        referralLink={referralUrl}
       />
       <div
         style={{

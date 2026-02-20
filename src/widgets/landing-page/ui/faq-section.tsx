@@ -18,8 +18,9 @@ function FaqSection() {
               <AccordionItem key={item.id} value={item.id} className="border-b border-[#73808D]/30 last:border-0">
                 <AccordionTrigger
                   className={cn(
-                    'group py-4 text-lg md:text-2xl font-medium text-[#171717] transition-colors hover:no-underline text-left',
-                    'data-[state=open]:text-[#005FF2] [&[data-state=open]>svg]:text-[#005FF2]',
+                    'group py-4 text-lg md:text-2xl font-medium text-[#171717] transition-all hover:no-underline text-left',
+                    'data-[state=open]:text-[#005FF2] data-[state=open]:font-semibold',
+                    '[&[data-state=open]>svg]:text-[#005FF2]',
                     '[&>svg]:h-6 [&>svg]:w-6 md:[&>svg]:h-8 md:[&>svg]:w-8',
                   )}
                 >

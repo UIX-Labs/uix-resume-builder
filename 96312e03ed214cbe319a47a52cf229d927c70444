@@ -1,0 +1,79 @@
+src/features/referral-flow/ui/referral-modal.tsx
+  0b83ae370a2fb8b9 10-11,91,97-98,109-110,122
+src/features/referral-flow/ui/referral-curve-svg.tsx
+  0b83ae370a2fb8b9 1-35
+src/features/referral-flow/constants/index.ts
+  0b83ae370a2fb8b9 12-13,18-19,24-25,38-44
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "96312e03ed214cbe319a47a52cf229d927c70444",
+  "prompts": {
+    "0b83ae370a2fb8b9": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380951",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 68,
+      "total_deletions": 58,
+      "accepted_lines": 66,
+      "overriden_lines": 0
+    },
+    "63a9f3ab23b60527": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380765",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 416,
+      "total_deletions": 114,
+      "accepted_lines": 209,
+      "overriden_lines": 15
+    },
+    "9a94973b3f317952": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380798",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 98,
+      "total_deletions": 78,
+      "accepted_lines": 80,
+      "overriden_lines": 7
+    },
+    "c61ae728d5bcf07b": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380822",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 302,
+      "total_deletions": 137,
+      "accepted_lines": 134,
+      "overriden_lines": 4
+    },
+    "fccde09de8b9162c": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "380871",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 153,
+      "total_deletions": 16,
+      "accepted_lines": 142,
+      "overriden_lines": 0
+    }
+  }
+}

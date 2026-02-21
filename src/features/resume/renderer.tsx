@@ -529,6 +529,7 @@ function ResumeRendererComponent({
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
                   key={`${index}-left-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}
                 />
@@ -544,6 +545,7 @@ function ResumeRendererComponent({
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
                   key={`${index}-right-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}
                 />

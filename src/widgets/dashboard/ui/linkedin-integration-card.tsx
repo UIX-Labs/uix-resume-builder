@@ -49,7 +49,9 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     parseLinkedInMutation.mutate(cleanUrl, {
       onSuccess: (response) => {
         onClose();
-        const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;
+        const url = isMobile
+          ? `/resume/${response.resumeId}?openForm=true&importSource=linkedin`
+          : `/resume/${response.resumeId}?importSource=linkedin`;
         router.push(url);
         setLinkedinUrl('');
       },

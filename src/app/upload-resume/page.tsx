@@ -1,20 +1,19 @@
 'use client';
 
-import Header from '@widgets/landing-page/ui/header-section';
-import { useRouter } from 'next/navigation';
+import { formatFileSize, useParsePdfResume, validateFile } from '@entities/resume';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { notFound } from 'next/navigation';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { formatFileSize, useParsePdfResume, validateFile } from '@entities/resume';
-import { Breadcrumb } from '@widgets/upload-resume/ui/breadcrumb';
-import { SelectState } from '@widgets/upload-resume/ui/select-state';
-import { UploadingState } from '@widgets/upload-resume/ui/uploading-state';
-import { SuccessState } from '@widgets/upload-resume/ui/success-state';
-import { DeleteModal } from '@widgets/upload-resume/ui/delete-modal';
+import Header from '@widgets/landing-page/ui/header-section';
 import { UploadState } from '@widgets/upload-resume/lib/upload-state';
+import { Breadcrumb } from '@widgets/upload-resume/ui/breadcrumb';
+import { DeleteModal } from '@widgets/upload-resume/ui/delete-modal';
+import { SelectState } from '@widgets/upload-resume/ui/select-state';
+import { SuccessState } from '@widgets/upload-resume/ui/success-state';
+import { UploadingState } from '@widgets/upload-resume/ui/uploading-state';
+import { notFound, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function UploadResumePage() {
   const router = useRouter();
@@ -199,7 +198,7 @@ export default function UploadResumePage() {
       user_type: user.data?.isLoggedIn ? 'logged_in' : 'guest',
     });
 
-    router.push(`/resume/${state.resumeId}`);
+    router.push(`/resume/${state.resumeId}?importSource=pdf`);
   }, [state.resumeId, state.uploadedFile?.name, user.data?.isLoggedIn, router]);
 
   const handleBackClick = useCallback(() => {

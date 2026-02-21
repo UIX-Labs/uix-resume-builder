@@ -4,6 +4,8 @@ import { Modal } from '@shared/ui/components/modal';
 import { useEffect, useState } from 'react';
 // import { useAnalyzeFiles } from '@entities/jd-modal-mobile/hooks/use-analyze-files';
 import { useFileUploadHandlers } from '@entities/jd-modal-mobile/hooks/use-file-upload-handlers';
+import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
+import Image from 'next/image';
 import {
   ModalStep,
   ReadyToAnalyzeStep,
@@ -12,8 +14,6 @@ import {
   UploadJDStep,
   UploadResumeStep,
 } from './jd-upload-steps';
-import Image from 'next/image';
-import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
 
 interface JDUploadMobileModalProps {
   isOpen: boolean;
@@ -95,7 +95,7 @@ export default function JDUploadMobileModal({ isOpen, onClose, onSubmittingChang
                   return <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />;
 
                 case ModalStep.UPLOADING_JD:
-                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} />;
+                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />;
 
                 case ModalStep.UPLOAD_RESUME:
                   return (

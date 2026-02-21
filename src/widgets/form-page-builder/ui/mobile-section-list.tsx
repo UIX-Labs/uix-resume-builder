@@ -1,10 +1,10 @@
 import type { FormSchema, ResumeData, ResumeDataKey } from '@entities/resume';
-import { cn } from '@shared/lib/cn';
 import { ProfessionalSummary } from '@shared/icons/prof-summary';
-import { SECTION_ICONS } from '../lib/section-utils';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { Button } from '@shared/ui/button';
+import { cn } from '@shared/lib/cn';
 import { cleanHtml } from '@shared/lib/markdown';
+import { Button } from '@shared/ui/button';
+import { ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { SECTION_ICONS } from '../lib/section-utils';
 
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
@@ -12,12 +12,20 @@ interface MobileSectionListProps {
   formSchema: FormSchema | {};
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
+  importSource?: 'linkedin' | 'pdf' | null;
 }
 
-export function MobileSectionList({ navs, formData, formSchema, onSectionClick, onBackClick }: MobileSectionListProps) {
+export function MobileSectionList({
+  navs,
+  formData,
+  formSchema,
+  onSectionClick,
+  onBackClick,
+  importSource,
+}: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})
-      .filter(([_, sectionData]) => sectionData?.isCompleted)
+      .filter(([_, sectionData]) => typeof sectionData === 'object' && sectionData !== null && 'isCompleted' in sectionData && (sectionData as any).isCompleted)
       .map(([key]) => key),
   );
 
@@ -87,10 +95,12 @@ export function MobileSectionList({ navs, formData, formSchema, onSectionClick, 
 
         <div className="flex-1">
           <h1 className="text-[18px] font-semibold text-section-text-primary">Your resume is ready</h1>
-          <p className="text-[13px] text-section-text-secondary">
-            We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit, improve,
-            or personalize it anytime.
-          </p>
+          {importSource === 'linkedin' && (
+            <p className="text-[13px] text-section-text-secondary">
+              We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit,
+              improve, or personalize it anytime.
+            </p>
+          )}
         </div>
       </div>
 

@@ -70,7 +70,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/dashboard',
     },
     {
-      label: 'Blog',
+      label: 'Blogs',
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },

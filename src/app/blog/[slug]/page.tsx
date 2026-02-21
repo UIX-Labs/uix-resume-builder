@@ -1,15 +1,13 @@
-import ArticleHeader from '@/widgets/blog/slug/article-header';
-
+import { categories } from '@/data/categories';
+import ArticleHeader, { type BreadcrumbItem } from '@/widgets/blog/slug/article-header';
 import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
-import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
@@ -127,6 +125,26 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     }),
   };
 
+  const categoryTag = frontmatter.tags?.[0]?.toLowerCase();
+  const categoryInfo = categories.find((c) => c.id === categoryTag);
+  const categoryLabel = categoryInfo ? categoryInfo.title : categoryTag;
+
+  const breadcrumbs: BreadcrumbItem[] = [
+    { label: 'Home', href: '/' },
+    { label: 'Blogs', href: '/blog' },
+    ...(categoryTag
+      ? [
+          {
+            label: categoryLabel,
+            href: `/blog/categories/${categoryTag}`,
+          },
+        ]
+      : []),
+    {
+      label: frontmatter.title,
+    },
+  ];
+
   return (
     <>
       <Script
@@ -138,13 +156,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
         {/* Back link */}
-        <Link
+        {/* <Link
           href="/blog"
           className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to all articles
-        </Link>
+        </Link> */}
 
         {/* Article header */}
         {/*   <header className="mb-10">
@@ -194,6 +212,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           readingTime={readingTime}
           tags={frontmatter.tags}
           highlightWord={frontmatter.highlightWord}
+          breadcrumbs={breadcrumbs}
         />
 
         {/* Content + Sidebar */}
@@ -202,7 +221,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Sidebar - TOC */}
           {headings.length > 0 && (
             <aside className="lg:block shrink-0 w-full md:w-[320px] lg:w-[400px]">
-              <div className="block sticky top-20">
+              <div className="block sticky top-5">
                 <div className="hidden lg:block">
                   <TableOfContents headings={headings} />
                 </div>
@@ -216,13 +235,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="min-w-0 flex-1">
             <div className="relative">
               {/* Mobile sticky */}
-              <div className="lg:hidden sticky top-0 mb-6 bg-[#F5F5F7] z-50">
-                <TableOfContents headings={headings} />
+              <div className="bg-[#F2F3F9] lg:hidden sticky top-0  z-50 pb-4">
+                <div className="lg:hidden sticky top-0 bg-[#F5F5F7] z-50">
+                  <TableOfContents headings={headings} />
+                </div>
               </div>
 
               <div
-                className="prose prose-lg prose-gray prose-headings:scroll-mt-24 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
-prose-a:text-blue-500w-full"
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-24
+                 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
+                 prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
+                    prose-a:text-blue-500w-full
+                    prose-table:mx-auto
+                    prose-table:w-full
+                    prose-th:text-center
+                    prose-td:text-center
+                    prose-th:px-4
+                    prose-td:px-4
+                    prose-th:py-3
+                    prose-td:py-3"
               >
                 <MDXRemote
                   source={content}
@@ -269,13 +300,15 @@ prose-a:text-blue-500w-full"
           </section> */}
 
         {/* )} */}
-        <div className="mt-10 gap-4  md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-4 border-white">
-          <div className="text-[36px] font-bold text-center p-2">Continue Reading</div>
-          <span className="text-[20px] text-gray-500 text-center block">
+        <div className="mt-10 lg:p-4 lg:mt-25 gap-2 md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-white">
+          <div className="text-xl md:text-[36px] font-bold text-center p-2 md:p-0 mt-4 md:mt-10 px-2">
+            Continue Reading
+          </div>
+          <span className="text-md md:text-[20px] text-gray-500 text-center block p-2 md:p-0 px-2">
             Check more recommended readings to get the job of your dreams.
           </span>
 
-          <div className="flex mt-10 justify-center p-2">
+          <div className="flex mt-4 md:mt-10 justify-center p-2">
             <BlogGrid posts={allPosts} />
           </div>
         </div>

@@ -25,8 +25,9 @@ export function LandingPage() {
       >
         <HeroSection />
       </div>
-
-      <AiFeaturesSection />
+      <div>
+        <AiFeaturesSection />
+      </div>
 
       <div>
         <TemplateCarousel />

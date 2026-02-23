@@ -114,7 +114,7 @@ export default function JDSection() {
             muted
             loop
             playsInline
-            preload="none"
+            preload="auto"
             className="h-full w-full object-cover"
             src="/videos/jdsection.mp4"
           />

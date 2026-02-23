@@ -32,7 +32,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
       return;
     }
 
-    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+\/?$/;
+    const linkedinPattern = /^https?:\/\/(www\.)?linkedin\.com\/in\/[\w-]+(\/.*)?(\?.*)?$/;
     if (!linkedinPattern.test(linkedinUrl.trim())) {
       setError('Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/your-profile)');
       return;
@@ -40,10 +40,13 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
 
     setError(null);
 
+    // Remove UTM parameters
+    const cleanUrl = linkedinUrl.trim().split('?')[0];
+
     // Ensure guest email exists for API tracking if user is not logged in
     getOrCreateGuestEmail();
 
-    parseLinkedInMutation.mutate(linkedinUrl.trim(), {
+    parseLinkedInMutation.mutate(cleanUrl, {
       onSuccess: (response) => {
         onClose();
         const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;

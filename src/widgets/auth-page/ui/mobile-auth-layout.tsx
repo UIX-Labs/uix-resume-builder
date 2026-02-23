@@ -9,12 +9,16 @@ import { Button } from '@shared/ui/components/button';
 import Header from '@widgets/landing-page/ui/header-section';
 import MobileAuthModal from './mobile-auth-modal';
 import { cn } from '@shared/lib/utils';
+import { useSearchParams } from 'next/navigation';
+import { setReferrerUserId } from '@shared/lib/referrer-user-id';
 
 type Stage = 'intro' | 'shrink' | 'cta';
 
 export default function MobileAuthLayout() {
   const [stage, setStage] = useState<Stage>('intro');
   const [openAuthModal, setOpenAuthModal] = useState(false);
+  const [isReferralLogin, setIsReferralLogin] = useState(false);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const t1 = setTimeout(() => setStage('shrink'), 600);
@@ -25,6 +29,15 @@ export default function MobileAuthLayout() {
       clearTimeout(t2);
     };
   }, []);
+
+  useEffect(() => {
+    // Capture referrer userId from URL parameters
+    const userId = searchParams.get('userId');
+    if (userId) {
+      setReferrerUserId(userId);
+      setIsReferralLogin(true);
+    }
+  }, [searchParams]);
 
   return (
     <div className={`flex flex-col items-center px-4 ${stage === 'intro' ? 'justify-center' : 'min-h-screen'}`}>
@@ -54,7 +67,15 @@ export default function MobileAuthLayout() {
           className="w-full max-w-[360px] mt-6 space-y-4 text-center"
         >
           <h1 className="text-center text-4xl font-semibold leading-none">
-            Build Your <p className="font-black">Perfect Resume</p>
+            {isReferralLogin ? (
+              <>
+                Sign Up & Get <p className="font-black">1 Free Download</p>
+              </>
+            ) : (
+              <>
+                Build Your <p className="font-black">Perfect Resume</p>
+              </>
+            )}
           </h1>
 
           <LinkedInSignInButton />

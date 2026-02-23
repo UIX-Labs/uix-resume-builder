@@ -1,104 +1,109 @@
-#Deploy resume-builder-fe-service
-name: deploy resume-builder-fe-service
+name: Deploy Frontend (Staging)
+
 on:
   push:
     branches:
-      - main
+      - stage
   workflow_dispatch:
-      
+
 env:
   AWS_REGION: ap-south-1
+  ECR_REPOSITORY: pikaresume-fe-image
+  ECS_CLUSTER: pikaresume-cluster
+  ECS_SERVICE: pikaresume-fe-svc
+  TASK_DEFINITION_NAME: pikaresume-fe-td
+  CONTAINER_NAME: pikaresume-fe-container
 
 jobs:
   deploy:
-    name: deploy resume-builder-fe-service
+    name: Deploy to ECS (Staging)
     runs-on: ubuntu-22.04
+    environment: ENV_STAGING   
+
     steps:
-      - name: Checkout Code
+      # 1️⃣ Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Environment Variables
-        run: |
-          echo "PROJECT_NAME=resume-builder" >> $GITHUB_ENV
-          echo "ECR_REPOSITORY=resume-builder-fe-image" >> $GITHUB_ENV
-          echo "ECS_SERVICE=resume-builder-fe-svc" >> $GITHUB_ENV
-          echo "ECS_CLUSTER=resume-builder-cluster" >> $GITHUB_ENV
-          echo "TASK_DEFINITION_NAME=resume-builder-fe-td" >> $GITHUB_ENV
-          echo "CONTAINER_NAME=resume-builder-fe-container" >> $GITHUB_ENV
-
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
-          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-
-          # Next.js build-time env vars
-          echo "NEXT_PUBLIC_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_REDIRECT_URI }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_ENV=${{ secrets.NEXT_PUBLIC_ENV || 'production' }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ secrets.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_MIXPANEL_TOKEN=${{ secrets.NEXT_PUBLIC_MIXPANEL_TOKEN }}" >> $GITHUB_ENV
-          echo "NEXT_PUBLIC_DOMAIN_URL=${{ secrets.NEXT_PUBLIC_DOMAIN_URL }}" >> $GITHUB_ENV
-          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
-
-      - name: Configure AWS Credentials
+      # 2️⃣ Configure AWS credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # 3️⃣ Login to Amazon ECR
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, Tag, and Push Image to Amazon ECR
+      # 4️⃣ Create .env.staging from Environment secrets
+      - name: Create .env.staging
+        run: |
+          cat <<EOF > .env.staging
+          NEXT_PUBLIC_BACKEND_URL=${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
+          NEXT_PUBLIC_DOMAIN_URL=${{ secrets.NEXT_PUBLIC_DOMAIN_URL }}
+          NEXT_PUBLIC_ENV=${{ secrets.NEXT_PUBLIC_ENV }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+          NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }}
+          NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }}
+          NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }}
+          NEXT_PUBLIC_MIXPANEL_TOKEN=${{ secrets.NEXT_PUBLIC_MIXPANEL_TOKEN }}
+          NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ secrets.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }}
+          NEXT_PUBLIC_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_REDIRECT_URI }}
+          SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+          EOF
+
+      # 5️⃣ Build & push Docker image (unchanged logic)
+      - name: Build, tag, and push image to ECR
         id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker build \
-            --build-arg ENVIRONMENT=${{ env.ENVIRONMENT }} \
-            --build-arg NEXT_PUBLIC_REDIRECT_URI=${{ env.NEXT_PUBLIC_REDIRECT_URI }} \
-            --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_ID=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_ID }} \
-            --build-arg NEXT_PUBLIC_GOOGLE_REDIRECT_URI=${{ env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI }} \
-            --build-arg NEXT_PUBLIC_BACKEND_URL=${{ env.NEXT_PUBLIC_BACKEND_URL }} \
-            --build-arg NEXT_PUBLIC_GOOGLE_CLIENT_ID=${{ env.NEXT_PUBLIC_GOOGLE_CLIENT_ID }} \
-            --build-arg NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET=${{ env.NEXT_PUBLIC_LINKEDIN_CLIENT_SECRET }} \
-            --build-arg NEXT_PUBLIC_ENV=${{ env.NEXT_PUBLIC_ENV }} \
-            --build-arg NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN=${{ env.NEXT_PUBLIC_PERCEPT_PROJECT_TOKEN }} \
-            --build-arg NEXT_PUBLIC_MIXPANEL_TOKEN=${{ env.NEXT_PUBLIC_MIXPANEL_TOKEN }} \
-            --build-arg NEXT_PUBLIC_DOMAIN_URL=${{ env.NEXT_PUBLIC_DOMAIN_URL }} \
-            --build-arg SENTRY_AUTH_TOKEN=${{ env.SENTRY_AUTH_TOKEN }} \
-            -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG} .
+            --build-arg ENV_FILE=.env.staging \
+            -t $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:staging-${IMAGE_TAG} .
 
-          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG}
-          echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:${{ env.PROJECT_NAME }}-${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          docker push $ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:staging-${IMAGE_TAG}
 
-      - name: Download Task Definition
+          echo "image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }}:staging-${IMAGE_TAG}" >> $GITHUB_OUTPUT
+
+      # 6️⃣ Download ECS task definition
+      - name: Download ECS task definition
         run: |
           aws ecs describe-task-definition \
             --task-definition ${{ env.TASK_DEFINITION_NAME }} \
-            --query taskDefinition > tmp-task-definition.json
+            --query taskDefinition > task-def.json
 
-      - name: Clean Task Definition
+      # 7️⃣ Clean task definition
+      - name: Clean task definition
         run: |
-          jq 'del(.enableFaultInjection)' tmp-task-definition.json > task-definition.json
+          jq 'del(
+            .taskDefinitionArn,
+            .revision,
+            .status,
+            .requiresAttributes,
+            .compatibilities,
+            .registeredAt,
+            .registeredBy
+          )' task-def.json > cleaned-task-def.json
 
-      - name: Update Task Definition with New Image
-        id: task-def
+      # 8️⃣ Inject new image
+      - name: Render new task definition
+        id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task-definition.json
+          task-definition: cleaned-task-def.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
-      - name: Deploy resume-builder-fe-service
+      # 9️⃣ Deploy to ECS
+      - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true

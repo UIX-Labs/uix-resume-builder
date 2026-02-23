@@ -1,11 +1,11 @@
 'use client';
 
-import { useSelectTemplate } from '@shared/hooks/use-select-template';
-import { FacebookIcon, LinkedInIcon, TwitterIcon, WhatsappIcon } from '@shared/icons';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { Star } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function BlogCreateResume() {
-  const { handleUseTemplate } = useSelectTemplate();
+  const router = useRouter();
   return (
     <>
       <div
@@ -25,7 +25,7 @@ export default function BlogCreateResume() {
         />
 
         <div className="text-2xl md:text-5xl font-semibold relative z-10">
-          Create your <span className="text-green-600">Resume</span>
+          Create your <span className="text-green-600 font-semibold">Resume</span>
         </div>
 
         <div className="text-base md:text-2xl max-w-[486px] text-center relative z-10">
@@ -34,8 +34,14 @@ export default function BlogCreateResume() {
 
         <button
           type="button"
-          className="bg-green-600 text-white px-8 py-3 md:py-4 rounded-md mb-2 md:mb-0 mt-2 hover:bg-green-700 transition-colors duration-300 cursor-pointer relative z-10 shadow-lg"
-          onClick={() => handleUseTemplate('template1')}
+          className="bg-green-600 text-lg lg:text-xl text-white px-4 py-3 md:py-4 font-semibold rounded-md mb-2 md:mb-0 mt-2 hover:bg-green-700 transition-colors duration-300 cursor-pointer relative z-10 shadow-lg"
+          onClick={() => {
+            router.push('/dashboard');
+            trackEvent('create_resume_click', {
+              source: 'blog',
+              method: 'create_my_resume',
+            });
+          }}
         >
           Create your Resume
         </button>
@@ -43,15 +49,15 @@ export default function BlogCreateResume() {
 
       <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="flex gap-1 mb-2">
-            <Star className="fill-yellow-300 text-yellow-300 w-5 h-5" />
-            <Star className="fill-yellow-300 text-yellow-300 w-5 h-5" />
-            <Star className="fill-yellow-300 text-yellow-300 w-5 h-5" />
-            <Star className="fill-yellow-300 text-yellow-300 w-5 h-5" />
-            <div className="relative w-5 h-5">
-              <Star className="text-gray-300 absolute inset-0 w-5 h-5" />
+          <div className="flex gap-2 mb-2">
+            <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
+            <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
+            <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
+            <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
+            <div className="relative w-6 h-6">
+              <Star className="text-gray-300 absolute inset-0 w-6 h-6" />
               <div className="absolute inset-0 overflow-hidden w-[50%]">
-                <Star className="fill-yellow-300 text-yellow-300 w-5 h-5" />
+                <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
               </div>
             </div>
           </div>
@@ -61,12 +67,12 @@ export default function BlogCreateResume() {
           </div>
         </div>
 
-        <div className="flex gap-4 h-full justify-center items-center">
-          <TwitterIcon className="w-6 h-6 text-black" />
-          <LinkedInIcon className="w-6 h-6 text-black" />
-          <WhatsappIcon className="w-6 h-6 text-black" />
-          <FacebookIcon className="w-6 h-6 text-black" />
-        </div>
+        {/* <div className="flex gap-4 h-full justify-center items-center">
+          <img src="/images/WhatsApp.svg" alt="" className="w-11 h-11 text-black" />
+          <img src="/images/blog/Facebook.svg" alt="" className="w-11 h-11 text-black" />
+          <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />
+          <LinkedInIcon className="w-10 h-10 text-black" />
+        </div> */}
       </div>
     </>
   );

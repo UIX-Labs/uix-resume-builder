@@ -867,7 +867,7 @@ export function FormPageBuilder() {
           </div>
         </div>
 
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white overflow-hidden">
           <Header />
 
           <MobileSectionList
@@ -953,7 +953,7 @@ export function FormPageBuilder() {
           </div>
           <div
             style={{
-              position: 'absolute',
+              position: 'fixed',
               left: '0',
               top: '0',
               width: '794px',

@@ -27,6 +27,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const tags = getAllTags();
 
+  const tags = getAllTags();
+
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {
       const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');

@@ -1,12 +1,37 @@
 import { Search } from 'lucide-react';
+import { useRef } from 'react';
 
 interface SearchBarProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   placeholder?: string;
+  scrollToResults?: boolean;
 }
 
-export default function SearchBar({ searchQuery, setSearchQuery, placeholder }: SearchBarProps) {
+export default function SearchBar({ searchQuery, setSearchQuery, placeholder, scrollToResults }: SearchBarProps) {
+
+
+ const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleChange = (value: string) => {
+    setSearchQuery(value);
+
+    if (!value.trim() || !scrollToResults) return;
+
+    // Clear previous timeout
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    // Set new timeout
+    debounceRef.current = setTimeout(() => {
+      const element = document.getElementById('blog-grid');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 500); 
+  };
+
   return (
     <div className="relative w-full sm:min-w-[350px] max-w-[450px]">
       <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -17,7 +42,7 @@ export default function SearchBar({ searchQuery, setSearchQuery, placeholder }: 
         type="text"
         placeholder={placeholder}
         value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         className="w-full pl-5 pr-11 py-2.5 sm:py-3 text-sm sm:text-base 
                    bg-white border border-gray-100 rounded-3xl
                    focus:outline-none focus:ring-2 focus:ring-blue-500 

@@ -46,7 +46,7 @@ export function UploadView({ onUpload, onSignIn, onClose }: UploadViewProps) {
               </span>
             </h2>
             <p
-              className="text-expert-subheading font-normal text-sm sm:text-base leading-[22px] tracking-[-0.18px] max-w-md whitespace-nowrap"
+              className="text-expert-subheading font-normal text-sm sm:text-base leading-[22px] tracking-[-0.18px] max-w-md lg:whitespace-nowrap"
               style={GEIST_FONT}
             >
               Upload your resume and get a detailed manual review from experts.

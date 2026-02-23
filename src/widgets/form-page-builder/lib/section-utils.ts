@@ -14,6 +14,45 @@ export const SECTION_ICONS = {
   achievements: Achievements,
 } as const;
 
+export const SECTION_PLACEHOLDERS: Record<string, { primary: string; secondary: string | null }> = {
+  personalDetails: {
+    primary: 'Akshat',
+    secondary: 'Software Engineer',
+  },
+  professionalSummary: {
+    primary: 'Briefly explain why you are a great fit...',
+    secondary: null,
+  },
+  experience: {
+    primary: 'Title',
+    secondary: 'Company Name',
+  },
+  education: {
+    primary: 'Degree',
+    secondary: 'College',
+  },
+  skills: {
+    primary: 'Skill Name',
+    secondary: 'null',
+  },
+  achievements: {
+    primary: 'Achievement',
+    secondary: null,
+  },
+  certifications: {
+    primary: 'Certification Title',
+    secondary: 'Issuer',
+  },
+  interests: {
+    primary: 'Interest',
+    secondary: null,
+  },
+  projects: {
+    primary: 'Project Title',
+    secondary: 'Description',
+  },
+} as const;
+
 // Check if a section has content (excluding suggestedUpdates field)
 export function sectionHasContent(sectionData: unknown): boolean {
   if (!sectionData || typeof sectionData !== 'object') {

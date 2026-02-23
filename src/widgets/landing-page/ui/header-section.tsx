@@ -21,7 +21,9 @@ function Header({ variant = 'default' }: HeaderProps) {
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes'].some((route) => pathname.startsWith(route));
+  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes', '/referral'].some((route) =>
+    pathname.startsWith(route),
+  );
 
   const handleNavigate = () => {
     router.push('/dashboard');

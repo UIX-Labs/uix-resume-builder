@@ -1,7 +1,6 @@
 'use client';
 
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function BlogCreateResume() {
@@ -47,7 +46,7 @@ export default function BlogCreateResume() {
         </button>
       </div>
 
-      <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
+      {/* <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
           <div className="flex gap-2 mb-2">
             <Star className="fill-yellow-300 text-yellow-300 w-6 h-6" />
@@ -65,15 +64,15 @@ export default function BlogCreateResume() {
             Average: 4.75/5 rated by 50+ people in last 7 days,{' '}
             <span className="text-gray-500 cursor-pointer">click to rate this article.</span>
           </div>
-        </div>
+        </div> */}
 
-        {/* <div className="flex gap-4 h-full justify-center items-center">
+      {/* <div className="flex gap-4 h-full justify-center items-center">
           <img src="/images/WhatsApp.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/Facebook.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />
           <LinkedInIcon className="w-10 h-10 text-black" />
         </div> */}
-      </div>
+      {/* </div> */}
     </>
   );
 }

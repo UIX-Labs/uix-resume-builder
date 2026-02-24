@@ -1,9 +1,10 @@
 'use client';
 
-import { BlogPost } from '@shared/lib/blog';
+import { BlogPost } from '@/shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
+import NotFoundSearch from './components/not-found-search';
 import SearchBar from './components/search-bar';
 
 export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
@@ -47,7 +48,12 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
             </div>
 
             <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-              <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} placeholder="Search Article" />
+              <SearchBar
+                setSearchQuery={setSearchQuery}
+                searchQuery={searchQuery}
+                placeholder="Search Article"
+                scrollToResults
+              />
             </div>
           </div>
 
@@ -59,8 +65,12 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
             <CategoriesSection />
           </div>
 
-          <div className="mt-6 md:mt-10 mb-2 md:mb-4">
-            <BlogGrid posts={filteredPosts} />
+          <div id="blog-grid" className="mt-6 md:mt-10 mb-2 md:mb-4">
+            {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
+              <NotFoundSearch tags={tags} />
+            ) : (
+              <BlogGrid posts={filteredPosts} />
+            )}
           </div>
         </div>
       </main>

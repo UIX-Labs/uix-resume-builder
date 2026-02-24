@@ -1,6 +1,7 @@
 'use client';
 
 import BlogGrid from '@/widgets/blog/blog-Grid';
+import NotFoundSearch from '@/widgets/blog/components/not-found-search';
 import SearchBar from '@/widgets/blog/components/search-bar';
 import { BlogPost } from '@shared/lib/blog';
 import { useState } from 'react';
@@ -10,9 +11,11 @@ interface Props {
   title: string;
   placeholder: string;
   color: string;
+  currentCategoryId?: string;
+  tags: string[];
 }
 
-export default function CategoryPageContent({ posts, title, placeholder, color }: Props) {
+export default function CategoryPageContent({ posts, title, placeholder, color, currentCategoryId, tags }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>
@@ -30,13 +33,19 @@ export default function CategoryPageContent({ posts, title, placeholder, color }
         </div>
 
         <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-          <SearchBar setSearchQuery={setSearchQuery} placeholder={placeholder} searchQuery={searchQuery} />
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            placeholder={placeholder}
+            searchQuery={searchQuery}
+            scrollToResults
+          />
         </div>
       </div>
 
       {/* GRID */}
-      <div className="mt-10">
-        <BlogGrid posts={searchedPosts} />
+      <div id="blog-grid" className="mt-10">
+        {searchedPosts.length === 0 && <NotFoundSearch tags={tags} />}
+        <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>
     </div>
   );

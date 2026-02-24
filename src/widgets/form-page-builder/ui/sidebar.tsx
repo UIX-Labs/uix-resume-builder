@@ -1,7 +1,7 @@
 import { cn } from '@shared/lib/cn';
 import { ProgressCircle } from '@shared/ui/progress-circle';
 import { useFormPageBuilder } from '../models/ctx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useFormDataStore } from '../models/store';
 import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 import { useParams } from 'next/navigation';
@@ -13,6 +13,7 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { useRouter } from 'next/navigation';
 import { NavigationItem } from './navigation-item';
 import { BuilderIntelligenceCard } from './builder-intelligence-card';
+import { isSectionEmpty } from '../lib/section-utils';
 
 export function Sidebar() {
   const [progress, setProgress] = useState(0);
@@ -34,6 +35,14 @@ export function Sidebar() {
   const isTailoredWithJD = useAnalyzerStore((state) => state.isTailoredWithJD);
 
   const isAnalyzed = resumeDataFromContext?.isAnalyzed ?? false;
+
+  const isResumeEmpty = useMemo(() => {
+    if (!resumeData) return true;
+    const sectionKeys = Object.keys(resumeData).filter(
+      (key) => key !== 'templateId' && key !== 'updatedAt' && key !== 'template',
+    );
+    return sectionKeys.every((key) => isSectionEmpty(resumeData[key as keyof typeof resumeData]));
+  }, [resumeData]);
 
   const handleLogoClick = () => {
     queryClient.invalidateQueries({ queryKey: ['resumes'] });
@@ -91,6 +100,7 @@ export function Sidebar() {
           isAnalyzed={isAnalyzed}
           isAnalyzing={isAnalyzing}
           isTailoredWithJD={isTailoredWithJD}
+          isResumeEmpty={isResumeEmpty}
           onAnalyze={onBuilderIntelligence}
         />
       )}

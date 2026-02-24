@@ -1,5 +1,7 @@
+import { debounce } from '@/shared/lib/utils';
 import { Search } from 'lucide-react';
-import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -8,29 +10,28 @@ interface SearchBarProps {
   scrollToResults?: boolean;
 }
 
+
 export default function SearchBar({ searchQuery, setSearchQuery, placeholder, scrollToResults }: SearchBarProps) {
+  const router = useRouter();
 
+    const scrollToGrid = () =>{
+      router.push('#blog-grid');
+    }
 
- const debounceRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedScroll = useMemo(
+    () => debounce(scrollToGrid, 500),
+    [router]
+  );
 
-  const handleChange = (value: string) => {
-    setSearchQuery(value);
+    const handleChange = (value: string) => {
+      setSearchQuery(value);
 
     if (!value.trim() || !scrollToResults) return;
 
-    // Clear previous timeout
-    if (debounceRef.current) {
-      clearTimeout(debounceRef.current);
-    }
-
-    // Set new timeout
-    debounceRef.current = setTimeout(() => {
-      const element = document.getElementById('blog-grid');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 500); 
+    debouncedScroll();
   };
+
+ 
 
   return (
     <div className="relative w-full sm:min-w-[350px] max-w-[450px]">

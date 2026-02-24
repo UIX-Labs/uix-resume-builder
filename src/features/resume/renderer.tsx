@@ -502,10 +502,9 @@ function ResumeRendererComponent({
       >
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
-            {bannerItems.map((s: any, i: number) => {
-              const stableKey = s.id || `${s.type}-${i}`;
+            {bannerItems.map((s: any) => {
               return (
-                <React.Fragment key={stableKey}>
+                <React.Fragment key={s.id}>
                   {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                 </React.Fragment>
               );
@@ -518,7 +517,7 @@ function ResumeRendererComponent({
               i < leftItems.length - 1 &&
               leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={s.id || i}>
+              <React.Fragment key={s.id}>
                 {renderSection(
                   s,
                   data,
@@ -538,7 +537,7 @@ function ResumeRendererComponent({
               i < rightItems.length - 1 &&
               rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={s.id || i}>
+              <React.Fragment key={s.id}>
                 {renderSection(
                   s,
                   data,
@@ -582,8 +581,8 @@ function ResumeRendererComponent({
                   marginTop: `-${PAGE_PADDING}px`,
                 }}
               >
-                {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={s.id || i}>
+                {bannerItems.map((s: any) => (
+                  <React.Fragment key={s.id}>
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
                 ))}
@@ -595,9 +594,9 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {leftColumn.map((node: any, i) => (
+              {leftColumn.map((node: any) => (
                 <div
-                  key={node.id || i}
+                  key={node.id}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}
@@ -610,9 +609,9 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {rightColumn.map((node: any, i) => (
+              {rightColumn.map((node: any) => (
                 <div
-                  key={node.id || i}
+                  key={node.id}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}

@@ -146,16 +146,12 @@ export const MobileNavDrawer = ({
                               {section.label}
                             </h3>
                           )}
-                          <ul className="space-y-4">
-                            {section.items.map((item, itemIndex) =>
-                              renderNavItem(item, `${section.label}-${itemIndex}`),
-                            )}
-                          </ul>
+                          <ul className="space-y-4">{section.items.map((item) => renderNavItem(item, item.label))}</ul>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <ul className="space-y-4">{navItems.map((item, index) => renderNavItem(item, index))}</ul>
+                    <ul className="space-y-4">{navItems.map((item) => renderNavItem(item, item.label))}</ul>
                   )}
                 </div>
               </nav>

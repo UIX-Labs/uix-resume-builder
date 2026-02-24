@@ -110,7 +110,6 @@ export function TemplateCarousel() {
 
   const { data: templates } = useGetAllTemplates();
 
-  // Limit templates to 3 on mobile, show all on desktop
   const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
 
   return (
@@ -264,15 +263,10 @@ export function TemplateCarousel() {
           <div className="flex justify-center lg:justify-end lg:pr-[440px] pb-4 lg:pb-[29px]">
             <div className="flex items-center gap-3">
               {displayTemplates?.map((template, index) => {
-                // 1. Logic block starts with {
-                // 2. Define your stable key
-                const templateKey = template.id || `template-dot-${index}`;
-
-                // 3. Explicitly return the JSX
                 return (
                   <button
                     type="button"
-                    key={templateKey}
+                    key={template.id}
                     onClick={() => scrollTo(index)}
                     className={cn(
                       'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',

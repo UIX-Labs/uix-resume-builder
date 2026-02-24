@@ -57,7 +57,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   return (
     <nav className="relative top-0 lg:static w-full rounded-xl border-2 border-white bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 lg:p-5 bg-gray-100">
-      <div className="mb-2 lg:mb-4 flex flex-row justify-between items-center gap-4">
+      <div className="mb-2 lg:mb-4 flex flex-row justify-between items-center gap-4 cursor-pointer">
         <h3 className="text-sm lg:text-lg font-semibold text-gray-900 shrink-0">In this Article</h3>
 
         <p className="block lg:hidden text-sm lg:text-base text-black font-medium truncate italic max-w-[200px]">
@@ -69,7 +69,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
         <div className="h-full bg-[#22C55E] transition-all duration-300" style={{ width: `${readProgress * 100}%` }} />
       </div>
 
-      <ul className="hidden lg:block space-y-2 max-h-[70vh] overflow-y-auto scrollbar-hide">
+      <ul className="hidden lg:block space-y-2 max-h-[70vh] overflow-y-auto scrollbar-hide cursor-pointer">
         {headings.map((heading) => (
           <li key={heading.id}>
             <button
@@ -77,7 +77,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
               onClick={() => {
                 const el = document.getElementById(heading.id);
                 if (el) {
-                  const offset = 120; // Increased offset for sticky header
+                  const offset = 20;
                   const bodyRect = document.body.getBoundingClientRect().top;
                   const elementRect = el.getBoundingClientRect().top;
                   const elementPosition = elementRect - bodyRect;
@@ -90,10 +90,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                 }
               }}
               className={cn(
-                'block text-base lg:text-lg transition-colors text-left mt-2 lg:mt-4',
+                'block text-base lg:text-lg transition-colors text-left mt-2 lg:mt-4 cursor-pointer',
                 heading.level === 3 && 'pl-3',
                 heading.level === 4 && 'pl-6',
-                activeId === heading.id ? 'text-black font-semibold' : 'text-gray-400 hover:text-gray-700',
+                activeId === heading.id ? 'text-black font-semibold' : 'text-gray-400 hover:text-gray-700 cursor-pointer',
               )}
             >
               {heading.text}

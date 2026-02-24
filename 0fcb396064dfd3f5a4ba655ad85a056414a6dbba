@@ -1,0 +1,36 @@
+src/app/globals.css
+  c6d298b6d00647b1 693-694
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "0fcb396064dfd3f5a4ba655ad85a056414a6dbba",
+  "prompts": {
+    "2113b31a397a83b8": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "382867",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    },
+    "c6d298b6d00647b1": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "382868",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 1,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}

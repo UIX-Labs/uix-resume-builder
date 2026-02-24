@@ -1,10 +1,49 @@
 import { cn } from '@shared/lib/cn';
-import * as React from 'react';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderSection, willSectionRender } from './lib/section-renderers';
+
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
+
+// ---------------------------------------------------------------------------
+// Pagination helpers
+// ---------------------------------------------------------------------------
+
+const DEFAULT_SAFE_BOTTOM_PADDING_PX = 24;
+
+function isTextOnlyElement(el: HTMLElement): boolean {
+  if (el.children.length > 0) return false;
+  const text = el.textContent ?? '';
+  return text.trim().length > 0;
+}
+
+function splitTextBlock(el: HTMLElement): HTMLElement | null {
+  const html = el.innerHTML;
+  if (!html) return null;
+
+  let parts = html.split(/\n\n+/);
+  if (parts.length <= 1) parts = html.split(/\n/);
+  if (parts.length <= 1) parts = html.split(/<br\s*\/?>\s*<br\s*\/?>/i);
+  if (parts.length <= 1) return null;
+
+  const nonEmptyParts = parts.filter((p) => p.trim().length > 0);
+  if (nonEmptyParts.length <= 1) return null;
+
+  const wrapper = el.cloneNode(false) as HTMLElement;
+  for (const part of nonEmptyParts) {
+    const partDiv = document.createElement('div');
+    partDiv.innerHTML = part;
+    wrapper.appendChild(partDiv);
+  }
+
+  return wrapper;
+}
+
+function removeBorderClasses(el: HTMLElement) {
+  if (!el.classList) return;
+  el.classList.remove('border-b', 'border-t', 'border-l', 'border-r', 'border');
+}
 
 export type RenderProps = {
   template: any;
@@ -30,229 +69,6 @@ function ResumeRendererComponent({
 
   const { page } = template;
 
-  const PAGE_HEIGHT = 1122;
-  const PAGE_PADDING = page.padding ?? 24;
-
-  // NEW: dynamic max height per column
-  const PAGE_PADDING_PX = PAGE_PADDING;
-  const _COLUMN_MAX_DEFAULT = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
-
-  useLayoutEffect(() => {
-    const container = dummyContentRef.current;
-    if (!container) return;
-    // Note: skipImageFallbacks is used to hide profile pictures when no image is set during PDF generation
-
-    // Get the actual computed height of the banner as it appears in the grid
-    const bannerEl = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
-    const bHeight = bannerEl ? bannerEl.offsetHeight : 0;
-
-    // On the first page, the columns are in a grid row below the banner.
-    // The banner's negative top margin means it occupies space starting from the top.
-    // However, the column content is still subject to the page's bottom padding.
-    const pageMaxFirst = PAGE_HEIGHT - bHeight - PAGE_PADDING_PX;
-    const pageMaxOther = PAGE_HEIGHT - PAGE_PADDING_PX * 2;
-
-    const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
-    const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
-
-    const leftPages: React.ReactNode[][] = [];
-    const rightPages: React.ReactNode[][] = [];
-
-    function paginateOneColumn(columnEl: HTMLElement, _columnName: 'left' | 'right', outPages: React.ReactNode[][]) {
-      const pageMax = pageMaxOther;
-
-      // Create a test container to measure actual heights
-      const testContainer = document.createElement('div');
-      testContainer.style.position = 'absolute';
-      testContainer.style.visibility = 'hidden';
-      testContainer.style.left = '-9999px';
-      testContainer.style.top = '0';
-
-      // Copy all computed styles from the column to ensure accurate measurements
-      const columnStyles = getComputedStyle(columnEl);
-      testContainer.style.width = columnStyles.width;
-      testContainer.style.fontFamily = columnStyles.fontFamily;
-      testContainer.style.fontSize = columnStyles.fontSize;
-      testContainer.style.lineHeight = columnStyles.lineHeight;
-      testContainer.style.letterSpacing = columnStyles.letterSpacing;
-      testContainer.style.wordSpacing = columnStyles.wordSpacing;
-      testContainer.className = columnEl.className;
-
-      document.body.appendChild(testContainer);
-
-      // State management
-      let currentPageIndex = 0;
-      outPages.push([]);
-
-      // Stack to track parent wrappers we're currently inside
-      const containerStack: HTMLElement[] = [];
-
-      function getCurrentPageMax(): number {
-        return currentPageIndex === 0 ? pageMaxFirst : pageMax;
-      }
-
-      function getPageHeight(): number {
-        testContainer.innerHTML = '';
-        const currentPageNodes = outPages[currentPageIndex];
-
-        currentPageNodes.forEach((node: any) => {
-          if (node.nodeType) {
-            testContainer.appendChild(node.cloneNode(true));
-          }
-        });
-
-        return testContainer.getBoundingClientRect().height;
-      }
-
-      function startNewPage() {
-        currentPageIndex++;
-        outPages.push([]);
-
-        // Recreate the container stack on the new page
-        for (let i = 0; i < containerStack.length; i++) {
-          const originalContainer = containerStack[i];
-          const newContainer = originalContainer.cloneNode(false) as HTMLElement;
-
-          if (i === 0) {
-            // First container goes directly on the page
-            outPages[currentPageIndex].push(newContainer as any);
-          } else {
-            // Nested containers get appended to their parent
-            const parent = findContainerOnCurrentPage(i - 1);
-            if (parent) {
-              parent.appendChild(newContainer);
-            }
-          }
-
-          // Update the stack reference
-          containerStack[i] = newContainer;
-        }
-      }
-
-      function findContainerOnCurrentPage(stackIndex: number): HTMLElement | null {
-        if (stackIndex < 0 || stackIndex >= containerStack.length) return null;
-        return containerStack[stackIndex];
-      }
-
-      function getCurrentContainer(): HTMLElement | null {
-        return containerStack.length > 0 ? containerStack[containerStack.length - 1] : null;
-      }
-
-      function addToPage(element: HTMLElement) {
-        const container = getCurrentContainer();
-        if (container) {
-          container.appendChild(element);
-        } else {
-          outPages[currentPageIndex].push(element as any);
-        }
-      }
-
-      function processChildren(parentEl: HTMLElement) {
-        const children = Array.from(parentEl.children) as HTMLElement[];
-
-        for (const child of children) {
-          const tagName = child.tagName?.toLowerCase();
-          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div'].includes(tagName);
-          const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
-          const hasBreakableContent =
-            child.querySelector('[data-canbreak="true"]') !== null ||
-            child.querySelector('[data-has-breakable-content="true"]') !== null ||
-            child.getAttribute('data-has-breakable-content') === 'true';
-
-          // Try adding the full element first
-          const clone = child.cloneNode(true) as HTMLElement;
-          addToPage(clone);
-
-          const currentHeight = getPageHeight();
-          const max = getCurrentPageMax();
-
-          // If it fits, keep it and continue
-          if (currentHeight <= max) {
-            continue;
-          }
-
-          // It doesn't fit - remove it
-          const container = getCurrentContainer();
-          if (container?.contains(clone)) {
-            container.removeChild(clone);
-          } else {
-            outPages[currentPageIndex].pop();
-          }
-
-          // Try to break it
-          if ((canBreak || hasBreakableContent) && child.children.length > 0) {
-            // Create empty wrapper and add to current page
-            const wrapper = child.cloneNode(false) as HTMLElement;
-            addToPage(wrapper);
-
-            // Push to stack
-            containerStack.push(wrapper);
-
-            // Process children (they'll be added inside the wrapper)
-            processChildren(child);
-
-            // Pop from stack
-            containerStack.pop();
-            continue;
-          }
-
-          // Cannot break - need new page
-          const pageHeight = getPageHeight();
-          const hasContent = pageHeight > 10;
-
-          if (!hasContent) {
-            // Page is empty, must add anyway to avoid infinite loop
-            addToPage(clone);
-            continue;
-          }
-
-          // Start new page and try again
-          startNewPage();
-
-          // Recursively try to add on new page
-          const newClone = child.cloneNode(true) as HTMLElement;
-          addToPage(newClone);
-
-          const newHeight = getPageHeight();
-          const newMax = getCurrentPageMax();
-
-          if (newHeight > newMax && (canBreak || hasBreakableContent) && child.children.length > 0) {
-            // Still doesn't fit on new page - must break it
-            const container = getCurrentContainer();
-            if (container?.contains(newClone)) {
-              container.removeChild(newClone);
-            } else {
-              outPages[currentPageIndex].pop();
-            }
-
-            const wrapper = child.cloneNode(false) as HTMLElement;
-            addToPage(wrapper);
-            containerStack.push(wrapper);
-            processChildren(child);
-            containerStack.pop();
-          }
-        }
-      }
-
-      processChildren(columnEl);
-
-      // Cleanup
-      document.body.removeChild(testContainer);
-    }
-
-    if (leftCol) paginateOneColumn(leftCol, 'left', leftPages);
-    if (rightCol) paginateOneColumn(rightCol, 'right', rightPages);
-
-    const totalPages = Math.max(leftPages.length, rightPages.length);
-    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
-
-    for (let i = 0; i < totalPages; i++) {
-      merged.push([leftPages[i] || [], rightPages[i] || []]);
-    }
-
-    setPages(merged);
-  }, [template, data, currentSection, hasSuggestions, isThumbnail]);
-
   const { columnConfig, leftItems, rightItems, bannerItems } = useMemo(() => {
     if (!template.columns) {
       return {
@@ -265,7 +81,6 @@ function ResumeRendererComponent({
             width: '0%',
           },
         },
-
         leftItems: template.sections,
         rightItems: [],
         bannerItems: [],
@@ -284,11 +99,323 @@ function ResumeRendererComponent({
     };
   }, [template]);
 
+  const PAGE_PADDING = page.padding ?? 24;
+  const PAGE_PADDING_PX = PAGE_PADDING;
+  const safeBottomPaddingPx = Math.max(
+    (page as any)?.safeBottomPaddingPx ?? DEFAULT_SAFE_BOTTOM_PADDING_PX,
+    DEFAULT_SAFE_BOTTOM_PADDING_PX,
+  );
+
   const leftWidth = columnConfig.left.width;
   const rightWidth = columnConfig.right.width;
   const spacing = columnConfig.spacing;
   const leftColumnClassName = columnConfig.left.className || '';
   const rightColumnClassName = columnConfig.right.className || '';
+
+  useLayoutEffect(() => {
+    const container = dummyContentRef.current;
+    if (!container) return;
+
+    let cleanedUp = false;
+    const cleanups: Array<() => void> = [];
+    const cleanup = () => {
+      if (cleanedUp) return;
+      cleanedUp = true;
+      for (const fn of cleanups) fn();
+    };
+
+    const leftCol = container.querySelector('[data-column="left"]') as HTMLElement | null;
+    const rightCol = container.querySelector('[data-column="right"]') as HTMLElement | null;
+
+    if (!leftCol && !rightCol) {
+      setPages([]);
+      return;
+    }
+
+    // For thumbnails and jsdom, layout metrics are unreliable; keep a single page.
+    if (isThumbnail) {
+      const leftNodes = leftCol ? Array.from(leftCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
+      const rightNodes = rightCol ? Array.from(rightCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
+      setPages([[leftNodes as any, rightNodes as any]]);
+      return;
+    }
+
+    const createMeasurementPage = (withBanner: boolean) => {
+      const root = document.createElement('div');
+      root.style.position = 'absolute';
+      root.style.visibility = 'hidden';
+      root.style.left = '-99999px';
+      root.style.top = '0';
+      root.style.pointerEvents = 'none';
+
+      const pageEl = document.createElement('div');
+      pageEl.className = cn('grid', page.className, className);
+      pageEl.style.width = '21cm';
+      pageEl.style.height = '29.7cm';
+      pageEl.style.overflow = 'hidden';
+      pageEl.style.boxSizing = 'border-box';
+      pageEl.style.padding = `${PAGE_PADDING_PX}px`;
+      pageEl.style.gap = spacing;
+      pageEl.style.gridTemplateColumns = `calc(${leftWidth} - ${spacing}) calc(${rightWidth} - ${spacing})`;
+      pageEl.style.alignContent = 'start';
+      pageEl.style.backgroundColor = page.background || 'white';
+      if (page.fontFamily) pageEl.style.fontFamily = page.fontFamily;
+      pageEl.style.gridTemplateRows = withBanner && bannerItems.length > 0 ? 'auto auto' : 'auto';
+
+      if (withBanner && bannerItems.length > 0) {
+        const bannerSource = container.querySelector('[data-section-type="banner"]') as HTMLElement | null;
+        const bannerRow = document.createElement('div');
+        bannerRow.style.gridColumn = '1 / -1';
+        bannerRow.style.gridRow = '1';
+        bannerRow.style.marginLeft = `-${PAGE_PADDING_PX}px`;
+        bannerRow.style.marginRight = `-${PAGE_PADDING_PX}px`;
+        bannerRow.style.marginTop = `-${PAGE_PADDING_PX}px`;
+
+        if (bannerSource) {
+          for (const child of Array.from(bannerSource.children)) {
+            bannerRow.appendChild(child.cloneNode(true));
+          }
+        }
+        pageEl.appendChild(bannerRow);
+      }
+
+      const left = document.createElement('div');
+      left.className = cn('flex flex-col', leftColumnClassName);
+      left.style.gridRow = withBanner && bannerItems.length > 0 ? '2' : '1';
+      left.setAttribute('data-column', 'left');
+
+      const right = document.createElement('div');
+      right.className = cn('flex flex-col', rightColumnClassName);
+      right.style.gridRow = withBanner && bannerItems.length > 0 ? '2' : '1';
+      right.setAttribute('data-column', 'right');
+
+      pageEl.appendChild(left);
+      pageEl.appendChild(right);
+      root.appendChild(pageEl);
+      document.body.appendChild(root);
+
+      return {
+        root,
+        pageEl,
+        left,
+        right,
+        cleanup: () => document.body.removeChild(root),
+      };
+    };
+
+    const envFirst = createMeasurementPage(true);
+    const envOther = createMeasurementPage(false);
+    cleanups.push(envFirst.cleanup, envOther.cleanup);
+
+    const getEnvForPage = (pageIdx: number) => (pageIdx === 0 ? envFirst : envOther);
+
+    const getSafeBottomForPage = (pageIdx: number): number => {
+      const env = getEnvForPage(pageIdx);
+      const pageRect = env.pageEl.getBoundingClientRect();
+      // jsdom: rects are often 0; treat as unbounded to avoid infinite loops in tests.
+      if (!pageRect.height) return Number.POSITIVE_INFINITY;
+      return pageRect.bottom - safeBottomPaddingPx;
+    };
+
+    const paginateOneColumn = (sourceColumnEl: HTMLElement, columnName: 'left' | 'right'): HTMLElement[][] => {
+      const outPages: HTMLElement[][] = [[]];
+      let currentPageIndex = 0;
+
+      // Prototypes track the original (dummy) wrappers for stack reconstruction.
+      const wrapperPrototypes: HTMLElement[] = [];
+      let wrapperClones: HTMLElement[] = [];
+
+      const getLiveColumn = (pageIdx: number): HTMLElement => {
+        const env = getEnvForPage(pageIdx);
+        return columnName === 'left' ? env.left : env.right;
+      };
+
+      const clearLivePage = (pageIdx: number) => {
+        const col = getLiveColumn(pageIdx);
+        col.innerHTML = '';
+      };
+
+      const rebuildWrapperStack = () => {
+        wrapperClones = [];
+
+        const col = getLiveColumn(currentPageIndex);
+        let parent: HTMLElement | null = null;
+
+        for (let i = 0; i < wrapperPrototypes.length; i++) {
+          const proto = wrapperPrototypes[i];
+          const clone = proto.cloneNode(false) as HTMLElement;
+          removeBorderClasses(clone);
+
+          if (i === 0) {
+            outPages[currentPageIndex].push(clone);
+            col.appendChild(clone);
+          } else if (parent) {
+            parent.appendChild(clone);
+          }
+
+          wrapperClones.push(clone);
+          parent = clone;
+        }
+      };
+
+      const getCurrentContainer = (): HTMLElement | null =>
+        wrapperClones.length > 0 ? wrapperClones[wrapperClones.length - 1] : null;
+
+      const fitsOnCurrentPage = (element: HTMLElement): boolean => {
+        const safeBottom = getSafeBottomForPage(currentPageIndex);
+        const rect = element.getBoundingClientRect();
+        return rect.bottom <= safeBottom + 0.5;
+      };
+
+      const addToPage = (element: HTMLElement) => {
+        const col = getLiveColumn(currentPageIndex);
+        const container = getCurrentContainer();
+        if (container) {
+          container.appendChild(element);
+          return;
+        }
+        outPages[currentPageIndex].push(element);
+        col.appendChild(element);
+      };
+
+      const removeFromPage = (element: HTMLElement) => {
+        const col = getLiveColumn(currentPageIndex);
+        const container = getCurrentContainer();
+        if (container?.contains(element)) {
+          container.removeChild(element);
+          return;
+        }
+        if (col.contains(element)) col.removeChild(element);
+        const idx = outPages[currentPageIndex].indexOf(element);
+        if (idx !== -1) outPages[currentPageIndex].splice(idx, 1);
+      };
+
+      const finalizePage = (pageIdx: number) => {
+        outPages[pageIdx] = outPages[pageIdx].map((n) => n.cloneNode(true) as HTMLElement);
+      };
+
+      const startNewPage = () => {
+        finalizePage(currentPageIndex);
+        currentPageIndex++;
+        outPages.push([]);
+        clearLivePage(currentPageIndex);
+        rebuildWrapperStack();
+      };
+
+      const processChildren = (parentEl: HTMLElement) => {
+        const children = Array.from(parentEl.children) as HTMLElement[];
+
+        for (const child of children) {
+          const tagName = child.tagName?.toLowerCase();
+          const isNaturallyBreakable = ['ul', 'ol', 'p', 'div'].includes(tagName);
+          const canBreak = child.getAttribute('data-canbreak') === 'true' || isNaturallyBreakable;
+          const hasBreakableContent =
+            child.querySelector('[data-canbreak="true"]') !== null ||
+            child.querySelector('[data-has-breakable-content="true"]') !== null ||
+            child.getAttribute('data-has-breakable-content') === 'true';
+
+          const clone = child.cloneNode(true) as HTMLElement;
+          addToPage(clone);
+
+          if (fitsOnCurrentPage(clone)) continue;
+
+          removeFromPage(clone);
+
+          // Try splitting text-only elements into paragraph-level blocks.
+          if ((canBreak || hasBreakableContent) && child.children.length === 0 && isTextOnlyElement(child)) {
+            const splitEl = splitTextBlock(child);
+            if (splitEl && splitEl.children.length > 1) {
+              const wrapperProto = child;
+              const wrapper = wrapperProto.cloneNode(false) as HTMLElement;
+              removeBorderClasses(wrapper);
+              addToPage(wrapper);
+              wrapperPrototypes.push(wrapperProto);
+              wrapperClones.push(wrapper);
+              processChildren(splitEl);
+              wrapperPrototypes.pop();
+              wrapperClones.pop();
+              continue;
+            }
+          }
+
+          // Break by recursing into children.
+          if ((canBreak || hasBreakableContent) && child.children.length > 0) {
+            const wrapperProto = child;
+            const wrapper = wrapperProto.cloneNode(false) as HTMLElement;
+            removeBorderClasses(wrapper);
+            addToPage(wrapper);
+            wrapperPrototypes.push(wrapperProto);
+            wrapperClones.push(wrapper);
+            processChildren(child);
+            wrapperPrototypes.pop();
+            wrapperClones.pop();
+            continue;
+          }
+
+          // Not breakable; move it to the next page.
+          const col = getLiveColumn(currentPageIndex);
+          const pageHasContent = col.childElementCount > 0;
+          if (!pageHasContent) {
+            addToPage(child.cloneNode(true) as HTMLElement);
+            continue;
+          }
+
+          startNewPage();
+
+          const newClone = child.cloneNode(true) as HTMLElement;
+          addToPage(newClone);
+          if (!fitsOnCurrentPage(newClone) && (canBreak || hasBreakableContent) && child.children.length > 0) {
+            removeFromPage(newClone);
+            const wrapperProto = child;
+            const wrapper = wrapperProto.cloneNode(false) as HTMLElement;
+            removeBorderClasses(wrapper);
+            addToPage(wrapper);
+            wrapperPrototypes.push(wrapperProto);
+            wrapperClones.push(wrapper);
+            processChildren(child);
+            wrapperPrototypes.pop();
+            wrapperClones.pop();
+          }
+        }
+      };
+
+      clearLivePage(0);
+      rebuildWrapperStack();
+      processChildren(sourceColumnEl);
+      finalizePage(currentPageIndex);
+
+      // Remove trailing empty pages.
+      for (let i = outPages.length - 1; i >= 0; i--) {
+        const hasVisibleContent = outPages[i].some((node) => (node.textContent ?? '').trim().length > 0);
+        if (!hasVisibleContent && i > 0) outPages.splice(i, 1);
+      }
+
+      return outPages;
+    };
+
+    const leftPages = leftCol ? paginateOneColumn(leftCol, 'left') : [];
+    const rightPages = rightCol ? paginateOneColumn(rightCol, 'right') : [];
+
+    const totalPages = Math.max(leftPages.length, rightPages.length);
+    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+    for (let i = 0; i < totalPages; i++) {
+      merged.push([(leftPages[i] || []) as any, (rightPages[i] || []) as any]);
+    }
+
+    setPages(merged);
+    cleanup();
+
+    return cleanup;
+  }, [
+    template,
+    data,
+    currentSection,
+    hasSuggestions,
+    isThumbnail,
+    skipImageFallbacks,
+    PAGE_PADDING_PX,
+    safeBottomPaddingPx,
+  ]);
 
   const baseStyle = {
     width: '21cm',
@@ -367,10 +494,12 @@ function ResumeRendererComponent({
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
-              [skipImageFallbacks ? 'height' : 'minHeight']: '29.7cm',
+              height: '29.7cm',
+              overflow: 'hidden',
               backgroundColor: page.background || 'white',
               fontFamily: page.fontFamily,
-              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto 1fr' : '1fr',
+              gridTemplateRows: index === 0 && bannerItems.length > 0 ? 'auto auto' : 'auto',
+              alignContent: 'start',
             }}
           >
             {index === 0 && bannerItems.length > 0 && (
@@ -396,9 +525,14 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {leftColumn.map((node: any, i) => (
+              {(leftColumn as any[]).map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={`${index}-left-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                />
               ))}
             </div>
             <div
@@ -407,9 +541,14 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {rightColumn.map((node: any, i) => (
+              {(rightColumn as any[]).map((node: any, i) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={`${index}-right-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                />
               ))}
             </div>
           </div>
@@ -419,6 +558,4 @@ function ResumeRendererComponent({
   );
 }
 
-// Wrap with React.memo to prevent unnecessary re-renders
-// Uses shallow comparison for all props - parent should memoize data prop
 export const ResumeRenderer = React.memo(ResumeRendererComponent);

@@ -13,8 +13,6 @@ export type { ResumeLayoutKind } from './v1/lib/layout-utils';
 export { hasPendingSuggestions } from './v1/lib/section-utils';
 export { generateThumbnail } from './v1/lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './v1/lib/thumbnail/thumbnail';
-export { SingleColumnRenderer } from './v1/single-column-renderer';
-export { TwoColumnRenderer } from './v1/two-column-renderer';
 
 /** Legacy template or engine TemplateConfig. Public API accepts both. */
 export type RenderTemplate = ResumeTemplate | TemplateConfig;

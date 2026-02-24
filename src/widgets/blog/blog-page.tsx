@@ -4,6 +4,7 @@ import type { BlogPost } from '@shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
+import NotFoundSearch from './components/not-found-search';
 import SearchBar from './components/search-bar';
 
 export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
@@ -23,6 +24,8 @@ export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
   if (secondaryPosts.length === 0) {
     secondaryPosts.push(...posts.filter((p) => p.slug !== primaryPost.slug).slice(0, 2));
   }
+
+
 
   return (
     <main className="min-h-screen max-w-[1395px] mx-auto p-2">
@@ -64,4 +67,5 @@ export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
       </div>
     </main>
   );
+
 }

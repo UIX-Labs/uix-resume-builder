@@ -15,6 +15,7 @@ export function renderBadgeSection(
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
 ): React.ReactNode {
+  const isBreakable = section.break === true || section.breakable === true;
   const items = resolvePath(data, section.listPath, []);
   let parentId: string | undefined;
   // Extract parent itemId for nested paths like "interests.items[0].items"
@@ -104,10 +105,10 @@ export function renderBadgeSection(
   const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
   return (
     <div
-      data-canbreak={section.break}
+      data-canbreak={isBreakable ? 'true' : undefined}
       data-item="section"
       data-section={sectionId}
-      data-has-breakable-content={section.breakable ? 'true' : 'false'}
+      data-has-breakable-content={isBreakable ? 'true' : undefined}
       className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
     >
@@ -120,7 +121,11 @@ export function renderBadgeSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div className={section.containerClassName || 'flex flex-col gap-2 mt-2'} data-canbreak={section.break}>
+      <div
+        className={section.containerClassName || 'flex flex-col gap-2 mt-2'}
+        data-canbreak={isBreakable ? 'true' : undefined}
+        data-has-breakable-content={isBreakable ? 'true' : undefined}
+      >
         {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
           // Extract renderable value - will return null for complex objects
           const actualValue = extractRenderableValue(value);
@@ -166,7 +171,7 @@ export function renderBadgeSection(
           // If icon exists
           if (IconComponent) {
             return (
-              <div key={idx} className={section.itemClassName} data-canbreak={section.break ? 'true' : undefined}>
+              <div key={idx} className={section.itemClassName} data-canbreak={isBreakable ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
                 <span
                   className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
@@ -180,7 +185,7 @@ export function renderBadgeSection(
 
           // Default rendering without icon
           return (
-            <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
+            <span key={idx} data-canbreak={isBreakable ? 'true' : undefined}>
               <span
                 className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                 data-suggestion={suggestionData}

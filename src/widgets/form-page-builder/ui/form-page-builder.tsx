@@ -3,10 +3,12 @@ import { getResumeEmptyData, useSaveResumeForm, type ResumeData } from '@entitie
 import { data as formSchemaData } from '@entities/resume/api/schema-data';
 import { deepMerge, normalizeStringsFields } from '@entities/resume/models/use-resume-data';
 import { FeedbackModal } from '@features/feedback-form/ui/feedback-modal';
+import { ReferralModal } from '@features/referral-flow/ui/referral-modal';
 import { ResumeRenderer } from '@features/resume/renderer';
 import { TemplateForm } from '@features/template-form';
 import { MobileForm } from '@features/template-form/ui/mobile-form';
 import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { camelToHumanString } from '@shared/lib/string';
 import { debounce } from '@shared/lib/utils';
@@ -16,6 +18,7 @@ import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
+import { DownloadButton } from '@shared/ui/components/download-button';
 import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
@@ -262,7 +265,15 @@ export function FormPageBuilder() {
     resumeId,
   });
 
-  const { handleDownloadPDF, isAuthModalOpen, setIsAuthModalOpen, authRedirectUrl } = usePdfDownload({
+  const {
+    handleDownloadPDF,
+    isAuthModalOpen,
+    setIsAuthModalOpen,
+    authRedirectUrl,
+    isReferralModalOpen,
+    setIsReferralModalOpen,
+    referralUrl,
+  } = usePdfDownload({
     resumeId,
     generatePDF,
     onDownloadSuccess: () => {
@@ -275,6 +286,10 @@ export function FormPageBuilder() {
       }, 800);
     },
   });
+
+  const { data: user } = useUserProfile();
+
+  const friendsBonus = (user?.referredTo?.length ?? 0) * 3;
 
   // Memoize cleaned data for renderer to prevent unnecessary re-renders
   // Only recompute when formData, isCreateMode, or isGeneratingPDF actually changes
@@ -377,14 +392,25 @@ export function FormPageBuilder() {
     (sectionId: string, isHidden: boolean) => {
       const sectionData = formData[sectionId as keyof typeof formData];
       if (sectionData && typeof sectionData === 'object') {
-        debouncedHideSave(sectionId, {
+        const updatedSectionData = {
           ...(sectionData as Record<string, unknown>),
           isHidden,
-        });
+        };
+
+        setFormData(
+          {
+            ...formData,
+            [sectionId]: updatedSectionData,
+          } as Omit<ResumeData, 'templateId'>,
+          resumeId,
+        );
+
+        debouncedHideSave(sectionId, updatedSectionData);
+
         toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
       }
     },
-    [formData, debouncedHideSave],
+    [formData, debouncedHideSave, setFormData, resumeId],
   );
 
   // Callback to open analyzer modal with specific field data (for form-based clicks)
@@ -700,12 +726,14 @@ export function FormPageBuilder() {
   }, [lastSaveTime, refreshKey]);
 
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
-  const [mobileCurrentStep, setMobileCurrentStep] = useState<ResumeDataKey>('personalDetails');
 
-  const handleMobileStepClick = useCallback((step: ResumeDataKey) => {
-    setMobileCurrentStep(step);
-    setIsMobileFormOpen(true);
-  }, []);
+  const handleMobileStepClick = useCallback(
+    (step: ResumeDataKey) => {
+      setCurrentStep(step);
+      setIsMobileFormOpen(true);
+    },
+    [setCurrentStep],
+  );
 
   const handleMobileFormClose = useCallback(() => {
     setIsMobileFormOpen(false);
@@ -716,20 +744,20 @@ export function FormPageBuilder() {
   }, [handleSaveResume]);
 
   const handleMobileNext = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentIndex = navs.findIndex((nav) => nav.name === currentStep);
     if (currentIndex < navs.length - 1) {
-      setMobileCurrentStep(navs[currentIndex + 1].name as ResumeDataKey);
+      setCurrentStep(navs[currentIndex + 1].name as ResumeDataKey);
     } else {
       setIsMobileFormOpen(false);
     }
-  }, [mobileCurrentStep, navs]);
+  }, [currentStep, navs, setCurrentStep]);
 
   const handleMobileBack = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentIndex = navs.findIndex((nav) => nav.name === currentStep);
     if (currentIndex > 0) {
-      setMobileCurrentStep(navs[currentIndex - 1].name as ResumeDataKey);
+      setCurrentStep(navs[currentIndex - 1].name as ResumeDataKey);
     }
-  }, [mobileCurrentStep, navs]);
+  }, [currentStep, navs, setCurrentStep]);
 
   const handleMobileBackToResume = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['resume', resumeId] });
@@ -818,11 +846,17 @@ export function FormPageBuilder() {
         title="Login Required"
         description="You need to login to download PDF."
       />
+
+      <ReferralModal
+        isOpen={isReferralModalOpen}
+        onClose={() => setIsReferralModalOpen(false)}
+        referralLink={referralUrl}
+      />
     </>
   );
 
   if (isMobile) {
-    const currentMobileIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentMobileIndex = navs.findIndex((nav) => nav.name === currentStep);
     const hasNext = currentMobileIndex < navs.length - 1;
     const hasPrevious = currentMobileIndex > 0;
 
@@ -846,7 +880,7 @@ export function FormPageBuilder() {
           </div>
         </div>
 
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white overflow-hidden">
           <Header />
 
           <MobileSectionList
@@ -855,12 +889,16 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             onSectionClick={handleMobileStepClick}
             onBackClick={handleMobileBackToResume}
+            onToggleHideSection={handleToggleHideSection}
           />
 
           <MobileFooter
             onDownloadPDF={handleDownloadPDF}
             onPreview={() => setIsPreviewModalOpen(true)}
             isGeneratingPDF={isGeneratingPDF}
+            downloadsLeft={user?.downloadsLeft ?? 3}
+            downloadsAllowed={user?.downloadsAllowed ?? 3}
+            isLoggedIn={!!user}
           >
             <TemplatesDialog onTemplateSelect={handleTemplateSelect} currentTemplateId={selectedTemplateId}>
               <MobileTemplateButton />
@@ -871,7 +909,7 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             values={formData ?? {}}
             onChange={(data) => setFormData(data, resumeId)}
-            currentStep={mobileCurrentStep}
+            currentStep={currentStep}
             isOpen={isMobileFormOpen}
             onClose={handleMobileFormClose}
             onNext={handleMobileNext}
@@ -929,7 +967,7 @@ export function FormPageBuilder() {
           </div>
           <div
             style={{
-              position: 'absolute',
+              position: 'fixed',
               left: '0',
               top: '0',
               width: '794px',
@@ -976,36 +1014,14 @@ export function FormPageBuilder() {
               <TemplateButton />
             </div>
           </TemplatesDialog>
-          <Button
+          <DownloadButton
             onClick={handleDownloadPDF}
-            className="
-              pointer-events-auto
-              border border-[#CBE7FF]
-              bg-[#E9F4FF]
-              font-semibold
-              text-[#005FF2]
-              hover:bg-[#E9F4FF] hover:text-white
-              shadow-lg
-              disabled:opacity-50 disabled:cursor-not-allowed
-              cursor-pointer
-              flex items-center gap-1.5
-              rounded-xl
-              p-5.5
-            "
-          >
-            {isGeneratingPDF ? (
-              <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-                Generating PDF...
-              </span>
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                <span className="text-[13px] font-semibold bg-gradient-to-r from-[#246EE1] to-[#1C3965] bg-clip-text text-transparent">
-                  Download PDF
-                </span>
-              </>
-            )}
-          </Button>
+            downloadsLeft={user?.downloadsLeft ?? 3}
+            downloadsAllowed={user?.downloadsAllowed ?? 3}
+            isGenerating={isGeneratingPDF}
+            isLoggedIn={!!user}
+            friendsBonus={friendsBonus}
+          />
         </div>
       </div>
       {/* Resizer Handle */}

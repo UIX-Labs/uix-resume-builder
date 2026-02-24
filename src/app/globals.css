@@ -340,6 +340,33 @@
   --color-blue-800: rgba(0, 89, 237, 1);
   --color-blue-900: rgba(0, 95, 242, 1);
   --color-blue-1000: rgba(0, 35, 89, 1);
+  --color-blue-hover: rgba(0, 71, 184, 1);
+  --color-blue-light-border: rgba(203, 231, 255, 1);
+  --color-blue-light-bg: rgba(233, 244, 255, 1);
+  --color-blue-gradient-start: rgba(36, 110, 225, 1);
+  --color-blue-gradient-end: rgba(28, 57, 101, 1);
+  --color-blue-text-light: rgba(241, 247, 255, 1);
+
+  --color-dark-900: rgba(12, 17, 24, 1);
+
+  --color-error-500: rgba(231, 76, 60, 1);
+  --color-error-600: rgba(192, 57, 43, 1);
+
+  --color-referral-modal-bg: rgba(12, 17, 24, 1);
+  --color-referral-modal-bg-alt: rgba(23, 23, 23, 1);
+  --color-referral-link-field-bg: rgba(59, 30, 29, 1);
+  --color-referral-button-bg: rgba(80, 37, 35, 1);
+  --color-referral-button-bg-mobile: rgba(120, 45, 42, 1);
+  --color-referral-button-hover: rgba(126, 52, 49, 1);
+  --color-referral-step-bg: rgba(213, 90, 85, 0.14);
+  --color-referral-icon-bg: rgba(143, 49, 46, 1);
+  --color-referral-text-primary: rgba(241, 247, 255, 1);
+  --color-referral-link-text: rgba(248, 187, 185, 1);
+  --color-referral-button-text: rgba(243, 223, 223, 1);
+  --color-referral-gradient-start: rgba(235, 137, 110, 1);
+  --color-referral-gradient-mid: rgba(233, 59, 54, 1);
+  --color-referral-border-gradient-start: rgba(215, 168, 166, 1);
+  --color-referral-border-gradient-end: rgba(59, 30, 29, 1);
 
   --color-sidebar-brand-primary: rgba(0, 95, 242, 1);
   --color-sidebar-brand-secondary: rgba(33, 52, 79, 1);
@@ -365,9 +392,34 @@
   --color-form-placeholder: rgba(207, 212, 219, 1);
   --color-form-focus-ring: rgba(203, 231, 255, 1);
 
+  --color-tooltip-border: rgba(193, 200, 210, 0.22);
+
   --color-black: rgba(0, 0, 0, 1);
   --color-black-80: rgba(0, 0, 0, 0.8);
   --color-template-dialog-blue: rgba(36, 114, 235, 1);
+  /* Expert review / popup modal */
+  --color-expert-heading: #f1f7ff;
+  --color-expert-subheading: #ccd4df;
+  --color-expert-bg: #0c1118;
+  --color-expert-bg-hover: #1a2230;
+  --color-expert-primary: #0a70f8;
+  --color-expert-primary-hover: #0960dd;
+  --color-expert-border: #005ff2;
+  --color-expert-card: #1a1c26;
+  --color-expert-card-text: #9ea3ae;
+  --color-expert-card-name: #ffffff;
+  --color-expert-logo-bg: #bf0711;
+  --color-expert-progress-muted: #6b7280;
+  --color-expert-gradient-start: rgba(37, 122, 255, 1);
+  --color-expert-gradient-end: rgba(12, 17, 24, 1);
+  --radius-expert-modal: 36px;
+  --radius-expert-modal-mobile: 1rem;
+  --radius-expert-card: 24px;
+  --radius-expert-button: 1rem;
+  --color-expert-button-ring: rgba(255, 255, 255, 0.1);
+  --expert-card-width: 275px;
+  --expert-card-height: 224px;
+  --expert-card-gradient: linear-gradient(113.21deg, #91baf8 -14.58%, #2d4160 21.17%, #000000 93.2%);
 }
 
 @theme inline {

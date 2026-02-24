@@ -1,5 +1,6 @@
 import { fetch } from '@shared/api';
 import { clearGuestEmail } from '@shared/lib/guest-email';
+import { clearReferrerUserId } from '@shared/lib/referrer-user-id';
 
 export const getGoogleAuthUrl = () => {
   const params = new URLSearchParams({
@@ -36,6 +37,7 @@ export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: strin
     });
 
     clearGuestEmail();
+    clearReferrerUserId();
 
     return response;
   } catch (error) {

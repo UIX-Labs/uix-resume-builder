@@ -206,7 +206,7 @@ export default function AllResumePage() {
         <ResumeCreationModal
           isOpen={isCreationModalOpen}
           onClose={handleCreationModalClose}
-          onJDModalOpen={handleLinkedInModalOpen}
+          onJDModalOpen={() => handleJDModalToggle(true)}
           onLinkedInClick={handleLinkedInModalOpen}
           onActionLock={lockOptions}
           onActionRelease={releaseOptions}

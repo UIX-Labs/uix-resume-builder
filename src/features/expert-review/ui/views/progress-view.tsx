@@ -3,6 +3,7 @@
 import { Button } from '@shared/ui/button';
 import { FileText, Upload, X } from 'lucide-react';
 import { useRef } from 'react';
+import { EXPERT_REVIEW_ACCEPT } from '../../constants';
 import { CloseButton } from './shared';
 
 const GEIST_FONT = { fontFamily: 'Geist, sans-serif' } as const;
@@ -20,7 +21,6 @@ interface ProgressViewProps {
   onClose: () => void;
 }
 
-const ACCEPT_FILES = '.pdf,.doc,.docx';
 
 export function ProgressView({
   fileName,
@@ -55,7 +55,7 @@ export function ProgressView({
         type="file"
         ref={fileInputRef}
         className="hidden"
-        accept={ACCEPT_FILES}
+        accept={EXPERT_REVIEW_ACCEPT}
         onChange={handleFileChange}
         aria-hidden
       />

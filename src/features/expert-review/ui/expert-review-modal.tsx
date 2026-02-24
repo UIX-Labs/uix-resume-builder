@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { uploadResumeForReview } from '../api/upload-for-review';
-import { MAX_EXPERT_REVIEW_FILE_BYTES } from '../constants';
+import { MAX_EXPERT_REVIEW_FILE_BYTES, isExpertReviewFileTypeValid } from '../constants';
 import { ProgressView } from './views/progress-view';
 import { SuccessView } from './views/success-view';
 import { UploadView } from './views/upload-view';
@@ -49,6 +49,10 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
   };
 
   const handleFileSelected = (file: File) => {
+    if (!isExpertReviewFileTypeValid(file)) {
+      toast.error('Please upload a PDF or Word document (.pdf, .doc, .docx).');
+      return;
+    }
     if (file.size > MAX_EXPERT_REVIEW_FILE_BYTES) {
       toast.error('File size must be 4 MB or less for expert review.');
       return;

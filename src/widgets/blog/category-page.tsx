@@ -40,7 +40,14 @@ export default function CategoryPageContent({ posts, title, placeholder, color, 
 
       {/* GRID */}
       <div id="blog-grid" className="mt-10">
-        {searchedPosts.length === 0 && <NotFoundSearch tags = {tags}/>}
+        {searchedPosts.length === 0 && (
+          <NotFoundSearch
+            suggestions={posts.slice(0, 3).map((p) => ({
+              label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
+              slug: p.slug,
+            }))}
+          />
+        )}
         <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>
     </div>

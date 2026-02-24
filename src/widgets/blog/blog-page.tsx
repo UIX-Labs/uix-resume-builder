@@ -70,7 +70,12 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
 
           <div id="blog-grid" className="mt-6 md:mt-10 mb-2 md:mb-4">
             {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
-              <NotFoundSearch tags={tags} />
+              <NotFoundSearch
+                suggestions={[primaryPost, ...secondaryPosts].map((p) => ({
+                  label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
+                  slug: p.slug,
+                }))}
+              />
             ) : (
               <BlogGrid posts={filteredPosts} />
             )}

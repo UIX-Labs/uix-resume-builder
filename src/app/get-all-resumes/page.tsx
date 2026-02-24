@@ -1,6 +1,6 @@
 'use client';
 import { createResume, updateResumeTemplate } from '@entities/resume';
-import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
+import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';

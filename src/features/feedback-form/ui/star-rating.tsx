@@ -22,7 +22,7 @@ export function StarRating({ value, onChange, max = 5, className }: StarRatingPr
 
         return (
           <Button
-            key={index}
+            key={`star-rating-${starValue}`}
             variant="ghost"
             type="button"
             className="focus:outline-none transition-transform hover:bg-transparent cursor-pointer"

@@ -23,13 +23,12 @@ export default async function CategoryPage({ params }: PageProps) {
   }
 
   const allPosts = getAllPosts();
-  
 
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {
       const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const normalizedId = id.toLowerCase().replace(/[^a-z0-9]/g, '-');
-      return normalizedTag === normalizedId || normalizedTag.startsWith(normalizedId + '-');
+      return normalizedTag === normalizedId || normalizedTag.startsWith(`${normalizedId}-`);
     }),
   );
 
@@ -58,7 +57,7 @@ export default async function CategoryPage({ params }: PageProps) {
         />
       ) : (
         <div>
-          <NotFoundPage/>
+          <NotFoundPage />
         </div>
       )}
     </div>

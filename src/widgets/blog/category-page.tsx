@@ -2,7 +2,7 @@
 
 import BlogGrid from '@/widgets/blog/blog-Grid';
 import SearchBar from '@/widgets/blog/components/search-bar';
-import { BlogPost } from '@shared/lib/blog';
+import type { BlogPost } from '@shared/lib/blog';
 import { useState } from 'react';
 
 interface Props {

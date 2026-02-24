@@ -22,7 +22,8 @@ export default function JDCTACard() {
   };
 
   return (
-    <div className="mt-6 rounded-2xl border-2 border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 pb-0 shadow-sm bg-gray-100
+    <div
+      className="mt-6 rounded-2xl border-2 border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 pb-0 shadow-sm bg-gray-100
     flex flex-col items-center justify-center"
     >
       {/* Title */}
@@ -50,16 +51,16 @@ export default function JDCTACard() {
       {/* Resume Preview Image */}
       {/* Resume Preview Image Container */}
       <div className="relative mt-6 flex justify-center w-full h-[120px]">
-        <div className="w-full h-full"> 
+        <div className="w-full h-full">
           <Image
             src="/images/blog/slug/upload-resume.svg"
             alt="Resume preview"
             fill
-            className="object-contain object-bottom" 
+            className="object-contain object-bottom"
             priority
-    />
-  </div>
-</div>
+          />
+        </div>
+      </div>
     </div>
   );
 }

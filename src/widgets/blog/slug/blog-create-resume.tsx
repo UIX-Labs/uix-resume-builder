@@ -3,7 +3,7 @@
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { Star } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-
+import Image from 'next/image';
 export default function BlogCreateResume() {
   const router = useRouter();
   return (
@@ -12,13 +12,13 @@ export default function BlogCreateResume() {
         className="flex flex-col justify-center md:min-h-[298px]
  items-center gap-4 px-4 md:pr-8 md:gap-2 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-green-600 relative overflow-hidden group mt-10 p-6 md:p-2 text-center"
       >
-        <img
+        <Image
           src="/images/blog/slug/Avatar.png"
-          alt=""
+          alt="left avatar"
           className="absolute bottom-0 -left-6 md:-left-4 h-24 md:h-40 pointer-events-none select-none"
         />
 
-        <img
+        <Image
           src="/images/blog/slug/avatar-img.png"
           alt=""
           className="absolute bottom-0 -right-6 md:-right-4 h-24 md:h-40 pointer-events-none select-none"
@@ -45,7 +45,6 @@ export default function BlogCreateResume() {
         >
           Create your Resume
         </button>
-
       </div>
 
       <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
@@ -74,10 +73,6 @@ export default function BlogCreateResume() {
           <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />
           <LinkedInIcon className="w-10 h-10 text-black" />
         </div> */}
-
-
-
-        
       </div>
     </>
   );

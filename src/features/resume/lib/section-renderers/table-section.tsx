@@ -166,7 +166,7 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
-                              <div key={badgeIdx} className={col.itemClassName}>
+                              <div key={badgeIdx || value} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
                                   className={cn(
@@ -183,7 +183,7 @@ export function renderTableSection(
                           }
                           return (
                             <span
-                              key={badgeIdx}
+                              key={badgeIdx || value}
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
@@ -205,7 +205,7 @@ export function renderTableSection(
 
               return (
                 <div
-                  key={colIdx}
+                  key={colIdx || column.id}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
                   data-has-breakable-content={column.break ? 'true' : undefined}
@@ -461,7 +461,7 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div key={badgeIdx} className={column.itemClassName}>
+                            <div key={badgeIdx || value} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
@@ -478,7 +478,7 @@ export function renderTableSection(
                         }
                         return (
                           <span
-                            key={badgeIdx}
+                            key={badgeIdx || value}
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
@@ -500,7 +500,7 @@ export function renderTableSection(
 
             return (
               <div
-                key={itemIdx}
+                key={item.id || itemIdx}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn('grid', section.rowClassName)}
@@ -523,7 +523,7 @@ export function renderTableSection(
                 {/* Render content columns for each item */}
                 {columns.map((column: any, colIdx: number) => (
                   <div
-                    key={`${itemIdx}-${colIdx}`}
+                    key={`${itemIdx}-${column.id || colIdx}`}
                     className={column.className}
                     data-canbreak={column.break ? 'true' : undefined}
                     data-has-breakable-content={column.break ? 'true' : undefined}

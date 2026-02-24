@@ -22,7 +22,7 @@ export const expertCardPositionClasses = [
   'absolute top-[290px] -right-5 z-10',
 ] as const;
 
-export function ExpertCard({ name, company, logo, image }: Expert) {
+export function ExpertCard({ name, company, image }: Expert) {
   return (
     <div
       className="flex items-center justify-center shadow-xl overflow-visible"

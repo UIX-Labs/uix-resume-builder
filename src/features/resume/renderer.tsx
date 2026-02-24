@@ -263,7 +263,7 @@ function ResumeRendererComponent({
 
         // Otherwise the wrapper is nested — find and remove it from its parent
         for (const node of pageNodes) {
-          if ((node as any).contains && (node as any).contains(wrapper) && wrapper.parentElement) {
+          if ((node as any)?.contains?.(wrapper) && wrapper.parentElement) {
             wrapper.parentElement.removeChild(wrapper);
             return;
           }
@@ -502,11 +502,14 @@ function ResumeRendererComponent({
       >
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
-            {bannerItems.map((s: any, i: number) => (
-              <React.Fragment key={i}>
-                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
-              </React.Fragment>
-            ))}
+            {bannerItems.map((s: any, i: number) => {
+              const stableKey = s.id || `${s.type}-${i}`;
+              return (
+                <React.Fragment key={stableKey}>
+                  {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+                </React.Fragment>
+              );
+            })}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
@@ -515,7 +518,7 @@ function ResumeRendererComponent({
               i < leftItems.length - 1 &&
               leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={i}>
+              <React.Fragment key={s.id || i}>
                 {renderSection(
                   s,
                   data,
@@ -535,7 +538,7 @@ function ResumeRendererComponent({
               i < rightItems.length - 1 &&
               rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={i}>
+              <React.Fragment key={s.id || i}>
                 {renderSection(
                   s,
                   data,
@@ -553,9 +556,10 @@ function ResumeRendererComponent({
 
       {pages.map((columns, index) => {
         const [leftColumn, rightColumn] = columns;
+        const pageKey = `${index}-${columns.join('-')}`;
         return (
           <div
-            key={index}
+            key={pageKey}
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
@@ -579,7 +583,7 @@ function ResumeRendererComponent({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
-                  <React.Fragment key={i}>
+                  <React.Fragment key={s.id || i}>
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
                 ))}
@@ -592,8 +596,12 @@ function ResumeRendererComponent({
               }}
             >
               {leftColumn.map((node: any, i) => (
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={node.id || i}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                />
               ))}
             </div>
             <div
@@ -603,8 +611,12 @@ function ResumeRendererComponent({
               }}
             >
               {rightColumn.map((node: any, i) => (
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
-                <div key={i} dangerouslySetInnerHTML={{ __html: node.outerHTML }} style={{ display: 'block' }} />
+                <div
+                  key={node.id || i}
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+                  dangerouslySetInnerHTML={{ __html: node.outerHTML }}
+                  style={{ display: 'block' }}
+                />
               ))}
             </div>
           </div>

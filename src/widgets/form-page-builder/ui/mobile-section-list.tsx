@@ -9,7 +9,7 @@ import { cleanHtml } from '@shared/lib/markdown';
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
   formData: Omit<ResumeData, 'templateId'>;
-  formSchema: FormSchema | {};
+  formSchema: FormSchema | null;
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
 }

@@ -9,7 +9,7 @@ export const TopAnnouncementStrip = () => {
   const { data: user, isLoading } = useUserProfile();
   const router = useRouter();
   const { data: currentStats } = getCurrentStatsQuery();
-  const MAX_USERS = 2500;
+  const MAX_USERS = 5000;
   const spotsLeft = Math.max(0, MAX_USERS - (currentStats?.totalUsers ?? 0));
 
   const handleSignUpClick = () => {

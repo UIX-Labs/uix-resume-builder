@@ -377,14 +377,25 @@ export function FormPageBuilder() {
     (sectionId: string, isHidden: boolean) => {
       const sectionData = formData[sectionId as keyof typeof formData];
       if (sectionData && typeof sectionData === 'object') {
-        debouncedHideSave(sectionId, {
+        const updatedSectionData = {
           ...(sectionData as Record<string, unknown>),
           isHidden,
-        });
+        };
+
+        setFormData(
+          {
+            ...formData,
+            [sectionId]: updatedSectionData,
+          } as Omit<ResumeData, 'templateId'>,
+          resumeId,
+        );
+
+        debouncedHideSave(sectionId, updatedSectionData);
+
         toast.success(isHidden ? `Section hidden from resume` : `Section visible in resume`);
       }
     },
-    [formData, debouncedHideSave],
+    [formData, debouncedHideSave, setFormData, resumeId],
   );
 
   // Callback to open analyzer modal with specific field data (for form-based clicks)
@@ -700,12 +711,14 @@ export function FormPageBuilder() {
   }, [lastSaveTime, refreshKey]);
 
   const [isMobileFormOpen, setIsMobileFormOpen] = useState(false);
-  const [mobileCurrentStep, setMobileCurrentStep] = useState<ResumeDataKey>('personalDetails');
 
-  const handleMobileStepClick = useCallback((step: ResumeDataKey) => {
-    setMobileCurrentStep(step);
-    setIsMobileFormOpen(true);
-  }, []);
+  const handleMobileStepClick = useCallback(
+    (step: ResumeDataKey) => {
+      setCurrentStep(step);
+      setIsMobileFormOpen(true);
+    },
+    [setCurrentStep],
+  );
 
   const handleMobileFormClose = useCallback(() => {
     setIsMobileFormOpen(false);
@@ -716,20 +729,20 @@ export function FormPageBuilder() {
   }, [handleSaveResume]);
 
   const handleMobileNext = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentIndex = navs.findIndex((nav) => nav.name === currentStep);
     if (currentIndex < navs.length - 1) {
-      setMobileCurrentStep(navs[currentIndex + 1].name as ResumeDataKey);
+      setCurrentStep(navs[currentIndex + 1].name as ResumeDataKey);
     } else {
       setIsMobileFormOpen(false);
     }
-  }, [mobileCurrentStep, navs]);
+  }, [currentStep, navs, setCurrentStep]);
 
   const handleMobileBack = useCallback(() => {
-    const currentIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentIndex = navs.findIndex((nav) => nav.name === currentStep);
     if (currentIndex > 0) {
-      setMobileCurrentStep(navs[currentIndex - 1].name as ResumeDataKey);
+      setCurrentStep(navs[currentIndex - 1].name as ResumeDataKey);
     }
-  }, [mobileCurrentStep, navs]);
+  }, [currentStep, navs, setCurrentStep]);
 
   const handleMobileBackToResume = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['resume', resumeId] });
@@ -822,7 +835,7 @@ export function FormPageBuilder() {
   );
 
   if (isMobile) {
-    const currentMobileIndex = navs.findIndex((nav) => nav.name === mobileCurrentStep);
+    const currentMobileIndex = navs.findIndex((nav) => nav.name === currentStep);
     const hasNext = currentMobileIndex < navs.length - 1;
     const hasPrevious = currentMobileIndex > 0;
 
@@ -846,7 +859,7 @@ export function FormPageBuilder() {
           </div>
         </div>
 
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-white overflow-hidden">
           <Header />
 
           <MobileSectionList
@@ -872,7 +885,7 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             values={formData ?? {}}
             onChange={(data) => setFormData(data, resumeId)}
-            currentStep={mobileCurrentStep}
+            currentStep={currentStep}
             isOpen={isMobileFormOpen}
             onClose={handleMobileFormClose}
             onNext={handleMobileNext}
@@ -930,7 +943,7 @@ export function FormPageBuilder() {
           </div>
           <div
             style={{
-              position: 'absolute',
+              position: 'fixed',
               left: '0',
               top: '0',
               width: '794px',

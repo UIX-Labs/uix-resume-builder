@@ -27,23 +27,17 @@ export function TemplatesDialog({ children, onTemplateSelect, currentTemplateId 
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (!isOpen || !isMobile) return;
 
-    const updateOverlay = () => {
-      const overlay = document.querySelector('[data-slot="dialog-overlay"]') as HTMLElement;
-      if (overlay && isOpen) {
-        if (isMobile) {
-          overlay.style.bottom = '72px';
-          overlay.style.top = '0';
-          overlay.style.left = '0';
-          overlay.style.right = '0';
-        }
-      }
+    const overlay = document.querySelector('[data-slot="dialog-overlay"]') as HTMLElement | null;
+
+    if (!overlay) return;
+
+    overlay.classList.add('templates-dialog-mobile-overlay');
+
+    return () => {
+      overlay.classList.remove('templates-dialog-mobile-overlay');
     };
-
-    const timer = setTimeout(updateOverlay, 10);
-
-    return () => clearTimeout(timer);
   }, [isOpen, isMobile]);
 
   return (

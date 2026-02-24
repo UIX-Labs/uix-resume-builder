@@ -688,3 +688,7 @@
 .float-blob-animation {
   animation: floatBlob linear infinite;
 }
+
+.templates-dialog-mobile-overlay {
+  inset: 0 0 72px 0;
+}

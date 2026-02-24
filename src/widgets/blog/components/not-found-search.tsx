@@ -1,17 +1,23 @@
-export default function NotFoundSearch({ tags }: { tags: string[] }) {
-  const randomTags = ['All', ...tags]
-    .sort(() => 0.5 - Math.random())
-    .slice(0, 6);
+import Image from 'next/image';
+
+
+interface NotFoundSearchProps {
+  tags: string[];
+}
+
+export default function NotFoundSearch({ tags }: NotFoundSearchProps) {
+  const displayTags = ['All', ...tags].slice(0, 6);
 
   return (
     <div className="w-full min-h-[70vh] flex flex-col justify-center items-center gap-8 p-6 md:gap-10">
       
       {/* Container for Image: Responsive width and height */}
-      <div className="w-full max-w-[300px] md:max-w-[500px] lg:max-w-[700px] aspect-square md:aspect-video flex justify-center items-center">
-        <img
+     <div className="relative w-full max-w-[300px] md:max-w-[500px] lg:max-w-[700px] aspect-square md:aspect-video">
+       <Image
           src="/images/blog/not-found-search-img.svg"
           alt="image-not-found"
-          className="w-full h-full object-contain"
+          fill
+          className="object-contain"
         />
       </div>
 
@@ -33,7 +39,7 @@ export default function NotFoundSearch({ tags }: { tags: string[] }) {
 
         {/* Grid: 2 columns on mobile, 3 on desktop */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 w-full max-w-md md:max-w-none">
-          {randomTags.map((tag) => (
+          {displayTags.map((tag) => (
             <button
               key={tag}
               className="px-4 py-2 md:px-4 md:py-3

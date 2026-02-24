@@ -26,7 +26,7 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
         <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-2 p-3 sm:p-5">
           <div>
             <span
-              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-2 py-1 rounded-sm"
+              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-3 py-1 rounded-sm"
               style={{ backgroundColor: badgeColor }}
             >
               {post.frontmatter.tags[0]}

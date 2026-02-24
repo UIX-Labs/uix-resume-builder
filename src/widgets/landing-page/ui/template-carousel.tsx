@@ -3,24 +3,23 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useMutation } from '@tanstack/react-query';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { MobileTextView } from './mobile-text-view';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { useCallback, useEffect, useState } from 'react';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -264,19 +263,26 @@ export function TemplateCarousel() {
           {/* Pagination dots */}
           <div className="flex justify-center lg:justify-end lg:pr-[440px] pb-4 lg:pb-[29px]">
             <div className="flex items-center gap-3">
-              {displayTemplates?.map((_, index) => (
-                <button
-                  type="button"
-                  key={index}
-                  onClick={() => scrollTo(index)}
-                  className={cn(
-                    'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',
-                    index === selectedIndex
-                      ? 'scale-110 bg-white/60 border-white/60 shadow-lg'
-                      : 'bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70',
-                  )}
-                />
-              ))}
+              {displayTemplates?.map((template, index) => {
+                // 1. Logic block starts with {
+                // 2. Define your stable key
+                const templateKey = template.id || `template-dot-${index}`;
+
+                // 3. Explicitly return the JSX
+                return (
+                  <button
+                    type="button"
+                    key={templateKey}
+                    onClick={() => scrollTo(index)}
+                    className={cn(
+                      'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',
+                      index === selectedIndex
+                        ? 'scale-110 bg-white/60 border-white/60 shadow-lg'
+                        : 'bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70',
+                    )}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

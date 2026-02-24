@@ -1,13 +1,12 @@
 'use client';
 
-import { BlogPost } from '@/shared/lib/blog';
+import type { BlogPost } from '@shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
-import NotFoundSearch from './components/not-found-search';
 import SearchBar from './components/search-bar';
 
-export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }){
+export default function BlogPageContent({ posts }: { posts: BlogPost[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
@@ -25,64 +24,44 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
     secondaryPosts.push(...posts.filter((p) => p.slug !== primaryPost.slug).slice(0, 2));
   }
 
-
-
   return (
-    
-    <>
-      <main className="min-h-screen max-w-[1395px] mx-auto p-2">
-        <div className="w-full">
-          <BlogHero
-            image="/images/blog/hero-section-img.svg"
-            description="Blogs to power up your resume, job search, and career growth."
-            breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs' }]}
-          >
-            <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
-              The <span className="text-[#005FF2] font-bold">Pika Journal</span>
-            </span>
-          </BlogHero>
+    <main className="min-h-screen max-w-[1395px] mx-auto p-2">
+      <div className="w-full">
+        <BlogHero
+          image="/images/blog/hero-section-img.svg"
+          description="Blogs to power up your resume, job search, and career growth."
+          breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Blogs' }]}
+        >
+          <span className="text-3xl sm:text-4xl lg:text-[63px] font-semibold">
+            The <span className="text-[#005FF2] font-bold">Pika Journal</span>
+          </span>
+        </BlogHero>
 
-          <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
-            <div className="flex flex-col items-center sm:items-start max-w-max">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
-                Popular Articles
-              </h1>
-              <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
-            </div>
-
-            <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-              <SearchBar
-                setSearchQuery={setSearchQuery}
-                searchQuery={searchQuery}
-                placeholder="Search Article"
-                scrollToResults
-              />
-            </div>
+        <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
+          <div className="flex flex-col items-center sm:items-start max-w-max">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
+              Popular Articles
+            </h1>
+            <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
           </div>
 
-          <div className="mt-4 md:mt-10">
-            <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
-          </div>
-
-          <div className="mt-6 md:mt-10">
-            <CategoriesSection />
-          </div>
-
-          <div id="blog-grid" className="mt-6 md:mt-10 mb-2 md:mb-4">
-            {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
-              <NotFoundSearch
-                suggestions={[primaryPost, ...secondaryPosts].map((p) => ({
-                  label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
-                  slug: p.slug,
-                }))}
-              />
-            ) : (
-              <BlogGrid posts={filteredPosts} />
-            )}
+          <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
+            <SearchBar setSearchQuery={setSearchQuery} searchQuery={searchQuery} placeholder="Search Article" />
           </div>
         </div>
-      </main>
-    </>
-  );
 
+        <div className="mt-4 md:mt-10">
+          <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
+        </div>
+
+        <div className="mt-6 md:mt-10">
+          <CategoriesSection />
+        </div>
+
+        <div className="mt-6 md:mt-10 mb-2 md:mb-4">
+          <BlogGrid posts={filteredPosts} />
+        </div>
+      </div>
+    </main>
+  );
 }

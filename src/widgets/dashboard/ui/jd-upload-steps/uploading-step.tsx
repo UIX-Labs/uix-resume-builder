@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { cn } from '@shared/lib/utils';
+
+import { CircularProgress } from '@shared/ui/circular-progress';
 import { Button } from '@shared/ui/components/button';
 import { DashboardChip } from './dashboard-chip';
-import { CircularProgress } from '@shared/ui/circular-progress';
 
 interface UploadingStepProps {
   uploadProgress: number;

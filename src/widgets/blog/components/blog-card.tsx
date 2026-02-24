@@ -68,10 +68,12 @@ export default function BlogCard({
               group-hover:text-white
             "
           >
-            <img
+            <Image
               src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
               className="w-6 h-6 rounded-full"
               alt=""
+              width={100}
+              height={100}
             />
 
             <span>

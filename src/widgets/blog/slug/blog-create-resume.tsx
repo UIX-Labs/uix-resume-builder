@@ -2,7 +2,7 @@
 
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { useRouter } from 'next/navigation';
-
+import Image from 'next/image';
 export default function BlogCreateResume() {
   const router = useRouter();
   return (
@@ -11,16 +11,20 @@ export default function BlogCreateResume() {
         className="flex flex-col justify-center md:min-h-[298px]
  items-center gap-4 px-4 md:pr-8 md:gap-2 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-green-600 relative overflow-hidden group mt-10 p-6 md:p-2 text-center"
       >
-        <img
+        <Image
           src="/images/blog/slug/Avatar.png"
-          alt=""
+          alt="left avatar"
           className="absolute bottom-0 -left-6 md:-left-4 h-24 md:h-40 pointer-events-none select-none"
+          width={100}
+          height={100}
         />
 
-        <img
+        <Image
           src="/images/blog/slug/avatar-img.png"
           alt=""
           className="absolute bottom-0 -right-6 md:-right-4 h-24 md:h-40 pointer-events-none select-none"
+          width={100}
+          height={100}
         />
 
         <div className="text-2xl md:text-5xl font-semibold relative z-10">
@@ -66,7 +70,7 @@ export default function BlogCreateResume() {
           </div>
         </div> */}
 
-        {/* <div className="flex gap-4 h-full justify-center items-center">
+      {/* <div className="flex gap-4 h-full justify-center items-center">
           <img src="/images/WhatsApp.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/Facebook.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />

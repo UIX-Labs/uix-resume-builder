@@ -25,54 +25,30 @@ export const expertCardPositionClasses = [
 export function ExpertCard({ name, company, logo, image }: Expert) {
   return (
     <div
-      className="flex items-center justify-center shadow-xl overflow-visible"
-      style={{
-        width: 275,
-        height: 224,
-        transform: 'scale(var(--expert-card-scale, 1))',
-        transformOrigin: 'top left',
-      }}
+      className="flex items-center justify-center shadow-xl overflow-hidden border border-white/40 w-[275px] h-[224px] rounded-tr-[36px] rounded-bl-[36px] origin-top-left [transform:scale(var(--expert-card-scale,1))]"
     >
       <div
-        className="relative w-[275px] h-[224px] flex items-center overflow-hidden p-1"
+        className="relative w-[275px] h-[224px] flex items-center overflow-visible p-3 rounded-tr-[36px] rounded-bl-[36px] box-border bg-cover bg-center bg-no-repeat"
         style={{
-          background: 'linear-gradient(113.21deg, #91BAF8 -14.58%, #2D4160 21.17%, #000000 93.2%)',
-          borderRadius: '0 36px 0 36px',
-          border: '1px solid rgba(255, 255, 255, 0.4)',
-          boxShadow: '0 4px 24px -1px rgba(0, 0, 0, 0.2)',
-          boxSizing: 'border-box',
-          padding: '12px',
+          backgroundImage: `url('/images/expert-card-bg.png'), radial-gradient(ellipse 80% 60% at 100% 0%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(ellipse 80% 60% at 0% 100%, rgba(255,255,255,0.08) 0%, transparent 50%)`,
+          backgroundSize: 'cover, 100% 100%, 100% 100%',
+          backgroundPosition: 'center, top right, bottom left',
+          backgroundRepeat: 'no-repeat, no-repeat, no-repeat',
         }}
       >
         {/* Profile Image with stylized border - rounded-tr and rounded-bl per design */}
         <div className="relative h-[198px] w-[114px] shrink-0 overflow-visible flex items-start justify-start">
-          <div
-            className="relative h-full w-full overflow-hidden"
-            style={{
-              border: '4px solid #FFFFFF5C',
-              borderRadius: '0 23px 0 23px',
-              boxSizing: 'border-box',
-            }}
-          >
-            <Image src={image} alt={name} fill className="object-cover" style={{ borderRadius: '0 19px 0 19px' }} />
+          <div className="relative h-full w-full overflow-hidden border-4 border-[#FFFFFF5C] rounded-tr-[23px] rounded-bl-[23px] box-border">
+            <Image src={image} alt={name} fill className="object-cover rounded-tr-[19px] rounded-bl-[19px]" />
           </div>
         </div>
         <div className="flex min-w-0 flex-col justify-start items-start gap-1.5 px-4">
-          <span
-            className="text-white/40 font-bold leading-[1] tracking-[-0.26px] truncate text-4xl"
-            style={{ fontFamily: 'Geist, sans-serif' }}
-          >
+          <span className="text-white/40 font-bold leading-[1] tracking-[-0.26px] truncate text-4xl font-[Geist,sans-serif]">
             {name}
           </span>
-          <p
-            className="text-[#E0E0E0] font-light leading-[1] tracking-[-0.18px] text-sm"
-            style={{ fontFamily: 'Geist, sans-serif' }}
-          >
+          <p className="text-[#E0E0E0] font-light leading-[1] tracking-[-0.18px] text-sm font-[Geist,sans-serif]">
             Get expert resume review by professional from{' '}
-            <span
-              className="font-bold text-white block mt-0.5 text-sm"
-              style={{ fontFamily: 'Geist, sans-serif', letterSpacing: '-0.18px' }}
-            >
+            <span className="font-bold text-white block mt-0.5 text-sm tracking-[-0.18px] font-[Geist,sans-serif]">
               {company}
             </span>
           </p>

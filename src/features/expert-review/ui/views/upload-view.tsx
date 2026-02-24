@@ -4,6 +4,8 @@ import { useCachedUser } from '@shared/hooks/use-user';
 import { Button } from '@shared/ui/button';
 import { Upload } from 'lucide-react';
 import { useRef } from 'react';
+import { toast } from 'sonner';
+import { MAX_EXPERT_REVIEW_FILE_BYTES } from '../../constants';
 import { CloseButton, ExpertCard, expertCardPositionClasses, experts } from './shared';
 
 const CTA_BUTTON_CLASS =
@@ -24,7 +26,14 @@ export function UploadView({ onUpload, onSignIn, onClose }: UploadViewProps) {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) onUpload(file);
+    if (!file) return;
+    if (file.size > MAX_EXPERT_REVIEW_FILE_BYTES) {
+      toast.error('File size must be 4 MB or less for expert review.');
+      e.target.value = '';
+      return;
+    }
+    onUpload(file);
+    e.target.value = '';
   };
 
   return (

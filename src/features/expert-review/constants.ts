@@ -1,0 +1,1 @@
+export const MAX_EXPERT_REVIEW_FILE_BYTES = 4 * 1024 * 1024; // 4 MB

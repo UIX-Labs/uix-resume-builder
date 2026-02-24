@@ -1,16 +1,19 @@
 'use client';
 
+import { formatFileSize } from '@entities/resume';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { uploadResumeForReview } from '../api/upload-for-review';
+import { MAX_EXPERT_REVIEW_FILE_BYTES } from '../constants';
 import { ProgressView } from './views/progress-view';
 import { SuccessView } from './views/success-view';
 import { UploadView } from './views/upload-view';
 
 enum ExpertReviewStep {
   UPLOAD = 'upload',
+  CONFIRM = 'confirm',
   PROGRESS = 'progress',
   SUCCESS = 'success',
 }
@@ -24,6 +27,20 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
   const [step, setStep] = useState<ExpertReviewStep>(ExpertReviewStep.UPLOAD);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileName, setFileName] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [fileSizeBytes, setFileSizeBytes] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setStep(ExpertReviewStep.UPLOAD);
+      setUploadProgress(0);
+      setFileName('');
+      setSelectedFile(null);
+      setFileSizeBytes(0);
+      setIsSubmitting(false);
+    }
+  }, [isOpen]);
 
   const handleSignIn = () => {
     const pathname = window.location.pathname;
@@ -31,14 +48,24 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
     window.location.href = `/auth?callbackUrl=${callbackUrl}`;
   };
 
-  const handleUpload = async (file: File) => {
+  const handleFileSelected = (file: File) => {
+    if (file.size > MAX_EXPERT_REVIEW_FILE_BYTES) {
+      toast.error('File size must be 4 MB or less for expert review.');
+      return;
+    }
+    setSelectedFile(file);
     setFileName(file.name);
+    setStep(ExpertReviewStep.CONFIRM);
+  };
+
+  const handleConfirmSubmit = async () => {
+    if (!selectedFile) return;
+    setIsSubmitting(true);
+    setFileSizeBytes(selectedFile.size);
     setStep(ExpertReviewStep.PROGRESS);
     setUploadProgress(0);
 
     try {
-      // Start a slow progress simulation while the real upload happens
-      // Since we don't have native progress tracking from fetch easily
       const progressInterval = setInterval(() => {
         setUploadProgress((prev) => {
           if (prev >= 90) {
@@ -49,10 +76,11 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
         });
       }, 500);
 
-      await uploadResumeForReview(file);
+      await uploadResumeForReview(selectedFile);
 
       clearInterval(progressInterval);
       setUploadProgress(100);
+      setSelectedFile(null);
 
       toast.success('Resume uploaded successfully for expert review!');
 
@@ -62,7 +90,10 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
     } catch (error) {
       console.error('Upload failed:', error);
       toast.error('Failed to upload resume. Please try again.');
-      setStep(ExpertReviewStep.UPLOAD);
+      setStep(ExpertReviewStep.CONFIRM);
+      setUploadProgress(0);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -70,19 +101,43 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
     setStep(ExpertReviewStep.UPLOAD);
     setUploadProgress(0);
     setFileName('');
+    setSelectedFile(null);
+    setFileSizeBytes(0);
+    setIsSubmitting(false);
     onClose();
   };
 
   const renderStep = () => {
     switch (step) {
       case ExpertReviewStep.UPLOAD:
-        return <UploadView onUpload={handleUpload} onSignIn={handleSignIn} onClose={handleReset} />;
+        return <UploadView onUpload={handleFileSelected} onSignIn={handleSignIn} onClose={handleReset} />;
+      case ExpertReviewStep.CONFIRM:
+        if (!selectedFile) {
+          return <UploadView onUpload={handleFileSelected} onSignIn={handleSignIn} onClose={handleReset} />;
+        }
+        return (
+          <ProgressView
+            fileName={fileName}
+            progress={0}
+            fileSizeFormatted={formatFileSize(selectedFile.size)}
+            showConfirmActions
+            isSubmitting={isSubmitting}
+            onFileSelected={handleFileSelected}
+            onSubmit={handleConfirmSubmit}
+            onCancel={() => setStep(ExpertReviewStep.CONFIRM)}
+            onClose={handleReset}
+          />
+        );
       case ExpertReviewStep.PROGRESS:
         return (
           <ProgressView
             fileName={fileName}
             progress={uploadProgress}
-            onCancel={() => setStep(ExpertReviewStep.UPLOAD)}
+            fileSizeFormatted={fileSizeBytes ? formatFileSize(fileSizeBytes) : '0 B'}
+            showConfirmActions={false}
+            onFileSelected={handleFileSelected}
+            onSubmit={handleConfirmSubmit}
+            onCancel={() => setStep(ExpertReviewStep.CONFIRM)}
             onClose={handleReset}
           />
         );
@@ -90,7 +145,7 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
         return (
           <SuccessView
             onDashboard={() => {
-              onClose(); /* navigate to dashboard */
+              onClose();
             }}
             onClose={handleReset}
           />

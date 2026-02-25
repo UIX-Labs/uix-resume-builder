@@ -184,7 +184,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
 
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
     <thead
-      className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-600"
+      className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600"
       {...props}
     >
       {children}
@@ -192,7 +192,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   ),
 
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 font-semibold" {...props}>
+    <th className="px-4 py-3 font-semibold text-base" {...props}>
       {children}
     </th>
   ),

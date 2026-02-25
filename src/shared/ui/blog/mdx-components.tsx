@@ -39,7 +39,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
         {...props}
       >
         {children}
-         {/* {id && (
+        {/* {id && (
           <a
             href={`${id}`}
             className="ml-2 text-gray-300 no-underline opacity-0 transition-opacity group-hover:opacity-100"
@@ -55,11 +55,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h3
-        id={id}
-        className="group mt-8 mb-3 scroll-mt-0 text-xl font-semibold tracking-tight text-gray-900"
-        {...props}
-      >
+      <h3 id={id} className="group mt-8 mb-3 scroll-mt-0 text-xl font-semibold tracking-tight text-gray-900" {...props}>
         {children}
       </h3>
     );
@@ -183,10 +179,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   ),
 
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead
-      className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600"
-      {...props}
-    >
+    <thead className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600" {...props}>
       {children}
     </thead>
   ),

@@ -7,7 +7,7 @@ import CategoriesSection from './categories-section';
 import NotFoundSearch from './components/not-found-search';
 import SearchBar from './components/search-bar';
 
-export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }){
+export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredPosts = posts.filter((post) =>
@@ -25,10 +25,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
     secondaryPosts.push(...posts.filter((p) => p.slug !== primaryPost.slug).slice(0, 2));
   }
 
-
-
   return (
-    
     <>
       <main className="min-h-screen max-w-[1395px] mx-auto p-2">
         <div className="w-full">
@@ -84,5 +81,4 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
       </main>
     </>
   );
-
 }

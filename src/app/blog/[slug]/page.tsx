@@ -124,7 +124,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     }),
   };
 
-
   const categoryTag = frontmatter.tags?.[0]?.toLowerCase();
   const categoryInfo = categories.find((c) => c.id === categoryTag);
   const categoryLabel = categoryInfo ? categoryInfo.title : categoryTag;
@@ -242,7 +241,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {/* </div> */}
 
               <div
-                  className="prose prose-lg prose-gray prose-headings:scroll-mt-0
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-0
                  prose-headings:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
                  prose-pre:bg-text-blue-500 prose-pre:text-black
                     prose-a:text-blue-500 w-full prose-headings:font-semibold
@@ -253,16 +252,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     prose-th:px-4
                     prose-td:px-4
                     prose-th:py-3
-                    prose-td:py-3 mt-6" >
+                    prose-td:py-3 mt-6"
+              >
                 <MDXRemote
                   source={content}
                   components={mdxComponents}
                   options={{
                     mdxOptions: {
                       remarkPlugins: [remarkGfm],
-                      rehypePlugins: [
-                        rehypeSlug,
-                      ],
+                      rehypePlugins: [rehypeSlug],
                     },
                   }}
                 />
@@ -299,7 +297,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* )} */}
         <div className="mt-10 lg:p-4 lg:mt-25 gap-2 md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-white">
-          <div className="text-xl md:text-[36px] font-bold text-center p-2 md:p-0 mt-4 md:mt-10 px-2">Continue Reading</div>
+          <div className="text-xl md:text-[36px] font-bold text-center p-2 md:p-0 mt-4 md:mt-10 px-2">
+            Continue Reading
+          </div>
           <span className="text-md md:text-[20px] text-gray-500 text-center block p-2 md:p-0 px-2">
             Check more recommended readings to get the job of your dreams.
           </span>

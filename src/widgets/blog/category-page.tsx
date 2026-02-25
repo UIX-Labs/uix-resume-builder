@@ -16,14 +16,7 @@ interface Props {
   tags: string[];
 }
 
-export default function CategoryPageContent({
-  posts,
-  allPosts,
-  title,
-  placeholder,
-  color,
-  currentCategoryId,
-}: Props) {
+export default function CategoryPageContent({ posts, allPosts, title, placeholder, color, currentCategoryId }: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>

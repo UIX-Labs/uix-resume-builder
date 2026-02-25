@@ -44,7 +44,6 @@ export default function BlogCreateResume() {
         >
           Create your Resume
         </button>
-
       </div>
 
       {/* <div className="flex flex-col md:flex-row justify-between mt-6 gap-4">
@@ -67,7 +66,7 @@ export default function BlogCreateResume() {
           </div>
         </div> */}
 
-        {/* <div className="flex gap-4 h-full justify-center items-center">
+      {/* <div className="flex gap-4 h-full justify-center items-center">
           <img src="/images/WhatsApp.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/Facebook.svg" alt="" className="w-11 h-11 text-black" />
           <img src="/images/blog/X (1).svg" alt="" className="w-12 h-12 text-black" />

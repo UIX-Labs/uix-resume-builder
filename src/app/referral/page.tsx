@@ -5,7 +5,7 @@ import { SidebarProvider } from '@shared/ui/sidebar';
 
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
-import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import ReferralPageContent from '@widgets/referral-page/ui/referral-page-content';
 import ReferralBackgroundPattern from '@features/referral-flow/ui/referral-background-pattern-svg';
 
@@ -18,7 +18,7 @@ export default function ReferralPage() {
         <DashboardSidebar />
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <AdaptiveDashboardHeader user={user} />
+          <ResponsiveDashboardHeader user={user} />
 
           <main className="flex flex-col bg-dashboard-bg h-[calc(100vh-114px)] md:h-auto mt-3 rounded-[36px] overflow-hidden pb-4 relative">
             <div className="absolute -bottom-18 -right-15 md:-right-7 md:top-0 pointer-events-none w-75 h-65 opacity-30">

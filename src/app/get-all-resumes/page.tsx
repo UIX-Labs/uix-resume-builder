@@ -16,7 +16,7 @@ import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
@@ -137,7 +137,7 @@ export default function GetAllResumesPage() {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <AdaptiveDashboardHeader user={user} />
+          <ResponsiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

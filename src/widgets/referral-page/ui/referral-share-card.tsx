@@ -12,13 +12,9 @@ interface ReferralShareCardProps {
 }
 
 export default function ReferralShareCard({ referralLink, isLoading = false }: ReferralShareCardProps) {
-  const [_copied, setCopied] = useState(false);
-
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(referralLink);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
       toast.success('Referral link copied!');
     } catch (error) {
       console.error('Failed to copy link:', error);

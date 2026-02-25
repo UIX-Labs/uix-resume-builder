@@ -7,6 +7,7 @@ import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
 import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
 import { FileText, Home, LayoutGrid, LogIn, LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
+import ReferralIcon from '@features/referral-flow/ui/referral-icon';
 
 export interface DashboardMobileSidebarProps {
   isOpen: boolean;
@@ -37,6 +38,10 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
 
   const handleYourResumesClick = () => {
     handleNavigation('/resumes', 'your_resumes');
+  };
+
+  const handleReferralClick = () => {
+    handleNavigation('/referral', 'referral');
   };
 
   const handleLogoutClick = () => {
@@ -79,6 +84,12 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
           onClick: handleYourResumesClick,
           isActive: pathname === '/resumes',
           icon: FileText,
+        },
+        {
+          label: 'Referral',
+          onClick: handleReferralClick,
+          isActive: pathname === '/referral',
+          icon: ReferralIcon,
         },
       ] as NavItem[],
     },

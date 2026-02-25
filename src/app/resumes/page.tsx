@@ -21,7 +21,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useCallback } from 'react';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
-import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import { Button } from '@shared/ui/components/button';
 import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
@@ -131,7 +131,7 @@ export default function AllResumePage() {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <AdaptiveDashboardHeader user={user} />
+          <ResponsiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

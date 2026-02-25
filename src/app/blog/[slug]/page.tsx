@@ -10,7 +10,6 @@ import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
@@ -243,10 +242,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {/* </div> */}
 
               <div
-                className="prose prose-lg prose-gray prose-headings:scroll-mt-24
-                 prose-a:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
-                 prose-pre:bg-gray-950 prose-pre:text-gray-100 prose-strong:text-blue-500
-                    prose-a:text-blue-500w-full
+                  className="prose prose-lg prose-gray prose-headings:scroll-mt-0
+                 prose-headings:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
+                 prose-pre:bg-text-blue-500 prose-pre:text-black
+                    prose-a:text-blue-500 w-full prose-headings:font-semibold
                     prose-table:mx-auto
                     prose-table:w-full
                     prose-th:text-center
@@ -263,7 +262,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                       remarkPlugins: [remarkGfm],
                       rehypePlugins: [
                         rehypeSlug,
-                        [rehypeAutolinkHeadings, { behavior: 'wrap', properties: { className: 'no-underline' } }],
                       ],
                     },
                   }}

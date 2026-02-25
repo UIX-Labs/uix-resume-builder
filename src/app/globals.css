@@ -740,3 +740,6 @@
 .float-blob-animation {
   animation: floatBlob linear infinite;
 }
+html {
+  scroll-behavior: smooth;
+}

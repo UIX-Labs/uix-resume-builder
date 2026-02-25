@@ -14,6 +14,7 @@ import { useBuilderIntelligence } from '@widgets/form-page-builder/hooks/use-bui
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { useQueryClient } from '@tanstack/react-query';
 import { useIsMobile } from '@shared/hooks/use-mobile';
+import { ResumeNotAccessibleModal } from '@features/resume/ui/resume-not-accessible-modal';
 
 export default function FormPage() {
   const params = useParams();
@@ -23,7 +24,8 @@ export default function FormPage() {
   const { data: user } = useUserProfile();
   const isMobile = useIsMobile();
 
-  const { data: resumeData, isLoading } = useResumeData(id);
+  const { data: resumeData, isLoading, error } = useResumeData(id);
+  const [showAccessDeniedModal, setShowAccessDeniedModal] = useState(false);
 
   const [currentStep, setCurrentStep] = useState<ResumeDataKey>('personalDetails');
   const isAnalyzing = useFormDataStore((state) => state.isAnalyzing);
@@ -36,6 +38,12 @@ export default function FormPage() {
 
   // Builder Intelligence logic
   const { handleBuilderIntelligence } = useBuilderIntelligence(id);
+
+  useEffect(() => {
+    if (error && (error as any)?.status === 403) {
+      setShowAccessDeniedModal(true);
+    }
+  }, [error]);
 
   useEffect(() => {
     const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
@@ -98,64 +106,72 @@ export default function FormPage() {
   }
 
   return (
-    <FormPageBuilderProvider
-      value={{
-        currentStep,
-        setCurrentStep,
-        navs,
-        resumeData,
-        onBuilderIntelligence: handleBuilderIntelligence,
-      }}
-    >
-      <div className={'flex pl-0 md:pl-4'}>
-        {!isMobile && <Sidebar />}
+    <>
+      <ResumeNotAccessibleModal
+        isOpen={showAccessDeniedModal}
+        onClose={() => setShowAccessDeniedModal(false)}
+        message={(error as any)?.data?.message?.message || 'You are not allowed to access this resume.'}
+      />
 
-        <div className="relative flex w-full overflow-hidden">
-          {analyzerError && (
-            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-sm">
-              <div className="relative flex flex-col items-center gap-4 bg-white p-8 rounded-2xl shadow-lg border border-red-200">
-                <Button
-                  onClick={() => setAnalyzerError(false)}
-                  className="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-transparent hover:text-gray-600 transition-colors"
-                >
-                  <X className="h-10 w-10" />
-                </Button>
-                <AlertCircle className="h-12 w-12 text-red-500" />
-                <p className="text-lg font-semibold text-gray-800">Sorry, please try again</p>
-                <p className="text-sm text-gray-600 text-center max-w-md">
-                  We encountered an error while analyzing your resume.
-                </p>
-                <Button
-                  onClick={() => {
-                    setAnalyzerError(false);
-                    if (!user?.isLoggedIn) {
-                      localStorage.setItem('pending_analyzer_resume_id', id);
-                      const callbackUrl = encodeURIComponent(window.location.pathname);
-                      window.location.href = `/auth?callbackUrl=${callbackUrl}`;
-                      return;
-                    }
-                    handleBuilderIntelligence();
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                >
-                  Try Again
-                </Button>
+      <FormPageBuilderProvider
+        value={{
+          currentStep,
+          setCurrentStep,
+          navs,
+          resumeData,
+          onBuilderIntelligence: handleBuilderIntelligence,
+        }}
+      >
+        <div className={'flex pl-0 md:pl-4'}>
+          {!isMobile && <Sidebar />}
+
+          <div className="relative flex w-full overflow-hidden">
+            {analyzerError && (
+              <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                <div className="relative flex flex-col items-center gap-4 bg-white p-8 rounded-2xl shadow-lg border border-red-200">
+                  <Button
+                    onClick={() => setAnalyzerError(false)}
+                    className="absolute top-4 right-4 text-gray-400 bg-transparent hover:bg-transparent hover:text-gray-600 transition-colors"
+                  >
+                    <X className="h-10 w-10" />
+                  </Button>
+                  <AlertCircle className="h-12 w-12 text-red-500" />
+                  <p className="text-lg font-semibold text-gray-800">Sorry, please try again</p>
+                  <p className="text-sm text-gray-600 text-center max-w-md">
+                    We encountered an error while analyzing your resume.
+                  </p>
+                  <Button
+                    onClick={() => {
+                      setAnalyzerError(false);
+                      if (!user?.isLoggedIn) {
+                        localStorage.setItem('pending_analyzer_resume_id', id);
+                        const callbackUrl = encodeURIComponent(window.location.pathname);
+                        window.location.href = `/auth?callbackUrl=${callbackUrl}`;
+                        return;
+                      }
+                      handleBuilderIntelligence();
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                  >
+                    Try Again
+                  </Button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <NewProgressBar
-            isVisible={isAnalyzing && !analyzerError}
-            transitionTexts={TRANSITION_TEXTS}
-            progress={analyzerProgress}
-            currentTextIndex={currentTextIndex}
-            showLoader={true}
-            className="z-50"
-          />
+            <NewProgressBar
+              isVisible={isAnalyzing && !analyzerError}
+              transitionTexts={TRANSITION_TEXTS}
+              progress={analyzerProgress}
+              currentTextIndex={currentTextIndex}
+              showLoader={true}
+              className="z-50"
+            />
 
-          <FormPageBuilder />
+            <FormPageBuilder />
+          </div>
         </div>
-      </div>
-    </FormPageBuilderProvider>
+      </FormPageBuilderProvider>
+    </>
   );
 }

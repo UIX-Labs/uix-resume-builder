@@ -19,6 +19,7 @@ interface ArticleHeaderProps {
 
 export default function ArticleHeader({
   title,
+  highlightWord,
   description,
   author,
   date,
@@ -73,7 +74,15 @@ export default function ArticleHeader({
 
       <div className="order-2 lg:order-1 flex-1 flex flex-col justify-center text-left">
         <h1 className="text-2xl font-bold tracking-tight text-[#0B0A09] sm:text-4xl lg:text-5xl leading-[1.15]">
-          {title}
+          {highlightWord ? (
+            <>
+              {title.split(highlightWord)[0]}
+              <span className="text-[#007BFF]">{highlightWord}</span>
+              {title.split(highlightWord)[1]}
+            </>
+          ) : (
+            title
+          )}
         </h1>
 
         <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 max-w-[600px]">{description}</p>

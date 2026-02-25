@@ -1,5 +1,6 @@
-import type { MetadataRoute } from 'next';
+import { categories } from '@/data/categories';
 import { getAllPosts } from '@shared/lib/blog';
+import type { MetadataRoute } from 'next';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
@@ -57,8 +58,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.frontmatter.date),
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }));
 
-  return [...staticPages, ...blogListPage, ...blogPosts];
+  const categoryPages: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: `${baseUrl}/blog/categories/${category.id}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }));
+
+  return [...staticPages, ...blogListPage, ...categoryPages, ...blogPosts];
 }

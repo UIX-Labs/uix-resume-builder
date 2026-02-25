@@ -428,6 +428,7 @@ function ResumeRendererComponent({
     <>
       <div
         ref={dummyContentRef}
+        data-resume-measurement="true"
         className="mb-5 grid"
         style={{
           ...baseStyle,

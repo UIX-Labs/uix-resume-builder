@@ -114,6 +114,7 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
         const { [key]: _, ...rest } = prev;
         return rest;
       });
+      setLinksOrder((prev) => prev.filter((k) => k !== key));
     } else {
       setLinksData((prev) => ({
         ...prev,

@@ -14,6 +14,7 @@ export function renderInlineListSection(
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
 ): React.ReactNode {
+  const isBreakable = section.break === true || section.breakable === true;
   const items = resolvePath(data, section.listPath, []);
   let parentId: string | undefined;
   // Extract parent itemId for nested paths like "interests.items[0].items"
@@ -80,8 +81,8 @@ export function renderInlineListSection(
   return (
     <div
       data-break={section.break}
-      data-canbreak={section.breakable ? 'true' : undefined}
-      data-has-breakable-content={section.breakable ? 'true' : undefined}
+      data-canbreak={isBreakable ? 'true' : undefined}
+      data-has-breakable-content={isBreakable ? 'true' : undefined}
       data-section={sectionId}
       className={cn(shouldBlur && 'blur-[2px] pointer-events-none')}
       style={wrapperStyle}
@@ -95,7 +96,7 @@ export function renderInlineListSection(
         {section.heading.divider && renderDivider(section.heading.divider)}
       </div>
 
-      <div data-item="content" data-break={section.break} data-canbreak={section.breakable ? 'true' : undefined}>
+      <div data-item="content" data-break={section.break} data-canbreak={isBreakable ? 'true' : undefined}>
         {section.showBullet ? (
           <ul className={cn('list-disc list-outside pl-6', section.containerClassName)}>
             {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {

@@ -9,6 +9,7 @@ interface BuilderIntelligenceCardProps {
   isAnalyzed: boolean;
   isAnalyzing: boolean;
   isTailoredWithJD: boolean;
+  isResumeEmpty: boolean;
   onAnalyze: () => void;
 }
 
@@ -16,6 +17,7 @@ export function BuilderIntelligenceCard({
   isAnalyzed,
   isAnalyzing,
   isTailoredWithJD,
+  isResumeEmpty,
   onAnalyze,
 }: BuilderIntelligenceCardProps) {
   const { data: user } = useUserProfile();
@@ -70,9 +72,10 @@ export function BuilderIntelligenceCard({
         </p>
 
         <Button
-          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer border-2 border-white"
+          className="w-full mt-3 bg-[#02A44F] hover:bg-[#028a42] h-8 text-white text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed"
           onClick={handleAnalyzeClick}
-          disabled={isAnalyzing}
+          disabled={isAnalyzing || isResumeEmpty}
+          title={isResumeEmpty ? 'Please add some data to your resume first' : ''}
         >
           {isAnalyzing ? (
             'Analyzing...'

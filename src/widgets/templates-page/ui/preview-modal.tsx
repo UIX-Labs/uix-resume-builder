@@ -2,6 +2,7 @@
 
 import type { Template } from '@entities/template-page/api/template-data';
 import { ResumeRenderer } from '@features/resume/renderer';
+import template1 from '@features/resume/templates/template1';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { cn } from '@shared/lib/cn';
@@ -9,7 +10,6 @@ import { Dialog, DialogOverlay, DialogPortal, DialogTitle } from '@shared/ui/dia
 import { useRef } from 'react';
 import mockData from '../../../../mock-data.json';
 import { CloseIcon } from '../../../shared/icons/close-icon';
-import template1 from '@features/resume/templates/template1';
 
 interface PreviewModalProps {
   template: Template | null;
@@ -21,6 +21,8 @@ interface PreviewModalProps {
 export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+
+  const scale = typeof window !== 'undefined' ? (window.innerWidth * 0.95) / 794 : 0.4;
 
   const handleClose = () => {
     onClose();
@@ -58,14 +60,18 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
           >
             <CloseIcon className="h-6 w-6 md:h-10 md:w-10" />
           </button>
-          <div ref={containerRef} className="h-full overflow-y-auto relative pt-0 pb-0">
+
+          <div ref={containerRef} className="h-full overflow-y-auto">
             <div
-              className="flex flex-col items-center [&>div]:border-b-2 [&>div]:border-gray-300 [&>div:last-child]:border-b-0"
-              style={{
-                transformOrigin: 'top center',
-                width: '100%',
-                transform: isMobile ? 'scale(0.4)' : 'none',
-              }}
+              key={activeTemplate.id}
+              style={
+                isMobile
+                  ? {
+                      zoom: scale,
+                      width: '794px',
+                    }
+                  : {}
+              }
             >
               <ResumeRenderer
                 template={activeTemplate.json}

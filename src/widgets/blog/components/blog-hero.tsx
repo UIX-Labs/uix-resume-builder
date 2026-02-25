@@ -11,7 +11,7 @@ interface BlogHeroProps {
 export default function BlogHero({ description, image, children }: BlogHeroProps) {
   return (
     <div
-      className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl overflow-hidden max-w-[1395px] mx-auto border-4 
+      className="relative bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl overflow-hidden border-4 
       border-white min-h-[296px] lg:h-[250px]"
     >
       <div className="flex flex-col lg:flex-row items-stretch h-full">

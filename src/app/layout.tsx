@@ -6,7 +6,9 @@ import '../app/globals.css';
 import { Providers } from './providers';
 
 import { UserTracker } from '@/shared/lib/analytics/user-tracker';
+import { Loader } from '@/shared/ui';
 import { AnalyticsProvider } from '@shared/lib/analytics/mixpnel-provider';
+import { Suspense } from 'react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -161,7 +163,9 @@ export default function RootLayout({
         <AnalyticsProvider />
         <Providers>
           <UserTracker />
-          {children}
+          <Suspense fallback={<Loader />}>
+            {children}
+          </Suspense>
         </Providers>
         {/* <Toaster /> */}
       </body>

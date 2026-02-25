@@ -1,6 +1,7 @@
 'use client';
+import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 import { createResume, updateResumeTemplate } from '@entities/resume';
-import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
@@ -8,17 +9,17 @@ import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import TemplateFilter from '@widgets/template-filters/template-filter';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
-import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
@@ -146,6 +147,10 @@ export default function GetAllResumesPage() {
               <WelcomeHeader
                 userName={isUserLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
               />
+
+              <div className="px-4 my-4">
+                <TemplateFilter />
+              </div>
 
               <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
                 {templates?.map((template) => {

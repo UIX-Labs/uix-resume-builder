@@ -18,6 +18,7 @@ import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import PikaResume from '@shared/icons/pika-resume';
 import { useRouter } from 'next/navigation';
 import { useUserProfile } from '@shared/hooks/use-user';
+import ReferralIcon from '@features/referral-flow/ui/referral-icon';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -47,6 +48,13 @@ export default function DashboardSidebar() {
     trackEvent('navigation_click', {
       source: 'dashboard_sidebar',
       destination: 'your_resumes',
+    });
+  };
+
+  const handleReferralClick = () => {
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'referral',
     });
   };
 
@@ -117,6 +125,15 @@ export default function DashboardSidebar() {
                   <Link href="/resumes" onClick={handleYourResumesClick}>
                     <FileText className="w-5 h-5" />
                     Your Resumes
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/referral'}>
+                  <Link href="/referral" onClick={handleReferralClick}>
+                    <ReferralIcon className="w-6 h-6" />
+                    Referral
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

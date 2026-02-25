@@ -24,9 +24,7 @@ export const expertCardPositionClasses = [
 
 export function ExpertCard({ name, company, image }: Expert) {
   return (
-    <div
-      className="flex items-center justify-center shadow-xl overflow-hidden border border-white/40 w-[275px] h-[224px] rounded-tr-[36px] rounded-bl-[36px] origin-top-left [transform:scale(var(--expert-card-scale,1))]"
-    >
+    <div className="flex items-center justify-center shadow-xl overflow-hidden border border-white/40 w-[275px] h-[224px] rounded-tr-[36px] rounded-bl-[36px] origin-top-left [transform:scale(var(--expert-card-scale,1))]">
       <div
         className="relative w-[275px] h-[224px] flex items-center overflow-visible p-3 rounded-tr-[36px] rounded-bl-[36px] box-border bg-cover bg-center bg-no-repeat"
         style={{

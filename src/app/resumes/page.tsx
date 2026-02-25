@@ -128,7 +128,7 @@ export default function AllResumePage() {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <AdaptiveDashboardHeader user={user} />
+          <ResponsiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

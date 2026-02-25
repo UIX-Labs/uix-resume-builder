@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "47a6be4238df588e4fa4468829242aabb52781c0",
+  "prompts": {
+    "0189581eb6e3dccc": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "384292",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 12,
+      "total_deletions": 7,
+      "accepted_lines": 12,
+      "overriden_lines": 0
+    }
+  }
+}

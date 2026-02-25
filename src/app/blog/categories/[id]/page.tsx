@@ -1,9 +1,8 @@
 import { categories } from '@/data/categories';
 import BlogHero from '@/widgets/blog/components/blog-hero';
-import NotFoundPage from '@/widgets/blog/slug/not-found-page';
 import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
-
+import NotFoundPage from '@widgets/blog/slug/not-found-page';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -27,13 +26,11 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const tags = getAllTags();
 
-  const tags = getAllTags();
-
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {
       const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const normalizedId = id.toLowerCase().replace(/[^a-z0-9]/g, '-');
-      return normalizedTag === normalizedId || normalizedTag.startsWith(normalizedId + '-');
+      return normalizedTag === normalizedId || normalizedTag.startsWith(`${normalizedId}-`);
     }),
   );
 
@@ -56,6 +53,7 @@ export default async function CategoryPage({ params }: PageProps) {
       {filteredPosts.length > 0 ? (
         <CategoryPageContent
           posts={filteredPosts}
+          allPosts={allPosts}
           title={`Collection of ${filteredPosts.length}+ ${filteredPosts.length === 1 ? 'blog' : 'blogs'}`}
           placeholder="Type Something"
           color={category.color}

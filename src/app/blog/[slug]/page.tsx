@@ -241,10 +241,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
 
               <div
-                className="prose prose-lg prose-gray prose-headings:scroll-mt-0
+                  className="prose prose-lg prose-gray prose-headings:scroll-mt-0
                  prose-headings:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
                  prose-pre:bg-text-blue-500 prose-pre:text-black
-                    prose-a:text-blue-500w-full prose-headings:font-semibold prose-headings:text-2xl
+                    prose-a:text-blue-500 w-full prose-headings:font-semibold
                     prose-table:mx-auto
                     prose-table:w-full
                     prose-th:text-center

@@ -55,6 +55,22 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 
   if (headings.length === 0) return null;
 
+  const handleHeadingClick = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = 20;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = el.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <nav className="relative top-0 lg:static w-full rounded-xl border-2 border-white bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 lg:p-5 bg-gray-100">
       <div className="mb-2 lg:mb-4 flex flex-row justify-between items-center gap-4 cursor-pointer">
@@ -74,26 +90,14 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           <li key={heading.id}>
             <button
               type="button"
-              onClick={() => {
-                const el = document.getElementById(heading.id);
-                if (el) {
-                  const offset = 20;
-                  const bodyRect = document.body.getBoundingClientRect().top;
-                  const elementRect = el.getBoundingClientRect().top;
-                  const elementPosition = elementRect - bodyRect;
-                  const offsetPosition = elementPosition - offset;
-
-                  window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth',
-                  });
-                }
-              }}
+              onClick={() => handleHeadingClick(heading.id)}
               className={cn(
                 'block text-base lg:text-lg transition-colors text-left mt-2 lg:mt-4 cursor-pointer',
                 heading.level === 3 && 'pl-3',
                 heading.level === 4 && 'pl-6',
-                activeId === heading.id ? 'text-black font-semibold' : 'text-gray-400 hover:text-gray-700 cursor-pointer',
+                activeId === heading.id
+                  ? 'text-black font-semibold'
+                  : 'text-gray-400 hover:text-gray-700 cursor-pointer',
               )}
             >
               {heading.text}

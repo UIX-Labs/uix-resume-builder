@@ -15,7 +15,11 @@ async function fetcher<T>(url: string, { options }: { options?: RequestInit } = 
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch data');
+    const errorData = await response.json().catch(() => null);
+    const error: any = new Error(errorData?.message || 'Failed to fetch data');
+    error.status = response.status;
+    error.data = errorData;
+    throw error;
   }
 
   return response.json();

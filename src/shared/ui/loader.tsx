@@ -16,11 +16,7 @@ export function Loader({ className, size = 'lg' }: LoaderProps) {
   return (
     <div className="flex items-center justify-center w-full h-full p-4">
       <div
-        className={cn(
-          'border-white border-t-transparent rounded-full animate-spin',
-          sizeClasses[size],
-          className
-        )}
+        className={cn('border-white border-t-transparent rounded-full animate-spin', sizeClasses[size], className)}
       />
     </div>
   );

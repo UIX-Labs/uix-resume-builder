@@ -163,9 +163,7 @@ export default function RootLayout({
         <AnalyticsProvider />
         <Providers>
           <UserTracker />
-          <Suspense fallback={<Loader />}>
-            {children}
-          </Suspense>
+          <Suspense fallback={<Loader />}>{children}</Suspense>
         </Providers>
         {/* <Toaster /> */}
       </body>

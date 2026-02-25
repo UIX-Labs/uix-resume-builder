@@ -121,15 +121,50 @@ export function downloadPdfBlob(blob: Blob, filename: string): void {
 /**
  * Generates and downloads a PDF from HTML content
  */
-export async function generatePdfFromHtml(htmlContent: string, filename: string, resumeId?: string): Promise<void> {
+export async function generatePdfFromHtml(
+  htmlContent: string,
+  filename: string,
+  resumeId?: string,
+): Promise<
+  { downloadsLeft: number; downloadsAllowed: number; downloadsDone: number; referralUrl?: string } | undefined
+> {
   try {
     const styledHtml = prepareHtmlForPdf(htmlContent);
-    const pdfBlob = await convertHtmlToPdf(styledHtml, resumeId);
-    downloadPdfBlob(pdfBlob, filename);
-    toast.success('PDF downloaded successfully');
+    const { blob, downloadInfo } = await convertHtmlToPdf(styledHtml, resumeId);
+    downloadPdfBlob(blob, filename);
+
+    const downloadsLeft = downloadInfo.downloadsLeft;
+    const message =
+      downloadsLeft > 0
+        ? `PDF downloaded successfully! ${downloadsLeft} download${downloadsLeft === 1 ? '' : 's'} remaining.`
+        : 'PDF downloaded successfully!';
+
+    toast.success(message);
+
+    return {
+      downloadsLeft: downloadInfo.downloadsLeft,
+      downloadsAllowed: downloadInfo.downloadsAllowed,
+      downloadsDone: downloadInfo.downloadsDone,
+    };
   } catch (error) {
     console.error('PDF generation error:', error);
-    toast.error('Failed to generate PDF');
+
+    if (error instanceof Error && 'downloadInfo' in error) {
+      const downloadInfo = (error as any).downloadInfo;
+      if (downloadInfo?.referralUrl) {
+        return {
+          downloadsLeft: downloadInfo.downloadsLeft,
+          downloadsAllowed: downloadInfo.downloadsAllowed,
+          downloadsDone: downloadInfo.downloadsDone,
+          referralUrl: downloadInfo.referralUrl,
+        };
+      } else {
+        toast.error('Download limit reached');
+      }
+    } else {
+      toast.error('Failed to generate PDF');
+    }
+
     throw error;
   }
 }

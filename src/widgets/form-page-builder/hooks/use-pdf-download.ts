@@ -1,20 +1,26 @@
 import { useUserProfile } from '@shared/hooks/use-user';
 import { startTimedEvent, trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { useState, useEffect, useRef } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 interface UsePdfDownloadParams {
   resumeId: string;
-  generatePDF: () => Promise<void>;
+  generatePDF: () => Promise<
+    { downloadsLeft: number; downloadsAllowed: number; downloadsDone: number; referralUrl?: string } | undefined
+  >;
   onDownloadSuccess?: () => void;
 }
 
 export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: UsePdfDownloadParams) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authRedirectUrl, setAuthRedirectUrl] = useState('');
+  const [isReferralModalOpen, setIsReferralModalOpen] = useState(false);
+  const [referralUrl, setReferralUrl] = useState('');
   const searchParams = useSearchParams();
   const processedRef = useRef(false);
+  const queryClient = useQueryClient();
 
   // const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
   // const [isWishlistSuccessModalOpen, setIsWishlistSuccessModalOpen] =
@@ -61,7 +67,17 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
       //     resumeId,
       //   });
       // } else {
-      await generatePDF();
+      const downloadInfo = await generatePDF();
+
+      if (downloadInfo?.referralUrl) {
+        setReferralUrl(downloadInfo.referralUrl);
+        setIsReferralModalOpen(true);
+        return;
+      }
+
+      if (downloadInfo) {
+        queryClient.invalidateQueries({ queryKey: ['userProfile'] });
+      }
 
       onDownloadSuccess?.();
 
@@ -69,6 +85,7 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
         status: 'success',
         format: 'pdf',
         resumeId,
+        downloadsLeft: downloadInfo?.downloadsLeft,
       });
       // }
     } catch (error) {
@@ -112,5 +129,8 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
     isAuthModalOpen,
     setIsAuthModalOpen,
     authRedirectUrl,
+    isReferralModalOpen,
+    setIsReferralModalOpen,
+    referralUrl,
   };
 }

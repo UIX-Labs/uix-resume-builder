@@ -876,7 +876,7 @@ export function FormPageBuilder() {
             onPreview={() => setIsPreviewModalOpen(true)}
             isGeneratingPDF={isGeneratingPDF}
           >
-            <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+            <TemplatesDialog onTemplateSelect={handleTemplateSelect} currentTemplateId={selectedTemplateId}>
               <MobileTemplateButton />
             </TemplatesDialog>
           </MobileFooter>
@@ -970,7 +970,7 @@ export function FormPageBuilder() {
           </div>
         </div>
         <div className="sticky bottom-0 left-0 right-0 flex justify-end items-center gap-3 pr-8 pb-4 pointer-events-none">
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
+          <TemplatesDialog onTemplateSelect={handleTemplateSelect} currentTemplateId={selectedTemplateId}>
             <div
               className="
                 pointer-events-auto

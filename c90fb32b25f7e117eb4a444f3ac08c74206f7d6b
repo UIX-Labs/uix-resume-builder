@@ -1,0 +1,37 @@
+src/widgets/landing-page/ui/header-section.tsx
+  d7ca4c1e94c531f8 15-16,28
+src/app/resumes/page.tsx
+  d7ca4c1e94c531f8 24,134
+src/widgets/dashboard/ui/header.tsx
+  d7ca4c1e94c531f8 8,13
+src/widgets/referral-page/ui/referral-steps-section.tsx
+  d7ca4c1e94c531f8 11,29,47
+src/app/get-all-resumes/page.tsx
+  d7ca4c1e94c531f8 19,140
+src/app/referral/page.tsx
+  d7ca4c1e94c531f8 8,21
+src/app/dashboard/page.tsx
+  d7ca4c1e94c531f8 18,73
+src/widgets/referral-page/ui/referral-stats-card.tsx
+  d7ca4c1e94c531f8 43-44,61,69,98,105-109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "c90fb32b25f7e117eb4a444f3ac08c74206f7d6b",
+  "prompts": {
+    "d7ca4c1e94c531f8": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "384173",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 35,
+      "total_deletions": 42,
+      "accepted_lines": 26,
+      "overriden_lines": 0
+    }
+  }
+}

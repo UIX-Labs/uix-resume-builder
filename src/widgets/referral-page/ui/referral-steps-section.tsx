@@ -8,7 +8,7 @@ export default function ReferralStepsSection() {
         <div className="flex flex-col items-center gap-2 relative">
           <div className="w-19 h-19 rounded-full bg-white flex items-center justify-center mb-2 relative">
             <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-              <Image src="/images/chat-dash.svg" alt="" width={28} height={28} />
+              <Image src="/images/chat-dash.svg" alt="Send invitation icon" width={28} height={28} />
             </div>
             <CurveUpwardsSvg
               className="absolute -top-[43px] left-25 w-45 h-20 pointer-events-none hidden md:block"
@@ -26,7 +26,7 @@ export default function ReferralStepsSection() {
         <div className="flex flex-col items-center gap-2 relative">
           <div className="w-19 h-19 rounded-full bg-white flex items-center justify-center mb-2 relative">
             <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-              <Image src="/images/app_registration-dash.svg" alt="" width={28} height={28} />
+              <Image src="/images/app_registration-dash.svg" alt="Registration icon" width={28} height={28} />
             </div>
             <CurveDownwardsSvg
               className="absolute top-[25px] left-[100px] w-[180px] h-[80px] pointer-events-none hidden md:block"
@@ -44,7 +44,7 @@ export default function ReferralStepsSection() {
         <div className="flex flex-col items-center gap-2">
           <div className="w-19 h-19 rounded-full bg-white flex items-center justify-center mb-2">
             <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-              <Image src="/images/earn.svg" alt="" width={28} height={28} />
+              <Image src="/images/earn.svg" alt="Earn downloads icon" width={28} height={28} />
             </div>
           </div>
           <h3 className="text-base font-semibold leading-[1.375] tracking-[-0.011em] text-center text-dark-900">

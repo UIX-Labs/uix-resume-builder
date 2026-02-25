@@ -12,6 +12,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
+const DASHBOARD_ROUTES = ['/dashboard', '/resumes', '/get-all-resumes', '/referral'];
+
 interface HeaderProps {
   variant?: 'default' | 'roast';
 }
@@ -23,7 +25,7 @@ function Header({ variant = 'default' }: HeaderProps) {
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  const isDashboardRoute = ['/dashboard', '/resumes', '/get-all-resumes', '/referral'].some((route) => pathname.startsWith(route));
+  const isDashboardRoute = DASHBOARD_ROUTES.some((route) => pathname.startsWith(route));
   const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
 
   useEffect(() => {

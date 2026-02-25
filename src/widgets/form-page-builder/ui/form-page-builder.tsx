@@ -255,9 +255,10 @@ export function FormPageBuilder() {
   });
 
   const { thumbnailRef, generateAndSaveThumbnail } = useThumbnailGeneration(resumeId);
+  const pdfSourceRef = useRef<HTMLDivElement>(null);
 
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
-    thumbnailRef,
+    pdfSourceRef,
     formData,
     resumeId,
   });
@@ -857,6 +858,18 @@ export function FormPageBuilder() {
               />
             )}
           </div>
+          <div ref={pdfSourceRef}>
+            {selectedTemplate && (
+              <ResumeRenderer
+                template={selectedTemplate}
+                data={cleanedDataForPreview}
+                currentSection={undefined}
+                hasSuggestions={false}
+                isThumbnail={false}
+                skipImageFallbacks={isGeneratingPDF}
+              />
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col min-h-screen bg-white overflow-hidden">
@@ -963,6 +976,18 @@ export function FormPageBuilder() {
                   currentSection={undefined}
                   hasSuggestions={false}
                   isThumbnail={true}
+                  skipImageFallbacks={isGeneratingPDF}
+                />
+              )}
+            </div>
+            <div ref={pdfSourceRef}>
+              {selectedTemplate && (
+                <ResumeRenderer
+                  template={selectedTemplate}
+                  data={cleanedDataForPreview}
+                  currentSection={undefined}
+                  hasSuggestions={false}
+                  isThumbnail={false}
                   skipImageFallbacks={isGeneratingPDF}
                 />
               )}

@@ -20,15 +20,15 @@ export default function FeaturedSection({ primaryPost, secondaryPosts }: Feature
   const primaryBadgeColor = getBadgeColorFromPost(primaryPost);
 
   return (
-    <section className="w-full mx-auto mt-10">
-      <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+    <section className="w-full mx-auto mt-2 md:mt-4">
+      <div className="grid lg:grid-cols-2 gap-4 items-stretch">
         {/* LEFT - BIG CARD */}
         <div className="h-full">
           <FeaturedPrimaryCard post={primaryPost} badgeColor={primaryBadgeColor} />
         </div>
 
         {/* RIGHT - TWO SMALL CARDS */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
           {secondaryPosts.map((post, index) => {
             const badgeColor = getBadgeColorFromPost(post);
 

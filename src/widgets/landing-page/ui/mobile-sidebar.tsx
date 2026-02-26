@@ -81,7 +81,7 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/dashboard',
     },
     {
-      label: 'Blog',
+      label: 'Blogs',
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },

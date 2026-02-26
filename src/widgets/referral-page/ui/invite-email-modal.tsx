@@ -2,9 +2,10 @@
 
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
+import { Input } from '@shared/ui/components/input';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { X, UserPlus, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useSendReferralEmails } from '@entities/referral/api/referral';
 
@@ -24,21 +25,27 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
 
   const sendEmailsMutation = useSendReferralEmails();
 
-  const handleAddMore = () => {
-    setInvites([...invites, { id: Date.now().toString(), firstName: '', email: '' }]);
-  };
+  const handleAddMore = useCallback(() => {
+    setInvites((prevInvites) => [...prevInvites, { id: Date.now().toString(), firstName: '', email: '' }]);
+  }, []);
 
-  const handleRemove = (id: string) => {
-    if (invites.length > 1) {
-      setInvites(invites.filter((invite) => invite.id !== id));
-    }
-  };
+  const handleRemove = useCallback((id: string) => {
+    setInvites((prevInvites) => {
+      if (prevInvites.length > 1) {
+        return prevInvites.filter((invite) => invite.id !== id);
+      }
+      return prevInvites;
+    });
+  }, []);
 
-  const handleChange = (id: string, field: 'firstName' | 'email', value: string) => {
-    setInvites(invites.map((invite) => (invite.id === id ? { ...invite, [field]: value } : invite)));
-  };
+  const handleChange = useCallback((id: string, field: 'firstName' | 'email', value: string) => {
+    setInvites((prevInvites) =>
+      prevInvites.map((invite) => (invite.id === id ? { ...invite, [field]: value } : invite)),
+    );
+  }, []);
 
-  const handleSendInvite = () => {
+
+  const handleSendInvite = useCallback(() => {
     const hasEmptyFields = invites.some((invite) => !invite.firstName || !invite.email);
     if (hasEmptyFields) {
       toast.error('Please fill in all fields');
@@ -69,7 +76,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
         toast.error(errorMessage);
       },
     });
-  };
+  }, [invites, sendEmailsMutation, onClose]);
 
   return (
     <Modal
@@ -110,19 +117,19 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                         >
                           First Name
                         </label>
-                        <input
+                        <Input
                           id={`firstName-${invite.id}`}
                           type="text"
                           value={invite.firstName}
                           onChange={(e) => handleChange(invite.id, 'firstName', e.target.value)}
                           placeholder="First Name"
                           className={cn(
-                            'w-full sm:w-[276px] h-10 rounded-lg px-3',
-                            'bg-form-bg-light border border-form-border',
+                            'w-full sm:w-[276px] h-10 rounded-lg',
+                            'bg-form-bg-light border-form-border',
                             'text-base font-semibold leading-[1.375] tracking-[-0.011em]',
-                            'text-gray-900 placeholder:text-form-placeholder',
+                            'placeholder:text-form-placeholder',
                             'shadow-[0px_0px_0px_4px_var(--color-form-ring-light)]',
-                            'focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
+                            'focus-visible:border-blue-600 focus-visible:ring-blue-200',
                           )}
                         />
                       </div>
@@ -134,19 +141,19 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                         >
                           Email ID
                         </label>
-                        <input
+                        <Input
                           id={`email-${invite.id}`}
                           type="email"
                           value={invite.email}
                           onChange={(e) => handleChange(invite.id, 'email', e.target.value)}
                           placeholder="Email ID"
                           className={cn(
-                            'w-full sm:w-[276px] h-10 rounded-lg px-3',
-                            'bg-form-bg-light border border-form-border',
+                            'w-full sm:w-[276px] h-10 rounded-lg',
+                            'bg-form-bg-light border-form-border',
                             'text-base font-semibold leading-[1.375] tracking-[-0.011em]',
-                            'text-gray-900 placeholder:text-form-placeholder',
+                            'placeholder:text-form-placeholder',
                             'shadow-[0px_0px_0px_4px_var(--color-form-ring-light)]',
-                            'focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
+                            'focus-visible:border-blue-600 focus-visible:ring-blue-200',
                           )}
                         />
                       </div>

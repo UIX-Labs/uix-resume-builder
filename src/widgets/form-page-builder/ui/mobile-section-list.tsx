@@ -14,8 +14,6 @@ interface MobileSectionListProps {
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
   importSource?: 'linkedin' | 'pdf' | null;
-}
-
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }
 

@@ -98,7 +98,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
               <div className="flex flex-col gap-6 mb-4">
                 {invites.map((invite, index) => (
                   <div key={invite.id} className="flex items-start sm:items-end gap-3 sm:gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-[#CFD4DB] flex items-center justify-center sm:mb-0">
+                    <div className="flex-shrink-0 w-10 h-10 sm:w-8 sm:h-8 rounded-full bg-form-placeholder flex items-center justify-center sm:mb-0">
                       <span className="text-base sm:text-lg font-semibold text-white">{index + 1}</span>
                     </div>
 
@@ -118,10 +118,10 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                           placeholder="First Name"
                           className={cn(
                             'w-full sm:w-[276px] h-10 rounded-lg px-3',
-                            'bg-[#FAFBFC] border border-[#959DA8]',
+                            'bg-form-bg-light border border-form-border',
                             'text-base font-semibold leading-[1.375] tracking-[-0.011em]',
-                            'text-gray-900 placeholder:text-[#CFD4DB]',
-                            'shadow-[0px_0px_0px_4px_rgba(246,246,246,1)]',
+                            'text-gray-900 placeholder:text-form-placeholder',
+                            'shadow-[0px_0px_0px_4px_var(--color-form-ring-light)]',
                             'focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
                           )}
                         />
@@ -142,10 +142,10 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                           placeholder="Email ID"
                           className={cn(
                             'w-full sm:w-[276px] h-10 rounded-lg px-3',
-                            'bg-[#FAFBFC] border border-[#959DA8]',
+                            'bg-form-bg-light border border-form-border',
                             'text-base font-semibold leading-[1.375] tracking-[-0.011em]',
-                            'text-gray-900 placeholder:text-[#CFD4DB]',
-                            'shadow-[0px_0px_0px_4px_rgba(246,246,246,1)]',
+                            'text-gray-900 placeholder:text-form-placeholder',
+                            'shadow-[0px_0px_0px_4px_var(--color-form-ring-light)]',
                             'focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500',
                           )}
                         />
@@ -156,7 +156,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                           type="button"
                           onClick={() => handleRemove(invite.id)}
                           variant="ghost"
-                          className="h-10 text-red-500 hover:text-red-600 hover:bg-red-50 px-0"
+                          className="h-10 text-error-500 hover:text-error-600 hover:bg-red-50 px-0"
                         >
                           <Trash2 />
                         </Button>
@@ -188,7 +188,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
               onClick={handleSendInvite}
               disabled={sendEmailsMutation.isPending}
               className={cn(
-                'w-full sm:w-[200px] h-auto px-5 py-3 rounded-[12px]',
+                'w-full sm:w-50 h-auto px-5 py-3 rounded-[12px]',
                 'bg-blue-500 text-white border-2 border-white',
                 'text-2xl font-semibold leading-[1.2] tracking-[-0.03em]',
                 'shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15)]',

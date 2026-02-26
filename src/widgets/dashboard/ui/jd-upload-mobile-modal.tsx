@@ -95,7 +95,9 @@ export default function JDUploadMobileModal({ isOpen, onClose }: JDUploadMobileM
                   return <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />;
 
                 case ModalStep.UPLOADING_JD:
-                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />;
+                  return (
+                    <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />
+                  );
 
                 case ModalStep.UPLOAD_RESUME:
                   return (

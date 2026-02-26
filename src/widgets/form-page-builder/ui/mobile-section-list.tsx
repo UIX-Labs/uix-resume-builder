@@ -14,8 +14,6 @@ interface MobileSectionListProps {
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
   importSource?: 'linkedin' | 'pdf' | null;
-}
-
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }
 
@@ -67,7 +65,13 @@ export function MobileSectionList({
 }: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})
-      .filter(([_, sectionData]) => typeof sectionData === 'object' && sectionData !== null && 'isCompleted' in sectionData && (sectionData as any).isCompleted)
+      .filter(
+        ([_, sectionData]) =>
+          typeof sectionData === 'object' &&
+          sectionData !== null &&
+          'isCompleted' in sectionData &&
+          (sectionData as any).isCompleted,
+      )
       .map(([key]) => key),
   );
 

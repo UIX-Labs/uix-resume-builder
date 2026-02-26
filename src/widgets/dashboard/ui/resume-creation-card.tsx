@@ -59,10 +59,19 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_RESUME | ResumeCreationAction.TAILORED_JD) => {
-    setActiveAction(action);
-    setOptionsLocked(true);
-  }, []);
+  const lockOptions = useCallback(
+    (
+      action:
+        | ResumeCreationAction.CREATE
+        | ResumeCreationAction.UPLOAD
+        | ResumeCreationAction.TAILORED_RESUME
+        | ResumeCreationAction.TAILORED_JD,
+    ) => {
+      setActiveAction(action);
+      setOptionsLocked(true);
+    },
+    [],
+  );
 
   const releaseOptions = useCallback(() => {
     setActiveAction(null);

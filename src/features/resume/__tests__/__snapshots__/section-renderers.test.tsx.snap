@@ -4,7 +4,6 @@ exports[`Section Renderer Snapshots > Badge Section Renderer > renders interests
 <div>
   <div
     class=""
-    data-has-breakable-content="false"
     data-item="section"
     data-section="interests"
     style="scroll-margin-top: 20px;"
@@ -44,7 +43,6 @@ exports[`Section Renderer Snapshots > Badge Section Renderer > renders skills ba
 <div>
   <div
     class=""
-    data-has-breakable-content="false"
     data-item="section"
     data-section="skills"
     style="scroll-margin-top: 20px;"

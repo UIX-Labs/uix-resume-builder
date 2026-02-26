@@ -2,10 +2,6 @@ const MohsinaTemplate1 = {
   name: 'Mohsina Template 1',
 
   page: {
-    width: '595px',
-
-    height: '842px',
-
     background: '#ffffff',
 
     className: 'text-black leading-relaxed',
@@ -157,7 +153,7 @@ const MohsinaTemplate1 = {
         className: 'flex flex-col mt-0',
         rows: [
           {
-            className: 'flex-row justify-between items-baseline',
+            className: 'flex flex-row justify-between items-baseline',
             cells: [
               {
                 type: 'inline-group',
@@ -182,13 +178,14 @@ const MohsinaTemplate1 = {
             ],
           },
           {
-            className: 'mt-0.5 mb-2',
+            className: 'mt-0 mb-2',
             cells: [
               {
                 type: 'html',
                 path: 'description',
+                descriptionTypePath: 'descriptionType',
                 className:
-                  'block w-full text-sm text-black font-normal text-justify leading-[1] break-words [&_ul]:list-none [&_ul]:m-0 [&_ul]:p-0 [&_li]:inline',
+                  'block w-full text-sm text-black font-normal text-justify leading-[1] break-words [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4',
               },
             ],
           },
@@ -253,12 +250,12 @@ const MohsinaTemplate1 = {
     {
       id: 'achievements',
       type: 'badge-section',
-      break: true,
+      break: false,
       breakable: true,
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-semibold text-black uppercase leading-[1] mt-2',
+        className: 'text-sm font-semibold text-black uppercase leading-[1] mt-1',
         divider: {
           variant: 'line',
           className: 'bg-black w-full h-0.5px ',

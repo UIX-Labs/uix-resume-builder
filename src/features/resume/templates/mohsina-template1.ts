@@ -183,7 +183,6 @@ const MohsinaTemplate1 = {
               {
                 type: 'html',
                 path: 'description',
-                descriptionTypePath: 'descriptionType',
                 className:
                   'block w-full text-sm text-black font-normal text-justify leading-[1] break-words [&_ul]:list-disc [&_ul]:ml-4 [&_ol]:list-decimal [&_ol]:ml-4',
               },
@@ -249,22 +248,37 @@ const MohsinaTemplate1 = {
     },
     {
       id: 'achievements',
-      type: 'badge-section',
-      break: false,
-      breakable: true,
+      type: 'list-section',
+      break: true,
       heading: {
         path: 'achievements.heading',
         fallback: 'ACHIEVEMENTS',
-        className: 'text-sm font-semibold text-black uppercase leading-[1] mt-1',
+        className: 'text-sm font-semibold text-black uppercase leading-tight mt-1',
         divider: {
           variant: 'line',
-          className: 'bg-black w-full h-0.5px ',
+          className: 'bg-black w-full h-[1px]',
         },
       },
+
       listPath: 'achievements.items[0].items',
-      itemPrefix: '• ',
-      badgeClassName: 'text-sm font-normal text-black text-justify w-[537px] leading-none',
-      containerClassName: 'flex flex-col -gap-y-0.8',
+
+      // 👇 ADD THIS
+      transformItem: (item) => ({ value: item }),
+
+      itemTemplate: {
+        className: 'flex flex-col',
+        rows: [
+          {
+            className: 'flex flex-row',
+            cells: [
+              {
+                path: 'value',
+                className: 'text-sm font-normal text-black leading-tight text-justify before:content-["•"] before:mr-2',
+              },
+            ],
+          },
+        ],
+      },
     },
     // Skills Section
     {

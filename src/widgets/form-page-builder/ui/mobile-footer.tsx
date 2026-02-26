@@ -1,6 +1,6 @@
 import { Button } from '@shared/ui/button';
-import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { MobileDownloadButton } from '@shared/ui/components/mobile-download-button';
+import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { Eye } from 'lucide-react';
 
 interface MobileFooterProps {

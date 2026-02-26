@@ -1,19 +1,17 @@
-import { cn } from '@shared/lib/cn';
-import { ProgressCircle } from '@shared/ui/progress-circle';
-import { useFormPageBuilder } from '../models/ctx';
-import { useEffect, useState, useMemo } from 'react';
-import { useFormDataStore } from '../models/store';
-import { calculateResumeCompletion } from '@shared/lib/resume-completion';
-import { useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
-import mockData from '../../../../mock-data.json';
-import { ArrowLeftIcon } from 'lucide-react';
-import { useQueryClient } from '@tanstack/react-query';
+import { cn } from '@shared/lib/cn';
+import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';
-import { useRouter } from 'next/navigation';
-import { NavigationItem } from './navigation-item';
-import { BuilderIntelligenceCard } from './builder-intelligence-card';
+import { ProgressCircle } from '@shared/ui/progress-circle';
+import { useQueryClient } from '@tanstack/react-query';
+import { ArrowLeftIcon } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import { isSectionEmpty } from '../lib/section-utils';
+import { useFormPageBuilder } from '../models/ctx';
+import { useFormDataStore } from '../models/store';
+import { BuilderIntelligenceCard } from './builder-intelligence-card';
+import { NavigationItem } from './navigation-item';
 
 export function Sidebar() {
   const [progress, setProgress] = useState(0);

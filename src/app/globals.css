@@ -753,3 +753,7 @@ html {
 .templates-dialog-mobile-overlay {
   inset: 0 0 72px 0;
 }
+
+html {
+  scroll-behavior: smooth;
+}

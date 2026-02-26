@@ -9,7 +9,7 @@ import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-s
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
 const DASHBOARD_ROUTES = ['/dashboard', '/resumes', '/get-all-resumes', '/referral'];
@@ -285,4 +285,10 @@ function Header({ variant = 'default' }: HeaderProps) {
   );
 }
 
-export default Header;
+export default function HeaderWithSuspense(props: HeaderProps) {
+  return (
+    <Suspense fallback={null}>
+      <Header {...props} />
+    </Suspense>
+  );
+}

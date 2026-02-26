@@ -902,6 +902,7 @@ export function FormPageBuilder() {
             formSchema={formSchemaData ?? {}}
             onSectionClick={handleMobileStepClick}
             onBackClick={handleMobileBackToResume}
+            importSource={searchParams.get('importSource') as any}
             onToggleHideSection={handleToggleHideSection}
           />
 

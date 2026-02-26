@@ -5,12 +5,12 @@ import type { User } from '@shared/hooks/use-user';
 import Header from '@widgets/landing-page/ui/header-section';
 import DashboardHeader from './dashboard-header';
 
-interface AdaptiveDashboardHeaderProps {
+interface ResponsiveDashboardHeaderProps {
   user?: User | null;
   className?: string;
 }
 
-export default function AdaptiveDashboardHeader({ user, className }: AdaptiveDashboardHeaderProps) {
+export default function ResponsiveDashboardHeader({ user, className }: ResponsiveDashboardHeaderProps) {
   const isMobile = useIsMobile();
 
   return isMobile ? <Header /> : <DashboardHeader user={user} className={className} />;

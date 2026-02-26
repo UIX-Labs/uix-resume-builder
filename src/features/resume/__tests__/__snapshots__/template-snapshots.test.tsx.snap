@@ -71,7 +71,6 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
       </div>
       <div
         class=""
-        data-has-breakable-content="false"
         data-item="section"
         data-section="skills"
         style="scroll-margin-top: 20px;"
@@ -356,6 +355,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           class="flex flex-wrap gap-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -401,6 +401,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
         <div
           class="flex flex-col gap-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -581,7 +582,6 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
       >
         <div
           class=""
-          data-has-breakable-content="false"
           data-item="section"
           data-section="skills"
           style="scroll-margin-top: 20px;"
@@ -882,6 +882,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             class="flex flex-wrap gap-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -931,6 +932,7 @@ exports[`Full Template Rendering Snapshots > renders 'aniket' template correctly
           <div
             class="flex flex-col gap-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -1172,6 +1174,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
       <div
         class=""
         data-break="true"
+        data-canbreak="true"
+        data-has-breakable-content="true"
         data-section="skills"
         style="scroll-margin-top: 20px;"
       >
@@ -1186,6 +1190,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         </div>
         <div
           data-break="true"
+          data-canbreak="true"
           data-item="content"
         >
           <div
@@ -1544,6 +1549,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         <div
           class="flex flex-col gap-2 mt-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -1713,6 +1719,8 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
         <div
           class=""
           data-break="true"
+          data-canbreak="true"
+          data-has-breakable-content="true"
           data-section="skills"
           style="scroll-margin-top: 20px;"
         >
@@ -1727,6 +1735,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           </div>
           <div
             data-break="true"
+            data-canbreak="true"
             data-item="content"
           >
             <div
@@ -2113,6 +2122,7 @@ exports[`Full Template Rendering Snapshots > renders 'enzo-template1' template c
           <div
             class="flex flex-col gap-2 mt-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -5894,6 +5904,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
       <div
         class=""
         data-break="true"
+        data-canbreak="true"
+        data-has-breakable-content="true"
         data-section="skills"
         style="scroll-margin-top: 20px;"
       >
@@ -5908,6 +5920,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
         </div>
         <div
           data-break="true"
+          data-canbreak="true"
           data-item="content"
         >
           <div
@@ -6498,6 +6511,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
         <div
           class=""
           data-break="true"
+          data-canbreak="true"
+          data-has-breakable-content="true"
           data-section="skills"
           style="scroll-margin-top: 20px;"
         >
@@ -6512,6 +6527,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template2' template c
           </div>
           <div
             data-break="true"
+            data-canbreak="true"
             data-item="content"
           >
             <div
@@ -7094,6 +7110,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
       <div
         class=""
         data-break="true"
+        data-canbreak="true"
+        data-has-breakable-content="true"
         data-section="skills"
         style="scroll-margin-top: 20px;"
       >
@@ -7108,6 +7126,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
         </div>
         <div
           data-break="true"
+          data-canbreak="true"
           data-item="content"
         >
           <div
@@ -7653,6 +7672,8 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
         <div
           class=""
           data-break="true"
+          data-canbreak="true"
+          data-has-breakable-content="true"
           data-section="skills"
           style="scroll-margin-top: 20px;"
         >
@@ -7667,6 +7688,7 @@ exports[`Full Template Rendering Snapshots > renders 'eren-template3' template c
           </div>
           <div
             data-break="true"
+            data-canbreak="true"
             data-item="content"
           >
             <div
@@ -8099,6 +8121,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
       <div
         class=""
         data-break="true"
+        data-canbreak="true"
+        data-has-breakable-content="true"
         data-section="skills"
         style="scroll-margin-top: 20px;"
       >
@@ -8117,6 +8141,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         </div>
         <div
           data-break="true"
+          data-canbreak="true"
           data-item="content"
         >
           <div
@@ -8235,6 +8260,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           class="flex flex-row flex-wrap gap-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -8280,6 +8306,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           class="flex flex-row flex-wrap gap-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -8608,6 +8635,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
         <div
           class=""
           data-break="true"
+          data-canbreak="true"
+          data-has-breakable-content="true"
           data-section="skills"
           style="scroll-margin-top: 20px;"
         >
@@ -8626,6 +8655,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           </div>
           <div
             data-break="true"
+            data-canbreak="true"
             data-item="content"
           >
             <div
@@ -8752,6 +8782,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             class="flex flex-row flex-wrap gap-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -8801,6 +8832,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard' template correct
           <div
             class="flex flex-row flex-wrap gap-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -9102,6 +9134,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
       <div
         class=""
         data-break="true"
+        data-canbreak="true"
+        data-has-breakable-content="true"
         data-section="skills"
         style="scroll-margin-top: 20px;"
       >
@@ -9120,6 +9154,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         </div>
         <div
           data-break="true"
+          data-canbreak="true"
           data-item="content"
         >
           <div
@@ -9147,7 +9182,6 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
       </div>
       <div
         class=""
-        data-has-breakable-content="false"
         data-item="section"
         data-section="achievements"
         style="scroll-margin-top: 20px;"
@@ -9338,7 +9372,6 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
       </div>
       <div
         class=""
-        data-has-breakable-content="false"
         data-item="section"
         data-section="interests"
         style="scroll-margin-top: 20px;"
@@ -9656,6 +9689,8 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
         <div
           class=""
           data-break="true"
+          data-canbreak="true"
+          data-has-breakable-content="true"
           data-section="skills"
           style="scroll-margin-top: 20px;"
         >
@@ -9674,6 +9709,7 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
           </div>
           <div
             data-break="true"
+            data-canbreak="true"
             data-item="content"
           >
             <div
@@ -9705,7 +9741,6 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
       >
         <div
           class=""
-          data-has-breakable-content="false"
           data-item="section"
           data-section="achievements"
           style="scroll-margin-top: 20px;"
@@ -9908,7 +9943,6 @@ exports[`Full Template Rendering Snapshots > renders 'standard2' template correc
       >
         <div
           class=""
-          data-has-breakable-content="false"
           data-item="section"
           data-section="interests"
           style="scroll-margin-top: 20px;"
@@ -10381,6 +10415,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
         <div
           class="text-xs text-black leading-relaxed mt-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -10429,6 +10464,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
         <div
           class="flex flex-col gap-1 mt-1.5 leading-none"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -10921,6 +10957,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
           <div
             class="text-xs text-black leading-relaxed mt-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -10973,6 +11010,7 @@ exports[`Full Template Rendering Snapshots > renders 'template1' template correc
           <div
             class="flex flex-col gap-1 mt-1.5 leading-none"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -11615,7 +11653,6 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
       </div>
       <div
         class=""
-        data-has-breakable-content="false"
         data-item="section"
         data-section="achievements"
         style="scroll-margin-top: 20px;"
@@ -12282,7 +12319,6 @@ exports[`Full Template Rendering Snapshots > renders 'template2' template correc
       >
         <div
           class=""
-          data-has-breakable-content="false"
           data-item="section"
           data-section="achievements"
           style="scroll-margin-top: 20px;"
@@ -12861,6 +12897,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
         <div
           class="flex flex-col gap-1 mt-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -13442,6 +13479,7 @@ exports[`Full Template Rendering Snapshots > renders 'template3' template correc
           <div
             class="flex flex-col gap-1 mt-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -13785,6 +13823,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
         <div
           class="block text-white"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -13833,6 +13872,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
         <div
           class="flex flex-col gap-2 mt-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -14033,6 +14073,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
         <div
           class="flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -14388,6 +14429,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           <div
             class="block text-white"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -14440,6 +14482,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           <div
             class="flex flex-col gap-2 mt-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -14652,6 +14695,7 @@ exports[`Full Template Rendering Snapshots > renders 'template4' template correc
           <div
             class="flex flex-row flex-wrap mt-1 mb-2.5 gap-x-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -14928,6 +14972,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
         <div
           class="block text-[#1a1a1a]"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -15036,6 +15081,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
         <div
           class="block mt-2 text-black"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -15282,6 +15328,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
         <div
           class="flex flex-col gap-2 mt-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -15494,6 +15541,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           <div
             class="block text-[#1a1a1a]"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -15610,6 +15658,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           <div
             class="block mt-2 text-black"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -15872,6 +15921,7 @@ exports[`Full Template Rendering Snapshots > renders 'template5' template correc
           <div
             class="flex flex-col gap-2 mt-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -16026,7 +16076,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
       <div
         class=""
         data-canbreak="true"
-        data-has-breakable-content="false"
+        data-has-breakable-content="true"
         data-item="section"
         data-section="interests"
         style="scroll-margin-top: 20px;"
@@ -16043,6 +16093,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
         <div
           class="flex flex-col gap-0 mb-8"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -16400,8 +16451,6 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
       </div>
       <div
         class=""
-        data-canbreak="false"
-        data-has-breakable-content="false"
         data-item="section"
         data-section="achievements"
         style="scroll-margin-top: 20px;"
@@ -16417,7 +16466,6 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
         </div>
         <div
           class="flex flex-col mt-1 px-8"
-          data-canbreak="false"
         >
           <span>
             <span
@@ -16577,7 +16625,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
         <div
           class=""
           data-canbreak="true"
-          data-has-breakable-content="false"
+          data-has-breakable-content="true"
           data-item="section"
           data-section="interests"
           style="scroll-margin-top: 20px;"
@@ -16594,6 +16642,7 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           <div
             class="flex flex-col gap-0 mb-8"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -16979,8 +17028,6 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
       >
         <div
           class=""
-          data-canbreak="false"
-          data-has-breakable-content="false"
           data-item="section"
           data-section="achievements"
           style="scroll-margin-top: 20px;"
@@ -16996,7 +17043,6 @@ exports[`Full Template Rendering Snapshots > renders 'template6' template correc
           </div>
           <div
             class="flex flex-col mt-1 px-8"
-            data-canbreak="false"
           >
             <span>
               <span
@@ -17212,6 +17258,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         <div
           class="flex flex-wrap gap-x-2.5 gap-y-1.5"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -17384,6 +17431,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         <div
           class="block"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -17428,6 +17476,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
         <div
           class="text-xs flex flex-col gap-2"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -17774,6 +17823,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           <div
             class="flex flex-wrap gap-x-2.5 gap-y-1.5"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -17958,6 +18008,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           <div
             class="block"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -18006,6 +18057,7 @@ exports[`Full Template Rendering Snapshots > renders 'template7' template correc
           <div
             class="text-xs flex flex-col gap-2"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -18543,6 +18595,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         <div
           class="flex flex-wrap gap-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -18649,6 +18702,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
         <div
           class="flex flex-wrap gap-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -19084,6 +19138,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           <div
             class="flex flex-wrap gap-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -19198,6 +19253,7 @@ exports[`Full Template Rendering Snapshots > renders 'template8' template correc
           <div
             class="flex flex-wrap gap-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -19525,7 +19581,6 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
         >
           <div
             class=""
-            data-has-breakable-content="false"
             data-item="section"
             data-section="achievements"
             style="scroll-margin-top: 20px;"
@@ -19654,7 +19709,6 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
           </div>
           <div
             class=""
-            data-has-breakable-content="false"
             data-item="section"
             data-section="interests"
             style="scroll-margin-top: 20px;"
@@ -20048,7 +20102,6 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
           >
             <div
               class=""
-              data-has-breakable-content="false"
               data-item="section"
               data-section="achievements"
               style="scroll-margin-top: 20px;"
@@ -20177,7 +20230,6 @@ exports[`Full Template Rendering Snapshots > renders 'template9' template correc
             </div>
             <div
               class=""
-              data-has-breakable-content="false"
               data-item="section"
               data-section="interests"
               style="scroll-margin-top: 20px;"
@@ -22401,7 +22453,6 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
           </div>
           <div
             class=""
-            data-has-breakable-content="false"
             data-item="section"
             data-section="interests"
             style="scroll-margin-top: 20px;"
@@ -22710,7 +22761,6 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
           </div>
           <div
             class=""
-            data-has-breakable-content="false"
             data-item="section"
             data-section="achievements"
             style="scroll-margin-top: 20px;"
@@ -22862,7 +22912,6 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             </div>
             <div
               class=""
-              data-has-breakable-content="false"
               data-item="section"
               data-section="interests"
               style="scroll-margin-top: 20px;"
@@ -23171,7 +23220,6 @@ exports[`Full Template Rendering Snapshots > renders 'template12' template corre
             </div>
             <div
               class=""
-              data-has-breakable-content="false"
               data-item="section"
               data-section="achievements"
               style="scroll-margin-top: 20px;"
@@ -23284,8 +23332,6 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
       </div>
       <div
         class=""
-        data-canbreak="false"
-        data-has-breakable-content="false"
         data-item="section"
         data-section="skills"
         style="scroll-margin-top: 20px;"
@@ -23301,7 +23347,6 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
         </div>
         <div
           class="block w-full"
-          data-canbreak="false"
         >
           <span>
             <span
@@ -23594,6 +23639,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
         <div
           class="flex flex-wrap gap-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -23638,6 +23684,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
         <div
           class="flex flex-col leading-none gap-1"
           data-canbreak="true"
+          data-has-breakable-content="true"
         >
           <span
             data-canbreak="true"
@@ -23742,8 +23789,6 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
       >
         <div
           class=""
-          data-canbreak="false"
-          data-has-breakable-content="false"
           data-item="section"
           data-section="skills"
           style="scroll-margin-top: 20px;"
@@ -23759,7 +23804,6 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           </div>
           <div
             class="block w-full"
-            data-canbreak="false"
           >
             <span>
               <span
@@ -24072,6 +24116,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           <div
             class="flex flex-wrap gap-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"
@@ -24120,6 +24165,7 @@ exports[`Full Template Rendering Snapshots > renders 'template13' template corre
           <div
             class="flex flex-col leading-none gap-1"
             data-canbreak="true"
+            data-has-breakable-content="true"
           >
             <span
               data-canbreak="true"

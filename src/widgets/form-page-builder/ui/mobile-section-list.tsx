@@ -13,6 +13,7 @@ interface MobileSectionListProps {
   formSchema: FormSchema | null;
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
+  importSource?: 'linkedin' | 'pdf' | null;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
 }
 
@@ -59,11 +60,12 @@ export function MobileSectionList({
   formSchema,
   onSectionClick,
   onBackClick,
+  importSource,
   onToggleHideSection,
 }: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})
-      .filter(([_, sectionData]) => sectionData?.isCompleted)
+      .filter(([_, sectionData]) => typeof sectionData === 'object' && sectionData !== null && 'isCompleted' in sectionData && (sectionData as any).isCompleted)
       .map(([key]) => key),
   );
 
@@ -155,10 +157,12 @@ export function MobileSectionList({
 
         <div className="flex-1">
           <h1 className="text-[18px] font-semibold text-section-text-primary">Your resume is ready</h1>
-          <p className="text-[13px] text-section-text-secondary">
-            We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit, improve,
-            or personalize it anytime.
-          </p>
+          {importSource === 'linkedin' && (
+            <p className="text-[13px] text-section-text-secondary">
+              We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit,
+              improve, or personalize it anytime.
+            </p>
+          )}
         </div>
       </div>
 

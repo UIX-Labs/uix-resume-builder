@@ -117,7 +117,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
 
     setTimeout(() => {
       setShowScanningOverlay(false);
-      router.push(`/resume/${data.resumeId}`);
+      router.push(`/resume/${data.resumeId}?importSource=pdf`);
     }, 300);
   };
 

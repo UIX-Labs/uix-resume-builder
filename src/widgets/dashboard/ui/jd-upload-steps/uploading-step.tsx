@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { CircularProgress } from '@shared/ui/circular-progress';
 import { Button } from '@shared/ui/components/button';
+import Image from 'next/image';
 import { DashboardChip } from './dashboard-chip';
 
 interface UploadingStepProps {
@@ -9,9 +10,16 @@ interface UploadingStepProps {
   onCancel: () => void;
   title: string;
   subtitle: string;
+  fileSize?: number;
+
 }
 
-export function UploadingStep({ uploadProgress, onCancel, title, subtitle }: UploadingStepProps) {
+export function UploadingStep({ uploadProgress, onCancel, title, subtitle, fileSize }: UploadingStepProps) {
+    const formattedSize = fileSize
+  ? `${(fileSize / 1024 / 1024).toFixed(2)} MB`
+  : '';
+
+
   return (
     <>
       <DashboardChip />
@@ -36,7 +44,7 @@ export function UploadingStep({ uploadProgress, onCancel, title, subtitle }: Upl
                 <span className="text-[#CEEEDD] font-semibold text-center leading-[1.2em] tracking-[-0.03em] text-5xl">
                   {uploadProgress}%
                 </span>
-                <span className="text-[#75A88D] text-xs leading-[1.5em] text-center font-normal mt-0.5">4 MB</span>
+                 <span className="text-[#75A88D] text-xs leading-[1.5em] text-center font-normal mt-0.5">{formattedSize}</span> 
               </div>
             </div>
           </CircularProgress>

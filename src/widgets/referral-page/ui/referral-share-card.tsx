@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { REFERRAL_CONSTANTS } from '@features/referral-flow/constants';
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
+import { InviteEmailModal } from './invite-email-modal';
 
 interface ReferralShareCardProps {
   referralLink: string;
@@ -12,6 +13,8 @@ interface ReferralShareCardProps {
 }
 
 export default function ReferralShareCard({ referralLink, isLoading = false }: ReferralShareCardProps) {
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(referralLink);
@@ -34,24 +37,44 @@ export default function ReferralShareCard({ referralLink, isLoading = false }: R
           </p>
         </div>
 
-        <div className="w-full h-16 rounded-[20px] flex items-center justify-between px-4 md:px-8 bg-blue-light-bg">
-          <span className="text-xs md:text-base font-normal leading-[1.375] tracking-[-0.011em] truncate text-text-muted">
-            {isLoading ? 'Loading referral link...' : referralLink}
-          </span>
+        <div className="w-full flex items-center gap-5">
           <Button
             type="button"
-            onClick={handleCopyLink}
+            onClick={() => setIsEmailModalOpen(true)}
             disabled={isLoading}
-            variant="ghost"
             className={cn(
-              'pr-5 md:px-5 py-3 rounded-[12px] text-base font-semibold leading-[1.375] tracking-[-0.011em]',
-              'text-blue-500 ',
+              'h-16 w-[195px] rounded-[20px] text-base font-semibold leading-[1.375] tracking-[-0.011em]',
+              'bg-blue-500 text-white hover:bg-blue-600 transition-colors',
+              'flex-shrink-0',
             )}
           >
-            {REFERRAL_CONSTANTS.COPY_BUTTON_TEXT}
+            Invite via Email
           </Button>
+
+          <div className="h-[37px] w-px bg-gray-200 flex-shrink-0" />
+
+          <div className="flex-1 max-w-[397px] h-16 rounded-[20px] flex items-center justify-between px-4 bg-blue-light-bg overflow-hidden">
+            <span className="text-xs md:text-base font-normal leading-[1.375] tracking-[-0.011em] truncate text-text-muted mr-2">
+              {isLoading ? 'Loading referral link...' : referralLink}
+            </span>
+            <Button
+              type="button"
+              onClick={handleCopyLink}
+              disabled={isLoading}
+              variant="ghost"
+              className={cn(
+                'px-4 py-3 rounded-[12px] text-base font-semibold leading-[1.375] tracking-[-0.011em]',
+                'text-blue-500 hover:bg-blue-50 transition-colors',
+                'flex-shrink-0',
+              )}
+            >
+              {REFERRAL_CONSTANTS.COPY_BUTTON_TEXT}
+            </Button>
+          </div>
         </div>
       </div>
+
+      <InviteEmailModal isOpen={isEmailModalOpen} onClose={() => setIsEmailModalOpen(false)} />
     </div>
   );
 }

@@ -72,8 +72,8 @@ export default function BlogCard({
               src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
               className="w-6 h-6 rounded-full"
               alt=""
-              width={100}
-              height={100}
+              width={24}
+              height={24}
             />
 
             <span>

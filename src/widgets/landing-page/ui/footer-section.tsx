@@ -21,8 +21,8 @@ const FooterSection = () => {
             src="/images/color-palete.svg"
             alt="Hired at Meta"
             className="w-full h-auto"
-            width={100}
-            height={100}
+            width={160}
+            height={120}
           />
         </div>
       ),

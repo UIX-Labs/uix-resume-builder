@@ -42,8 +42,8 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
                 src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
                 className="w-full h-full object-cover"
                 alt={post.frontmatter.author}
-                width={100}
-                height={100}
+                width={50}
+                height={50}
               />
             </div>
 

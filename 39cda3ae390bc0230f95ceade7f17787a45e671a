@@ -1,0 +1,36 @@
+src/widgets/referral-page/ui/invite-email-modal.tsx
+  6b7f138acb92eaec 101,121,123-124,145,147-148,159
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "39cda3ae390bc0230f95ceade7f17787a45e671a",
+  "prompts": {
+    "6b7f138acb92eaec": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "386276",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 20,
+      "total_deletions": 15,
+      "accepted_lines": 13,
+      "overriden_lines": 0
+    },
+    "dc7c54765443a076": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "386275",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 22,
+      "total_deletions": 5,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}

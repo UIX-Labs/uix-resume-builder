@@ -59,7 +59,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_RESUME | ResumeCreationAction.TAILORED_JD) => {
+  const lockOptions = useCallback((action: ResumeCreationAction) => {
     setActiveAction(action);
     setOptionsLocked(true);
   }, []);
@@ -149,7 +149,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
+      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent('/dashboard')}`);
       setIsAuthModalOpen(true);
       return;
     }

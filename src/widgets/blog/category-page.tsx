@@ -16,17 +16,20 @@ interface Props {
   tags: string[];
 }
 
-export default function CategoryPageContent({ posts, allPosts, title, placeholder, color, currentCategoryId }: Props) {
+export default function CategoryPageContent({
+  posts,
+
+  title,
+  placeholder,
+  color,
+  currentCategoryId,
+  tags,
+}: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
-
-  const suggestions = allPosts.slice(0, 3).map((p) => ({
-    label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
-    slug: p.slug,
-  }));
 
   return (
     <div className="max-w-[1395px] mx-auto px-4">
@@ -45,12 +48,18 @@ export default function CategoryPageContent({ posts, allPosts, title, placeholde
             searchQuery={searchQuery}
             scrollToResults
           />
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            placeholder={placeholder}
+            searchQuery={searchQuery}
+            scrollToResults
+          />
         </div>
       </div>
 
       {/* GRID */}
       <div id="blog-grid" className="mt-10">
-        {searchedPosts.length === 0 && <NotFoundSearch suggestions={suggestions} />}
+        {searchedPosts.length === 0 && <NotFoundSearch tags={tags} />}
         <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>
     </div>

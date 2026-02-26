@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { toast } from 'sonner';
 import { REFERRAL_CONSTANTS } from '@features/referral-flow/constants';
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
+import { toast } from 'sonner';
 
 interface ReferralShareCardProps {
   referralLink: string;

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { CircularProgress } from '@shared/ui/circular-progress';
 import { Button } from '@shared/ui/components/button';
 import Image from 'next/image';

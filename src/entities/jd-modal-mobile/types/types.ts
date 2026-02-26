@@ -38,8 +38,8 @@ export interface StepProps {
   onResumeSelected?: (resumeId: string) => void;
   onRunPikaIntelligence: () => void;
   isSubmitting: boolean;
-  jdFileInputRef: React.RefObject<HTMLInputElement>;
-  resumeFileInputRef: React.RefObject<HTMLInputElement>;
+  jdFileInputRef: React.RefObject<HTMLInputElement | null>;
+  resumeFileInputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 export type UploadJDStepProps = Pick<StepProps, StepPropKey.JD_FILE_INPUT_REF | StepPropKey.ON_JD_FILE_SELECT>;

@@ -10,7 +10,7 @@ import { SECTION_ICONS, SECTION_PLACEHOLDERS } from '../lib/section-utils';
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
   formData: Omit<ResumeData, 'templateId'>;
-  formSchema: FormSchema | {};
+  formSchema: FormSchema | null;
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
   importSource?: 'linkedin' | 'pdf' | null;

@@ -3,7 +3,6 @@ import BlogHero from '@/widgets/blog/components/blog-hero';
 import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
 import NotFoundPage from '@widgets/blog/slug/not-found-page';
-
 interface PageProps {
   params: Promise<{ id: string }>;
 }

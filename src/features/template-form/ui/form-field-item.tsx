@@ -17,7 +17,6 @@ interface FormFieldItemProps {
 export function FormFieldItem({
   itemId,
   fieldKey,
-  fieldValue,
   section,
   isMobile = false,
   suggestedUpdates,

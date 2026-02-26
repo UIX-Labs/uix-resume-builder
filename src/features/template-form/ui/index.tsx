@@ -2,6 +2,7 @@ import { Input } from '@/shared/ui/components/input';
 
 import type { FormSchema, ResumeData, ResumeDataKey, SuggestedUpdates } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
+import { stripMarkdown } from '@shared/lib/markdown';
 import { Button } from '@shared/ui/button';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
 import { Eye, EyeOff } from 'lucide-react';
@@ -55,6 +56,8 @@ export function TemplateForm({
       }
 
       case 'data': {
+        const displayValue = typeof data.value === 'string' ? stripMarkdown(data.value) : data.value;
+
         return (
           <Input
             placeholder={section.placeholder}
@@ -63,7 +66,7 @@ export function TemplateForm({
                 ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
                 : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
-            value={data.value}
+            value={displayValue}
             onChange={(e) => onChange({ ...data, value: e.target.value })}
           />
         );
@@ -142,6 +145,8 @@ export function TemplateForm({
       }
 
       default: {
+        const displayValue = typeof data === 'string' ? stripMarkdown(data) : data;
+
         return (
           <Input
             placeholder={section.placeholder}
@@ -150,7 +155,7 @@ export function TemplateForm({
                 ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
                 : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
-            value={data}
+            value={displayValue}
             onChange={(e) => onChange(e.target.value)}
           />
         );

@@ -82,74 +82,7 @@ function normalizeContent(content: string | undefined): string {
     return content;
   }
 
-  const lines = content.split(/\r?\n/);
-  const result: string[] = [];
-  let inBulletList = false;
-  let inOrderedList = false;
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
-    const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
-
-    if (bulletMatch) {
-      // Start bullet list if not already in one
-      if (!inBulletList) {
-        // Close ordered list if open
-        if (inOrderedList) {
-          result.push('</ol>');
-          inOrderedList = false;
-        }
-        result.push('<ul>');
-        inBulletList = true;
-      }
-      // Convert markdown in list item content
-      const markdownContent = convertMarkdownToHtml(bulletMatch[1]);
-      result.push(`<li><p>${markdownContent}</p></li>`);
-    } else if (orderedMatch) {
-      // Start ordered list if not already in one
-      if (!inOrderedList) {
-        // Close bullet list if open
-        if (inBulletList) {
-          result.push('</ul>');
-          inBulletList = false;
-        }
-        result.push('<ol>');
-        inOrderedList = true;
-      }
-      // Convert markdown in list item content
-      const markdownContent = convertMarkdownToHtml(orderedMatch[1]);
-      result.push(`<li><p>${markdownContent}</p></li>`);
-    } else {
-      // Close any open lists
-      if (inBulletList) {
-        result.push('</ul>');
-        inBulletList = false;
-      }
-      if (inOrderedList) {
-        result.push('</ol>');
-        inOrderedList = false;
-      }
-
-      if (!line) {
-        result.push('<p><br /></p>');
-      } else {
-        // Convert markdown in paragraph content
-        const markdownContent = convertMarkdownToHtml(line);
-        result.push(`<p>${markdownContent}</p>`);
-      }
-    }
-  }
-
-  // Close any remaining open lists
-  if (inBulletList) {
-    result.push('</ul>');
-  }
-  if (inOrderedList) {
-    result.push('</ol>');
-  }
-
-  return result.join('');
+  return convertMarkdownToHtml(content);
 }
 
 /**

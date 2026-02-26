@@ -3,6 +3,7 @@ import { Button } from '@shared/ui/components/button';
 import { Label } from '@shared/ui/label';
 import { RadioGroupItem } from '@shared/ui/radio-group';
 import { useId } from 'react';
+import { normalizeMarkdownContent } from '@shared/lib/markdown';
 
 interface HtmlContentProps {
   as?: 'span' | 'p';
@@ -10,25 +11,10 @@ interface HtmlContentProps {
   content: string;
 }
 
-/**
- * Converts plain text with \n to HTML format
- */
 export const processContentWithNewlines = (content: string): string => {
   if (!content) return '';
 
-  // Check if content already contains HTML tags
-  const hasHtmlTags = /<[^>]+>/.test(content);
-
-  if (hasHtmlTags) {
-    // If already has HTML, just replace \n with <br>
-    return content.replace(/\n/g, '<br>');
-  } else {
-    // If plain text, wrap each line in <p> tags
-    const lines = content.split('\n').filter((line) => line.trim());
-    if (lines.length === 0) return '';
-    if (lines.length === 1) return lines[0];
-    return lines.map((line) => `<p>${line}</p>`).join('');
-  }
+  return normalizeMarkdownContent(content);
 };
 
 const HtmlContent = ({ as = 'span', className, content }: HtmlContentProps) => {

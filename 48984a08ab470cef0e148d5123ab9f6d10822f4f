@@ -1,0 +1,25 @@
+src/widgets/dashboard/ui/dashboard-mobile-sidebar.tsx
+  332545a08b54738d 45-52
+src/widgets/dashboard/ui/dashboard-sidebar.tsx
+  332545a08b54738d 55-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "48984a08ab470cef0e148d5123ab9f6d10822f4f",
+  "prompts": {
+    "332545a08b54738d": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "385420",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 293,
+      "total_deletions": 23,
+      "accepted_lines": 264,
+      "overriden_lines": 8
+    }
+  }
+}

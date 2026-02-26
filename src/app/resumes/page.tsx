@@ -12,7 +12,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
-import AdaptiveDashboardHeader from '@widgets/dashboard/ui/header';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
@@ -25,7 +25,6 @@ import { ChevronDown, MoreVertical, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
   const { data: resumes } = useGetAllResumes();
@@ -128,7 +127,7 @@ export default function AllResumePage() {
         </div>
 
         <div className="flex-1 flex flex-col min-w-0 m-3">
-          <AdaptiveDashboardHeader user={user} />
+          <ResponsiveDashboardHeader user={user} />
 
           <main className="flex flex-col md:flex-row bg-dashboard-bg mt-3 rounded-[36px] overflow-hidden pb-4">
             <div className="flex-1">

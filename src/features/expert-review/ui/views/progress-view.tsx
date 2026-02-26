@@ -64,7 +64,7 @@ export function ProgressView({
           className="text-expert-heading font-semibold text-[28px] sm:text-[40px] md:text-[56px] leading-[1] tracking-[-0.18px] text-center align-bottom"
           style={GEIST_FONT}
         >
-          {showConfirmActions ? 'Confirm your resume' : 'Resume Uploading'}
+          {showConfirmActions ? 'Confirm your resume' : 'Resume Submitting'}
         </h2>
 
         <div className="w-full bg-white border-2 border-expert-border rounded-2xl sm:rounded-[28px] p-4 sm:p-6 md:p-8 flex flex-col gap-4 sm:gap-6 relative shadow-xl">

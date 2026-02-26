@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 interface Props {
   posts: BlogPost[];
+  allPosts: BlogPost[];
   title: string;
   placeholder: string;
   color: string;
@@ -15,7 +16,15 @@ interface Props {
   tags: string[];
 }
 
-export default function CategoryPageContent({ posts, title, placeholder, color, currentCategoryId, tags }: Props) {
+export default function CategoryPageContent({
+  posts,
+
+  title,
+  placeholder,
+  color,
+  currentCategoryId,
+  tags,
+}: Props) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>
@@ -33,6 +42,12 @@ export default function CategoryPageContent({ posts, title, placeholder, color, 
         </div>
 
         <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            placeholder={placeholder}
+            searchQuery={searchQuery}
+            scrollToResults
+          />
           <SearchBar
             setSearchQuery={setSearchQuery}
             placeholder={placeholder}

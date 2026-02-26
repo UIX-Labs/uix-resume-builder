@@ -1,24 +1,25 @@
 // UI Components
-export { ShadcnInput } from './input';
+export { Avatar, AvatarFallback, AvatarImage } from './avatar';
 export { Button } from './button';
-export { Avatar, AvatarImage, AvatarFallback } from './avatar';
+export { TiptapTextArea } from './components/textarea';
 export {
   DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuCheckboxItem,
-  DropdownMenuRadioItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuRadioGroup,
+  DropdownMenuTrigger,
 } from './dropdown';
+export { ShadcnInput } from './input';
 export { Label } from './label';
+export { Loader } from './loader';
 export { ProgressCircle } from './progress-circle';
-export { TiptapTextArea } from './components/textarea';

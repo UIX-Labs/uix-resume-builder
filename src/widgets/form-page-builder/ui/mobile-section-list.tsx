@@ -3,8 +3,6 @@ import { ProfessionalSummary } from '@shared/icons/prof-summary';
 import { cn } from '@shared/lib/cn';
 import { cleanHtml } from '@shared/lib/markdown';
 import { Button } from '@shared/ui/button';
-import { ArrowLeft, CheckCircle2 } from 'lucide-react';
-import { SECTION_ICONS } from '../lib/section-utils';
 import { Input } from '@shared/ui/components/input';
 import { ArrowLeft, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { SECTION_ICONS, SECTION_PLACEHOLDERS } from '../lib/section-utils';
@@ -18,6 +16,46 @@ interface MobileSectionListProps {
   importSource?: 'linkedin' | 'pdf' | null;
 }
 
+  onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
+}
+
+const SectionItemWithData = ({
+  primary,
+  secondary,
+  itemKey,
+}: {
+  primary: string;
+  secondary: string | null;
+  itemKey: string | number;
+}) => {
+  const isPlaceholder = itemKey === 'placeholder';
+  return (
+    <div
+      key={itemKey}
+      className="relative w-full rounded-md bg-white border border-section-border shadow-[0_0_0_4px_var(--color-section-shadow)]"
+    >
+      <Input readOnly value="" className="absolute inset-0 opacity-0 h-full cursor-text" tabIndex={-1} />
+      <div className="relative flex flex-col items-start p-3 space-y-1 pointer-events-none">
+        {primary && (
+          <div
+            className={cn(
+              'text-sm font-semibold text-section-text-primary w-full',
+              isPlaceholder && 'text-section-text-muted',
+            )}
+          >
+            {primary}
+          </div>
+        )}
+        {secondary && (
+          <div className={cn('text-sm text-section-text-secondary w-full', isPlaceholder && 'text-section-text-muted')}>
+            {secondary}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export function MobileSectionList({
   navs,
   formData,
@@ -25,6 +63,7 @@ export function MobileSectionList({
   onSectionClick,
   onBackClick,
   importSource,
+  onToggleHideSection,
 }: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})

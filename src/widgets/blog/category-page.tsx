@@ -1,52 +1,58 @@
 'use client';
 
 import BlogGrid from '@/widgets/blog/blog-Grid';
-import { BlogPost } from '@shared/lib/blog';
+import NotFoundSearch from '@/widgets/blog/components/not-found-search';
+import SearchBar from '@/widgets/blog/components/search-bar';
+import type { BlogPost } from '@shared/lib/blog';
 import { useState } from 'react';
 
 interface Props {
   posts: BlogPost[];
+  allPosts: BlogPost[];
   title: string;
   placeholder: string;
+  color: string;
+  currentCategoryId?: string;
+  tags: string[];
 }
 
-export default function CategoryPageContent({ posts, title, placeholder }: Props) {
-  const [searchQuery, _setSearchQuery] = useState('');
+export default function CategoryPageContent({ posts, allPosts, title, placeholder, color, currentCategoryId }: Props) {
+  const [searchQuery, setSearchQuery] = useState('');
 
   const searchedPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  return (
-    <>
-      {/* HEADER + SEARCH */}
-      <div className="mt-[35px] max-w-[1395px] mx-auto px-4">
-        <div className="flex flex-col sm:flex-row sm:justify-between gap-4 items-start sm:items-center">
-          {/* LEFT TITLE */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold">{title}</h1>
+  const suggestions = allPosts.slice(0, 3).map((p) => ({
+    label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
+    slug: p.slug,
+  }));
 
-          {/* RIGHT SEARCH */}
-          {/* <div className="relative w-full sm:w-[350px] lg:w-[400px]">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search blogs"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3.5 text-base bg-white border border-gray-200
-                  rounded-3xl shadow-sm focus:outline-none focus:ring-2 
-                  focus:ring-blue-500 transition-all duration-200"
-            />
-          </div> */}
+  return (
+    <div className="max-w-[1395px] mx-auto px-4">
+      <div className="mt-6 flex flex-col-reverse sm:flex-row justify-between items-center gap-6">
+        <div className="flex flex-col items-center sm:items-start max-w-max">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight text-center sm:text-left">
+            {title}
+          </h1>
+          <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: color || 'black' }} />
+        </div>
+
+        <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            placeholder={placeholder}
+            searchQuery={searchQuery}
+            scrollToResults
+          />
         </div>
       </div>
 
       {/* GRID */}
-      <div className="mt-[35px]">
-        <BlogGrid posts={searchedPosts} />
+      <div id="blog-grid" className="mt-10">
+        {searchedPosts.length === 0 && <NotFoundSearch suggestions={suggestions} />}
+        <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>
-    </>
+    </div>
   );
 }

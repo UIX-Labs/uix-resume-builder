@@ -8,6 +8,15 @@ export interface User {
   lastName?: string;
   isVerified: boolean;
   isLoggedIn: boolean;
+  downloadsLeft: number;
+  downloadsAllowed: number;
+  referredTo?: Array<{
+    id: string;
+    createdAt: string;
+    email: string;
+    firstName: string;
+    lastName?: string | null;
+  }>;
 }
 
 const fetchUserProfile = async (): Promise<User> => {

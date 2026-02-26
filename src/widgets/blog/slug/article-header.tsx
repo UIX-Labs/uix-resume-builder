@@ -109,6 +109,8 @@ export default function ArticleHeader({
           src="/images/blog/slug/header-img.png"
           alt="article header illustration"
           className="w-full h-auto object-contain drop-shadow-sm"
+          width={100}
+          height={100}
         />
       </div>
     </div>

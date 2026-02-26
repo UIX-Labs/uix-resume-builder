@@ -17,7 +17,13 @@ const FooterSection = () => {
       id: 'colors',
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
-          <Image src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
+          <Image
+            src="/images/color-palete.svg"
+            alt="Hired at Meta"
+            className="w-full h-auto"
+            width={160}
+            height={120}
+          />
         </div>
       ),
       desktopPosition: { top: '-1%', left: '2%' },

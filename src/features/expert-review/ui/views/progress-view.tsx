@@ -21,7 +21,6 @@ interface ProgressViewProps {
   onClose: () => void;
 }
 
-
 export function ProgressView({
   fileName,
   progress,

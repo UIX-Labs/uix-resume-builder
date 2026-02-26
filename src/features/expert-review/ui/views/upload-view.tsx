@@ -5,11 +5,7 @@ import { Button } from '@shared/ui/button';
 import { Upload } from 'lucide-react';
 import { useRef } from 'react';
 import { toast } from 'sonner';
-import {
-  MAX_EXPERT_REVIEW_FILE_BYTES,
-  EXPERT_REVIEW_ACCEPT,
-  isExpertReviewFileTypeValid,
-} from '../../constants';
+import { MAX_EXPERT_REVIEW_FILE_BYTES, EXPERT_REVIEW_ACCEPT, isExpertReviewFileTypeValid } from '../../constants';
 import { CloseButton, ExpertCard, expertCardPositionClasses, experts } from './shared';
 
 const CTA_BUTTON_CLASS =

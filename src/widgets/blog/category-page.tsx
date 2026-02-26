@@ -13,7 +13,6 @@ interface Props {
   color: string;
   currentCategoryId?: string;
   tags: string[];
-  
 }
 
 export default function CategoryPageContent({ posts, title, placeholder, color, currentCategoryId, tags }: Props) {
@@ -34,13 +33,18 @@ export default function CategoryPageContent({ posts, title, placeholder, color, 
         </div>
 
         <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
-          <SearchBar setSearchQuery={setSearchQuery} placeholder={placeholder} searchQuery={searchQuery} scrollToResults />
+          <SearchBar
+            setSearchQuery={setSearchQuery}
+            placeholder={placeholder}
+            searchQuery={searchQuery}
+            scrollToResults
+          />
         </div>
       </div>
 
       {/* GRID */}
       <div id="blog-grid" className="mt-10">
-        {searchedPosts.length === 0 && <NotFoundSearch tags = {tags}/>}
+        {searchedPosts.length === 0 && <NotFoundSearch tags={tags} />}
         <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>
     </div>

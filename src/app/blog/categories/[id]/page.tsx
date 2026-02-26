@@ -4,7 +4,6 @@ import NotFoundPage from '@/widgets/blog/slug/not-found-page';
 import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
 
-
 interface PageProps {
   params: Promise<{ id: string }>;
 }

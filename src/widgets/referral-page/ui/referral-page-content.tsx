@@ -16,7 +16,6 @@ export default function ReferralPageContent({ user }: ReferralPageContentProps) 
 
   const referralLink = referralData?.referralUrl ?? '';
   const friendsJoined = user?.referredTo?.length ?? 0;
-  const downloadsEarned = friendsJoined * REFERRAL_CONSTANTS.REFERRER_DOWNLOADS;
   const downloadsRemaining = referralData?.downloadsLeft ?? user?.downloadsLeft ?? 0;
   const downloadsAllowed = referralData?.downloadsAllowed ?? user?.downloadsAllowed ?? 0;
   const friendsJoinedBonus = friendsJoined * 3;
@@ -48,7 +47,7 @@ export default function ReferralPageContent({ user }: ReferralPageContentProps) 
       <div className="flex flex-col lg:flex-row items-stretch gap-5 max-w-6xl mx-auto mt-16">
         <ReferralStatsCard
           friendsJoined={friendsJoined}
-          downloadsEarned={downloadsEarned}
+          downloadsEarned={downloadsAllowed}
           downloadsRemaining={downloadsRemaining}
           downloadsAllowed={downloadsAllowed}
           friendsJoinedBonus={friendsJoinedBonus}

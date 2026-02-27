@@ -21,6 +21,7 @@ import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+
 export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();

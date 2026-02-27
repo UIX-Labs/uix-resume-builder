@@ -241,7 +241,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
 
               <div
-                  className="prose prose-lg prose-gray prose-headings:scroll-mt-0
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-0
                  prose-headings:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
                  prose-pre:bg-text-blue-500 prose-pre:text-black
                     prose-a:text-blue-500 w-full prose-headings:font-semibold
@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     prose-th:px-4
                     prose-td:px-4
                     prose-th:py-3
-                    prose-td:py-3"
+                    prose-td:py-3 mt-6"
               >
                 <MDXRemote
                   source={content}
@@ -260,9 +260,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   options={{
                     mdxOptions: {
                       remarkPlugins: [remarkGfm],
-                      rehypePlugins: [
-                        rehypeSlug,
-                      ],
+                      rehypePlugins: [rehypeSlug],
                     },
                   }}
                 />

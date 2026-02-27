@@ -1,5 +1,5 @@
 import { categories } from '@/data/categories';
-import { BlogPost } from '@/shared/lib/blog';
+import type { BlogPost } from '@/shared/lib/blog';
 import FeaturedPrimaryCard from './feature-primary-card';
 import FeaturedSecondaryCard from './feature-secondary';
 

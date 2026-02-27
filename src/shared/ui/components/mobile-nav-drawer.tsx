@@ -139,23 +139,19 @@ export const MobileNavDrawer = ({
                 <div className="bg-sidebar-nav-bg rounded-[36px] px-[33px] py-9 relative flex-1">
                   {menuSections && menuSections.length > 0 ? (
                     <div className="space-y-8">
-                      {menuSections.map((section, sectionIndex) => (
-                        <div key={sectionIndex}>
+                      {menuSections.map((section) => (
+                        <div key={section.label}>
                           {section.label && (
                             <h3 className="text-xs font-normal text-sidebar-section-label mb-4 tracking-[-0.00167em] leading-[1.667em]">
                               {section.label}
                             </h3>
                           )}
-                          <ul className="space-y-4">
-                            {section.items.map((item, itemIndex) =>
-                              renderNavItem(item, `${sectionIndex}-${itemIndex}`),
-                            )}
-                          </ul>
+                          <ul className="space-y-4">{section.items.map((item) => renderNavItem(item, item.label))}</ul>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <ul className="space-y-4">{navItems.map((item, index) => renderNavItem(item, index))}</ul>
+                    <ul className="space-y-4">{navItems.map((item) => renderNavItem(item, item.label))}</ul>
                   )}
                 </div>
               </nav>

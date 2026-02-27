@@ -99,7 +99,7 @@ export function renderInlineListSection(
       <div data-item="content" data-break={section.break} data-canbreak={isBreakable ? 'true' : undefined}>
         {section.showBullet ? (
           <ul className={cn('list-disc list-outside pl-6', section.containerClassName)}>
-            {flattenedItemsWithContext.map(({ value, itemId }, idx: number) => {
+            {flattenedItemsWithContext.map(({ value, itemId }) => {
               // Extract renderable value - will return null for complex objects
               const actualValue = extractRenderableValue(value);
 
@@ -139,7 +139,7 @@ export function renderInlineListSection(
 
               return (
                 <li
-                  key={idx}
+                  key={sectionKey}
                   className={cn(
                     section.itemClassName,
 
@@ -195,7 +195,7 @@ export function renderInlineListSection(
               const hasClickableSuggestions = !!suggestionData;
 
               return (
-                <span key={idx}>
+                <span key={sectionKey}>
                   <span
                     className={cn(section.itemClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                     data-suggestion={suggestionData}

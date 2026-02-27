@@ -2,11 +2,9 @@ import { CircularProgress } from './circular-progress';
 
 interface ProgressCircleProps {
   progress: number; // 0-100
-  currentStep: number;
-  totalSteps: number;
 }
 
-export function ProgressCircle({ currentStep, totalSteps, progress }: ProgressCircleProps) {
+export function ProgressCircle({ progress }: ProgressCircleProps) {
   return (
     <CircularProgress progress={progress} size={188} strokeWidth={20} variant="default">
       <div className="absolute inset-0 flex flex-col items-center justify-center">

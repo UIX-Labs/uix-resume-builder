@@ -24,6 +24,7 @@ export default function NotFoundPage({ color = '#004EF8' }: NotFoundPageProps) {
       {/* BUTTON */}
       <Link href="/">
         <button
+          type="button"
           className="
           mt-6 px-6 py-3 
           bg-blue-600 

@@ -1,10 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { Calendar, Clock, ArrowRight } from 'lucide-react';
-import { cn } from '@shared/lib/utils';
-import { TagBadge } from './tag-badge';
 import type { BlogPost } from '@shared/lib/blog';
+import { cn } from '@shared/lib/utils';
+import { ArrowRight, Calendar, Clock } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { TagBadge } from './tag-badge';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -36,7 +37,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         {/* Cover Image */}
         {frontmatter.coverImage && (
           <div className={cn('relative shrink-0 overflow-hidden bg-gray-100', featured ? 'h-64 md:h-80' : 'h-48')}>
-            <img
+            <Image
               src={frontmatter.coverImage}
               alt={frontmatter.title}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

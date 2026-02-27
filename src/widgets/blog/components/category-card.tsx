@@ -15,10 +15,11 @@ export default function CategoryCard({ category }: { category: Category }) {
         className="bg-white border border-[#E5E7EB] rounded-2xl 
         hover:shadow-md transition-all cursor-pointer 
         hover:-translate-y-1 
-        w-[210px] h-[210px] overflow-hidden flex flex-col items-center justify-center p-4"
+        w-[165px] h-[165px]
+       md:w-[210px] md:h-[210px] overflow-hidden flex flex-col items-center justify-center p-4"
       >
-        <div className="relative h-full flex items-center justify-center w-full ">
-          <div className="relative w-full h-full">
+        <div className="relative md:h-full h-[70%] flex items-center justify-center w-full ">
+          <div className="relative w-full md:h-full h-full">
             <Image
               src={category.image}
               alt={category.title}

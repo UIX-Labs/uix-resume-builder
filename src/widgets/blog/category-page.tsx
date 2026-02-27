@@ -67,7 +67,7 @@ export default function CategoryPageContent({ posts, allPosts, title, placeholde
       </div>
 
       {/* GRID */}
-      <div id="search-area" className="mt-10">
+      <div id="search-area" className="">
         {searchedPosts.length === 0 && <NotFoundSearch suggestions={suggestions} />}
         <BlogGrid posts={searchedPosts} currentCategoryId={currentCategoryId} />
       </div>

@@ -1,8 +1,8 @@
 'use client';
 
-import { Download } from 'lucide-react';
-import { Button } from '@shared/ui/button';
 import { cn } from '@shared/lib/utils';
+import { Button } from '@shared/ui/button';
+import { Download } from 'lucide-react';
 import Image from 'next/image';
 
 export interface MobileDownloadButtonProps {
@@ -31,8 +31,9 @@ export function MobileDownloadButton({
   isLoggedIn = false,
 }: MobileDownloadButtonProps) {
   const isLocked = downloadsLeft === 0;
-  const downloadsDone = downloadsAllowed - downloadsLeft;
-
+  const safeDownloadsAllowed = downloadsAllowed ?? 3;
+  const safeDownloadsLeft = downloadsLeft ?? 3;
+  const downloadsDone = safeDownloadsAllowed - safeDownloadsLeft;
   return (
     <Button
       type="button"
@@ -45,7 +46,7 @@ export function MobileDownloadButton({
       {isLoggedIn && !isLocked && !isGenerating && (
         <div className="absolute -top-2 -left-2  flex items-center justify-center  px-1.5 rounded-full bg-gradient-to-r from-blue-600 to-dark-900 border-2 border-white z-10">
           <span className="text-xs font-semibold text-white">
-            {downloadsDone}/{downloadsAllowed}
+            {downloadsDone}/{safeDownloadsAllowed}
           </span>
         </div>
       )}

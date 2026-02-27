@@ -1,6 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
+import type React from 'react';
 import { CodeBlock } from './code-block';
 
 /* ------------------------------------------------------------------ */
@@ -24,7 +24,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h1 id={id} className="mt-12 mb-4 scroll-mt-24 text-4xl font-bold tracking-tight text-gray-900" {...props}>
+      <h1 id={id} className="mt-12 mb-4 scroll-mt-0 text-4xl font-bold tracking-tight text-gray-900" {...props}>
         {children}
       </h1>
     );
@@ -35,19 +35,19 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
     return (
       <h2
         id={id}
-        className="group mt-10 mb-4 scroll-mt-24 border-b border-gray-200 pb-2 text-2xl font-semibold tracking-tight text-gray-900"
+        className="group mt-10 mb-4 scroll-mt-0 border-b border-gray-200 pb-2 text-2xl font-semibold tracking-tight text-gray-900"
         {...props}
       >
         {children}
-        {id && (
+        {/* {id && (
           <a
-            href={`#${id}`}
+            href={`${id}`}
             className="ml-2 text-gray-300 no-underline opacity-0 transition-opacity group-hover:opacity-100"
             aria-label={`Link to ${typeof children === 'string' ? children : 'heading'}`}
           >
-            #
+            
           </a>
-        )}
+        )} */}
       </h2>
     );
   },
@@ -55,21 +55,8 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h3
-        id={id}
-        className="group mt-8 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight text-gray-900"
-        {...props}
-      >
+      <h3 id={id} className="group mt-8 mb-3 scroll-mt-0 text-xl font-semibold tracking-tight text-gray-900" {...props}>
         {children}
-        {id && (
-          <a
-            href={`#${id}`}
-            className="ml-2 text-gray-300 no-underline opacity-0 transition-opacity group-hover:opacity-100"
-            aria-label={`Link to ${typeof children === 'string' ? children : 'heading'}`}
-          >
-            #
-          </a>
-        )}
       </h3>
     );
   },
@@ -175,8 +162,8 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <figure className="my-8">
       <div className="overflow-hidden rounded-xl border border-gray-200">
-        {/* biome-ignore lint/a11y/useAltText: alt is passed through props */}
-        <img src={src} alt={alt || ''} className="w-full object-cover" loading="lazy" {...props} />
+        {/* biome-ignore lint/performance/noImgElement: alt is passed through props */}
+        <img src={src || ''} alt={alt || ''} className="w-full object-cover" loading="lazy" {...props} />
       </div>
       {alt && <figcaption className="mt-3 text-center text-sm text-gray-500">{alt}</figcaption>}
     </figure>
@@ -192,16 +179,13 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   ),
 
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead
-      className="border-b border-gray-200 bg-gray-50 text-xs font-semibold uppercase tracking-wider text-gray-600"
-      {...props}
-    >
+    <thead className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600" {...props}>
       {children}
     </thead>
   ),
 
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 font-semibold" {...props}>
+    <th className="px-4 py-3 font-semibold text-base" {...props}>
       {children}
     </th>
   ),

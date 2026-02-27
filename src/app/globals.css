@@ -543,7 +543,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-
+    pointer-events: auto !important;
     @apply bg-background text-foreground;
   }
 
@@ -748,7 +748,9 @@
 .float-blob-animation {
   animation: floatBlob linear infinite;
 }
-
+html {
+  scroll-behavior: smooth;
+}
 .templates-dialog-mobile-overlay {
   inset: 0 0 72px 0;
 }

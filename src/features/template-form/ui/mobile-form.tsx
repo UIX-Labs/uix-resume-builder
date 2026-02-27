@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { TemplateForm } from './index';
 
 interface MobileFormProps {
-  formSchema: FormSchema | {};
+  formSchema: FormSchema | Record<string, any>;
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
@@ -20,6 +20,7 @@ interface MobileFormProps {
   hasPrevious?: boolean;
   onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
   onSave?: () => void;
+  isMobile?: boolean;
 }
 
 export function MobileForm({
@@ -29,10 +30,6 @@ export function MobileForm({
   currentStep,
   isOpen,
   onClose,
-  onNext,
-  onBack,
-  hasNext,
-  hasPrevious,
   onOpenAnalyzerModal,
   onSave,
 }: MobileFormProps) {
@@ -48,8 +45,7 @@ export function MobileForm({
   }, [isOpen]);
 
   const currentData = values[currentStep];
-  const currentSchema = formSchema?.[currentStep];
-
+  const currentSchema = (formSchema as Record<ResumeDataKey, any>)?.[currentStep];
   if (!currentSchema || !currentData || typeof currentData === 'string' || !('items' in currentData)) {
     return null;
   }

@@ -16,14 +16,14 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { Button } from '@shared/ui/button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { DownloadButton } from '@shared/ui/components/download-button';
 import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
-import { DownloadButton } from '@shared/ui/components/download-button';
 import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Download, GripVertical } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -488,7 +488,7 @@ export function FormPageBuilder() {
       const formDataSectionKey = sectionToFormDataMap[sectionId.toLowerCase()] || sectionId;
 
       // Get section data from formData
-      const sectionData = formData?.[formDataSectionKey];
+      const sectionData = formData?.[formDataSectionKey as ResumeDataKey];
 
       if (!sectionData || !sectionData.suggestedUpdates) {
         return;
@@ -516,7 +516,7 @@ export function FormPageBuilder() {
         suggestions,
         fieldName,
         itemId,
-        suggestionType,
+        suggestionType: suggestionType as SuggestionType,
         formDataSectionKey,
       });
       setAnalyzerModalOpen(true);
@@ -534,7 +534,7 @@ export function FormPageBuilder() {
 
   // Use DOM event delegation for suggestion clicks
   useSuggestionClickHandler({
-    containerRef: targetRef,
+    containerRef: targetRef as React.RefObject<HTMLDivElement>,
     onSuggestionClick: handleSuggestionClickFromDOM,
     enabled: hasSuggestions && !isGeneratingPDF,
   });
@@ -551,7 +551,7 @@ export function FormPageBuilder() {
 
       const { itemId, fieldName, formDataSectionKey } = analyzerModalData;
       // Use formDataSectionKey if available (from DOM clicks), otherwise fallback to currentStep
-      const sectionKey = formDataSectionKey || currentStep;
+      const sectionKey = (formDataSectionKey || currentStep) as ResumeDataKey;
       const currentData = formData?.[sectionKey];
 
       if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {

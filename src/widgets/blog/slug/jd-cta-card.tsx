@@ -22,7 +22,10 @@ export default function JDCTACard() {
   };
 
   return (
-    <div className="mt-6 rounded-2xl border border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-6 pb-0 shadow-sm">
+    <div
+      className="mt-6 rounded-2xl border-2 border-green-500 bg-[url('/images/blog/hero-section/Dot-bg.png')] p-4 pb-0 shadow-sm bg-gray-100
+    flex flex-col items-center justify-center"
+    >
       {/* Title */}
       <h3 className="text-2xl font-semibold text-gray-900 text-center">
         Upgrade Your Resume with
@@ -35,25 +38,28 @@ export default function JDCTACard() {
       </p>
 
       {/* Button */}
-      <div className="flex justify-center w-full">
+      <div className="flex justify-center w-full ">
         <button
           type="button"
           onClick={handleUploadClick}
-          className="mt-4 w-3/4 rounded-lg bg-green-600 py-5 text-lg font-semibold text-white transition hover:bg-green-700"
+          className="mt-4 w-1/3 md:w-2/3 rounded-lg bg-green-600 py-4 text-lg font-semibold text-white transition hover:bg-green-700 cursor-pointer"
         >
           Upload Resume & JD
         </button>
       </div>
 
       {/* Resume Preview Image */}
-      <div className="mt-6 flex justify-center">
-        <Image
-          src="/images/blog/slug/upload-resume.png"
-          alt="Resume preview"
-          width={325}
-          height={325}
-          className="rounded-lg object-contain"
-        />
+      {/* Resume Preview Image Container */}
+      <div className="relative mt-6 flex justify-center w-full h-[120px]">
+        <div className="w-full h-full">
+          <Image
+            src="/images/blog/slug/upload-resume.svg"
+            alt="Resume preview"
+            fill
+            className="object-contain object-bottom"
+            priority
+          />
+        </div>
       </div>
     </div>
   );

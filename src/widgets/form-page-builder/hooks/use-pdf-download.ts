@@ -49,7 +49,7 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
         // Store current resume ID so we can return after login
         localStorage.setItem('pending_download_resume_id', resumeId);
         // Redirect to auth with callback to current page
-        const callbackUrl = encodeURIComponent(window.location.pathname + '?download=true');
+        const callbackUrl = encodeURIComponent(`${window.location.pathname}?download=true`);
         setAuthRedirectUrl(`/auth?callbackUrl=${callbackUrl}`);
         setIsAuthModalOpen(true);
         return;
@@ -132,5 +132,8 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
     isReferralModalOpen,
     setIsReferralModalOpen,
     referralUrl,
+    downloadsLeft: user?.downloadsLeft,
+    downloadsAllowed: user?.downloadsAllowed,
+    isLoggedIn: user?.isLoggedIn ?? false,
   };
 }

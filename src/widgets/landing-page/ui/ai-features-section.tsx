@@ -19,7 +19,7 @@ export function AiFeaturesSection() {
   if (!isMounted) return null;
 
   return (
-    <section className="py-12 sm:py-16 md:py-24" aria-labelledby="ai-features-heading">
+    <section className="py-12 sm:py-16 md:py-12" aria-labelledby="ai-features-heading">
       <div className="container mx-auto px-4 sm:px-6 max-w-[90rem]">
         <h2
           id="ai-features-heading"

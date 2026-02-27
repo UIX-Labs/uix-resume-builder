@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
 import { toast } from 'sonner';
 import { Copy } from 'lucide-react';
 import { REFERRAL_CONSTANTS } from '@features/referral-flow/constants';
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
 import { InviteEmailModal } from './invite-email-modal';
+import { useState } from 'react';
 
 interface ReferralShareCardProps {
   referralLink: string;

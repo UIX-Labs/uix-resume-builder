@@ -1,26 +1,29 @@
 'use client';
 import { type Resume, useResumeData } from '@entities/resume';
+
+import { ReferralModal } from '@features/referral-flow/ui/referral-modal';
+import { ResumeRenderer } from '@features/resume/renderer';
 import { formatDate } from '@shared/lib/date-time';
 import { Button } from '@shared/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
-import { MoreHorizontal, Eye, Trash2, Loader2, DownloadIcon } from 'lucide-react';
-import { useState, useRef } from 'react';
-import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
-import { usePdfGeneration } from '@widgets/form-page-builder/hooks/use-pdf-generation';
-import { usePdfDownload } from '@widgets/form-page-builder/hooks/use-pdf-download';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import { ReferralModal } from '@features/referral-flow/ui/referral-modal';
-import { toast } from 'sonner';
-import { ResumeRenderer } from '@features/resume/renderer';
+import { MobileDownloadButton } from '@shared/ui/components/mobile-download-button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
+import { useQueryClient } from '@tanstack/react-query';
+import { usePdfDownload } from '@widgets/form-page-builder/hooks/use-pdf-download';
+import { usePdfGeneration } from '@widgets/form-page-builder/hooks/use-pdf-generation';
+import { Eye, MoreHorizontal, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { DeleteResumeModal } from './delete-resume-modal';
 
 interface Props {
   resume: Resume;
   onPreview: () => void;
 }
+
 function getMobileTitle(title: string) {
   const parts = title.split('-Resume-');
-
   if (parts.length === 2) {
     const name = parts[0];
     const date = parts[1];
@@ -30,11 +33,13 @@ function getMobileTitle(title: string) {
 }
 
 export function ResumeCardMobile({ resume, onPreview }: Props) {
+  const queryClient = useQueryClient();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const thumbnailRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const { data: resumeData } = useResumeData(resume.id);
+
   const { isGeneratingPDF, generatePDF } = usePdfGeneration({
     thumbnailRef,
     formData: resumeData,
@@ -49,9 +54,15 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
     isReferralModalOpen,
     setIsReferralModalOpen,
     referralUrl,
+    downloadsLeft,
+    downloadsAllowed,
+    isLoggedIn,
   } = usePdfDownload({
     resumeId: resume.id,
     generatePDF,
+    onDownloadSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-profile'] });
+    },
   });
 
   const handlePDFClick = async () => {
@@ -66,6 +77,7 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
   const handleEditClick = () => {
     router.push(`/resume/${resume.id}?openForm=true`);
   };
+
   return (
     <>
       <div className="w-[85vw] bg-white rounded-2xl p-4 shadow-sm h-[160px] flex flex-col justify-between">
@@ -91,7 +103,6 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
                   <MoreHorizontal className="w-5 h-5" />
                 </Button>
               </DropdownMenuTrigger>
-
               <DropdownMenuContent align="end">
                 <DropdownMenuItem className="text-red-600 cursor-pointer" onClick={() => setShowDeleteDialog(true)}>
                   <Trash2 className="w-4 h-4 mr-2" />
@@ -103,16 +114,14 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
         </div>
 
         <div className="flex gap-3 mt-4">
-          <Button
-            variant="outline"
-            className="flex-1 rounded-[12px] bg-[#005FF2] text-white"
+          <MobileDownloadButton
+            className="flex-1 rounded-[12px] bg-[#005ff2] text-white h-9 px-4 py-2"
             onClick={handlePDFClick}
-            disabled={isGeneratingPDF}
-          >
-            <DownloadIcon className="text-white" />
-            {isGeneratingPDF ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : 'PDF'}
-          </Button>
-
+            downloadsLeft={downloadsLeft ?? 0}
+            downloadsAllowed={downloadsAllowed ?? 3}
+            isGenerating={isGeneratingPDF}
+            isLoggedIn={isLoggedIn}
+          />
           <Button
             className="flex-1 rounded-[12px] bg-[#E9F4FF] border border-[#CBE7FF] text-[#005FF2]"
             onClick={handleEditClick}
@@ -137,9 +146,10 @@ export function ResumeCardMobile({ resume, onPreview }: Props) {
         onClose={() => setIsReferralModalOpen(false)}
         referralLink={referralUrl}
       />
+
       <div
         style={{
-          position: 'absolute',
+          position: 'fixed',
           left: '-9999px',
           top: 0,
           width: '794px',

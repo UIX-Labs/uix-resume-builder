@@ -10,28 +10,22 @@ interface SearchBarProps {
   scrollToResults?: boolean;
 }
 
-
 export default function SearchBar({ searchQuery, setSearchQuery, placeholder, scrollToResults }: SearchBarProps) {
   const router = useRouter();
 
-    const scrollToGrid = () =>{
-      router.push('#blog-grid');
-    }
+  const scrollToGrid = () => {
+    router.push('#blog-grid');
+  };
 
-  const debouncedScroll = useMemo(
-    () => debounce(scrollToGrid, 500),
-    [router]
-  );
+  const debouncedScroll = useMemo(() => debounce(scrollToGrid, 500), [router]);
 
-    const handleChange = (value: string) => {
-      setSearchQuery(value);
+  const handleChange = (value: string) => {
+    setSearchQuery(value);
 
     if (!value.trim() || !scrollToResults) return;
 
     debouncedScroll();
   };
-
- 
 
   return (
     <div className="relative w-full sm:min-w-[350px] max-w-[450px]">

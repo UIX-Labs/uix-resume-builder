@@ -41,6 +41,15 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
   };
 
   const handleReferralClick = () => {
+    if (!user) {
+      router.push('/auth');
+      trackEvent('navigation_blocked', {
+        source: 'dashboard_mobile_sidebar',
+        destination: 'referral',
+        reason: 'not_authenticated',
+      });
+      return;
+    }
     handleNavigation('/referral', 'referral');
   };
 

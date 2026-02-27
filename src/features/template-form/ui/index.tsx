@@ -26,7 +26,7 @@ export function TemplateForm({
   onToggleHideSection,
   isMobile = false,
 }: {
-  formSchema: FormSchema | {};
+  formSchema: FormSchema | null;
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;

@@ -1,5 +1,6 @@
 import { fetch } from '@shared/api';
 import { clearGuestEmail } from '@shared/lib/guest-email';
+import { clearReferrerUserId } from '@shared/lib/referrer-user-id';
 
 export const getLinkedInAuthUrl = () => {
   const state = Math.random().toString(36).substring(2, 15);
@@ -38,6 +39,7 @@ export const sendAuthCodeToBackend = async (authCode: string, guestEmail?: strin
     });
 
     clearGuestEmail();
+    clearReferrerUserId();
 
     return response;
   } catch (error) {

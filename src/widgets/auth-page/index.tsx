@@ -21,6 +21,7 @@ import { cn } from '@shared/lib/utils';
 import LinkedInSignInButton from '@shared/ui/components/linkedIn-signin-button';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { clearGuestEmail } from '@shared/lib/guest-email';
+import { setReferrerUserId, clearReferrerUserId } from '@shared/lib/referrer-user-id';
 
 export default function DesktopAuthLayout() {
   const router = useRouter();
@@ -32,6 +33,11 @@ export default function DesktopAuthLayout() {
     if (callbackUrl) {
       localStorage.setItem('auth_callback_url', callbackUrl);
     }
+
+    const userId = searchParams.get('userId');
+    if (userId) {
+      setReferrerUserId(userId);
+    }
   }, [searchParams]);
 
   const handleAuthSuccessRedirect = () => {
@@ -41,6 +47,7 @@ export default function DesktopAuthLayout() {
 
     localStorage.removeItem('auth_callback_url');
     clearGuestEmail();
+    clearReferrerUserId();
 
     if (pendingResumeId) {
       router.push(`/resume/${pendingResumeId}`);

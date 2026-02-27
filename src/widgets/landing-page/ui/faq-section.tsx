@@ -27,7 +27,7 @@ function FaqSection() {
                   {item.title}
                 </AccordionTrigger>
 
-                <AccordionContent className="text-[#171717] text-base md:text-lg pb-6 leading-relaxed md:pr-20">
+                <AccordionContent className="text-[#171717] text-base md:text-lg pb-4 leading-relaxed md:pr-20">
                   <div className="flex flex-col gap-4">{item.content}</div>
                 </AccordionContent>
               </AccordionItem>

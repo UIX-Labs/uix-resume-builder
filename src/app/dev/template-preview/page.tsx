@@ -17,7 +17,7 @@ import { useState } from 'react';
 const templateNames = getTemplateNames();
 
 export default function TemplatePreviewPage() {
-  const [selected, setSelected] = useState<string>('mohsina-template1');
+  const [selected, setSelected] = useState<string>('standard');
 
   return (
     <div className="flex min-h-screen bg-gray-100">

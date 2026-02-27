@@ -81,7 +81,7 @@ export function FriendsJoinedModal({ open, onOpenChange, friends }: FriendsJoine
           'z-50 w-67.5 bg-background-white rounded-[16px] border border-modal-border shadow-[0_6px_14px_0_rgba(0,0,0,0.05)] animate-in fade-in-0 duration-200 flex flex-col',
           isMobile
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 slide-in-from-bottom-4 max-h-120'
-            : 'absolute -top-63 -right-6 zoom-in-95 min-h-53',
+            : 'absolute -top-63 -right-6 zoom-in-95 max-h-55',
         )}
       >
         {/* Custom Header with gradient background */}

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form';
+import PhoneInputWithCountry from 'react-phone-number-input';
 import { cn } from '@shared/lib/cn';
 import 'react-phone-number-input/style.css';
 
@@ -14,13 +14,12 @@ interface PhoneInputProps {
 }
 
 const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
-  ({ value, onChange, placeholder = 'Enter phone number', className, disabled, ...props }, _ref) => {
+  ({ value, onChange, placeholder = 'Enter phone number', className, disabled }, _ref) => {
     return (
       <div className={cn('relative', className)}>
         <PhoneInputWithCountry
-          name=""
           value={value}
-          onChange={onChange}
+          onChange={(val) => onChange?.(val ?? undefined)}
           placeholder={placeholder}
           disabled={disabled}
           className={cn(
@@ -30,16 +29,6 @@ const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             'disabled:cursor-not-allowed disabled:opacity-50',
             'PhoneInputCountry',
           )}
-          inputClassName={cn(
-            'flex-1 border-0 bg-transparent outline-none focus:ring-0',
-            'placeholder:text-[#CFD4DB] text-base text-[#0C1118] font-normal',
-            'disabled:cursor-not-allowed disabled:opacity-50',
-          )}
-          countrySelectClassName={cn(
-            'border-0 bg-transparent outline-none focus:ring-0 mr-2',
-            'text-base text-[#0C1118] font-normal',
-          )}
-          {...props}
         />
         <style jsx>{`
           .PhoneInputCountry {

@@ -187,7 +187,7 @@ export function renderBadgeSection(
           }
 
           return (
-            <span key={sectionKey} data-canbreak={section.break ? 'true' : undefined}>
+            <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
               <span
                 className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                 data-suggestion={suggestionData}

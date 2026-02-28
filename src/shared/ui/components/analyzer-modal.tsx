@@ -1,11 +1,11 @@
-import type { SuggestionType } from '@entities/resume';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { RadioGroup } from '@shared/ui/radio-group';
 import { SuggestionCard, SuggestionItem } from '@widgets/builder-intelligence/suggestion-card';
-import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
 import { Button } from '../button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../dialog';
+import type { SuggestionType } from '@entities/resume';
+import { useEffect, useMemo, useState } from 'react';
+import { RadioGroup } from '@shared/ui/radio-group';
+
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 interface Suggestion {
   old?: string;
@@ -125,7 +125,7 @@ export default function AnalyzerModal({
         <DialogHeader>
           <DialogTitle className="flex items-center justify-center">
             <span className="flex items-center gap-2 text-2xl font-semibold text-white">
-              <Image src="/images/auto_awesome.svg" alt="Stars" className="w-6 h-6" />
+              <img src="/images/auto_awesome.svg" alt="Stars" className="w-6 h-6" />
               {typeLabels[suggestionType]}
             </span>
           </DialogTitle>
@@ -135,7 +135,7 @@ export default function AnalyzerModal({
           {isNewPoints ? (
             suggestions.map((suggestion, index) => (
               <SuggestionCard
-                key={suggestion.new}
+                key={index}
                 label={`Point ${index + 1}`}
                 labelColor="#2E7D32"
                 borderColor="#81C784"
@@ -152,7 +152,7 @@ export default function AnalyzerModal({
 
                 return (
                   <RadioGroup
-                    key={suggestion.new}
+                    key={index}
                     value={selectedValue}
                     onValueChange={(value) => handleOptionChange(index, value as 'old' | 'new')}
                     className="flex flex-col gap-3"

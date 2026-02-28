@@ -6,7 +6,6 @@ import JDSection from './jd-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import { TopAnnouncementStrip } from './top-announcement-strip';
-import FaqSection from './faq-section';
 
 export function LandingPage() {
   return (
@@ -25,9 +24,8 @@ export function LandingPage() {
       >
         <HeroSection />
       </div>
-      <div>
-        <AiFeaturesSection />
-      </div>
+
+      <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />
@@ -38,16 +36,6 @@ export function LandingPage() {
       {/* <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
         <AITailorSection />
       </div> */}
-
-      <div
-        className="border border-white rounded-[36px] mx-4 overflow-hidden mt-6 mb-6"
-        style={{
-          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-        }}
-      >
-        <FaqSection />
-      </div>
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"

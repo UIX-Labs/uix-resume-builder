@@ -252,7 +252,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     prose-th:px-4
                     prose-td:px-4
                     prose-th:py-3
-                    prose-td:py-3 mt-6"
+                    prose-td:py-3"
               >
                 <MDXRemote
                   source={content}

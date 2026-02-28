@@ -1,12 +1,8 @@
-import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 import { createResume } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { Button } from '@shared/ui/components/button';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { useMutation } from '@tanstack/react-query';
@@ -14,11 +10,14 @@ import { FileUpload } from '@widgets/resumes/file-upload';
 import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import JDUploadMobileModal from './jd-upload-mobile-modal';
+import ResumeCreationModal from './resume-creation-modal';
 import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationMobileCard from './resume-creation-mobile-card';
-import ResumeCreationModal from './resume-creation-modal';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -55,11 +54,11 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
-  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
+  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: ResumeCreationAction) => {
+  const lockOptions = useCallback((action: 'create' | 'upload' | 'tailoredResume' | 'tailoredJD') => {
     setActiveAction(action);
     setOptionsLocked(true);
   }, []);
@@ -74,7 +73,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
   });
 
   const resumeCreateHandler = async () => {
-    lockOptions(ResumeCreationAction.CREATE);
+    lockOptions('create');
     setShowScanningOverlay(true);
 
     trackEvent('create_resume_click', {
@@ -129,7 +128,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
 
   const handleUploadPendingChange = (pending: boolean) => {
     if (pending) {
-      lockOptions(ResumeCreationAction.UPLOAD);
+      lockOptions('upload');
       setShowScanningOverlay(true);
       return;
     }
@@ -149,12 +148,12 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false }: Resume
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent('/dashboard')}`);
+      setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
       setIsAuthModalOpen(true);
       return;
     }
 
-    lockOptions(ResumeCreationAction.TAILORED_JD);
+    lockOptions('tailoredJD');
 
     if (isMobile) {
       handleJDModal(true);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { createResume } from '@entities/resume';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
@@ -23,20 +23,18 @@ export default function TemplateCardGrid() {
 
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
-  // const [selectedTemplate, setSelectedTemplate] = useState<(typeof mockTemplates)[0] | null>(null);
   const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
-  const [isJDModalOpen, setIsJDModalOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<(typeof mockTemplates)[0] | null>(null); 
 
   const createResumeMutation = useMutation({ mutationFn: createResume });
-  // const updateTemplateMutation = useMutation({ mutationFn: updateResumeTemplate });
+  const updateTemplateMutation = useMutation({ mutationFn: updateResumeTemplate }); 
 
   const releaseOptions = () => {
     setIsGetStartedOpen(false);
     setIsLinkedInModalOpen(false);
-    setIsJDModalOpen(false);
   };
 
-  const { handleJDModal, handleJDSubmittingChange } = useJDModal({
+  const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
     onRelease: releaseOptions,
   });
 
@@ -53,10 +51,8 @@ export default function TemplateCardGrid() {
     return matchStyle && matchColumn && matchRole && matchColor;
   });
 
-  // ── Handlers — ResumeCreationModal se copy kiye ──
   const handleScratch = async () => {
     setIsGetStartedOpen(false);
-
     if (!user?.isLoggedIn) getOrCreateGuestEmail();
 
     trackEvent('create_resume_click', {
@@ -74,12 +70,13 @@ export default function TemplateCardGrid() {
         userInfo: { userId: user?.id ?? '' },
       });
 
-      // if (selectedTemplate) {
-      //   await updateTemplateMutation.mutateAsync({
-      //     resumeId: data.id,
-      //     templateId: selectedTemplate.id,
-      //   });
-      // }
+     
+      if (selectedTemplate) {
+        await updateTemplateMutation.mutateAsync({
+          resumeId: data.id,
+          templateId: selectedTemplate.id,
+        });
+      }
 
       router.push(`/resume/${data.id}`);
     } catch (error) {
@@ -88,7 +85,6 @@ export default function TemplateCardGrid() {
   };
 
   const handleUpload = () => {
-    console.log('upload clicked!');
     setIsGetStartedOpen(false);
     trackEvent('upload_resume_click', { source: 'template_modal' });
     router.push('/upload-resume');
@@ -114,18 +110,24 @@ export default function TemplateCardGrid() {
               key={template.id}
               template={template}
               onClick={() => {
-                //  setSelsectedTemplate(template);
+                setSelectedTemplate(template); 
                 setIsGetStartedOpen(true);
               }}
               onPreviewClick={() => setPreviewTemplate(template as unknown as Template)}
             />
           ))
         ) : (
-          <div className="col-span-5 text-center text-gray-400 py-20">No templates found for selected filters.</div>
+          <div className="col-span-5 text-center text-gray-400 py-20">
+            No templates found for selected filters.
+          </div>
         )}
       </div>
 
-      <PreviewModal template={previewTemplate} isOpen={!!previewTemplate} onClose={() => setPreviewTemplate(null)} />
+      <PreviewModal
+        template={previewTemplate}
+        isOpen={!!previewTemplate}
+        onClose={() => setPreviewTemplate(null)}
+      />
 
       <GetStartedModal
         isOpen={isGetStartedOpen}
@@ -136,7 +138,10 @@ export default function TemplateCardGrid() {
         onJDClick={handleJD}
       />
 
-      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+      <LinkedInModal
+        isOpen={isLinkedInModalOpen}
+        onClose={() => setIsLinkedInModalOpen(false)}
+      />
 
       <JDUploadMobileModal
         isOpen={isJDModalOpen}

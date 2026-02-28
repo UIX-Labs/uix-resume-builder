@@ -4,7 +4,6 @@ import { renderDivider } from '../components/Divider';
 import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
 import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
-
 export function renderListSection(
   section: any,
   data: any,
@@ -94,7 +93,6 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {
@@ -126,7 +124,7 @@ export function renderListSection(
 
           return (
             <div
-              key={sectionKey}
+              key={idx}
               className={cn(
                 section.itemTemplate.className,
                 isItemBreakable && shouldBlur ? 'blur-[2px] pointer-events-none' : '',

@@ -194,7 +194,7 @@ export function renderInlineListSection(
               const hasClickableSuggestions = !!suggestionData;
 
               return (
-                <span key={sectionKey}>
+                <span key={idx}>
                   <span
                     className={cn(section.itemClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                     data-suggestion={suggestionData}

@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /resumes
+Disallow: /resume/
+Disallow: /auth
+Disallow: /referral
+Disallow: /api/
 
 Sitemap: https://pikaresume.com/sitemap.xml

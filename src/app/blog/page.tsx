@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 export const metadata: Metadata = {
-  title: 'Blog - Resume Tips, Career Advice & Job Search Strategies | Pika Resume',
+  title: 'Blog - Resume Tips, Career Advice & Job Search Strategies',
   description:
     'Expert advice on resume writing, job searching, and career growth. Learn how to create ATS-friendly resumes, use AI tools, and land your dream job faster.',
   keywords: [
@@ -41,6 +41,5 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   const posts = getAllPosts();
   const tags = getAllTags();
-  console.log(tags);
   return <BlogPageContent posts={posts} tags={tags} />;
 }

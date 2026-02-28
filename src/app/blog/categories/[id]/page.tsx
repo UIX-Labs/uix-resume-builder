@@ -3,6 +3,9 @@ import BlogHero from '@/widgets/blog/components/blog-hero';
 import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
 import NotFoundPage from '@widgets/blog/slug/not-found-page';
+import type { Metadata } from 'next';
+
+const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -12,6 +15,34 @@ export async function generateStaticParams() {
   return categories.map((category) => ({
     id: category.id,
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const category = categories.find((c) => c.id === id);
+  if (!category) return { title: 'Category Not Found' };
+
+  const url = `${DOMAIN_URL}/blog/categories/${id}`;
+  const title = `${category.title} ${category.hero.suffix} - Blog`;
+
+  return {
+    title,
+    description: category.hero.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description: category.hero.description,
+      url,
+      siteName: 'Pika Resume',
+      type: 'website',
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: category.hero.description,
+    },
+  };
 }
 
 export default async function CategoryPage({ params }: PageProps) {

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const url = `${DOMAIN_URL}/blog/${slug}`;
 
   return {
-    title: `${frontmatter.title} | Pika Resume Blog`,
+    title: frontmatter.title,
     description: frontmatter.description,
     keywords: frontmatter.tags,
     authors: [{ name: frontmatter.author }],
@@ -144,13 +144,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
   ];
 
+  // BreadcrumbList structured data
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.label,
+      ...(crumb.href && { item: `${DOMAIN_URL}${crumb.href}` }),
+    })),
+  };
+
   return (
     <>
       <Script
         id="article-structured-data"
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([articleJsonLd, breadcrumbJsonLd]) }}
       />
 
       <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">

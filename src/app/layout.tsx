@@ -30,7 +30,10 @@ const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com
 const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp';
 
 export const metadata: Metadata = {
-  title: 'Build AI Powered Resume in Minutes',
+  title: {
+    default: 'Pika Resume - Build AI Powered Resume in Minutes',
+    template: '%s | Pika Resume',
+  },
   description: 'Choose from practical resume templates and power it with smart resume builder suggestions.',
   metadataBase: new URL(DOMAIN_URL),
 
@@ -95,10 +98,10 @@ export const metadata: Metadata = {
 
   // Open Graph SEO
   openGraph: {
-    title: 'Build AI Powered Resume in Minutes',
+    title: 'Pika Resume - Build AI Powered Resume in Minutes',
     description: 'Choose from practical resume templates and power it with smart resume builder suggestions.',
     url: DOMAIN_URL,
-    siteName: 'Your Resume Builder',
+    siteName: 'Pika Resume',
     images: [
       {
         url: LOGO_URL,
@@ -114,7 +117,7 @@ export const metadata: Metadata = {
   // Twitter Card
   twitter: {
     card: 'summary_large_image',
-    title: 'Build AI Powered Resume in Minutes',
+    title: 'Pika Resume - Build AI Powered Resume in Minutes',
     description: 'Choose from practical resume templates and power it with smart resume builder suggestions.',
     images: [LOGO_URL],
   },
@@ -139,25 +142,44 @@ export default function RootLayout({
           type="application/ld+json"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'WebSite',
-              name: 'Your Resume Builder',
-              url: DOMAIN_URL,
-              description:
-                'Create professional AI-powered resumes in minutes using modern templates and smart suggestions.',
-              logo: {
-                '@type': 'ImageObject',
-                url: LOGO_URL,
-                width: '512',
-                height: '512',
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'Pika Resume',
+                url: DOMAIN_URL,
+                description:
+                  'Create professional AI-powered resumes in minutes using modern templates and smart suggestions.',
               },
-              potentialAction: {
-                '@type': 'SearchAction',
-                target: `${DOMAIN_URL}/?q={search_term_string}`,
-                'query-input': 'required name=search_term_string',
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'Pika Resume',
+                url: DOMAIN_URL,
+                logo: {
+                  '@type': 'ImageObject',
+                  url: LOGO_URL,
+                  width: '512',
+                  height: '512',
+                },
+                sameAs: [],
               },
-            }),
+              {
+                '@context': 'https://schema.org',
+                '@type': 'SoftwareApplication',
+                name: 'Pika Resume',
+                applicationCategory: 'BusinessApplication',
+                operatingSystem: 'Web',
+                url: DOMAIN_URL,
+                description:
+                  'AI-powered resume builder with professional templates, ATS optimization, and smart suggestions.',
+                offers: {
+                  '@type': 'Offer',
+                  price: '0',
+                  priceCurrency: 'USD',
+                },
+              },
+            ]),
           }}
         />
         <AnalyticsProvider />

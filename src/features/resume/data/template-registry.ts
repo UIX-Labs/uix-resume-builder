@@ -14,6 +14,7 @@ import erenTemplate3 from '@features/resume/templates/eren-templete-3';
 import erenTemplate1 from '@features/resume/templates/eren-templete1';
 import erenTemplate2 from '@features/resume/templates/eren-templete2';
 //import mohsinaTemplate1 from '@features/resume/templates/mohsina-template1';
+import mohsinaTemplate2 from '@features/resume/templates/mohsina-template2';
 import standard from '@features/resume/templates/standard';
 import standard2 from '@features/resume/templates/standard2';
 import template7 from '@features/resume/templates/template-7';
@@ -53,6 +54,7 @@ export const templateRegistry: Record<string, any> = {
   'enzo-template1': enzoTemplate1,
   'enzo-template2': enzoTemplate2,
   'enzo-template3': enzoTemplate3,
+  'mohsina-template2': mohsinaTemplate2,
   // 'mohsina-template1': mohsinaTemplate1,
 };
 

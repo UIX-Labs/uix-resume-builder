@@ -538,9 +538,9 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {leftColumn.map((node: any) => (
+              {leftColumn.map((node: any, i: number) => (
                 <div
-                  key={node.id}
+                  key={i}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}

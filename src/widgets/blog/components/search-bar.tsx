@@ -13,18 +13,21 @@ interface SearchBarProps {
 export default function SearchBar({ searchQuery, setSearchQuery, placeholder, scrollToResults }: SearchBarProps) {
   const router = useRouter();
 
-  const scrollToGrid = () => {
-    router.push('#blog-grid');
-  };
-
-  const debouncedScroll = useMemo(() => debounce(scrollToGrid, 500), [router]);
+  const scrollToSearchArea = useMemo(
+    () =>
+      debounce(() => {
+        router.push('#search-header', { scroll: true });
+      }, 500),
+    [router],
+  );
 
   const handleChange = (value: string) => {
+    const isDeletion = value.length <= searchQuery.length;
     setSearchQuery(value);
 
-    if (!value.trim() || !scrollToResults) return;
+    if (!value.trim() || isDeletion || !scrollToResults) return;
 
-    debouncedScroll();
+    scrollToSearchArea();
   };
 
   return (
@@ -32,8 +35,8 @@ export default function SearchBar({ searchQuery, setSearchQuery, placeholder, sc
       <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
         <Search className="h-5 w-5 text-gray-400" />
       </div>
-
       <input
+        id="blog-search-input"
         type="text"
         placeholder={placeholder}
         value={searchQuery}

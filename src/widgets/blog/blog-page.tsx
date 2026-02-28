@@ -2,6 +2,7 @@
 
 import { BlogPost } from '@/shared/lib/blog';
 import { BlogGrid, BlogHero, FeaturedSection } from '@widgets/blog';
+import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import CategoriesSection from './categories-section';
 import NotFoundSearch from './components/not-found-search';
@@ -9,6 +10,7 @@ import SearchBar from './components/search-bar';
 
 export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
   const [searchQuery, setSearchQuery] = useState('');
+  const isSearch = searchQuery.trim().length > 0;
 
   const filteredPosts = posts.filter((post) =>
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
@@ -39,15 +41,32 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
             </span>
           </BlogHero>
 
-          <div className="flex flex-col-reverse sm:flex-row justify-between items-center mt-8 gap-4 px-4">
+          <div
+            id="search-header"
+            className={`flex flex-col-reverse sm:flex-row justify-between items-center gap-4 px-4 pb-4 transition-all duration-300 scroll-mt-2
+              ${isSearch ? 'pt-4' : 'mt-8'}`}
+          >
             <div className="flex flex-col items-center sm:items-start max-w-max">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
-                Popular Articles
-              </h1>
-              <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
+              {isSearch ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="bg-[#005FF2] text-white px-6 py-2 rounded-full font-medium hover:bg-blue-600 transition-colors shadow-md flex items-center gap-2 scroll-mt-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  All Blogs
+                </button>
+              ) : (
+                <>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#17171A] font-semibold leading-tight">
+                    Popular Articles
+                  </h1>
+                  <div className="border-2 w-full mt-2 rounded-full" style={{ borderColor: '#005FF2' }} />
+                </>
+              )}
             </div>
 
-            <div className="w-full sm:flex-1 flex justify-center sm:justify-end">
+            <div className="w-full sm:flex-1 flex justify-center sm:justify-end scroll-mt-10">
               <SearchBar
                 setSearchQuery={setSearchQuery}
                 searchQuery={searchQuery}
@@ -57,15 +76,19 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
             </div>
           </div>
 
-          <div className="mt-4 md:mt-10">
-            <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
-          </div>
+          {!isSearch && (
+            <div className="mt-4 md:mt-10">
+              <FeaturedSection primaryPost={primaryPost} secondaryPosts={secondaryPosts} />
+            </div>
+          )}
 
-          <div className="mt-6 md:mt-10">
-            <CategoriesSection />
-          </div>
+          {!isSearch && (
+            <div className="mt-6 md:mt-10">
+              <CategoriesSection />
+            </div>
+          )}
 
-          <div id="blog-grid" className="mt-6 md:mt-10 mb-2 md:mb-4">
+          <div id="search-area">
             {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
               <NotFoundSearch
                 suggestions={[primaryPost, ...secondaryPosts].map((p) => ({
@@ -74,7 +97,9 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
                 }))}
               />
             ) : (
-              <BlogGrid posts={filteredPosts} />
+              <div className="mt-6 md:mt-10">
+                <BlogGrid posts={filteredPosts} />
+              </div>
             )}
           </div>
         </div>

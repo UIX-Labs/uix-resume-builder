@@ -88,7 +88,7 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
             </div>
           )}
 
-          <div id="search-area" className="">
+          <div id="search-area">
             {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
               <NotFoundSearch
                 suggestions={[primaryPost, ...secondaryPosts].map((p) => ({
@@ -97,7 +97,9 @@ export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; ta
                 }))}
               />
             ) : (
-              <BlogGrid posts={filteredPosts} />
+              <div className="mt-6 md:mt-10">
+                <BlogGrid posts={filteredPosts} />
+              </div>
             )}
           </div>
         </div>

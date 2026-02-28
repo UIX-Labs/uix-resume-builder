@@ -15,12 +15,11 @@ import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import TemplateFilter from '@widgets/template-filters/template-filter';
+import TemplateFilter from '@widgets/filter-templates/components/template-filters/template-filter';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-
 
 export default function GetAllResumesPage() {
   const router = useRouter();

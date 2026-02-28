@@ -66,16 +66,6 @@ function ResumeRendererComponent({
 }: RenderProps) {
   const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
-  const pageIdsRef = useRef<string[]>([]);
-
-  // Keep stable IDs for each page slot so we never use array index as key.
-  if (pageIdsRef.current.length < pages.length) {
-    while (pageIdsRef.current.length < pages.length) {
-      pageIdsRef.current.push(crypto.randomUUID());
-    }
-  } else if (pageIdsRef.current.length > pages.length) {
-    pageIdsRef.current.length = pages.length;
-  }
 
   const { page } = template;
 
@@ -448,13 +438,11 @@ function ResumeRendererComponent({
       >
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
-            {bannerItems.map((s: any) => {
-              return (
-                <React.Fragment key={s.id}>
-                  {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
-                </React.Fragment>
-              );
-            })}
+            {bannerItems.map((s: any, i: number) => (
+              <React.Fragment key={i}>
+                {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
+              </React.Fragment>
+            ))}
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
@@ -463,7 +451,7 @@ function ResumeRendererComponent({
               i < leftItems.length - 1 &&
               leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={s.id}>
+              <React.Fragment key={i}>
                 {renderSection(
                   s,
                   data,
@@ -483,7 +471,7 @@ function ResumeRendererComponent({
               i < rightItems.length - 1 &&
               rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
-              <React.Fragment key={s.id}>
+              <React.Fragment key={i}>
                 {renderSection(
                   s,
                   data,
@@ -503,7 +491,7 @@ function ResumeRendererComponent({
         const [leftColumn, rightColumn] = columns;
         return (
           <div
-            key={pageIdsRef.current[index]}
+            key={index}
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
               ...baseStyle,
@@ -525,8 +513,8 @@ function ResumeRendererComponent({
                   marginTop: `-${PAGE_PADDING}px`,
                 }}
               >
-                {bannerItems.map((s: any) => (
-                  <React.Fragment key={s.id}>
+                {bannerItems.map((s: any, i: number) => (
+                  <React.Fragment key={i}>
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
                 ))}
@@ -538,9 +526,10 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {leftColumn.map((node: any) => (
+              {(leftColumn as any[]).map((node: any, i) => (
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
-                  key={node.id}
+                  key={`${index}-left-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}
@@ -553,9 +542,10 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {rightColumn.map((node: any) => (
+              {(rightColumn as any[]).map((node: any, i) => (
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
-                  key={node.id}
+                  key={`${index}-right-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}

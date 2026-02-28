@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 
 import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';

@@ -1,13 +1,12 @@
-import type { SuggestedUpdates } from '@entities/resume';
-import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
 import { isHtml } from '@shared/lib/markdown';
-import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
-import Image from 'next/image';
 import React from 'react';
-import { renderDivider } from './components/Divider';
+import type { SuggestedUpdates } from '@entities/resume';
+import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { resolvePath } from './resolve-path';
+import { renderDivider } from './components/Divider';
 import { getSuggestionDataAttribute } from './suggestion-utils';
 
 export function renderField(
@@ -28,13 +27,11 @@ export function renderField(
   if (field.type === 'container') {
     return (
       <div className={cn(field.className)}>
-        {field.children?.map((child: any) => {
-          return (
-            <React.Fragment key={child.id}>
-              {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {field.children?.map((child: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -120,13 +117,11 @@ export function renderField(
             {field.heading.divider && renderDivider(field.heading.divider)}
           </div>
         )}
-        {field.items?.map((subField: any) => {
-          return (
-            <React.Fragment key={subField.id}>
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {field.items?.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -134,14 +129,12 @@ export function renderField(
   if (field.type === 'horizontal-group') {
     return (
       <div className={cn('flex flex-row items-center', field.className)}>
-        {field.items.map((subField: any) => {
-          return (
-            <React.Fragment key={subField.id}>
-              {subField.id > 0 && field.separator && <span>{field.separator}</span>}
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {idx > 0 && field.separator && <span>{field.separator}</span>}
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -225,7 +218,7 @@ export function renderField(
     const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
-      <Image
+      <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
         alt={field.alt || 'Image'}
@@ -237,13 +230,11 @@ export function renderField(
   if (field.type === 'group') {
     return (
       <div className={field.className}>
-        {field.items.map((subField: any) => {
-          return (
-            <React.Fragment key={subField.id}>
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {field.items.map((subField: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -278,18 +269,12 @@ export function renderField(
         className={cn('flex gap-1', field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
         data-suggestion={suggestionData}
       >
-        {Array.from({ length: 5 }, (_, index) => {
-          const skillKey = `skill-dot-${index}`;
-          return (
-            <div
-              key={skillKey}
-              className={cn(
-                'w-2 h-2 rounded-full border border-black',
-                index < circleCount ? 'bg-black' : 'bg-gray-400',
-              )}
-            />
-          );
-        })}
+        {Array.from({ length: 5 }, (_, index) => (
+          <div
+            key={index}
+            className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400')}
+          />
+        ))}
       </div>
     );
   }
@@ -458,25 +443,23 @@ export function renderItemWithRows(
   isThumbnail?: boolean,
   sectionId?: string,
 ): React.ReactNode {
-  return template.rows.map((row: any) => {
+  return template.rows.map((row: any, rowIdx: number) => {
     // Check if any cell in this row has break/breakable: true
     const hasBreakableCell = row.cells.some((cell: any) => cell.break === true || cell.breakable === true);
     const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
 
     return (
       <div
-        key={row.id}
+        key={rowIdx}
         className={row.className}
         data-canbreak={isRowBreakable ? 'true' : undefined}
         data-has-breakable-content={isRowBreakable ? 'true' : undefined}
       >
-        {row.cells.map((cell: any) => {
-          return (
-            <React.Fragment key={cell.id}>
-              {renderField(cell, item, itemId, suggestedUpdates, isThumbnail, undefined, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {row.cells.map((cell: any, cellIdx: number) => (
+          <React.Fragment key={cellIdx}>
+            {renderField(cell, item, itemId, suggestedUpdates, isThumbnail, undefined, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   });
@@ -490,15 +473,13 @@ export function renderItemWithFields(
   isThumbnail?: boolean,
   sectionId?: string,
 ): React.ReactNode {
-  return template.fields.map((field: any) => {
-    return (
-      <div
-        key={field.id}
-        data-canbreak={field.break || field.breakable ? 'true' : undefined}
-        data-has-breakable-content={field.break || field.breakable ? 'true' : undefined}
-      >
-        {renderField(field, item, itemId, suggestedUpdates, isThumbnail, undefined, sectionId)}
-      </div>
-    );
-  });
+  return template.fields.map((field: any, idx: number) => (
+    <div
+      key={idx}
+      data-canbreak={field.break || field.breakable ? 'true' : undefined}
+      data-has-breakable-content={field.break || field.breakable ? 'true' : undefined}
+    >
+      {renderField(field, item, itemId, suggestedUpdates, isThumbnail, undefined, sectionId)}
+    </div>
+  ));
 }

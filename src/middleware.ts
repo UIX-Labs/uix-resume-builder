@@ -9,6 +9,7 @@ const PUBLIC_ROUTES = [
   '/roast',
   '/dashboard',
   '/resume',
+  '/resume-beta',
   '/resumes',
   '/get-all-resumes',
   '/blog',

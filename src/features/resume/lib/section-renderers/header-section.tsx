@@ -1,5 +1,3 @@
-import type { HeaderTemplateSection } from "@features/resume-beta/models/template-types";
-import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import React from 'react';
 import { cn } from '@shared/lib/cn';
 import type { HeaderTemplateSection } from '@features/resume-beta/models/template-types';
@@ -51,8 +49,8 @@ export function renderHeaderSection(
   const personalDetailsItem = data.personalDetails?.items?.[0];
   const personalDetailsItemId =
     personalDetailsItem && typeof personalDetailsItem === 'object'
-      ? (personalDetailsItem as Record<string, unknown>).itemId as string | undefined ||
-        (personalDetailsItem as Record<string, unknown>).id as string | undefined
+      ? ((personalDetailsItem as Record<string, unknown>).itemId as string | undefined) ||
+        ((personalDetailsItem as Record<string, unknown>).id as string | undefined)
       : undefined;
 
   // Helper function to get error background color for a field

@@ -12,12 +12,7 @@ interface UseSectionVisibilityParams {
   save: (params: { type: string; data: Record<string, unknown>; updatedAt: number }) => void;
 }
 
-export function useSectionVisibility({
-  formData,
-  resumeId,
-  setFormData,
-  save,
-}: UseSectionVisibilityParams) {
+export function useSectionVisibility({ formData, resumeId, setFormData, save }: UseSectionVisibilityParams) {
   const debouncedHideSave = useCallback(
     debounce((sectionId: string, data: Record<string, unknown>) => {
       try {

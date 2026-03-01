@@ -54,7 +54,7 @@ export function useFormDataSync({ resumeId, resumeData }: UseFormDataSyncParams)
             typeof s === 'object' &&
             'suggestedUpdates' in s &&
             Array.isArray((s as { suggestedUpdates?: unknown[] }).suggestedUpdates) &&
-            ((s as { suggestedUpdates: unknown[] }).suggestedUpdates).length > 0,
+            (s as { suggestedUpdates: unknown[] }).suggestedUpdates.length > 0,
         );
 
       if (formData && hasSuggestionsInData(formData) && !hasSuggestionsInData(resumeData)) {
@@ -66,9 +66,7 @@ export function useFormDataSync({ resumeId, resumeData }: UseFormDataSyncParams)
       (key) => key !== 'templateId' && key !== 'updatedAt' && key !== 'template',
     );
 
-    const allSectionsEmpty = sectionKeys.every((key) =>
-      isSectionEmpty(resumeData[key as keyof typeof resumeData]),
-    );
+    const allSectionsEmpty = sectionKeys.every((key) => isSectionEmpty(resumeData[key as keyof typeof resumeData]));
 
     if (allSectionsEmpty) {
       setIsCreateMode(true);

@@ -15,15 +15,7 @@ import { HiddenRenderers } from '../hidden-renderers';
 import { ModalsContainer } from '../modal/modals-container';
 
 export function MobileBuilder() {
-  const {
-    currentStep,
-    formData,
-    resumeId,
-    navs,
-    isGeneratingPDF,
-    selectedTemplateId,
-    user,
-  } = useBuilderState();
+  const { currentStep, formData, resumeId, navs, isGeneratingPDF, selectedTemplateId, user } = useBuilderState();
   const {
     setCurrentStep,
     setFormData,

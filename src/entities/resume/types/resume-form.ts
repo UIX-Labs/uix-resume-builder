@@ -1,6 +1,18 @@
 import type { ResumeDataKey } from './resume-data';
 
-type FieldType = 'text' | 'email' | 'tel' | 'url' | 'textarea' | 'duration' | 'dropdown' | 'tags' | 'data' | 'profilePicture' | 'links' | 'strings';
+type FieldType =
+  | 'text'
+  | 'email'
+  | 'tel'
+  | 'url'
+  | 'textarea'
+  | 'duration'
+  | 'dropdown'
+  | 'tags'
+  | 'data'
+  | 'profilePicture'
+  | 'links'
+  | 'strings';
 
 export interface BaseField {
   name: string;

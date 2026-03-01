@@ -1,6 +1,13 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { BaseField, FormSchema, ResumeData, ResumeDataKey, SuggestedUpdates, SuggestionType } from '@entities/resume';
+import type {
+  BaseField,
+  FormSchema,
+  ResumeData,
+  ResumeDataKey,
+  SuggestedUpdates,
+  SuggestionType,
+} from '@entities/resume';
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/button';
 import { TiptapTextArea } from '@shared/ui/components/textarea';

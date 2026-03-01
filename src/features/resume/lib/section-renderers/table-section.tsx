@@ -1,3 +1,4 @@
+
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
@@ -28,18 +29,18 @@ export function renderTableSection(
   if (!Array.isArray(items) || items.length === 0) return null;
 
   // Filter out items where all values are empty, null, or undefined
-  const validItems = items.filter((item: any) => {
+  const validItems = items.filter((item: Record<string, unknown>) => {
     if (!item || typeof item !== 'object') {
       return false;
     }
 
     // Check if at least one field has a non-empty value
-    const hasContent = Object.values(item).some((value: any) => {
+    const hasContent = Object.values(item).some((value: unknown) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
         const nestedValues = Object.values(value);
-        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+        return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
       return true;
     });
@@ -132,7 +133,7 @@ export function renderTableSection(
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
                       if (!iconName) return null;
-                      const Icon = (LucideIcons as any)[iconName];
+                      const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
                       return Icon || null;
                     };
                     const IconComponent = col.icon ? getIconComponent(col.icon) : null;
@@ -413,7 +414,7 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
+                      (v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''),
                     );
 
                 // Determine fieldName for suggestions
@@ -422,7 +423,7 @@ export function renderTableSection(
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
                     if (!iconName) return null;
-                    const Icon = (LucideIcons as any)[iconName];
+                    const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
                     return Icon || null;
                   };
                   const IconComponent = column.icon ? getIconComponent(column.icon) : null;

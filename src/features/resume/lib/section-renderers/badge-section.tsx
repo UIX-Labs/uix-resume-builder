@@ -1,7 +1,7 @@
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
-import type { LucideIcon } from 'lucide-react';
+import type LucideIcon from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import type React from 'react';
 import { renderDivider } from '../components/Divider';
@@ -106,7 +106,7 @@ export function renderBadgeSection(
     fieldName = section.itemPath;
   }
 
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey ? data[sectionKey as keyof any]?.suggestedUpdates : undefined;
   return (
     <div
       data-canbreak={isBreakable ? 'true' : undefined}

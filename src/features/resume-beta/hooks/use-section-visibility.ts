@@ -1,15 +1,15 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { ResumeData } from '@entities/resume';
 import { debounce } from '@shared/lib/utils';
 import { toast } from 'sonner';
+import type { ResumeFormData } from '../models/resume-sections';
 
 interface UseSectionVisibilityParams {
-  formData: Omit<ResumeData, 'templateId'>;
+  formData: ResumeFormData;
   resumeId: string;
-  setFormData: (data: Omit<ResumeData, 'templateId'>) => void;
-  save: (params: { type: string; data: any; updatedAt: number }) => void;
+  setFormData: (data: ResumeFormData) => void;
+  save: (params: { type: string; data: Record<string, unknown>; updatedAt: number }) => void;
 }
 
 export function useSectionVisibility({
@@ -19,7 +19,7 @@ export function useSectionVisibility({
   save,
 }: UseSectionVisibilityParams) {
   const debouncedHideSave = useCallback(
-    debounce((sectionId: string, data: any) => {
+    debounce((sectionId: string, data: Record<string, unknown>) => {
       try {
         save({
           type: sectionId,
@@ -43,12 +43,10 @@ export function useSectionVisibility({
           isHidden,
         };
 
-        setFormData(
-          {
-            ...formData,
-            [sectionId]: updatedSectionData,
-          } as Omit<ResumeData, 'templateId'>,
-        );
+        setFormData({
+          ...formData,
+          [sectionId]: updatedSectionData,
+        } as ResumeFormData);
 
         debouncedHideSave(sectionId, updatedSectionData);
 

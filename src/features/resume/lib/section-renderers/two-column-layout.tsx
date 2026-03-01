@@ -2,7 +2,7 @@ import { cn } from '@shared/lib/cn';
 import React from 'react';
 
 export function renderTwoColumnLayout(
-  section: any,
+    section: any,
   data: any,
   currentSection?: string,
   hasSuggestions?: boolean,

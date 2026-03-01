@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import type { ResumeData, ResumeDataKey, SuggestedUpdate, SuggestionType } from '@entities/resume';
+import type { ResumeDataKey, SuggestedUpdate, SuggestionType } from '@entities/resume';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import {
   applySuggestionsToArrayField,
@@ -16,14 +16,21 @@ import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { SECTION_TO_FORM_DATA_MAP } from '../lib/section-map';
 import type { AnalyzerModalData } from '../models/types';
+import type { ResumeFormData, AnySection } from '../models/resume-sections';
 
-type FormDataRecord = Record<string, any>;
+/** Safely access a section from formData by a dynamic key */
+function getSectionByKey(
+  formData: ResumeFormData,
+  key: string,
+): AnySection | undefined {
+  return (formData as unknown as Record<string, AnySection | undefined>)[key];
+}
 
 interface UseSuggestionHandlerParams {
-  formData: Omit<ResumeData, 'templateId'>;
+  formData: ResumeFormData;
   currentStep: ResumeDataKey;
   resumeId: string;
-  setFormData: (data: Omit<ResumeData, 'templateId'>) => void;
+  setFormData: (data: ResumeFormData) => void;
 }
 
 export function useSuggestionHandler({
@@ -93,7 +100,7 @@ export function useSuggestionHandler({
     ({ sectionId, itemId, fieldName, suggestionType }: SuggestionClickParams) => {
       const formDataSectionKey = SECTION_TO_FORM_DATA_MAP[sectionId.toLowerCase()] || sectionId;
 
-      const sectionData = (formData as FormDataRecord)?.[formDataSectionKey];
+      const sectionData = getSectionByKey(formData, formDataSectionKey);
 
       if (!sectionData || !sectionData.suggestedUpdates) {
         return;
@@ -150,7 +157,7 @@ export function useSuggestionHandler({
 
       const { itemId, fieldName, formDataSectionKey } = analyzerModalData;
       const sectionKey = formDataSectionKey || currentStep;
-      const currentData = (formData as FormDataRecord)?.[sectionKey];
+      const currentData = getSectionByKey(formData, sectionKey);
 
       if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
         toast.error('Failed to apply suggestions');
@@ -172,7 +179,7 @@ export function useSuggestionHandler({
           return;
         }
 
-        const currentFieldValue = (currentItem as Record<string, unknown>)[fieldName];
+        const currentFieldValue = (currentItem as unknown as Record<string, unknown>)[fieldName];
 
         const isArrayField = Array.isArray(currentFieldValue);
 
@@ -222,7 +229,7 @@ export function useSuggestionHandler({
           },
         };
 
-        setFormData(updatedData as Omit<ResumeData, 'templateId'>);
+        setFormData(updatedData as ResumeFormData);
 
         invalidateQueriesIfAllSuggestionsApplied(queryClient, updatedData, resumeId);
 

@@ -1,6 +1,6 @@
 import { Input } from '@/shared/ui/components/input';
 
-import type { FormSchema, ResumeData, ResumeDataKey, SuggestedUpdates } from '@entities/resume';
+import type { BaseField, FormSchema, ResumeData, ResumeDataKey, SuggestedUpdates, SuggestionType } from '@entities/resume';
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/button';
 import { TiptapTextArea } from '@shared/ui/components/textarea';
@@ -30,12 +30,12 @@ export function TemplateForm({
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
-  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: any) => void;
+  onOpenAnalyzerModal?: (itemId: string, fieldName: string, suggestionType: SuggestionType) => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
   isMobile?: boolean;
 }) {
-  function getItem<T = any>(
-    section: any,
+  function getItem<T = unknown>(
+    section: BaseField,
     data: T,
     onChange: (data: T) => void,
     suggestedUpdates?: SuggestedUpdates,
@@ -165,13 +165,13 @@ export function TemplateForm({
     return null;
   }
 
-  const isHidden = (currentData as any).isHidden || false;
+  const isHidden = ('isHidden' in currentData && currentData.isHidden) || false;
 
   const handleToggleHide = () => {
     const newHiddenState = !isHidden;
     onChange({
       ...values,
-      [currentStep]: { ...currentData, isHidden: newHiddenState } as any,
+      [currentStep]: { ...currentData, isHidden: newHiddenState } as typeof currentData & { isHidden: boolean },
     });
     onToggleHideSection?.(currentStep, newHiddenState);
   };
@@ -252,7 +252,7 @@ export function TemplateForm({
           currentData.items.map((item, itemIdx) => {
             const itemId = item.id || item.itemId || `item-${itemIdx}`;
 
-            const handleFieldChange = (key: string) => (value: any) => {
+            const handleFieldChange = (key: string) => (value: unknown) => {
               const items = [...currentData.items];
               items[itemIdx][key] = value;
               onChange({
@@ -261,7 +261,7 @@ export function TemplateForm({
               });
             };
 
-            const renderFieldInput = (key: string, value: any, section: any) => {
+            const renderFieldInput = (key: string, value: unknown, section: BaseField) => {
               return getItem(
                 section,
                 value,

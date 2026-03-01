@@ -1,5 +1,4 @@
 'use client';
-import { ExpertReviewModal } from '@/features/expert-review/ui/expert-review-modal';
 import { Button } from '@/shared/ui/components/button';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useCachedUser } from '@shared/hooks/use-user';
@@ -12,7 +11,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
-const DASHBOARD_ROUTES = ['/dashboard', '/resumes', '/get-all-resumes', '/referral'];
+const DASHBOARD_ROUTES = ['/dashboard', '/my-resumes', '/templates', '/referral'];
 
 interface HeaderProps {
   variant?: 'default' | 'roast';
@@ -25,24 +24,17 @@ function Header({ variant = 'default' }: HeaderProps) {
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const isDashboardRoute = DASHBOARD_ROUTES.some((route) => pathname.startsWith(route));
-  const [showExpertReviewModal, setShowExpertReviewModal] = useState(false);
 
   useEffect(() => {
-    const expertReview = searchParams.get('expertReview');
-    if (expertReview !== 'open') return;
-
-    setShowExpertReviewModal(true);
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete('expertReview');
-    const newSearch = params.toString();
-    router.replace(`${pathname}${newSearch ? `?${newSearch}` : ''}`, { scroll: false });
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleNavigate = () => {
-    router.push('/dashboard');
-  };
 
   const handleMenuClick = () => {
     if (isMobile) {
@@ -80,22 +72,6 @@ function Header({ variant = 'default' }: HeaderProps) {
     });
   };
 
-  const handleAboutUsClick = () => {
-    router.push('/about-us');
-    trackEvent('navigation_click', {
-      source: 'landing_header',
-      destination: 'about_us',
-    });
-  };
-
-  const handleCreateResumeClick = () => {
-    handleNavigate();
-    trackEvent('create_resume_click', {
-      source: 'landing_header',
-      method: 'create_my_resume',
-    });
-  };
-
   const handleRoastClick = () => {
     router.push('/roast');
     trackEvent('navigation_click', {
@@ -111,14 +87,24 @@ function Header({ variant = 'default' }: HeaderProps) {
       <header
         className={cn(
           isRoast
-            ? 'fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-4 transition-all duration-300'
-            : 'w-full flex items-center justify-between px-4 md:px-4 py-4',
-          isRoast ? 'backdrop-blur-md' : '',
+            ? 'fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 transition-all duration-300'
+            : 'sticky top-0 z-50 w-full flex items-center justify-between px-4 md:px-4 transition-all duration-200',
+          isRoast
+            ? 'backdrop-blur-md py-4'
+            : isScrolled
+              ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_3px_rgba(0,0,0,0.08)] py-2'
+              : 'bg-white py-4',
         )}
       >
         <button className="flex items-center gap-2 md:gap-4 cursor-pointer" onClick={handleHomeClick} type="button">
-          <Image src="/images/Pika-Resume.png" alt="AI" width={60} height={60} className="inline-block " />
-          <div className="flex flex-col items-start">
+          <Image
+            src="/images/Pika-Resume.png"
+            alt="AI"
+            width={60}
+            height={60}
+            className={cn('inline-block transition-all duration-200', isScrolled && !isRoast && 'scale-[0.8] origin-left')}
+          />
+          <div className={cn('flex flex-col items-start transition-all duration-200', isScrolled && !isRoast && 'scale-[0.9] origin-left')}>
             <div className="flex flex-row">
               <span className={cn('font-bold text-3xl', isRoast ? 'text-white' : 'text-[#005FF2] bg-clip-text')}>
                 Pika
@@ -127,7 +113,7 @@ function Header({ variant = 'default' }: HeaderProps) {
                 Resume
               </span>
             </div>
-            <div className={cn('flex-row gap-1', isRoast ? 'hidden md:flex' : 'flex')}>
+            <div className={cn('flex-row gap-1', isRoast ? 'hidden md:flex' : isScrolled ? 'hidden' : 'flex')}>
               <span className={cn('font-normal text-sm', isRoast ? 'text-white/90' : 'text-[#005FF2] bg-clip-text')}>
                 Build Fast.
               </span>
@@ -160,11 +146,22 @@ function Header({ variant = 'default' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setShowExpertReviewModal(true)}
+            onClick={() => {
+              router.push('/expert-review');
+              trackEvent('navigation_click', {
+                source: 'landing_header',
+                destination: 'expert_review',
+              });
+            }}
             className={cn(
               'font-semibold text-lg cursor-pointer',
-              'text-blue-900 hover:text-gray-900',
-              isRoast ? 'text-white' : '',
+              pathname === '/expert-review'
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
             )}
           >
             Expert Review
@@ -191,24 +188,6 @@ function Header({ variant = 'default' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={handleDashboardClick}
-            className={cn(
-              'font-semibold text-lg cursor-pointer',
-              pathname === '/dashboard' || pathname === '/auth'
-                ? isRoast
-                  ? 'text-blue-400'
-                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
-                : isRoast
-                  ? 'text-white hover:bg-white/10 hover:text-white'
-                  : 'text-blue-900 hover:text-gray-900',
-            )}
-          >
-            {user ? 'Dashboard' : 'Sign In'}
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
             onClick={handleBlogsClick}
             className={cn(
               'font-semibold text-lg cursor-pointer',
@@ -224,35 +203,25 @@ function Header({ variant = 'default' }: HeaderProps) {
             Blogs
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleAboutUsClick}
-            className={cn(
-              'font-semibold text-lg cursor-pointer',
-              pathname === '/about-us'
-                ? isRoast
-                  ? 'text-blue-400'
-                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
-                : isRoast
-                  ? 'text-white hover:bg-white/10 hover:text-white'
-                  : 'text-blue-900 hover:text-gray-900',
-            )}
-          >
-            About Us
-          </Button>
-
-          <Button
-            variant="default"
-            size="default"
-            onClick={handleCreateResumeClick}
-            className={cn(
-              'font-medium p-3 rounded-lg shadow-sm cursor-pointer',
-              isRoast ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-900 hover:bg-blue-700 text-white',
-            )}
-          >
-            Create My Resume
-          </Button>
+          {user && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDashboardClick}
+              className={cn(
+                'font-semibold text-lg cursor-pointer',
+                pathname === '/dashboard'
+                  ? isRoast
+                    ? 'text-blue-400'
+                    : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                  : isRoast
+                    ? 'text-white hover:bg-white/10 hover:text-white'
+                    : 'text-blue-900 hover:text-gray-900',
+              )}
+            >
+              Dashboard
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button - Hidden on Desktop */}
@@ -277,10 +246,8 @@ function Header({ variant = 'default' }: HeaderProps) {
           <MobileSidebar
             isOpen={showMobileSidebar}
             onClose={() => setShowMobileSidebar(false)}
-            onExpertReviewClick={() => setShowExpertReviewModal(true)}
           />
         ))}
-      <ExpertReviewModal isOpen={showExpertReviewModal} onClose={() => setShowExpertReviewModal(false)} />
     </>
   );
 }

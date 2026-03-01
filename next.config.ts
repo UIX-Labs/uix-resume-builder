@@ -22,6 +22,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/get-all-resumes',
+        destination: '/templates',
+        permanent: true,
+      },
+      {
+        source: '/resumes',
+        destination: '/my-resumes',
+        permanent: true,
+      },
+    ];
+  },
   output: 'standalone',
 };
 

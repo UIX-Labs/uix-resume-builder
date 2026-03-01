@@ -112,8 +112,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/get-all-resumes'}>
-                  <Link href="/get-all-resumes" onClick={handleAllTemplatesClick}>
+                <SidebarMenuButton asChild isActive={pathname === '/templates'}>
+                  <Link href="/templates" onClick={handleAllTemplatesClick}>
                     <LayoutGrid className="w-5 h-5" />
                     All Templates
                   </Link>
@@ -121,8 +121,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
-                  <Link href="/resumes" onClick={handleYourResumesClick}>
+                <SidebarMenuButton asChild isActive={pathname === '/my-resumes'}>
+                  <Link href="/my-resumes" onClick={handleYourResumesClick}>
                     <FileText className="w-5 h-5" />
                     Your Resumes
                   </Link>

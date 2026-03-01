@@ -33,11 +33,11 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
   };
 
   const handleAllTemplatesClick = () => {
-    handleNavigation('/get-all-resumes', 'all_templates');
+    handleNavigation('/templates', 'all_templates');
   };
 
   const handleYourResumesClick = () => {
-    handleNavigation('/resumes', 'your_resumes');
+    handleNavigation('/my-resumes', 'your_resumes');
   };
 
   const handleReferralClick = () => {
@@ -76,13 +76,13 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
         {
           label: 'All Templates',
           onClick: handleAllTemplatesClick,
-          isActive: pathname === '/get-all-resumes',
+          isActive: pathname === '/templates',
           icon: LayoutGrid,
         },
         {
           label: 'Your Resumes',
           onClick: handleYourResumesClick,
-          isActive: pathname === '/resumes',
+          isActive: pathname === '/my-resumes',
           icon: FileText,
         },
         {

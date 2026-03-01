@@ -91,8 +91,22 @@ function normalizeContent(content: string | undefined): string {
     const line = lines[i];
     const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
     const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+    const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
 
-    if (bulletMatch) {
+    if (headerMatch) {
+      if (inBulletList) {
+        result.push('</ul>');
+        inBulletList = false;
+      }
+      if (inOrderedList) {
+        result.push('</ol>');
+        inOrderedList = false;
+      }
+
+      const level = headerMatch[1].length;
+      const content = convertMarkdownToHtml(headerMatch[2]);
+      result.push(`<h${level}>${content}</h${level}>`);
+    } else if (bulletMatch) {
       // Start bullet list if not already in one
       if (!inBulletList) {
         // Close ordered list if open
@@ -194,7 +208,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     const editor = useEditor({
       extensions: [
         StarterKit.configure({
-          heading: false,
+          heading: {
+            levels: [1, 2, 3, 4, 5, 6],
+          },
           /**
            * The `bulletList` prop in the StarterKit Tiptap extension configures the behavior and HTML rendering of bulleted lists.
            *
@@ -456,7 +472,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
               'prose-ol:text-sm prose-ol:mt-0 prose-ol:mb-2 prose-ol:list-decimal prose-ol:pl-6',
               'prose-li:mt-0 prose-li:mb-1 prose-li:marker:text-gray-600',
               'prose-strong:font-semibold',
-              'prose-em:italic  ml-2',
+              'prose-em:italic',
+              '[&_.ProseMirror_em]:italic [&_.ProseMirror_em]:font-[italic]',
               'prose-a:text-primary prose-a:underline prose-a:underline-offset-4',
               '[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-full',
               '[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]',

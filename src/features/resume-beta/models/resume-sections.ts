@@ -147,8 +147,7 @@ export type ResumeFormData = ResumeSectionMap & {
 export type SectionData<K extends ResumeDataKey> = ResumeSectionMap[K];
 
 /** Get the item type for a given section key */
-export type SectionItem<K extends ResumeDataKey> =
-  ResumeSectionMap[K] extends ObjectSection<infer T> ? T : string;
+export type SectionItem<K extends ResumeDataKey> = ResumeSectionMap[K] extends ObjectSection<infer T> ? T : string;
 
 /** Union of all section types */
 export type AnySection = ResumeSectionMap[ResumeDataKey];

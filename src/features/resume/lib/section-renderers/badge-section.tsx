@@ -1,5 +1,5 @@
-import type { BadgeTemplateSection } from "@features/resume-beta/models/template-types";
-import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
+import type { BadgeTemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';

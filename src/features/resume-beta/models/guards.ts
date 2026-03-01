@@ -7,28 +7,15 @@ import type { ObjectSection, ResumeSectionMap, StringSection } from './resume-se
 
 const STRING_SECTIONS: ReadonlySet<ResumeDataKey> = new Set(['interests', 'achievements']);
 
-export function isStringSection(
-  key: ResumeDataKey,
-  section: unknown,
-): section is StringSection {
-  return (
-    STRING_SECTIONS.has(key) &&
-    section !== null &&
-    typeof section === 'object' &&
-    'items' in section
-  );
+export function isStringSection(key: ResumeDataKey, section: unknown): section is StringSection {
+  return STRING_SECTIONS.has(key) && section !== null && typeof section === 'object' && 'items' in section;
 }
 
 export function isObjectSection<K extends ResumeDataKey>(
   key: K,
   section: unknown,
 ): section is ResumeSectionMap[K] & ObjectSection<unknown> {
-  return (
-    !STRING_SECTIONS.has(key) &&
-    section !== null &&
-    typeof section === 'object' &&
-    'items' in section
-  );
+  return !STRING_SECTIONS.has(key) && section !== null && typeof section === 'object' && 'items' in section;
 }
 
 // ---------------------------------------------------------------------------

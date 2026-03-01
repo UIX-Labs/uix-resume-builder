@@ -3,7 +3,11 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ResumeData, ResumeDataKey } from '@entities/resume';
 import { useSaveResumeForm } from '@entities/resume';
+import { initDsl } from '../dsl/init';
 import type { ResumeFormData } from '../models/resume-sections';
+
+// Register all DSL field & section renderers once at module load
+initDsl();
 import type { CleanedResumeData } from '../models/cleaned-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
@@ -48,11 +52,7 @@ interface BuilderProviderComponentProps {
   children: React.ReactNode;
 }
 
-export function BuilderProviderComponent({
-  resumeId,
-  resumeData,
-  children,
-}: BuilderProviderComponentProps) {
+export function BuilderProviderComponent({ resumeId, resumeData, children }: BuilderProviderComponentProps) {
   const isMobile = useIsMobile();
   const searchParams = useSearchParams();
   const { data: user } = useUserProfile();
@@ -238,10 +238,7 @@ export function BuilderProviderComponent({
 
   const cleanedDataForThumbnail = useMemo(
     () =>
-      getCleanDataForRenderer(
-        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
-        true,
-      ) as CleanedResumeData,
+      getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), true) as CleanedResumeData,
     [formData, isCreateMode],
   );
 
@@ -274,9 +271,20 @@ export function BuilderProviderComponent({
       friendsBonus,
     }),
     [
-      resumeId, currentStep, formData, resumeData, isCreateMode, isGeneratingPDF,
-      isAnalyzing, analyzerError, selectedTemplate, selectedTemplateId,
-      hasSuggestions, lastSaveTime, user, friendsBonus,
+      resumeId,
+      currentStep,
+      formData,
+      resumeData,
+      isCreateMode,
+      isGeneratingPDF,
+      isAnalyzing,
+      analyzerError,
+      selectedTemplate,
+      selectedTemplateId,
+      hasSuggestions,
+      lastSaveTime,
+      user,
+      friendsBonus,
     ],
   );
 
@@ -295,9 +303,15 @@ export function BuilderProviderComponent({
       setIsPreviewModalOpen,
     }),
     [
-      setFormData, handleSaveResume, handleNextStep, handleDownloadPDF,
-      handleTemplateSelect, handleToggleHideSection, handleOpenAnalyzerModal,
-      handleBuilderIntelligence, handleApplySuggestions,
+      setFormData,
+      handleSaveResume,
+      handleNextStep,
+      handleDownloadPDF,
+      handleTemplateSelect,
+      handleToggleHideSection,
+      handleOpenAnalyzerModal,
+      handleBuilderIntelligence,
+      handleApplySuggestions,
     ],
   );
 
@@ -331,18 +345,26 @@ export function BuilderProviderComponent({
       referralUrl,
     }),
     [
-      cleanedDataForPreview, cleanedDataForThumbnail, cleanedDataForModal,
-      leftWidth, previewScale, startResizing, getFormattedSaveTime,
-      nextStepIndex, analyzerModalOpen, analyzerModalData,
-      isFeedbackModalOpen, isPreviewModalOpen,
-      isAuthModalOpen, authRedirectUrl, isReferralModalOpen, referralUrl,
+      cleanedDataForPreview,
+      cleanedDataForThumbnail,
+      cleanedDataForModal,
+      leftWidth,
+      previewScale,
+      startResizing,
+      getFormattedSaveTime,
+      nextStepIndex,
+      analyzerModalOpen,
+      analyzerModalData,
+      isFeedbackModalOpen,
+      isPreviewModalOpen,
+      isAuthModalOpen,
+      authRedirectUrl,
+      isReferralModalOpen,
+      referralUrl,
     ],
   );
 
-  const contextValue: BuilderContextValue = useMemo(
-    () => ({ state, actions, meta }),
-    [state, actions, meta],
-  );
+  const contextValue: BuilderContextValue = useMemo(() => ({ state, actions, meta }), [state, actions, meta]);
 
   return <BuilderProvider value={contextValue}>{children}</BuilderProvider>;
 }

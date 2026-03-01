@@ -1,5 +1,5 @@
-import type { InlineListTemplateSection } from "@features/resume-beta/models/template-types";
-import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
+import type { InlineListTemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';

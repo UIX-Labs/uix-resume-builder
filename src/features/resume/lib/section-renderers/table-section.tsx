@@ -1,5 +1,9 @@
-import type { TableTemplateSection, TableColumn as TableColumnType, TemplateField } from "@features/resume-beta/models/template-types";
-import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
+import type {
+  TableTemplateSection,
+  TableColumn as TableColumnType,
+  TemplateField,
+} from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
@@ -134,7 +138,9 @@ export function renderTableSection(
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
                       if (!iconName) return null;
-                      const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
+                      const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[
+                        iconName
+                      ];
                       return Icon || null;
                     };
                     const IconComponent = col.icon ? getIconComponent(col.icon) : null;

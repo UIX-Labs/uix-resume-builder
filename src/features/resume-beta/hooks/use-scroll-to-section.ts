@@ -25,9 +25,7 @@ export function useScrollToSection({
     if (!sectionId) return;
 
     const scrollTimer = setTimeout(() => {
-      const sectionElement = targetRef.current?.querySelector(
-        `[data-section="${sectionId}"]`,
-      ) as HTMLElement;
+      const sectionElement = targetRef.current?.querySelector(`[data-section="${sectionId}"]`) as HTMLElement;
 
       if (sectionElement && scrollContainerRef.current) {
         const container = scrollContainerRef.current;

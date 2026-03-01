@@ -15,14 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useBuilderActions, useBuilderState } from '../models/builder-context';
 
 export function Sidebar() {
-  const {
-    currentStep,
-    navs,
-    formData,
-    resumeData,
-    resumeId,
-    isAnalyzing,
-  } = useBuilderState();
+  const { currentStep, navs, formData, resumeData, resumeId, isAnalyzing } = useBuilderState();
   const { setCurrentStep, handleBuilderIntelligence } = useBuilderActions();
 
   const queryClient = useQueryClient();
@@ -64,22 +57,14 @@ export function Sidebar() {
       )}
     >
       <div className="flex flex-col gap-4 mt-4 w-full pl-6 pr-2">
-        <button
-          className="flex flex-row items-center cursor-pointer gap-2"
-          type="button"
-          onClick={handleLogoClick}
-        >
+        <button className="flex flex-row items-center cursor-pointer gap-2" type="button" onClick={handleLogoClick}>
           <ArrowLeftIcon className="w-5 h-5" />
           <span className="font-normal text-black bg-clip-text text-xl text-left">Back</span>
         </button>
       </div>
 
       <div className="mt-5">
-        <ProgressCircle
-          progress={progress}
-          totalSteps={navs.length}
-          currentStep={currentStepIndex + 1}
-        />
+        <ProgressCircle progress={progress} totalSteps={navs.length} currentStep={currentStepIndex + 1} />
       </div>
 
       <div className="flex flex-col gap-2 mt-4 w-full pl-6 pr-2">

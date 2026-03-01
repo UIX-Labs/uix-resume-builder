@@ -1,6 +1,6 @@
 'use client';
 
-import { ResumeRenderer } from '@features/resume/renderer';
+import { ResumeRenderer } from '../dsl/renderer';
 import { useBuilderMeta, useBuilderState } from '../models/builder-context';
 
 export function HiddenRenderers() {

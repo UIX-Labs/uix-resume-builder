@@ -20,8 +20,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'AI Resume Roast - Get Honest Resume Feedback',
-    description:
-      'Upload your resume and get brutally honest AI-powered feedback. Fix your resume before applying.',
+    description: 'Upload your resume and get brutally honest AI-powered feedback. Fix your resume before applying.',
     url: `${DOMAIN_URL}/roast`,
     siteName: 'Pika Resume',
     type: 'website',

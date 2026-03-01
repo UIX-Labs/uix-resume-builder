@@ -1,8 +1,6 @@
-import type { TemplateSection } from "@features/resume-beta/models/template-types";
-import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
-import type React from 'react';
-import type { TemplateSection } from '@features/resume-beta/models/template-types';
 import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
+import type { TemplateSection } from '@features/resume-beta/models/template-types';
+import type React from 'react';
 import { resolvePath } from '../resolve-path';
 import { renderBadgeSection } from './badge-section';
 import { renderContentSection } from './content-section';

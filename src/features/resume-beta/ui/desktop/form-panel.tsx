@@ -8,13 +8,8 @@ import { useBuilderActions, useBuilderMeta, useBuilderState } from '../../models
 
 export function FormPanel() {
   const { currentStep, formData, resumeId, navs } = useBuilderState();
-  const {
-    setFormData,
-    handleSaveResume,
-    handleNextStep,
-    handleOpenAnalyzerModal,
-    handleToggleHideSection,
-  } = useBuilderActions();
+  const { setFormData, handleSaveResume, handleNextStep, handleOpenAnalyzerModal, handleToggleHideSection } =
+    useBuilderActions();
   const { getFormattedSaveTime, nextStepIndex } = useBuilderMeta();
 
   return (
@@ -49,9 +44,7 @@ export function FormPanel() {
 
       <div className="sticky bottom-0 z-10 bg-white px-5 py-4 border-t border-gray-100 flex items-center gap-4">
         <div className="flex-1 flex justify-start">
-          {getFormattedSaveTime() && (
-            <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>
-          )}
+          {getFormattedSaveTime() && <p className="text-sm text-gray-500">{getFormattedSaveTime()}</p>}
         </div>
 
         {navs[nextStepIndex]?.name && (

@@ -19,10 +19,7 @@ import type { AnalyzerModalData } from '../models/types';
 import type { ResumeFormData, AnySection } from '../models/resume-sections';
 
 /** Safely access a section from formData by a dynamic key */
-function getSectionByKey(
-  formData: ResumeFormData,
-  key: string,
-): AnySection | undefined {
+function getSectionByKey(formData: ResumeFormData, key: string): AnySection | undefined {
   return (formData as unknown as Record<string, AnySection | undefined>)[key];
 }
 
@@ -33,12 +30,7 @@ interface UseSuggestionHandlerParams {
   setFormData: (data: ResumeFormData) => void;
 }
 
-export function useSuggestionHandler({
-  formData,
-  currentStep,
-  resumeId,
-  setFormData,
-}: UseSuggestionHandlerParams) {
+export function useSuggestionHandler({ formData, currentStep, resumeId, setFormData }: UseSuggestionHandlerParams) {
   const queryClient = useQueryClient();
   const [analyzerModalOpen, setAnalyzerModalOpen] = useState(false);
   const [analyzerModalData, setAnalyzerModalData] = useState<AnalyzerModalData | null>(null);
@@ -62,9 +54,7 @@ export function useSuggestionHandler({
         return;
       }
 
-      const itemUpdate = currentData.suggestedUpdates.find(
-        (update: SuggestedUpdate) => update.itemId === itemId,
-      );
+      const itemUpdate = currentData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
       if (!itemUpdate || !itemUpdate.fields[fieldName]) {
         return;
@@ -106,9 +96,7 @@ export function useSuggestionHandler({
         return;
       }
 
-      const itemUpdate = sectionData.suggestedUpdates.find(
-        (update: SuggestedUpdate) => update.itemId === itemId,
-      );
+      const itemUpdate = sectionData.suggestedUpdates.find((update: SuggestedUpdate) => update.itemId === itemId);
 
       if (!itemUpdate || !itemUpdate.fields[fieldName]) {
         return;
@@ -223,9 +211,7 @@ export function useSuggestionHandler({
             ...currentData,
             items: updatedItems,
             suggestedUpdates:
-              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0
-                ? updatedSuggestedUpdates
-                : undefined,
+              updatedSuggestedUpdates && updatedSuggestedUpdates.length > 0 ? updatedSuggestedUpdates : undefined,
           },
         };
 

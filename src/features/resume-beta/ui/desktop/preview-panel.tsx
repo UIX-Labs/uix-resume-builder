@@ -1,6 +1,6 @@
 'use client';
 
-import { ResumeRenderer } from '@features/resume/renderer';
+import { ResumeRenderer } from '../../dsl/renderer';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 import { DownloadButton } from '@shared/ui/components/download-button';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
@@ -8,28 +8,11 @@ import TemplateButton from '@widgets/form-page-builder/ui/change-template-button
 import { useBuilderActions, useBuilderMeta, useBuilderState } from '../../models/builder-context';
 
 export function PreviewPanel() {
-  const {
-    selectedTemplate,
-    selectedTemplateId,
-    isGeneratingPDF,
-    hasSuggestions,
-    currentStep,
-    user,
-    friendsBonus,
-  } = useBuilderState();
-  const {
-    handleDownloadPDF,
-    handleTemplateSelect,
-    setIsPreviewModalOpen,
-  } = useBuilderActions();
-  const {
-    scrollContainerRef,
-    previewWrapperRef,
-    targetRef,
-    leftWidth,
-    previewScale,
-    cleanedDataForPreview,
-  } = useBuilderMeta();
+  const { selectedTemplate, selectedTemplateId, isGeneratingPDF, hasSuggestions, currentStep, user, friendsBonus } =
+    useBuilderState();
+  const { handleDownloadPDF, handleTemplateSelect, setIsPreviewModalOpen } = useBuilderActions();
+  const { scrollContainerRef, previewWrapperRef, targetRef, leftWidth, previewScale, cleanedDataForPreview } =
+    useBuilderMeta();
 
   return (
     <div

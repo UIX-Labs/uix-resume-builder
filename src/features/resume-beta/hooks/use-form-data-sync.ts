@@ -25,9 +25,9 @@ export function useFormDataSync({ resumeId, resumeData }: UseFormDataSyncParams)
 
       const emptyData = await getResumeEmptyData();
 
-      let processedData: Record<string, any> = { ...analyzedData };
+      let processedData: Record<string, unknown> = { ...analyzedData };
       for (const key of Object.keys(emptyData)) {
-        processedData[key] = deepMerge(processedData[key], (emptyData as Record<string, any>)[key]);
+        processedData[key] = deepMerge(processedData[key], (emptyData as Record<string, unknown>)[key]);
       }
 
       processedData = normalizeStringsFields(processedData);
@@ -47,10 +47,17 @@ export function useFormDataSync({ resumeId, resumeData }: UseFormDataSyncParams)
 
     const isSameResume = formDataResumeId === resumeId;
     if (isSameResume) {
-      const hasSuggestionsInData = (data: any) =>
-        Object.values(data).some((s: any) => s?.suggestedUpdates?.length > 0);
+      const hasSuggestionsInData = (data: object) =>
+        Object.values(data).some(
+          (s) =>
+            s !== null &&
+            typeof s === 'object' &&
+            'suggestedUpdates' in s &&
+            Array.isArray((s as { suggestedUpdates?: unknown[] }).suggestedUpdates) &&
+            ((s as { suggestedUpdates: unknown[] }).suggestedUpdates).length > 0,
+        );
 
-      if (hasSuggestionsInData(formData) && !hasSuggestionsInData(resumeData)) {
+      if (formData && hasSuggestionsInData(formData) && !hasSuggestionsInData(resumeData)) {
         return;
       }
     }

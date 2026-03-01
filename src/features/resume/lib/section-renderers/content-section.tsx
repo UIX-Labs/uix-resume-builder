@@ -1,3 +1,5 @@
+import type { ContentTemplateSection } from "@features/resume-beta/models/template-types";
+import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { isHtml } from '@shared/lib/markdown';
@@ -8,8 +10,8 @@ import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/tem
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderContentSection(
-  section: any,
-  data: any,
+  section: ContentTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -65,7 +67,7 @@ export function renderContentSection(
   }
 
   // Get suggestions for this field
-  let fieldSuggestions: any[] = [];
+  let fieldSuggestions: ReturnType<typeof getFieldSuggestions> = [];
   if (formDataSectionKey && itemId && fieldName) {
     const sectionSuggestedUpdates = data[formDataSectionKey]?.suggestedUpdates;
     fieldSuggestions = getFieldSuggestions(sectionSuggestedUpdates, itemId, fieldName);

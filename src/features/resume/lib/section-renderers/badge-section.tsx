@@ -1,3 +1,5 @@
+import type { BadgeTemplateSection } from "@features/resume-beta/models/template-types";
+import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
@@ -9,8 +11,8 @@ import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@feature
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderBadgeSection(
-  section: any,
-  data: any,
+  section: BadgeTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -102,7 +104,7 @@ export function renderBadgeSection(
     fieldName = section.itemPath;
   }
 
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey ? data[sectionKey as keyof CleanedResumeData]?.suggestedUpdates : undefined;
   return (
     <div
       data-canbreak={isBreakable ? 'true' : undefined}

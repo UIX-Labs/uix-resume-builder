@@ -31,7 +31,7 @@ export function Sidebar() {
 
   const [progress, setProgress] = useState(0);
 
-  const isAnalyzed = (resumeData as any)?.isAnalyzed ?? false;
+  const isAnalyzed = (resumeData as (ResumeData & { isAnalyzed?: boolean }) | undefined)?.isAnalyzed ?? false;
 
   const isResumeEmpty = useMemo(() => {
     if (!formData) return true;

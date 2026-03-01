@@ -1,3 +1,5 @@
+import type { ListTemplateSection } from "@features/resume-beta/models/template-types";
+import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
@@ -6,15 +8,15 @@ import { hasPendingSuggestions } from '../section-utils';
 import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
 
 export function renderListSection(
-  section: any,
-  data: any,
+  section: ListTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
 ): React.ReactNode {
   const rawItems = resolvePath(data, section.listPath, []);
 
-  const items = rawItems.map((item: any) => ({ ...item }));
+  const items = rawItems.map((item: Record<string, unknown>) => ({ ...item }));
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -77,7 +79,7 @@ export function renderListSection(
         className={section.containerClassName}
         id="teacher-content"
       >
-        {items.map((item: any, idx: number) => {
+        {items.map((item: Record<string, unknown>, idx: number) => {
           const itemId = item.itemId || item.id;
 
           // Use sectionKey (from listPath) instead of sectionId because sectionKey matches formData keys

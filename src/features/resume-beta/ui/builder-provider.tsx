@@ -3,6 +3,8 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { ResumeData, ResumeDataKey } from '@entities/resume';
 import { useSaveResumeForm } from '@entities/resume';
+import type { ResumeFormData } from '../models/resume-sections';
+import type { CleanedResumeData } from '../models/cleaned-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { useFormDataStore } from '@widgets/form-page-builder/models/store';
@@ -79,8 +81,8 @@ export function BuilderProviderComponent({
 
   // Wrap setFormData to always pass resumeId
   const setFormData = useCallback(
-    (data: Omit<ResumeData, 'templateId'>) => {
-      storeSetFormData(data, resumeId);
+    (data: ResumeFormData) => {
+      storeSetFormData(data as Omit<ResumeData, 'templateId'>, resumeId);
     },
     [storeSetFormData, resumeId],
   );
@@ -136,8 +138,8 @@ export function BuilderProviderComponent({
   const { mutateAsync: saveResumeForm } = useSaveResumeForm();
 
   const save = useCallback(
-    ({ type, data }: { type: string; data: any; updatedAt: number }) => {
-      saveResumeForm({ type: type as any, data });
+    ({ type, data }: { type: string; data: Record<string, unknown>; updatedAt: number }) => {
+      saveResumeForm({ type: type as ResumeDataKey, data: data as ResumeData[ResumeDataKey] });
     },
     [saveResumeForm],
   );
@@ -147,7 +149,7 @@ export function BuilderProviderComponent({
   });
 
   const saveWithTimestamp = useCallback(
-    (params: { type: string; data: any; updatedAt: number }) => {
+    (params: { type: string; data: Record<string, unknown>; updatedAt: number }) => {
       save(params);
       setLastSaveTime(Date.now());
     },
@@ -226,17 +228,29 @@ export function BuilderProviderComponent({
 
   // --- Cleaned data for renderers ---
   const cleanedDataForPreview = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), isGeneratingPDF),
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        isGeneratingPDF,
+      ) as CleanedResumeData,
     [formData, isCreateMode, isGeneratingPDF],
   );
 
   const cleanedDataForThumbnail = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), true),
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        true,
+      ) as CleanedResumeData,
     [formData, isCreateMode],
   );
 
   const cleanedDataForModal = useMemo(
-    () => getCleanDataForRenderer(getRendererDataWithMockFallback(formData ?? {}, isCreateMode), false),
+    () =>
+      getCleanDataForRenderer(
+        getRendererDataWithMockFallback(formData ?? {}, isCreateMode),
+        false,
+      ) as CleanedResumeData,
     [formData, isCreateMode],
   );
 
@@ -245,7 +259,7 @@ export function BuilderProviderComponent({
     () => ({
       resumeId,
       currentStep,
-      formData,
+      formData: formData as ResumeFormData,
       resumeData,
       isCreateMode,
       isGeneratingPDF,

@@ -1,3 +1,5 @@
+import type { TableTemplateSection, TableColumn as TableColumnType, TemplateField } from "@features/resume-beta/models/template-types";
+import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
@@ -10,8 +12,8 @@ import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 // Table section renderer (row-based layout with configurable columns)
 export function renderTableSection(
-  section: any,
-  data: any,
+  section: TableTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -28,18 +30,18 @@ export function renderTableSection(
   if (!Array.isArray(items) || items.length === 0) return null;
 
   // Filter out items where all values are empty, null, or undefined
-  const validItems = items.filter((item: any) => {
+  const validItems = items.filter((item: Record<string, unknown>) => {
     if (!item || typeof item !== 'object') {
       return false;
     }
 
     // Check if at least one field has a non-empty value
-    const hasContent = Object.values(item).some((value: any) => {
+    const hasContent = Object.values(item).some((value: unknown) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
         const nestedValues = Object.values(value);
-        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+        return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
       return true;
     });
@@ -117,8 +119,8 @@ export function renderTableSection(
             )}
 
             {/* Render content columns with all items */}
-            {columns.map((column: any, colIdx: number) => {
-              const renderColumnContent = (col: any): React.ReactNode => {
+            {columns.map((column: TableColumnType, colIdx: number) => {
+              const renderColumnContent = (col: TableColumnType): React.ReactNode => {
                 let content: React.ReactNode = null;
 
                 if (col.type === 'badge-list') {
@@ -132,7 +134,7 @@ export function renderTableSection(
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
                       if (!iconName) return null;
-                      const Icon = (LucideIcons as any)[iconName];
+                      const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
                       return Icon || null;
                     };
                     const IconComponent = col.icon ? getIconComponent(col.icon) : null;
@@ -217,12 +219,12 @@ export function renderTableSection(
           </div>
         ) : (
           // Multi-row mode: each item gets a row
-          validItems.map((item: any, itemIdx: number) => {
+          validItems.map((item: Record<string, any>, itemIdx: number) => {
             // Get itemId for this item
             const itemId = item.itemId || item.id;
 
             // Handle different column types for a single item
-            const renderColumnContent = (column: any): React.ReactNode => {
+            const renderColumnContent = (column: TableColumnType): React.ReactNode => {
               let content: React.ReactNode = null;
 
               if (column.type === 'field') {
@@ -237,7 +239,7 @@ export function renderTableSection(
                 );
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
-                  .map((subField: any, subIdx: number) => {
+                  .map((subField: TemplateField, subIdx: number) => {
                     return {
                       idx: subIdx,
                       element: renderField(
@@ -320,11 +322,11 @@ export function renderTableSection(
               } else if (column.type === 'group') {
                 // Render a group of fields stacked vertically
                 const groupItems = column.items
-                  .map((subField: any) => {
+                  .map((subField: TemplateField) => {
                     // Handle inline-group specially to preserve inline layout
                     if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
-                        .map((inlineSubField: any, idx: number) => {
+                        .map((inlineSubField: TemplateField, idx: number) => {
                           return {
                             idx,
                             element: renderField(
@@ -410,7 +412,7 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
+                      (v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''),
                     );
 
                 // Determine fieldName for suggestions
@@ -419,14 +421,14 @@ export function renderTableSection(
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
                     if (!iconName) return null;
-                    const Icon = (LucideIcons as any)[iconName];
+                    const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
                     return Icon || null;
                   };
                   const IconComponent = column.icon ? getIconComponent(column.icon) : null;
 
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
-                      {badgeItems.map((badgeItem: any, badgeIdx: number) => {
+                      {badgeItems.map((badgeItem: { value: unknown; itemId?: string }, badgeIdx: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
 
@@ -521,7 +523,7 @@ export function renderTableSection(
                 )}
 
                 {/* Render content columns for each item */}
-                {columns.map((column: any, colIdx: number) => (
+                {columns.map((column: TableColumnType, colIdx: number) => (
                   <div
                     key={`${itemIdx}-${colIdx}`}
                     className={column.className}

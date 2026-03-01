@@ -4,6 +4,7 @@ import { isNil } from '@shared/lib/guards';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { ShieldAlert } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { isApiError } from '../../models/guards';
 
 interface NotAccessibleModalProps {
   error: Error | null;
@@ -12,10 +13,12 @@ interface NotAccessibleModalProps {
 export function NotAccessibleModal({ error }: NotAccessibleModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const message = (error as any)?.data?.message?.message || 'You are not allowed to access this.';
+  const message = isApiError(error)
+    ? error.data?.message?.message || 'You are not allowed to access this.'
+    : 'You are not allowed to access this.';
 
   useEffect(() => {
-    if (!isNil(error) && (error as any)?.status === 403) {
+    if (!isNil(error) && isApiError(error) && error.status === 403) {
       setIsOpen(true);
     }
   }, [error]);

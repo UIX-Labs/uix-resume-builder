@@ -1,4 +1,8 @@
+import type { TemplateSection } from "@features/resume-beta/models/template-types";
+import type { CleanedResumeData } from "@features/resume-beta/models/cleaned-data";
 import type React from 'react';
+import type { TemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { resolvePath } from '../resolve-path';
 import { renderBadgeSection } from './badge-section';
 import { renderContentSection } from './content-section';
@@ -9,15 +13,15 @@ import { renderTableSection } from './table-section';
 import { renderTwoColumnLayout } from './two-column-layout';
 
 // Helper function to check if a section will render (has content and is not hidden)
-export function willSectionRender(section: any, data: any): boolean {
+export function willSectionRender(section: TemplateSection, data: CleanedResumeData): boolean {
   // Get section ID from different possible sources
   let sectionId = section.id;
 
-  if (!sectionId && section.listPath) {
+  if (!sectionId && 'listPath' in section && section.listPath) {
     sectionId = section.listPath.split('.')[0];
   }
 
-  if (!sectionId && section.heading?.path) {
+  if (!sectionId && 'heading' in section && section.heading?.path) {
     sectionId = section.heading.path.split('.')[0];
   }
 
@@ -28,7 +32,8 @@ export function willSectionRender(section: any, data: any): boolean {
   }
 
   // Check if section is hidden
-  if (dataKey && data[dataKey]?.isHidden === true) {
+  const dataEntry = dataKey ? data[dataKey] : undefined;
+  if (dataEntry && typeof dataEntry === 'object' && dataEntry.isHidden === true) {
     return false;
   }
 
@@ -37,14 +42,14 @@ export function willSectionRender(section: any, data: any): boolean {
     const items = resolvePath(data, section.listPath, []);
     if (!Array.isArray(items) || items.length === 0) return false;
 
-    const validItems = items.filter((item: any) => {
+    const validItems = items.filter((item: Record<string, unknown>) => {
       if (!item || typeof item !== 'object') return false;
-      return Object.values(item).some((value: any) => {
+      return Object.values(item).some((value: unknown) => {
         if (!value) return false;
         if (typeof value === 'string' && value.trim() === '') return false;
         if (typeof value === 'object') {
-          const nestedValues = Object.values(value);
-          return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+          const nestedValues = Object.values(value as Record<string, unknown>);
+          return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
         }
         return true;
       });
@@ -61,8 +66,8 @@ export function willSectionRender(section: any, data: any): boolean {
 
 // Main section renderer - routes to appropriate section renderer based on type
 export function renderSection(
-  section: any,
-  data: any,
+  section: TemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -74,12 +79,12 @@ export function renderSection(
   let sectionId = section.id;
 
   // If no direct ID, try to extract from listPath (e.g., "experience.items" -> "experience")
-  if (!sectionId && section.listPath) {
+  if (!sectionId && 'listPath' in section && section.listPath) {
     sectionId = section.listPath.split('.')[0];
   }
 
   // If still no ID, try to extract from heading path (e.g., "experience.heading" -> "experience")
-  if (!sectionId && section.heading?.path) {
+  if (!sectionId && 'heading' in section && section.heading?.path) {
     sectionId = section.heading.path.split('.')[0];
   }
 
@@ -91,7 +96,8 @@ export function renderSection(
   }
 
   // Check if this section is marked as hidden
-  if (dataKey && data[dataKey]?.isHidden === true) {
+  const dataEntry = dataKey ? data[dataKey] : undefined;
+  if (dataEntry && typeof dataEntry === 'object' && dataEntry.isHidden === true) {
     return null;
   }
 

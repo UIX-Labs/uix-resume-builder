@@ -1,5 +1,9 @@
 import type { ResumeData, ResumeDataKey, SuggestionType } from '@entities/resume';
+import type { Template } from '@entities/template-page/api/template-data';
 import type { User } from '@shared/hooks/use-user';
+import type { TemplateConfig } from './template-types';
+import type { CleanedResumeData } from './cleaned-data';
+import type { ResumeFormData } from './resume-sections';
 
 export interface NavItem {
   label: string;
@@ -17,13 +21,13 @@ export interface AnalyzerModalData {
 export interface BuilderState {
   resumeId: string;
   currentStep: ResumeDataKey;
-  formData: Omit<ResumeData, 'templateId'>;
+  formData: ResumeFormData;
   resumeData: ResumeData | undefined;
   isCreateMode: boolean;
   isGeneratingPDF: boolean;
   isAnalyzing: boolean;
   analyzerError: boolean;
-  selectedTemplate: any | null;
+  selectedTemplate: TemplateConfig | null;
   selectedTemplateId: string | null;
   hasSuggestions: boolean;
   lastSaveTime: number | null;
@@ -34,11 +38,11 @@ export interface BuilderState {
 
 export interface BuilderActions {
   setCurrentStep: (step: ResumeDataKey) => void;
-  setFormData: (data: Omit<ResumeData, 'templateId'>) => void;
+  setFormData: (data: ResumeFormData) => void;
   handleSaveResume: () => Promise<void>;
   handleNextStep: () => Promise<void>;
   handleDownloadPDF: () => Promise<void>;
-  handleTemplateSelect: (template: any) => Promise<void>;
+  handleTemplateSelect: (template: Template) => Promise<void>;
   handleToggleHideSection: (sectionId: string, isHidden: boolean) => void;
   handleOpenAnalyzerModal: (itemId: string, fieldName: string, suggestionType: SuggestionType) => void;
   handleBuilderIntelligence: () => Promise<void>;
@@ -55,9 +59,9 @@ export interface BuilderMeta {
   previewWrapperRef: React.RefObject<HTMLDivElement | null>;
   thumbnailRef: React.RefObject<HTMLDivElement | null>;
   pdfSourceRef: React.RefObject<HTMLDivElement | null>;
-  cleanedDataForPreview: Record<string, unknown>;
-  cleanedDataForThumbnail: Record<string, unknown>;
-  cleanedDataForModal: Record<string, unknown>;
+  cleanedDataForPreview: CleanedResumeData;
+  cleanedDataForThumbnail: CleanedResumeData;
+  cleanedDataForModal: CleanedResumeData;
   leftWidth: number;
   previewScale: number;
   startResizing: () => void;

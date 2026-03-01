@@ -2,6 +2,9 @@ import { cn } from '@shared/lib/cn';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderSection, willSectionRender } from './lib/section-renderers';
 
+import type { TemplateConfig, TemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
+
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';
@@ -46,8 +49,8 @@ function removeBorderClasses(el: HTMLElement) {
 }
 
 export type RenderProps = {
-  template: any;
-  data: any;
+  template: TemplateConfig;
+  data: CleanedResumeData;
   className?: string;
   currentSection?: string;
   hasSuggestions?: boolean;
@@ -64,7 +67,7 @@ function ResumeRendererComponent({
   isThumbnail = false,
   skipImageFallbacks = false,
 }: RenderProps) {
-  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
+  const [pages, setPages] = useState<[HTMLElement[], HTMLElement[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
@@ -87,9 +90,9 @@ function ResumeRendererComponent({
       };
     }
 
-    const bannerItems = template.sections.filter((s: any) => s.type === 'banner');
-    const leftItems = template.sections.filter((s: any) => s.column === 'left' && s.type !== 'banner');
-    const rightItems = template.sections.filter((s: any) => s.column === 'right' && s.type !== 'banner');
+    const bannerItems = template.sections.filter((s: TemplateSection) => s.type === 'banner');
+    const leftItems = template.sections.filter((s: TemplateSection) => s.column === 'left' && s.type !== 'banner');
+    const rightItems = template.sections.filter((s: TemplateSection) => s.column === 'right' && s.type !== 'banner');
 
     return {
       columnConfig: template.columns,
@@ -102,13 +105,13 @@ function ResumeRendererComponent({
   const PAGE_PADDING = page.padding ?? 24;
   const PAGE_PADDING_PX = PAGE_PADDING;
   const safeBottomPaddingPx = Math.max(
-    (page as any)?.safeBottomPaddingPx ?? DEFAULT_SAFE_BOTTOM_PADDING_PX,
+    page.safeBottomPaddingPx ?? DEFAULT_SAFE_BOTTOM_PADDING_PX,
     DEFAULT_SAFE_BOTTOM_PADDING_PX,
   );
 
   const leftWidth = columnConfig.left.width;
   const rightWidth = columnConfig.right.width;
-  const spacing = columnConfig.spacing;
+  const spacing = String(columnConfig.spacing ?? '0px');
   const leftColumnClassName = columnConfig.left.className || '';
   const rightColumnClassName = columnConfig.right.className || '';
 
@@ -136,7 +139,7 @@ function ResumeRendererComponent({
     if (isThumbnail) {
       const leftNodes = leftCol ? Array.from(leftCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
       const rightNodes = rightCol ? Array.from(rightCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
-      setPages([[leftNodes as any, rightNodes as any]]);
+      setPages([[leftNodes, rightNodes]]);
       return;
     }
 
@@ -397,9 +400,9 @@ function ResumeRendererComponent({
     const rightPages = rightCol ? paginateOneColumn(rightCol, 'right') : [];
 
     const totalPages = Math.max(leftPages.length, rightPages.length);
-    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+    const merged: [HTMLElement[], HTMLElement[]][] = [];
     for (let i = 0; i < totalPages; i++) {
-      merged.push([(leftPages[i] || []) as any, (rightPages[i] || []) as any]);
+      merged.push([leftPages[i] || [], rightPages[i] || []]);
     }
 
     setPages(merged);
@@ -438,7 +441,7 @@ function ResumeRendererComponent({
       >
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
-            {bannerItems.map((s: any, i: number) => (
+            {bannerItems.map((s: TemplateSection, i: number) => (
               <React.Fragment key={i}>
                 {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
               </React.Fragment>
@@ -446,10 +449,10 @@ function ResumeRendererComponent({
           </div>
         )}
         <div className={cn('flex flex-col', leftColumnClassName)} data-column="left">
-          {leftItems.map((s: any, i: number) => {
+          {leftItems.map((s: TemplateSection, i: number) => {
             const hasNextSection =
               i < leftItems.length - 1 &&
-              leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+              leftItems.slice(i + 1).some((nextSection: TemplateSection) => willSectionRender(nextSection, data));
             return (
               <React.Fragment key={i}>
                 {renderSection(
@@ -466,10 +469,10 @@ function ResumeRendererComponent({
           })}
         </div>
         <div className={cn('flex flex-col', rightColumnClassName)} data-column="right">
-          {rightItems.map((s: any, i: number) => {
+          {rightItems.map((s: TemplateSection, i: number) => {
             const hasNextSection =
               i < rightItems.length - 1 &&
-              rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
+              rightItems.slice(i + 1).some((nextSection: TemplateSection) => willSectionRender(nextSection, data));
             return (
               <React.Fragment key={i}>
                 {renderSection(
@@ -513,7 +516,7 @@ function ResumeRendererComponent({
                   marginTop: `-${PAGE_PADDING}px`,
                 }}
               >
-                {bannerItems.map((s: any, i: number) => (
+                {bannerItems.map((s: TemplateSection, i: number) => (
                   <React.Fragment key={i}>
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
@@ -526,7 +529,7 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {(leftColumn as any[]).map((node: any, i) => (
+              {(leftColumn as HTMLElement[]).map((node: HTMLElement, i: number) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
                   key={`${index}-left-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
@@ -542,7 +545,7 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {(rightColumn as any[]).map((node: any, i) => (
+              {(rightColumn as HTMLElement[]).map((node: HTMLElement, i: number) => (
                 // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
                   key={`${index}-right-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}

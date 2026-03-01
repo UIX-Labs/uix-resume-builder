@@ -1,7 +1,7 @@
 import type { SuggestedUpdates } from '@entities/resume';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
-import { isHtml } from '@shared/lib/markdown';
+import { isHtml, normalizeMarkdownContent } from '@shared/lib/markdown';
 import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
@@ -426,7 +426,7 @@ export function renderField(
       <div
         className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
-        dangerouslySetInnerHTML={{ __html: value }}
+        dangerouslySetInnerHTML={{ __html: normalizeMarkdownContent(value) }}
         data-canbreak={field.break !== false ? 'true' : undefined}
         data-has-breakable-content={field.break !== false ? 'true' : undefined}
         data-suggestion={suggestionData}

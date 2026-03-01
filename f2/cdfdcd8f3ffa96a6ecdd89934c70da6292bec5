@@ -1,0 +1,23 @@
+src/app/globals.css
+  8b22137f49033a5d 553-583
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "f2cdfdcd8f3ffa96a6ecdd89934c70da6292bec5",
+  "prompts": {
+    "8b22137f49033a5d": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "387678",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 31,
+      "total_deletions": 0,
+      "accepted_lines": 31,
+      "overriden_lines": 0
+    }
+  }
+}

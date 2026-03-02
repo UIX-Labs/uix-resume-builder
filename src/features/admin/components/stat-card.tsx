@@ -24,11 +24,7 @@ export function StatCard({ label, total, daily, weekly, icon }: StatCardProps) {
         >
           {daily > 0 ? `+${daily}` : daily} today
         </span>
-        {weekly !== undefined && (
-          <span className="text-xs text-gray-400">
-            {weekly} this week
-          </span>
-        )}
+        {weekly !== undefined && <span className="text-xs text-gray-400">{weekly} this week</span>}
       </div>
     </div>
   );

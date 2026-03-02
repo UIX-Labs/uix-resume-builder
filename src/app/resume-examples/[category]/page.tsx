@@ -1,24 +1,16 @@
-import {
-  RESUME_EXAMPLE_CATEGORIES,
-  type ResumeExampleCategoryData,
-} from '@/data/resume-example-categories';
+import { RESUME_EXAMPLE_CATEGORIES, type ResumeExampleCategoryData } from '@/data/resume-example-categories';
 import { ResumeExamplesGallery } from '@widgets/resume-examples/ui/resume-examples-gallery';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
-const DOMAIN_URL =
-  process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
+const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 export async function generateStaticParams() {
   return RESUME_EXAMPLE_CATEGORIES.map((cat) => ({ category: cat.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const { category } = await params;
   const cat = RESUME_EXAMPLE_CATEGORIES.find((c) => c.slug === category);
   if (!cat) return { title: 'Not Found' };
@@ -46,11 +38,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
-  params,
-}: {
-  params: Promise<{ category: string }>;
-}) {
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
   const cat = RESUME_EXAMPLE_CATEGORIES.find((c) => c.slug === category);
 

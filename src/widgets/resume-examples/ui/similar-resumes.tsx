@@ -13,16 +13,10 @@ export function SimilarResumes({ examples, onSelect }: SimilarResumesProps) {
 
   return (
     <div className="mt-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
-        Similar Resumes
-      </h3>
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">Similar Resumes</h3>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {examples.map((example) => (
-          <ExampleCard
-            key={example.id}
-            example={example}
-            onClick={() => onSelect(example)}
-          />
+          <ExampleCard key={example.id} example={example} onClick={() => onSelect(example)} />
         ))}
       </div>
     </div>

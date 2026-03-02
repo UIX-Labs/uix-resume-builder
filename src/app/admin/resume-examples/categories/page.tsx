@@ -55,7 +55,12 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async () => {
     const payload = {
       ...form,
-      metaKeywords: form.metaKeywords ? form.metaKeywords.split(',').map((k) => k.trim()).filter(Boolean) : [],
+      metaKeywords: form.metaKeywords
+        ? form.metaKeywords
+            .split(',')
+            .map((k) => k.trim())
+            .filter(Boolean)
+        : [],
       rank: Number(form.rank) || 0,
     };
     if (editingId) {
@@ -96,16 +101,10 @@ export default function AdminCategoriesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button
-            onClick={() => openEdit(row)}
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-          >
+          <button onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
             Edit
           </button>
-          <button
-            onClick={() => handleDelete(row.id)}
-            className="text-xs text-red-600 hover:text-red-800 font-medium"
-          >
+          <button onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
             Delete
           </button>
         </div>
@@ -143,9 +142,7 @@ export default function AdminCategoriesPage() {
       {showModal && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-semibold mb-4">
-              {editingId ? 'Edit Category' : 'Add New Category'}
-            </h3>
+            <h3 className="text-lg font-semibold mb-4">{editingId ? 'Edit Category' : 'Add New Category'}</h3>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
@@ -222,7 +219,10 @@ export default function AdminCategoriesPage() {
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => { setShowModal(false); setEditingId(null); }}
+                onClick={() => {
+                  setShowModal(false);
+                  setEditingId(null);
+                }}
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
               >
                 Cancel

@@ -67,9 +67,7 @@ export function FilterBar({ filters, onFilterChange, onReset }: FilterBarProps) 
       {/* Layout filter */}
       <select
         value={filters.layout ?? ''}
-        onChange={(e) =>
-          onFilterChange({ layout: e.target.value || undefined })
-        }
+        onChange={(e) => onFilterChange({ layout: e.target.value || undefined })}
         className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="">Layout: Any</option>

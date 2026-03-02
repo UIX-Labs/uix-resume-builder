@@ -8,7 +8,12 @@ import { useDownloads } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, DownloadRow } from '@/features/admin/types/admin.types';
 
 export default function AdminDownloadsPage() {
-  const [params, setParams] = useState<AdminQueryParams>({ page: 1, limit: 20, sortBy: 'updatedAt', sortOrder: 'DESC' });
+  const [params, setParams] = useState<AdminQueryParams>({
+    page: 1,
+    limit: 20,
+    sortBy: 'updatedAt',
+    sortOrder: 'DESC',
+  });
   const { data, isLoading } = useDownloads(params);
 
   const handleFilterChange = (newParams: Partial<AdminQueryParams>) => {
@@ -30,9 +35,7 @@ export default function AdminDownloadsPage() {
       key: 'downloadsDone',
       label: 'Downloads',
       sortable: true,
-      render: (row) => (
-        <span className="font-semibold text-gray-900">{row.downloadsDone}</span>
-      ),
+      render: (row) => <span className="font-semibold text-gray-900">{row.downloadsDone}</span>,
     },
     {
       key: 'downloadsAllowed',
@@ -66,9 +69,7 @@ export default function AdminDownloadsPage() {
   return (
     <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Downloads</h2>
-      <p className="text-sm text-gray-500 mb-6">
-        Users who have downloaded resumes
-      </p>
+      <p className="text-sm text-gray-500 mb-6">Users who have downloaded resumes</p>
 
       <FilterBar onFilterChange={handleFilterChange} />
 
@@ -80,7 +81,9 @@ export default function AdminDownloadsPage() {
         limit={params.limit}
         isLoading={isLoading}
         onPageChange={(page) => setParams((p) => ({ ...p, page }))}
-        onSort={(sortBy, sortOrder) => setParams((p) => ({ ...p, sortBy: sortBy === 'downloadsDone' ? 'downloads' : sortBy, sortOrder }))}
+        onSort={(sortBy, sortOrder) =>
+          setParams((p) => ({ ...p, sortBy: sortBy === 'downloadsDone' ? 'downloads' : sortBy, sortOrder }))
+        }
         emptyMessage="No downloads yet"
       />
     </div>

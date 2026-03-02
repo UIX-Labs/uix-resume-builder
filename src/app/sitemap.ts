@@ -79,13 +79,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const resumeExampleCategoryPages: MetadataRoute.Sitemap =
-    RESUME_EXAMPLE_CATEGORIES.map((cat) => ({
-      url: `${baseUrl}/resume-examples/${cat.slug}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.85,
-    }));
+  const resumeExampleCategoryPages: MetadataRoute.Sitemap = RESUME_EXAMPLE_CATEGORIES.map((cat) => ({
+    url: `${baseUrl}/resume-examples/${cat.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.85,
+  }));
 
   return [
     ...staticPages,

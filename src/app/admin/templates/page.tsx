@@ -51,9 +51,7 @@ export default function AdminTemplatesPage() {
           onClick={() => toggleMutation.mutate(row.id)}
           disabled={toggleMutation.isPending}
           className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
-            row.isActive
-              ? 'bg-green-50 text-green-700 hover:bg-green-100'
-              : 'bg-red-50 text-red-700 hover:bg-red-100'
+            row.isActive ? 'bg-green-50 text-green-700 hover:bg-green-100' : 'bg-red-50 text-red-700 hover:bg-red-100'
           }`}
         >
           {row.isActive ? 'Active' : 'Disabled'}

@@ -67,7 +67,7 @@ export default function AdminFeedbacksPage() {
       key: 'createdAt',
       label: 'Date',
       sortable: true,
-      render: (row) => row.createdAt ? new Date(row.createdAt).toLocaleDateString() : '—',
+      render: (row) => (row.createdAt ? new Date(row.createdAt).toLocaleDateString() : '—'),
     },
   ];
 
@@ -78,10 +78,7 @@ export default function AdminFeedbacksPage() {
         Total: <span className="font-semibold text-gray-900">{data?.total || 0}</span> users gave feedback
       </p>
 
-      <FilterBar
-        onFilterChange={handleFilterChange}
-        showRatingFilter
-      />
+      <FilterBar onFilterChange={handleFilterChange} showRatingFilter />
 
       <DataTable
         columns={columns}

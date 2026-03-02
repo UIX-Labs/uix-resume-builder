@@ -58,7 +58,23 @@ function extractTextSections(resumeData: any): Array<{
         if (
           typeof fieldValue === 'string' &&
           fieldValue.trim() &&
-          !['id', 'createdAt', 'updatedAt', 'deleted_at', 'personalDetailId', 'educationId', 'experienceId', 'projectId', 'certificationId', 'publicationId', 'interestId', 'achievementId', 'skillId', 'resumeId', 'rank'].includes(fieldName) &&
+          ![
+            'id',
+            'createdAt',
+            'updatedAt',
+            'deleted_at',
+            'personalDetailId',
+            'educationId',
+            'experienceId',
+            'projectId',
+            'certificationId',
+            'publicationId',
+            'interestId',
+            'achievementId',
+            'skillId',
+            'resumeId',
+            'rank',
+          ].includes(fieldName) &&
           !fieldName.includes('Url') &&
           !fieldName.includes('Thumbnail')
         ) {
@@ -142,16 +158,17 @@ export default function ReviewSuggestionPage() {
         formatted[s.sectionType] = { suggestedUpdates: [] };
       }
 
-      let itemEntry = formatted[s.sectionType].suggestedUpdates.find(
-        (u: any) => u.itemId === s.itemId,
-      );
+      let itemEntry = formatted[s.sectionType].suggestedUpdates.find((u: any) => u.itemId === s.itemId);
       if (!itemEntry) {
         itemEntry = { itemId: s.itemId, fields: {} };
         formatted[s.sectionType].suggestedUpdates.push(itemEntry);
       }
 
       if (!itemEntry.fields[s.fieldName]) {
-        itemEntry.fields[s.fieldName] = { suggestedUpdates: [], fieldCounts: { spelling_error: 0, sentence_refinement: 0, new_summary: 0 } };
+        itemEntry.fields[s.fieldName] = {
+          suggestedUpdates: [],
+          fieldCounts: { spelling_error: 0, sentence_refinement: 0, new_summary: 0 },
+        };
       }
 
       const update: Record<string, string> = { new: s.new, type: s.type };
@@ -186,12 +203,19 @@ export default function ReviewSuggestionPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <button onClick={() => router.back()} className="text-sm text-gray-500 hover:text-gray-700 mb-2 inline-flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          <button
+            onClick={() => router.back()}
+            className="text-sm text-gray-500 hover:text-gray-700 mb-2 inline-flex items-center gap-1"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
             Back to Reviews
           </button>
           <h2 className="text-2xl font-bold text-gray-900">Review Resume</h2>
-          <p className="text-sm text-gray-500">{data.userName} ({data.userEmail})</p>
+          <p className="text-sm text-gray-500">
+            {data.userName} ({data.userEmail})
+          </p>
         </div>
         {data.isReviewDone && (
           <span className="px-3 py-1 bg-green-50 text-green-700 rounded-full text-sm font-semibold">Completed</span>
@@ -217,16 +241,15 @@ export default function ReviewSuggestionPage() {
                       key={`${item.itemId}-${field.fieldName}-${idx}`}
                       onClick={() => handleTextClick(section.sectionType, item.itemId, field.fieldName, field.value)}
                       className={`block w-full text-left px-3 py-2 rounded-md text-sm transition-all mb-1 border ${
-                        selectedText === field.value && selectedItemId === item.itemId && selectedFieldName === field.fieldName
+                        selectedText === field.value &&
+                        selectedItemId === item.itemId &&
+                        selectedFieldName === field.fieldName
                           ? 'border-blue-400 bg-blue-50 ring-2 ring-blue-200'
                           : 'border-transparent hover:border-blue-200 hover:bg-blue-50/50'
                       }`}
                     >
                       <span className="text-[10px] font-medium text-gray-400 uppercase">{field.fieldName}</span>
-                      <div
-                        className="text-gray-800 mt-0.5"
-                        dangerouslySetInnerHTML={{ __html: field.value }}
-                      />
+                      <div className="text-gray-800 mt-0.5" dangerouslySetInnerHTML={{ __html: field.value }} />
                     </button>
                   ))}
                 </div>
@@ -294,7 +317,9 @@ export default function ReviewSuggestionPage() {
                 >
                   <option value="">Select a section...</option>
                   {textSections.map((s) => (
-                    <option key={s.sectionType} value={s.sectionType}>{s.sectionLabel}</option>
+                    <option key={s.sectionType} value={s.sectionType}>
+                      {s.sectionLabel}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -313,7 +338,9 @@ export default function ReviewSuggestionPage() {
 
             <button
               onClick={handleAddSuggestion}
-              disabled={!suggestedText.trim() || (!selectedText && suggestionType !== 'new_summary') || !selectedSection}
+              disabled={
+                !suggestedText.trim() || (!selectedText && suggestionType !== 'new_summary') || !selectedSection
+              }
               className="w-full px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Add Suggestion
@@ -323,9 +350,7 @@ export default function ReviewSuggestionPage() {
           {/* Suggestions List */}
           <div className="rounded-xl border border-gray-200 bg-white p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Suggestions ({suggestions.length})
-              </h3>
+              <h3 className="text-lg font-semibold text-gray-900">Suggestions ({suggestions.length})</h3>
             </div>
 
             {suggestions.length === 0 ? (
@@ -336,10 +361,7 @@ export default function ReviewSuggestionPage() {
                   <div key={idx} className={`rounded-lg border p-3 ${getTypeStyle(s.type)}`}>
                     <div className="flex items-start justify-between">
                       <span className="text-xs font-semibold">{getTypeLabel(s.type)}</span>
-                      <button
-                        onClick={() => handleRemoveSuggestion(idx)}
-                        className="text-gray-400 hover:text-red-500"
-                      >
+                      <button onClick={() => handleRemoveSuggestion(idx)} className="text-gray-400 hover:text-red-500">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
@@ -348,7 +370,10 @@ export default function ReviewSuggestionPage() {
                     {s.old && (
                       <div className="mt-2">
                         <span className="text-[10px] text-gray-500">Old:</span>
-                        <div className="text-xs text-gray-700 line-through" dangerouslySetInnerHTML={{ __html: s.old }} />
+                        <div
+                          className="text-xs text-gray-700 line-through"
+                          dangerouslySetInnerHTML={{ __html: s.old }}
+                        />
                       </div>
                     )}
                     <div className="mt-1">
@@ -366,7 +391,9 @@ export default function ReviewSuggestionPage() {
                 disabled={submitMutation.isPending}
                 className="w-full mt-4 px-4 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
               >
-                {submitMutation.isPending ? 'Submitting...' : `Submit ${suggestions.length} Suggestion${suggestions.length !== 1 ? 's' : ''}`}
+                {submitMutation.isPending
+                  ? 'Submitting...'
+                  : `Submit ${suggestions.length} Suggestion${suggestions.length !== 1 ? 's' : ''}`}
               </button>
             )}
           </div>

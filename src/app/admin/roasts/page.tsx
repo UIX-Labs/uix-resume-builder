@@ -20,7 +20,7 @@ export default function AdminRoastsPage() {
     {
       key: 'email',
       label: 'Email',
-      render: (row) => row.email ? <CopyButton text={row.email} /> : <span className="text-gray-400">Guest</span>,
+      render: (row) => (row.email ? <CopyButton text={row.email} /> : <span className="text-gray-400">Guest</span>),
     },
     {
       key: 'name',

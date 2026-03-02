@@ -20,19 +20,13 @@ interface ExamplePreviewModalProps {
   onSelectSimilar: (example: ResumeExampleListItem) => void;
 }
 
-export function ExamplePreviewModal({
-  exampleSlug,
-  isOpen,
-  onClose,
-  onSelectSimilar,
-}: ExamplePreviewModalProps) {
+export function ExamplePreviewModal({ exampleSlug, isOpen, onClose, onSelectSimilar }: ExamplePreviewModalProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
   const { data: detail, isLoading } = useExampleDetail(isOpen ? exampleSlug : null);
   const cloneMutation = useCloneExample();
 
-  const scale =
-    typeof window !== 'undefined' ? (window.innerWidth * 0.95) / 794 : 0.4;
+  const scale = typeof window !== 'undefined' ? (window.innerWidth * 0.95) / 794 : 0.4;
 
   const handleClone = () => {
     if (!detail) return;
@@ -60,10 +54,7 @@ export function ExamplePreviewModal({
             <X className="h-5 w-5" />
           </button>
 
-          <div
-            ref={containerRef}
-            className="overflow-y-auto bg-white rounded-2xl shadow-2xl max-h-[85vh]"
-          >
+          <div ref={containerRef} className="overflow-y-auto bg-white rounded-2xl shadow-2xl max-h-[85vh]">
             {isLoading ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
@@ -72,13 +63,7 @@ export function ExamplePreviewModal({
               <div className="flex flex-col lg:flex-row">
                 {/* Resume preview */}
                 <div className="flex-1 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-gray-100">
-                  <div
-                    style={
-                      isMobile
-                        ? { zoom: scale, width: '794px' }
-                        : {}
-                    }
-                  >
+                  <div style={isMobile ? { zoom: scale, width: '794px' } : {}}>
                     <ResumeRenderer
                       template={detail.template?.json}
                       data={detail.resumeData}
@@ -91,18 +76,14 @@ export function ExamplePreviewModal({
 
                 {/* Sidebar */}
                 <div className="w-full lg:w-[340px] p-4 lg:p-6 flex flex-col">
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">
-                    {detail.title}
-                  </h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">{detail.title}</h2>
                   <div className="flex items-center gap-2 mb-4">
                     <span className="text-sm text-gray-500">{detail.role}</span>
                     {detail.experienceYears !== null && (
                       <>
                         <span className="text-gray-300">|</span>
                         <span className="text-sm text-gray-500">
-                          {detail.experienceYears === 0
-                            ? 'No experience'
-                            : `${detail.experienceYears} years exp.`}
+                          {detail.experienceYears === 0 ? 'No experience' : `${detail.experienceYears} years exp.`}
                         </span>
                       </>
                     )}
@@ -137,17 +118,12 @@ export function ExamplePreviewModal({
 
                   {/* Similar resumes */}
                   {detail.similar?.length > 0 && (
-                    <SimilarResumes
-                      examples={detail.similar}
-                      onSelect={onSelectSimilar}
-                    />
+                    <SimilarResumes examples={detail.similar} onSelect={onSelectSimilar} />
                   )}
                 </div>
               </div>
             ) : (
-              <div className="flex items-center justify-center py-20 text-gray-500">
-                Example not found
-              </div>
+              <div className="flex items-center justify-center py-20 text-gray-500">Example not found</div>
             )}
           </div>
         </DialogPrimitive.Content>

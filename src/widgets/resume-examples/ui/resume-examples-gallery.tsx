@@ -60,11 +60,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
 
         {/* Filters */}
         <div className="mt-4 mb-6">
-          <FilterBar
-            filters={filters}
-            onFilterChange={setFilters}
-            onReset={resetFilters}
-          />
+          <FilterBar filters={filters} onFilterChange={setFilters} onReset={resetFilters} />
         </div>
 
         {/* Results count */}
@@ -83,11 +79,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
           <>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 sm:gap-6">
               {data.data.map((example) => (
-                <ExampleCard
-                  key={example.id}
-                  example={example}
-                  onClick={() => handleCardClick(example)}
-                />
+                <ExampleCard key={example.id} example={example} onClick={() => handleCardClick(example)} />
               ))}
             </div>
 
@@ -96,9 +88,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
               <div className="flex items-center justify-center gap-4 mt-8">
                 <button
                   type="button"
-                  onClick={() =>
-                    setFilters({ page: Math.max(1, currentPage - 1) })
-                  }
+                  onClick={() => setFilters({ page: Math.max(1, currentPage - 1) })}
                   disabled={currentPage <= 1}
                   className="flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
@@ -110,9 +100,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
                 </span>
                 <button
                   type="button"
-                  onClick={() =>
-                    setFilters({ page: Math.min(totalPages, currentPage + 1) })
-                  }
+                  onClick={() => setFilters({ page: Math.min(totalPages, currentPage + 1) })}
                   disabled={currentPage >= totalPages}
                   className="flex items-center gap-1 px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                 >
@@ -125,9 +113,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
         ) : (
           <div className="text-center py-20">
             <p className="text-gray-500 text-lg">No resume examples found.</p>
-            <p className="text-gray-400 text-sm mt-2">
-              Try adjusting your filters or browse a different category.
-            </p>
+            <p className="text-gray-400 text-sm mt-2">Try adjusting your filters or browse a different category.</p>
             <button
               type="button"
               onClick={resetFilters}

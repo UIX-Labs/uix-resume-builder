@@ -72,8 +72,7 @@ export const RESUME_EXAMPLE_CATEGORIES: ResumeExampleCategoryData[] = [
       'Server and restaurant resume examples. Highlight your hospitality skills and customer service experience.',
     metaKeywords: ['server resume', 'restaurant resume examples', 'waitress resume'],
     heroHeading: 'Server & Restaurant Resume Examples',
-    heroDescription:
-      'Showcase your hospitality and customer service skills with these server resume examples.',
+    heroDescription: 'Showcase your hospitality and customer service skills with these server resume examples.',
   },
   {
     slug: 'nursing',
@@ -90,30 +89,25 @@ export const RESUME_EXAMPLE_CATEGORIES: ResumeExampleCategoryData[] = [
     slug: 'engineering',
     name: 'Engineering',
     metaTitle: 'Engineering Resume Examples & Templates | Pika Resume',
-    metaDescription:
-      'Engineering resume examples across all disciplines. Mechanical, electrical, civil, and more.',
+    metaDescription: 'Engineering resume examples across all disciplines. Mechanical, electrical, civil, and more.',
     metaKeywords: ['engineering resume', 'engineer resume examples', 'technical resume'],
     heroHeading: 'Engineering Resume Examples',
-    heroDescription:
-      'Browse engineering resume examples across mechanical, electrical, civil, and other disciplines.',
+    heroDescription: 'Browse engineering resume examples across mechanical, electrical, civil, and other disciplines.',
   },
   {
     slug: 'data-analyst',
     name: 'Data Analyst',
     metaTitle: 'Data Analyst Resume Examples & Templates | Pika Resume',
-    metaDescription:
-      'Data analyst resume examples showcasing technical skills, tools, and analytical experience.',
+    metaDescription: 'Data analyst resume examples showcasing technical skills, tools, and analytical experience.',
     metaKeywords: ['data analyst resume', 'analytics resume examples', 'data science resume'],
     heroHeading: 'Data Analyst Resume Examples',
-    heroDescription:
-      'Highlight your analytical skills and data expertise with these professionally crafted examples.',
+    heroDescription: 'Highlight your analytical skills and data expertise with these professionally crafted examples.',
   },
   {
     slug: 'medical-assistant',
     name: 'Medical Assistant',
     metaTitle: 'Medical Assistant Resume Examples & Templates | Pika Resume',
-    metaDescription:
-      'Medical assistant resume examples. Showcase your clinical and administrative healthcare skills.',
+    metaDescription: 'Medical assistant resume examples. Showcase your clinical and administrative healthcare skills.',
     metaKeywords: ['medical assistant resume', 'healthcare resume examples', 'clinical assistant resume'],
     heroHeading: 'Medical Assistant Resume Examples',
     heroDescription:
@@ -123,8 +117,7 @@ export const RESUME_EXAMPLE_CATEGORIES: ResumeExampleCategoryData[] = [
     slug: 'sales',
     name: 'Sales',
     metaTitle: 'Sales Resume Examples & Templates | Pika Resume',
-    metaDescription:
-      'Sales resume examples that highlight your achievements, quotas, and revenue generation skills.',
+    metaDescription: 'Sales resume examples that highlight your achievements, quotas, and revenue generation skills.',
     metaKeywords: ['sales resume', 'sales representative resume', 'account executive resume'],
     heroHeading: 'Sales Resume Examples',
     heroDescription:

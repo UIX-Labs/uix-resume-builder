@@ -30,12 +30,7 @@ export default function AdminOverviewPage() {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <StatCard
-          label="Total Users"
-          total={stats.users.total}
-          daily={stats.users.daily}
-          weekly={stats.users.weekly}
-        />
+        <StatCard label="Total Users" total={stats.users.total} daily={stats.users.daily} weekly={stats.users.weekly} />
         <StatCard
           label="Downloads"
           total={stats.downloads.total}
@@ -54,12 +49,7 @@ export default function AdminOverviewPage() {
           daily={stats.feedbacks.daily}
           weekly={stats.feedbacks.weekly}
         />
-        <StatCard
-          label="Roasts"
-          total={stats.roasts.total}
-          daily={stats.roasts.daily}
-          weekly={stats.roasts.weekly}
-        />
+        <StatCard label="Roasts" total={stats.roasts.total} daily={stats.roasts.daily} weekly={stats.roasts.weekly} />
       </div>
 
       {/* Review breakdown */}
@@ -75,9 +65,7 @@ export default function AdminOverviewPage() {
         <div className="rounded-xl border border-gray-200 bg-white p-5">
           <div className="text-sm text-gray-500">Review Completion Rate</div>
           <div className="text-2xl font-bold text-blue-600 mt-1">
-            {stats.reviews.total > 0
-              ? `${Math.round((stats.reviews.completed / stats.reviews.total) * 100)}%`
-              : '—'}
+            {stats.reviews.total > 0 ? `${Math.round((stats.reviews.completed / stats.reviews.total) * 100)}%` : '—'}
           </div>
         </div>
       </div>

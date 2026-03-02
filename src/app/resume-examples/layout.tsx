@@ -35,11 +35,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ResumeExamplesLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function ResumeExamplesLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Script
@@ -51,8 +47,7 @@ export default function ResumeExamplesLayout({
             '@context': 'https://schema.org',
             '@type': 'CollectionPage',
             name: 'Resume Examples',
-            description:
-              'Browse professional resume examples for every industry and experience level.',
+            description: 'Browse professional resume examples for every industry and experience level.',
             url: `${DOMAIN_URL}/resume-examples`,
             provider: {
               '@type': 'Organization',

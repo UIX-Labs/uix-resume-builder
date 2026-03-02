@@ -45,7 +45,8 @@ export function ResumeExamplesSection() {
             Resume Examples
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Browse professional resume examples for every industry and experience level. Get inspired and start building yours.
+            Browse professional resume examples for every industry and experience level. Get inspired and start building
+            yours.
           </p>
         </motion.div>
 
@@ -69,9 +70,7 @@ export function ResumeExamplesSection() {
                 <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors duration-300">
                   {cat.name}
                 </h3>
-                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">
-                  {cat.heroDescription.split('.')[0]}.
-                </p>
+                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">{cat.heroDescription.split('.')[0]}.</p>
                 <div className="mt-3 flex items-center gap-1 text-xs font-medium text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <span>Browse examples</span>
                   <ArrowRight className="w-3 h-3" />

@@ -79,11 +79,7 @@ export function DataTable<T extends Record<string, any>>({
                     {col.label}
                     {col.sortable && sortKey === col.key && (
                       <svg className="w-3 h-3" viewBox="0 0 12 12" fill="currentColor">
-                        {sortOrder === 'ASC' ? (
-                          <path d="M6 2l4 5H2z" />
-                        ) : (
-                          <path d="M6 10l4-5H2z" />
-                        )}
+                        {sortOrder === 'ASC' ? <path d="M6 2l4 5H2z" /> : <path d="M6 10l4-5H2z" />}
                       </svg>
                     )}
                   </span>
@@ -145,9 +141,7 @@ export function DataTable<T extends Record<string, any>>({
                   key={pageNum}
                   onClick={() => onPageChange?.(pageNum)}
                   className={`px-3 py-1 rounded-md text-sm border transition-colors ${
-                    pageNum === page
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'border-gray-300 hover:bg-gray-100'
+                    pageNum === page ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-300 hover:bg-gray-100'
                   }`}
                 >
                   {pageNum}

@@ -13,9 +13,7 @@ export function useExampleFilters(initialCategory?: string) {
     () => ({
       category: initialCategory || searchParams.get('category') || undefined,
       role: searchParams.get('role') || undefined,
-      experienceYears: searchParams.get('experienceYears')
-        ? Number(searchParams.get('experienceYears'))
-        : undefined,
+      experienceYears: searchParams.get('experienceYears') ? Number(searchParams.get('experienceYears')) : undefined,
       primaryColor: searchParams.get('color') || undefined,
       layout: searchParams.get('layout') || undefined,
       page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,

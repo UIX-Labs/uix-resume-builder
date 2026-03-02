@@ -189,16 +189,10 @@ export default function AdminResumeExamplesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button
-            onClick={() => openEdit(row)}
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-          >
+          <button onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
             Edit
           </button>
-          <button
-            onClick={() => handleDelete(row.id)}
-            className="text-xs text-red-600 hover:text-red-800 font-medium"
-          >
+          <button onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
             Delete
           </button>
         </div>
@@ -277,7 +271,9 @@ export default function AdminResumeExamplesPage() {
                 >
                   <option value="">Select category...</option>
                   {categories?.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -290,7 +286,9 @@ export default function AdminResumeExamplesPage() {
                 >
                   <option value="">Select template...</option>
                   {templates?.map((t) => (
-                    <option key={t.id} value={t.id}>{t.id.slice(0, 8)}... (Rank: {t.rank})</option>
+                    <option key={t.id} value={t.id}>
+                      {t.id.slice(0, 8)}... (Rank: {t.rank})
+                    </option>
                   ))}
                 </select>
               </div>
@@ -377,7 +375,9 @@ export default function AdminResumeExamplesPage() {
                   className="rounded border-gray-300"
                   id="isPublished"
                 />
-                <label htmlFor="isPublished" className="text-sm text-gray-700">Published</label>
+                <label htmlFor="isPublished" className="text-sm text-gray-700">
+                  Published
+                </label>
               </div>
               <div className="col-span-full">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Resume Data (JSON) *</label>
@@ -391,7 +391,10 @@ export default function AdminResumeExamplesPage() {
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
-                onClick={() => { setShowModal(false); setEditingId(null); }}
+                onClick={() => {
+                  setShowModal(false);
+                  setEditingId(null);
+                }}
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
               >
                 Cancel

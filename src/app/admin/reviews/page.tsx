@@ -35,9 +35,7 @@ export default function AdminReviewsPage() {
       render: (row) => (
         <span
           className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-            row.isReviewDone
-              ? 'bg-green-50 text-green-700'
-              : 'bg-orange-50 text-orange-700'
+            row.isReviewDone ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700'
           }`}
         >
           {row.isReviewDone ? 'Completed' : 'Pending'}
@@ -71,15 +69,18 @@ export default function AdminReviewsPage() {
     <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Resume Reviews</h2>
       <div className="flex gap-4 text-sm text-gray-500 mb-6">
-        <span>Total: <span className="font-semibold text-gray-900">{data?.total || 0}</span></span>
-        <span>Pending: <span className="font-semibold text-orange-600">{pending}</span></span>
-        <span>Completed: <span className="font-semibold text-green-600">{completed}</span></span>
+        <span>
+          Total: <span className="font-semibold text-gray-900">{data?.total || 0}</span>
+        </span>
+        <span>
+          Pending: <span className="font-semibold text-orange-600">{pending}</span>
+        </span>
+        <span>
+          Completed: <span className="font-semibold text-green-600">{completed}</span>
+        </span>
       </div>
 
-      <FilterBar
-        onFilterChange={handleFilterChange}
-        showStatusFilter
-      />
+      <FilterBar onFilterChange={handleFilterChange} showStatusFilter />
 
       <DataTable
         columns={columns}

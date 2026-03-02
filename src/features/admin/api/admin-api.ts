@@ -31,12 +31,10 @@ function buildQueryString(params: AdminQueryParams): string {
 }
 
 // ─── Overview ──────────────────────────────────────────────────
-export const getOverviewStats = () =>
-  fetcher<OverviewStats>('admin/overview');
+export const getOverviewStats = () => fetcher<OverviewStats>('admin/overview');
 
 // ─── Templates ─────────────────────────────────────────────────
-export const getAdminTemplates = () =>
-  fetcher<AdminTemplate[]>('admin/templates');
+export const getAdminTemplates = () => fetcher<AdminTemplate[]>('admin/templates');
 
 export const toggleTemplate = (id: string) =>
   fetcher<AdminTemplate>(`admin/templates/${id}/toggle`, {
@@ -61,11 +59,9 @@ export const getFeedbacks = (params: AdminQueryParams = {}) =>
 export const getReviews = (params: AdminQueryParams = {}) =>
   fetcher<PaginatedResponse<ReviewRow>>(`admin/reviews${buildQueryString(params)}`);
 
-export const getResumeForReview = (resumeId: string) =>
-  fetcher<ResumeForReview>(`admin/reviews/${resumeId}`);
+export const getResumeForReview = (resumeId: string) => fetcher<ResumeForReview>(`admin/reviews/${resumeId}`);
 
-export const getReviewSuggestions = (resumeId: string) =>
-  fetcher<any>(`admin/reviews/${resumeId}/suggestions`);
+export const getReviewSuggestions = (resumeId: string) => fetcher<any>(`admin/reviews/${resumeId}/suggestions`);
 
 export const submitReviewSuggestions = (resumeId: string, suggestions: Record<string, any>) =>
   fetcher<any>(`admin/reviews/${resumeId}/suggestions`, {
@@ -111,8 +107,7 @@ export const deleteResumeExampleCategory = (id: string) =>
 export const getResumeExamples = (params: AdminQueryParams = {}) =>
   fetcher<PaginatedResponse<AdminResumeExample>>(`admin/resume-examples${buildQueryString(params)}`);
 
-export const getResumeExampleById = (id: string) =>
-  fetcher<AdminResumeExampleDetail>(`admin/resume-examples/${id}`);
+export const getResumeExampleById = (id: string) => fetcher<AdminResumeExampleDetail>(`admin/resume-examples/${id}`);
 
 export const createResumeExample = (data: Partial<AdminResumeExampleDetail>) =>
   fetcher<AdminResumeExampleDetail>('admin/resume-examples', {

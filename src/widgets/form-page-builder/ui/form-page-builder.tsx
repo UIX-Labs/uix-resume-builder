@@ -720,10 +720,7 @@ export function FormPageBuilder() {
         let hasMerged = false;
 
         for (const [sectionKey, sectionSuggestions] of Object.entries(data.suggestions)) {
-          if (
-            sectionKey in updatedData &&
-            (sectionSuggestions as any)?.suggestedUpdates?.length
-          ) {
+          if (sectionKey in updatedData && (sectionSuggestions as any)?.suggestedUpdates?.length) {
             const existing = (updatedData as any)[sectionKey]?.suggestedUpdates || [];
             (updatedData as any)[sectionKey] = {
               ...(updatedData as any)[sectionKey],

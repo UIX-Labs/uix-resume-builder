@@ -22,11 +22,7 @@ export function ExampleCard({ example, onClick }: ExampleCardProps) {
         {/* Thumbnail */}
         <div className="relative w-full aspect-[3/4] bg-gray-50">
           {example.publicThumbnail?.url ? (
-            <img
-              src={example.publicThumbnail.url}
-              alt={example.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={example.publicThumbnail.url} alt={example.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center p-4">
@@ -34,9 +30,7 @@ export function ExampleCard({ example, onClick }: ExampleCardProps) {
                   className="w-16 h-16 mx-auto mb-3 rounded-full flex items-center justify-center"
                   style={{ backgroundColor: example.primaryColor || '#2563EB' }}
                 >
-                  <span className="text-white text-xl font-bold">
-                    {example.title.charAt(0)}
-                  </span>
+                  <span className="text-white text-xl font-bold">{example.title.charAt(0)}</span>
                 </div>
                 <p className="text-sm text-gray-500 line-clamp-2">{example.title}</p>
               </div>
@@ -54,9 +48,7 @@ export function ExampleCard({ example, onClick }: ExampleCardProps) {
 
         {/* Info */}
         <div className="p-3">
-          <h3 className="text-sm font-medium text-gray-900 line-clamp-1">
-            {example.title}
-          </h3>
+          <h3 className="text-sm font-medium text-gray-900 line-clamp-1">{example.title}</h3>
           <div className="flex items-center gap-2 mt-1.5">
             <span className="text-xs text-gray-500">{example.role}</span>
             {example.experienceYears !== null && (

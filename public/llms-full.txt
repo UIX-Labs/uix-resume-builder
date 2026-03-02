@@ -1,0 +1,111 @@
+# Pika Resume - Full Documentation
+
+> Pika Resume (https://pikaresume.com) is a free AI-powered resume builder that helps job seekers create professional, ATS-optimized resumes in minutes.
+
+## Product Overview
+
+Pika Resume combines AI content generation with professional resume templates to help users build job-ready resumes. The platform supports multiple resume creation flows and offers both AI-powered and human expert feedback.
+
+## Features in Detail
+
+### 1. AI Resume Builder (Free)
+Create a resume from scratch using AI assistance.
+- Smart content suggestions for each resume section
+- AI-generated bullet points with strong action verbs and quantified achievements
+- Section-by-section guidance: Personal Details, Professional Summary, Work Experience, Education, Skills, Projects, Certifications, Achievements
+- Real-time preview as you build
+- URL: https://pikaresume.com/dashboard?action=from_scratch
+
+### 2. LinkedIn Profile Import (Free)
+Import your LinkedIn profile to instantly populate your resume.
+- One-click import from LinkedIn
+- Automatic mapping of experience, education, and skills
+- AI enhancement of imported content
+- URL: https://pikaresume.com/dashboard
+
+### 3. Upload and Enhance Existing Resume (Free)
+Upload a PDF of your current resume and get an AI-enhanced version.
+- PDF parsing with intelligent field extraction
+- AI improves wording, structure, and formatting
+- Preserves your original content while making it stronger
+- Supports files up to 10 MB
+- URL: https://pikaresume.com/dashboard?action=upload
+
+### 4. Job Description Matching (Free)
+Tailor your resume to match a specific job posting.
+- Paste any job description URL or text
+- AI analyzes the role requirements
+- Resume content is automatically adjusted to highlight relevant experience and skills
+- Keyword optimization for ATS compatibility
+- URL: https://pikaresume.com/dashboard?action=tailored_jd
+
+### 5. ATS-Optimized Resume Templates (Free)
+Professional templates designed to pass Applicant Tracking Systems.
+- Multiple modern, clean designs
+- All templates are ATS-tested and recruiter-approved
+- Customizable colors and layouts
+- PDF export with proper formatting
+- URL: https://pikaresume.com/templates
+
+### 6. AI Resume Roast (Free)
+Get brutally honest AI feedback on your resume.
+- Upload your resume PDF
+- Receive detailed, humorous but actionable feedback
+- Identifies weak bullet points, missing metrics, formatting issues
+- Provides specific improvement suggestions
+- URL: https://pikaresume.com/roast
+
+### 7. Expert Resume Review (Paid)
+Get a manual, line-by-line review from industry professionals.
+- Reviewers from Google, Microsoft, TikTok, Uber, Zepto, and 20+ top companies
+- Every bullet point reviewed for clarity, impact, and relevance
+- ATS compatibility verification
+- Specific rewrite suggestions you can apply immediately
+- Feedback personalized to your career level and target roles
+- Delivered to your inbox within 3 business days
+- URL: https://pikaresume.com/expert-review
+
+## Target Audience
+
+- **Freshers and Students**: First-time resume creators entering the job market
+- **Experienced Professionals**: Updating resumes for career growth or new opportunities
+- **Career Changers**: Repositioning experience for a different industry or role
+- **Job Seekers**: Anyone actively applying who wants to maximize interview callbacks
+- **International Professionals**: Creating resumes that meet global standards
+
+## Technology
+
+- Built with Next.js, React, and TypeScript
+- AI powered by advanced language models for content generation
+- Cloud-based with instant access from any browser
+- Mobile-responsive for on-the-go editing
+
+## Blog Topics
+
+The Pika Resume blog covers:
+- Resume writing tips and best practices
+- ATS optimization strategies
+- Career change advice
+- Interview preparation
+- Job search strategies
+- AI tools for job seekers
+- Industry-specific resume guidance
+- Blog URL: https://pikaresume.com/blog
+
+## Differentiators
+
+1. **Truly Free**: Core features are free with generous download limits
+2. **Multiple Creation Paths**: Build from scratch, import LinkedIn, upload existing, or match to job description
+3. **AI + Human Review**: Both AI-powered instant feedback and expert human review available
+4. **ATS-First Design**: Every template and suggestion is optimized for ATS compatibility
+5. **Speed**: Create a professional resume in under 5 minutes
+6. **Expert Network**: Reviews by professionals from Google, Microsoft, TikTok, and 20+ top companies
+
+## Contact and Social
+
+- Website: https://pikaresume.com
+- Company: UIX Labs (https://uixlabs.co)
+
+## Sitemap
+
+https://pikaresume.com/sitemap.xml

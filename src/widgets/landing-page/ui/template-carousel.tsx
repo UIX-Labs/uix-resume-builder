@@ -3,23 +3,23 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { useMutation } from '@tanstack/react-query';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useMutation } from '@tanstack/react-query';
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { MobileTextView } from './mobile-text-view';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -110,6 +110,7 @@ export function TemplateCarousel() {
 
   const { data: templates } = useGetAllTemplates();
 
+  // Limit templates to 3 on mobile, show all on desktop
   const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
 
   return (
@@ -136,21 +137,20 @@ export function TemplateCarousel() {
             </div>
 
             {/* Desktop button - hidden on mobile */}
-            <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-              <Button
-                variant="default"
-                size="lg"
-                onClick={() => {
-                  trackEvent('navigation_click', {
-                    source: 'landing_carousel',
-                    destination: 'all_templates',
-                  });
-                }}
-                className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto"
-              >
-                Check All Templates
-              </Button>
-            </TemplatesDialog>
+            <Button
+              variant="default"
+              size="lg"
+              onClick={() => {
+                router.push('/templates');
+                trackEvent('navigation_click', {
+                  source: 'landing_carousel',
+                  destination: 'all_templates',
+                });
+              }}
+              className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto cursor-pointer"
+            >
+              Check All Templates
+            </Button>
           </div>
         </div>
 
@@ -262,42 +262,39 @@ export function TemplateCarousel() {
           {/* Pagination dots */}
           <div className="flex justify-center lg:justify-end lg:pr-[440px] pb-4 lg:pb-[29px]">
             <div className="flex items-center gap-3">
-              {displayTemplates?.map((template, index) => {
-                return (
-                  <button
-                    type="button"
-                    key={template.id}
-                    onClick={() => scrollTo(index)}
-                    className={cn(
-                      'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',
-                      index === selectedIndex
-                        ? 'scale-110 bg-white/60 border-white/60 shadow-lg'
-                        : 'bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70',
-                    )}
-                  />
-                );
-              })}
+              {displayTemplates?.map((_, index) => (
+                <button
+                  type="button"
+                  key={index}
+                  onClick={() => scrollTo(index)}
+                  className={cn(
+                    'h-2.5 w-2.5 md:h-3 md:w-3 rounded-full transition-all duration-300 ease-in-out lg:-rotate-45 backdrop-blur-md border-t border-b',
+                    index === selectedIndex
+                      ? 'scale-110 bg-white/60 border-white/60 shadow-lg'
+                      : 'bg-white/10 hover:bg-white/50 hover:scale-105 border-white/70',
+                  )}
+                />
+              ))}
             </div>
           </div>
         </div>
 
         {/* Mobile button at bottom - visible only on mobile */}
         <div className="lg:hidden px-6 pb-6">
-          <TemplatesDialog onTemplateSelect={handleTemplateSelect}>
-            <Button
-              variant="default"
-              size="lg"
-              onClick={() => {
-                trackEvent('navigation_click', {
-                  source: 'landing_carousel',
-                  destination: 'all_templates',
-                });
-              }}
-              className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 py-3 h-[52px] text-[20px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full"
-            >
-              Check All Templates
-            </Button>
-          </TemplatesDialog>
+          <Button
+            variant="default"
+            size="lg"
+            onClick={() => {
+              router.push('/templates');
+              trackEvent('navigation_click', {
+                source: 'landing_carousel',
+                destination: 'all_templates',
+              });
+            }}
+            className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 py-3 h-[52px] text-[20px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full cursor-pointer"
+          >
+            Check All Templates
+          </Button>
         </div>
       </div>
 

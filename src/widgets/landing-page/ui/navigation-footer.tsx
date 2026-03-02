@@ -60,9 +60,12 @@ const FooterNavigation = () => {
   const leftColumnLinks: NavigationLink[] = [
     { label: 'About Us', href: '/about-us' },
     { label: 'Check Templates', isTemplateDialog: true },
+    { label: 'Blog', href: '/blog' },
   ];
 
   const rightColumnLinks: NavigationLink[] = [
+    { label: 'Resume Roast', href: '/roast' },
+    { label: 'Expert Review', href: '/expert-review' },
     { label: 'Reviews', isTestimonialsModal: true },
     { label: 'Terms of Service', href: 'https://uixlabs.co/' },
   ];

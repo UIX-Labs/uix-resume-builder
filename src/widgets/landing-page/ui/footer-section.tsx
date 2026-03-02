@@ -1,10 +1,10 @@
 'use client';
 
-import { Button } from '@/shared/ui/components/button';
 import { motion } from 'framer-motion';
+import { Button } from '@/shared/ui/components/button';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import FooterNavigation from './navigation-footer';
+import { useRouter } from 'next/navigation';
 
 const FooterSection = () => {
   const router = useRouter();
@@ -17,13 +17,7 @@ const FooterSection = () => {
       id: 'colors',
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
-          <Image
-            src="/images/color-palete.svg"
-            alt="Hired at Meta"
-            className="w-full h-auto"
-            width={160}
-            height={120}
-          />
+          <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
       desktopPosition: { top: '-1%', left: '2%' },

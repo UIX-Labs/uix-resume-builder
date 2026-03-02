@@ -1,8 +1,10 @@
 import { AiFeaturesSection } from './ai-features-section';
 import FooterSection from './footer-section';
+import { PaidToolsSection } from './free-tools-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
-import JDSection from './jd-section';
+import { HowItWorksSection } from './how-it-works-section';
+import { ReferralBanner } from './referral-banner';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import { TopAnnouncementStrip } from './top-announcement-strip';
@@ -25,17 +27,18 @@ export function LandingPage() {
         <HeroSection />
       </div>
 
+      <HowItWorksSection />
+
       <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />
         <Testimonials />
-        <JDSection />
       </div>
 
-      {/* <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
-        <AITailorSection />
-      </div> */}
+      <PaidToolsSection />
+
+      <ReferralBanner />
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"

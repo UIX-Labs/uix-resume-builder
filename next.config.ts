@@ -1,4 +1,4 @@
-import { withSentryConfig } from '@sentry/nextjs';
+import {withSentryConfig} from '@sentry/nextjs';
 import type { NextConfig } from "next";
 const { NEXT_PUBLIC_BACKEND_URL, NEXT_PUBLIC_GOOGLE_CLIENT_ID } = process.env;
 const nextConfig: NextConfig = {
@@ -20,11 +20,21 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'uix-resume-builder.s3.ap-south-1.amazonaws.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/get-all-resumes',
+        destination: '/templates',
+        permanent: true,
+      },
+      {
+        source: '/resumes',
+        destination: '/my-resumes',
+        permanent: true,
+      },
+    ];
   },
   output: 'standalone',
 };

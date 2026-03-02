@@ -22,7 +22,7 @@ export const expertCardPositionClasses = [
   'absolute top-[290px] -right-5 z-10',
 ] as const;
 
-export function ExpertCard({ name, company, image }: Expert) {
+export function ExpertCard({ name, company, logo, image }: Expert) {
   return (
     <div className="flex items-center justify-center shadow-xl overflow-hidden border border-white/40 w-[275px] h-[224px] rounded-tr-[36px] rounded-bl-[36px] origin-top-left [transform:scale(var(--expert-card-scale,1))]">
       <div

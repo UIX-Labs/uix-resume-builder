@@ -7,10 +7,11 @@ const PUBLIC_ROUTES = [
   '/auth/linkedin/callback',
   '/about-us',
   '/roast',
+  '/expert-review',
   '/dashboard',
   '/resume',
-  '/resumes',
-  '/get-all-resumes',
+  '/my-resumes',
+  '/templates',
   '/blog',
   '/upload-resume',
 ];

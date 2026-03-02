@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { HomeIcon } from 'lucide-react';
 import { Button } from '@shared/ui';
-import type { User } from '@shared/hooks/use-user';
+import { type User } from '@shared/hooks/use-user';
 
 interface DashboardHeaderProps {
   user?: User | null;

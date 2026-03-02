@@ -1,8 +1,7 @@
-import { cn } from '@shared/lib/cn';
 import type React from 'react';
-import { renderDivider } from '../components/Divider';
-import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
+import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
 export function renderListSection(
   section: any,
@@ -98,7 +97,7 @@ export function renderListSection(
           if (section.break && idx === 0) {
             return (
               <div
-                key={sectionKey}
+                key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
                 data-canbreak={isItemBreakable ? 'true' : undefined}

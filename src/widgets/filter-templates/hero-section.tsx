@@ -15,7 +15,10 @@ export default function HeroSection() {
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
 
-  const releaseOptions = useCallback(() => {}, []);
+  const releaseOptions = useCallback(() => {
+    setShowJDUpload(false);
+    setIsBuilderIntelligenceModalOpen(false);
+  }, []);
 
   const { isJDModalOpen, handleJDModal, handleJDSubmittingChange } = useJDModal({
     onRelease: releaseOptions,
@@ -63,11 +66,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-     
-      <LinkedInModal
-        isOpen={isLinkedInModalOpen}
-        onClose={() => setIsLinkedInModalOpen(false)}
-      />
+      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
 
       {isBuilderIntelligenceModalOpen && (
         <BuilderIntelligenceModal

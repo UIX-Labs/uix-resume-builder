@@ -150,7 +150,7 @@ const total = data?.total ?? templates.length;
         isVisible={showProgressBar}
         estimatedTime={30000}
         targetProgress={95}
-        onComplete={() => {}}
+      
       />
 
       <NewProgressBar

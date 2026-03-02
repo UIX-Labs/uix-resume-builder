@@ -37,7 +37,9 @@ export function TemplateCardFilter({
               key={role}
               className="bg-white/80 backdrop-blur-sm text-xs text-gray-500 px-2 py-0.5 rounded-full border border-gray-200"
             >
-              {role}
+              {role
+                .replace(/_/g, ' ')
+                .replace(/\b\w/g, (c) => c.toUpperCase())}
             </span>
           ))}
         </div>

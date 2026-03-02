@@ -22,7 +22,27 @@ export const expertCardPositionClasses = [
   'absolute top-[290px] -right-5 z-10',
 ] as const;
 
-export function ExpertCard({ name, company, logo, image }: Expert) {
+interface ExpertCardProps extends Expert {
+  variant?: 'default' | 'light';
+}
+
+export function ExpertCard({ name, company, logo: _logo, image, variant = 'default' }: ExpertCardProps) {
+  if (variant === 'light') {
+    return (
+      <div className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 border border-gray-100">
+        <div className="relative w-14 h-14 shrink-0 overflow-hidden rounded-lg">
+          <Image src={image} alt={name} fill className="object-cover" />
+        </div>
+        <div className="flex flex-col min-w-0">
+          <span className="font-bold text-neutral-900 text-lg">{name}</span>
+          <p className="text-sm text-gray-600">
+            Get expert resume review by professional from <span className="font-semibold text-neutral-900">{company}</span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center shadow-xl overflow-hidden border border-white/40 w-[275px] h-[224px] rounded-tr-[36px] rounded-bl-[36px] origin-top-left [transform:scale(var(--expert-card-scale,1))]">
       <div

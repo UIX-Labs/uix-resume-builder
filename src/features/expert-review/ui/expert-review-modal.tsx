@@ -21,9 +21,10 @@ enum ExpertReviewStep {
 interface ExpertReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: (fileName: string) => void;
 }
 
-export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
+export function ExpertReviewModal({ isOpen, onClose, onSuccess }: ExpertReviewModalProps) {
   const [step, setStep] = useState<ExpertReviewStep>(ExpertReviewStep.UPLOAD);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fileName, setFileName] = useState('');
@@ -87,6 +88,7 @@ export function ExpertReviewModal({ isOpen, onClose }: ExpertReviewModalProps) {
       setSelectedFile(null);
 
       toast.success('Resume uploaded successfully for expert review!');
+      onSuccess?.(fileName);
 
       setTimeout(() => {
         setStep(ExpertReviewStep.SUCCESS);

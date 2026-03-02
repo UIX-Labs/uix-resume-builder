@@ -10,10 +10,9 @@ import { MobileTextView } from './mobile-text-view';
 export interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onExpertReviewClick: () => void;
 }
 
-export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSidebarProps) => {
+export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [showMobileTextView, setShowMobileTextView] = useState(false);
@@ -34,13 +33,8 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
     handleNavigation('/roast', 'navigation_click', 'roast');
   };
 
-  const handleAboutUsClick = () => {
-    handleNavigation('/about-us', 'navigation_click', 'about_us');
-  };
-
   const handleExpertReviewClick = () => {
-    onClose();
-    onExpertReviewClick();
+    handleNavigation('/expert-review', 'navigation_click', 'expert_review');
   };
 
   const handleDashboardClick = () => {
@@ -49,10 +43,6 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
 
   const handleBlogClick = () => {
     handleNavigation('/blog', 'navigation_click', 'blog');
-  };
-
-  const handleCreateResumeClick = () => {
-    handleNavigation('/dashboard', 'create_resume_click', 'dashboard');
   };
 
   const handleLogoClick = () => {
@@ -66,19 +56,14 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/',
     },
     {
+      label: 'Expert Review',
+      onClick: handleExpertReviewClick,
+      isActive: pathname === '/expert-review',
+    },
+    {
       label: 'Roast',
       onClick: handleRoastClick,
       isActive: pathname === '/roast',
-    },
-    {
-      label: 'Expert Review',
-      onClick: handleExpertReviewClick,
-      isActive: false,
-    },
-    {
-      label: 'Dashboard',
-      onClick: handleDashboardClick,
-      isActive: pathname === '/dashboard',
     },
     {
       label: 'Blogs',
@@ -86,9 +71,9 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/blog',
     },
     {
-      label: 'About Us',
-      onClick: handleAboutUsClick,
-      isActive: pathname === '/about-us',
+      label: 'Dashboard',
+      onClick: handleDashboardClick,
+      isActive: pathname === '/dashboard',
     },
   ];
 
@@ -99,11 +84,6 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
         onClose={onClose}
         navItems={navItems}
         onLogoClick={handleLogoClick}
-        ctaButton={{
-          label: 'Create My Resume',
-          onClick: handleCreateResumeClick,
-          className: 'bg-blue-900 hover:bg-blue-700 text-white',
-        }}
       />
 
       {/* Mobile Text View - Shows when user tries to access desktop-only features */}

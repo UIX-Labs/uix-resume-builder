@@ -72,7 +72,6 @@ export function FeedbackCarousel() {
         {scrollSnaps.map((_, index) => (
           <button
             type="button"
-            // biome-ignore lint/suspicious/noArrayIndexKey: Fixed rating scale
             key={index}
             className={cn(
               'size-2.5 rounded-full transition-all duration-300',

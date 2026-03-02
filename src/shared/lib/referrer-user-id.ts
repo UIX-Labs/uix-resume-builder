@@ -7,7 +7,7 @@ export function getReferrerUserId(): string | null {
 
 export function setReferrerUserId(userId: string): void {
   if (typeof window === 'undefined') return;
-  if (userId?.trim()) {
+  if (userId && userId.trim()) {
     localStorage.setItem(REFERRER_USER_ID_KEY, userId.trim());
   }
 }

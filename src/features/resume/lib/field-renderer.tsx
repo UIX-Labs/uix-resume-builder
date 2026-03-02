@@ -1,13 +1,12 @@
-import type { SuggestedUpdates } from '@entities/resume';
-import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import dayjs from 'dayjs';
 import { cn } from '@shared/lib/cn';
 import { isHtml } from '@shared/lib/markdown';
-import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
-import Image from 'next/image';
 import React from 'react';
-import { renderDivider } from './components/Divider';
+import type { SuggestedUpdates } from '@entities/resume';
+import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { resolvePath } from './resolve-path';
+import { renderDivider } from './components/Divider';
 import { getSuggestionDataAttribute } from './suggestion-utils';
 
 export function renderField(
@@ -28,13 +27,11 @@ export function renderField(
   if (field.type === 'container') {
     return (
       <div className={cn(field.className)}>
-        {field.children?.map((child: any) => {
-          return (
-            <React.Fragment key={child.id}>
-              {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {field.children?.map((child: any, idx: number) => (
+          <React.Fragment key={idx}>
+            {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
+          </React.Fragment>
+        ))}
       </div>
     );
   }
@@ -225,7 +222,7 @@ export function renderField(
     const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
-      <Image
+      <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
         alt={field.alt || 'Image'}
@@ -278,18 +275,12 @@ export function renderField(
         className={cn('flex gap-1', field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
         data-suggestion={suggestionData}
       >
-        {Array.from({ length: 5 }, (_, index) => {
-          const skillKey = `skill-dot-${index}`;
-          return (
-            <div
-              key={skillKey}
-              className={cn(
-                'w-2 h-2 rounded-full border border-black',
-                index < circleCount ? 'bg-black' : 'bg-gray-400',
-              )}
-            />
-          );
-        })}
+        {Array.from({ length: 5 }, (_, index) => (
+          <div
+            key={index}
+            className={cn('w-2 h-2 rounded-full border border-black', index < circleCount ? 'bg-black' : 'bg-gray-400')}
+          />
+        ))}
       </div>
     );
   }

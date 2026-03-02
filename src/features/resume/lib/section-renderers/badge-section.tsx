@@ -1,11 +1,11 @@
-import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import type React from 'react';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
-import { icons as LucideIcons } from 'lucide-react';
-import type React from 'react';
-import { renderDivider } from '../components/Divider';
+import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
-import { extractRenderableValue, flattenAndFilterItemsWithContext, hasPendingSuggestions } from '../section-utils';
+import { renderDivider } from '../components/Divider';
+import { hasPendingSuggestions, flattenAndFilterItemsWithContext, extractRenderableValue } from '../section-utils';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderBadgeSection(
@@ -34,7 +34,8 @@ export function renderBadgeSection(
   const getIconComponent = (iconName?: string) => {
     if (!iconName) return null;
 
-    const Icon = LucideIcons[iconName as keyof typeof LucideIcons];
+    // @ts-ignore - Dynamic icon access
+    const Icon = LucideIcons[iconName];
     return Icon || null;
   };
 
@@ -170,11 +171,7 @@ export function renderBadgeSection(
           // If icon exists
           if (IconComponent) {
             return (
-              <div
-                key={sectionKey}
-                className={section.itemClassName}
-                data-canbreak={section.break ? 'true' : undefined}
-              >
+              <div key={idx} className={section.itemClassName} data-canbreak={isBreakable ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
                 <span
                   className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
@@ -186,6 +183,7 @@ export function renderBadgeSection(
             );
           }
 
+          // Default rendering without icon
           return (
             <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
               <span

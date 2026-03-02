@@ -122,7 +122,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                             htmlFor={`firstName-${invite.id}`}
                             className="text-sm font-semibold leading-[1.43] tracking-[-0.0014em] text-dark-900"
                           >
-                            First Name
+                            Name
                           </label>
                           <Input
                             id={`firstName-${invite.id}`}

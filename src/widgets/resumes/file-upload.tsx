@@ -23,18 +23,21 @@ export interface FileUploadHandle {
   triggerClick: () => void;
 }
 
-export const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(function FileUpload({
-  onSuccess,
-  onError,
-  disabled = false,
-  className = '',
-  buttonText = 'Upload Resume',
-  acceptedFileTypes = '.pdf',
-  maxFileSize = 10,
-  onPendingChange,
-  renderAsOverlay = false,
-  onUploadClick,
-}, ref) {
+export const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(function FileUpload(
+  {
+    onSuccess,
+    onError,
+    disabled = false,
+    className = '',
+    buttonText = 'Upload Resume',
+    acceptedFileTypes = '.pdf',
+    maxFileSize = 10,
+    onPendingChange,
+    renderAsOverlay = false,
+    onUploadClick,
+  },
+  ref,
+) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
 

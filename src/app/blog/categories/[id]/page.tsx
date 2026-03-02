@@ -43,14 +43,7 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
     'professional cover letter',
     'application letter',
   ],
-  job: [
-    'job search',
-    'job application',
-    'job hunting tips',
-    'find a job',
-    'job search strategies',
-    'employment tips',
-  ],
+  job: ['job search', 'job application', 'job hunting tips', 'find a job', 'job search strategies', 'employment tips'],
 };
 
 interface PageProps {
@@ -74,7 +67,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description: category.hero.description,
-    keywords: CATEGORY_KEYWORDS[id] || [`${category.title.toLowerCase()} tips`, `${category.title.toLowerCase()} advice`],
+    keywords: CATEGORY_KEYWORDS[id] || [
+      `${category.title.toLowerCase()} tips`,
+      `${category.title.toLowerCase()} advice`,
+    ],
     alternates: { canonical: url },
     openGraph: {
       title,

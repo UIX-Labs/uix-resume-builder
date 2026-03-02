@@ -67,12 +67,8 @@ export function TrustSection() {
               variants={statVariants}
               className="flex flex-col items-center text-center gap-2 cursor-default hover:scale-[1.08] transition-transform duration-150 ease-out"
             >
-              <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#005FF2]">
-                {stat.value}
-              </span>
-              <span className="text-sm sm:text-base text-white/70 font-medium">
-                {stat.label}
-              </span>
+              <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#005FF2]">{stat.value}</span>
+              <span className="text-sm sm:text-base text-white/70 font-medium">{stat.label}</span>
             </motion.div>
           ))}
         </motion.div>

@@ -25,7 +25,6 @@ function DashboardMockup() {
 
         {/* Dashboard content */}
         <div className="bg-[#f3f4f8] p-5 space-y-4">
-
           {/* Stats row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white rounded-2xl p-4 shadow-sm">
@@ -145,7 +144,6 @@ export function ReferralBanner() {
 
       <div className="relative z-10 container mx-auto px-4 sm:px-6 max-w-[90rem]">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
           {/* Left column */}
           <motion.div
             variants={containerVariants}
@@ -168,9 +166,7 @@ export function ReferralBanner() {
               variants={itemVariants}
               className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white tracking-tight leading-[1.1] mb-4"
             >
-              Free Forever.{' '}
-              <span className="text-[#005FF2]">One Referral</span>{' '}
-              at a Time.
+              Free Forever. <span className="text-[#005FF2]">One Referral</span> at a Time.
             </motion.h2>
 
             {/* Sub-heading */}
@@ -184,12 +180,10 @@ export function ReferralBanner() {
             {/* Feature list */}
             <motion.div variants={containerVariants} className="flex flex-col gap-5 mb-10">
               {features.map((feature) => (
-                <motion.div
-                  key={feature.title}
-                  variants={itemVariants}
-                  className="flex items-start gap-4"
-                >
-                  <div className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                <motion.div key={feature.title} variants={itemVariants} className="flex items-start gap-4">
+                  <div
+                    className={`w-10 h-10 rounded-xl ${feature.bg} flex items-center justify-center flex-shrink-0 mt-0.5`}
+                  >
                     <feature.icon className={`w-5 h-5 ${feature.color}`} />
                   </div>
                   <div>
@@ -212,11 +206,9 @@ export function ReferralBanner() {
             </motion.div>
 
             {/* Transparency note */}
-            <motion.p
-              variants={itemVariants}
-              className="mt-6 text-xs text-white/25 max-w-md leading-relaxed"
-            >
-              We are testing how our community grows organically. If referrals take off, the core product stays free. Paid plans, if ever introduced, will always have a free tier powered by referrals.
+            <motion.p variants={itemVariants} className="mt-6 text-xs text-white/25 max-w-md leading-relaxed">
+              We are testing how our community grows organically. If referrals take off, the core product stays free.
+              Paid plans, if ever introduced, will always have a free tier powered by referrals.
             </motion.p>
           </motion.div>
 
@@ -229,7 +221,6 @@ export function ReferralBanner() {
           >
             <DashboardMockup />
           </motion.div>
-
         </div>
       </div>
     </section>

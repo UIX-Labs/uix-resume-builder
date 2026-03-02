@@ -14,15 +14,13 @@ const features = [
   {
     icon: CheckCircle,
     title: 'ATS Compatibility Check',
-    description:
-      '75% of resumes are filtered by ATS before a human sees them. We make sure yours is not one of them.',
+    description: '75% of resumes are filtered by ATS before a human sees them. We make sure yours is not one of them.',
     gradient: 'from-green-50 to-white',
   },
   {
     icon: Lightbulb,
     title: 'Actionable Rewrites',
-    description:
-      'Not vague advice. You get specific rewrites you can copy-paste into your resume immediately.',
+    description: 'Not vague advice. You get specific rewrites you can copy-paste into your resume immediately.',
     gradient: 'from-blue-50 to-white',
   },
   {
@@ -71,8 +69,8 @@ export function WhatYouGetSection() {
             More Than a Score. A Complete Breakdown.
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Every review covers structure, content, ATS readiness, and specific rewrites.
-            Here is what your report includes.
+            Every review covers structure, content, ATS readiness, and specific rewrites. Here is what your report
+            includes.
           </p>
         </motion.div>
 
@@ -92,12 +90,8 @@ export function WhatYouGetSection() {
               <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 group-hover:scale-110 transition-all duration-300">
                 <feature.icon className="w-6 h-6 text-[#005FF2]" />
               </div>
-              <h3 className="text-xl sm:text-2xl font-semibold text-[#171717]">
-                {feature.title}
-              </h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="text-xl sm:text-2xl font-semibold text-[#171717]">{feature.title}</h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </motion.div>

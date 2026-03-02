@@ -1,4 +1,5 @@
 import { AiFeaturesSection } from './ai-features-section';
+import FaqSection from './faq-section';
 import FooterSection from './footer-section';
 import { PaidToolsSection } from './free-tools-section';
 import Header from './header-section';
@@ -39,6 +40,16 @@ export function LandingPage() {
       <PaidToolsSection />
 
       <ReferralBanner />
+
+      <div
+        className="border border-white rounded-[36px] mx-4 overflow-hidden mt-6 mb-6"
+        style={{
+          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      >
+        <FaqSection />
+      </div>
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"

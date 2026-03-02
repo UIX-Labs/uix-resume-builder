@@ -79,12 +79,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
 
   return (
     <>
-      <MobileNavDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        navItems={navItems}
-        onLogoClick={handleLogoClick}
-      />
+      <MobileNavDrawer isOpen={isOpen} onClose={onClose} navItems={navItems} onLogoClick={handleLogoClick} />
 
       {/* Mobile Text View - Shows when user tries to access desktop-only features */}
       <MobileTextView isOpen={showMobileTextView} onClose={() => setShowMobileTextView(false)} />

@@ -123,7 +123,8 @@ const HeroSection = () => {
 
               {/* Subtitle */}
               <p className="mt-3 lg:mt-4 text-base lg:text-lg text-gray-600 text-center md:text-left max-w-[520px]">
-                Import from LinkedIn, upload your resume, or start fresh. Pika&apos;s AI crafts ATS-optimized content that gets you hired.
+                Import from LinkedIn, upload your resume, or start fresh. Pika&apos;s AI crafts ATS-optimized content
+                that gets you hired.
               </p>
 
               {/* Buttons */}
@@ -141,7 +142,6 @@ const HeroSection = () => {
                 >
                   Upload Existing Resume
                 </Button>
-
               </div>
             </div>
           </div>

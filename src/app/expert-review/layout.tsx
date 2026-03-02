@@ -37,8 +37,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Expert Resume Review - Feedback from Industry Professionals',
-    description:
-      'Get a detailed, manual resume review from professionals at Google, Microsoft, TikTok, and more.',
+    description: 'Get a detailed, manual resume review from professionals at Google, Microsoft, TikTok, and more.',
   },
 };
 

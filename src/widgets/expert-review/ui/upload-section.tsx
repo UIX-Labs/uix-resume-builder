@@ -123,19 +123,10 @@ export function UploadSection() {
   };
 
   return (
-    <section
-      id="expert-review-upload"
-      className="relative overflow-hidden bg-[#0c1118] min-h-[500px] sm:min-h-[600px]"
-    >
+    <section id="expert-review-upload" className="relative overflow-hidden bg-[#0c1118] min-h-[500px] sm:min-h-[600px]">
       {/* Background image */}
       <div className="absolute inset-0 pointer-events-none">
-        <Image
-          src="/images/expert-review-bg.png"
-          alt=""
-          fill
-          className="object-cover"
-          priority
-        />
+        <Image src="/images/expert-review-bg.png" alt="" fill className="object-cover" priority />
       </div>
 
       <input
@@ -160,8 +151,8 @@ export function UploadSection() {
               Ready to Level Up Your Resume?
             </h2>
             <p className="text-base sm:text-lg text-white/70 mb-10 max-w-xl mx-auto">
-              Upload your resume below and our experts will review it personally.
-              You will receive detailed feedback in your inbox within 3 days.
+              Upload your resume below and our experts will review it personally. You will receive detailed feedback in
+              your inbox within 3 days.
             </p>
 
             <div className="flex flex-col items-center gap-4">
@@ -172,9 +163,7 @@ export function UploadSection() {
                 <Upload className="w-5 h-5" />
                 {user ? 'Upload Resume' : 'Sign In to Upload'}
               </Button>
-              <span className="text-sm text-white/50">
-                Accepted: PDF, DOC, DOCX (max 4 MB)
-              </span>
+              <span className="text-sm text-white/50">Accepted: PDF, DOC, DOCX (max 4 MB)</span>
             </div>
           </motion.div>
         </div>
@@ -207,9 +196,7 @@ export function UploadSection() {
         />
       )}
 
-      {step === 'success' && (
-        <SuccessView onDashboard={handleDashboard} onClose={handleReset} />
-      )}
+      {step === 'success' && <SuccessView onDashboard={handleDashboard} onClose={handleReset} />}
     </section>
   );
 }

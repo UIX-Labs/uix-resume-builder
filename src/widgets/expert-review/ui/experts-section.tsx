@@ -20,9 +20,7 @@ export function ExpertsSection() {
     slidesToScroll: 1,
   };
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
-    Autoplay({ delay: 3000, stopOnInteraction: false }),
-  ]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay({ delay: 3000, stopOnInteraction: false })]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -68,8 +66,8 @@ export function ExpertsSection() {
             Meet the Experts Who Review Your Resume
           </h2>
           <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-            Our reviewers work at companies like Google, Microsoft, TikTok, Uber, Zepto, and more.
-            They know exactly what hiring managers look for.
+            Our reviewers work at companies like Google, Microsoft, TikTok, Uber, Zepto, and more. They know exactly
+            what hiring managers look for.
           </p>
         </motion.div>
 
@@ -84,10 +82,7 @@ export function ExpertsSection() {
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex items-center">
               {carouselExperts.map((expert, index) => (
-                <div
-                  key={`${expert.name}-${index}`}
-                  className="flex-[0_0_auto] px-3 sm:px-4"
-                >
+                <div key={`${expert.name}-${index}`} className="flex-[0_0_auto] px-3 sm:px-4">
                   <div className="[--expert-card-scale:1] transition-transform duration-300 hover:scale-[1.03]">
                     <ExpertCard {...expert} />
                   </div>
@@ -132,9 +127,7 @@ export function ExpertsSection() {
                 onClick={() => scrollTo(index)}
                 className={cn(
                   'h-2.5 rounded-full transition-all duration-300 cursor-pointer',
-                  index === selectedIndex % experts.length
-                    ? 'w-7 bg-[#005FF2]'
-                    : 'w-2.5 bg-gray-300 hover:bg-gray-400',
+                  index === selectedIndex % experts.length ? 'w-7 bg-[#005FF2]' : 'w-2.5 bg-gray-300 hover:bg-gray-400',
                 )}
                 aria-label={`Go to expert ${index + 1}`}
               />

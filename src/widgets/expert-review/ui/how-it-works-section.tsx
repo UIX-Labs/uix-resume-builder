@@ -8,8 +8,7 @@ const steps = [
     step: 1,
     icon: Upload,
     title: 'Upload Your Resume',
-    description:
-      'Drop your resume in. PDF or Word, under 4 MB. Takes less than 30 seconds.',
+    description: 'Drop your resume in. PDF or Word, under 4 MB. Takes less than 30 seconds.',
     gradient: 'from-[#005FF2]/5 to-[#005FF2]/[0.02]',
     borderHover: 'hover:border-[#005FF2]/30',
   },
@@ -26,8 +25,7 @@ const steps = [
     step: 3,
     icon: Mail,
     title: 'Get Actionable Feedback',
-    description:
-      'Your detailed review lands in your inbox within 3 business days. No fluff. Just what to fix and how.',
+    description: 'Your detailed review lands in your inbox within 3 business days. No fluff. Just what to fix and how.',
     gradient: 'from-[#005FF2]/5 to-[#005FF2]/[0.02]',
     borderHover: 'hover:border-[#005FF2]/30',
   },
@@ -92,12 +90,8 @@ export function HowItWorksSection() {
                 </div>
               </div>
 
-              <h3 className="relative z-10 text-xl sm:text-2xl font-semibold text-[#171717]">
-                {item.title}
-              </h3>
-              <p className="relative z-10 text-sm sm:text-base text-gray-600 leading-relaxed">
-                {item.description}
-              </p>
+              <h3 className="relative z-10 text-xl sm:text-2xl font-semibold text-[#171717]">{item.title}</h3>
+              <p className="relative z-10 text-sm sm:text-base text-gray-600 leading-relaxed">{item.description}</p>
 
               {/* Connecting line (visible on desktop) */}
               {item.step < 3 && (

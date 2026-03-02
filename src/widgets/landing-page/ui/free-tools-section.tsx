@@ -59,7 +59,7 @@ export function PaidToolsSection() {
           id="paid-tools-heading"
           className="mb-8 sm:mb-12 md:mb-16 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 tracking-tight"
         >
-          Paid Resume Tools
+          Resume Add-on Tools
         </h2>
 
         <div className="flex flex-col md:flex-row gap-4 sm:gap-6 lg:gap-8 md:h-[450px]">
@@ -100,13 +100,7 @@ export function PaidToolsSection() {
                   roastExpanded ? 'bg-white/20' : 'bg-blue-50',
                 )}
               >
-                <Flame
-                  className={cn(
-                    'w-6 h-6',
-                    TRANSITION,
-                    roastExpanded ? 'text-white' : 'text-[#005FF2]',
-                  )}
-                />
+                <Flame className={cn('w-6 h-6', TRANSITION, roastExpanded ? 'text-white' : 'text-[#005FF2]')} />
               </div>
               <h3
                 className={cn(
@@ -132,9 +126,7 @@ export function PaidToolsSection() {
               className={cn(
                 'w-fit font-semibold rounded-xl px-8 py-6 text-lg relative z-10',
                 TRANSITION,
-                roastExpanded
-                  ? 'bg-white text-blue-600 hover:bg-gray-50'
-                  : 'bg-[#005FF2] text-white hover:bg-blue-700',
+                roastExpanded ? 'bg-white text-blue-600 hover:bg-gray-50' : 'bg-[#005FF2] text-white hover:bg-blue-700',
               )}
             >
               Roast My Resume
@@ -216,13 +208,7 @@ export function PaidToolsSection() {
                   reviewExpanded ? 'bg-white/20' : 'bg-green-50',
                 )}
               >
-                <UserCheck
-                  className={cn(
-                    'w-6 h-6',
-                    TRANSITION,
-                    reviewExpanded ? 'text-white' : 'text-[#00BA34]',
-                  )}
-                />
+                <UserCheck className={cn('w-6 h-6', TRANSITION, reviewExpanded ? 'text-white' : 'text-[#00BA34]')} />
               </div>
               <h3
                 className={cn(
@@ -297,7 +283,6 @@ export function PaidToolsSection() {
           </motion.div>
         </div>
       </div>
-
     </section>
   );
 }

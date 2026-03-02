@@ -11,13 +11,11 @@ export const expertReviewFaqs: FAQ[] = [
   },
   {
     question: 'What file formats do you accept?',
-    answer:
-      'We accept PDF and Word documents (.pdf, .doc, .docx). The maximum file size is 4 MB.',
+    answer: 'We accept PDF and Word documents (.pdf, .doc, .docx). The maximum file size is 4 MB.',
   },
   {
     question: 'How long does it take to get my review?',
-    answer:
-      'You will receive detailed feedback in your inbox within 3 business days of uploading.',
+    answer: 'You will receive detailed feedback in your inbox within 3 business days of uploading.',
   },
   {
     question: 'Who reviews my resume?',
@@ -41,13 +39,11 @@ export const expertReviewFaqs: FAQ[] = [
   },
   {
     question: 'Can I upload more than one resume?',
-    answer:
-      'Yes. Each upload is reviewed independently. You can submit multiple resumes for different roles.',
+    answer: 'Yes. Each upload is reviewed independently. You can submit multiple resumes for different roles.',
   },
   {
     question: 'Is my resume data secure?',
-    answer:
-      'Yes. Your resume is only shared with the assigned reviewer and is not stored beyond the review period.',
+    answer: 'Yes. Your resume is only shared with the assigned reviewer and is not stored beyond the review period.',
   },
   {
     question: 'What if I am not satisfied with the review?',

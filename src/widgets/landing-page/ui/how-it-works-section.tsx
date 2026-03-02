@@ -96,8 +96,7 @@ export function HowItWorksSection() {
           id="how-it-works-heading"
           className="mb-8 sm:mb-12 md:mb-16 text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 tracking-tight"
         >
-          4 Ways to Build Your{' '}
-          <span className="text-[#005FF2]">Resume</span>
+          4 Ways to Build Your <span className="text-[#005FF2]">Resume</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
@@ -127,12 +126,8 @@ export function HowItWorksSection() {
               <div className="relative z-10 w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
                 <method.icon className="w-6 h-6 text-[#005FF2]" />
               </div>
-              <h3 className="relative z-10 text-xl sm:text-2xl font-semibold text-[#171717]">
-                {method.title}
-              </h3>
-              <p className="relative z-10 text-sm sm:text-base text-gray-600 flex-1">
-                {method.description}
-              </p>
+              <h3 className="relative z-10 text-xl sm:text-2xl font-semibold text-[#171717]">{method.title}</h3>
+              <p className="relative z-10 text-sm sm:text-base text-gray-600 flex-1">{method.description}</p>
               <Button
                 tabIndex={-1}
                 className="w-full h-12 bg-[#005FF2] text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-300 flex items-center justify-center gap-2 relative z-10 group-hover:bg-blue-700"

@@ -102,9 +102,17 @@ function Header({ variant = 'default' }: HeaderProps) {
             alt="AI"
             width={60}
             height={60}
-            className={cn('inline-block transition-all duration-200', isScrolled && !isRoast && 'scale-[0.8] origin-left')}
+            className={cn(
+              'inline-block transition-all duration-200',
+              isScrolled && !isRoast && 'scale-[0.8] origin-left',
+            )}
           />
-          <div className={cn('flex flex-col items-start transition-all duration-200', isScrolled && !isRoast && 'scale-[0.9] origin-left')}>
+          <div
+            className={cn(
+              'flex flex-col items-start transition-all duration-200',
+              isScrolled && !isRoast && 'scale-[0.9] origin-left',
+            )}
+          >
             <div className="flex flex-row">
               <span className={cn('font-bold text-3xl', isRoast ? 'text-white' : 'text-[#005FF2] bg-clip-text')}>
                 Pika
@@ -243,10 +251,7 @@ function Header({ variant = 'default' }: HeaderProps) {
         (isDashboardRoute ? (
           <DashboardMobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
         ) : (
-          <MobileSidebar
-            isOpen={showMobileSidebar}
-            onClose={() => setShowMobileSidebar(false)}
-          />
+          <MobileSidebar isOpen={showMobileSidebar} onClose={() => setShowMobileSidebar(false)} />
         ))}
     </>
   );

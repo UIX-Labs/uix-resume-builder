@@ -134,9 +134,7 @@ function ResumeMockup() {
           <span
             className={`inline-flex items-center gap-1 sm:gap-1.5 ${variantStyles[note.variant]} text-[9px] sm:text-[10px] md:text-xs font-medium px-2 sm:px-2.5 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-full border shadow-sm whitespace-nowrap`}
           >
-            <span
-              className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${dotStyles[note.variant]} flex-shrink-0`}
-            />
+            <span className={`w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full ${dotStyles[note.variant]} flex-shrink-0`} />
             {note.label}
           </span>
         </motion.div>
@@ -184,8 +182,7 @@ export function HeroSection() {
             </motion.span>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[64px] font-semibold text-[#171717] tracking-tight leading-[1.1] mb-6">
-              Your Resume Might Never{' '}
-              <span className="text-[#005FF2]">Reach a Recruiter</span>
+              Your Resume Might Never <span className="text-[#005FF2]">Reach a Recruiter</span>
             </h1>
 
             <motion.p
@@ -194,10 +191,8 @@ export function HeroSection() {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-base sm:text-lg md:text-xl text-gray-600 max-w-xl mb-8 leading-relaxed"
             >
-              Get a line-by-line review from professionals who have hired at
-              Google, Microsoft, and TikTok. They will find what is holding your
-              resume back and tell you exactly how to fix it. Delivered in 3
-              days.
+              Get a line-by-line review from professionals who have hired at Google, Microsoft, and TikTok. They will
+              find what is holding your resume back and tell you exactly how to fix it. Delivered in 3 days.
             </motion.p>
 
             <motion.div
@@ -214,22 +209,14 @@ export function HeroSection() {
               </Button>
 
               {/* Company logos strip */}
-              <div className="flex flex-col gap-2.5">
+              <div className="flex flex-col items-center lg:items-start gap-2.5">
                 <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                   Our reviewers work at
                 </span>
                 <div className="flex items-center gap-5">
                   {companyLogos.map((logo) => (
-                    <div
-                      key={logo.name}
-                      className="relative w-5 h-5 sm:w-6 sm:h-6"
-                    >
-                      <Image
-                        src={logo.src}
-                        alt={logo.name}
-                        fill
-                        className="object-contain grayscale opacity-50"
-                      />
+                    <div key={logo.name} className="relative w-5 h-5 sm:w-6 sm:h-6">
+                      <Image src={logo.src} alt={logo.name} fill className="object-contain grayscale opacity-50" />
                     </div>
                   ))}
                 </div>

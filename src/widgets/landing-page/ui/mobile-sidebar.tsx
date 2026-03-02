@@ -33,6 +33,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     handleNavigation('/roast', 'navigation_click', 'roast');
   };
 
+  const handlePricingClick = () => {
+    handleNavigation('/pricing', 'navigation_click', 'pricing');
+  };
+
   const handleExpertReviewClick = () => {
     handleNavigation('/expert-review', 'navigation_click', 'expert_review');
   };
@@ -64,6 +68,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       label: 'Roast',
       onClick: handleRoastClick,
       isActive: pathname === '/roast',
+    },
+    {
+      label: 'Pricing',
+      onClick: handlePricingClick,
+      isActive: pathname === '/pricing',
     },
     {
       label: 'Blogs',

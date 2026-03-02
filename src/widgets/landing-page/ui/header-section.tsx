@@ -196,6 +196,30 @@ function Header({ variant = 'default' }: HeaderProps) {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => {
+              router.push('/pricing');
+              trackEvent('navigation_click', {
+                source: 'landing_header',
+                destination: 'pricing',
+              });
+            }}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              pathname === '/pricing'
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
+            )}
+          >
+            Pricing
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={handleBlogsClick}
             className={cn(
               'font-semibold text-lg cursor-pointer',

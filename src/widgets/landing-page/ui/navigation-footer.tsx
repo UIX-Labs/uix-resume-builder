@@ -67,6 +67,7 @@ const FooterNavigation = () => {
   const rightColumnLinks: NavigationLink[] = [
     { label: 'Resume Roast', href: '/roast' },
     { label: 'Expert Review', href: '/expert-review' },
+    { label: 'Pricing', href: '/pricing' },
     { label: 'Reviews', isTestimonialsModal: true },
     { label: 'Terms of Service', href: 'https://uixlabs.co/' },
   ];

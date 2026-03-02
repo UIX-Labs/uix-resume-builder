@@ -207,8 +207,8 @@ export function ReferralBanner() {
 
             {/* Transparency note */}
             <motion.p variants={itemVariants} className="mt-6 text-xs text-white/25 max-w-md leading-relaxed">
-              We are testing how our community grows organically. If referrals take off, the core product stays free.
-              Paid plans, if ever introduced, will always have a free tier powered by referrals.
+              The core resume builder is free forever. Referral credits work alongside all plans — your earned
+              downloads never expire.
             </motion.p>
           </motion.div>
 

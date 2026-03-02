@@ -5,9 +5,11 @@ import { PaidToolsSection } from './free-tools-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
 import { HowItWorksSection } from './how-it-works-section';
-import { PricingSection } from './pricing-section';
+// WIP - PricingSection hidden temporarily
+// import { PricingSection } from './pricing-section';
 import { ReferralBanner } from './referral-banner';
-import { ResumeExamplesSection } from './resume-examples-section';
+// WIP - ResumeExamplesSection hidden temporarily
+// import { ResumeExamplesSection } from './resume-examples-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import { TopAnnouncementStrip } from './top-announcement-strip';
@@ -41,8 +43,11 @@ export function LandingPage() {
 
       <PaidToolsSection />
 
-      <ResumeExamplesSection />
-      <PricingSection />
+      {/* WIP - ResumeExamplesSection hidden temporarily */}
+      {/* <ResumeExamplesSection /> */}
+
+      {/* WIP - PricingSection hidden temporarily */}
+      {/* <PricingSection /> */}
 
       <ReferralBanner />
 

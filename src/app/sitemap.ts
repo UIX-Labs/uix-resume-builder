@@ -1,5 +1,6 @@
 import { categories } from '@/data/categories';
-import { RESUME_EXAMPLE_CATEGORIES } from '@/data/resume-example-categories';
+// WIP - Resume example categories hidden temporarily
+// import { RESUME_EXAMPLE_CATEGORIES } from '@/data/resume-example-categories';
 import { getAllPosts } from '@shared/lib/blog';
 import type { MetadataRoute } from 'next';
 
@@ -43,12 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-    {
-      url: `${baseUrl}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
+    // WIP - Pricing URL hidden temporarily
+    // {
+    //   url: `${baseUrl}/pricing`,
+    //   lastModified: new Date(),
+    //   changeFrequency: 'weekly',
+    //   priority: 0.8,
+    // },
   ];
 
   // Blog pages
@@ -75,29 +77,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Resume examples pages
-  const resumeExamplesPages: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/resume-examples`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-  ];
+  // WIP - Resume examples sitemap entries hidden temporarily
+  // const resumeExamplesPages: MetadataRoute.Sitemap = [
+  //   {
+  //     url: `${baseUrl}/resume-examples`,
+  //     lastModified: new Date(),
+  //     changeFrequency: 'weekly',
+  //     priority: 0.8,
+  //   },
+  // ];
 
-  const resumeExampleCategoryPages: MetadataRoute.Sitemap = RESUME_EXAMPLE_CATEGORIES.map((cat) => ({
-    url: `${baseUrl}/resume-examples/${cat.slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.85,
-  }));
+  // const resumeExampleCategoryPages: MetadataRoute.Sitemap = RESUME_EXAMPLE_CATEGORIES.map((category) => ({
+  //   url: `${baseUrl}/resume-examples/${category.slug}`,
+  //   lastModified: new Date(),
+  //   changeFrequency: 'weekly' as const,
+  //   priority: 0.7,
+  // }));
 
   return [
     ...staticPages,
-    ...resumeExamplesPages,
-    ...resumeExampleCategoryPages,
     ...blogListPage,
     ...categoryPages,
     ...blogPosts,
+    // WIP - Resume examples spread hidden temporarily
+    // ...resumeExamplesPages,
+    // ...resumeExampleCategoryPages,
   ];
 }

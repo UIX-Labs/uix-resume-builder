@@ -70,20 +70,22 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/roast',
     },
     {
-      label: 'Pricing',
-      onClick: handlePricingClick,
-      isActive: pathname === '/pricing',
-    },
-    {
       label: 'Blogs',
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },
-    {
-      label: 'Resume Examples',
-      onClick: () => handleNavigation('/resume-examples', 'navigation_click', 'resume_examples'),
-      isActive: pathname.startsWith('/resume-examples'),
-    },
+    // WIP - Pricing nav item hidden temporarily
+    // {
+    //   label: 'Pricing',
+    //   onClick: handlePricingClick,
+    //   isActive: pathname === '/pricing',
+    // },
+    // WIP - Resume Examples nav item hidden temporarily
+    // {
+    //   label: 'Resume Examples',
+    //   onClick: () => handleNavigation('/resume-examples', 'navigation_click', 'resume_examples'),
+    //   isActive: pathname === '/resume-examples',
+    // },
     {
       label: 'Dashboard',
       onClick: handleDashboardClick,

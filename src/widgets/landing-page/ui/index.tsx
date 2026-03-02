@@ -5,6 +5,7 @@ import { PaidToolsSection } from './free-tools-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
 import { HowItWorksSection } from './how-it-works-section';
+import { PricingSection } from './pricing-section';
 import { ReferralBanner } from './referral-banner';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
@@ -38,6 +39,8 @@ export function LandingPage() {
       </div>
 
       <PaidToolsSection />
+
+      <PricingSection />
 
       <ReferralBanner />
 

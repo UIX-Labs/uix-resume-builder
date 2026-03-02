@@ -12,6 +12,7 @@ const PUBLIC_ROUTES = [
   '/resume',
   '/my-resumes',
   '/templates',
+  '/pricing',
   '/blog',
   '/upload-resume',
 ];

@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@shared/ui/sidebar';
-import { FileText, Home, LayoutGrid, LogIn, LogOut } from 'lucide-react';
+import { FileText, Home, LayoutGrid, LogIn, LogOut, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -63,6 +63,13 @@ export default function DashboardSidebar() {
     trackEvent('navigation_click', {
       source: 'dashboard_sidebar',
       destination: 'referral',
+    });
+  };
+
+  const handleExpertReviewClick = () => {
+    trackEvent('navigation_click', {
+      source: 'dashboard_sidebar',
+      destination: 'expert_review',
     });
   };
 
@@ -133,6 +140,15 @@ export default function DashboardSidebar() {
                   <Link href="/resumes" onClick={handleYourResumesClick}>
                     <FileText className="w-5 h-5" />
                     Your Resumes
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild isActive={pathname === '/dashboard/expert-review'}>
+                  <Link href="/dashboard/expert-review" onClick={handleExpertReviewClick}>
+                    <Sparkles className="w-5 h-5" />
+                    Expert Review
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

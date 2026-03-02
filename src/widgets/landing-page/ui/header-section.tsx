@@ -211,6 +211,30 @@ function Header({ variant = 'default' }: HeaderProps) {
             Blogs
           </Button>
 
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              router.push('/resume-examples');
+              trackEvent('navigation_click', {
+                source: 'landing_header',
+                destination: 'resume_examples',
+              });
+            }}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              pathname.startsWith('/resume-examples')
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
+            )}
+          >
+            Examples
+          </Button>
+
           {user && (
             <Button
               variant="ghost"

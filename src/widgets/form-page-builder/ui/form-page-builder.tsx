@@ -701,6 +701,49 @@ export function FormPageBuilder() {
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
 
+  // Fetch and merge expert review suggestions (if any)
+  useEffect(() => {
+    if (!resumeId || !formData) return;
+
+    async function fetchReviewSuggestions() {
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const response = await fetch(`${backendUrl}/resume/${resumeId}/review-suggestions`, {
+          credentials: 'include',
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!data?.suggestions) return;
+
+        // Merge review suggestions into formData sections
+        const updatedData = { ...formData };
+        let hasMerged = false;
+
+        for (const [sectionKey, sectionSuggestions] of Object.entries(data.suggestions)) {
+          if (
+            sectionKey in updatedData &&
+            (sectionSuggestions as any)?.suggestedUpdates?.length
+          ) {
+            const existing = (updatedData as any)[sectionKey]?.suggestedUpdates || [];
+            (updatedData as any)[sectionKey] = {
+              ...(updatedData as any)[sectionKey],
+              suggestedUpdates: [...existing, ...(sectionSuggestions as any).suggestedUpdates],
+            };
+            hasMerged = true;
+          }
+        }
+
+        if (hasMerged) {
+          setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
+        }
+      } catch {
+        // Silently fail - review suggestions are optional
+      }
+    }
+
+    fetchReviewSuggestions();
+  }, [resumeId]);
+
   // Initialize last save time from resume data
   useEffect(() => {
     if (resumeData?.updatedAt) {

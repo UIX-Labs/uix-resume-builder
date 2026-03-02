@@ -60,6 +60,7 @@ const FooterNavigation = () => {
   const leftColumnLinks: NavigationLink[] = [
     { label: 'About Us', href: '/about-us' },
     { label: 'Check Templates', isTemplateDialog: true },
+    { label: 'Resume Examples', href: '/resume-examples' },
     { label: 'Blog', href: '/blog' },
   ];
 

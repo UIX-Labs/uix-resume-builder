@@ -71,6 +71,11 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/blog',
     },
     {
+      label: 'Resume Examples',
+      onClick: () => handleNavigation('/resume-examples', 'navigation_click', 'resume_examples'),
+      isActive: pathname.startsWith('/resume-examples'),
+    },
+    {
       label: 'Dashboard',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard',

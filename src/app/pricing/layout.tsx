@@ -34,8 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Pricing - Simple Plans for Every Job Seeker | Pika Resume',
-    description:
-      'Free AI resume builder, Pro plan at $9/mo, and Expert Review starting at $29.',
+    description: 'Free AI resume builder, Pro plan at $9/mo, and Expert Review starting at $29.',
   },
 };
 
@@ -52,7 +51,8 @@ export default function PricingLayout({ children }: { children: React.ReactNode 
               '@context': 'https://schema.org',
               '@type': 'Product',
               name: 'Pika Resume',
-              description: 'AI-powered resume builder with professional templates, ATS optimization, and expert reviews',
+              description:
+                'AI-powered resume builder with professional templates, ATS optimization, and expert reviews',
               url: `${DOMAIN_URL}/pricing`,
               brand: {
                 '@type': 'Organization',

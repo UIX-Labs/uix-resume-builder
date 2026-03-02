@@ -53,9 +53,7 @@ export function PricingSection() {
           >
             Choose Your <span className="text-[#005FF2]">Plan</span>
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">
-            Start free. Upgrade when you need more.
-          </p>
+          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">Start free. Upgrade when you need more.</p>
         </motion.div>
 
         {/* Billing Toggle */}

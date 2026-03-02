@@ -36,7 +36,8 @@ export function ExpertCard({ name, company, logo: _logo, image, variant = 'defau
         <div className="flex flex-col min-w-0">
           <span className="font-bold text-neutral-900 text-lg">{name}</span>
           <p className="text-sm text-gray-600">
-            Get expert resume review by professional from <span className="font-semibold text-neutral-900">{company}</span>
+            Get expert resume review by professional from{' '}
+            <span className="font-semibold text-neutral-900">{company}</span>
           </p>
         </div>
       </div>

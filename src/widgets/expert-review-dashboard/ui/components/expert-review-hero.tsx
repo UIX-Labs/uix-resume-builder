@@ -20,19 +20,13 @@ export function ExpertReviewHero({ userName, onUploadClick }: ExpertReviewHeroPr
         <h2 className="text-2xl md:text-4xl font-semibold leading-tight tracking-[-0.03em] text-neutral-900 mb-1">
           Welcome, {userName}
         </h2>
-        <p className="text-base text-[#959DA8]">
-          Track the status of all your submitted resumes
-        </p>
+        <p className="text-base text-[#959DA8]">Track the status of all your submitted resumes</p>
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:gap-5 gap-3">
         <div className="shrink-0">
-          <p className="text-base font-medium text-neutral-700 leading-tight">
-            start getting reviewed by experts
-          </p>
-          <p className="text-sm text-neutral-600 mt-0.5">
-            from google, zepto, uber
-          </p>
+          <p className="text-base font-medium text-neutral-700 leading-tight">start getting reviewed by experts</p>
+          <p className="text-sm text-neutral-600 mt-0.5">from google, zepto, uber</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2 shrink-0">

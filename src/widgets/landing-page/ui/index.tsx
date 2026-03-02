@@ -1,16 +1,16 @@
-import { AiFeaturesSection } from "./ai-features-section";
-import FaqSection from "./faq-section";
-import FooterSection from "./footer-section";
-import { PaidToolsSection } from "./free-tools-section";
-import Header from "./header-section";
-import HeroSection from "./hero-section";
-import { HowItWorksSection } from "./how-it-works-section";
-import { PricingSection } from "./pricing-section";
-import { ReferralBanner } from "./referral-banner";
-import { ResumeExamplesSection } from "./resume-examples-section";
-import { TemplateCarousel } from "./template-carousel";
-import Testimonials from "./testimonials-section";
-import { TopAnnouncementStrip } from "./top-announcement-strip";
+import { AiFeaturesSection } from './ai-features-section';
+import FaqSection from './faq-section';
+import FooterSection from './footer-section';
+import { PaidToolsSection } from './free-tools-section';
+import Header from './header-section';
+import HeroSection from './hero-section';
+import { HowItWorksSection } from './how-it-works-section';
+import { PricingSection } from './pricing-section';
+import { ReferralBanner } from './referral-banner';
+import { ResumeExamplesSection } from './resume-examples-section';
+import { TemplateCarousel } from './template-carousel';
+import Testimonials from './testimonials-section';
+import { TopAnnouncementStrip } from './top-announcement-strip';
 
 export function LandingPage() {
   return (
@@ -23,8 +23,8 @@ export function LandingPage() {
       <div
         className="h-auto border-2 border-white rounded-[36px] m-4 mt-0 overflow-hidden"
         style={{
-          background: "radial-gradient(circle, #ccc 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
         }}
       >
         <HeroSection />
@@ -49,8 +49,8 @@ export function LandingPage() {
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden mt-6 mb-6"
         style={{
-          background: "radial-gradient(circle, #ccc 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
         }}
       >
         <FaqSection />
@@ -59,8 +59,8 @@ export function LandingPage() {
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"
         style={{
-          background: "radial-gradient(circle, #ccc 1px, transparent 1px)",
-          backgroundSize: "20px 20px",
+          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
         }}
       >
         <FooterSection />

@@ -50,9 +50,7 @@ export function ExpertReviewAddon() {
               transition={{ duration: 0.4, delay: index * 0.1 }}
               className={cn(
                 'relative flex flex-col rounded-2xl border p-5 sm:p-6 transition-all duration-300 hover:shadow-md hover:border-[#00BA34]',
-                bundle.id === 'three-pack'
-                  ? 'border-[#00BA34] bg-green-50/30'
-                  : 'border-gray-200 bg-white',
+                bundle.id === 'three-pack' ? 'border-[#00BA34] bg-green-50/30' : 'border-gray-200 bg-white',
               )}
             >
               {bundle.id === 'three-pack' && (

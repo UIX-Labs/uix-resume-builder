@@ -11,13 +11,7 @@ import { useState } from 'react';
 
 type BillingPeriod = 'monthly' | 'yearly';
 
-function BillingToggle({
-  period,
-  onChange,
-}: {
-  period: BillingPeriod;
-  onChange: (p: BillingPeriod) => void;
-}) {
+function BillingToggle({ period, onChange }: { period: BillingPeriod; onChange: (p: BillingPeriod) => void }) {
   return (
     <div className="flex items-center justify-center gap-3 mb-10 sm:mb-14">
       <div className="relative flex items-center bg-gray-100 rounded-full p-1">
@@ -114,9 +108,7 @@ function TierCard({
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className={cn(
         'relative flex flex-col rounded-2xl border p-6 sm:p-8',
-        isHighlighted
-          ? 'border-[#005FF2] shadow-lg shadow-[#005FF2]/10 bg-white'
-          : 'border-gray-200 bg-white',
+        isHighlighted ? 'border-[#005FF2] shadow-lg shadow-[#005FF2]/10 bg-white' : 'border-gray-200 bg-white',
       )}
     >
       {isHighlighted && (
@@ -149,19 +141,14 @@ function TierCard({
           </AnimatePresence>
           <span className="text-gray-500 text-base">{getPriceLabel()}</span>
         </div>
-        {getInrPrice() && (
-          <p className="text-xs text-gray-400 mt-1">{getInrPrice()} in India</p>
-        )}
+        {getInrPrice() && <p className="text-xs text-gray-400 mt-1">{getInrPrice()} in India</p>}
       </div>
 
       <ul className="flex-1 space-y-3 mb-8">
         {tier.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2.5">
             <Check
-              className={cn(
-                'w-4.5 h-4.5 mt-0.5 flex-shrink-0',
-                isExpertReview ? 'text-[#00BA34]' : 'text-[#005FF2]',
-              )}
+              className={cn('w-4.5 h-4.5 mt-0.5 flex-shrink-0', isExpertReview ? 'text-[#00BA34]' : 'text-[#005FF2]')}
             />
             <span className="text-sm text-gray-700">{feature}</span>
           </li>
@@ -206,9 +193,7 @@ export function PricingHero() {
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-[#171717] tracking-tight mb-4">
             Simple, Transparent <span className="text-[#005FF2]">Pricing</span>
           </h1>
-          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">
-            Start free. Upgrade when you need more.
-          </p>
+          <p className="text-base sm:text-lg text-gray-600 max-w-xl mx-auto">Start free. Upgrade when you need more.</p>
         </motion.div>
 
         <BillingToggle period={billingPeriod} onChange={setBillingPeriod} />

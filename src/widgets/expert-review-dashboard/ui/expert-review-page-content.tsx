@@ -33,18 +33,11 @@ export default function ExpertReviewPageContent() {
   return (
     <div className="px-4 md:px-6 pb-8">
       <div className="flex flex-col">
-        <ExpertReviewHero
-          userName={isUserLoading ? '...' : userName}
-          onUploadClick={handleUploadClick}
-        />
+        <ExpertReviewHero userName={isUserLoading ? '...' : userName} onUploadClick={handleUploadClick} />
         <ExpertReviewTableCard reviews={reviews} isLoading={isLoading} />
       </div>
 
-      <ExpertReviewModal
-        isOpen={isUploadModalOpen}
-        onClose={handleModalClose}
-        onSuccess={handleUploadSuccess}
-      />
+      <ExpertReviewModal isOpen={isUploadModalOpen} onClose={handleModalClose} onSuccess={handleUploadSuccess} />
     </div>
   );
 }

@@ -23,22 +23,15 @@ function DesktopTable() {
           <tr className="bg-[#171717]">
             <th className="text-left px-6 py-4 text-sm font-semibold text-white w-[40%]">Feature</th>
             <th className="text-center px-6 py-4 text-sm font-semibold text-white">Free</th>
-            <th className="text-center px-6 py-4 text-sm font-semibold text-[#005FF2] bg-[#171717]">
-              Pro
-            </th>
-            <th className="text-center px-6 py-4 text-sm font-semibold text-[#00BA34]">
-              Expert Review
-            </th>
+            <th className="text-center px-6 py-4 text-sm font-semibold text-[#005FF2] bg-[#171717]">Pro</th>
+            <th className="text-center px-6 py-4 text-sm font-semibold text-[#00BA34]">Expert Review</th>
           </tr>
         </thead>
         <tbody>
           {featureComparisonRows.map((row, index) => (
             <tr
               key={row.label}
-              className={cn(
-                'border-t border-gray-100',
-                index % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]',
-              )}
+              className={cn('border-t border-gray-100', index % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]')}
             >
               <td className="px-6 py-3.5 text-sm text-gray-700 font-medium">{row.label}</td>
               <td className="px-6 py-3.5 text-center">

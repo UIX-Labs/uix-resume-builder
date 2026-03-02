@@ -1,25 +1,25 @@
 'use client';
 
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { useSelectTemplate } from '@shared/hooks/use-select-template';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useUserProfile } from '@shared/hooks/use-user';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
+import { useMutation } from '@tanstack/react-query';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
-import ResumeCreationModal from './resume-creation-modal';
-import { LinkedInModal } from './linkedin-integration-card';
+import { useCallback, useEffect, useState } from 'react';
 import JDUploadMobileModal from './jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { LinkedInModal } from './linkedin-integration-card';
+import ResumeCreationModal from './resume-creation-modal';
+
 
 export default function DashboardCarousel() {
   const router = useRouter();
@@ -38,7 +38,9 @@ export default function DashboardCarousel() {
     setSelectedIndex(emblaApi.selectedScrollSnap());
   }, []);
 
-  const { data: templates } = useGetAllTemplates();
+  const { data: response } = useGetAllTemplates();
+  const templates = response?.data;
+
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
 

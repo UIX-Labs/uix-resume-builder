@@ -24,7 +24,9 @@ import { useState } from 'react';
 export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
-  const { data: templates } = useGetAllTemplates();
+  const { data: response } = useGetAllTemplates();
+  const templates = response?.data;
+
   const isMobile = useIsMobile();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);

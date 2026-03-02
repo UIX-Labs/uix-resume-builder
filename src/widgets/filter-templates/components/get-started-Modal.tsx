@@ -50,13 +50,9 @@ export function GetStartedModal({
   onJDClick,
 }: GetStartedModalProps) {
   const handleClick = (id: string) => {
-    console.log('option clicked:', id);
     onClose();
     if (id === 'scratch') onScratchClick();
-    if (id === 'upload') {
-      console.log('upload calling');
-      onUploadClick();
-    }
+    if (id === 'upload') onUploadClick();
     if (id === 'linkedin') onLinkedInClick();
     if (id === 'job') onJDClick();
   };

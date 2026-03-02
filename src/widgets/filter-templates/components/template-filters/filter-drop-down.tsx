@@ -13,13 +13,13 @@ export interface Option {
 interface FilterDropdownProps {
   label: string;
   options: Option[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
+  selectedValues: string[];
+  onSelect: (values: string[]) => void;
 }
 
 /* ---------------- COMPONENT ---------------- */
 
-export default function FilterDropdown({ label, options, selectedValue, onSelect }: FilterDropdownProps) {
+export default function FilterDropdown({ label, options, selectedValues, onSelect }: FilterDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,18 +34,32 @@ export default function FilterDropdown({ label, options, selectedValue, onSelect
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
+  const toggleOption = (value: string) => {
+    if (selectedValues.includes(value)) {
+      onSelect(selectedValues.filter((v) => v !== value));
+    } else {
+      onSelect([...selectedValues, value]);
+    }
+  };
+
+  const getLabel = () => {
+    if (selectedValues.length === 0) return label;
+    if (selectedValues.length === 1) return selectedValues[0];
+    return `${selectedValues[0]} +${selectedValues.length - 1}`;
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Trigger */}
       <button
         type="button"
         onClick={() => setIsOpen((p) => !p)}
-        className="flex items-center justify-between min-w-[120px]
+        className="flex items-center justify-between min-w-[140px]
                    bg-white border border-gray-300 rounded-xl
                    px-4 py-3 text-md font-medium text-gray-700 cursor-pointer 
                    hover:bg-gray-50 gap-6"
       >
-        <span>{selectedValue || label}</span>
+        <span>{getLabel()}</span>
 
         <ChevronDown className={isOpen ? 'rotate-180' : ''} />
       </button>
@@ -57,32 +71,33 @@ export default function FilterDropdown({ label, options, selectedValue, onSelect
                         bg-white border border-gray-200
                         rounded-2xl shadow-xl z-50 py-2"
         >
-          {options.map((option) => (
-            <div
-              key={option.value}
-              role="button"
-              tabIndex={0}
-              onClick={() => {
-                onSelect(option.value);
-                setIsOpen(false);
-              }}
-              className={`flex items-center gap-3 px-4 py-2.5
-                          cursor-pointer
-                ${selectedValue === option.value ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
-            >
-              {/* Checkbox */}
+          {options.map((option) => {
+            const isSelected = selectedValues.includes(option.value);
+            return (
               <div
-                className={`w-5 h-5 rounded border flex items-center justify-center
-                ${selectedValue === option.value ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+                key={option.value}
+                role="button"
+                tabIndex={0}
+                onClick={() => toggleOption(option.value)}
+                className={`flex items-center gap-3 px-4 py-2.5
+                            cursor-pointer
+                  ${isSelected ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50 text-gray-700'}`}
               >
-                {selectedValue === option.value && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
-              </div>
+                {/* Checkbox */}
+                <div
+                  className={`w-5 h-5 rounded border flex items-center justify-center
+                  ${isSelected ? 'bg-blue-600 border-blue-600' : 'bg-white border-gray-300'}`}
+                >
+                  {isSelected && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+                </div>
 
-              <span className="text-sm">{option.label}</span>
-            </div>
-          ))}
+                <span className="text-sm">{option.label}</span>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
   );
 }
+

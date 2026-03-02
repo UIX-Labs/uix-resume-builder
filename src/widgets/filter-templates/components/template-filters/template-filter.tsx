@@ -5,80 +5,121 @@ import FilterDropdown from './filter-drop-down';
 import { FILTER_OPTIONS } from './filter-options';
 import SelectedFilters from './selected-filter';
 
-export default function TemplateFilter() {
+export default function TemplateFilter({ results }: { results: number }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const style = searchParams.get('style') || '';
-  const column = searchParams.get('column') || '';
-  const role = searchParams.get('role') || '';
-  const color = searchParams.get('color') || '';
+ 
+  const formatQueryValue = (value: string) =>
+    value.toLowerCase().trim().replace(/\s+/g, '_');
 
-  const updateFilter = (key: string, value: string) => {
+  const getLabelFromValue = (category: keyof typeof FILTER_OPTIONS, urlValue: string) => {
+    const options = (FILTER_OPTIONS as any)[category] as { label: string; value: string }[];
+    const option = options.find((opt) => formatQueryValue(opt.value) === urlValue);
+    return option ? option.label : urlValue;
+  };
+
+  
+  const getValueFromLabel = (category: keyof typeof FILTER_OPTIONS, label: string) => {
+    const options = (FILTER_OPTIONS as any)[category] as { label: string; value: string }[];
+    const option = options.find((opt) => opt.label === label);
+    return option ? option.value : label;
+  };
+
+  
+  const style =
+    searchParams.get('style')?.split(',').filter(Boolean) || [];
+  const column =
+    searchParams.get('column')?.split(',').filter(Boolean) || [];
+  const role =
+    searchParams.get('role')?.split(',').filter(Boolean) || [];
+
+
+  const updateFilter = (key: string, values: string[]) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (value) {
-      params.set(key, value);
+
+    if (values.length > 0) {
+      params.set(
+        key,
+        values.map((v) => formatQueryValue(v)).join(',')
+      );
     } else {
       params.delete(key);
     }
-    router.push(`?${params.toString()}`);
+    params.delete('offset');
+
+   router.replace(`?${params.toString()}`, { scroll: false});
   };
 
-  const clearAll = () => {
-    router.push('?');
-  };
-
-  const results = 10;
+  
+  const clearAll = () => router.replace('?', { scroll: false});
 
   return (
     <div className="flex flex-col gap-3">
       <div className="w-full bg-white rounded-3xl px-6 py-4 flex items-center gap-4 border">
-        <span className="text-md font-semibold text-black">Filter by</span>
+        <span className="text-md font-semibold text-black">
+          Filter by
+        </span>
 
+        {/* STYLE */}
         <FilterDropdown
           label="Style"
           options={FILTER_OPTIONS.style}
-          selectedValue={style}
-          onSelect={(val) => updateFilter('style', val)}
+          selectedValues={style.map((s) => getLabelFromValue('style', s))}
+          onSelect={(vals) => updateFilter('style', vals)}
         />
+
+        {/* COLUMN */}
         <FilterDropdown
           label="Column"
           options={FILTER_OPTIONS.column}
-          selectedValue={column}
-          onSelect={(val) => updateFilter('column', val)}
+          selectedValues={column.map((c) => getLabelFromValue('column', c))}
+          onSelect={(vals) => updateFilter('column', vals)}
         />
+
+        {/* ROLE */}
         <FilterDropdown
           label="Role"
           options={FILTER_OPTIONS.role}
-          selectedValue={role}
-          onSelect={(val) => updateFilter('role', val)}
+          selectedValues={role.map((r) => getLabelFromValue('role', r))}
+          onSelect={(vals) => updateFilter('role', vals)}
         />
-
-        <div className="flex items-center gap-2 ml-auto">
-          <span className="text-sm text-gray-400">Colors</span>
-          {FILTER_OPTIONS.colors.map((c) => (
-            <button
-              type="button"
-              key={c}
-              onClick={() => updateFilter('color', color === c ? '' : c)}
-              className={`w-6 h-6 rounded-full border-2 cursor-pointer ${
-                color === c ? 'border-blue-500 scale-110' : 'border-transparent'
-              }`}
-              style={{ backgroundColor: c }}
-            />
-          ))}
-        </div>
       </div>
 
+
+         
+
+      {/* SELECTED FILTERS DISPLAY */}
       <SelectedFilters
-        style={style}
-        column={column}
-        role={role}
+        style={style.map((s) => getLabelFromValue('style', s))}
+        column={column.map((c) => getLabelFromValue('column', c))}
+        role={role.map((r) => getLabelFromValue('role', r))}
         results={results}
         onClearAll={clearAll}
-        onRemoveStyle={() => updateFilter('style', '')}
-        onRemoveColumn={() => updateFilter('column', '')}
-        onRemoveRole={() => updateFilter('role', '')}
+        onRemoveStyle={(label) =>
+          updateFilter(
+            'style',
+            style
+              .filter((s) => getLabelFromValue('style', s) !== label)
+              .map((s) => getValueFromLabel('style', getLabelFromValue('style', s)))
+          )
+        }
+        onRemoveColumn={(label) =>
+          updateFilter(
+            'column',
+            column
+              .filter((c) => getLabelFromValue('column', c) !== label)
+              .map((c) => getValueFromLabel('column', getLabelFromValue('column', c)))
+          )
+        }
+        onRemoveRole={(label) =>
+          updateFilter(
+            'role',
+            role
+              .filter((r) => getLabelFromValue('role', r) !== label)
+              .map((r) => getValueFromLabel('role', getLabelFromValue('role', r)))
+          )
+        }
       />
     </div>
   );

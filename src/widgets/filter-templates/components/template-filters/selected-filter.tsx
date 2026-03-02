@@ -1,14 +1,14 @@
 'use client';
 import Image from 'next/image';
 interface Props {
-  style: string;
-  column: string;
-  role: string;
+  style: string[];
+  column: string[];
+  role: string[];
   results: number;
   onClearAll: () => void;
-  onRemoveStyle: () => void;
-  onRemoveColumn: () => void;
-  onRemoveRole: () => void;
+  onRemoveStyle: (val: string) => void;
+  onRemoveColumn: (val: string) => void;
+  onRemoveRole: (val: string) => void;
 }
 
 export default function SelectedFilters({
@@ -21,18 +21,24 @@ export default function SelectedFilters({
   onRemoveColumn,
   onRemoveRole,
 }: Props) {
-  const hasFilters = style || column || role;
+  const hasFilters = style.length > 0 || column.length > 0 || role.length > 0;
   if (!hasFilters) return null;
 
   return (
     <div className="rounded-xl px-4 py-3 flex items-center gap-2 flex-wrap">
       <span className="text-sm text-gray-600">Results ({results})</span>
 
-      {style && <Chip label={style} onRemove={onRemoveStyle} />}
-      {column && <Chip label={column} onRemove={onRemoveColumn} />}
-      {role && <Chip label={role} onRemove={onRemoveRole} />}
+      {style.map((val) => (
+        <Chip key={val} label={val} onRemove={() => onRemoveStyle(val)} />
+      ))}
+      {column.map((val) => (
+        <Chip key={val} label={val} onRemove={() => onRemoveColumn(val)} />
+      ))}
+      {role.map((val) => (
+        <Chip key={val} label={val} onRemove={() => onRemoveRole(val)} />
+      ))}
 
-      {(style || column || role) && (
+      {hasFilters && (
         <button
           type="button"
           onClick={onClearAll}
@@ -47,6 +53,7 @@ export default function SelectedFilters({
     </div>
   );
 }
+
 
 function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (

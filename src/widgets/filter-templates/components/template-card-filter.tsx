@@ -1,13 +1,13 @@
 'use client';
 
+import type { Template } from '@entities/template-page/api/template-data';
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
-import { mockTemplates } from '@widgets/filter-templates/mock-template';
 import Image from 'next/image';
 
 interface TemplateCardFilterProps {
-  template: (typeof mockTemplates)[0];
+  template: Template;
   onClick: () => void;
   isDashboard?: boolean;
   onPreviewClick?: () => void;
@@ -24,15 +24,15 @@ export function TemplateCardFilter({
   return (
     <div
       className={cn(
-        'group cursor-pointer transition-all duration-200 flex-shrink-0 hover:shadow-lg mx-auto relative mb-8',
+        'group cursor-pointer transition-all duration-200 flex-shrink-0 hover:shadow-lg mx-auto relative mb-16',
         isDashboard
           ? 'w-[280px] h-[400px] sm:w-[320px] sm:h-[460px] lg:w-[380px] lg:h-[547px]'
           : 'w-[75vw] max-w-[420px] h-[420px] sm:w-[260px] sm:h-[360px]',
       )}
     >
-      {template.profession?.length > 0 && (
+      {(template.role?.length ?? 0) > 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
-          {template.profession.map((role: string) => (
+          {template.role?.map((role: string) => (
             <span
               key={role}
               className="bg-white/80 backdrop-blur-sm text-xs text-gray-500 px-2 py-0.5 rounded-full border border-gray-200"
@@ -62,7 +62,7 @@ export function TemplateCardFilter({
         <div className="w-full h-full relative">
           <Image
             src={template.publicImageUrl}
-            alt={template.name ?? `Template ${template.id}`}
+            alt={`Template ${template.id}`}
             fill
             className="object-fit rounded-[20px]"
             unoptimized

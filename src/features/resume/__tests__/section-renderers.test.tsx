@@ -38,7 +38,7 @@ describe('Section Renderer Snapshots', () => {
         },
       };
 
-      const { container } = render(renderHeaderSection(headerSection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderHeaderSection(headerSection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
 
@@ -61,7 +61,9 @@ describe('Section Renderer Snapshots', () => {
         },
       };
 
-      const { container } = render(renderHeaderSection(headerSectionWithImage, mockResumeData, undefined, false, true));
+      const { container } = render(
+        <>{renderHeaderSection(headerSectionWithImage, mockResumeData, undefined, false, true)}</>,
+      );
       expect(container).toMatchSnapshot();
     });
   });
@@ -104,7 +106,7 @@ describe('Section Renderer Snapshots', () => {
         },
       };
 
-      const { container } = render(renderListSection(experienceSection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderListSection(experienceSection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
 
@@ -139,7 +141,7 @@ describe('Section Renderer Snapshots', () => {
         },
       };
 
-      const { container } = render(renderListSection(educationSection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderListSection(educationSection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
   });
@@ -163,7 +165,7 @@ describe('Section Renderer Snapshots', () => {
         },
       };
 
-      const { container } = render(renderContentSection(summarySection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderContentSection(summarySection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
   });
@@ -185,7 +187,9 @@ describe('Section Renderer Snapshots', () => {
         itemSeparator: ', ',
       };
 
-      const { container } = render(renderInlineListSection(skillsSection, mockResumeData, undefined, false, true));
+      const { container } = render(
+        <>{renderInlineListSection(skillsSection, mockResumeData, undefined, false, true)}</>,
+      );
       expect(container).toMatchSnapshot();
     });
   });
@@ -206,7 +210,9 @@ describe('Section Renderer Snapshots', () => {
         containerClassName: 'flex flex-wrap gap-2',
       };
 
-      const { container } = render(renderBadgeSection(skillsBadgeSection, mockResumeData, undefined, false, true));
+      const { container } = render(
+        <>{renderBadgeSection(skillsBadgeSection, mockResumeData, undefined, false, true)}</>,
+      );
       expect(container).toMatchSnapshot();
     });
 
@@ -224,7 +230,7 @@ describe('Section Renderer Snapshots', () => {
         containerClassName: 'flex flex-wrap gap-2',
       };
 
-      const { container } = render(renderBadgeSection(interestsSection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderBadgeSection(interestsSection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
   });
@@ -246,7 +252,7 @@ describe('Section Renderer Snapshots', () => {
         ],
       };
 
-      const { container } = render(renderTableSection(tableSection, mockResumeData, undefined, false, true));
+      const { container } = render(<>{renderTableSection(tableSection, mockResumeData, undefined, false, true)}</>);
       expect(container).toMatchSnapshot();
     });
   });

@@ -50,7 +50,7 @@ export const useGetAllTemplates = () => {
 export const useGetTemplateById = (templateId: string | null) => {
   return useFetch({
     queryKey: ['template', templateId],
-    queryFn: () => fetchTemplateById(templateId || ''),
+    queryFn: () => fetchTemplateById(templateId!),
     enabled: !!templateId,
   });
 };

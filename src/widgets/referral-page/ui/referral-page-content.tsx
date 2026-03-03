@@ -15,13 +15,13 @@ export default function ReferralPageContent({ user }: ReferralPageContentProps) 
   const { data: referralData, isLoading: isLoadingReferral } = useReferralData();
 
   const referralLink = referralData?.referralUrl ?? '';
-  const friendsJoined = user?.referredTo?.length ?? 0;
+  const friendsJoined = referralData?.referredTo?.length ?? 0;
   const downloadsRemaining = referralData?.downloadsLeft ?? user?.downloadsLeft ?? 0;
   const downloadsAllowed = referralData?.downloadsAllowed ?? user?.downloadsAllowed ?? 0;
   const friendsJoinedBonus = friendsJoined * 3;
 
   const friends =
-    user?.referredTo?.map((referral) => ({
+    referralData?.referredTo?.map((referral) => ({
       id: referral.id,
       name: `${referral.firstName}${referral.lastName ? ` ${referral.lastName}` : ''}`,
       email: referral.email,

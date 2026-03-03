@@ -16,14 +16,14 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { Button } from '@shared/ui/button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import { DownloadButton } from '@shared/ui/components/download-button';
 import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
+import { DownloadButton } from '@shared/ui/components/download-button';
 import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { GripVertical } from 'lucide-react';
+import { Download, GripVertical } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -488,7 +488,7 @@ export function FormPageBuilder() {
       const formDataSectionKey = sectionToFormDataMap[sectionId.toLowerCase()] || sectionId;
 
       // Get section data from formData
-      const sectionData = formData?.[formDataSectionKey as ResumeDataKey];
+      const sectionData = formData?.[formDataSectionKey];
 
       if (!sectionData || !sectionData.suggestedUpdates) {
         return;
@@ -516,7 +516,7 @@ export function FormPageBuilder() {
         suggestions,
         fieldName,
         itemId,
-        suggestionType: suggestionType as SuggestionType,
+        suggestionType,
         formDataSectionKey,
       });
       setAnalyzerModalOpen(true);
@@ -534,7 +534,7 @@ export function FormPageBuilder() {
 
   // Use DOM event delegation for suggestion clicks
   useSuggestionClickHandler({
-    containerRef: targetRef as React.RefObject<HTMLDivElement>,
+    containerRef: targetRef,
     onSuggestionClick: handleSuggestionClickFromDOM,
     enabled: hasSuggestions && !isGeneratingPDF,
   });
@@ -551,7 +551,7 @@ export function FormPageBuilder() {
 
       const { itemId, fieldName, formDataSectionKey } = analyzerModalData;
       // Use formDataSectionKey if available (from DOM clicks), otherwise fallback to currentStep
-      const sectionKey = (formDataSectionKey || currentStep) as ResumeDataKey;
+      const sectionKey = formDataSectionKey || currentStep;
       const currentData = formData?.[sectionKey];
 
       if (!currentData || !currentData.items || !Array.isArray(currentData.items)) {
@@ -700,6 +700,46 @@ export function FormPageBuilder() {
       setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
+
+  // Fetch and merge expert review suggestions (if any)
+  useEffect(() => {
+    if (!resumeId || !formData) return;
+
+    async function fetchReviewSuggestions() {
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const response = await fetch(`${backendUrl}/resume/${resumeId}/review-suggestions`, {
+          credentials: 'include',
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!data?.suggestions) return;
+
+        // Merge review suggestions into formData sections
+        const updatedData = { ...formData };
+        let hasMerged = false;
+
+        for (const [sectionKey, sectionSuggestions] of Object.entries(data.suggestions)) {
+          if (sectionKey in updatedData && (sectionSuggestions as any)?.suggestedUpdates?.length) {
+            const existing = (updatedData as any)[sectionKey]?.suggestedUpdates || [];
+            (updatedData as any)[sectionKey] = {
+              ...(updatedData as any)[sectionKey],
+              suggestedUpdates: [...existing, ...(sectionSuggestions as any).suggestedUpdates],
+            };
+            hasMerged = true;
+          }
+        }
+
+        if (hasMerged) {
+          setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
+        }
+      } catch {
+        // Silently fail - review suggestions are optional
+      }
+    }
+
+    fetchReviewSuggestions();
+  }, [resumeId]);
 
   // Initialize last save time from resume data
   useEffect(() => {

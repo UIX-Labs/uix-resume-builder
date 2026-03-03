@@ -108,9 +108,9 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                       {member.name}'s Work History
                     </p>
                     <div className="flex gap-2">
-                      {workHistory.slice(0, 3).map((work) => (
+                      {workHistory.slice(0, 3).map((work, index) => (
                         <div
-                          key={work.company}
+                          key={index}
                           className="w-[36px] h-[36px] md:w-[49px] md:h-[49px] rounded overflow-hidden bg-gray-100"
                         >
                           <Image
@@ -130,18 +130,12 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                       {member.name}'s Style
                     </p>
                     <div className="flex flex-wrap gap-[7px]">
-                      {styleTags.map((tag) => (
+                      {styleTags.map((tag, index) => (
                         <div
-                          key={tag.label}
+                          key={index}
                           className="flex items-center gap-1 px-2 md:px-3 py-1 bg-[#E9ECF1] rounded-[25px]"
                         >
-                          <span
-                            className="text-[10px] md:text-[12px] font-bold leading-[1.3em]"
-                            role="img"
-                            aria-label={tag.label}
-                          >
-                            {tag.emoji}
-                          </span>
+                          <span className="text-[10px] md:text-[12px] font-bold leading-[1.3em]">{tag.emoji}</span>
                           <span className="text-[10px] md:text-[12px] font-bold leading-[1.3em] text-[#0C1118]">
                             {tag.label}
                           </span>

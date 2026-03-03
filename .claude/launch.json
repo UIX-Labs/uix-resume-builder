@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nextjs-dev",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source ~/.nvm/nvm.sh && nvm use 20 && yarn dev --port 3001"],
+      "port": 3001
+    },
+    {
+      "name": "storybook",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source ~/.nvm/nvm.sh && nvm use 20 && yarn storybook"],
+      "port": 6006
+    }
+  ]
+}

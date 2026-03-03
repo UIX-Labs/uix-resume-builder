@@ -117,7 +117,7 @@ export function renderTableSection(
             )}
 
             {/* Render content columns with all items */}
-            {columns.map((column: any) => {
+            {columns.map((column: any, columnIdx: number) => {
               const renderColumnContent = (col: any): React.ReactNode => {
                 let content: React.ReactNode = null;
 
@@ -139,7 +139,7 @@ export function renderTableSection(
 
                     content = (
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
-                        {allBadgeItems.map(({ value, itemId }) => {
+                        {allBadgeItems.map(({ value, itemId }, badgeIndex: number) => {
                           // Extract renderable value - will return null for complex objects
                           const actualValue = extractRenderableValue(value);
 
@@ -166,7 +166,7 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
-                              <div key={value} className={col.itemClassName}>
+                              <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
                                   className={cn(
@@ -183,7 +183,7 @@ export function renderTableSection(
                           }
                           return (
                             <span
-                              key={value}
+                              key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
@@ -205,7 +205,7 @@ export function renderTableSection(
 
               return (
                 <div
-                  key={column.id}
+                  key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
                   data-has-breakable-content={column.break ? 'true' : undefined}
@@ -217,7 +217,7 @@ export function renderTableSection(
           </div>
         ) : (
           // Multi-row mode: each item gets a row
-          validItems.map((item: any) => {
+          validItems.map((item: any, itemIndex: number) => {
             // Get itemId for this item
             const itemId = item.itemId || item.id;
 
@@ -237,9 +237,9 @@ export function renderTableSection(
                 );
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
-                  .map((subField: any) => {
+                  .map((subField: any, subIdx: number) => {
                     return {
-                      fieldPath: subField.path || subField.type,
+                      idx: subIdx,
                       element: renderField(
                         { ...subField, path: subField.path },
                         item,
@@ -252,8 +252,8 @@ export function renderTableSection(
                     };
                   })
                   .filter(
-                    (entry: { element: React.ReactNode }) =>
-                      entry.element !== null && entry.element !== undefined && entry.element !== '',
+                    ({ element }: { element: React.ReactNode }) =>
+                      element !== null && element !== undefined && element !== '',
                   );
 
                 if (renderedItems.length > 0) {
@@ -264,10 +264,10 @@ export function renderTableSection(
                       data-has-breakable-content={column.break ? 'true' : undefined}
                     >
                       {renderedItems.map(
-                        (entry: { fieldPath: string; element: React.ReactNode }, entryIndex: number) => (
-                          <React.Fragment key={`inline-${entry.fieldPath}`}>
-                            {entryIndex > 0 && column.separator && <span>{column.separator}</span>}
-                            <span>{entry.element}</span>
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+                          <React.Fragment key={idx}>
+                            {arrayIdx > 0 && column.separator && <span>{column.separator}</span>}
+                            <span>{element}</span>
                           </React.Fragment>
                         ),
                       )}
@@ -324,9 +324,9 @@ export function renderTableSection(
                     // Handle inline-group specially to preserve inline layout
                     if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
-                        .map((inlineSubField: any, inlineIdx: number) => {
+                        .map((inlineSubField: any, idx: number) => {
                           return {
-                            inlineIdx,
+                            idx,
                             element: renderField(
                               { ...inlineSubField, path: inlineSubField.path },
                               item,
@@ -339,8 +339,8 @@ export function renderTableSection(
                           };
                         })
                         .filter(
-                          (entry: { inlineIdx: number; element: React.ReactNode }) =>
-                            entry.element !== null && entry.element !== undefined && entry.element !== '',
+                          ({ element }: { element: React.ReactNode }) =>
+                            element !== null && element !== undefined && element !== '',
                         );
 
                       if (renderedItems.length === 0) return null;
@@ -349,18 +349,14 @@ export function renderTableSection(
                       const hasSeparator = !!subField.separator;
 
                       const inlineContent = renderedItems.map(
-                        (entry: { key: string; element: React.ReactNode }, index: number) => {
-                          const isNotFirstItem = index > 0;
-                          const itemKey = entry.key;
-
-                          return (
-                            <React.Fragment key={itemKey}>
-                              {isNotFirstItem && hasSeparator && <span>{subField.separator}</span>}
-                              {entry.element}
-                            </React.Fragment>
-                          );
-                        },
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+                          <React.Fragment key={idx}>
+                            {arrayIdx > 0 && hasSeparator && <span>{subField.separator}</span>}
+                            <span>{element}</span>
+                          </React.Fragment>
+                        ),
                       );
+
                       // Use containerClassName if provided, otherwise className
                       const wrapperClassName = hasContainerClassName ? subField.containerClassName : subField.className;
 
@@ -376,7 +372,7 @@ export function renderTableSection(
                         );
                       }
 
-                      return <React.Fragment>{inlineContent}</React.Fragment>;
+                      return <>{inlineContent}</>;
                     }
                     // For other field types, use renderField normally
                     return renderField(
@@ -430,7 +426,7 @@ export function renderTableSection(
 
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
-                      {badgeItems.map((badgeItem: any) => {
+                      {badgeItems.map((badgeItem: any, badgeIndex: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
 
@@ -465,7 +461,7 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div key={value} className={column.itemClassName}>
+                            <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
@@ -482,7 +478,7 @@ export function renderTableSection(
                         }
                         return (
                           <span
-                            key={value}
+                            key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
@@ -504,7 +500,7 @@ export function renderTableSection(
 
             return (
               <div
-                key={item.id}
+                key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn('grid', section.rowClassName)}
@@ -513,7 +509,7 @@ export function renderTableSection(
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
                   <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
-                    {item.itemId === 0 && section.heading && (
+                    {itemIndex === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>
                           {resolvePath(data, section.heading.path, section.heading.fallback)}
@@ -525,14 +521,14 @@ export function renderTableSection(
                 )}
 
                 {/* Render content columns for each item */}
-                {columns.map((column: any) => (
+                {columns.map((column: any, columnIdx: number) => (
                   <div
-                    key={`${item.itemId}-${column.id}`}
+                    key={`${item.itemId}-${columnIdx}`}
                     className={column.className}
                     data-canbreak={column.break ? 'true' : undefined}
                     data-has-breakable-content={column.break ? 'true' : undefined}
                     style={{
-                      gridColumn: section.headingColumn ? column.id + 2 : column.id + 1,
+                      gridColumn: section.headingColumn ? columnIdx + 2 : columnIdx + 1,
                     }}
                   >
                     {renderColumnContent(column)}

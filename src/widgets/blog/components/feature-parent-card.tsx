@@ -1,5 +1,5 @@
 import { categories } from '@/data/categories';
-import type { BlogPost } from '@/shared/lib/blog';
+import { BlogPost } from '@/shared/lib/blog';
 import FeaturedPrimaryCard from './feature-primary-card';
 import FeaturedSecondaryCard from './feature-secondary';
 
@@ -22,16 +22,12 @@ export default function FeaturedSection({ primaryPost, secondaryPosts }: Feature
   return (
     <section className="w-full mx-auto mt-2 md:mt-4">
       <div className="grid lg:grid-cols-2 gap-4 items-stretch">
-        {/* LEFT - BIG CARD */}
         <div className="h-full">
           <FeaturedPrimaryCard post={primaryPost} badgeColor={primaryBadgeColor} />
         </div>
-
-        {/* RIGHT - TWO SMALL CARDS */}
         <div className="flex flex-col gap-4">
           {secondaryPosts.map((post, index) => {
             const badgeColor = getBadgeColorFromPost(post);
-
             return (
               <FeaturedSecondaryCard
                 key={post.slug}

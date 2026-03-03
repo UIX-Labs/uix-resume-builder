@@ -21,7 +21,11 @@ interface JDUploadMobileModalProps {
   onSubmittingChange?: (isSubmitting: boolean, hasError?: boolean) => void;
 }
 
-export default function JDUploadMobileModal({ isOpen, onClose, onSubmittingChange: _onSubmittingChange }: JDUploadMobileModalProps) {
+export default function JDUploadMobileModal({
+  isOpen,
+  onClose,
+  onSubmittingChange: _onSubmittingChange,
+}: JDUploadMobileModalProps) {
   const [isMobileTextViewOpen, setIsMobileTextViewOpen] = useState(false);
 
   const {

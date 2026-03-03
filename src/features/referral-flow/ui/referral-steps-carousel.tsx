@@ -88,9 +88,9 @@ export function ReferralStepsCarousel({ steps }: ReferralStepsCarouselProps) {
 
       <div className="flex justify-center mt-6 gap-2">
         {steps.map((_, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <button
             type="button"
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             key={index}
             onClick={() => scrollTo(index)}
             className={cn(

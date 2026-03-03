@@ -130,7 +130,7 @@ export default function AdminResumeExamplesPage() {
       render: (row) => (
         <div className="w-12 h-16 rounded border border-gray-200 overflow-hidden bg-gray-100">
           {row.publicThumbnail?.url ? (
-            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+            // biome-ignore lint/performance/noImgElement: dynamic image source
             <img src={row.publicThumbnail.url} alt="Preview" className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">N/A</div>
@@ -191,10 +191,18 @@ export default function AdminResumeExamplesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button type="button" onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+          <button
+            type="button"
+            onClick={() => openEdit(row)}
+            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+          >
             Edit
           </button>
-          <button type="button" onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
+          <button
+            type="button"
+            onClick={() => handleDelete(row.id)}
+            className="text-xs text-red-600 hover:text-red-800 font-medium"
+          >
             Delete
           </button>
         </div>

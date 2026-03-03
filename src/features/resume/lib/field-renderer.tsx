@@ -284,8 +284,8 @@ export function renderField(
       >
         {Array.from({ length: 5 }, (_, index) => {
           return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               key={index}
               className={cn(
                 'w-2 h-2 rounded-full border border-black',
@@ -468,8 +468,8 @@ export function renderItemWithRows(
     const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
 
     return (
-      // biome-ignore lint/suspicious/noArrayIndexKey: static list
       <div
+        // biome-ignore lint/suspicious/noArrayIndexKey: static list
         key={index}
         className={row.className}
         data-canbreak={isRowBreakable ? 'true' : undefined}
@@ -498,8 +498,8 @@ export function renderItemWithFields(
 ): React.ReactNode {
   return template.fields.map((field: any, index: number) => {
     return (
-      // biome-ignore lint/suspicious/noArrayIndexKey: static list
       <div
+        // biome-ignore lint/suspicious/noArrayIndexKey: static list
         key={index}
         data-canbreak={field.break || field.breakable ? 'true' : undefined}
         data-has-breakable-content={field.break || field.breakable ? 'true' : undefined}

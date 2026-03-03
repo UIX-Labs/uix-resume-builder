@@ -66,7 +66,14 @@ export function AdminSidebar() {
             isActive(item.href) ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
           }`}
         >
-          <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5} aria-hidden="true">
+          <svg
+            className="w-5 h-5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d={item.icon} />
           </svg>
           {item.label}

@@ -138,8 +138,8 @@ export function renderInlineListSection(
               const hasClickableSuggestions = !!suggestionData;
 
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <li
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={idx}
                   className={cn(
                     section.itemClassName,

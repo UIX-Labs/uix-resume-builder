@@ -101,10 +101,18 @@ export default function AdminCategoriesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button type="button" onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+          <button
+            type="button"
+            onClick={() => openEdit(row)}
+            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+          >
             Edit
           </button>
-          <button type="button" onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
+          <button
+            type="button"
+            onClick={() => handleDelete(row.id)}
+            className="text-xs text-red-600 hover:text-red-800 font-medium"
+          >
             Delete
           </button>
         </div>

@@ -30,7 +30,7 @@ export default function AdminTemplatesPage() {
       render: (row) => (
         <div className="w-12 h-16 rounded border border-gray-200 overflow-hidden bg-gray-100">
           {row.publicImage?.url ? (
-            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+            // biome-ignore lint/performance/noImgElement: dynamic image source
             <img src={row.publicImage.url} alt="Template" className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">N/A</div>

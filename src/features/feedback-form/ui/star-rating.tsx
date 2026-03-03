@@ -21,8 +21,8 @@ export function StarRating({ value, onChange, max = 5, className }: StarRatingPr
         const isFilled = (hoverValue !== null ? hoverValue : value) >= starValue;
 
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <Button
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             key={index}
             variant="ghost"
             type="button"

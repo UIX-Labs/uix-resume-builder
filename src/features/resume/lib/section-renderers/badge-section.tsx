@@ -36,7 +36,7 @@ export function renderBadgeSection(
     if (!iconName) return null;
     if (!(iconName in LucideIcons)) return null;
 
-    // biome-ignore lint/complexity/noDynamicNamespaceImportAccess: dynamic icon lookup by name
+    // biome-ignore lint/performance/noDynamicNamespaceImportAccess: dynamic icon lookup by name
     const Icon = LucideIcons[iconName as keyof typeof LucideIcons];
     // Only return actual icon components, not utility functions like createLucideIcon
     if (typeof Icon !== 'function' || Icon.length > 1) return null;

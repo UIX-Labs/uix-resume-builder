@@ -50,6 +50,7 @@ export function DataTable<T extends Record<string, any>>({
         <div className="animate-pulse">
           <div className="h-12 bg-gray-50 border-b" />
           {Array.from({ length: 5 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div key={i} className="h-14 border-b border-gray-100 flex items-center px-4 gap-4">
               <div className="h-4 bg-gray-200 rounded w-1/4" />
               <div className="h-4 bg-gray-200 rounded w-1/3" />
@@ -78,7 +79,7 @@ export function DataTable<T extends Record<string, any>>({
                   <span className="inline-flex items-center gap-1">
                     {col.label}
                     {col.sortable && sortKey === col.key && (
-                      <svg className="w-3 h-3" viewBox="0 0 12 12" fill="currentColor">
+                      <svg className="w-3 h-3" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
                         {sortOrder === 'ASC' ? <path d="M6 2l4 5H2z" /> : <path d="M6 10l4-5H2z" />}
                       </svg>
                     )}
@@ -119,6 +120,7 @@ export function DataTable<T extends Record<string, any>>({
           </span>
           <div className="flex gap-1">
             <button
+              type="button"
               onClick={() => onPageChange?.(page - 1)}
               disabled={page <= 1}
               className="px-3 py-1 rounded-md text-sm border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-colors"
@@ -138,6 +140,7 @@ export function DataTable<T extends Record<string, any>>({
               }
               return (
                 <button
+                  type="button"
                   key={pageNum}
                   onClick={() => onPageChange?.(pageNum)}
                   className={`px-3 py-1 rounded-md text-sm border transition-colors ${
@@ -149,6 +152,7 @@ export function DataTable<T extends Record<string, any>>({
               );
             })}
             <button
+              type="button"
               onClick={() => onPageChange?.(page + 1)}
               disabled={page >= totalPages}
               className="px-3 py-1 rounded-md text-sm border border-gray-300 disabled:opacity-40 hover:bg-gray-100 transition-colors"

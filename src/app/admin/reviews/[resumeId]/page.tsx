@@ -488,7 +488,13 @@ export default function ReviewSuggestionPage() {
                             onClick={() => handleAddBullet(section.sectionType, item.itemId, group.fieldName)}
                             className="ml-3 mb-2 px-2 py-1 text-[11px] text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded font-medium inline-flex items-center gap-1 transition-colors"
                           >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <svg
+                              className="w-3 h-3"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                             </svg>
                             Add bullet
@@ -622,8 +628,18 @@ export default function ReviewSuggestionPage() {
                           <span className="text-[10px] text-gray-500">bullet #{s.bulletIndex + 1}</span>
                         )}
                       </div>
-                      <button type="button" onClick={() => handleRemoveSuggestion(idx)} className="text-gray-400 hover:text-red-500">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveSuggestion(idx)}
+                        className="text-gray-400 hover:text-red-500"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>

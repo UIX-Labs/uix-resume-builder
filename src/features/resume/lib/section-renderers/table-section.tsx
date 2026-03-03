@@ -183,8 +183,8 @@ export function renderTableSection(
                             );
                           }
                           return (
-                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             <span
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
                               key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
@@ -206,8 +206,8 @@ export function renderTableSection(
               };
 
               return (
-                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
@@ -481,8 +481,8 @@ export function renderTableSection(
                           );
                         }
                         return (
-                          // biome-ignore lint/suspicious/noArrayIndexKey: static list
                           <span
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
@@ -504,8 +504,8 @@ export function renderTableSection(
             };
 
             return (
-              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}

@@ -493,8 +493,8 @@ function ResumeRendererComponent({
       {pages.map((columns, index) => {
         const [leftColumn, rightColumn] = columns;
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             key={index}
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
@@ -532,8 +532,8 @@ function ResumeRendererComponent({
               }}
             >
               {leftColumn.map((node: any, i: number) => (
-                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={i}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}

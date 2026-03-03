@@ -51,7 +51,7 @@ const mohsinaTemplate4 = {
             // RIGHT SIDE (Contacts)
             {
               type: 'group',
-              className: 'flex flex-col gap-1 w-[115px] mt-6 mr-2',
+              className: 'flex flex-col gap-1 w-[115px] mt-6 mr-8',
 
               items: [
                 {
@@ -403,7 +403,7 @@ const mohsinaTemplate4 = {
       showBullet: false,
       itemSeparator: '',
 
-      containerClassName: 'flex flex-wrap gap-x-4 gap-y-2',
+      containerClassName: 'flex flex-wrap gap-x-4 gap-y-0 mt-2',
 
       itemClassName:
         'inline-flex items-baseline gap-2 text-sm font-semibold leading-[14px] text-black font-poppins before:content-["•"] before:text-black',

@@ -264,6 +264,7 @@ export function TemplateCarousel() {
               {displayTemplates?.map((_, index) => (
                 <button
                   type="button"
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={index}
                   onClick={() => scrollTo(index)}
                   className={cn(

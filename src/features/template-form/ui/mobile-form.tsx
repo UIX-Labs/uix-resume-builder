@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { TemplateForm } from './index';
 
 interface MobileFormProps {
-  formSchema: FormSchema | {};
+  formSchema: FormSchema | Record<string, never>;
   values: Omit<ResumeData, 'templateId'>;
   onChange: (data: Omit<ResumeData, 'templateId'>) => void;
   currentStep: ResumeDataKey;
@@ -29,10 +29,10 @@ export function MobileForm({
   currentStep,
   isOpen,
   onClose,
-  onNext,
-  onBack,
-  hasNext,
-  hasPrevious,
+  onNext: _onNext,
+  onBack: _onBack,
+  hasNext: _hasNext,
+  hasPrevious: _hasPrevious,
   onOpenAnalyzerModal,
   onSave,
 }: MobileFormProps) {

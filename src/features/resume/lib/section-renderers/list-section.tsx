@@ -99,6 +99,7 @@ export function renderListSection(
 
           if (section.break && idx === 0) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <div
                 key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
@@ -125,6 +126,7 @@ export function renderListSection(
           }
 
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div
               key={idx}
               className={cn(

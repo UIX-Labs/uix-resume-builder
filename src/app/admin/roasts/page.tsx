@@ -80,6 +80,7 @@ export default function AdminRoastsPage() {
           </div>
           {row.roastInputMarkdown && row.roastInputMarkdown.length > 100 && (
             <button
+              type="button"
               onClick={() => setExpandedInput(expandedInput === row.resumeId ? null : row.resumeId)}
               className="text-xs text-blue-600 hover:text-blue-800 mt-1"
             >
@@ -103,6 +104,7 @@ export default function AdminRoastsPage() {
           </div>
           {row.roastOutput && row.roastOutput.length > 100 && (
             <button
+              type="button"
               onClick={() => setExpandedOutput(expandedOutput === row.resumeId ? null : row.resumeId)}
               className="text-xs text-blue-600 hover:text-blue-800 mt-1"
             >

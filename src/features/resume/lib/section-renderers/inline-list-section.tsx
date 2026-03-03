@@ -138,6 +138,7 @@ export function renderInlineListSection(
               const hasClickableSuggestions = !!suggestionData;
 
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <li
                   key={idx}
                   className={cn(
@@ -195,6 +196,7 @@ export function renderInlineListSection(
               const hasClickableSuggestions = !!suggestionData;
 
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <span key={idx}>
                   <span
                     className={cn(section.itemClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}

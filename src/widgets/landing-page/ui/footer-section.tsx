@@ -17,6 +17,7 @@ const FooterSection = () => {
       id: 'colors',
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
+          {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
           <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),

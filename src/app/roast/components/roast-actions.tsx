@@ -33,7 +33,9 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
   const trackAction = (actionType: string) => {
     apiFetch(`resume/roast/${resumeId}/action`, {
       options: { method: 'POST', body: JSON.stringify({ actionType }) },
-    }).catch(() => {});
+    }).catch(() => {
+      // Silently ignore tracking failures
+    });
   };
 
   const handleShare = () => {

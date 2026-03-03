@@ -366,10 +366,11 @@ export default function ReviewSuggestionPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <button
+            type="button"
             onClick={() => router.back()}
             className="text-sm text-gray-500 hover:text-gray-700 mb-2 inline-flex items-center gap-1"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Reviews
@@ -381,7 +382,7 @@ export default function ReviewSuggestionPage() {
             </p>
             {data.reviewer && (
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -451,6 +452,7 @@ export default function ReviewSuggestionPage() {
                           );
 
                           return (
+                            // biome-ignore lint/a11y/noStaticElementInteractions: interactive element
                             <div
                               key={fieldKey}
                               ref={(el) => {
@@ -482,10 +484,11 @@ export default function ReviewSuggestionPage() {
                         {/* Add Bullet button — shown at the end of bullet groups */}
                         {group.entries[0]?.isBullet && (
                           <button
+                            type="button"
                             onClick={() => handleAddBullet(section.sectionType, item.itemId, group.fieldName)}
                             className="ml-3 mb-2 px-2 py-1 text-[11px] text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded font-medium inline-flex items-center gap-1 transition-colors"
                           >
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                             </svg>
                             Add bullet
@@ -508,10 +511,11 @@ export default function ReviewSuggestionPage() {
 
             {/* Suggestion Type */}
             <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-500 mb-2">Type</label>
+              <span className="block text-xs font-medium text-gray-500 mb-2">Type</span>
               <div className="flex flex-wrap gap-2">
                 {SUGGESTION_TYPES.map((t) => (
                   <button
+                    type="button"
                     key={t.value}
                     onClick={() => setSuggestionType(t.value)}
                     className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
@@ -529,12 +533,12 @@ export default function ReviewSuggestionPage() {
             {/* Original text */}
             {suggestionType !== 'new_summary' && (
               <div className="mb-4">
-                <label className="block text-xs font-medium text-gray-500 mb-1">
+                <span className="block text-xs font-medium text-gray-500 mb-1">
                   Original Text
                   {selectedText && selectedBulletIndex !== undefined && (
                     <span className="ml-2 text-blue-500 font-normal">(bullet #{selectedBulletIndex + 1})</span>
                   )}
-                </label>
+                </span>
                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700 min-h-[60px]">
                   {selectedText ? (
                     <div>{selectedText}</div>
@@ -548,41 +552,46 @@ export default function ReviewSuggestionPage() {
             {/* Section selector for new_summary */}
             {suggestionType === 'new_summary' && !selectedSection && (
               <div className="mb-4">
-                <label className="block text-xs font-medium text-gray-500 mb-1">Select Section</label>
-                <select
-                  value={selectedSection}
-                  onChange={(e) => {
-                    setSelectedSection(e.target.value);
-                    const section = textSections.find((s) => s.sectionType === e.target.value);
-                    if (section?.items[0]) {
-                      setSelectedItemId(section.items[0].itemId);
-                      setSelectedFieldName('description');
-                    }
-                  }}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
-                >
-                  <option value="">Select a section...</option>
-                  {textSections.map((s) => (
-                    <option key={s.sectionType} value={s.sectionType}>
-                      {s.sectionLabel}
-                    </option>
-                  ))}
-                </select>
+                <label className="block text-xs font-medium text-gray-500 mb-1">
+                  Select Section
+                  <select
+                    value={selectedSection}
+                    onChange={(e) => {
+                      setSelectedSection(e.target.value);
+                      const section = textSections.find((s) => s.sectionType === e.target.value);
+                      if (section?.items[0]) {
+                        setSelectedItemId(section.items[0].itemId);
+                        setSelectedFieldName('description');
+                      }
+                    }}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                  >
+                    <option value="">Select a section...</option>
+                    {textSections.map((s) => (
+                      <option key={s.sectionType} value={s.sectionType}>
+                        {s.sectionLabel}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
             )}
 
             {/* Suggested text */}
             <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-500 mb-1">Suggested Text</label>
-              <textarea
-                value={suggestedText}
-                onChange={(e) => setSuggestedText(e.target.value)}
-                placeholder="Type your suggested improvement..."
-                className="w-full rounded-lg border border-gray-300 p-3 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-              />
+              <label className="block text-xs font-medium text-gray-500 mb-1">
+                Suggested Text
+                <textarea
+                  value={suggestedText}
+                  onChange={(e) => setSuggestedText(e.target.value)}
+                  placeholder="Type your suggested improvement..."
+                  className="w-full rounded-lg border border-gray-300 p-3 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                />
+              </label>
             </div>
 
             <button
+              type="button"
               onClick={handleAddSuggestion}
               disabled={
                 !suggestedText.trim() || (!selectedText && suggestionType !== 'new_summary') || !selectedSection
@@ -604,6 +613,7 @@ export default function ReviewSuggestionPage() {
             ) : (
               <div className="space-y-3 max-h-60 overflow-y-auto">
                 {suggestions.map((s, idx) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   <div key={idx} className={`rounded-lg border p-3 ${getTypeStyle(s.type)}`}>
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2">
@@ -612,8 +622,8 @@ export default function ReviewSuggestionPage() {
                           <span className="text-[10px] text-gray-500">bullet #{s.bulletIndex + 1}</span>
                         )}
                       </div>
-                      <button onClick={() => handleRemoveSuggestion(idx)} className="text-gray-400 hover:text-red-500">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <button type="button" onClick={() => handleRemoveSuggestion(idx)} className="text-gray-400 hover:text-red-500">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
@@ -636,6 +646,7 @@ export default function ReviewSuggestionPage() {
             {suggestions.length > 0 && (
               <div className="flex gap-3 mt-4">
                 <button
+                  type="button"
                   onClick={handleSaveDraft}
                   disabled={draftMutation.isPending}
                   className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors border border-gray-200"
@@ -643,6 +654,7 @@ export default function ReviewSuggestionPage() {
                   {draftMutation.isPending ? 'Saving...' : 'Save Draft'}
                 </button>
                 <button
+                  type="button"
                   onClick={handleSubmit}
                   disabled={submitMutation.isPending}
                   className="flex-1 px-4 py-2.5 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"

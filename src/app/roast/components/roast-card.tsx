@@ -25,6 +25,7 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
           aria-hidden="true"
         >
           {Array.from({ length: 20 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <span key={i} className="text-6xl transform rotate-12">
               🔥
             </span>
@@ -52,6 +53,7 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
 
             return (
               <motion.div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={index}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}

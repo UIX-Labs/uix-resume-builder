@@ -140,6 +140,7 @@ export const MobileNavDrawer = ({
                   {menuSections && menuSections.length > 0 ? (
                     <div className="space-y-8">
                       {menuSections.map((section, sectionIndex) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: static list
                         <div key={sectionIndex}>
                           {section.label && (
                             <h3 className="text-xs font-normal text-sidebar-section-label mb-4 tracking-[-0.00167em] leading-[1.667em]">

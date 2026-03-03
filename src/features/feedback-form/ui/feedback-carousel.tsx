@@ -70,6 +70,7 @@ export function FeedbackCarousel() {
       {/* Pagination Dots */}
       <div className="flex justify-center gap-2">
         {scrollSnaps.map((_, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <button
             type="button"
             key={index}

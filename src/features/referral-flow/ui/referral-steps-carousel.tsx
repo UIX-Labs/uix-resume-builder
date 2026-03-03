@@ -48,6 +48,7 @@ export function ReferralStepsCarousel({ steps }: ReferralStepsCarouselProps) {
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {steps.map((step, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div key={index} className="flex-[0_0_100%] min-w-0 px-4">
               <div className="flex flex-col items-center gap-2 relative pt-16 z-10">
                 {step.threadImage && (
@@ -87,6 +88,7 @@ export function ReferralStepsCarousel({ steps }: ReferralStepsCarouselProps) {
 
       <div className="flex justify-center mt-6 gap-2">
         {steps.map((_, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <button
             type="button"
             key={index}

@@ -73,7 +73,7 @@ export default function AllResumePage() {
   const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   const handleCreateResume = useCallback(async () => {
-    // biome-ignore lint/correctness/noUnusedVariables: <explanation>
+    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is assigned for future use in guest auth flow
     let guestEmail: string | undefined;
 
     if (!user?.isLoggedIn) {

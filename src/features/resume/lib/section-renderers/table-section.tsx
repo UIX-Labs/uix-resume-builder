@@ -166,6 +166,7 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
                               <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
@@ -182,6 +183,7 @@ export function renderTableSection(
                             );
                           }
                           return (
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             <span
                               key={badgeIndex}
                               className={cn(
@@ -204,6 +206,7 @@ export function renderTableSection(
               };
 
               return (
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 <div
                   key={columnIdx}
                   className={column.className}
@@ -461,6 +464,7 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
@@ -477,6 +481,7 @@ export function renderTableSection(
                           );
                         }
                         return (
+                          // biome-ignore lint/suspicious/noArrayIndexKey: static list
                           <span
                             key={badgeIndex}
                             className={cn(
@@ -499,6 +504,7 @@ export function renderTableSection(
             };
 
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <div
                 key={itemIndex}
                 data-item="table-row"

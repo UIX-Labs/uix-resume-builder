@@ -89,7 +89,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
 
-    const { isLoggedIn: isAuthenticated, email } = await checkAuth(request);
+    const { isLoggedIn: isAuthenticated, email: _email } = await checkAuth(request);
 
     if (isAuthenticated && isAuthRoute) {
       const callbackUrl = request.nextUrl.searchParams.get('callbackUrl');

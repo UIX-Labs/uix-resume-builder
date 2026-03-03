@@ -101,10 +101,10 @@ export default function AdminCategoriesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+          <button type="button" onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
             Edit
           </button>
-          <button onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
+          <button type="button" onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
             Delete
           </button>
         </div>
@@ -124,6 +124,7 @@ export default function AdminCategoriesPage() {
           </p>
         </div>
         <button
+          type="button"
           onClick={openCreate}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
@@ -145,80 +146,97 @@ export default function AdminCategoriesPage() {
             <h3 className="text-lg font-semibold mb-4">{editingId ? 'Edit Category' : 'Add New Category'}</h3>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-                <input
-                  value={form.name}
-                  onChange={(e) => onChange('name', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Software Engineer"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Name *
+                  <input
+                    value={form.name}
+                    onChange={(e) => onChange('name', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., Software Engineer"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
-                <input
-                  value={form.slug}
-                  onChange={(e) => onChange('slug', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., software-engineer"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Slug *
+                  <input
+                    value={form.slug}
+                    onChange={(e) => onChange('slug', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., software-engineer"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title *</label>
-                <input
-                  value={form.metaTitle}
-                  onChange={(e) => onChange('metaTitle', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="SEO title for this category page"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Title *
+                  <input
+                    value={form.metaTitle}
+                    onChange={(e) => onChange('metaTitle', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="SEO title for this category page"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description *</label>
-                <textarea
-                  value={form.metaDescription}
-                  onChange={(e) => onChange('metaDescription', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm h-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="SEO description for this category page"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Description *
+                  <textarea
+                    value={form.metaDescription}
+                    onChange={(e) => onChange('metaDescription', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm h-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="SEO description for this category page"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
-                <input
-                  value={form.metaKeywords}
-                  onChange={(e) => onChange('metaKeywords', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="comma, separated, keywords"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Keywords
+                  <input
+                    value={form.metaKeywords}
+                    onChange={(e) => onChange('metaKeywords', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="comma, separated, keywords"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Hero Heading</label>
-                <input
-                  value={form.heroHeading}
-                  onChange={(e) => onChange('heroHeading', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Hero section heading text"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Hero Heading
+                  <input
+                    value={form.heroHeading}
+                    onChange={(e) => onChange('heroHeading', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Hero section heading text"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Hero Description</label>
-                <textarea
-                  value={form.heroDescription}
-                  onChange={(e) => onChange('heroDescription', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm h-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Hero section description text"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Hero Description
+                  <textarea
+                    value={form.heroDescription}
+                    onChange={(e) => onChange('heroDescription', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm h-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Hero section description text"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rank</label>
-                <input
-                  type="number"
-                  value={form.rank}
-                  onChange={(e) => onChange('rank', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Rank
+                  <input
+                    type="number"
+                    value={form.rank}
+                    onChange={(e) => onChange('rank', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </label>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
+                type="button"
                 onClick={() => {
                   setShowModal(false);
                   setEditingId(null);
@@ -228,6 +246,7 @@ export default function AdminCategoriesPage() {
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={handleSubmit}
                 disabled={isPending || !form.name || !form.slug || !form.metaTitle || !form.metaDescription}
                 className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50"

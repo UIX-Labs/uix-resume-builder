@@ -29,6 +29,7 @@ export function renderField(
       <div className={cn(field.className)}>
         {field.children?.map((child: any, idx: number) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
               {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
             </React.Fragment>
@@ -121,6 +122,7 @@ export function renderField(
         )}
         {field.items?.map((subField: any, idx: number) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
               {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
             </React.Fragment>
@@ -135,6 +137,7 @@ export function renderField(
       <div className={cn('flex flex-row items-center', field.className)}>
         {field.items.map((subField: any, idx: number) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
               {idx > 0 && field.separator && <span>{field.separator}</span>}
               {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
@@ -224,6 +227,7 @@ export function renderField(
     const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
+      // biome-ignore lint/performance/noImgElement: resume template rendering requires img for PDF/thumbnail generation
       <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
@@ -238,6 +242,7 @@ export function renderField(
       <div className={field.className}>
         {field.items.map((subField: any, idx: number) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
               {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
             </React.Fragment>
@@ -279,6 +284,7 @@ export function renderField(
       >
         {Array.from({ length: 5 }, (_, index) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div
               key={index}
               className={cn(
@@ -462,6 +468,7 @@ export function renderItemWithRows(
     const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
 
     return (
+      // biome-ignore lint/suspicious/noArrayIndexKey: static list
       <div
         key={index}
         className={row.className}
@@ -470,6 +477,7 @@ export function renderItemWithRows(
       >
         {row.cells.map((cell: any, cellIndex: number) => {
           return (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={cellIndex}>
               {renderField(cell, item, itemId, suggestedUpdates, isThumbnail, undefined, sectionId)}
             </React.Fragment>
@@ -490,6 +498,7 @@ export function renderItemWithFields(
 ): React.ReactNode {
   return template.fields.map((field: any, index: number) => {
     return (
+      // biome-ignore lint/suspicious/noArrayIndexKey: static list
       <div
         key={index}
         data-canbreak={field.break || field.breakable ? 'true' : undefined}

@@ -86,6 +86,7 @@ export default function FaqSection() {
         >
           {faqs.map((faq, index) => (
             <motion.div
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               key={index}
               variants={itemVariants}
               className="border border-gray-200 rounded-xl overflow-hidden bg-white hover:border-gray-300 transition-colors duration-200"

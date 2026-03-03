@@ -8,7 +8,7 @@ import CategoriesSection from './categories-section';
 import NotFoundSearch from './components/not-found-search';
 import SearchBar from './components/search-bar';
 
-export default function BlogPageContent({ posts, tags }: { posts: BlogPost[]; tags: string[] }) {
+export default function BlogPageContent({ posts, tags: _tags }: { posts: BlogPost[]; tags: string[] }) {
   const [searchQuery, setSearchQuery] = useState('');
   const isSearch = searchQuery.trim().length > 0;
 

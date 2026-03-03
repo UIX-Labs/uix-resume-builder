@@ -1,25 +1,25 @@
 'use client';
 
-import type { ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { createResume, updateResumeTemplate } from '@entities/resume';
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { useUserProfile } from '@shared/hooks/use-user';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
-import { useMutation } from '@tanstack/react-query';
+import { useSelectTemplate } from '@shared/hooks/use-select-template';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import JDUploadMobileModal from './jd-upload-mobile-modal';
-import { LinkedInModal } from './linkedin-integration-card';
+import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useUserProfile } from '@shared/hooks/use-user';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
 import ResumeCreationModal from './resume-creation-modal';
+import { LinkedInModal } from './linkedin-integration-card';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function DashboardCarousel() {
   const router = useRouter();
@@ -41,9 +41,10 @@ export default function DashboardCarousel() {
   const { data: templates } = useGetAllTemplates();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
-  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
+
   const [isCreationModalOpen, setIsCreationModalOpen] = useState(false);
   const [creationTemplate, setCreationTemplate] = useState<Template | null>(null);
+  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
@@ -57,7 +58,7 @@ export default function DashboardCarousel() {
 
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = (action: ResumeCreationActionType) => {
+  const lockOptions = (action: 'create' | 'upload' | 'tailoredJD') => {
     setActiveAction(action);
     setOptionsLocked(true);
   };

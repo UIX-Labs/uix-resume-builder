@@ -237,9 +237,9 @@ export function renderTableSection(
                 );
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
-                  .map((subField: any) => {
+                  .map((subField: any, subIdx: number) => {
                     return {
-                      fieldPath: subField.path || subField.type,
+                      idx: subIdx,
                       element: renderField(
                         { ...subField, path: subField.path },
                         item,
@@ -252,8 +252,8 @@ export function renderTableSection(
                     };
                   })
                   .filter(
-                    (entry: { element: React.ReactNode }) =>
-                      entry.element !== null && entry.element !== undefined && entry.element !== '',
+                    ({ element }: { element: React.ReactNode }) =>
+                      element !== null && element !== undefined && element !== '',
                   );
 
                 if (renderedItems.length > 0) {
@@ -264,10 +264,10 @@ export function renderTableSection(
                       data-has-breakable-content={column.break ? 'true' : undefined}
                     >
                       {renderedItems.map(
-                        (entry: { fieldPath: string; element: React.ReactNode }, entryIndex: number) => (
-                          <React.Fragment key={`inline-${entry.fieldPath}`}>
-                            {entryIndex > 0 && column.separator && <span>{column.separator}</span>}
-                            <span>{entry.element}</span>
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+                          <React.Fragment key={idx}>
+                            {arrayIdx > 0 && column.separator && <span>{column.separator}</span>}
+                            <span>{element}</span>
                           </React.Fragment>
                         ),
                       )}
@@ -324,9 +324,9 @@ export function renderTableSection(
                     // Handle inline-group specially to preserve inline layout
                     if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
-                        .map((inlineSubField: any, inlineIdx: number) => {
+                        .map((inlineSubField: any, idx: number) => {
                           return {
-                            inlineIdx,
+                            idx,
                             element: renderField(
                               { ...inlineSubField, path: inlineSubField.path },
                               item,
@@ -339,8 +339,8 @@ export function renderTableSection(
                           };
                         })
                         .filter(
-                          (entry: { inlineIdx: number; element: React.ReactNode }) =>
-                            entry.element !== null && entry.element !== undefined && entry.element !== '',
+                          ({ element }: { element: React.ReactNode }) =>
+                            element !== null && element !== undefined && element !== '',
                         );
 
                       if (renderedItems.length === 0) return null;
@@ -349,18 +349,14 @@ export function renderTableSection(
                       const hasSeparator = !!subField.separator;
 
                       const inlineContent = renderedItems.map(
-                        (entry: { key: string; element: React.ReactNode }, index: number) => {
-                          const isNotFirstItem = index > 0;
-                          const itemKey = entry.key;
-
-                          return (
-                            <React.Fragment key={itemKey}>
-                              {isNotFirstItem && hasSeparator && <span>{subField.separator}</span>}
-                              {entry.element}
-                            </React.Fragment>
-                          );
-                        },
+                        ({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
+                          <React.Fragment key={idx}>
+                            {arrayIdx > 0 && hasSeparator && <span>{subField.separator}</span>}
+                            <span>{element}</span>
+                          </React.Fragment>
+                        ),
                       );
+
                       // Use containerClassName if provided, otherwise className
                       const wrapperClassName = hasContainerClassName ? subField.containerClassName : subField.className;
 
@@ -376,7 +372,7 @@ export function renderTableSection(
                         );
                       }
 
-                      return <React.Fragment>{inlineContent}</React.Fragment>;
+                      return <>{inlineContent}</>;
                     }
                     // For other field types, use renderField normally
                     return renderField(

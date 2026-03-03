@@ -1,8 +1,7 @@
-import { cn } from '@shared/lib/cn';
 import type React from 'react';
-import { renderDivider } from '../components/Divider';
-import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
+import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
 export function renderListSection(
   section: any,

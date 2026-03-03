@@ -94,19 +94,16 @@ function Innovation() {
               {/* Stars and text */}
               <div className="flex flex-col">
                 <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => {
-                    const starKey = `star-${i}`;
-                    return (
-                      <Image
-                        key={starKey}
-                        src="/images/Star.svg"
-                        width={23}
-                        height={23}
-                        alt="Rating Star"
-                        className="w-4 h-4 md:w-[23px] md:h-[23px]"
-                      />
-                    );
-                  })}
+                  {[...Array(5)].map((_, i) => (
+                    <Image
+                      src="/images/Star.svg"
+                      width={18}
+                      height={18}
+                      alt=""
+                      key={i}
+                      className="w-4 h-4 md:w-[23px] md:h-[23px]"
+                    />
+                  ))}
                 </div>
                 <p className="text-[#F1F7FF] font-semibold mt-1 font-[Geist,sans-serif] text-sm md:text-[18px] leading-[1.33em] tracking-[-0.0144em]">
                   <span className="inline-block tabular-nums" style={{ minWidth: countMinWidth, textAlign: 'center' }}>

@@ -4,7 +4,6 @@ import { cn } from '@shared/lib/cn';
 import { isHtml } from '@shared/lib/markdown';
 import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
-import Image from 'next/image';
 import React from 'react';
 import { renderDivider } from './components/Divider';
 import { resolvePath } from './resolve-path';

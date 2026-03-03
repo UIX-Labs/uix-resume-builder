@@ -186,6 +186,7 @@ export function renderBadgeSection(
             );
           }
 
+          // Default rendering without icon
           return (
             <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
               <span

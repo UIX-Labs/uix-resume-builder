@@ -1,4 +1,4 @@
-import type * as React from 'react';
+import * as React from 'react';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
@@ -41,8 +41,10 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
   return (
+    // biome-ignore lint/a11y/useFocusableInteractive: <explanation>
     <span
       data-slot="breadcrumb-page"
+      role="link"
       aria-disabled="true"
       aria-current="page"
       className={cn('text-foreground font-normal', className)}

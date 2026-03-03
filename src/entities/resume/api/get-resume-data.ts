@@ -12,7 +12,7 @@ export interface ResumeDataResponse extends ResumeData {
 }
 
 export async function getResumeData(id: string, isLoggedIn = false) {
-  // biome-ignore lint/correctness/noUnusedVariables: false positive
+  // biome-ignore lint/correctness/noUnusedVariables: <explanation>
   let guestEmail: string | null = null;
 
   if (!isLoggedIn) {

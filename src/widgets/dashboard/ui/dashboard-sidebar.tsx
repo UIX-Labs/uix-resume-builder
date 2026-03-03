@@ -1,9 +1,4 @@
 'use client';
-import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
-import ReferralIcon from '@features/referral-flow/ui/referral-icon';
-import { useUserProfile } from '@shared/hooks/use-user';
-import PikaResume from '@shared/icons/pika-resume';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import {
   Sidebar,
   SidebarContent,
@@ -12,12 +7,18 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuButton,
 } from '@shared/ui/sidebar';
-import { FileText, Home, LayoutGrid, LogIn, LogOut } from 'lucide-react';
+import { Home, FileText, LogOut, LayoutGrid, LogIn } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useLogoutUser } from '@entities/auth-page/api/auth-queries';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import PikaResume from '@shared/icons/pika-resume';
+import { useRouter } from 'next/navigation';
+import { useUserProfile } from '@shared/hooks/use-user';
+import ReferralIcon from '@features/referral-flow/ui/referral-icon';
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
@@ -51,15 +52,6 @@ export default function DashboardSidebar() {
   };
 
   const handleReferralClick = () => {
-    if (!user) {
-      router.push('/auth');
-      trackEvent('navigation_blocked', {
-        source: 'dashboard_sidebar',
-        destination: 'referral',
-        reason: 'not_authenticated',
-      });
-      return;
-    }
     trackEvent('navigation_click', {
       source: 'dashboard_sidebar',
       destination: 'referral',
@@ -120,8 +112,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/get-all-resumes'}>
-                  <Link href="/get-all-resumes" onClick={handleAllTemplatesClick}>
+                <SidebarMenuButton asChild isActive={pathname === '/templates'}>
+                  <Link href="/templates" onClick={handleAllTemplatesClick}>
                     <LayoutGrid className="w-5 h-5" />
                     All Templates
                   </Link>
@@ -129,8 +121,8 @@ export default function DashboardSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname === '/resumes'}>
-                  <Link href="/resumes" onClick={handleYourResumesClick}>
+                <SidebarMenuButton asChild isActive={pathname === '/my-resumes'}>
+                  <Link href="/my-resumes" onClick={handleYourResumesClick}>
                     <FileText className="w-5 h-5" />
                     Your Resumes
                   </Link>

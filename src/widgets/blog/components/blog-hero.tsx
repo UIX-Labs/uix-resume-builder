@@ -21,38 +21,23 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
       border-white min-h-0 lg:h-[296px] border-2"
     >
       {breadcrumbs && (
-        <nav
-          aria-label="Breadcrumb"
-          className="absolute top-4 lg:left-10 z-10 text-sm text-gray-500 left-1/2 -translate-x-1/2 whitespace-nowrap lg:translate-x-0 lg:right-auto"
+        <div
+          className="absolute top-4 lg:left-10 z-10 text-sm text-gray-500 left-1/2 -translate-x-1/2 whitespace-nowrap
+                         lg:translate-x-0 lg:right-auto"
         >
-          <ol className="flex list-none p-0">
-            {breadcrumbs.map((item, index) => {
-              // Use a unique property like 'id' or 'label' if available, otherwise fallback to index safely
-              const itemKey = item.label || `breadcrumb-${index}`;
-              const isLast = index === breadcrumbs.length - 1;
-
-              return (
-                <li key={itemKey} className="flex items-center">
-                  {item.href && !isLast ? (
-                    <a href={item.href} className="hover:text-black transition-colors">
-                      {item.label}
-                    </a>
-                  ) : (
-                    <span className="text-black font-medium" aria-current="page">
-                      {item.label}
-                    </span>
-                  )}
-
-                  {!isLast && (
-                    <span className="mx-2 text-gray-400" aria-hidden="true">
-                      &gt;
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ol>
-        </nav>
+          {breadcrumbs.map((item, index) => (
+            <span key={index}>
+              {item.href ? (
+                <a href={item.href} className="hover:text-black transition-colors">
+                  {item.label}
+                </a>
+              ) : (
+                <span className="text-black font-medium">{item.label}</span>
+              )}
+              {index < breadcrumbs.length - 1 && <span className="mx-2 text-gray-400">{'>'}</span>}
+            </span>
+          ))}
+        </div>
       )}
       <div className="flex flex-col lg:flex-row items-stretch h-full w-full">
         {/* LEFT TEXT */}

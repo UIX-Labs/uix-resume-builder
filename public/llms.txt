@@ -1,0 +1,41 @@
+# Pika Resume
+
+> Pika Resume is a free AI-powered resume builder that helps job seekers create professional, ATS-optimized resumes in minutes. Built for freshers, career changers, and experienced professionals.
+
+## Core Features
+
+- **AI Resume Builder**: Create resumes from scratch with AI-powered content suggestions, strong action verbs, and quantified bullet points
+- **LinkedIn Import**: Import your LinkedIn profile in one click for an instant, polished resume
+- **Upload and Enhance**: Upload an existing PDF resume and get AI-enhanced wording, structure, and formatting
+- **Job Description Matching**: Paste a job description and get a tailored resume that matches the role requirements
+- **ATS-Optimized Templates**: Professional resume templates designed to pass Applicant Tracking Systems
+- **AI Resume Roast**: Get brutally honest, AI-powered feedback on your resume (free)
+- **Expert Resume Review**: Upload your resume and get a detailed, line-by-line review from professionals at Google, Microsoft, TikTok, and 20+ other top companies. Delivered in 3 business days.
+
+## Who It Is For
+
+- Job seekers creating their first resume
+- Professionals updating their resume for a new role
+- Career changers repositioning their experience
+- Students and freshers entering the job market
+- Anyone who wants an ATS-friendly, professionally formatted resume
+
+## Pricing
+
+- Free tier: 3 resume downloads on signup, earn more through referrals
+- All AI features available to all users
+
+## Links
+
+- Homepage: https://pikaresume.com
+- Resume Builder Dashboard: https://pikaresume.com/dashboard
+- Resume Templates: https://pikaresume.com/templates
+- AI Resume Roast: https://pikaresume.com/roast
+- Expert Resume Review: https://pikaresume.com/expert-review
+- Blog: https://pikaresume.com/blog
+- About Us: https://pikaresume.com/about-us
+
+## Full Documentation
+
+For detailed information about all features, use cases, and capabilities, see:
+https://pikaresume.com/llms-full.txt

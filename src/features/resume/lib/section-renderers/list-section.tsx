@@ -3,8 +3,6 @@ import { cn } from '@shared/lib/cn';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
 import { hasPendingSuggestions } from '../section-utils';
-import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
-
 export function renderListSection(
   section: any,
   data: any,
@@ -94,7 +92,6 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {

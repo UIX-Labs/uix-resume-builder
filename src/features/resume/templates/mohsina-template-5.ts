@@ -13,172 +13,127 @@ const mohsinaTemplate5 = {
     {
       id: 'header',
       type: 'banner',
-      break: false,
-      className: 'flex justify-between bg-white -mx-6 px-6  py-6 mb-0',
+      className: 'flex flex-col px-2 py-4 bg-white',
 
       fields: {
         container: {
           type: 'group',
-          className: 'flex justify-between items-start w-full',
+          className: 'flex flex-row justify-between items-start w-full',
 
           items: [
-            // LEFT SECTION (Photo + Name + Title)
+            // LEFT SIDE
             {
               type: 'group',
-              className: 'flex items-center gap-4',
+              className: 'flex flex-row items-center gap-4',
 
               items: [
-                // PROFILE IMAGE
                 {
                   type: 'image',
-                  path: 'personalDetails.items[0].photo',
-                  fallback: '',
-                  className: 'w-[75px] h-[75px] aspect-square object-cover rounded-full border border-[#005FF2]',
+                  path: 'personalDetails.items[0].profilePicturePublicUrl',
+                  fallback: '/images/profileimg.jpeg',
+                  className: 'w-[99px] h-[99px] rounded-full object-cover border border-[#005FF2] flex-shrink-0',
                 },
 
-                // NAME + TITLE CONTAINER
                 {
                   type: 'group',
-                  className: 'flex flex-col items-start gap-[5px]',
+                  className: 'flex flex-col gap-1',
 
                   items: [
-                    // NAME
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'Aman Gupta',
-                      className: 'text-3xl font-bold text-[#005FF2] leading-[20px] font-arial mt-6',
+                      className: 'text-3xl font-bold text-[#005FF2] leading-none font-arial',
                     },
-
-                    // TITLE
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].jobTitle',
                       fallback: 'WEB DESIGNER',
-                      className:
-                        'text-[10px] font-normal text-black uppercase tracking-[2px] leading-[18px] font-arial',
+                      className: 'text-[13px] uppercase tracking-[2px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
               ],
             },
 
-            // RIGHT SIDE (CONTACT BOX)
+            // RIGHT SIDE
             {
               type: 'group',
-              className: 'flex flex-col gap-1',
+              className: 'flex flex-col gap-2 items-start text-left',
 
               items: [
-                // Address
                 {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    {
-                      type: 'icon',
-                      name: 'MapPin',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
-                    {
-                      path: 'personalDetails.items[0].address',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
-                    },
-                  ],
-                },
-                // Email
-                {
-                  type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
-                  items: [
-                    {
-                      type: 'icon',
-                      name: 'Mail',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
+                    { type: 'icon', name: 'Mail', size: 12, className: 'text-[#005FF2]' },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
-                // Phone
                 {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    {
-                      type: 'icon',
-                      name: 'Phone',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
+                    { type: 'icon', name: 'Phone', size: 12, className: 'text-[#005FF2]' },
                     {
                       path: 'personalDetails.items[0].phone',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
-                // LinkedIn
                 {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    {
-                      type: 'icon',
-                      name: 'Linkedin',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
+                    { type: 'icon', name: 'Linkedin', size: 12, className: 'text-[#005FF2]' },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
-                      fallback: '',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
-                // Github
                 {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    {
-                      type: 'icon',
-                      name: 'Github',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
+                    { type: 'icon', name: 'Github', size: 12, className: 'text-[#005FF2]' },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].links.github.title',
                       href: 'personalDetails.items[0].links.github.link',
-                      fallback: '',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
-                //website
                 {
                   type: 'inline-group-with-icon',
                   className: 'flex items-center gap-2',
                   items: [
-                    {
-                      type: 'icon',
-                      name: 'Link',
-                      size: 12,
-                      className: 'text-[#005FF2]',
-                    },
+                    { type: 'icon', name: 'Globe', size: 12, className: 'text-[#005FF2]' },
                     {
                       type: 'link',
-                      path: 'personalDetails.items[0].links.website.title',
-                      href: 'personalDetails.items[0].links.website.link',
-                      fallback: '',
-                      className: 'text-[8px] text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                      path: 'personalDetails.items[0].links.portfolio.title',
+                      href: 'personalDetails.items[0].links.portfolio.url',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-2',
+                  items: [
+                    { type: 'icon', name: 'MapPin', size: 12, className: 'text-[#005FF2]' },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].address',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
                 },
@@ -197,7 +152,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Summary',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial',
       },
 
       divider: {
@@ -210,7 +165,7 @@ const mohsinaTemplate5 = {
         path: 'personalDetails.items[0].description',
         fallback:
           'UX/UI specialist focused on designing clean and functional projects across all platforms and devices in response to specific briefs and problems.',
-        className: 'text-[13px] text-black leading-[16px] font-arial whitespace-pre-wrap w-full',
+        className: 'text-[13px] text-black leading-[18px] font-arial whitespace-pre-wrap w-full',
       },
     },
 
@@ -222,7 +177,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-5',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial mt-2',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -242,16 +197,16 @@ const mohsinaTemplate5 = {
               {
                 type: 'inline-group',
                 separator: ', ',
-                className: 'flex items-center  -mt-2',
+                className: 'flex items-center -mt-2',
 
                 items: [
                   {
                     path: 'degree',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
                   },
                   {
                     path: 'grade.value',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
                   },
                 ],
               },
@@ -265,12 +220,12 @@ const mohsinaTemplate5 = {
           },
 
           {
-            className: '-mt-2 mb-4',
+            className: '-mt-2 mb-2',
 
             cells: [
               {
                 path: 'institution',
-                className: 'text-[13px] font-normal text-black uppercase tracking-[1px] leading-[16px] font-arial',
+                className: 'text-[10px] font-normal text-black uppercase tracking-[1px]  leading-[18px] font-arial',
               },
             ],
           },
@@ -286,7 +241,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Work Experience',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial -mt-3',
+        className: 'uppercase text-sm font-bold text-black tracking-[2.5px] leading-[18px] font-arial -mt-4',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -305,7 +260,7 @@ const mohsinaTemplate5 = {
             cells: [
               {
                 path: 'position',
-                className: 'text-[13px] font-bold text-black leading-[16px] font-arial',
+                className: 'text-[13px] font-bold text-black leading-[18px] font-arial',
               },
               {
                 type: 'duration',
@@ -320,7 +275,7 @@ const mohsinaTemplate5 = {
             cells: [
               {
                 path: 'company',
-                className: 'text-[13px] font-normal text-black uppercase tracking-[2px] leading-[16px] font-arial',
+                className: 'text-[13px] font-normal text-[#005FF2] uppercase tracking-[2px] leadin-[18px] font-arial',
               },
             ],
           },
@@ -331,7 +286,7 @@ const mohsinaTemplate5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-[13px] text-black leading-[16px] font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
+                  'text-[13px] text-black leading-[18px] font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
               },
             ],
           },
@@ -347,7 +302,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-4',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial -mt-1',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -403,7 +358,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'uppercase text-[13px] font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-4',
+        className: 'uppercase text-[14px] font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial mt-2',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -418,7 +373,7 @@ const mohsinaTemplate5 = {
 
       containerClassName: 'flex flex-wrap leading-[18px] font-arial',
 
-      itemClassName: 'text-[13px] font-bold text-black leading-[18px] m-2 font-arial',
+      itemClassName: 'text-[13px] font-bold text-black leading-[18px] m-2  font-arial',
     },
 
     {
@@ -430,7 +385,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-4',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial mt-2',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -442,9 +397,9 @@ const mohsinaTemplate5 = {
 
       showBullet: true,
 
-      containerClassName: 'flex flex-col gap-2 w-full',
+      containerClassName: 'flex flex-col gap-0 w-full',
 
-      itemClassName: 'text-[13px] font-normal text-black leading-[12px] font-arial break-words',
+      itemClassName: 'text-[13px] font-normal text-black leading-[18px] font-arial break-words',
     },
     {
       id: 'certifications',
@@ -455,7 +410,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certification',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-4',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial mt-2',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -469,9 +424,9 @@ const mohsinaTemplate5 = {
         className: 'flex flex-col',
 
         rows: [
+          // First Row → Title + Duration
           {
             className: 'flex justify-between items-center',
-
             cells: [
               {
                 path: 'title',
@@ -482,6 +437,18 @@ const mohsinaTemplate5 = {
                 type: 'duration',
                 path: 'duration',
                 className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
+              },
+            ],
+          },
+
+          // Second Row → Issuer
+          {
+            className: 'mt-0',
+            cells: [
+              {
+                path: 'issuer',
+                fallback: 'Issuer',
+                className: 'text-[13px] font-normal text-black  tracking-[2px] leading-[18px] font-arial',
               },
             ],
           },
@@ -498,7 +465,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interest',
-        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2px] leading-[18px] font-arial mt-4',
+        className: 'uppercase text-sm font-bold text-[#005FF2] tracking-[2.5px] leading-[18px] font-arial mt-2',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',

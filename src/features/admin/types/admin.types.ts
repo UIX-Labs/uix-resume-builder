@@ -6,6 +6,19 @@ export interface OverviewStats {
   roasts: { total: number; daily: number; weekly: number };
 }
 
+export interface TrendPoint {
+  date: string;
+  count: number;
+}
+
+export interface OverviewTrends {
+  users: TrendPoint[];
+  downloads: TrendPoint[];
+  reviews: TrendPoint[];
+  feedbacks: TrendPoint[];
+  roasts: TrendPoint[];
+}
+
 export interface AdminTemplate {
   id: string;
   json: Record<string, any> | null;
@@ -36,6 +49,7 @@ export interface ReviewRow {
   firstName: string | null;
   lastName: string | null;
   isReviewDone: boolean;
+  reviewer: string;
   createdAt: string;
   resumePublicThumbnail?: { url: string };
 }
@@ -53,6 +67,14 @@ export interface DownloadRow {
   updatedAt: string;
 }
 
+export interface RoastActions {
+  share: number;
+  download: number;
+  fix_and_download: number;
+  create_resume: number;
+  roast_another: number;
+}
+
 export interface RoastRow {
   resumeId: string;
   title: string;
@@ -60,6 +82,9 @@ export interface RoastRow {
   firstName: string | null;
   lastName: string | null;
   roastOutput: string | null;
+  roastInputMarkdown: string | null;
+  isGuest: boolean;
+  actions: RoastActions;
   createdAt: string;
 }
 
@@ -88,6 +113,7 @@ export interface ResumeForReview {
   userEmail: string;
   userName: string;
   isReviewDone: boolean;
+  reviewer: string | null;
   existingSuggestions: Record<string, any> | null;
   suggestionsStatus: string | null;
 }
@@ -99,6 +125,7 @@ export interface ReviewSuggestionItem {
   old?: string;
   new: string;
   type: 'spelling_error' | 'sentence_refinement' | 'new_summary' | 'adhoc';
+  bulletIndex?: number;
 }
 
 export interface AdminResumeExampleCategory {

@@ -702,8 +702,17 @@ export function FormPageBuilder() {
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
 
   // Fetch and merge expert review suggestions (if any)
+  // Skipped when the analyzer flow is about to handle it (pending_analyzer pattern)
   useEffect(() => {
     if (!resumeId || !formData) return;
+
+    // Skip if the analyzer flow will handle loading review suggestions
+    const pendingAnalyzer = typeof window !== 'undefined' && localStorage.getItem('pending_analyzer_resume_id');
+    if (pendingAnalyzer === resumeId) return;
+
+    // Skip if formData already has suggestions (prevents re-merge after analyzer completes)
+    const alreadyHasSuggestions = Object.values(formData).some((section: any) => section?.suggestedUpdates?.length > 0);
+    if (alreadyHasSuggestions) return;
 
     async function fetchReviewSuggestions() {
       try {

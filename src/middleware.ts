@@ -18,6 +18,8 @@ const PUBLIC_ROUTES = [
   '/resume-examples',
 ];
 
+const ADMIN_ALLOWED_DOMAINS = ['@uixlabs.in'];
+
 async function checkAuth(request: NextRequest): Promise<{ isLoggedIn: boolean; email?: string }> {
   try {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -49,13 +51,37 @@ async function checkAuth(request: NextRequest): Promise<{ isLoggedIn: boolean; e
 export async function middleware(request: NextRequest) {
   try {
     const { pathname } = request.nextUrl;
+    const hostname = request.headers.get('host') || '';
+
+    // Redirect www to non-www for SEO canonicalization
+    if (hostname.startsWith('www.')) {
+      const newUrl = new URL(request.url);
+      newUrl.host = hostname.replace('www.', '');
+      return NextResponse.redirect(newUrl, 301);
+    }
+
     const isAuthRoute = pathname === '/auth';
     const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
 
     const isAdminRoute = pathname.startsWith('/admin');
 
-    // Admin route protection: temporarily disabled for testing
+    // Admin route protection: require auth + allowed email domain
     if (isAdminRoute) {
+      if (pathname === '/admin/unauthorized') {
+        return NextResponse.next();
+      }
+
+      const { isLoggedIn, email } = await checkAuth(request);
+
+      if (!isLoggedIn) {
+        return NextResponse.redirect(new URL(`/auth?callbackUrl=${encodeURIComponent(pathname)}`, request.url));
+      }
+
+      const isAllowedDomain = email && ADMIN_ALLOWED_DOMAINS.some((domain) => email.endsWith(domain));
+      if (!isAllowedDomain) {
+        return NextResponse.redirect(new URL('/admin/unauthorized', request.url));
+      }
+
       return NextResponse.next();
     }
 

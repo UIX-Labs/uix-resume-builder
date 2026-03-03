@@ -6,6 +6,7 @@ import { FilterBar } from '@/features/admin/components/filter-bar';
 import { CopyButton } from '@/features/admin/components/copy-button';
 import { useDownloads } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, DownloadRow } from '@/features/admin/types/admin.types';
+import { fromNow } from '@/features/admin/lib/format-date';
 
 export default function AdminDownloadsPage() {
   const [params, setParams] = useState<AdminQueryParams>({
@@ -62,7 +63,7 @@ export default function AdminDownloadsPage() {
       key: 'updatedAt',
       label: 'Last Active',
       sortable: true,
-      render: (row) => new Date(row.updatedAt).toLocaleDateString(),
+      render: (row) => fromNow(row.updatedAt),
     },
   ];
 

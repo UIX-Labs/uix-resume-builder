@@ -2,9 +2,13 @@
 
 import { AdminSidebar } from '@/features/admin/components/admin-sidebar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isUnauthorized = pathname === '/admin/unauthorized';
+
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -16,6 +20,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         },
       }),
   );
+
+  if (isUnauthorized) {
+    return <>{children}</>;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

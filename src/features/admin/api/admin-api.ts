@@ -1,6 +1,7 @@
 import { fetch as fetcher } from '@shared/api';
 import type {
   OverviewStats,
+  OverviewTrends,
   AdminTemplate,
   PaginatedResponse,
   FeedbackRow,
@@ -32,6 +33,7 @@ function buildQueryString(params: AdminQueryParams): string {
 
 // ─── Overview ──────────────────────────────────────────────────
 export const getOverviewStats = () => fetcher<OverviewStats>('admin/overview');
+export const getOverviewTrends = () => fetcher<OverviewTrends>('admin/overview/trends');
 
 // ─── Templates ─────────────────────────────────────────────────
 export const getAdminTemplates = () => fetcher<AdminTemplate[]>('admin/templates');
@@ -74,6 +76,14 @@ export const submitReviewSuggestions = (resumeId: string, suggestions: Record<st
 export const markReviewDone = (resumeId: string) =>
   fetcher<any>(`admin/reviews/${resumeId}/mark-done`, {
     options: { method: 'PATCH' },
+  });
+
+export const saveDraftSuggestions = (resumeId: string, suggestions: Record<string, any>) =>
+  fetcher<any>(`admin/reviews/${resumeId}/suggestions/draft`, {
+    options: {
+      method: 'POST',
+      body: JSON.stringify({ suggestions }),
+    },
   });
 
 // ─── Downloads ─────────────────────────────────────────────────

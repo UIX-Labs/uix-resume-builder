@@ -15,7 +15,7 @@ const TABLE_COLUMNS = [
   { key: 'reviewer', label: 'Reviewer', className: 'hidden md:table-cell' },
   { key: 'submitted', label: 'Submitted', className: 'hidden sm:table-cell' },
   { key: 'lastModified', label: 'Last Modified', className: 'hidden lg:table-cell' },
-  // { key: 'actions', label: 'Actions', className: '' },
+  { key: 'actions', label: '', className: '' },
 ] as const;
 
 function TableHeader() {

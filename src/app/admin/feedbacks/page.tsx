@@ -6,6 +6,7 @@ import { FilterBar } from '@/features/admin/components/filter-bar';
 import { CopyButton } from '@/features/admin/components/copy-button';
 import { useFeedbacks } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, FeedbackRow } from '@/features/admin/types/admin.types';
+import { fromNow } from '@/features/admin/lib/format-date';
 
 function StarRating({ rating }: { rating: number | null }) {
   if (rating === null) return <span className="text-gray-400">—</span>;
@@ -67,7 +68,7 @@ export default function AdminFeedbacksPage() {
       key: 'createdAt',
       label: 'Date',
       sortable: true,
-      render: (row) => (row.createdAt ? new Date(row.createdAt).toLocaleDateString() : '—'),
+      render: (row) => fromNow(row.createdAt),
     },
   ];
 

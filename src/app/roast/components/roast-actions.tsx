@@ -10,6 +10,7 @@ import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { MobileTextView } from '@widgets/landing-page/ui/mobile-text-view';
+import { fetch as apiFetch } from '@shared/api';
 
 interface RoastActionsProps {
   onShare: () => void;
@@ -29,7 +30,29 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
   const setAnalyzerError = useFormDataStore((state) => state.setAnalyzerError);
   const setFormData = useFormDataStore((state) => state.setFormData);
 
+  const trackAction = (actionType: string) => {
+    apiFetch(`resume/roast/${resumeId}/action`, {
+      options: { method: 'POST', body: JSON.stringify({ actionType }) },
+    }).catch(() => {});
+  };
+
+  const handleShare = () => {
+    trackAction('share');
+    onShare();
+  };
+
+  const handleDownload = () => {
+    trackAction('download');
+    onDownload();
+  };
+
+  const handleRoastAnother = () => {
+    trackAction('roast_another');
+    onRoastAnother();
+  };
+
   const handleFixAndDownload = async () => {
+    trackAction('fix_and_download');
     if (isMobile) {
       setShowMobileView(true);
       return;
@@ -54,6 +77,7 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
   };
 
   const handleCreateResume = () => {
+    trackAction('create_resume');
     if (isMobile) {
       setShowMobileView(true);
       return;
@@ -81,7 +105,7 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
               {isShareAvailable && (
                 <Button
                   size="lg"
-                  onClick={onShare}
+                  onClick={handleShare}
                   className="w-full sm:w-auto min-w-[160px] bg-[#005FF2] hover:bg-[#004dc7] text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all hover:-translate-y-0.5"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
@@ -91,7 +115,7 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
 
               <Button
                 size="lg"
-                onClick={onDownload}
+                onClick={handleDownload}
                 variant={isShareAvailable ? 'outline' : 'default'}
                 className={cn(
                   'w-full sm:w-auto min-w-[160px] transition-all hover:-translate-y-0.5',
@@ -137,7 +161,7 @@ export function RoastActions({ onShare, onDownload, onRoastAnother, isShareAvail
 
               <Button
                 variant="ghost"
-                onClick={onRoastAnother}
+                onClick={handleRoastAnother}
                 className="w-full sm:w-auto text-slate-500 hover:text-slate-800 hover:bg-slate-100"
               >
                 <RotateCcw className="w-4 h-4 mr-2" />

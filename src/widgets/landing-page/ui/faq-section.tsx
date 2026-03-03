@@ -104,8 +104,9 @@ export default function FaqSection() {
                   )}
                 />
               </button>
-              <AnimatePresence>
-                {openIndex === index && (
+              {/* Always render answer in DOM for SEO (sr-only when collapsed) */}
+              {openIndex === index ? (
+                <AnimatePresence initial={false}>
                   <motion.div
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
@@ -117,8 +118,10 @@ export default function FaqSection() {
                       {faq.answer}
                     </div>
                   </motion.div>
-                )}
-              </AnimatePresence>
+                </AnimatePresence>
+              ) : (
+                <div className="sr-only">{faq.answer}</div>
+              )}
             </motion.div>
           ))}
         </motion.div>

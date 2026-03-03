@@ -108,8 +108,12 @@ const HeroSection = () => {
                   </div>
                 </h1>
 
-                {/* Mobile View */}
-                <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2">
+                {/* Mobile View - uses div to avoid duplicate H1 (desktop H1 above is the canonical one) */}
+                <div
+                  className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2"
+                  role="presentation"
+                  aria-hidden="true"
+                >
                   <div className="flex flex-col items-center gap-1">
                     <span className="font-geist font-semibold text-4xl">Build a</span>
                     <span className="text-blue-800 font-[800] text-[48px]">Professional</span>
@@ -118,7 +122,7 @@ const HeroSection = () => {
                     <span className="text-green-600 font-[800] text-5xl">Resume</span>
                     <span className="text-xl font-semibold">in under 3 minutes</span>
                   </div>
-                </h1>
+                </div>
               </div>
 
               {/* Subtitle */}

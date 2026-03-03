@@ -169,13 +169,13 @@ const FooterSection = () => {
 
         <div className="flex-1 flex items-center justify-center relative z-20">
           <div className="text-center">
-            <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight whitespace-nowrap">
+            <h2 className="text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight whitespace-nowrap">
               Right <span className="text-blue-800 font-black">Resume</span>
               <br />
               <span className="text-[28px] md:text-[80px] block -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8 mx-auto w-fit px-4 sm:px-6 md:px-8 lg:px-[49px] py-1 sm:py-0 rounded-full text-[rgba(0,137,65,1)] font-black backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
                 Right Opportunity
               </span>
-            </h1>
+            </h2>
 
             <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col items-center gap-[10px]">
               <Button

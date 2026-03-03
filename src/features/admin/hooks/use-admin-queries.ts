@@ -11,6 +11,12 @@ export const useOverviewStats = () =>
     queryFn: adminApi.getOverviewStats,
   });
 
+export const useOverviewTrends = () =>
+  useQuery({
+    queryKey: ['admin', 'overview', 'trends'],
+    queryFn: adminApi.getOverviewTrends,
+  });
+
 // ─── Templates ─────────────────────────────────────────────────
 export const useAdminTemplates = () =>
   useQuery({
@@ -76,6 +82,17 @@ export const useMarkReviewDone = () => {
     mutationFn: (resumeId: string) => adminApi.markReviewDone(resumeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'reviews'] });
+    },
+  });
+};
+
+export const useSaveDraftSuggestions = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ resumeId, suggestions }: { resumeId: string; suggestions: Record<string, any> }) =>
+      adminApi.saveDraftSuggestions(resumeId, suggestions),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'review', variables.resumeId] });
     },
   });
 };

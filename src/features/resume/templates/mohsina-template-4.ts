@@ -4,11 +4,11 @@ const mohsinaTemplate4 = {
   page: {
     background: 'white',
     className: 'text-black leading-relaxed',
-    fontFamily: 'Montserrat',
+    fontFamily: 'Montserrat, Poppins',
   },
 
   sections: [
-    // Header Section - Name and Title on one line
+    // Header Section
     {
       id: 'header',
       type: 'banner',
@@ -21,7 +21,6 @@ const mohsinaTemplate4 = {
           className: 'flex justify-between items-start',
 
           items: [
-            // LEFT SIDE (Name + Title + Description)
             {
               type: 'group',
               className: 'flex flex-col gap-2 max-w-[70%]',
@@ -43,40 +42,40 @@ const mohsinaTemplate4 = {
                   type: 'html',
                   path: 'personalDetails.items[0].description',
                   fallback: 'Over 5 years...',
-                  className: 'text-sm leading-[20px] text-black mt-1 font-poppins',
+                  className: 'text-xs leading-[20px] text-black mt-1 font-poppins',
                 },
               ],
             },
 
-            // RIGHT SIDE (Contacts)
+            // (Contacts)
             {
               type: 'group',
-              className: 'flex flex-col gap-1 w-[115px] mt-6 mr-8',
+              className: 'flex flex-col gap-1 max-w-[25%] mt-6 mr-0',
 
               items: [
                 {
                   path: 'personalDetails.items[0].address',
                   className:
-                    'flex flex-col w-full text-sm font-semibold text-black before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-0',
+                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   className:
-                    'block w-full flex flex-col text-sm font-semibold text-black before:content-["Email"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-0',
+                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
                   className:
-                    'block w-full flex flex-col text-sm font-semibold text-black before:content-["Connect"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-0',
+                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
                 },
                 {
                   path: 'personalDetails.items[0].phone',
                   className:
-                    'flex flex-col w-full text-sm font-semibold text-black before:content-["Phone"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-0',
+                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
                 },
               ],
             },
@@ -84,7 +83,7 @@ const mohsinaTemplate4 = {
         },
       },
     },
-    // Work Experience Section - Left Column
+    // Work Experience
     {
       id: 'experience',
       type: 'list-section',
@@ -95,7 +94,7 @@ const mohsinaTemplate4 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'text-base font-normal leading-[16px] text-[#005FF2] mb-0 -mt-2',
+        className: 'text-base font-normal leading-[16px] font-montserrat text-[#005FF2] mb-0 -mt-2',
       },
 
       listPath: 'experience.items',
@@ -114,7 +113,7 @@ const mohsinaTemplate4 = {
                 items: [
                   {
                     type: 'inline-group',
-                    className: 'flex items-baseline mt-1 ',
+                    className: 'flex items-baseline mt-0 ',
                     separator: ', ',
                     items: [
                       {
@@ -125,14 +124,14 @@ const mohsinaTemplate4 = {
                       {
                         path: 'company',
                         fallback: 'Oracle',
-                        className: 'text-[14px] pl-1  font-bold text-black ',
+                        className: 'text-[16px] pl-1  font-bold text-black ',
                       },
                     ],
                   },
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-sm font-normal leading-[14px] text-[#797979] font-poppins text-right',
+                    className: 'text-xs font-normal leading-[14px] text-[#797979] font-montserrat text-right',
                   },
                 ],
               },
@@ -146,7 +145,7 @@ const mohsinaTemplate4 = {
                 path: 'description',
                 break: true,
                 className:
-                  'text-sm mt-0 font-medium leading-tight text-black font-montserrat whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
+                  'text-xs mb-2 font-normal leading-[20px] text-black font-poppins whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
               },
             ],
           },
@@ -164,7 +163,7 @@ const mohsinaTemplate4 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'text-base font-normal leading-[16px] text-[#005FF2] font-montserrat mt-4',
+        className: 'text-base font-normal leading-[16px] text-[#005FF2] font-montserrat mt-0 ',
       },
 
       listPath: 'education.items',
@@ -188,30 +187,30 @@ const mohsinaTemplate4 = {
                       {
                         type: 'inline-group',
                         separator: ', ',
-                        className: 'flex items-baseline ',
+                        className: 'flex items-baseline mt-2 ',
                         items: [
                           {
                             path: 'degree',
                             fallback: 'Masters of Design',
-                            className: 'text-base leading-[14px] font-bold text-black font-montserrat ',
+                            className: 'text-base leading-[14px] font-bold text-black font-poppins ',
                           },
                           {
                             path: 'cgpa',
                             fallback: '8.0 CGPA',
-                            className: 'text-base leading-[14px] font-bold text-[#005FF2] font-montserrat ml-1',
+                            className: 'text-base leading-[14px] font-bold text-[#005FF2] font-poppins ml-1',
                           },
                         ],
                       },
                       {
                         type: 'duration',
                         path: 'duration',
-                        className: 'text-sm leading-[14px] font-medium text-[#797979] font-montserrat',
+                        className: 'text-xs leading-[14px] font-medium text-[#797979] font-montserrat',
                       },
                     ],
                   },
                   {
                     path: 'institution',
-                    className: 'text-sm  leading-14px font-normal text-black font-poppins',
+                    className: 'text-xs  leading-[18px] font-normal text-black font-poppins',
                   },
                 ],
               },
@@ -220,8 +219,6 @@ const mohsinaTemplate4 = {
         ],
       },
     },
-
-    // Work Experience Section - Left Column
 
     // Projects Section - Left Column
     {
@@ -234,14 +231,14 @@ const mohsinaTemplate4 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mt-4',
+        className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mt-3',
       },
 
       listPath: 'projects.items',
       containerClassName: 'flex flex-col gap-0',
 
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: 'flex flex-col gap-0',
         break: true,
 
         rows: [
@@ -249,7 +246,7 @@ const mohsinaTemplate4 = {
             cells: [
               {
                 type: 'inline-group',
-                className: 'flex justify-between w-full items-start',
+                className: 'flex justify-between w-full items-start mt-2',
                 items: [
                   {
                     path: 'title',
@@ -259,7 +256,7 @@ const mohsinaTemplate4 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-sm font-medium leading-[16px] text-[#797979] font-montserrat',
+                    className: 'text-xs font-medium leading-[16px] text-[#797979] font-montserrat',
                   },
                 ],
               },
@@ -273,7 +270,7 @@ const mohsinaTemplate4 = {
                 path: 'description',
                 break: true,
                 className:
-                  'text-sm font-normal leading-tight text-black font-poppins whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
+                  'text-xs font-normal leading-[20px] text-black font-poppins whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1',
               },
             ],
           },
@@ -291,15 +288,15 @@ const mohsinaTemplate4 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'text-md font-medium leading-[13px] text-[#005FF2] font-montserrat mb-2 mt-4',
+        className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mb-2 mt-4',
       },
 
       listPath: 'achievements.items[0].items',
       itemPath: '',
 
-      containerClassName: 'flex flex-col gap-1.5 w-full leading-[16px]',
+      containerClassName: 'flex flex-col w-full ',
 
-      itemClassName: 'text-sm font-normal leading-[16px] text-black font-poppins break-words',
+      itemClassName: 'text-xs font-normal leading-[20px] text-black font-poppins break-words',
     },
     // Skills Section - Right Column
     {
@@ -323,7 +320,7 @@ const mohsinaTemplate4 = {
 
       containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 leading-none',
       itemClassName:
-        'inline-flex items-baseline gap-1 text-sm leading-10px font-semibold text-black font-poppins before:content-["•"] before:text-black before:text-[9px]',
+        'inline-flex items-baseline gap-1 text-xs leading-[18px] font-semibold text-black font-poppins before:content-["•"] before:text-black before:text-[9px]',
     },
     // Certifications Section - Left Column
     {
@@ -361,7 +358,7 @@ const mohsinaTemplate4 = {
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-sm font-medium leading-[16px] text-[#797979] font-montserrat',
+                    className: 'text-xs font-medium leading-[16px] text-[#797979] font-montserrat',
                   },
                 ],
               },
@@ -374,7 +371,7 @@ const mohsinaTemplate4 = {
                 path: 'issuer',
                 fallback: 'Company name',
                 className:
-                  'inline-flex -mt-4 items-baseline gap-2 text-sm font-normal text-black font-poppins before:content-["•"] before:text-black ',
+                  'inline-flex -mt-4 items-baseline gap-2 text-xs font-normal text-black font-poppins before:content-["•"] before:text-black ',
               },
             ],
           },
@@ -406,7 +403,7 @@ const mohsinaTemplate4 = {
       containerClassName: 'flex flex-wrap gap-x-4 gap-y-0 mt-2',
 
       itemClassName:
-        'inline-flex items-baseline gap-2 text-sm font-semibold leading-[14px] text-black font-poppins before:content-["•"] before:text-black',
+        'inline-flex items-baseline gap-2 text-xs font-semibold leading-[18px] text-black font-poppins before:content-["•"] before:text-black',
     },
   ],
 };

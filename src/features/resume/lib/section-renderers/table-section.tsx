@@ -117,7 +117,7 @@ export function renderTableSection(
             )}
 
             {/* Render content columns with all items */}
-            {columns.map((column: any) => {
+            {columns.map((column: any, columnIdx: number) => {
               const renderColumnContent = (col: any): React.ReactNode => {
                 let content: React.ReactNode = null;
 
@@ -139,7 +139,7 @@ export function renderTableSection(
 
                     content = (
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
-                        {allBadgeItems.map(({ value, itemId }) => {
+                        {allBadgeItems.map(({ value, itemId }, badgeIndex: number) => {
                           // Extract renderable value - will return null for complex objects
                           const actualValue = extractRenderableValue(value);
 
@@ -166,7 +166,7 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
-                              <div key={value} className={col.itemClassName}>
+                              <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
                                   className={cn(
@@ -183,7 +183,7 @@ export function renderTableSection(
                           }
                           return (
                             <span
-                              key={value}
+                              key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
@@ -205,7 +205,7 @@ export function renderTableSection(
 
               return (
                 <div
-                  key={column.id}
+                  key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
                   data-has-breakable-content={column.break ? 'true' : undefined}
@@ -217,7 +217,7 @@ export function renderTableSection(
           </div>
         ) : (
           // Multi-row mode: each item gets a row
-          validItems.map((item: any) => {
+          validItems.map((item: any, itemIndex: number) => {
             // Get itemId for this item
             const itemId = item.itemId || item.id;
 
@@ -430,7 +430,7 @@ export function renderTableSection(
 
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
-                      {badgeItems.map((badgeItem: any) => {
+                      {badgeItems.map((badgeItem: any, badgeIndex: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
 
@@ -465,7 +465,7 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div key={value} className={column.itemClassName}>
+                            <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
@@ -482,7 +482,7 @@ export function renderTableSection(
                         }
                         return (
                           <span
-                            key={value}
+                            key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
@@ -504,7 +504,7 @@ export function renderTableSection(
 
             return (
               <div
-                key={item.id}
+                key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn('grid', section.rowClassName)}
@@ -513,7 +513,7 @@ export function renderTableSection(
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
                   <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
-                    {item.itemId === 0 && section.heading && (
+                    {itemIndex === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>
                           {resolvePath(data, section.heading.path, section.heading.fallback)}
@@ -525,14 +525,14 @@ export function renderTableSection(
                 )}
 
                 {/* Render content columns for each item */}
-                {columns.map((column: any) => (
+                {columns.map((column: any, columnIdx: number) => (
                   <div
-                    key={`${item.itemId}-${column.id}`}
+                    key={`${item.itemId}-${columnIdx}`}
                     className={column.className}
                     data-canbreak={column.break ? 'true' : undefined}
                     data-has-breakable-content={column.break ? 'true' : undefined}
                     style={{
-                      gridColumn: section.headingColumn ? column.id + 2 : column.id + 1,
+                      gridColumn: section.headingColumn ? columnIdx + 2 : columnIdx + 1,
                     }}
                   >
                     {renderColumnContent(column)}

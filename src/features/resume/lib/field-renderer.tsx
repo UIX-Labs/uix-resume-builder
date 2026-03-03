@@ -28,9 +28,9 @@ export function renderField(
   if (field.type === 'container') {
     return (
       <div className={cn(field.className)}>
-        {field.children?.map((child: any) => {
+        {field.children?.map((child: any, idx: number) => {
           return (
-            <React.Fragment key={child.id}>
+            <React.Fragment key={idx}>
               {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
             </React.Fragment>
           );
@@ -225,7 +225,7 @@ export function renderField(
     const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
-      <Image
+      <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
         alt={field.alt || 'Image'}
@@ -279,10 +279,9 @@ export function renderField(
         data-suggestion={suggestionData}
       >
         {Array.from({ length: 5 }, (_, index) => {
-          const skillKey = `skill-dot-${index}`;
           return (
             <div
-              key={skillKey}
+              key={index}
               className={cn(
                 'w-2 h-2 rounded-full border border-black',
                 index < circleCount ? 'bg-black' : 'bg-gray-400',

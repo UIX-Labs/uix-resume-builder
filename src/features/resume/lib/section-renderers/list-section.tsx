@@ -98,7 +98,7 @@ export function renderListSection(
           if (section.break && idx === 0) {
             return (
               <div
-                key={sectionKey}
+                key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
                 data-canbreak={isItemBreakable ? 'true' : undefined}

@@ -526,10 +526,9 @@ function ResumeRendererComponent({
                 gridRow: index === 0 && bannerItems.length > 0 ? '2' : '1',
               }}
             >
-              {(leftColumn as any[]).map((node: any, i) => (
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
+              {leftColumn.map((node: any, i: number) => (
                 <div
-                  key={`${index}-left-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
+                  key={i}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
                   style={{ display: 'block' }}

@@ -1,10 +1,9 @@
-import type React from 'react';
 import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
+import type React from 'react';
 import { renderDivider } from '../components/Divider';
+import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
-import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
-
 export function renderListSection(
   section: any,
   data: any,
@@ -84,6 +83,8 @@ export function renderListSection(
           // e.g., "skills.items" -> "skills" which matches formData.skills
           const formDataSectionKey = sectionKey || sectionId;
 
+          if (!section.itemTemplate) return null;
+
           const content = section.itemTemplate.rows
             ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)
             : renderItemWithFields(
@@ -94,7 +95,6 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {

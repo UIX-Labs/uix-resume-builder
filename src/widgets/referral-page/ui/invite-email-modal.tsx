@@ -1,13 +1,13 @@
 'use client';
 
+import { useSendReferralEmails } from '@entities/referral/api/referral';
 import { cn } from '@shared/lib/utils';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/components/input';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
-import { X, UserPlus, Trash2 } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { Trash2, UserPlus, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { useSendReferralEmails } from '@entities/referral/api/referral';
 
 interface EmailInvite {
   id: string;
@@ -22,8 +22,17 @@ interface InviteEmailModalProps {
 
 export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
   const [invites, setInvites] = useState<EmailInvite[]>([{ id: '1', firstName: '', email: '' }]);
+  const lastRowRef = useRef<HTMLDivElement>(null);
+  const prevCountRef = useRef(invites.length);
 
   const sendEmailsMutation = useSendReferralEmails();
+
+  useEffect(() => {
+    if (invites.length > prevCountRef.current && prevCountRef.current >= 1) {
+      lastRowRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+    prevCountRef.current = invites.length;
+  }, [invites.length]);
 
   const handleAddMore = useCallback(() => {
     setInvites((prevInvites) => [...prevInvites, { id: Date.now().toString(), firstName: '', email: '' }]);
@@ -100,7 +109,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
           </h2>
 
           <div className="flex-1 overflow-y-auto overflow-x-hidden mb-0 sm:mb-6 px-0 sm:px-2 min-h-0 max-h-[calc(85vh-180px)] sm:max-h-[calc(85vh-220px)]">
-            <div className="flex flex-col items-center sm:items-center">
+            <div className="flex flex-col items-center sm:items-center" ref={lastRowRef}>
               <div className="flex flex-col gap-0 sm:mb-4 sm:gap-6 w-full sm:w-auto">
                 {invites.map((invite, index) => (
                   <div key={invite.id} className="relative">
@@ -111,13 +120,25 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                       )}
                     >
                       {invites.length > 1 && (
-                        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-form-badge-bg flex items-center justify-center mt-8 sm:mt-0 sm:mb-0">
-                          <span className="text-base font-semibold text-white">{index + 1}</span>
+                        <div className="md:hidden flex flex-col items-center gap-1.5 shrink-0 pt-0 sm:pb-0 sm:pt-0">
+                          <div className="w-8 h-8 rounded-full bg-form-badge-bg flex items-center justify-center">
+                            <span className="text-base font-semibold text-white">{index + 1}</span>
+                          </div>
+                          <Button
+                            type="button"
+                            onClick={() => handleRemove(invite.id)}
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 shrink-0 flex items-center justify-center text-error-500 hover:text-error-600 hover:bg-red-50"
+                            aria-label={`Remove invite ${index + 1}`}
+                          >
+                            <Trash2 className="size-4 sm:size-5" />
+                          </Button>
                         </div>
                       )}
 
-                      <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3 sm:gap-4 flex-1">
-                        <div className="flex flex-col gap-2 w-full sm:w-auto">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3 sm:gap-4 flex-1 min-w-0">
+                        <div className="flex flex-col gap-2 w-full sm:w-auto min-w-0">
                           <label
                             htmlFor={`firstName-${invite.id}`}
                             className="text-sm font-semibold leading-[1.43] tracking-[-0.0014em] text-dark-900"
@@ -141,7 +162,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                           />
                         </div>
 
-                        <div className="flex flex-col gap-2 w-full sm:w-auto">
+                        <div className="flex flex-col gap-2 w-full sm:w-auto min-w-0">
                           <label
                             htmlFor={`email-${invite.id}`}
                             className="text-sm font-semibold leading-[1.43] tracking-[-0.0014em] text-dark-900"
@@ -170,7 +191,7 @@ export function InviteEmailModal({ isOpen, onClose }: InviteEmailModalProps) {
                             type="button"
                             onClick={() => handleRemove(invite.id)}
                             variant="ghost"
-                            className="h-10 text-error-500 hover:text-error-600 hover:bg-red-50 px-0 hidden sm:flex"
+                            className="h-10 text-error-500 hover:text-error-600 hover:bg-red-50 px-0 hidden sm:hidden md:block"
                           >
                             <Trash2 />
                           </Button>

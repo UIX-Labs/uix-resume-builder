@@ -2,7 +2,6 @@
 
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import DesktopAuthLayout from '@widgets/auth-page';
-import AuthPageWidget from '@widgets/auth-page';
 import MobileAuthLayout from '@widgets/auth-page/ui/mobile-auth-layout';
 import Image from 'next/image';
 import { Suspense } from 'react';

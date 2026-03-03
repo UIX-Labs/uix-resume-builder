@@ -1,6 +1,6 @@
 'use client';
 
-import { BlogPost } from '@/shared/lib/blog';
+import type { BlogPost } from '@/shared/lib/blog';
 import { Clock } from 'lucide-react';
 import Link from 'next/link';
 

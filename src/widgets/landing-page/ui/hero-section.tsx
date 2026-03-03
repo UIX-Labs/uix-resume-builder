@@ -38,7 +38,7 @@ const HeroSection = () => {
     });
   }, [currentStats?.latestUsers]);
 
-  const handleNavigate = () => {
+  const _handleNavigate = () => {
     router.push('/dashboard');
   };
 

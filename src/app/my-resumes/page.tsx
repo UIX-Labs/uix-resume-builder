@@ -1,7 +1,7 @@
 'use client';
 import { createResume, useGetAllResumes, type Resume, useResumeData } from '@entities/resume';
 import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useGetTemplateById, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useGetTemplateById } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';

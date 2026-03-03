@@ -1,7 +1,7 @@
 import { LandingPage } from '@widgets/landing-page';
 import Script from 'next/script';
 
-const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
+const _DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 
 const faqStructuredData = {
   '@context': 'https://schema.org',

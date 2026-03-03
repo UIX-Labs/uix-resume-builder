@@ -6,7 +6,6 @@ import { useFormDataStore } from '../models/store';
 import { calculateResumeCompletion } from '@shared/lib/resume-completion';
 import { useParams } from 'next/navigation';
 import type { ResumeData } from '@entities/resume';
-import mockData from '../../../../mock-data.json';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAnalyzerStore } from '@shared/stores/analyzer-store';

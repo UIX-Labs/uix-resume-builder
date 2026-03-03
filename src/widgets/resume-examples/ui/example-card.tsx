@@ -1,7 +1,6 @@
 'use client';
 
 import type { ResumeExampleListItem } from '@entities/resume-example/types';
-import { cn } from '@shared/lib/cn';
 import { Eye } from 'lucide-react';
 
 interface ExampleCardProps {

@@ -23,7 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Download, GripVertical } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';

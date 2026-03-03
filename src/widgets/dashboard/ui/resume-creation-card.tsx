@@ -153,7 +153,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setAuthRedirectUrl('/auth?callbackUrl=' + encodeURIComponent('/dashboard'));
+      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent('/dashboard')}`);
       setIsAuthModalOpen(true);
       return;
     }

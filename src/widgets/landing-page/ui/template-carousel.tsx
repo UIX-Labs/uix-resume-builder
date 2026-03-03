@@ -16,7 +16,6 @@ import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { MobileTextView } from './mobile-text-view';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';

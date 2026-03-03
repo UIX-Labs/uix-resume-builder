@@ -1,7 +1,8 @@
-import type React from 'react';
 import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
+import type React from 'react';
 import { renderDivider } from '../components/Divider';
+import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
 export function renderListSection(
   section: any,
@@ -81,6 +82,8 @@ export function renderListSection(
           // Use sectionKey (from listPath) instead of sectionId because sectionKey matches formData keys
           // e.g., "skills.items" -> "skills" which matches formData.skills
           const formDataSectionKey = sectionKey || sectionId;
+
+          if (!section.itemTemplate) return null;
 
           const content = section.itemTemplate.rows
             ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)

@@ -31,20 +31,80 @@ export function TemplateCardFilter({
       )}
     >
       {(template.role?.length ?? 0) > 0 && (
-        <div className="flex flex-wrap gap-1 mb-2">
-          {template.role?.map((role: string) => (
-            <span
-              key={role}
-              className="bg-white/80 backdrop-blur-sm text-xs text-gray-500 px-2 py-0.5 rounded-full border border-gray-200"
-            >
-              {role
-                .replace(/_/g, ' ')
-                .replace(/\b\w/g, (c) => c.toUpperCase())}
-            </span>
-          ))}
-        </div>
-      )}
+  <div className="flex flex-wrap items-center gap-2 mb-2">
 
+    {/* First visible role badge */}
+    <div className="bg-gray-100 backdrop-blur-md 
+                    border border-gray-200 
+                    text-xs text-gray-700 
+                    px-3 py-1 rounded-full">
+      {template.role[0]
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase())}
+    </div>
+
+    {/* "+X MORE" badge with hover popup */}
+    {template.role.length > 1 && (
+      <div className="relative group inline-block">
+
+        {/* +MORE Tag */}
+        <div className="bg-gray-100 backdrop-blur-md 
+                        border border-gray-200 
+                        text-xs text-gray-700
+                        px-3 py-1 rounded-full 
+                        cursor-pointer transition-all duration-200 
+                        hover:bg-gray-200 
+                        hover:border-gray-200">
+          +{template.role.length - 1} More
+        </div>
+
+        {/* Floating Panel — opens UPWARD */}
+        <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 
+                        opacity-0 scale-95 pointer-events-none
+                        group-hover:opacity-100 
+                        group-hover:scale-100 
+                        group-hover:pointer-events-auto
+                        transition-all duration-200 ease-out
+                        z-50">
+
+          {/* Arrow pointing down */}
+          <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 
+                          w-4 h-4 bg-white 
+                          rotate-45 rounded-sm
+                          border-r border-b border-gray-200" />
+
+          <div className="bg-white 
+                          border border-gray-200 
+                          rounded-xl shadow-xl shadow-black/10
+                          p-4 
+                          max-h-[280px] overflow-y-auto">
+
+            {/* All remaining role chips */}
+            <div className="flex flex-wrap gap-2">
+              {template.role.slice(1).map((role, index) => (
+                <span
+                  key={index}
+                  className="inline-block 
+                             bg-gray-100 
+                             text-gray-700 text-xs font-medium
+                             px-3 py-1.5 rounded-md
+                             border border-gray-200
+                             hover:bg-gray-200 
+                             transition-colors duration-150
+                             cursor-default whitespace-nowrap"
+                >
+                  {role
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+)}
       <div
         className={cn(
           'relative glass-card2 border-0 p-4 rounded-[20px]',

@@ -40,26 +40,30 @@ export default function HeroSection() {
 
   return (
     <div className="relative">
-      <div className="flex flex-col items-center text-center pt-16 pb-10">
-        <h1 className="text-5xl font-bold text-[#198447]">
-          Your Resume, <span className="text-[#0059ED]">But Better</span>
+      <div className="flex flex-col items-center text-center md:pt-16 md:pb-10 pt-14 pb-4">
+        <h1 className="md:text-5xl text-2xl font-bold text-[#198447] rounded">
+          
+          <span className="text-[#198447] bg-[#C9E1DD]  px-2">Your Resume,</span>
+           {/* {' '} */}
+         <span className="text-[#0059ED] bg-[#C4D8F7]  px-2">But Better</span>
         </h1>
-        <p className="text-black mt-3 max-w-3xl text-lg">
+       
+        <p className="text-black md:mt-4 mt-2 max-w-3xl md:text-lg text-sm lg:p-0 p-2">
           Choose from free and premium templates, customise with our intuitive drag-and-drop builder, and download your
           resume as a polished PDF in minutes.
         </p>
-        <div className="flex gap-4 mt-6">
+        <div className="flex gap-4 md:mt-8 mt-2">
           <button
             onClick={handleLinkedIn}
             type="button"
-            className="bg-[#0059ED] text-white px-5 py-2.5 rounded text-sm font-medium cursor-pointer"
+            className="bg-[#0059ED] text-white md:px-5 md:py-3 px-2 py-2 rounded text-sm lg:text-md font-medium cursor-pointer"
           >
             Autofill via LinkedIn
           </button>
           <button
             onClick={handleJD}
             type="button"
-            className="border border-gray-300 text-[#0059ED] px-5 py-2.5 rounded text-sm font-medium bg-[#D5E5FF] cursor-pointer"
+            className="border border-gray-300 text-[#0059ED] md:px-5 md:py-3 px-2 py-2 rounded text-sm font-medium lg:text-md bg-[#D5E5FF] cursor-pointer"
           >
             Upload My Resume
           </button>

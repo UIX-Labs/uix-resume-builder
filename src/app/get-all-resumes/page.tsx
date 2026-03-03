@@ -15,16 +15,28 @@ import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import NotFoundSearch from '@widgets/filter-templates/components/Not-found-filter';
+import { TemplateCardFilter } from '@widgets/filter-templates/components/template-card-filter';
 import TemplateFilter from '@widgets/filter-templates/components/template-filters/template-filter';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { TemplateCard } from '@widgets/templates-page/ui/template-card';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
-  const { data: response } = useGetAllTemplates();
+  const searchParams = useSearchParams();
+const style = searchParams.get('style') || '';
+const column = searchParams.get('column') || '';
+const role = searchParams.get('role') || '';
+
+const { data: response } = useGetAllTemplates({ 
+  style, 
+  role, 
+  column,
+  limit: 10,
+  offset: 0,
+});
   const templates = response?.data;
 
   const isMobile = useIsMobile();
@@ -151,10 +163,16 @@ export default function GetAllResumesPage() {
               />
 
               <div className="px-4 my-4">
-                <TemplateFilter />
+                <TemplateFilter results={templates?.length ?? 0} />
               </div>
 
-              <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
+               {/* No results */}
+              {!isLoading && (templates?.length ?? 0) === 0 && (
+               <NotFoundSearch />
+              )}
+
+              {/* <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap"> */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
                 {templates?.map((template) => {
                   const handleClick = () => {
                     if (isMobile) {
@@ -168,14 +186,22 @@ export default function GetAllResumesPage() {
                     handleTemplateClick(template);
                   };
 
-                  return (
-                    <TemplateCard
+                  // return (
+                  //   <TemplateCard
+                  //     key={template.id}
+                  //     template={template}
+                  //     onClick={handleClick}
+                  //     onPreviewClick={handlePreview}
+                  //   />
+                  // );
+                  return(
+                    <TemplateCardFilter
                       key={template.id}
                       template={template}
                       onClick={handleClick}
-                      onPreviewClick={handlePreview}
+                      onPreviewClick={() => handleTemplateClick(template)}
                     />
-                  );
+                  )
                 })}
               </div>
             </div>

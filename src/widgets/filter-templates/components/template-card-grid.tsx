@@ -16,6 +16,7 @@ import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { GetStartedModal } from './get-started-Modal';
+import NotFoundFilter from './Not-found-filter';
 import { TemplateCardFilter } from './template-card-filter';
 
 interface TemplateCardGridProps {
@@ -184,13 +185,14 @@ const total = data?.total ?? templates.length;
             />
           ))
         ) : (
-          <div className="col-span-5 text-center text-gray-400 py-20">
-            No templates found.
-          </div>
+            <div className="col-span-5">
+             <NotFoundFilter />
+            </div>
+
         )}
 
         {/* Pagination */}
-        {!isLoading && total > 0 && (
+        {/* {!isLoading && total > 0 && (
           <div className="col-span-5 flex justify-center items-center gap-4 mt-8">
             <button
               type="button"
@@ -214,7 +216,7 @@ const total = data?.total ?? templates.length;
               Next
             </button>
           </div>
-        )}
+        )} */}
       </div>
 
       <PreviewModal

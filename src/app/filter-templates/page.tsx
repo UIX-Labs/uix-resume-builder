@@ -2,8 +2,10 @@
 
 import HeroSection from '@/widgets/filter-templates/hero-section';
 import { useGetAllTemplates } from '@entities/template-page/api/template-data';
+import NotFoundFilter from '@widgets/filter-templates/components/Not-found-filter';
 import TemplateCardGrid from '@widgets/filter-templates/components/template-card-grid';
 import TemplateFilter from '@widgets/filter-templates/components/template-filters/template-filter';
+import { templates } from '@widgets/landing-page/models/constants';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -43,7 +45,7 @@ const { data, isLoading } = useGetAllTemplates(
 // console.log("data",data)
   return (
     <div className="relative">
-      <div className="relative rounded-2xl border-2 border-[#D5E5FF] m-6">
+      <div className="relative rounded-2xl border-2 border-[#D5E5FF] md:m-6 m-2">
         <div className="dotted-bg" />
 
         <div className="relative">
@@ -51,11 +53,16 @@ const { data, isLoading } = useGetAllTemplates(
             <HeroSection />
           </div>
 
-          <div className="p-16">
+          <div className="md:pl-16 md:pr-16 md:pt-4 md:pb-4 p-4">
+            {/* No results */}
+              {!isLoading && (templates?.length ?? 0) === 0 && (
+               <NotFoundFilter />
+              )}
+              
             <TemplateFilter results={data?.total || 0} />
           </div>
 
-          <div className="p-4">
+          <div className="p-4 md:pt-4 md:pb-4 md:mt-4">
             <TemplateCardGrid 
               data={data} 
               isLoading={isLoading} 

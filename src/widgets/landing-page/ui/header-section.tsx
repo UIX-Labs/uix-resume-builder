@@ -7,7 +7,7 @@ import { cn } from '@shared/lib/cn';
 import { DashboardMobileSidebar } from '@widgets/dashboard/ui/dashboard-mobile-sidebar';
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MobileSidebar } from './mobile-sidebar';
 
@@ -20,7 +20,6 @@ interface HeaderProps {
 function Header({ variant = 'default' }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const user = useCachedUser();
   const isMobile = useIsMobile();
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
@@ -28,12 +27,28 @@ function Header({ variant = 'default' }: HeaderProps) {
   const isDashboardRoute = DASHBOARD_ROUTES.some((route) => pathname.startsWith(route));
 
   useEffect(() => {
+    const SCROLL_DOWN_THRESHOLD = 20;
+    const SCROLL_UP_THRESHOLD = 5;
+    let rafId: number | null = null;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const y = window.scrollY;
+        setIsScrolled((prev) => {
+          if (y > SCROLL_DOWN_THRESHOLD) return true;
+          if (y < SCROLL_UP_THRESHOLD) return false;
+          return prev;
+        });
+      });
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const handleMenuClick = () => {

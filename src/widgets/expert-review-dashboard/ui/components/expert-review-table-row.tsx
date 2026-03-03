@@ -2,7 +2,6 @@
 
 import type { ResumeReviewItemDto } from '@/features/expert-review/api/review-stats';
 import { StatusChip } from '@/features/expert-review/ui/status-chip';
-import { formatDateShort } from '@shared/lib/date-time';
 
 interface ExpertReviewTableRowProps {
   review: ResumeReviewItemDto;
@@ -23,7 +22,7 @@ export function ExpertReviewTableRow({ review, onEdit, onDownload }: ExpertRevie
         {review.reviewer || '—'}
       </td>
       <td className="px-4 sm:px-6 py-3 text-[#959DA8] hidden sm:table-cell">{review.submitted}</td>
-      <td className="px-4 sm:px-6 py-3 text-[#959DA8] hidden lg:table-cell">{formatDateShort(review.lastModified)}</td>
+      <td className="px-4 sm:px-6 py-3 text-[#959DA8] hidden lg:table-cell">{review.lastModified}</td>
       {/* <td className="px-4 sm:px-6 py-3">
         <div className="flex items-center gap-1">
           <button

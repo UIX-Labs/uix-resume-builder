@@ -28,81 +28,19 @@ const brianWayneTemplate = {
       id: 'header',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col gap-4 mt-4',
+      className: 'flex flex-col gap-3 mt-4',
 
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Brian T. Wayne',
-          className: 'text-[22px] font-bold text-white leading-[24px] font-arial break-words',
+          className: 'text-2xl break-words font-bold text-white',
         },
 
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Senior UX Designer',
           className: 'text-[10px] uppercase tracking-[2px] leading-[18px] font-arial text-white',
-        },
-
-        contact: {
-          type: 'contact-grid',
-          className:
-            'flex flex-col gap-2 mt-3 text-[8px] font-arial uppercase tracking-[1px] leading-[16px] text-white',
-
-          items: [
-            {
-              type: 'inline-group-with-icon',
-              className: 'flex items-center gap-3',
-              items: [
-                {
-                  type: 'icon',
-                  name: 'Mail',
-                  size: 14,
-                  className: 'text-white',
-                },
-                {
-                  type: 'link',
-                  path: 'personalDetails.items[0].email',
-                  href: 'mailto:{{value}}',
-                  fallback: 'email@example.com',
-                  className: 'hover:text-[#005FF2]',
-                },
-              ],
-            },
-
-            {
-              type: 'inline-group-with-icon',
-              className: 'flex items-center gap-3',
-              items: [
-                {
-                  type: 'icon',
-                  name: 'Phone',
-                  size: 14,
-                  className: 'text-white',
-                },
-                {
-                  path: 'personalDetails.items[0].phone',
-                  fallback: '+91 99999 99999',
-                },
-              ],
-            },
-
-            {
-              type: 'inline-group-with-icon',
-              className: 'flex items-start gap-3',
-              items: [
-                {
-                  type: 'icon',
-                  name: 'MapPin',
-                  size: 14,
-                  className: 'text-white mt-0.5',
-                },
-                {
-                  path: 'personalDetails.items[0].address',
-                  fallback: 'City, Country',
-                },
-              ],
-            },
-          ],
         },
       },
     },
@@ -121,6 +59,7 @@ const brianWayneTemplate = {
             'flex flex-col gap-2 mt-4 text-[8px] font-arial uppercase tracking-[1px] leading-[16px] text-black',
 
           items: [
+            // Email
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -128,19 +67,19 @@ const brianWayneTemplate = {
                 {
                   type: 'icon',
                   name: 'Mail',
-                  size: 14,
-                  className: 'text-black',
+                  size: 16,
+                  className: 'text-white',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'email@example.com',
-                  className: 'hover:text-[#005FF2]',
+                  className: 'text-xs text-white',
                 },
               ],
             },
-
+            // Phone
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -148,16 +87,17 @@ const brianWayneTemplate = {
                 {
                   type: 'icon',
                   name: 'Phone',
-                  size: 14,
-                  className: 'text-black',
+                  size: 16,
+                  className: 'text-white',
                 },
                 {
                   path: 'personalDetails.items[0].phone',
-                  fallback: '+91 99999 99999',
+                  fallback: '12332344',
+                  className: 'text-xs text-white',
                 },
               ],
             },
-
+            // Address
             {
               type: 'inline-group-with-icon',
               className: 'flex items-start gap-3',
@@ -165,17 +105,17 @@ const brianWayneTemplate = {
                 {
                   type: 'icon',
                   name: 'MapPin',
-                  size: 14,
-                  className: 'text-black mt-0.5',
+                  size: 16,
+                  className: 'text-white mt-0.5',
                 },
                 {
                   path: 'personalDetails.items[0].address',
-                  fallback: 'City, Country',
-                  className: 'leading-[16px]',
+                  fallback: '22611 Pacific Coast Hwy,\nMalibu, California, 9032, USA',
+                  className: 'text-xs text-white leading-relaxed',
                 },
               ],
             },
-
+            // LinkedIn
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -183,18 +123,19 @@ const brianWayneTemplate = {
                 {
                   type: 'icon',
                   name: 'Linkedin',
-                  size: 14,
-                  className: 'text-black',
+                  size: 16,
+                  className: 'text-white',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.linkedin.title',
                   href: 'personalDetails.items[0].links.linkedin.link',
-                  className: 'hover:text-[#005FF2]',
+                  fallback: '',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },
-
+            // Github
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -202,14 +143,94 @@ const brianWayneTemplate = {
                 {
                   type: 'icon',
                   name: 'Github',
-                  size: 14,
+                  size: 16,
                   className: 'text-black',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
-                  className: 'hover:text-[#005FF2]',
+                  fallback: 'email@example.com',
+                  className: 'text-xs text-white',
+                },
+              ],
+            },
+            // Website
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Globe',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.website.title',
+                  href: 'personalDetails.items[0].links.website.link',
+                  fallback: '',
+                  className: 'text-xs text-white hover:text-green-200',
+                },
+              ],
+            },
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Youtube',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.youtube.title',
+                  href: 'personalDetails.items[0].links.youtube.link',
+                  fallback: '',
+                  className: 'text-xs text-white hover:text-green-200',
+                },
+              ],
+            },
+            // Dribbble
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Dribbble',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.dribbble.title',
+                  href: 'personalDetails.items[0].links.dribbble.link',
+                  fallback: '',
+                  className: 'text-xs text-white hover:text-green-200',
+                },
+              ],
+            },
+            // Behance
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-3',
+              items: [
+                {
+                  type: 'icon',
+                  name: 'Behance',
+                  size: 16,
+                  className: 'text-white',
+                },
+                {
+                  type: 'link',
+                  path: 'personalDetails.items[0].links.behance.title',
+                  href: 'personalDetails.items[0].links.behance.link',
+                  fallback: '',
+                  className: 'text-xs text-white hover:text-green-200',
                 },
               ],
             },

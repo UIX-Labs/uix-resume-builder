@@ -162,8 +162,8 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <figure className="my-8">
       <div className="overflow-hidden rounded-xl border border-gray-200">
-        {/* biome-ignore lint/performance/noImgElement: alt is passed through props */}
-        <img src={src || ''} alt={alt || ''} className="w-full object-cover" loading="lazy" {...props} />
+        {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+        <img src={src} alt={alt || ''} className="w-full object-cover" loading="lazy" {...props} />
       </div>
       {alt && <figcaption className="mt-3 text-center text-sm text-gray-500">{alt}</figcaption>}
     </figure>

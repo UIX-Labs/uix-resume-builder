@@ -1,8 +1,5 @@
-'use client';
-
 import { Clock } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+
 export interface BreadcrumbItem {
   label: string;
   href?: string;
@@ -51,36 +48,28 @@ export default function ArticleHeader({
       {breadcrumbs && (
         <div
           className="
-            absolute top-5 left-6 right-6 lg:left-12 z-10 
-            flex items-center gap-1 
-            overflow-x-auto 
-            flex-nowrap 
-            scrollbar-hide
-            [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
-            whitespace-nowrap text-xs md:text-[13px] text-gray-500
-          "
+      absolute top-5 left-6 right-6 lg:left-12 z-10 
+      flex items-center gap-1 
+      overflow-x-auto 
+      flex-nowrap 
+      scrollbar-hide
+      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+      whitespace-nowrap text-xs md:text-[13px] text-gray-500
+    "
         >
-          {breadcrumbs.map((item, index) => {
-            const isLast = index === breadcrumbs.length - 1;
-
-            return (
-              <div key={`${item.label}-${index}`} className="flex items-center flex-shrink-0">
-                {item.href && !isLast ? (
-                  <Link href={item.href} className="hover:text-black transition-colors capitalize">
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span className="text-black font-medium capitalize">{item.label}</span>
-                )}
-
-                {!isLast && (
-                  <span className="mx-1 text-gray-500 flex-shrink-0" aria-hidden="true">
-                    {'>'}
-                  </span>
-                )}
-              </div>
-            );
-          })}
+          {breadcrumbs.map((item, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            <div key={index} className="flex items-center flex-shrink-0 sentenceCase">
+              {item.href ? (
+                <a href={item.href} className="hover:text-black transition-colors sentenceCase">
+                  {item.label}
+                </a>
+              ) : (
+                <span className="text-black font-medium">{item.label}</span>
+              )}
+              {index < breadcrumbs.length - 1 && <span className="mx-1 text-gray-500 flex-shrink-0">{'>'}</span>}
+            </div>
+          ))}
         </div>
       )}
 
@@ -103,9 +92,13 @@ export default function ArticleHeader({
           <span className="flex items-center gap-1 text-black font-medium">
             Published by- <span className="text-[#8A8C99] font-normal ml-1">{author}</span>
           </span>
+
           <span className="hidden sm:block text-gray-300">|</span>
+
           <span className="whitespace-nowrap">Updated- {date}</span>
+
           <span className="hidden sm:block text-gray-300">|</span>
+
           <span className="flex items-center gap-1.5 whitespace-nowrap">
             <Clock className="w-4 h-4" />
             {readingTime}
@@ -114,12 +107,11 @@ export default function ArticleHeader({
       </div>
 
       <div className="order-1 lg:order-2 w-full max-w-[240px] sm:max-w-[300px] lg:max-w-[380px] flex items-center justify-center mx-auto lg:mx-0">
-        <Image
+        {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+        <img
           src="/images/blog/slug/header-img.png"
           alt="article header illustration"
           className="w-full h-auto object-contain drop-shadow-sm"
-          width={100}
-          height={100}
         />
       </div>
     </div>

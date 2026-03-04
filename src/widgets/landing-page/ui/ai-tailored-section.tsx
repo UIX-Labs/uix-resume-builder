@@ -204,19 +204,16 @@ export function AITailorSection() {
                     <div className="flex flex-col gap-2 sm:gap-3 mt-2 sm:mt-4">
                       {[320, 286, 334, 196].map((w, i) => {
                         const mobileWidth = (w / 334) * 100; // Convert to percentage for mobile
-
-                        // Create a stable key using a prefix and the width/index combination
-                        const barKey = `loading-bar-${i}-${w}`;
-
                         return (
                           <motion.div
-                            key={barKey}
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                            key={i}
                             initial={{ width: 0 }}
                             animate={{ width: '100%' }}
                             transition={{ delay: 0.3 + i * 0.2, duration: 0.6 }}
                             className="h-1.5 sm:h-2 rounded-full"
                             style={{
-                              backgroundColor: highlightColor || 'currentColor',
+                              backgroundColor: highlightColor,
                               maxWidth: `${mobileWidth}%`,
                             }}
                           />

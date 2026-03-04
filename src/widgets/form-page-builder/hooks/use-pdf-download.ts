@@ -132,8 +132,5 @@ export function usePdfDownload({ resumeId, generatePDF, onDownloadSuccess }: Use
     isReferralModalOpen,
     setIsReferralModalOpen,
     referralUrl,
-    downloadsLeft: user?.downloadsLeft,
-    downloadsAllowed: user?.downloadsAllowed,
-    isLoggedIn: user?.isLoggedIn ?? false,
   };
 }

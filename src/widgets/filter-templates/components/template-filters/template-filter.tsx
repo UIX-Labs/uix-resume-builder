@@ -143,7 +143,9 @@ export default function TemplateFilter({ results }: { results: number }) {
     isMobile && (
       <div className='w-fit'>
      <div className='bg-white border-2 border-gray-200 rounded-lg px-4 py-2'>
-      <button onClick={() => setIsFilterOpen(!isFilterOpen)} className='flex items-center gap-2'>
+      <button 
+      type='button'
+      onClick={() => setIsFilterOpen(!isFilterOpen)} className='flex items-center gap-2'>
         <SlidersHorizontal className="w-4 h-4" />
         <span className='text-md font-semibold text-black'>
           filter

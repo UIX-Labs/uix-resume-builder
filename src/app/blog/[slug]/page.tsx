@@ -6,14 +6,17 @@ import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
+import { TagBadge } from '@shared/ui/blog/tag-badge';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
+const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp';
 
 /* ------------------------------------------------------------------ */
 /*  Static params                                                      */
@@ -35,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const url = `${DOMAIN_URL}/blog/${slug}`;
 
   return {
-    title: `${frontmatter.title} | Pika Resume Blog`,
+    title: frontmatter.title,
     description: frontmatter.description,
     keywords: frontmatter.tags,
     authors: [{ name: frontmatter.author }],
@@ -94,8 +97,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { frontmatter, content, readingTime } = post;
   const headings = extractHeadings(content);
 
-  // Find related posts (same tags, excluding current)
   const allPosts = getAllPosts();
+
+  // Find related posts (same tags, excluding current)
+  const relatedPosts = allPosts
+    .filter((p) => p.slug !== slug)
+    .filter((p) => p.frontmatter.tags.some((tag) => frontmatter.tags.includes(tag)))
+    .slice(0, 3);
+
+  // Word count for structured data
+  const wordCount = content.split(/\s+/).filter(Boolean).length;
 
   // Article structured data
   const articleJsonLd = {
@@ -105,6 +116,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     description: frontmatter.description,
     datePublished: frontmatter.date,
     dateModified: frontmatter.date,
+    wordCount,
+    articleSection: frontmatter.tags[0] || 'Career',
     author: {
       '@type': 'Person',
       name: frontmatter.author,
@@ -113,6 +126,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       '@type': 'Organization',
       name: 'Pika Resume',
       url: DOMAIN_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: LOGO_URL,
+      },
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -144,13 +161,25 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     },
   ];
 
+  // BreadcrumbList structured data
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.label,
+      ...(crumb.href && { item: `${DOMAIN_URL}${crumb.href}` }),
+    })),
+  };
+
   return (
     <>
       <Script
         id="article-structured-data"
         type="application/ld+json"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([articleJsonLd, breadcrumbJsonLd]) }}
       />
 
       <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
@@ -271,7 +300,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         {/* Related Posts */}
-        {/* {relatedPosts.length > 0 && (
+        {relatedPosts.length > 0 && (
           <section className="mt-16 border-t border-gray-100 pt-12">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">Related Articles</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -293,9 +322,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 </Link>
               ))}
             </div>
-          </section> */}
-
-        {/* )} */}
+          </section>
+        )}
         <div className="mt-10 lg:p-4 lg:mt-25 gap-2 md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-white">
           <div className="text-xl md:text-[36px] font-bold text-center p-2 md:p-0 mt-4 md:mt-10 px-2">
             Continue Reading

@@ -25,14 +25,19 @@ function DashboardContent() {
   const setFormData = useFormDataStore((state) => state.setFormData);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [shouldOpenJDModal, setShouldOpenJDModal] = useState(false);
+  const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(null);
 
   useEffect(() => {
-    // Check if we should open the JD modal
+    // Unified action param: ?action=from_scratch | upload | tailored_jd
+    const action = searchParams?.get('action');
+    // Backward compat: ?openModal=jd
     const openModal = searchParams?.get('openModal');
-    if (openModal === 'jd') {
-      setShouldOpenJDModal(true);
-      // Clear the query parameter from URL
+
+    if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') {
+      setAutoAction(action);
+      router.replace('/dashboard');
+    } else if (openModal === 'jd') {
+      setAutoAction('tailored_jd');
       router.replace('/dashboard');
     }
   }, [searchParams, router]);
@@ -81,7 +86,7 @@ function DashboardContent() {
               />
 
               <div className="px-4">
-                <ResumeCreationCard shouldOpenJDModal={shouldOpenJDModal} />
+                <ResumeCreationCard autoAction={autoAction} />
               </div>
 
               <div className="flex-1 mt-4 px-4">

@@ -19,7 +19,6 @@ export function AuthHeader() {
           <PikaResume stopColor="black" offsetColor="black" width={50} height={50} />
           <div className="flex flex-row items-center justify-center">
             <span className="font-bold text-black bg-clip-text text-2xl">Pika</span>
-
             <span className="font-normal text-[#21344F] bg-clip-text text-2xl">Resume</span>
           </div>
         </button>

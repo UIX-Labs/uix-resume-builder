@@ -47,7 +47,7 @@ export function Sidebar() {
   const handleLogoClick = () => {
     queryClient.invalidateQueries({ queryKey: ['resumes'] });
     queryClient.invalidateQueries({ queryKey: ['resume-data', resumeId] });
-    router.push('/resumes');
+    router.push('/my-resumes');
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
-import React from 'react';
 import { cn } from '@shared/lib/cn';
+import React from 'react';
 
 export function renderTwoColumnLayout(
   section: any,
@@ -22,24 +22,24 @@ export function renderTwoColumnLayout(
       {/* Left Column */}
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
-          {leftColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
-            </React.Fragment>
-          ))}
+          {leftColumn.sections?.map((subSection: any, idx: number) => {
+            return (
+              <React.Fragment key={idx}>
+                {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
 
       {/* Right Column */}
-      {rightColumn && (
-        <div className={cn(rightColumn.className)}>
-          {rightColumn.sections?.map((subSection: any, idx: number) => (
-            <React.Fragment key={idx}>
-              {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
-            </React.Fragment>
-          ))}
-        </div>
-      )}
+      {rightColumn.sections?.map((subSection: any, idx: number) => {
+        return (
+          <React.Fragment key={idx}>
+            {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
+          </React.Fragment>
+        );
+      })}
     </div>
   );
 }

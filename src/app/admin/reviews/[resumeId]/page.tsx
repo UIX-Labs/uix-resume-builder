@@ -1,19 +1,26 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { ResumeRenderer } from '@/features/resume/renderer';
+import { getCleanDataForRenderer } from '@/widgets/form-page-builder/lib/data-cleanup';
+import aniketTemplate from '@/features/resume/templates/standard';
 import {
   useResumeForReview,
   useSubmitReviewSuggestions,
   useSaveDraftSuggestions,
 } from '@/features/admin/hooks/use-admin-queries';
 import type { ReviewSuggestionItem } from '@/features/admin/types/admin.types';
+import { TiptapTextArea } from '@shared/ui';
 
+// ---------------------------------------------------------------------------
+// Suggestion types — kept in sync with SuggestionType enum used by Pika Intelligence
+// (spelling_error, sentence_refinement, new_summary)
+// ---------------------------------------------------------------------------
 const SUGGESTION_TYPES = [
-  { value: 'sentence_refinement', label: 'Weak Sentence', color: 'bg-orange-50 text-orange-700 border-orange-200' },
+  { value: 'spelling_error', label: 'Spelling', color: 'bg-orange-50 text-orange-700 border-orange-200' },
+  { value: 'sentence_refinement', label: 'Weak Sentence', color: 'bg-red-50 text-red-700 border-red-200' },
   { value: 'new_summary', label: 'New Point', color: 'bg-green-50 text-green-700 border-green-200' },
-  { value: 'spelling_error', label: 'Spelling', color: 'bg-red-50 text-red-700 border-red-200' },
-  { value: 'adhoc', label: 'Adhoc', color: 'bg-purple-50 text-purple-700 border-purple-200' },
 ] as const;
 
 function getTypeStyle(type: string) {
@@ -24,7 +31,10 @@ function getTypeLabel(type: string) {
   return SUGGESTION_TYPES.find((t) => t.value === type)?.label || type;
 }
 
-// Parse <li> bullets from HTML string
+// ---------------------------------------------------------------------------
+// HTML helpers
+// ---------------------------------------------------------------------------
+
 function parseBullets(html: string): string[] {
   const matches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi);
   if (!matches) return [];
@@ -38,20 +48,23 @@ function parseBullets(html: string): string[] {
     .filter(Boolean);
 }
 
-// Strip all HTML tags to get plain text
 function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, '').trim();
 }
 
+// ---------------------------------------------------------------------------
+// FieldEntry + extractTextSections — used to map selected text → section/item/field
+// ---------------------------------------------------------------------------
+
 interface FieldEntry {
   fieldName: string;
   value: string;
+  rawHtml: string; // original HTML (before stripping)
   bulletIndex?: number;
   isBullet: boolean;
-  totalBullets?: number; // total bullets in this field — used for "add bullet" button
+  totalBullets?: number;
 }
 
-// Extract text content sections from resume data for clickable selection
 function extractTextSections(resumeData: any): Array<{
   sectionType: string;
   sectionLabel: string;
@@ -105,38 +118,36 @@ function extractTextSections(resumeData: any): Array<{
           !fieldName.includes('Url') &&
           !fieldName.includes('Thumbnail')
         ) {
-          // Check if this field contains <li> bullets
           if (fieldValue.includes('<li')) {
             const bullets = parseBullets(fieldValue);
             if (bullets.length > 0) {
               bullets.forEach((bullet, bulletIdx) => {
                 fields.push({
                   fieldName,
-                  value: bullet,
+                  value: stripHtml(bullet),
+                  rawHtml: bullet,
                   bulletIndex: bulletIdx,
                   isBullet: true,
                   totalBullets: bullets.length,
                 });
               });
             } else {
-              // Has <li> tags but couldn't parse — fall back to full field
-              fields.push({ fieldName, value: stripHtml(fieldValue), isBullet: false });
+              fields.push({ fieldName, value: stripHtml(fieldValue), rawHtml: fieldValue, isBullet: false });
             }
           } else {
-            fields.push({ fieldName, value: fieldValue, isBullet: false });
+            fields.push({ fieldName, value: stripHtml(fieldValue), rawHtml: fieldValue, isBullet: false });
           }
         }
-        // Handle array fields (achievements, interests)
         if (fieldName === 'items' && Array.isArray(fieldValue)) {
           for (const textItem of fieldValue) {
             if (typeof textItem === 'string' && textItem.trim()) {
-              fields.push({ fieldName: 'items', value: textItem, isBullet: false });
+              fields.push({ fieldName: 'items', value: textItem, rawHtml: textItem, isBullet: false });
             }
           }
         }
       }
 
-      return { itemId: item.id, fields };
+      return { itemId: item.itemId || item.id, fields };
     });
 
     if (items.some((i: any) => i.fields.length > 0)) {
@@ -147,7 +158,28 @@ function extractTextSections(resumeData: any): Array<{
   return sections;
 }
 
-// Convert flat suggestions array to the nested format the backend expects
+// ---------------------------------------------------------------------------
+// Section-ID → data-key map (template data-section attr → resume data key)
+// ---------------------------------------------------------------------------
+const sectionToDataKeyMap: Record<string, string> = {
+  header: 'personalDetails',
+  personaldetails: 'personalDetails',
+  'header-section': 'personalDetails',
+  summary: 'personalDetails',
+  experience: 'experience',
+  education: 'education',
+  skills: 'skills',
+  projects: 'projects',
+  certifications: 'certifications',
+  interests: 'interests',
+  achievements: 'achievements',
+  publications: 'publications',
+};
+
+// ---------------------------------------------------------------------------
+// Backend format converters
+// ---------------------------------------------------------------------------
+
 function formatSuggestionsForBackend(suggestions: ReviewSuggestionItem[]): Record<string, any> {
   const formatted: Record<string, any> = {};
 
@@ -182,7 +214,6 @@ function formatSuggestionsForBackend(suggestions: ReviewSuggestionItem[]): Recor
   return formatted;
 }
 
-// Convert nested backend format back to flat suggestions array (for loading drafts)
 function parseSuggestionsFromBackend(nested: Record<string, any>): ReviewSuggestionItem[] {
   const items: ReviewSuggestionItem[] = [];
 
@@ -216,6 +247,10 @@ function parseSuggestionsFromBackend(nested: Record<string, any>): ReviewSuggest
   return items;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Component
+// ═══════════════════════════════════════════════════════════════════════════
+
 export default function ReviewSuggestionPage() {
   const { resumeId } = useParams<{ resumeId: string }>();
   const router = useRouter();
@@ -223,20 +258,51 @@ export default function ReviewSuggestionPage() {
   const submitMutation = useSubmitReviewSuggestions();
   const draftMutation = useSaveDraftSuggestions();
 
+  // ── Suggestions state ──────────────────────────────────────────────────
   const [suggestions, setSuggestions] = useState<ReviewSuggestionItem[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // ── Selection state ────────────────────────────────────────────────────
   const [selectedText, setSelectedText] = useState('');
+  const [selectedHtml, setSelectedHtml] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const [selectedItemId, setSelectedItemId] = useState('');
   const [selectedFieldName, setSelectedFieldName] = useState('');
   const [selectedBulletIndex, setSelectedBulletIndex] = useState<number | undefined>(undefined);
+
+  // ── Form state ─────────────────────────────────────────────────────────
   const [suggestedText, setSuggestedText] = useState('');
   const [suggestionType, setSuggestionType] = useState<string>('sentence_refinement');
+  const [tiptapKey, setTiptapKey] = useState(0);
+
+  // ── Draft state ────────────────────────────────────────────────────────
   const [draftLoaded, setDraftLoaded] = useState(false);
   const [draftSavedAt, setDraftSavedAt] = useState<Date | null>(null);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const fieldRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
-  // Load existing draft on page load
+  // ── Refs ───────────────────────────────────────────────────────────────
+  const resumeRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [resumeScale, setResumeScale] = useState(1);
+
+  // ── Measure container and compute zoom ─────────────────────────────────
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const A4_WIDTH_PX = 793.7;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect?.width;
+      if (width && width > 0) {
+        setResumeScale(Math.min(1, width / A4_WIDTH_PX));
+      }
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  // ── Load existing draft ────────────────────────────────────────────────
   useEffect(() => {
     if (data && !draftLoaded) {
       if (data.existingSuggestions && data.suggestionsStatus === 'draft') {
@@ -249,69 +315,194 @@ export default function ReviewSuggestionPage() {
     }
   }, [data, draftLoaded]);
 
-  // Track unsaved changes
+  // ── Track unsaved changes ──────────────────────────────────────────────
   useEffect(() => {
-    if (draftLoaded) {
-      setHasUnsavedChanges(true);
-    }
+    if (draftLoaded) setHasUnsavedChanges(true);
   }, [suggestions.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleFieldMouseUp = useCallback(
-    (sectionType: string, itemId: string, fieldName: string, fullValue: string, bulletIndex?: number) => {
-      const selection = window.getSelection();
-      const highlighted = selection?.toString().trim();
-
-      setSelectedSection(sectionType);
-      setSelectedItemId(itemId);
-      setSelectedFieldName(fieldName);
-      setSelectedBulletIndex(bulletIndex);
-
-      if (highlighted && highlighted.length > 0 && highlighted !== fullValue) {
-        // User highlighted specific text within the field
-        setSelectedText(highlighted);
-      } else {
-        // User clicked without highlighting — use the full value
-        setSelectedText(fullValue);
-      }
-      setSuggestedText('');
-    },
-    [],
+  // ── Template + data ────────────────────────────────────────────────────
+  const template = useMemo(
+    () => data?.resume?.template?.json || aniketTemplate,
+    [data?.resume?.template?.json],
   );
 
-  const handleAddBullet = useCallback((sectionType: string, itemId: string, fieldName: string) => {
-    setSelectedSection(sectionType);
-    setSelectedItemId(itemId);
-    setSelectedFieldName(fieldName);
-    setSelectedBulletIndex(undefined);
+  const cleanedData = useMemo(
+    () => (data?.resume ? getCleanDataForRenderer(data.resume as Record<string, unknown>, false) : {}),
+    [data?.resume],
+  );
+
+  // Merge current suggestions into renderer data so they get highlighted
+  const dataWithSuggestions = useMemo(() => {
+    if (suggestions.length === 0) return cleanedData;
+
+    const formatted = formatSuggestionsForBackend(suggestions);
+    const merged = { ...cleanedData } as Record<string, any>;
+
+    for (const [sectionKey, sectionSuggestions] of Object.entries(formatted)) {
+      if (merged[sectionKey] && typeof merged[sectionKey] === 'object') {
+        merged[sectionKey] = {
+          ...merged[sectionKey],
+          suggestedUpdates: (sectionSuggestions as any).suggestedUpdates,
+        };
+      }
+    }
+
+    return merged;
+  }, [cleanedData, suggestions]);
+
+  // Text sections for mapping selected text → section/item/field
+  const textSections = useMemo(() => (data?.resume ? extractTextSections(data.resume) : []), [data?.resume]);
+
+  // ── Clear form ─────────────────────────────────────────────────────────
+  const clearForm = useCallback(() => {
     setSelectedText('');
+    setSelectedHtml('');
+    setSelectedSection('');
+    setSelectedItemId('');
+    setSelectedFieldName('');
+    setSelectedBulletIndex(undefined);
     setSuggestedText('');
-    setSuggestionType('new_summary');
+    setEditingIndex(null);
+    setTiptapKey((k) => k + 1);
   }, []);
 
-  const handleAddSuggestion = () => {
+  // ── Handle text selection on rendered resume ───────────────────────────
+  const handleResumeMouseUp = useCallback(() => {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const selectedStr = selection.toString().trim();
+    if (!selectedStr) return;
+
+    // Capture HTML from the selection
+    const range = selection.getRangeAt(0);
+    const fragment = range.cloneContents();
+    const tempDiv = document.createElement('div');
+    tempDiv.appendChild(fragment);
+    const selectionHtml = tempDiv.innerHTML;
+
+    // Walk up from anchor node to find data-section
+    let node: Node | null = selection.anchorNode;
+    let sectionId = '';
+    while (node && node !== resumeRef.current) {
+      if (node instanceof HTMLElement) {
+        const ds = node.getAttribute('data-section');
+        if (ds) {
+          sectionId = ds;
+          break;
+        }
+      }
+      node = node.parentNode;
+    }
+
+    if (!sectionId) return;
+
+    const dataKey = sectionToDataKeyMap[sectionId.toLowerCase()] || sectionId;
+    const section = textSections.find((s) => s.sectionType === dataKey);
+    if (!section) return;
+
+    // Search for matching field
+    let foundItem: string | null = null;
+    let foundField: string | null = null;
+    let foundBulletIndex: number | undefined = undefined;
+    let foundRawHtml = '';
+
+    const normalizedSelection = selectedStr.toLowerCase().replace(/\s+/g, ' ');
+
+    for (const item of section.items) {
+      for (const field of item.fields) {
+        const normalizedField = field.value.toLowerCase().replace(/\s+/g, ' ');
+        if (normalizedField.includes(normalizedSelection) || normalizedSelection.includes(normalizedField)) {
+          foundItem = item.itemId;
+          foundField = field.fieldName;
+          foundBulletIndex = field.bulletIndex;
+          foundRawHtml = field.rawHtml;
+          break;
+        }
+      }
+      if (foundItem) break;
+    }
+
+    setEditingIndex(null);
+    setSelectedSection(dataKey);
+    setSelectedItemId(foundItem || section.items[0]?.itemId || '');
+    setSelectedFieldName(foundField || '');
+    setSelectedBulletIndex(foundBulletIndex);
+    setSelectedText(selectedStr);
+    setSelectedHtml(selectionHtml || foundRawHtml || selectedStr);
+    setSuggestedText('');
+    setTiptapKey((k) => k + 1);
+  }, [textSections]);
+
+  // ── Handle click on highlighted suggestion in resume ───────────────────
+  useEffect(() => {
+    const container = resumeRef.current;
+    if (!container || suggestions.length === 0) return;
+
+    const handleClick = (e: MouseEvent) => {
+      let el = e.target as HTMLElement | null;
+      while (el && el !== container) {
+        const attr = el.getAttribute('data-suggestion');
+        if (attr) {
+          const [sId, itemId, fieldName] = attr.split('|');
+          const dataKey = sectionToDataKeyMap[sId.toLowerCase()] || sId;
+
+          // Find the first matching suggestion
+          const idx = suggestions.findIndex(
+            (s) => s.sectionType === dataKey && s.itemId === itemId && s.fieldName === fieldName,
+          );
+
+          if (idx !== -1) {
+            const s = suggestions[idx];
+            setSelectedSection(s.sectionType);
+            setSelectedItemId(s.itemId);
+            setSelectedFieldName(s.fieldName);
+            setSelectedBulletIndex(s.bulletIndex);
+            setSelectedText(s.old || '');
+            setSelectedHtml(s.old || '');
+            setSuggestedText(s.new);
+            setSuggestionType(s.type);
+            setEditingIndex(idx);
+            setTiptapKey((k) => k + 1);
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          break;
+        }
+        el = el.parentElement;
+      }
+    };
+
+    container.addEventListener('click', handleClick);
+    return () => container.removeEventListener('click', handleClick);
+  }, [suggestions]);
+
+  // ── Add or update suggestion ───────────────────────────────────────────
+  const handleAddOrUpdateSuggestion = () => {
     if (!suggestedText.trim()) return;
 
-    const newSuggestion: ReviewSuggestionItem = {
+    const suggestion: ReviewSuggestionItem = {
       sectionType: selectedSection,
       itemId: selectedItemId,
       fieldName: selectedFieldName,
-      ...(suggestionType !== 'new_summary' && { old: selectedText }),
+      ...(suggestionType !== 'new_summary' && selectedText && { old: selectedText }),
       new: suggestedText,
       type: suggestionType as ReviewSuggestionItem['type'],
       ...(selectedBulletIndex !== undefined && { bulletIndex: selectedBulletIndex }),
     };
 
-    setSuggestions((prev) => [...prev, newSuggestion]);
-    setSelectedText('');
-    setSuggestedText('');
-    setSelectedSection('');
-    setSelectedItemId('');
-    setSelectedFieldName('');
-    setSelectedBulletIndex(undefined);
+    if (editingIndex !== null) {
+      setSuggestions((prev) => prev.map((s, i) => (i === editingIndex ? suggestion : s)));
+    } else {
+      setSuggestions((prev) => [...prev, suggestion]);
+    }
+
+    clearForm();
   };
 
   const handleRemoveSuggestion = (index: number) => {
     setSuggestions((prev) => prev.filter((_, i) => i !== index));
+    if (editingIndex === index) clearForm();
   };
 
   const handleSaveDraft = async () => {
@@ -329,6 +520,7 @@ export default function ReviewSuggestionPage() {
     router.push('/admin/reviews');
   };
 
+  // ── Loading / error states ─────────────────────────────────────────────
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -341,24 +533,9 @@ export default function ReviewSuggestionPage() {
     return <div className="text-center py-12 text-gray-500">Resume not found</div>;
   }
 
-  const textSections = extractTextSections(data.resume);
-
-  // Helper to check if a field row is selected
-  const isFieldSelected = (
-    sectionType: string,
-    itemId: string,
-    fieldName: string,
-    value: string,
-    bulletIndex?: number,
-  ) => {
-    return (
-      selectedItemId === itemId &&
-      selectedFieldName === fieldName &&
-      selectedSection === sectionType &&
-      (bulletIndex !== undefined ? selectedBulletIndex === bulletIndex : true) &&
-      (selectedText === value || selectedText.length > 0)
-    );
-  };
+  // ═════════════════════════════════════════════════════════════════════════
+  // Render
+  // ═════════════════════════════════════════════════════════════════════════
 
   return (
     <div>
@@ -408,112 +585,49 @@ export default function ReviewSuggestionPage() {
         </div>
       </div>
 
-      {/* Split pane */}
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left: Resume Content */}
-        <div className="lg:w-3/5 rounded-xl border border-gray-200 bg-white p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Resume Content</h3>
-          <p className="text-xs text-gray-400 mb-4">
-            Click on any text to select it. Highlight specific text for partial selection.
-          </p>
+      <p className="text-xs text-gray-400 mb-4">
+        Highlight text on the resume to select it, then add your suggestion in the panel on the right. Click a
+        highlighted suggestion to edit it.
+      </p>
 
-          {textSections.map((section) => (
-            <div key={section.sectionType} className="mb-6">
-              <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider mb-3 border-b pb-2">
-                {section.sectionLabel}
-              </h4>
-              {section.items.map((item) => {
-                // Group fields by fieldName to detect bullet groups
-                const fieldGroups: Array<{ fieldName: string; entries: FieldEntry[] }> = [];
-                let currentGroup: { fieldName: string; entries: FieldEntry[] } | null = null;
-
-                for (const field of item.fields) {
-                  if (currentGroup && currentGroup.fieldName === field.fieldName && field.isBullet) {
-                    currentGroup.entries.push(field);
-                  } else {
-                    currentGroup = { fieldName: field.fieldName, entries: [field] };
-                    fieldGroups.push(currentGroup);
-                  }
-                }
-
-                return (
-                  <div key={item.itemId} className="mb-3 pl-2">
-                    {fieldGroups.map((group, groupIdx) => (
-                      <div key={`${item.itemId}-${group.fieldName}-${groupIdx}`}>
-                        <span className="text-[10px] font-medium text-gray-400 uppercase px-3">{group.fieldName}</span>
-                        {group.entries.map((field, idx) => {
-                          const fieldKey = `${item.itemId}-${field.fieldName}-${field.bulletIndex ?? idx}`;
-                          const selected = isFieldSelected(
-                            section.sectionType,
-                            item.itemId,
-                            field.fieldName,
-                            field.value,
-                            field.bulletIndex,
-                          );
-
-                          return (
-                            // biome-ignore lint/a11y/noStaticElementInteractions: interactive element
-                            <div
-                              key={fieldKey}
-                              ref={(el) => {
-                                if (el) fieldRefs.current.set(fieldKey, el);
-                              }}
-                              onMouseUp={() =>
-                                handleFieldMouseUp(
-                                  section.sectionType,
-                                  item.itemId,
-                                  field.fieldName,
-                                  field.value,
-                                  field.bulletIndex,
-                                )
-                              }
-                              className={`block w-full text-left px-3 py-2 rounded-md text-sm transition-all mb-1 border cursor-text select-text ${
-                                selected
-                                  ? 'border-blue-400 bg-blue-50 ring-2 ring-blue-200'
-                                  : 'border-transparent hover:border-blue-200 hover:bg-blue-50/50'
-                              } ${field.isBullet ? 'pl-6 relative' : ''}`}
-                            >
-                              {field.isBullet && (
-                                <span className="absolute left-3 top-2.5 text-gray-400 text-xs">&#8226;</span>
-                              )}
-                              <div className="text-gray-800 mt-0.5">{field.value}</div>
-                            </div>
-                          );
-                        })}
-
-                        {/* Add Bullet button — shown at the end of bullet groups */}
-                        {group.entries[0]?.isBullet && (
-                          <button
-                            type="button"
-                            onClick={() => handleAddBullet(section.sectionType, item.itemId, group.fieldName)}
-                            className="ml-3 mb-2 px-2 py-1 text-[11px] text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded font-medium inline-flex items-center gap-1 transition-colors"
-                          >
-                            <svg
-                              className="w-3 h-3"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                              aria-hidden="true"
-                            >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                            Add bullet
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                );
-              })}
-            </div>
-          ))}
+      {/* Split pane — single page scroll */}
+      <div className="flex flex-col lg:flex-row gap-6 items-start">
+        {/* Left: Rendered Resume — uses CSS zoom so layout size adjusts naturally */}
+        <div ref={containerRef} className="flex-1 min-w-0">
+          {/* biome-ignore lint/a11y/noStaticElementInteractions: text selection + suggestion click */}
+          <div
+            ref={resumeRef}
+            onMouseUp={handleResumeMouseUp}
+            className="select-text cursor-text origin-top-left"
+            style={{ zoom: resumeScale < 1 ? resumeScale : undefined }}
+          >
+            <ResumeRenderer
+              template={template}
+              data={dataWithSuggestions}
+              hasSuggestions={suggestions.length > 0}
+              isThumbnail={false}
+            />
+          </div>
         </div>
 
-        {/* Right: Suggestion Panel */}
-        <div className="lg:w-2/5 space-y-4">
+        {/* Right: Suggestion Panel (sticky, scrolls within viewport) */}
+        <div className="w-full lg:w-[380px] lg:shrink-0 space-y-4 lg:sticky lg:top-[24px] lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto">
           {/* Suggestion Builder */}
           <div className="rounded-xl border border-gray-200 bg-white p-5">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Add Suggestion</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {editingIndex !== null ? 'Edit Suggestion' : 'Add Suggestion'}
+              </h3>
+              {editingIndex !== null && (
+                <button
+                  type="button"
+                  onClick={clearForm}
+                  className="text-xs text-gray-400 hover:text-gray-600 underline"
+                >
+                  Cancel edit
+                </button>
+              )}
+            </div>
 
             {/* Suggestion Type */}
             <div className="mb-4">
@@ -536,7 +650,7 @@ export default function ReviewSuggestionPage() {
               </div>
             </div>
 
-            {/* Original text */}
+            {/* Original text — rendered with HTML styling */}
             {suggestionType !== 'new_summary' && (
               <div className="mb-4">
                 <span className="block text-xs font-medium text-gray-500 mb-1">
@@ -545,11 +659,12 @@ export default function ReviewSuggestionPage() {
                     <span className="ml-2 text-blue-500 font-normal">(bullet #{selectedBulletIndex + 1})</span>
                   )}
                 </span>
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700 min-h-[60px]">
-                  {selectedText ? (
-                    <div>{selectedText}</div>
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-700 min-h-[60px] prose prose-sm max-w-none">
+                  {selectedHtml ? (
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: renders the selected resume HTML
+                    <div dangerouslySetInnerHTML={{ __html: selectedHtml }} />
                   ) : (
-                    <span className="text-gray-400 italic">Click on text in the resume to select</span>
+                    <span className="text-gray-400 italic not-prose">Highlight text on the resume to select</span>
                   )}
                 </div>
               </div>
@@ -583,28 +698,29 @@ export default function ReviewSuggestionPage() {
               </div>
             )}
 
-            {/* Suggested text */}
+            {/* Suggested text — TipTap rich-text editor */}
             <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-500 mb-1">
-                Suggested Text
-                <textarea
-                  value={suggestedText}
-                  onChange={(e) => setSuggestedText(e.target.value)}
-                  placeholder="Type your suggested improvement..."
-                  className="w-full rounded-lg border border-gray-300 p-3 text-sm h-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                />
-              </label>
+              <span className="block text-xs font-medium text-gray-500 mb-1">Suggested Text</span>
+              <TiptapTextArea
+                key={tiptapKey}
+                defaultValue={suggestedText}
+                onChange={(_text, html) => setSuggestedText(html)}
+                placeholder="Type your suggested improvement..."
+                showToolbar={true}
+                minHeight="100px"
+                maxHeight="200px"
+              />
             </div>
 
             <button
               type="button"
-              onClick={handleAddSuggestion}
+              onClick={handleAddOrUpdateSuggestion}
               disabled={
                 !suggestedText.trim() || (!selectedText && suggestionType !== 'new_summary') || !selectedSection
               }
               className="w-full px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              Add Suggestion
+              {editingIndex !== null ? 'Update Suggestion' : 'Add Suggestion'}
             </button>
           </div>
 
@@ -620,7 +736,12 @@ export default function ReviewSuggestionPage() {
               <div className="space-y-3 max-h-60 overflow-y-auto">
                 {suggestions.map((s, idx) => (
                   // biome-ignore lint/suspicious/noArrayIndexKey: static list
-                  <div key={idx} className={`rounded-lg border p-3 ${getTypeStyle(s.type)}`}>
+                  <div
+                    key={idx}
+                    className={`rounded-lg border p-3 transition-all ${getTypeStyle(s.type)} ${
+                      editingIndex === idx ? 'ring-2 ring-blue-400' : ''
+                    }`}
+                  >
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-semibold">{getTypeLabel(s.type)}</span>
@@ -647,12 +768,16 @@ export default function ReviewSuggestionPage() {
                     {s.old && (
                       <div className="mt-2">
                         <span className="text-[10px] text-gray-500">Old:</span>
-                        <div className="text-xs text-gray-700 line-through">{s.old}</div>
+                        <div className="text-xs text-gray-700 line-through">{stripHtml(s.old)}</div>
                       </div>
                     )}
                     <div className="mt-1">
                       <span className="text-[10px] text-gray-500">New:</span>
-                      <div className="text-xs text-gray-900 font-medium">{s.new}</div>
+                      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: renders suggestion HTML */}
+                      <div
+                        className="text-xs text-gray-900 font-medium prose prose-xs max-w-none"
+                        dangerouslySetInnerHTML={{ __html: s.new }}
+                      />
                     </div>
                   </div>
                 ))}

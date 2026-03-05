@@ -23,7 +23,7 @@ export default function TemplateCardGrid({ data, isLoading, offset, setOffset, l
 
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  // const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
   const templates = Array.isArray(data) ? data : data?.data || [];
@@ -89,7 +89,7 @@ export default function TemplateCardGrid({ data, isLoading, offset, setOffset, l
               key={template.id}
               template={template}
               onClick={() => {
-                setSelectedTemplate(template);
+                // setSelectedTemplate(template);
                 setIsGetStartedOpen(true);
               }}
               onPreviewClick={() => setPreviewTemplate(template)}

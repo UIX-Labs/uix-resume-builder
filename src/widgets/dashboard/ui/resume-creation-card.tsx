@@ -1,8 +1,11 @@
-import { createResume } from '@entities/resume';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { Button } from '@shared/ui/components/button';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { useMutation } from '@tanstack/react-query';
@@ -10,14 +13,11 @@ import { FileUpload, type FileUploadHandle } from '@widgets/resumes/file-upload'
 import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import ResumeCreationModal from './resume-creation-modal';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
 import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationMobileCard from './resume-creation-mobile-card';
-import JDUploadMobileModal from './jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { useIsMobile } from '@shared/hooks/use-mobile';
+import ResumeCreationModal from './resume-creation-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -39,15 +39,21 @@ interface ResumeCreationCardProps {
   shouldOpenJDModal?: boolean;
   /** Unified auto-action triggered from landing page query params */
   autoAction?: 'from_scratch' | 'upload' | 'tailored_jd' | null;
+  autoTemplateId?: string;
 }
 
-export default function ResumeCreationCard({ shouldOpenJDModal = false, autoAction = null }: ResumeCreationCardProps) {
+export default function ResumeCreationCard({
+  shouldOpenJDModal = false,
+  autoAction = null,
+  autoTemplateId,
+}: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
   const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
+  const updateTemplateMutation = useMutation({ mutationFn: updateResumeTemplate });
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -104,6 +110,13 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
           userId: user.data?.id ?? '',
         },
       });
+
+      if (autoTemplateId) {
+        await updateTemplateMutation.mutateAsync({
+          resumeId: data.id,
+          templateId: autoTemplateId,
+        });
+      }
 
       router.push(`/resume/${data.id}`);
     } catch (error) {

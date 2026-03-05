@@ -1,8 +1,50 @@
 import { categories } from '@/data/categories';
 import BlogHero from '@/widgets/blog/components/blog-hero';
-import { getAllPosts } from '@shared/lib/blog';
+import { getAllPosts, getAllTags } from '@shared/lib/blog';
 import CategoryPageContent from '@widgets/blog/category-page';
 import NotFoundPage from '@widgets/blog/slug/not-found-page';
+import type { Metadata } from 'next';
+import Script from 'next/script';
+
+const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
+const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp';
+
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+  resume: [
+    'resume tips',
+    'resume writing',
+    'ATS resume',
+    'resume format',
+    'professional resume',
+    'resume builder tips',
+    'resume examples',
+  ],
+  interview: [
+    'interview tips',
+    'job interview',
+    'interview preparation',
+    'interview questions',
+    'behavioral interview',
+    'technical interview',
+  ],
+  career: [
+    'career advice',
+    'career growth',
+    'career change',
+    'professional development',
+    'salary negotiation',
+    'career planning',
+  ],
+  'cover-letter': [
+    'cover letter tips',
+    'cover letter examples',
+    'cover letter writing',
+    'cover letter format',
+    'professional cover letter',
+    'application letter',
+  ],
+  job: ['job search', 'job application', 'job hunting tips', 'find a job', 'job search strategies', 'employment tips'],
+};
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -12,6 +54,38 @@ export async function generateStaticParams() {
   return categories.map((category) => ({
     id: category.id,
   }));
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { id } = await params;
+  const category = categories.find((c) => c.id === id);
+  if (!category) return { title: 'Category Not Found' };
+
+  const url = `${DOMAIN_URL}/blog/categories/${id}`;
+  const title = `${category.title} ${category.hero.suffix} - Blog`;
+
+  return {
+    title,
+    description: category.hero.description,
+    keywords: CATEGORY_KEYWORDS[id] || [
+      `${category.title.toLowerCase()} tips`,
+      `${category.title.toLowerCase()} advice`,
+    ],
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description: category.hero.description,
+      url,
+      siteName: 'Pika Resume',
+      type: 'website',
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: category.hero.description,
+    },
+  };
 }
 
 export default async function CategoryPage({ params }: PageProps) {
@@ -24,6 +98,8 @@ export default async function CategoryPage({ params }: PageProps) {
 
   const allPosts = getAllPosts();
 
+  const tags = getAllTags();
+
   const filteredPosts = allPosts.filter((post) =>
     post.frontmatter.tags.some((tag) => {
       const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -32,8 +108,41 @@ export default async function CategoryPage({ params }: PageProps) {
     }),
   );
 
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: `${category.title} ${category.hero.suffix} - Pika Resume Blog`,
+    description: category.hero.description,
+    url: `${DOMAIN_URL}/blog/categories/${id}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Pika Resume',
+      url: DOMAIN_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: LOGO_URL,
+      },
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: filteredPosts.length,
+      itemListElement: filteredPosts.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${DOMAIN_URL}/blog/${post.slug}`,
+        name: post.frontmatter.title,
+      })),
+    },
+  };
+
   return (
     <div className="max-w-[1395px] mx-auto p-2">
+      <Script
+        id="category-collection-structured-data"
+        type="application/ld+json"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for SEO structured data
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       {/* HERO */}
       <BlogHero
         description={category.hero.description}
@@ -56,7 +165,7 @@ export default async function CategoryPage({ params }: PageProps) {
           placeholder="Type Something"
           color={category.color}
           currentCategoryId={id}
-          tags={category.tags}
+          tags={tags}
         />
       ) : (
         <div>

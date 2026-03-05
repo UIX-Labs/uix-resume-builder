@@ -10,10 +10,9 @@ import { MobileTextView } from './mobile-text-view';
 export interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onExpertReviewClick: () => void;
 }
 
-export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSidebarProps) => {
+export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [showMobileTextView, setShowMobileTextView] = useState(false);
@@ -34,13 +33,12 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
     handleNavigation('/roast', 'navigation_click', 'roast');
   };
 
-  const handleAboutUsClick = () => {
-    handleNavigation('/about-us', 'navigation_click', 'about_us');
+  const _handlePricingClick = () => {
+    handleNavigation('/pricing', 'navigation_click', 'pricing');
   };
 
   const handleExpertReviewClick = () => {
-    onClose();
-    onExpertReviewClick();
+    handleNavigation('/expert-review', 'navigation_click', 'expert_review');
   };
 
   const handleDashboardClick = () => {
@@ -49,10 +47,6 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
 
   const handleBlogClick = () => {
     handleNavigation('/blog', 'navigation_click', 'blog');
-  };
-
-  const handleCreateResumeClick = () => {
-    handleNavigation('/dashboard', 'create_resume_click', 'dashboard');
   };
 
   const handleLogoClick = () => {
@@ -66,45 +60,42 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/',
     },
     {
+      label: 'Expert Review',
+      onClick: handleExpertReviewClick,
+      isActive: pathname === '/expert-review',
+    },
+    {
       label: 'Roast',
       onClick: handleRoastClick,
       isActive: pathname === '/roast',
-    },
-    {
-      label: 'Expert Review',
-      onClick: handleExpertReviewClick,
-      isActive: false,
-    },
-    {
-      label: 'Dashboard',
-      onClick: handleDashboardClick,
-      isActive: pathname === '/dashboard',
     },
     {
       label: 'Blogs',
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },
+    // WIP - Pricing nav item hidden temporarily
+    // {
+    //   label: 'Pricing',
+    //   onClick: handlePricingClick,
+    //   isActive: pathname === '/pricing',
+    // },
+    // WIP - Resume Examples nav item hidden temporarily
+    // {
+    //   label: 'Resume Examples',
+    //   onClick: () => handleNavigation('/resume-examples', 'navigation_click', 'resume_examples'),
+    //   isActive: pathname === '/resume-examples',
+    // },
     {
-      label: 'About Us',
-      onClick: handleAboutUsClick,
-      isActive: pathname === '/about-us',
+      label: 'Dashboard',
+      onClick: handleDashboardClick,
+      isActive: pathname === '/dashboard',
     },
   ];
 
   return (
     <>
-      <MobileNavDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        navItems={navItems}
-        onLogoClick={handleLogoClick}
-        ctaButton={{
-          label: 'Create My Resume',
-          onClick: handleCreateResumeClick,
-          className: 'bg-blue-900 hover:bg-blue-700 text-white',
-        }}
-      />
+      <MobileNavDrawer isOpen={isOpen} onClose={onClose} navItems={navItems} onLogoClick={handleLogoClick} />
 
       {/* Mobile Text View - Shows when user tries to access desktop-only features */}
       <MobileTextView isOpen={showMobileTextView} onClose={() => setShowMobileTextView(false)} />

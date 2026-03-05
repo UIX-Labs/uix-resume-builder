@@ -22,7 +22,8 @@ export function StarRating({ value, onChange, max = 5, className }: StarRatingPr
 
         return (
           <Button
-            key={`star-rating-${starValue}`}
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            key={index}
             variant="ghost"
             type="button"
             className="focus:outline-none transition-transform hover:bg-transparent cursor-pointer"

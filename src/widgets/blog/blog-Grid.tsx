@@ -1,13 +1,14 @@
 import { categories } from '@/data/categories';
 import BlogCard from '@/widgets/blog/components/blog-card';
 import type { BlogPost } from '@shared/lib/blog';
+
 interface BlogGridProps {
   posts: BlogPost[];
   badgeColor?: string;
   currentCategoryId?: string;
 }
 
-export default function BlogGrid({ posts, currentCategoryId, badgeColor }: BlogGridProps) {
+export default function BlogGrid({ posts, badgeColor, currentCategoryId }: BlogGridProps) {
   const blogs = posts;
 
   return (

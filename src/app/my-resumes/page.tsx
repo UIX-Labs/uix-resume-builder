@@ -1,30 +1,30 @@
 'use client';
+import { createResume, useGetAllResumes, type Resume, useResumeData } from '@entities/resume';
 import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { createResume, useGetAllResumes, useResumeData, type Resume } from '@entities/resume';
 import { useGetTemplateById } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { formatDate } from '@shared/lib/date-time';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { Button } from '@shared/ui/components/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@shared/ui/dropdown';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
-import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
-import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
-import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
-import PageHeading from '@widgets/dashboard/ui/page-heading';
-import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
+import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import { DeleteResumeModal } from '@widgets/resumes/ui/delete-resume-modal';
 import { ResumeCardMobile } from '@widgets/resumes/ui/resume-card-mobile';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { ChevronDown, MoreVertical, Trash2 } from 'lucide-react';
+import { MoreVertical, Trash2, ChevronDown } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
+import { Button } from '@shared/ui/components/button';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 
 export default function AllResumePage() {
   const { data: user, isLoading } = useUserProfile();
@@ -73,8 +73,11 @@ export default function AllResumePage() {
   const sortedResumes = resumes?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
 
   const handleCreateResume = useCallback(async () => {
+    // biome-ignore lint/correctness/noUnusedVariables: guestEmail is assigned for future use in guest auth flow
+    let guestEmail: string | undefined;
+
     if (!user?.isLoggedIn) {
-      getOrCreateGuestEmail();
+      guestEmail = getOrCreateGuestEmail();
     } else if (!user) {
       return;
     }
@@ -114,8 +117,8 @@ export default function AllResumePage() {
   }, []);
 
   const handleJDModalToggle = useCallback(
-    (isOpen?: boolean) => {
-      handleJDModal(isOpen ?? false);
+    (isOpen: boolean) => {
+      handleJDModal(isOpen);
     },
     [handleJDModal],
   );

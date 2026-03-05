@@ -1,8 +1,16 @@
 import { AiFeaturesSection } from './ai-features-section';
+import FaqSection from './faq-section';
 import FooterSection from './footer-section';
+import { PaidToolsSection } from './free-tools-section';
 import Header from './header-section';
 import HeroSection from './hero-section';
-import JDSection from './jd-section';
+import { HowItWorksSection } from './how-it-works-section';
+// WIP - PricingSection hidden temporarily
+// import { PricingSection } from './pricing-section';
+import { ReferralBanner } from './referral-banner';
+// WIP - ResumeExamplesSection hidden temporarily
+// import { ResumeExamplesSection } from './resume-examples-section';
+import { SeoContentSection } from './seo-content-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import { TopAnnouncementStrip } from './top-announcement-strip';
@@ -25,17 +33,36 @@ export function LandingPage() {
         <HeroSection />
       </div>
 
+      <HowItWorksSection />
+
       <AiFeaturesSection />
 
       <div>
         <TemplateCarousel />
         <Testimonials />
-        <JDSection />
       </div>
 
-      {/* <div className="min-h-0 lg:h-[1065px] pb-4 lg:pb-0">
-        <AITailorSection />
-      </div> */}
+      <PaidToolsSection />
+
+      {/* WIP - ResumeExamplesSection hidden temporarily */}
+      {/* <ResumeExamplesSection /> */}
+
+      {/* WIP - PricingSection hidden temporarily */}
+      {/* <PricingSection /> */}
+
+      <ReferralBanner />
+
+      <SeoContentSection />
+
+      <div
+        className="border border-white rounded-[36px] mx-4 overflow-hidden mt-6 mb-6"
+        style={{
+          background: 'radial-gradient(circle, #ccc 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+        }}
+      >
+        <FaqSection />
+      </div>
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden"

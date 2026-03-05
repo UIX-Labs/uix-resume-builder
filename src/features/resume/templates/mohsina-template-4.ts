@@ -18,12 +18,12 @@ const mohsinaTemplate4 = {
       fields: {
         container: {
           type: 'group',
-          className: 'flex justify-between items-start',
+          className: 'flex items-start justify-between gap-10 w-full',
 
           items: [
             {
               type: 'group',
-              className: 'flex flex-col gap-2 max-w-[70%]',
+              className: 'flex flex-col gap-2 flex-1 min-w-0',
 
               items: [
                 {
@@ -47,35 +47,82 @@ const mohsinaTemplate4 = {
               ],
             },
 
-            // (Contacts)
             {
               type: 'group',
-              className: 'flex flex-col gap-1 max-w-[25%] mt-6 mr-0',
-
+              className: 'flex flex-col gap-[2px] w-[148px] flex-shrink-0',
               items: [
                 {
-                  path: 'personalDetails.items[0].address',
-                  className:
-                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
+                  type: 'group',
+                  className: 'flex flex-col ',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Location',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].address',
+                      fallback: 'Gurugram, Haryana',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins break-words',
+                    },
+                  ],
                 },
+
                 {
-                  type: 'link',
-                  path: 'personalDetails.items[0].email',
-                  href: 'mailto:{{value}}',
-                  className:
-                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
+                  type: 'group',
+                  className: 'flex flex-col gap-0',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Email',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].email',
+                      href: 'mailto:{{value}}',
+                      fallback: 'yourmail@gmail.com',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins break-words',
+                    },
+                  ],
                 },
+
                 {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.linkedin.title',
-                  href: 'personalDetails.items[0].links.linkedin.link',
-                  className:
-                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
+                  type: 'group',
+                  className: 'flex flex-col',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Connect',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.linkedin.title',
+                      href: 'personalDetails.items[0].links.linkedin.link',
+                      fallback: 'Portfolio/LinkedIn',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins break-words',
+                    },
+                  ],
                 },
+
                 {
-                  path: 'personalDetails.items[0].phone',
-                  className:
-                    'flex flex-col w-full text-[11px] font-semibold text-black break-words whitespace-normal before:content-["Location"] before:text-[10px] before:font-normal before:text-gray-400 before:mb-1',
+                  type: 'group',
+                  className: 'flex flex-col ',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Phone',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'text',
+                      path: 'personalDetails.items[0].phone',
+                      fallback: '9999444555',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
+                    },
+                  ],
                 },
               ],
             },
@@ -119,19 +166,19 @@ const mohsinaTemplate4 = {
                       {
                         path: 'position',
                         fallback: 'Software Engineer',
-                        className: 'text-base font-bold leading-[13px] text-black  -mt-2',
+                        className: 'text-base font-semibold leading-[13px] text-black font-poppins -mt-2',
                       },
                       {
                         path: 'company',
                         fallback: 'Oracle',
-                        className: 'text-[16px] pl-1  font-bold text-black ',
+                        className: 'text-base pl-1  font-semibold font-poppins text-black ',
                       },
                     ],
                   },
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-xs font-normal leading-[14px] text-[#797979] font-montserrat text-right',
+                    className: 'text-xs font-medium leading-[14px] text-gray-500 font-montserrat text-right',
                   },
                 ],
               },
@@ -192,25 +239,25 @@ const mohsinaTemplate4 = {
                           {
                             path: 'degree',
                             fallback: 'Masters of Design',
-                            className: 'text-base leading-[14px] font-bold text-black font-poppins ',
+                            className: 'text-base leading-[14px] font-semibold text-black font-poppins ',
                           },
                           {
                             path: 'cgpa',
                             fallback: '8.0 CGPA',
-                            className: 'text-base leading-[14px] font-bold text-[#005FF2] font-poppins ml-1',
+                            className: 'text-base leading-[14px] font-semibold text-[#005FF2] font-poppins ml-1',
                           },
                         ],
                       },
                       {
                         type: 'duration',
                         path: 'duration',
-                        className: 'text-xs leading-[14px] font-medium text-[#797979] font-montserrat',
+                        className: 'text-xs font-medium leading-[16px] text-gray-500 font-montserrat',
                       },
                     ],
                   },
                   {
                     path: 'institution',
-                    className: 'text-xs  leading-[18px] font-normal text-black font-poppins',
+                    className: 'text-xs  leading-[18px] font-normal text-gray-500 font-poppins',
                   },
                 ],
               },
@@ -251,12 +298,12 @@ const mohsinaTemplate4 = {
                   {
                     path: 'title',
                     fallback: 'Project Title',
-                    className: 'text-base font-bold leading-[16px] text-black font-poppins',
+                    className: 'text-base font-semibold leading-[16px] text-black font-poppins',
                   },
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-xs font-medium leading-[16px] text-[#797979] font-montserrat',
+                    className: 'text-xs font-medium leading-[16px] text-gray-500 font-montserrat',
                   },
                 ],
               },
@@ -315,12 +362,10 @@ const mohsinaTemplate4 = {
       listPath: 'skills.items',
       itemPath: 'name',
 
-      showBullet: false,
-      itemSeparator: '',
-
-      containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 leading-none',
+      containerClassName: 'flex flex-wrap gap-x-3 gap-y-0 mt-2',
       itemClassName:
-        'inline-flex items-baseline gap-1 text-xs leading-[18px] font-semibold text-black font-poppins before:content-["•"] before:text-black before:text-[9px]',
+        'inline-flex items-center pt-[2.6px] pr-[10px] text-xs font-semibold leading-[18px] text-black font-poppins',
+      itemSeparator: ' • ',
     },
     // Certifications Section - Left Column
     {
@@ -353,7 +398,7 @@ const mohsinaTemplate4 = {
                   {
                     path: 'title',
                     fallback: 'Certificate 1',
-                    className: 'text-base font-bold  text-black font-poppins',
+                    className: 'text-base font-semibold  text-black font-poppins',
                   },
                   {
                     type: 'duration',
@@ -397,13 +442,12 @@ const mohsinaTemplate4 = {
       listPath: 'interests.items[0].items',
       itemPath: '',
 
-      showBullet: false,
-      itemSeparator: '',
-
-      containerClassName: 'flex flex-wrap gap-x-4 gap-y-0 mt-2',
+      containerClassName: 'flex flex-wrap gap-x-3 mt-2',
 
       itemClassName:
-        'inline-flex items-baseline gap-2 text-xs font-semibold leading-[18px] text-black font-poppins before:content-["•"] before:text-black',
+        'inline-flex items-center pt-[2.6px] pr-[10px]  text-xs font-semibold leading-[18px] text-black font-poppins',
+
+      itemSeparator: ' • ',
     },
   ],
 };

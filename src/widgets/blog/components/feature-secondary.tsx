@@ -20,7 +20,7 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
       rounded-2xl border-2 sm:border-4 border-white relative overflow-hidden group transition-all hover:shadow-sm"
       >
         <div className="w-[120px] sm:w-[35%] shrink-0 relative">
-          <Image src={featureImage} alt="feature" fill className="object-cover" />
+          <Image src={featureImage} alt="feature" fill className="object-cover" sizes="(max-width: 640px) 120px, 35vw" />
         </div>
 
         <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-2 p-3 sm:p-5">

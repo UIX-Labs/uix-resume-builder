@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Button } from '@/shared/ui/components/button';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import FooterNavigation from './navigation-footer';
 import { useRouter } from 'next/navigation';
+import FooterNavigation from './navigation-footer';
 
 const FooterSection = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const FooterSection = () => {
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
           {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
-          <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
+          <img src="/images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
       desktopPosition: { top: '-1%', left: '2%' },
@@ -35,7 +35,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/google-logo.svg" alt="google" fill className="object-contain" />
+                  <Image src="/images/google-logo.svg" alt="google" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Google</span>
@@ -57,7 +57,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/microsoft-logo.svg" alt="microsoft" fill className="object-contain" />
+                  <Image src="/images/microsoft-logo.svg" alt="microsoft" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Microsoft</span>
@@ -79,7 +79,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-black">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/apple-logo.svg" alt="apple" fill className="object-contain" />
+                  <Image src="/images/apple-logo.svg" alt="apple" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Apple</span>
@@ -101,7 +101,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(214,235,255,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/meta-logo.svg" alt="meta" fill className="object-contain" />
+                  <Image src="/images/meta-logo.svg" alt="meta" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Meta</span>
@@ -123,7 +123,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/amazon-logo.svg" alt="amazon" fill className="object-contain" />
+                  <Image src="/images/amazon-logo.svg" alt="amazon" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Amazon</span>
@@ -145,7 +145,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/nvidia-logo.svg" alt="nvidia" fill className="object-contain" />
+                  <Image src="/images/nvidia-logo.svg" alt="nvidia" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Nvidia</span>

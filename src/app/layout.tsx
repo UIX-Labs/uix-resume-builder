@@ -141,7 +141,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        style={{ '--font-arial': 'Arial, Helvetica, sans-serif' } as React.CSSProperties}
+      >
         <Script
           id="structured-data"
           type="application/ld+json"

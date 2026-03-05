@@ -438,7 +438,6 @@ const mohsinaTemplate4 = {
         fallback: 'Interests',
         className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mb-0 mt-4',
       },
-
       listPath: 'interests.items[0].items',
       itemPath: '',
 

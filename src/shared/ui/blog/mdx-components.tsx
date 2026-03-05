@@ -107,7 +107,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
 
   /* --- Lists ------------------------------------------------------ */
   ul: ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className="my-4 ml-6 list-disc space-y-2 text-gray-700 marker:text-gray-400" {...props}>
+    <ul className="my-4 ml-8 list-disc space-y-2 text-gray-700 marker:text-gray-900" {...props}>
       {children}
     </ul>
   ),

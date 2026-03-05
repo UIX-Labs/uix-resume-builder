@@ -3,7 +3,7 @@ export const mohsinaTemplate7 = {
   page: {
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Arial',
+    fontFamily: 'Arial,Lato',
   },
 
   sections: [
@@ -37,14 +37,14 @@ export const mohsinaTemplate7 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-[24px] leading-[15px] font-semibold tracking-[-0.3px] text-black',
+                      className: 'text-[34px] leading-[28px] font-normal tracking-[-0.3px] text-black',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].jobTitle',
                       fallback: 'UX-DESIGNER',
                       className:
-                        'text-[11px] leading-[11px] font-semibold uppercase text-white bg-[#4C77FF] px-3 py-1.5 text-center tracking-widest',
+                        'text-sm leading-[11px] font-bold uppercase text-white tracking-[3px] bg-[#4C77FF] px-3 py-1.5 text-center tracking-widest',
                     },
                   ],
                 },
@@ -70,7 +70,7 @@ export const mohsinaTemplate7 = {
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'amanguppta@gmail.com',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -88,7 +88,7 @@ export const mohsinaTemplate7 = {
                       type: 'text',
                       path: 'personalDetails.items[0].location',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -107,7 +107,7 @@ export const mohsinaTemplate7 = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: 'Portfolio / linkedin',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -125,7 +125,7 @@ export const mohsinaTemplate7 = {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -144,7 +144,7 @@ export const mohsinaTemplate7 = {
                       path: 'personalDetails.items[0].links.website.title',
                       href: 'personalDetails.items[0].links.website.link',
                       fallback: 'Portfolio',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -163,7 +163,7 @@ export const mohsinaTemplate7 = {
                       path: 'personalDetails.items[0].links.github.title',
                       href: 'personalDetails.items[0].links.github.link',
                       fallback: 'Github',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -182,7 +182,7 @@ export const mohsinaTemplate7 = {
                       path: 'personalDetails.items[0].links.behance.title',
                       href: 'personalDetails.items[0].links.behance.link',
                       fallback: 'Behance',
-                      className: 'text-[9px] leading-[13px] text-black',
+                      className: 'text-[13px] leading-[13px] text-black',
                     },
                   ],
                 },
@@ -197,13 +197,13 @@ export const mohsinaTemplate7 = {
       id: 'summary',
       type: 'list-section',
       column: 'left',
-      className: 'flex flex-col px-0 pt-0',
+      className: 'flex flex-col px-0 pt-0 mb-4',
 
       heading: {
         path: 'summary.heading',
         fallback: 'Professional Summary',
         className:
-          'flex-row items-center gap-3 w-full text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2 mb-2',
+          'flex-row items-center gap-3 w-full text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'personalDetails.items',
@@ -219,7 +219,7 @@ export const mohsinaTemplate7 = {
                 type: 'html',
                 path: 'description',
                 fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
-                className: 'text-[10px] leading-[13px] text-black break-words whitespace-pre-wrap',
+                className: 'text-[13px] leading-[16px] text-[#323232] break-words whitespace-pre-wrap',
               },
             ],
           },
@@ -230,17 +230,18 @@ export const mohsinaTemplate7 = {
       id: 'education',
       type: 'list-section',
       column: 'right',
+      className: 'mb-4',
 
       heading: {
         path: 'education.heading',
         fallback: 'Education',
         className:
-          'flex-row items-center gap-3 w-full text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2 mb-2',
+          'flex-row items-center gap-3 w-full text-xs font-bold leading-[16px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'education.items',
 
-      containerClassName: 'flex flex-col gap-3',
+      containerClassName: 'flex flex-col gap-4',
 
       itemTemplate: {
         className: 'flex justify-between items-start w-full',
@@ -255,12 +256,23 @@ export const mohsinaTemplate7 = {
                 className: 'flex flex-col gap-[2px]',
                 items: [
                   {
-                    path: 'degree',
-                    className: 'text-[10px] font-bold text-[#101214] leading-[13px] font-[Arial]',
+                    type: 'group',
+                    className: 'flex items-center gap-1',
+                    items: [
+                      {
+                        path: 'degree',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] font-[Arial]',
+                      },
+                      {
+                        path: 'grade.value',
+                        prefix: ', ',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] font-[Arial]',
+                      },
+                    ],
                   },
                   {
                     path: 'institution',
-                    className: 'text-[10px] font-normal text-[#323232] leading-[13px] font-[Arial]',
+                    className: 'text-[13px] font-normal text-[#323232] leading-[16px] font-[Arial]',
                   },
                 ],
               },
@@ -269,7 +281,7 @@ export const mohsinaTemplate7 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[8px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap font-[Arial]',
+                className: 'text-[10px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap font-[Arial]',
               },
             ],
           },
@@ -282,12 +294,13 @@ export const mohsinaTemplate7 = {
       type: 'list-section',
       column: 'right',
       break: true,
+      className: 'mb-4',
 
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
         className:
-          'flex-row items-center w-full gap-3 text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mb-0 mt-2',
+          'flex-row items-center w-full gap-3 text-[12px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mb-2 mt-2',
       },
 
       listPath: 'experience.items',
@@ -304,7 +317,7 @@ export const mohsinaTemplate7 = {
               // LEFT SIDE
               {
                 type: 'group',
-                className: 'flex flex-col gap-[2px] flex-1',
+                className: 'flex flex-col gap-2 flex-1',
                 items: [
                   {
                     type: 'group',
@@ -312,12 +325,12 @@ export const mohsinaTemplate7 = {
                     items: [
                       {
                         path: 'position',
-                        className: 'text-[10px] font-bold text-[#101214] leading-[13px]',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[13px]',
                       },
                       {
                         path: 'company',
                         prefix: ', ',
-                        className: 'text-[10px] font-bold text-[#101214] leading-[13px]',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[13px]',
                       },
                     ],
                   },
@@ -326,7 +339,8 @@ export const mohsinaTemplate7 = {
                     type: 'html',
                     path: 'description',
                     breakable: true,
-                    className: 'text-[10px] text-[#323232] leading-[13px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
+                    className:
+                      'text-[13px] text-[#323232] font-lato leading-[16px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
                   },
                 ],
               },
@@ -335,7 +349,7 @@ export const mohsinaTemplate7 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[8px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
+                className: 'text-[10px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
               },
             ],
           },
@@ -347,12 +361,13 @@ export const mohsinaTemplate7 = {
       type: 'list-section',
       column: 'right',
       break: true,
+      className: 'mb-4',
 
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
         className:
-          'flex-row items-center w-full gap-3 text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mb-0 mt-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mb-2 mt-2',
       },
 
       listPath: 'projects.items',
@@ -369,19 +384,20 @@ export const mohsinaTemplate7 = {
               // LEFT SIDE
               {
                 type: 'group',
-                className: 'flex flex-col gap-[2px] flex-1',
+                className: 'flex flex-col gap-2 flex-1',
                 items: [
                   {
                     path: 'title',
                     fallback: 'Project Title',
-                    className: 'text-[10px] font-bold text-[#101214] leading-[13px]',
+                    className: 'text-base font-semibold font-lato text-[#101214] leading-[18px]',
                   },
 
                   {
                     type: 'html',
                     path: 'description',
                     breakable: true,
-                    className: 'text-[10px] text-[#323232] leading-[13px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
+                    className:
+                      'text-[13px] text-[#323232] font-lato leading-[16px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
                   },
                 ],
               },
@@ -390,7 +406,7 @@ export const mohsinaTemplate7 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[8px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
+                className: 'text-[10px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
               },
             ],
           },
@@ -403,19 +419,20 @@ export const mohsinaTemplate7 = {
       column: 'left',
       break: true,
       breakable: true,
+      className: 'mb-4',
 
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
         className:
-          'flex-row items-center gap-3 w-full text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2',
+          'flex-row items-center gap-3 w-full text-sm font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'achievements.items[0].items',
       itemPath: '',
       itemPrefix: '• ',
 
-      badgeClassName: 'block w-full text-[10px] text-[#4D4D4D] leading-[13px] whitespace-pre-wrap ',
+      badgeClassName: 'block w-full text-[13px] gap-y-2 text-[#323232] leading-[16px] whitespace-pre-wrap ',
     },
     {
       id: 'skills',
@@ -423,38 +440,40 @@ export const mohsinaTemplate7 = {
       column: 'right',
       break: true,
       breakable: true,
+      className: 'mb-4',
 
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
         className:
-          'flex-row items-center w-full gap-3 text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2 mb-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'skills.items',
       itemPath: 'name',
 
-      containerClassName: 'flex flex-wrap gap-x-4 gap-y-2 ',
+      containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 ',
 
       badgeClassName:
-        'flex items-center gap-2 text-[10px] font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
+        'flex items-center gap-3 text-[13px] font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
     },
     {
       id: 'certifications',
       type: 'list-section',
       column: 'right',
       break: true,
+      className: 'mb-4',
 
       heading: {
         path: 'certifications.title',
         fallback: 'Certifications',
         className:
-          'flex-row items-center w-full gap-3 text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2 mb-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'certifications.items',
 
-      containerClassName: 'flex flex-col gap-3 ',
+      containerClassName: 'flex flex-col gap-4 ',
 
       itemTemplate: {
         className: 'flex flex-col ',
@@ -466,17 +485,17 @@ export const mohsinaTemplate7 = {
               // LEFT SIDE
               {
                 type: 'group',
-                className: 'flex flex-col gap-[2px] flex-1',
+                className: 'flex flex-col gap-2 flex-1',
                 items: [
                   {
                     path: 'title',
                     fallback: 'Certification Title',
-                    className: 'text-[10px] font-bold text-[#101214] leading-[13px]',
+                    className: 'text-base font-semibold font-lato text-[#101214] leading-[13px]',
                   },
                   {
                     path: 'issuer',
                     fallback: 'Issuer',
-                    className: 'text-[10px] font-normal text-[#323232] leading-[13px]',
+                    className: 'text-[13px] font-normal font-lato text-[#323232] leading-[13px]',
                   },
                 ],
               },
@@ -485,7 +504,7 @@ export const mohsinaTemplate7 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[8px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
+                className: 'text-[10px] font-bold text-[#4C77FF] leading-[13px] whitespace-nowrap flex-shrink-0',
               },
             ],
           },
@@ -498,21 +517,22 @@ export const mohsinaTemplate7 = {
       column: 'right',
       break: true,
       breakable: true,
+      className: 'mb-4',
 
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
         className:
-          'flex-row items-center w-full gap-3 text-[10px] font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
       },
 
       listPath: 'interests.items[0].items',
       itemPath: '',
 
-      containerClassName: 'flex flex-wrap gap-x-4 gap-y-2 ',
+      containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 ',
 
       badgeClassName:
-        'flex items-center gap-2 text-[10px] font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
+        'flex items-center gap-3 text-[13px] font-lato font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
     },
   ],
 };

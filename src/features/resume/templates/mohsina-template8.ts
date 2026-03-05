@@ -3,7 +3,7 @@ export const mohsinaTemplate8 = {
   page: {
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Lato',
+    fontFamily: 'Lato , Poppins',
   },
 
   sections: [
@@ -462,7 +462,7 @@ export const mohsinaTemplate8 = {
 
       containerClassName: 'overflow-hidden flex flex-row flex-wrap',
 
-      badgeClassName: 'text-[10px] font-bold text-black tracking-[0.2px] ml-2',
+      badgeClassName: 'text-[10px] font-bold text-black font-poppins tracking-[0.2px] ml-2',
     },
     {
       id: 'interests',

@@ -1,25 +1,25 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { DataTable, type Column } from '@/features/admin/components/data-table';
 import {
   useAdminTemplates,
-  useUpdateTemplateStatus,
-  useUpdateTemplateMetadata,
-  useCreateTemplate,
-  useUpdateTemplate,
-  useRoles,
   useCreateRole,
+  useCreateTemplate,
   useDeleteRole,
+  useRoles,
+  useUpdateTemplate,
+  useUpdateTemplateMetadata,
+  useUpdateTemplateStatus,
 } from '@/features/admin/hooks/use-admin-queries';
 import type {
   AdminTemplate,
-  TemplateStatus,
-  TemplateLayoutType,
   ColorVariation,
   Role,
+  TemplateLayoutType,
+  TemplateStatus,
   UpdateTemplateMetadataPayload,
 } from '@/features/admin/types/admin.types';
+import { useCallback, useState } from 'react';
 
 // ─── Status Config ──────────────────────────────────────────────
 const STATUS_CONFIG: Record<TemplateStatus, { label: string; bgClass: string; textClass: string }> = {
@@ -140,7 +140,7 @@ function TemplateFormModal({
         <div className="space-y-6">
           {/* Status */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <span className="block text-sm font-medium text-gray-700 mb-2">Status</span>
             <div className="flex gap-2">
               {STATUS_ORDER.map((s) => (
                 <button
@@ -161,7 +161,7 @@ function TemplateFormModal({
 
           {/* Layout Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Layout Type</label>
+            <span className="block text-sm font-medium text-gray-700 mb-2">Layout Type</span>
             <div className="flex gap-2">
               {LAYOUT_OPTIONS.map((opt) => (
                 <button
@@ -182,7 +182,7 @@ function TemplateFormModal({
 
           {/* Profile Photo Toggle */}
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-gray-700">With Profile Photo</label>
+            <span className="text-sm font-medium text-gray-700">With Profile Photo</span>
             <button
               type="button"
               onClick={() => setForm((prev) => ({ ...prev, hasProfilePhoto: !prev.hasProfilePhoto }))}
@@ -200,8 +200,11 @@ function TemplateFormModal({
 
           {/* Rank */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Rank</label>
+            <label htmlFor="template-rank" className="block text-sm font-medium text-gray-700 mb-1">
+              Rank
+            </label>
             <input
+              id="template-rank"
               type="number"
               value={form.rank}
               onChange={(e) => setForm((prev) => ({ ...prev, rank: parseInt(e.target.value) || 0 }))}
@@ -212,9 +215,9 @@ function TemplateFormModal({
           {/* Color Variations */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-gray-700">
                 Color Variations ({form.colorVariations.length}/5)
-              </label>
+              </span>
               {form.colorVariations.length < 5 && (
                 <button
                   type="button"
@@ -230,7 +233,7 @@ function TemplateFormModal({
             )}
             <div className="space-y-2">
               {form.colorVariations.map((cv, index) => (
-                <div key={`color-${index}`} className="flex items-center gap-2">
+                <div key={`color-${cv.primaryColor}-${cv.name}`} className="flex items-center gap-2">
                   <input
                     type="color"
                     value={cv.primaryColor}
@@ -259,7 +262,7 @@ function TemplateFormModal({
 
           {/* Roles */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Roles</label>
+            <span className="block text-sm font-medium text-gray-700 mb-2">Roles</span>
             <div className="flex flex-wrap gap-2 mb-2">
               {roles.map((role) => (
                 <button
@@ -299,8 +302,11 @@ function TemplateFormModal({
 
           {/* Template JSON */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Template JSON</label>
+            <label htmlFor="template-json" className="block text-sm font-medium text-gray-700 mb-1">
+              Template JSON
+            </label>
             <textarea
+              id="template-json"
               value={form.jsonInput}
               onChange={(e) => setForm((prev) => ({ ...prev, jsonInput: e.target.value }))}
               className="w-full rounded-lg border border-gray-300 p-3 text-sm h-40 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -310,7 +316,9 @@ function TemplateFormModal({
 
           {/* Template Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Template Image</label>
+            <label htmlFor="template-image" className="block text-sm font-medium text-gray-700 mb-1">
+              Template Image
+            </label>
             {isEdit && template?.publicImage?.url && !form.imageFile && (
               <div className="mb-2 flex items-center gap-2">
                 <div className="w-12 h-16 rounded border border-gray-200 overflow-hidden bg-gray-100">
@@ -321,6 +329,7 @@ function TemplateFormModal({
               </div>
             )}
             <input
+              id="template-image"
               type="file"
               accept="image/*"
               onChange={(e) => setForm((prev) => ({ ...prev, imageFile: e.target.files?.[0] || null }))}

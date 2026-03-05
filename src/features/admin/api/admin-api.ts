@@ -30,6 +30,7 @@ function buildQueryString(params: AdminQueryParams): string {
   if (params.dateTo) searchParams.set('dateTo', params.dateTo);
   if (params.ratingMin !== undefined) searchParams.set('ratingMin', String(params.ratingMin));
   if (params.ratingMax !== undefined) searchParams.set('ratingMax', String(params.ratingMax));
+  if (params.excludeInternal !== undefined) searchParams.set('excludeInternal', String(params.excludeInternal));
   const qs = searchParams.toString();
   return qs ? `?${qs}` : '';
 }

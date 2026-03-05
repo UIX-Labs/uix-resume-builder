@@ -8,6 +8,7 @@ interface FilterBarProps {
   showStatusFilter?: boolean;
   statusOptions?: { label: string; value: string }[];
   showRatingFilter?: boolean;
+  showInternalFilter?: boolean;
   placeholder?: string;
 }
 
@@ -20,12 +21,14 @@ export function FilterBar({
     { label: 'Completed', value: 'completed' },
   ],
   showRatingFilter,
+  showInternalFilter,
   placeholder = 'Search by email...',
 }: FilterBarProps) {
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [showInternal, setShowInternal] = useState(false);
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -102,6 +105,21 @@ export function FilterBar({
             </option>
           ))}
         </select>
+      )}
+
+      {showInternalFilter && (
+        <label className="inline-flex items-center gap-2 cursor-pointer text-sm text-gray-600 ml-auto select-none">
+          <input
+            type="checkbox"
+            checked={showInternal}
+            onChange={(e) => {
+              setShowInternal(e.target.checked);
+              onFilterChange({ excludeInternal: !e.target.checked, page: 1 });
+            }}
+            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-4 w-4"
+          />
+          Show internal accounts
+        </label>
       )}
     </div>
   );

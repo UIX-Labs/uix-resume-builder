@@ -135,6 +135,7 @@ export interface AdminQueryParams {
   dateTo?: string;
   ratingMin?: number;
   ratingMax?: number;
+  excludeInternal?: boolean;
 }
 
 export interface ResumeForReview {

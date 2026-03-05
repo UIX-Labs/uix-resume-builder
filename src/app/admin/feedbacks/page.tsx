@@ -8,14 +8,23 @@ import { useFeedbacks } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, FeedbackRow } from '@/features/admin/types/admin.types';
 import { fromNow } from '@/features/admin/lib/format-date';
 
+function getStarColor(rating: number): string {
+  if (rating <= 1) return 'text-red-500 fill-red-500';
+  if (rating === 2) return 'text-orange-400 fill-orange-400';
+  if (rating === 3) return 'text-yellow-400 fill-yellow-400';
+  if (rating === 4) return 'text-lime-500 fill-lime-500';
+  return 'text-green-500 fill-green-500';
+}
+
 function StarRating({ rating }: { rating: number | null }) {
   if (rating === null) return <span className="text-gray-400">—</span>;
+  const colorClass = getStarColor(rating);
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((star) => (
         <svg
           key={star}
-          className={`w-4 h-4 ${star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`}
+          className={`w-4 h-4 ${star <= rating ? colorClass : 'text-gray-300'}`}
           viewBox="0 0 20 20"
           fill="currentColor"
           aria-hidden="true"
@@ -28,7 +37,13 @@ function StarRating({ rating }: { rating: number | null }) {
 }
 
 export default function AdminFeedbacksPage() {
-  const [params, setParams] = useState<AdminQueryParams>({ page: 1, limit: 20, sortOrder: 'DESC' });
+  const [params, setParams] = useState<AdminQueryParams>({
+    page: 1,
+    limit: 20,
+    sortBy: 'createdAt',
+    sortOrder: 'DESC',
+    excludeInternal: true,
+  });
   const { data, isLoading } = useFeedbacks(params);
 
   const handleFilterChange = (newParams: Partial<AdminQueryParams>) => {
@@ -81,7 +96,7 @@ export default function AdminFeedbacksPage() {
         Total: <span className="font-semibold text-gray-900">{data?.total || 0}</span> users gave feedback
       </p>
 
-      <FilterBar onFilterChange={handleFilterChange} showRatingFilter />
+      <FilterBar onFilterChange={handleFilterChange} showRatingFilter showInternalFilter />
 
       <DataTable
         columns={columns}

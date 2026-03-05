@@ -6,10 +6,8 @@ import { mdxComponents } from '@shared/ui/blog/mdx-components';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
-import { TagBadge } from '@shared/ui/blog/tag-badge';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 import rehypeSlug from 'rehype-slug';
@@ -100,10 +98,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const allPosts = getAllPosts();
 
   // Find related posts (same tags, excluding current)
-  const relatedPosts = allPosts
-    .filter((p) => p.slug !== slug)
-    .filter((p) => p.frontmatter.tags.some((tag) => frontmatter.tags.includes(tag)))
-    .slice(0, 3);
+  // const relatedPosts = allPosts
+  //   .filter((p) => p.slug !== slug)
+  //   .filter((p) => p.frontmatter.tags.some((tag) => frontmatter.tags.includes(tag)))
+  //   .slice(0, 3);
 
   // Word count for structured data
   const wordCount = content.split(/\s+/).filter(Boolean).length;
@@ -300,7 +298,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
 
         {/* Related Posts */}
-        {relatedPosts.length > 0 && (
+        {/* {relatedPosts.length > 0 && (
           <section className="mt-16 border-t border-gray-100 pt-12">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">Related Articles</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -323,7 +321,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               ))}
             </div>
           </section>
-        )}
+        )} */}
         <div className="mt-10 lg:p-4 lg:mt-25 gap-2 md:gap-8 bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl border-2 border-white">
           <div className="text-xl md:text-[36px] font-bold text-center p-2 md:p-0 mt-4 md:mt-10 px-2">
             Continue Reading

@@ -199,11 +199,11 @@ const mohsinaTemplate4 = {
         ],
       },
     },
-    // Education Section - Left Column
+    // Education Section
     {
       id: 'education',
       type: 'list-section',
-      column: 'left',
+
       break: true,
       className: 'mt-0',
 
@@ -271,7 +271,7 @@ const mohsinaTemplate4 = {
     {
       id: 'projects',
       type: 'list-section',
-      column: 'left',
+
       break: true,
       className: 'mt-0',
 
@@ -327,7 +327,7 @@ const mohsinaTemplate4 = {
     {
       id: 'achievements',
       type: 'inline-list-section',
-      column: 'right',
+
       showBullet: true,
       break: true,
       breakable: true,
@@ -345,14 +345,11 @@ const mohsinaTemplate4 = {
 
       itemClassName: 'text-xs font-normal leading-[20px] text-black font-poppins break-words',
     },
-    // Skills Section - Right Column
+    // Skills Section
     {
       id: 'skills',
       type: 'inline-list-section',
-      column: 'left',
       break: true,
-      breakable: true,
-
       heading: {
         path: 'skills.heading',
         fallback: 'Skills & Tools',
@@ -367,18 +364,17 @@ const mohsinaTemplate4 = {
         'inline-flex items-center pt-[2.6px] pr-[10px] text-xs font-semibold leading-[18px] text-black font-poppins',
       itemSeparator: ' • ',
     },
-    // Certifications Section - Left Column
+    // Certifications Section
     {
       id: 'certifications',
       type: 'list-section',
-      column: 'left',
       break: true,
-      className: 'mt-0',
+      className: 'mt-8',
 
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mb-0 mt-4',
+        className: 'text-base font-medium leading-[13px] text-[#005FF2] font-montserrat mb-1 mt-4',
       },
 
       listPath: 'certifications.items',
@@ -428,7 +424,7 @@ const mohsinaTemplate4 = {
     {
       id: 'interests',
       type: 'inline-list-section',
-      column: 'left',
+
       break: true,
       breakable: true,
       className: 'mt-8',
@@ -441,10 +437,10 @@ const mohsinaTemplate4 = {
       listPath: 'interests.items[0].items',
       itemPath: '',
 
-      containerClassName: 'flex flex-wrap gap-x-3 mt-2',
+      containerClassName: 'flex flex-wrap gap-x-3 mt-1',
 
       itemClassName:
-        'inline-flex items-center pt-[2.6px] pr-[10px]  text-xs font-semibold leading-[18px] text-black font-poppins',
+        'inline-flex items-center  pr-[10px]  text-xs font-semibold leading-[18px] text-black font-poppins',
 
       itemSeparator: ' • ',
     },

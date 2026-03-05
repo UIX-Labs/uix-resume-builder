@@ -26,7 +26,7 @@ export type ReviewStatusVariantKey = keyof typeof REVIEW_STATUS_VARIANTS;
 export function getStatusVariant(status: string): ReviewStatusVariantKey {
   const s = status.toLowerCase();
   if (s.includes('pending')) return 'pending';
-  if (s.includes('review') || s.includes('progress')) return 'in_review';
-  if (s.includes('complete') || s.includes('done')) return 'completed';
+  if (s.includes('in review')) return 'in_review';
+  if (s.includes('review done')) return 'completed';
   return 'default';
 }

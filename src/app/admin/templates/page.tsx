@@ -212,7 +212,9 @@ function TemplateFormModal({
           {/* Color Variations */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-sm font-medium text-gray-700">Color Variations ({form.colorVariations.length}/5)</label>
+              <label className="text-sm font-medium text-gray-700">
+                Color Variations ({form.colorVariations.length}/5)
+              </label>
               {form.colorVariations.length < 5 && (
                 <button
                   type="button"
@@ -384,7 +386,10 @@ function RolesManagement({ roles, isLoading }: { roles: Role[]; isLoading: boole
             <>
               <div className="flex flex-wrap gap-2 mt-3">
                 {roles.map((role) => (
-                  <div key={role.id} className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-1">
+                  <div
+                    key={role.id}
+                    className="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-full px-3 py-1"
+                  >
                     <span className="text-sm text-gray-700">{role.name}</span>
                     {role.description && <span className="text-xs text-gray-400 ml-1">({role.description})</span>}
                     <button
@@ -560,7 +565,10 @@ export default function AdminTemplatesPage() {
       render: (row) => (
         <div className="flex flex-wrap gap-1 max-w-[200px]">
           {(row.roles || []).map((role) => (
-            <span key={role.id} className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200">
+            <span
+              key={role.id}
+              className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-purple-50 text-purple-700 border border-purple-200"
+            >
               {role.name}
             </span>
           ))}

@@ -30,6 +30,7 @@ function buildQueryString(params: AdminQueryParams): string {
   if (params.dateTo) searchParams.set('dateTo', params.dateTo);
   if (params.ratingMin !== undefined) searchParams.set('ratingMin', String(params.ratingMin));
   if (params.ratingMax !== undefined) searchParams.set('ratingMax', String(params.ratingMax));
+  if (params.excludeInternal !== undefined) searchParams.set('excludeInternal', String(params.excludeInternal));
   const qs = searchParams.toString();
   return qs ? `?${qs}` : '';
 }
@@ -41,8 +42,7 @@ export const getOverviewTrends = () => fetcher<OverviewTrends>('admin/overview/t
 // ─── Templates ─────────────────────────────────────────────────
 export const getAdminTemplates = () => fetcher<AdminTemplate[]>('admin/templates');
 
-export const getAdminTemplateById = (id: string) =>
-  fetcher<AdminTemplate>(`admin/templates/${id}`);
+export const getAdminTemplateById = (id: string) => fetcher<AdminTemplate>(`admin/templates/${id}`);
 
 export const updateTemplateStatus = (id: string, status: TemplateStatus) =>
   fetcher<AdminTemplate>(`admin/templates/${id}/status`, {

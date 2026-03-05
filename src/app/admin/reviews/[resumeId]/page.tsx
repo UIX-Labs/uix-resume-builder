@@ -321,10 +321,7 @@ export default function ReviewSuggestionPage() {
   }, [suggestions.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Template + data ────────────────────────────────────────────────────
-  const template = useMemo(
-    () => data?.resume?.template?.json || aniketTemplate,
-    [data?.resume?.template?.json],
-  );
+  const template = useMemo(() => data?.resume?.template?.json || aniketTemplate, [data?.resume?.template?.json]);
 
   const cleanedData = useMemo(
     () => (data?.resume ? getCleanDataForRenderer(data.resume as Record<string, unknown>, false) : {}),

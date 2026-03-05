@@ -34,8 +34,7 @@ export const useAdminTemplateById = (id: string) =>
 export const useUpdateTemplateStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: TemplateStatus }) =>
-      adminApi.updateTemplateStatus(id, status),
+    mutationFn: ({ id, status }: { id: string; status: TemplateStatus }) => adminApi.updateTemplateStatus(id, status),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
     },
@@ -66,8 +65,7 @@ export const useCreateTemplate = () => {
 export const useUpdateTemplate = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, formData }: { id: string; formData: FormData }) =>
-      adminApi.updateAdminTemplate(id, formData),
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) => adminApi.updateAdminTemplate(id, formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
     },

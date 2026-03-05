@@ -30,7 +30,7 @@ export const MobileTextView = ({ isOpen, onClose }: MobileTextViewProps) => {
           <span>Back</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Build Your Professional Resume</h1>
+        <h2 className="text-3xl font-bold text-gray-900 mb-6">Build Your Professional Resume</h2>
 
         <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6 flex items-start gap-4">
           <div>

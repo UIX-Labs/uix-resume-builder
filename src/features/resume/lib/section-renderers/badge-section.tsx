@@ -1,7 +1,8 @@
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
-import { icons as LucideIcons } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import type React from 'react';
 import { renderDivider } from '../components/Divider';
 import { resolvePath } from '../resolve-path';
@@ -31,11 +32,15 @@ export function renderBadgeSection(
   const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
 
   // Icon component mapping
-  const getIconComponent = (iconName?: string) => {
+  const getIconComponent = (iconName?: string): LucideIcon | null => {
     if (!iconName) return null;
+    if (!(iconName in LucideIcons)) return null;
 
+    // biome-ignore lint/performance/noDynamicNamespaceImportAccess: dynamic icon lookup by name
     const Icon = LucideIcons[iconName as keyof typeof LucideIcons];
-    return Icon || null;
+    // Only return actual icon components, not utility functions like createLucideIcon
+    if (typeof Icon !== 'function' || Icon.length > 1) return null;
+    return Icon as LucideIcon;
   };
 
   const IconComponent = section.icon ? getIconComponent(section.icon) : null;
@@ -170,11 +175,8 @@ export function renderBadgeSection(
           // If icon exists
           if (IconComponent) {
             return (
-              <div
-                key={sectionKey}
-                className={section.itemClassName}
-                data-canbreak={section.break ? 'true' : undefined}
-              >
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+              <div key={idx} className={section.itemClassName} data-canbreak={isBreakable ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
                 <span
                   className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
@@ -186,8 +188,10 @@ export function renderBadgeSection(
             );
           }
 
+          // Default rendering without icon
           return (
-            <span key={sectionKey} data-canbreak={section.break ? 'true' : undefined}>
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
               <span
                 className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                 data-suggestion={suggestionData}

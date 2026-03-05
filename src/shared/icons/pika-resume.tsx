@@ -5,11 +5,11 @@ interface IProps {
   offsetColor?: string;
 }
 
-const PikaResume = ({ width = 32, height = 32, stopColor = '#005FF2', offsetColor = '#21344F' }: IProps) => {
+const PikaResume = ({ width = 32, height: _height = 32, stopColor = '#005FF2', offsetColor = '#21344F' }: IProps) => {
   return (
     <svg
       width={width}
-      height={height}
+      height={width}
       viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -23,9 +23,9 @@ export function renderTwoColumnLayout(
       {leftColumn && (
         <div className={cn(leftColumn.className)}>
           {leftColumn.sections?.map((subSection: any, idx: number) => {
-            const sectionKey = subSection.id || `${subSection.type}-${idx}`;
             return (
-              <React.Fragment key={sectionKey}>
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+              <React.Fragment key={idx}>
                 {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
               </React.Fragment>
             );
@@ -35,10 +35,9 @@ export function renderTwoColumnLayout(
 
       {/* Right Column */}
       {rightColumn.sections?.map((subSection: any, idx: number) => {
-        const sectionKey = subSection.id || `${subSection.type}-${idx}`;
-
         return (
-          <React.Fragment key={sectionKey}>
+          // biome-ignore lint/suspicious/noArrayIndexKey: static list
+          <React.Fragment key={idx}>
             {renderSection?.(subSection, data, currentSection, hasSuggestions, isThumbnail)}
           </React.Fragment>
         );

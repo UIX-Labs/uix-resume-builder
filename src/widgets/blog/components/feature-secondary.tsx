@@ -1,4 +1,5 @@
 'use client';
+
 import type { BlogPost } from '@/shared/lib/blog';
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
@@ -38,12 +39,11 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
 
           <div className="flex items-center gap-3 mt-4">
             <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
-              <Image
+              {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+              <img
                 src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
                 className="w-full h-full object-cover"
                 alt={post.frontmatter.author}
-                width={50}
-                height={50}
               />
             </div>
 

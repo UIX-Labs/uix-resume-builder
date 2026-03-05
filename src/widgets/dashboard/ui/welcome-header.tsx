@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 
 export default function WelcomeHeader({ userName }: { userName: string }) {
   const pathname = usePathname();
-  const isGetAllTemplates = pathname === '/get-all-resumes';
+  const isGetAllTemplates = pathname === '/templates';
 
   return (
     <div className="flex items-center gap-3 px-4 -mt-6 md:mt-0">

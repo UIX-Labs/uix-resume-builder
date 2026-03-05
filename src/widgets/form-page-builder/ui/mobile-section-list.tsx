@@ -10,7 +10,7 @@ import { SECTION_ICONS, SECTION_PLACEHOLDERS } from '../lib/section-utils';
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
   formData: Omit<ResumeData, 'templateId'>;
-  formSchema: FormSchema | null;
+  formSchema: FormSchema | Record<string, never>;
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;

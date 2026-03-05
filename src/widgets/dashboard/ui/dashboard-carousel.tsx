@@ -20,7 +20,6 @@ import JDUploadMobileModal from './jd-upload-mobile-modal';
 import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationModal from './resume-creation-modal';
 
-
 export default function DashboardCarousel() {
   const router = useRouter();
   const { data: user } = useUserProfile();

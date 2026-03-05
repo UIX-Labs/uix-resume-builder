@@ -51,6 +51,7 @@ export function useSaveAndNext({
       // Save current section + any other modified sections
       await saveSectionWithSuggestions(
         currentStep,
+        // biome-ignore lint/style/noNonNullAssertion: value is checked by enabled flag
         formData!,
         save,
         resumeData as Omit<ResumeData, 'templateId'> | undefined,

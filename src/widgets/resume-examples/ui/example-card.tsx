@@ -1,7 +1,6 @@
 'use client';
 
 import type { ResumeExampleListItem } from '@entities/resume-example/types';
-import { cn } from '@shared/lib/cn';
 import { Eye } from 'lucide-react';
 
 interface ExampleCardProps {
@@ -22,6 +21,7 @@ export function ExampleCard({ example, onClick }: ExampleCardProps) {
         {/* Thumbnail */}
         <div className="relative w-full aspect-[3/4] bg-gray-50">
           {example.publicThumbnail?.url ? (
+            // biome-ignore lint/performance/noImgElement: dynamic image source
             <img src={example.publicThumbnail.url} alt={example.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

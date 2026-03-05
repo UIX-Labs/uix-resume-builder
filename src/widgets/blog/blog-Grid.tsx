@@ -1,6 +1,6 @@
 import { categories } from '@/data/categories';
 import BlogCard from '@/widgets/blog/components/blog-card';
-import { BlogPost } from '@shared/lib/blog';
+import type { BlogPost } from '@shared/lib/blog';
 
 interface BlogGridProps {
   posts: BlogPost[];
@@ -22,7 +22,7 @@ export default function BlogGrid({ posts, badgeColor, currentCategoryId }: BlogG
               const matchesCurrent = blog.frontmatter.tags.some((tag) => {
                 const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
                 const normalizedId = currentCategoryId.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                return normalizedTag === normalizedId || normalizedTag.startsWith(normalizedId + '-');
+                return normalizedTag === normalizedId || normalizedTag.startsWith(`${normalizedId}-`);
               });
 
               if (matchesCurrent) {

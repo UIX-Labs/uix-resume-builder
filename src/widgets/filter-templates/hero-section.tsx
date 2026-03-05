@@ -42,12 +42,11 @@ export default function HeroSection() {
     <div className="relative">
       <div className="flex flex-col items-center text-center md:pt-16 md:pb-10 pt-14 pb-4">
         <h1 className="md:text-5xl text-2xl font-bold text-[#198447] rounded">
-          
           <span className="text-[#198447] bg-[#C9E1DD]  px-2">Your Resume,</span>
-           {/* {' '} */}
-         <span className="text-[#0059ED] bg-[#C4D8F7]  px-2">But Better</span>
+          {/* {' '} */}
+          <span className="text-[#0059ED] bg-[#C4D8F7]  px-2">But Better</span>
         </h1>
-       
+
         <p className="text-black md:mt-4 mt-2 max-w-3xl md:text-lg text-sm lg:p-0 p-2">
           Choose from free and premium templates, customise with our intuitive drag-and-drop builder, and download your
           resume as a polished PDF in minutes.

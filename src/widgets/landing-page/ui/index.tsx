@@ -10,6 +10,7 @@ import { HowItWorksSection } from './how-it-works-section';
 import { ReferralBanner } from './referral-banner';
 // WIP - ResumeExamplesSection hidden temporarily
 // import { ResumeExamplesSection } from './resume-examples-section';
+import { SeoContentSection } from './seo-content-section';
 import { TemplateCarousel } from './template-carousel';
 import Testimonials from './testimonials-section';
 import { TopAnnouncementStrip } from './top-announcement-strip';
@@ -50,6 +51,8 @@ export function LandingPage() {
       {/* <PricingSection /> */}
 
       <ReferralBanner />
+
+      <SeoContentSection />
 
       <div
         className="border border-white rounded-[36px] mx-4 overflow-hidden mt-6 mb-6"

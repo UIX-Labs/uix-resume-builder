@@ -166,6 +166,7 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
                               <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
@@ -183,6 +184,7 @@ export function renderTableSection(
                           }
                           return (
                             <span
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
                               key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
@@ -205,6 +207,7 @@ export function renderTableSection(
 
               return (
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
@@ -461,6 +464,7 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
@@ -478,6 +482,7 @@ export function renderTableSection(
                         }
                         return (
                           <span
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
@@ -500,6 +505,7 @@ export function renderTableSection(
 
             return (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}

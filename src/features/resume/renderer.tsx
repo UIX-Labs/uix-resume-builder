@@ -439,6 +439,7 @@ function ResumeRendererComponent({
         {bannerItems.length > 0 && (
           <div style={{ gridColumn: '1 / -1' }} data-section-type="banner">
             {bannerItems.map((s: any, i: number) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <React.Fragment key={i}>
                 {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
               </React.Fragment>
@@ -451,6 +452,7 @@ function ResumeRendererComponent({
               i < leftItems.length - 1 &&
               leftItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <React.Fragment key={i}>
                 {renderSection(
                   s,
@@ -471,6 +473,7 @@ function ResumeRendererComponent({
               i < rightItems.length - 1 &&
               rightItems.slice(i + 1).some((nextSection: any) => willSectionRender(nextSection, data));
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <React.Fragment key={i}>
                 {renderSection(
                   s,
@@ -491,6 +494,7 @@ function ResumeRendererComponent({
         const [leftColumn, rightColumn] = columns;
         return (
           <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             key={index}
             className={cn('grid', !skipImageFallbacks && 'mb-5', page.className, className)}
             style={{
@@ -514,6 +518,7 @@ function ResumeRendererComponent({
                 }}
               >
                 {bannerItems.map((s: any, i: number) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   <React.Fragment key={i}>
                     {renderSection(s, data, currentSection, hasSuggestions, isThumbnail, skipImageFallbacks)}
                   </React.Fragment>
@@ -528,6 +533,7 @@ function ResumeRendererComponent({
             >
               {leftColumn.map((node: any, i: number) => (
                 <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={i}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                   dangerouslySetInnerHTML={{ __html: node.outerHTML }}
@@ -542,7 +548,6 @@ function ResumeRendererComponent({
               }}
             >
               {(rightColumn as any[]).map((node: any, i) => (
-                // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering
                 <div
                   key={`${index}-right-${i}-${node?.getAttribute?.('data-section') ?? node?.getAttribute?.('data-item') ?? node?.tagName ?? 'node'}`}
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for DOM node rendering

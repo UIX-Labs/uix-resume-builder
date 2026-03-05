@@ -54,7 +54,6 @@ export default function SelectedFilters({
   );
 }
 
-
 function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
     <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-[#E7EEF3] border border-gray-200 cursor-pointer">

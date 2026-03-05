@@ -1,6 +1,6 @@
 'use client';
 
-import { type Template } from '@entities/template-page/api/template-data';
+import type { Template } from '@entities/template-page/api/template-data';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
@@ -11,107 +11,98 @@ import NotFoundFilter from './Not-found-filter';
 import { TemplateCardFilter } from './template-card-filter';
 
 interface TemplateCardGridProps {
-data: any;
-isLoading: boolean;
-offset: number;
-setOffset: (offset: number | ((prev: number) => number)) => void;
-limit: number;
+  data: any;
+  isLoading: boolean;
+  offset: number;
+  setOffset: (offset: number | ((prev: number) => number)) => void;
+  limit: number;
 }
 
-export default function TemplateCardGrid({
-data,
-isLoading,
-offset,
-setOffset,
-limit,
-}: TemplateCardGridProps) {
-const router = useRouter();
+export default function TemplateCardGrid({ data, isLoading, offset, setOffset, limit }: TemplateCardGridProps) {
+  const router = useRouter();
 
-const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
-const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
-const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
-const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
+  const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
+  const [isGetStartedOpen, setIsGetStartedOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
+  const [isLinkedInModalOpen, setIsLinkedInModalOpen] = useState(false);
 
-const templates = Array.isArray(data) ? data : data?.data || [];
-// const total = data?.total ?? templates.length;
-// const hasMore = offset + limit < total;
+  const templates = Array.isArray(data) ? data : data?.data || [];
+  // const total = data?.total ?? templates.length;
+  // const hasMore = offset + limit < total;
 
-// FROM SCRATCH
-const handleScratch = () => {
-setIsGetStartedOpen(false);
+  // FROM SCRATCH
+  const handleScratch = () => {
+    setIsGetStartedOpen(false);
 
-trackEvent('create_resume_click', {
-  source: 'template_modal',
-  method: 'from_scratch',
-});
+    trackEvent('create_resume_click', {
+      source: 'template_modal',
+      method: 'from_scratch',
+    });
 
-router.push('/dashboard?action=from_scratch');
+    router.push('/dashboard?action=from_scratch');
+  };
 
-};
+  // UPLOAD RESUME
+  const handleUpload = () => {
+    setIsGetStartedOpen(false);
 
-// UPLOAD RESUME
-const handleUpload = () => {
-setIsGetStartedOpen(false);
+    trackEvent('create_resume_click', {
+      source: 'template_modal',
+      method: 'upload_existing',
+    });
 
+    router.push('/dashboard?action=upload');
+  };
 
-trackEvent('create_resume_click', {
-  source: 'template_modal',
-  method: 'upload_existing',
-});
+  // LINKEDIN
+  const handleLinkedIn = () => {
+    setIsGetStartedOpen(false);
 
-router.push('/dashboard?action=upload');
+    trackEvent('create_resume_click', {
+      source: 'template_modal',
+      method: 'linkedin_autofill',
+    });
 
-};
+    setIsLinkedInModalOpen(true);
+  };
 
-// LINKEDIN
-const handleLinkedIn = () => {
-setIsGetStartedOpen(false);
+  // JD MATCH
+  const handleJD = () => {
+    setIsGetStartedOpen(false);
 
+    trackEvent('create_resume_click', {
+      source: 'template_modal',
+      method: 'upload_resume_jd',
+    });
 
-trackEvent('create_resume_click', {
-  source: 'template_modal',
-  method: 'linkedin_autofill',
-});
+    router.push('/dashboard?action=tailored_jd');
+  };
 
-setIsLinkedInModalOpen(true);
+  return (
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        {isLoading ? (
+          <div className="col-span-5 text-center py-20">Loading...</div>
+        ) : templates.length > 0 ? (
+          templates.map((template: Template) => (
+            <TemplateCardFilter
+              key={template.id}
+              template={template}
+              onClick={() => {
+                setSelectedTemplate(template);
+                setIsGetStartedOpen(true);
+              }}
+              onPreviewClick={() => setPreviewTemplate(template)}
+            />
+          ))
+        ) : (
+          <div className="col-span-5">
+            {' '}
+            <NotFoundFilter />{' '}
+          </div>
+        )}
 
-};
-
-// JD MATCH
-const handleJD = () => {
-setIsGetStartedOpen(false);
-
-
-trackEvent('create_resume_click', {
-  source: 'template_modal',
-  method: 'upload_resume_jd',
-});
-
-router.push('/dashboard?action=tailored_jd');
-
-};
-
-return (
-<> 
-
-<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-{isLoading ? ( <div className="col-span-5 text-center py-20">Loading...</div>
-) : templates.length > 0 ? (
-templates.map((template: Template) => (
-<TemplateCardFilter
-key={template.id}
-template={template}
-onClick={() => {
-setSelectedTemplate(template);
-setIsGetStartedOpen(true);
-}}
-onPreviewClick={() => setPreviewTemplate(template)}
-/>
-))
-) : ( <div className="col-span-5"> <NotFoundFilter /> </div>
-)}
-
-    {/* {!isLoading && total > 0 && (
+        {/* {!isLoading && total > 0 && (
       <div className="col-span-5 flex justify-center items-center gap-4 mt-8">
         <button
           type="button"
@@ -136,28 +127,20 @@ onPreviewClick={() => setPreviewTemplate(template)}
         </button>
       </div>
     )} */}
-  </div>
+      </div>
 
-  <PreviewModal
-    template={previewTemplate}
-    isOpen={!!previewTemplate}
-    onClose={() => setPreviewTemplate(null)}
-  />
+      <PreviewModal template={previewTemplate} isOpen={!!previewTemplate} onClose={() => setPreviewTemplate(null)} />
 
-  <GetStartedModal
-    isOpen={isGetStartedOpen}
-    onClose={() => setIsGetStartedOpen(false)}
-    onScratchClick={handleScratch}
-    onUploadClick={handleUpload}
-    onLinkedInClick={handleLinkedIn}
-    onJDClick={handleJD}
-  />
+      <GetStartedModal
+        isOpen={isGetStartedOpen}
+        onClose={() => setIsGetStartedOpen(false)}
+        onScratchClick={handleScratch}
+        onUploadClick={handleUpload}
+        onLinkedInClick={handleLinkedIn}
+        onJDClick={handleJD}
+      />
 
-  <LinkedInModal
-    isOpen={isLinkedInModalOpen}
-    onClose={() => setIsLinkedInModalOpen(false)}
-  />
-</>
-
-);
+      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+    </>
+  );
 }

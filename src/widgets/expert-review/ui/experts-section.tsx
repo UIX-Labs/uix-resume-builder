@@ -123,6 +123,7 @@ export function ExpertsSection() {
             {experts.map((_, index) => (
               <button
                 type="button"
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={index}
                 onClick={() => scrollTo(index)}
                 className={cn(

@@ -58,6 +58,7 @@ export default function ArticleHeader({
     "
         >
           {breadcrumbs.map((item, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div key={index} className="flex items-center flex-shrink-0 sentenceCase">
               {item.href ? (
                 <a href={item.href} className="hover:text-black transition-colors sentenceCase">
@@ -106,6 +107,7 @@ export default function ArticleHeader({
       </div>
 
       <div className="order-1 lg:order-2 w-full max-w-[240px] sm:max-w-[300px] lg:max-w-[380px] flex items-center justify-center mx-auto lg:mx-0">
+        {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
         <img
           src="/images/blog/slug/header-img.png"
           alt="article header illustration"

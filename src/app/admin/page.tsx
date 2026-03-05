@@ -1,10 +1,12 @@
 'use client';
 
 import { StatCard } from '@/features/admin/components/stat-card';
-import { useOverviewStats } from '@/features/admin/hooks/use-admin-queries';
+import { TrendChart } from '@/features/admin/components/trend-chart';
+import { useOverviewStats, useOverviewTrends } from '@/features/admin/hooks/use-admin-queries';
 
 export default function AdminOverviewPage() {
   const { data: stats, isLoading } = useOverviewStats();
+  const { data: trends } = useOverviewTrends();
 
   if (isLoading) {
     return (
@@ -12,6 +14,7 @@ export default function AdminOverviewPage() {
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {Array.from({ length: 5 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 animate-pulse">
               <div className="h-4 bg-gray-200 rounded w-20 mb-3" />
               <div className="h-8 bg-gray-200 rounded w-16 mb-2" />
@@ -51,6 +54,20 @@ export default function AdminOverviewPage() {
         />
         <StatCard label="Roasts" total={stats.roasts.total} daily={stats.roasts.daily} weekly={stats.roasts.weekly} />
       </div>
+
+      {/* Growth Trends - Last 30 Days */}
+      {trends && (
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Growth Trends — Last 30 Days</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+            <TrendChart title="Users" data={trends.users} color="#3b82f6" />
+            <TrendChart title="Downloads" data={trends.downloads} color="#10b981" />
+            <TrendChart title="Reviews" data={trends.reviews} color="#f59e0b" />
+            <TrendChart title="Feedbacks" data={trends.feedbacks} color="#8b5cf6" />
+            <TrendChart title="Roasts" data={trends.roasts} color="#ef4444" />
+          </div>
+        </div>
+      )}
 
       {/* Review breakdown */}
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">

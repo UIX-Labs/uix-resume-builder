@@ -1,4 +1,4 @@
-import { RESUME_EXAMPLE_CATEGORIES, type ResumeExampleCategoryData } from '@/data/resume-example-categories';
+import { RESUME_EXAMPLE_CATEGORIES } from '@/data/resume-example-categories';
 import { ResumeExamplesGallery } from '@widgets/resume-examples/ui/resume-examples-gallery';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';

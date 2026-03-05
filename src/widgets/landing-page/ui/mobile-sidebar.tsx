@@ -33,7 +33,7 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     handleNavigation('/roast', 'navigation_click', 'roast');
   };
 
-  const handlePricingClick = () => {
+  const _handlePricingClick = () => {
     handleNavigation('/pricing', 'navigation_click', 'pricing');
   };
 

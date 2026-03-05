@@ -58,6 +58,7 @@ export function FriendsJoinedModal({ open, onOpenChange, friends }: FriendsJoine
         </div>
       ) : (
         friends.map((friend, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: static list
           <div key={index} className="flex flex-col gap-0.5">
             <span className="text-base font-normal leading-[1.375] tracking-[-0.011em] text-dark-900">
               {friend.name}

@@ -4,7 +4,7 @@ import { Button } from '@/shared/ui/components/button';
 import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { motion } from 'framer-motion';
-import { ArrowRight, Copy, Gift, Infinity, Link, Users } from 'lucide-react';
+import { ArrowRight, Copy, Gift, Infinity as InfinityIcon, Link, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 // Pixel-accurate dashboard mockup shown to the right
@@ -100,7 +100,7 @@ const features = [
     bg: 'bg-[#00BA34]/10',
   },
   {
-    icon: Infinity,
+    icon: InfinityIcon,
     title: 'No Limits, No Expiry',
     description: 'Refer 10 friends, earn 30 downloads. There is no cap and your credits never expire.',
     color: 'text-[#005FF2]',

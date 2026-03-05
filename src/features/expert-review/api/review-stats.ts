@@ -1,6 +1,7 @@
 import { fetch } from '@shared/api';
 
 export interface ResumeReviewItemDto {
+  resumeId: string;
   name: string;
   status: string;
   reviewer: string;

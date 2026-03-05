@@ -20,7 +20,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
     loop: true,
@@ -266,6 +265,7 @@ export function TemplateCarousel() {
               {displayTemplates?.map((_, index) => (
                 <button
                   type="button"
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   key={index}
                   onClick={() => scrollTo(index)}
                   className={cn(

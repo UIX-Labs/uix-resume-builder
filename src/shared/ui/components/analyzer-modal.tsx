@@ -125,6 +125,7 @@ export default function AnalyzerModal({
         <DialogHeader>
           <DialogTitle className="flex items-center justify-center">
             <span className="flex items-center gap-2 text-2xl font-semibold text-white">
+              {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
               <img src="/images/auto_awesome.svg" alt="Stars" className="w-6 h-6" />
               {typeLabels[suggestionType]}
             </span>
@@ -135,6 +136,7 @@ export default function AnalyzerModal({
           {isNewPoints ? (
             suggestions.map((suggestion, index) => (
               <SuggestionCard
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={index}
                 label={`Point ${index + 1}`}
                 labelColor="#2E7D32"
@@ -152,6 +154,7 @@ export default function AnalyzerModal({
 
                 return (
                   <RadioGroup
+                    // biome-ignore lint/suspicious/noArrayIndexKey: static list
                     key={index}
                     value={selectedValue}
                     onValueChange={(value) => handleOptionChange(index, value as 'old' | 'new')}

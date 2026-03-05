@@ -15,7 +15,6 @@ interface GetStartedModalProps {
   onJDClick: () => void;
 }
 
-
 export function GetStartedModal({
   isOpen,
   onClose,

@@ -1,6 +1,7 @@
 import { fetch as fetcher } from '@shared/api';
 import type {
   OverviewStats,
+  OverviewTrends,
   AdminTemplate,
   PaginatedResponse,
   FeedbackRow,
@@ -12,6 +13,9 @@ import type {
   AdminResumeExampleCategory,
   AdminResumeExample,
   AdminResumeExampleDetail,
+  TemplateStatus,
+  UpdateTemplateMetadataPayload,
+  Role,
 } from '../types/admin.types';
 
 function buildQueryString(params: AdminQueryParams): string {
@@ -32,13 +36,21 @@ function buildQueryString(params: AdminQueryParams): string {
 
 // ─── Overview ──────────────────────────────────────────────────
 export const getOverviewStats = () => fetcher<OverviewStats>('admin/overview');
+export const getOverviewTrends = () => fetcher<OverviewTrends>('admin/overview/trends');
 
 // ─── Templates ─────────────────────────────────────────────────
 export const getAdminTemplates = () => fetcher<AdminTemplate[]>('admin/templates');
 
-export const toggleTemplate = (id: string) =>
-  fetcher<AdminTemplate>(`admin/templates/${id}/toggle`, {
-    options: { method: 'PATCH' },
+export const getAdminTemplateById = (id: string) => fetcher<AdminTemplate>(`admin/templates/${id}`);
+
+export const updateTemplateStatus = (id: string, status: TemplateStatus) =>
+  fetcher<AdminTemplate>(`admin/templates/${id}/status`, {
+    options: { method: 'PATCH', body: JSON.stringify({ status }) },
+  });
+
+export const updateTemplateMetadata = (id: string, data: UpdateTemplateMetadataPayload) =>
+  fetcher<AdminTemplate>(`admin/templates/${id}/metadata`, {
+    options: { method: 'PATCH', body: JSON.stringify(data) },
   });
 
 export const createAdminTemplate = (formData: FormData) =>
@@ -49,6 +61,24 @@ export const createAdminTemplate = (formData: FormData) =>
 export const updateAdminTemplate = (id: string, formData: FormData) =>
   fetcher<any>(`admin/templates/${id}`, {
     options: { method: 'PUT', body: formData },
+  });
+
+// ─── Roles ──────────────────────────────────────────────────────
+export const getRoles = () => fetcher<Role[]>('admin/roles');
+
+export const createRole = (data: { name: string; description?: string }) =>
+  fetcher<Role>('admin/roles', {
+    options: { method: 'POST', body: JSON.stringify(data) },
+  });
+
+export const updateRole = (id: string, data: { name: string; description?: string }) =>
+  fetcher<Role>(`admin/roles/${id}`, {
+    options: { method: 'PUT', body: JSON.stringify(data) },
+  });
+
+export const deleteRole = (id: string) =>
+  fetcher<{ success: boolean }>(`admin/roles/${id}`, {
+    options: { method: 'DELETE' },
   });
 
 // ─── Feedbacks ─────────────────────────────────────────────────
@@ -74,6 +104,14 @@ export const submitReviewSuggestions = (resumeId: string, suggestions: Record<st
 export const markReviewDone = (resumeId: string) =>
   fetcher<any>(`admin/reviews/${resumeId}/mark-done`, {
     options: { method: 'PATCH' },
+  });
+
+export const saveDraftSuggestions = (resumeId: string, suggestions: Record<string, any>) =>
+  fetcher<any>(`admin/reviews/${resumeId}/suggestions/draft`, {
+    options: {
+      method: 'POST',
+      body: JSON.stringify({ suggestions }),
+    },
   });
 
 // ─── Downloads ─────────────────────────────────────────────────

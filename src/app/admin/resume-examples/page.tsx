@@ -130,6 +130,7 @@ export default function AdminResumeExamplesPage() {
       render: (row) => (
         <div className="w-12 h-16 rounded border border-gray-200 overflow-hidden bg-gray-100">
           {row.publicThumbnail?.url ? (
+            // biome-ignore lint/performance/noImgElement: dynamic image source
             <img src={row.publicThumbnail.url} alt="Preview" className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">N/A</div>
@@ -172,6 +173,7 @@ export default function AdminResumeExamplesPage() {
       label: 'Status',
       render: (row) => (
         <button
+          type="button"
           onClick={() => togglePublishMutation.mutate(row.id)}
           disabled={togglePublishMutation.isPending}
           className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
@@ -189,10 +191,18 @@ export default function AdminResumeExamplesPage() {
       label: 'Actions',
       render: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => openEdit(row)} className="text-xs text-blue-600 hover:text-blue-800 font-medium">
+          <button
+            type="button"
+            onClick={() => openEdit(row)}
+            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+          >
             Edit
           </button>
-          <button onClick={() => handleDelete(row.id)} className="text-xs text-red-600 hover:text-red-800 font-medium">
+          <button
+            type="button"
+            onClick={() => handleDelete(row.id)}
+            className="text-xs text-red-600 hover:text-red-800 font-medium"
+          >
             Delete
           </button>
         </div>
@@ -216,6 +226,7 @@ export default function AdminResumeExamplesPage() {
           </p>
         </div>
         <button
+          type="button"
           onClick={openCreate}
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >
@@ -245,127 +256,151 @@ export default function AdminResumeExamplesPage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
-                <input
-                  value={form.title}
-                  onChange={(e) => onChange('title', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Senior Software Engineer Resume"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Title *
+                  <input
+                    value={form.title}
+                    onChange={(e) => onChange('title', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., Senior Software Engineer Resume"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Slug *</label>
-                <input
-                  value={form.slug}
-                  onChange={(e) => onChange('slug', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., senior-software-engineer"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Slug *
+                  <input
+                    value={form.slug}
+                    onChange={(e) => onChange('slug', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., senior-software-engineer"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-                <select
-                  value={form.categoryId}
-                  onChange={(e) => onChange('categoryId', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select category...</option>
-                  {categories?.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category *
+                  <select
+                    value={form.categoryId}
+                    onChange={(e) => onChange('categoryId', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select category...</option>
+                    {categories?.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Template *</label>
-                <select
-                  value={form.templateId}
-                  onChange={(e) => onChange('templateId', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Select template...</option>
-                  {templates?.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.id.slice(0, 8)}... (Rank: {t.rank})
-                    </option>
-                  ))}
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Template *
+                  <select
+                    value={form.templateId}
+                    onChange={(e) => onChange('templateId', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select template...</option>
+                    {templates?.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.id.slice(0, 8)}... (Rank: {t.rank})
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-                <input
-                  value={form.role}
-                  onChange={(e) => onChange('role', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Software Engineer"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Role
+                  <input
+                    value={form.role}
+                    onChange={(e) => onChange('role', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., Software Engineer"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Experience Years</label>
-                <input
-                  type="number"
-                  value={form.experienceYears}
-                  onChange={(e) => onChange('experienceYears', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., 5"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Experience Years
+                  <input
+                    type="number"
+                    value={form.experienceYears}
+                    onChange={(e) => onChange('experienceYears', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., 5"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Primary Color</label>
-                <input
-                  value={form.primaryColor}
-                  onChange={(e) => onChange('primaryColor', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., #3B82F6"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Primary Color
+                  <input
+                    value={form.primaryColor}
+                    onChange={(e) => onChange('primaryColor', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., #3B82F6"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Color Name</label>
-                <input
-                  value={form.colorName}
-                  onChange={(e) => onChange('colorName', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="e.g., Blue"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Color Name
+                  <input
+                    value={form.colorName}
+                    onChange={(e) => onChange('colorName', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="e.g., Blue"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Layout</label>
-                <select
-                  value={form.layout}
-                  onChange={(e) => onChange('layout', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="two-column">Two Column</option>
-                  <option value="single-column">Single Column</option>
-                </select>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Layout
+                  <select
+                    value={form.layout}
+                    onChange={(e) => onChange('layout', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="two-column">Two Column</option>
+                    <option value="single-column">Single Column</option>
+                  </select>
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rank</label>
-                <input
-                  type="number"
-                  value={form.rank}
-                  onChange={(e) => onChange('rank', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Rank
+                  <input
+                    type="number"
+                    value={form.rank}
+                    onChange={(e) => onChange('rank', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
-                <input
-                  value={form.metaTitle}
-                  onChange={(e) => onChange('metaTitle', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="SEO title"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Title
+                  <input
+                    value={form.metaTitle}
+                    onChange={(e) => onChange('metaTitle', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="SEO title"
+                  />
+                </label>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                <input
-                  value={form.metaDescription}
-                  onChange={(e) => onChange('metaDescription', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="SEO description"
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Meta Description
+                  <input
+                    value={form.metaDescription}
+                    onChange={(e) => onChange('metaDescription', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="SEO description"
+                  />
+                </label>
               </div>
               <div className="flex items-center gap-2 pt-6">
                 <input
@@ -380,17 +415,20 @@ export default function AdminResumeExamplesPage() {
                 </label>
               </div>
               <div className="col-span-full">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Resume Data (JSON) *</label>
-                <textarea
-                  value={form.resumeData}
-                  onChange={(e) => onChange('resumeData', e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 p-3 text-sm h-48 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder='{"personalDetails": {...}, "experience": [...], ...}'
-                />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Resume Data (JSON) *
+                  <textarea
+                    value={form.resumeData}
+                    onChange={(e) => onChange('resumeData', e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 p-3 text-sm h-48 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder='{"personalDetails": {...}, "experience": [...], ...}'
+                  />
+                </label>
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
               <button
+                type="button"
                 onClick={() => {
                   setShowModal(false);
                   setEditingId(null);
@@ -400,6 +438,7 @@ export default function AdminResumeExamplesPage() {
                 Cancel
               </button>
               <button
+                type="button"
                 onClick={handleSubmit}
                 disabled={isPending || !form.title || !form.slug || !form.categoryId || !form.templateId}
                 className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50"

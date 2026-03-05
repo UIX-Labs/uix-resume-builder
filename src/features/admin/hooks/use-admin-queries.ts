@@ -2,13 +2,19 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as adminApi from '../api/admin-api';
-import type { AdminQueryParams } from '../types/admin.types';
+import type { AdminQueryParams, TemplateStatus, UpdateTemplateMetadataPayload } from '../types/admin.types';
 
 // ─── Overview ──────────────────────────────────────────────────
 export const useOverviewStats = () =>
   useQuery({
     queryKey: ['admin', 'overview'],
     queryFn: adminApi.getOverviewStats,
+  });
+
+export const useOverviewTrends = () =>
+  useQuery({
+    queryKey: ['admin', 'overview', 'trends'],
+    queryFn: adminApi.getOverviewTrends,
   });
 
 // ─── Templates ─────────────────────────────────────────────────
@@ -18,10 +24,28 @@ export const useAdminTemplates = () =>
     queryFn: adminApi.getAdminTemplates,
   });
 
-export const useToggleTemplate = () => {
+export const useAdminTemplateById = (id: string) =>
+  useQuery({
+    queryKey: ['admin', 'template', id],
+    queryFn: () => adminApi.getAdminTemplateById(id),
+    enabled: !!id,
+  });
+
+export const useUpdateTemplateStatus = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => adminApi.toggleTemplate(id),
+    mutationFn: ({ id, status }: { id: string; status: TemplateStatus }) => adminApi.updateTemplateStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
+    },
+  });
+};
+
+export const useUpdateTemplateMetadata = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateTemplateMetadataPayload }) =>
+      adminApi.updateTemplateMetadata(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
     },
@@ -34,6 +58,54 @@ export const useCreateTemplate = () => {
     mutationFn: (formData: FormData) => adminApi.createAdminTemplate(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
+    },
+  });
+};
+
+export const useUpdateTemplate = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, formData }: { id: string; formData: FormData }) => adminApi.updateAdminTemplate(id, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'templates'] });
+    },
+  });
+};
+
+// ─── Roles ──────────────────────────────────────────────────────
+export const useRoles = () =>
+  useQuery({
+    queryKey: ['admin', 'roles'],
+    queryFn: adminApi.getRoles,
+  });
+
+export const useCreateRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { name: string; description?: string }) => adminApi.createRole(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
+    },
+  });
+};
+
+export const useUpdateRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: { name: string; description?: string } }) =>
+      adminApi.updateRole(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
+    },
+  });
+};
+
+export const useDeleteRole = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => adminApi.deleteRole(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'roles'] });
     },
   });
 };
@@ -76,6 +148,17 @@ export const useMarkReviewDone = () => {
     mutationFn: (resumeId: string) => adminApi.markReviewDone(resumeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'reviews'] });
+    },
+  });
+};
+
+export const useSaveDraftSuggestions = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ resumeId, suggestions }: { resumeId: string; suggestions: Record<string, any> }) =>
+      adminApi.saveDraftSuggestions(resumeId, suggestions),
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'review', variables.resumeId] });
     },
   });
 };

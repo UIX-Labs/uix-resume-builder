@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 export default function NotFoundFilter() {
-return (
+  return (
     <div className="w-full min-h-[50vh] flex flex-col justify-center items-center gap-8 p-6 md:gap-10">
       <div className="relative w-full max-w-[300px] md:max-w-[500px] lg:max-w-[700px] aspect-square md:aspect-video">
         <Image src="/images/blog/not-found-search-img.svg" alt="image-not-found" fill className="object-contain" />

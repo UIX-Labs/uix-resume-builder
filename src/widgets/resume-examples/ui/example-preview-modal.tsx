@@ -1,6 +1,6 @@
 'use client';
 
-import type { ResumeExampleDetail, ResumeExampleListItem } from '@entities/resume-example/types';
+import type { ResumeExampleListItem } from '@entities/resume-example/types';
 import { useExampleDetail } from '@entities/resume-example/hooks/use-example-detail';
 import { useCloneExample } from '@entities/resume-example/hooks/use-clone-example';
 import { ResumeRenderer } from '@features/resume/renderer';

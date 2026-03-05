@@ -7,6 +7,7 @@ import { FilterBar } from '@/features/admin/components/filter-bar';
 import { CopyButton } from '@/features/admin/components/copy-button';
 import { useReviews } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, ReviewRow } from '@/features/admin/types/admin.types';
+import { fromNow } from '@/features/admin/lib/format-date';
 
 export default function AdminReviewsPage() {
   const [params, setParams] = useState<AdminQueryParams>({ page: 1, limit: 20, sortOrder: 'DESC' });
@@ -43,16 +44,22 @@ export default function AdminReviewsPage() {
       ),
     },
     {
+      key: 'reviewer',
+      label: 'Reviewer',
+      render: (row) => <span className="text-sm text-gray-700 font-medium">{row.reviewer || '—'}</span>,
+    },
+    {
       key: 'createdAt',
       label: 'Date',
       sortable: true,
-      render: (row) => new Date(row.createdAt).toLocaleDateString(),
+      render: (row) => fromNow(row.createdAt),
     },
     {
       key: 'actions',
       label: 'Actions',
       render: (row) => (
         <button
+          type="button"
           onClick={() => router.push(`/admin/reviews/${row.resumeId}`)}
           className="px-3 py-1.5 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-colors"
         >

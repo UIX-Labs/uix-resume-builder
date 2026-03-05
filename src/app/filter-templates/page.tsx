@@ -19,30 +19,27 @@ export default function FilterTemplatesPage() {
   const column = searchParams.get('column') || undefined;
   const role = searchParams.get('role') || undefined;
 
-  
   useEffect(() => {
     setOffset(0);
   }, [style, column, role]);
 
-const hasFilters = style || role || column;
+  const hasFilters = style || role || column;
 
-// const {data:allData,isLoading:allIsLoading} = useGetAllTemplates();
-// console.log("allData",allData)
+  // const {data:allData,isLoading:allIsLoading} = useGetAllTemplates();
+  // console.log("allData",allData)
 
-const { data, isLoading } = useGetAllTemplates(
-
-
-  hasFilters
-    ? {
-        ...(style && { style }),
-        ...(role && { role }),
-        ...(column && { column }),
-        offset,
-        limit: LIMIT,
-      }
-    : undefined   
-);
-// console.log("data",data)
+  const { data, isLoading } = useGetAllTemplates(
+    hasFilters
+      ? {
+          ...(style && { style }),
+          ...(role && { role }),
+          ...(column && { column }),
+          offset,
+          limit: LIMIT,
+        }
+      : undefined,
+  );
+  // console.log("data",data)
   return (
     <div className="relative">
       <div className="relative rounded-2xl border-2 border-[#D5E5FF] md:m-6 m-2">
@@ -55,21 +52,13 @@ const { data, isLoading } = useGetAllTemplates(
 
           <div className="md:pl-16 md:pr-16 md:pt-4 md:pb-4 p-4">
             {/* No results */}
-              {!isLoading && (templates?.length ?? 0) === 0 && (
-               <NotFoundFilter />
-              )}
-              
+            {!isLoading && (templates?.length ?? 0) === 0 && <NotFoundFilter />}
+
             <TemplateFilter results={data?.total || 0} />
           </div>
 
           <div className="p-4 md:pt-4 md:pb-4 md:mt-4">
-            <TemplateCardGrid 
-              data={data} 
-              isLoading={isLoading} 
-              offset={offset} 
-              setOffset={setOffset}
-              limit={LIMIT}
-            />
+            <TemplateCardGrid data={data} isLoading={isLoading} offset={offset} setOffset={setOffset} limit={LIMIT} />
           </div>
         </div>
       </div>

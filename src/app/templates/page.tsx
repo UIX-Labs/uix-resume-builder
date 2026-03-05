@@ -26,17 +26,17 @@ export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
   const searchParams = useSearchParams();
-const style = searchParams.get('style') || '';
-const column = searchParams.get('column') || '';
-const role = searchParams.get('role') || '';
+  const style = searchParams.get('style') || '';
+  const column = searchParams.get('column') || '';
+  const role = searchParams.get('role') || '';
 
-const { data: response } = useGetAllTemplates({ 
-  style, 
-  role, 
-  column,
-  limit: 10,
-  offset: 0,
-});
+  const { data: response } = useGetAllTemplates({
+    style,
+    role,
+    column,
+    limit: 10,
+    offset: 0,
+  });
   const templates = response?.data;
 
   const isMobile = useIsMobile();
@@ -166,10 +166,8 @@ const { data: response } = useGetAllTemplates({
                 <TemplateFilter results={templates?.length ?? 0} />
               </div>
 
-               {/* No results */}
-              {!isLoading && (templates?.length ?? 0) === 0 && (
-               <NotFoundSearch />
-              )}
+              {/* No results */}
+              {!isLoading && (templates?.length ?? 0) === 0 && <NotFoundSearch />}
 
               {/* <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap"> */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
@@ -182,9 +180,9 @@ const { data: response } = useGetAllTemplates({
                     }
                   };
 
-                  const handlePreview = () => {
-                    handleTemplateClick(template);
-                  };
+                  // const handlePreview = () => {
+                  //   handleTemplateClick(template);
+                  // };
 
                   // return (
                   //   <TemplateCard
@@ -194,14 +192,14 @@ const { data: response } = useGetAllTemplates({
                   //     onPreviewClick={handlePreview}
                   //   />
                   // );
-                  return(
+                  return (
                     <TemplateCardFilter
                       key={template.id}
                       template={template}
                       onClick={handleClick}
                       onPreviewClick={() => handleTemplateClick(template)}
                     />
-                  )
+                  );
                 })}
               </div>
             </div>

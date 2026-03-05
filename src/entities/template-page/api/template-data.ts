@@ -4,20 +4,18 @@ import { useFetch } from '@shared/api/hooks/useFetch';
 export interface TemplateApiResponse {
   id: string;
   json: any;
-  publicImageUrl: string;  
-  role?: string[];           
-  column?: string[];         
-  style?: string[];          
-  slug?: string[];           
+  publicImageUrl: string;
+  role?: string[];
+  column?: string[];
+  style?: string[];
+  slug?: string[];
   createdAt: string;
   updatedAt: string;
 }
 
- export interface Template extends TemplateApiResponse {}
+export interface Template extends TemplateApiResponse {}
 
-
-
- export interface TemplateListResponse {
+export interface TemplateListResponse {
   data: Template[];
   total: number;
   offset: number;
@@ -37,8 +35,6 @@ export interface TemplateApiResponse {
 
 //   return response;
 // };
-
-
 
 export const fetchAllTemplates = async (params?: {
   style?: string;
@@ -87,7 +83,6 @@ export const fetchTemplateById = async (templateId: string): Promise<Template> =
 //   });
 // };
 
-
 export const useGetAllTemplates = (params?: {
   style?: string;
   role?: string;
@@ -102,10 +97,10 @@ export const useGetAllTemplates = (params?: {
   });
 };
 
-
 export const useGetTemplateById = (templateId: string | null) => {
   return useFetch({
     queryKey: ['template', templateId],
+    // biome-ignore lint/style/noNonNullAssertion: value is checked by enabled flag
     queryFn: () => fetchTemplateById(templateId!),
     enabled: !!templateId,
   });

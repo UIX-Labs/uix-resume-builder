@@ -20,4 +20,3 @@ export const FILTER_OPTIONS = {
 
   colors: ['#C5244E', '#F03126', '#3DB482', '#FFBE1B', '#6927B3', '#D52078', '#16C5F5', '#005FF2'],
 };
-

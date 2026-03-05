@@ -19,10 +19,14 @@ export default function BlogGrid({ posts, badgeColor, currentCategoryId }: BlogG
             let displayCategoryId = blog.frontmatter.tags?.[0];
 
             if (currentCategoryId) {
+              const normalizedId = currentCategoryId.toLowerCase().replace(/[^a-z0-9]/g, '-');
               const matchesCurrent = blog.frontmatter.tags.some((tag) => {
-                const normalizedTag = tag.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                const normalizedId = currentCategoryId.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                return normalizedTag === normalizedId || normalizedTag.startsWith(`${normalizedId}-`);
+                const normalizedTag = tag.replace(/[^a-z0-9]/g, '-');
+                return (
+                  normalizedTag === normalizedId ||
+                  normalizedTag === `${normalizedId}s` ||
+                  `${normalizedTag}s` === normalizedId
+                );
               });
 
               if (matchesCurrent) {
@@ -30,7 +34,12 @@ export default function BlogGrid({ posts, badgeColor, currentCategoryId }: BlogG
               }
             }
 
-            const category = categories.find((cat) => cat.id === displayCategoryId);
+            const category = categories.find(
+              (cat) =>
+                cat.id === displayCategoryId?.toLowerCase() ||
+                cat.id === displayCategoryId?.toLowerCase()?.replace(/s$/, '') ||
+                `${cat.id}s` === displayCategoryId?.toLowerCase(),
+            );
 
             return (
               <BlogCard

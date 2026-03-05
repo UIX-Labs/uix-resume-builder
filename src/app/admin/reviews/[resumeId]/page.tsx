@@ -401,7 +401,7 @@ export default function ReviewSuggestionPage() {
     // Search for matching field
     let foundItem: string | null = null;
     let foundField: string | null = null;
-    let foundBulletIndex: number | undefined = undefined;
+    let foundBulletIndex: number | undefined;
     let foundRawHtml = '';
 
     const normalizedSelection = selectedStr.toLowerCase().replace(/\s+/g, ' ');
@@ -732,9 +732,8 @@ export default function ReviewSuggestionPage() {
             ) : (
               <div className="space-y-3 max-h-60 overflow-y-auto">
                 {suggestions.map((s, idx) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
                   <div
-                    key={idx}
+                    key={`${s.sectionType}-${s.itemId}-${s.fieldName}-${s.type}-${idx}`}
                     className={`rounded-lg border p-3 transition-all ${getTypeStyle(s.type)} ${
                       editingIndex === idx ? 'ring-2 ring-blue-400' : ''
                     }`}
@@ -770,9 +769,9 @@ export default function ReviewSuggestionPage() {
                     )}
                     <div className="mt-1">
                       <span className="text-[10px] text-gray-500">New:</span>
-                      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: renders suggestion HTML */}
                       <div
                         className="text-xs text-gray-900 font-medium prose prose-xs max-w-none"
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: renders admin-authored suggestion HTML
                         dangerouslySetInnerHTML={{ __html: s.new }}
                       />
                     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
 import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
@@ -10,12 +11,12 @@ import { MobileTextView } from './mobile-text-view';
 export interface MobileSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  onExpertReviewClick: () => void;
 }
 
-export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSidebarProps) => {
+export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const user = useCachedUser();
   const [showMobileTextView, setShowMobileTextView] = useState(false);
 
   const handleNavigation = (path: string, eventName: string, destination: string) => {
@@ -34,13 +35,12 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
     handleNavigation('/roast', 'navigation_click', 'roast');
   };
 
-  const handleAboutUsClick = () => {
-    handleNavigation('/about-us', 'navigation_click', 'about_us');
+  const _handlePricingClick = () => {
+    handleNavigation('/pricing', 'navigation_click', 'pricing');
   };
 
   const handleExpertReviewClick = () => {
-    onClose();
-    onExpertReviewClick();
+    handleNavigation('/expert-review', 'navigation_click', 'expert_review');
   };
 
   const handleDashboardClick = () => {
@@ -51,12 +51,15 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
     handleNavigation('/blog', 'navigation_click', 'blog');
   };
 
-  const handleCreateResumeClick = () => {
-    handleNavigation('/dashboard', 'create_resume_click', 'dashboard');
-  };
-
   const handleLogoClick = () => {
     handleNavigation('/', 'navigation_click', 'home');
+  };
+
+  const handleSignInClick = () => {
+    const callbackUrl = encodeURIComponent(pathname + (typeof window !== 'undefined' ? window.location.search : ''));
+    router.push(`/auth?callbackUrl=${callbackUrl}`);
+    onClose();
+    trackEvent('navigation_click', { source: 'mobile_sidebar', destination: 'auth', action: 'sign_in' });
   };
 
   const navItems: NavItem[] = [
@@ -66,19 +69,14 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/',
     },
     {
+      label: 'Expert Review',
+      onClick: handleExpertReviewClick,
+      isActive: pathname === '/expert-review',
+    },
+    {
       label: 'Roast',
       onClick: handleRoastClick,
       isActive: pathname === '/roast',
-    },
-    {
-      label: 'Expert Review',
-      onClick: handleExpertReviewClick,
-      isActive: false,
-    },
-    {
-      label: 'Dashboard',
-      onClick: handleDashboardClick,
-      isActive: pathname === '/dashboard',
     },
     {
       label: 'Blogs',
@@ -86,25 +84,24 @@ export const MobileSidebar = ({ isOpen, onClose, onExpertReviewClick }: MobileSi
       isActive: pathname === '/blog',
     },
     {
-      label: 'About Us',
-      onClick: handleAboutUsClick,
-      isActive: pathname === '/about-us',
+      label: 'Dashboard',
+      onClick: handleDashboardClick,
+      isActive: pathname === '/dashboard',
     },
+    ...(!user
+      ? [
+          {
+            label: 'Sign In',
+            onClick: handleSignInClick,
+            isActive: pathname === '/auth',
+          },
+        ]
+      : []),
   ];
 
   return (
     <>
-      <MobileNavDrawer
-        isOpen={isOpen}
-        onClose={onClose}
-        navItems={navItems}
-        onLogoClick={handleLogoClick}
-        ctaButton={{
-          label: 'Create My Resume',
-          onClick: handleCreateResumeClick,
-          className: 'bg-blue-900 hover:bg-blue-700 text-white',
-        }}
-      />
+      <MobileNavDrawer isOpen={isOpen} onClose={onClose} navItems={navItems} onLogoClick={handleLogoClick} />
 
       {/* Mobile Text View - Shows when user tries to access desktop-only features */}
       <MobileTextView isOpen={showMobileTextView} onClose={() => setShowMobileTextView(false)} />

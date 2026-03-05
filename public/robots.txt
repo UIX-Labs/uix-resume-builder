@@ -1,4 +1,36 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Disallow: /dashboard
+Disallow: /my-resumes
+Disallow: /resume/
+Disallow: /auth
+Disallow: /referral
+Disallow: /api/
+
+User-agent: GPTBot
+Allow: /
+Disallow: /dashboard
+Disallow: /my-resumes
+Disallow: /resume/
+Disallow: /auth
+Disallow: /referral
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
 
 Sitemap: https://pikaresume.com/sitemap.xml

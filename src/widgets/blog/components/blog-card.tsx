@@ -30,7 +30,7 @@ export default function BlogCard({
       >
         {/* IMAGE */}
         <div className="relative w-full md:h-[255px] h-[200px] rounded-md overflow-hidden">
-          <Image src={image} alt={title} fill className="object-cover" />
+          <Image src={image} alt={title} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
         </div>
 
         {/* CONTENT */}
@@ -68,12 +68,11 @@ export default function BlogCard({
               group-hover:text-white
             "
           >
-            <Image
+            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+            <img
               src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
               className="w-6 h-6 rounded-full"
               alt=""
-              width={24}
-              height={24}
             />
 
             <span>

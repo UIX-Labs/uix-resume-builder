@@ -395,6 +395,7 @@
   --color-form-text-dark: rgba(12, 17, 24, 1);
   --color-form-placeholder: rgba(207, 212, 219, 1);
   --color-form-focus-ring: rgba(203, 231, 255, 1);
+  --color-form-badge-bg: rgba(204, 212, 223, 1);
 
   --color-tooltip-border: rgba(193, 200, 210, 0.22);
 
@@ -409,8 +410,8 @@
   --color-expert-subheading: #ccd4df;
   --color-expert-bg: #0c1118;
   --color-expert-bg-hover: #1a2230;
-  --color-expert-primary: #0a70f8;
-  --color-expert-primary-hover: #0960dd;
+  --color-expert-primary: #257aff;
+  --color-expert-primary-hover: #1a6ae6;
   --color-expert-border: #005ff2;
   --color-expert-card: #1a1c26;
   --color-expert-card-text: #9ea3ae;
@@ -543,6 +544,7 @@
     background-position: center;
     background-repeat: no-repeat;
     pointer-events: auto !important;
+
     @apply bg-background text-foreground;
   }
 
@@ -748,7 +750,9 @@
   animation: floatBlob linear infinite;
 }
 html {
-  scroll-behavior: smooth;
+  &[data-scroll-behavior="smooth"] {
+    scroll-behavior: smooth;
+  }
 }
 .templates-dialog-mobile-overlay {
   inset: 0 0 72px 0;

@@ -50,11 +50,9 @@ export function TestimonialsCarousel({
     <div className={`relative ${className}`}>
       <div className={`overflow-hidden ${roundedClassName}`} ref={emblaRef}>
         <div className="flex">
-          {testimonials.map((testimonial) => (
-            <div
-              key={testimonial.name}
-              className="flex-[0_0_100%] min-w-0 relative h-[550px] sm:h-[550px] lg:h-[679px]"
-            >
+          {testimonials.map((testimonial, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            <div key={index} className="flex-[0_0_100%] min-w-0 relative h-[550px] sm:h-[550px] lg:h-[679px]">
               <div
                 className={`absolute inset-0 bg-cover bg-center ${roundedClassName}`}
                 style={{

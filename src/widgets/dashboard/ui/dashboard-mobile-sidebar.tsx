@@ -5,7 +5,7 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
 import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
-import { FileText, Home, LayoutGrid, LogIn, LogOut } from 'lucide-react';
+import { FileText, Home, LayoutGrid, LogIn, LogOut, Sparkles } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import ReferralIcon from '@features/referral-flow/ui/referral-icon';
 
@@ -33,23 +33,18 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
   };
 
   const handleAllTemplatesClick = () => {
-    handleNavigation('/get-all-resumes', 'all_templates');
+    handleNavigation('/templates', 'all_templates');
   };
 
   const handleYourResumesClick = () => {
-    handleNavigation('/resumes', 'your_resumes');
+    handleNavigation('/my-resumes', 'your_resumes');
+  };
+
+  const handleExpertReviewClick = () => {
+    handleNavigation('/dashboard/expert-review', 'expert_review');
   };
 
   const handleReferralClick = () => {
-    if (!user) {
-      router.push('/auth');
-      trackEvent('navigation_blocked', {
-        source: 'dashboard_mobile_sidebar',
-        destination: 'referral',
-        reason: 'not_authenticated',
-      });
-      return;
-    }
     handleNavigation('/referral', 'referral');
   };
 
@@ -85,14 +80,20 @@ export const DashboardMobileSidebar = ({ isOpen, onClose }: DashboardMobileSideb
         {
           label: 'All Templates',
           onClick: handleAllTemplatesClick,
-          isActive: pathname === '/get-all-resumes',
+          isActive: pathname === '/templates',
           icon: LayoutGrid,
         },
         {
           label: 'Your Resumes',
           onClick: handleYourResumesClick,
-          isActive: pathname === '/resumes',
+          isActive: pathname === '/my-resumes',
           icon: FileText,
+        },
+        {
+          label: 'Expert Review',
+          onClick: handleExpertReviewClick,
+          isActive: pathname === '/dashboard/expert-review',
+          icon: Sparkles,
         },
         {
           label: 'Referral',

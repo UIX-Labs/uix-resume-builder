@@ -4,7 +4,6 @@ import { renderDivider } from '../components/Divider';
 import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
 import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
-
 export function renderListSection(
   section: any,
   data: any,
@@ -84,6 +83,8 @@ export function renderListSection(
           // e.g., "skills.items" -> "skills" which matches formData.skills
           const formDataSectionKey = sectionKey || sectionId;
 
+          if (!section.itemTemplate) return null;
+
           const content = section.itemTemplate.rows
             ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)
             : renderItemWithFields(
@@ -94,13 +95,13 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {
             return (
               <div
-                key={sectionKey}
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
                 data-canbreak={isItemBreakable ? 'true' : undefined}
@@ -126,7 +127,8 @@ export function renderListSection(
 
           return (
             <div
-              key={sectionKey}
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+              key={idx}
               className={cn(
                 section.itemTemplate.className,
                 isItemBreakable && shouldBlur ? 'blur-[2px] pointer-events-none' : '',

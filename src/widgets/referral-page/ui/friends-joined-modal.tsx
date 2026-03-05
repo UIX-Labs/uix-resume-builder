@@ -1,10 +1,10 @@
 'use client';
 
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { cn } from '@shared/lib/utils';
-import { Button } from '@shared/ui/button';
 import { X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { Button } from '@shared/ui/button';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { cn } from '@shared/lib/utils';
 
 interface Friend {
   name: string;
@@ -57,8 +57,9 @@ export function FriendsJoinedModal({ open, onOpenChange, friends }: FriendsJoine
           <p className="text-sm text-sidebar-section-label">No friends joined yet</p>
         </div>
       ) : (
-        friends.map((friend) => (
-          <div key={friend.email} className="flex flex-col gap-0.5">
+        friends.map((friend, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: static list
+          <div key={index} className="flex flex-col gap-0.5">
             <span className="text-base font-normal leading-[1.375] tracking-[-0.011em] text-dark-900">
               {friend.name}
             </span>
@@ -81,7 +82,7 @@ export function FriendsJoinedModal({ open, onOpenChange, friends }: FriendsJoine
           'z-50 w-67.5 bg-background-white rounded-[16px] border border-modal-border shadow-[0_6px_14px_0_rgba(0,0,0,0.05)] animate-in fade-in-0 duration-200 flex flex-col',
           isMobile
             ? 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 slide-in-from-bottom-4 max-h-120'
-            : 'absolute -top-63 -right-6 zoom-in-95 max-h-55',
+            : 'absolute -top-63 -right-6 zoom-in-95 min-h-53',
         )}
       >
         {/* Custom Header with gradient background */}

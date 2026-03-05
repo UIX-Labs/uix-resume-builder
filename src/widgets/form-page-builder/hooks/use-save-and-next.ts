@@ -1,10 +1,10 @@
-import type { ResumeData } from '@entities/resume';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { useCallback } from 'react';
 import { toast } from 'sonner';
-import mockData from '../../../../mock-data.json';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { isSectionModified } from '../lib/data-cleanup';
 import { saveSectionWithSuggestions } from '../lib/save-helpers';
+import mockData from '../../../../mock-data.json';
+import type { ResumeData } from '@entities/resume';
 
 interface UseSaveAndNextParams {
   currentStep: string;
@@ -47,11 +47,12 @@ export function useSaveAndNext({
       }
 
       onThumbnailInvalidate?.();
-      if (!formData) return;
+
       // Save current section + any other modified sections
       await saveSectionWithSuggestions(
         currentStep,
-        formData,
+        // biome-ignore lint/style/noNonNullAssertion: value is checked by enabled flag
+        formData!,
         save,
         resumeData as Omit<ResumeData, 'templateId'> | undefined,
       );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useParsePdfResume } from '@entities/resume';
-import { useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Button } from '@shared/ui/components/button';
 import StarsIcon from '@shared/icons/stars-icon';
 import { cn } from '@shared/lib/cn';
@@ -19,20 +19,35 @@ interface FileUploadProps {
   onUploadClick?: () => void;
 }
 
-export function FileUpload({
-  onSuccess,
-  onError,
-  disabled = false,
-  className = '',
-  buttonText = 'Upload Resume',
-  acceptedFileTypes = '.pdf',
-  maxFileSize = 10,
-  onPendingChange,
-  renderAsOverlay = false,
-  onUploadClick,
-}: FileUploadProps) {
+export interface FileUploadHandle {
+  triggerClick: () => void;
+}
+
+export const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(function FileUpload(
+  {
+    onSuccess,
+    onError,
+    disabled = false,
+    className = '',
+    buttonText = 'Upload Resume',
+    acceptedFileTypes = '.pdf',
+    maxFileSize = 10,
+    onPendingChange,
+    renderAsOverlay = false,
+    onUploadClick,
+  },
+  ref,
+) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { mutate: parsePdfResume, isPending } = useParsePdfResume();
+
+  useImperativeHandle(ref, () => ({
+    triggerClick: () => {
+      if (!disabled && !isPending) {
+        handleButtonClick();
+      }
+    },
+  }));
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -114,4 +129,4 @@ export function FileUpload({
       </Button>
     </>
   );
-}
+});

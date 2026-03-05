@@ -1,8 +1,8 @@
-import PikaResume from '@shared/icons/pika-resume';
 import { cn } from '@shared/lib/utils';
 import { motion } from 'framer-motion';
-import { forwardRef } from 'react';
+import PikaResume from '@shared/icons/pika-resume';
 import { TypewriterLine } from './typewriter-line';
+import { forwardRef } from 'react';
 
 interface RoastCardProps {
   lines: string[];
@@ -24,14 +24,12 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
           className="absolute inset-0 pointer-events-none z-0 flex flex-wrap gap-12 p-8 opacity-[0.03] select-none overflow-hidden items-center justify-center"
           aria-hidden="true"
         >
-          {Array.from({ length: 20 }).map((_, idx) => {
-            const decorationId = `watermark-fire-icon-node-${idx}`;
-            return (
-              <span key={decorationId} className="text-6xl transform rotate-12">
-                🔥
-              </span>
-            );
-          })}
+          {Array.from({ length: 20 }).map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            <span key={i} className="text-6xl transform rotate-12">
+              🔥
+            </span>
+          ))}
           <div className="absolute inset-0 flex items-center justify-center opacity-20">
             <PikaResume width={400} height={400} />
           </div>
@@ -47,24 +45,32 @@ export const RoastCard = forwardRef<HTMLDivElement, RoastCardProps>(
         <div className="relative z-10">
           {lines.map((line, index) => {
             const isBullet = line.trim().startsWith('*');
+            // Remove the bullet and leading spaces
             const cleanLine = isBullet ? line.replace(/^\*\s*/, '') : line;
 
+            // Only render if it's the current line or previous line
             if (index > activeLineIndex) return null;
-
-            const lineKey = `roast-line-${index}-${line.slice(0, 15)}`;
 
             return (
               <motion.div
-                key={lineKey}
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                key={index}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 className={cn('flex items-start gap-3 mb-3', isBullet ? 'pl-2' : '')}
               >
-                {isBullet && <span className="text-xl mt-1 shrink-0">{['💀', '🔥', '🚩', '😩', '💅'][index % 5]}</span>}
+                {isBullet && (
+                  <span className="text-xl mt-1 shrink-0">
+                    {/* Randomize emoji potentially, or stick to fire/skull as in the prompt */}
+                    {['💀', '🔥', '🚩', '😩', '💅'][index % 5]}
+                  </span>
+                )}
                 <div className="flex-1">
                   {index === activeLineIndex ? (
                     <TypewriterLine text={cleanLine} onComplete={onLineComplete} />
                   ) : (
+                    // Render fully typed lines as static text to save resources
+                    // and parse simple markdown bolding if present
                     <span
                       // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for markdown rendering
                       dangerouslySetInnerHTML={{

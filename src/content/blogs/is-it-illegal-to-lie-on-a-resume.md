@@ -2,6 +2,8 @@
 title: "Is It Illegal to Lie on a Resume? What Actually Happens in 2026"
 description: "Is it illegal to lie on a resume? In most cases, no. But the consequences go way beyond legality. Here is what really happens when you get caught, and what to do instead."
 author: "PikaResume Team"
+authorRole: "Career Experts"
+authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 date: "2026-03-03"
 slug: "illegal-to-lie-on-resume"
 keywords: "is it illegal to lie on a resume, lying on resume, resume fraud, resume lie consequences, fake resume, resume honesty"
@@ -12,6 +14,9 @@ tags:
 - career
 - Resume
 - Job
+featured: "primary"
+published: true
+coverImage: ""
 ---
 
 # Is It Illegal to Lie on a Resume? What Actually Happens in 2026

@@ -8,8 +8,8 @@ authorRole: "Career Experts"
 authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
   - "job"
-  - "resume-tips"
-  - "career-advice"
+  - "resume"
+  - "career"
 published: true
 coverImage: ""
 ---

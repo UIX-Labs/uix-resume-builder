@@ -8,7 +8,8 @@ authorRole: "Career Experts"
 authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
   - "interview"
-  - "ATS"
+  - "resume"
+  - "job"
 featured: "secondary1"
 published: true
 coverImage: ""

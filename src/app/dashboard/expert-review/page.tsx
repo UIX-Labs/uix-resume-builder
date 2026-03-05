@@ -16,10 +16,10 @@ export default function ExpertReviewPage() {
       <div className="flex min-h-screen w-screen bg-white">
         <DashboardSidebar />
 
-        <div className="flex-1 flex flex-col min-w-0 m-3">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 m-3">
           <ResponsiveDashboardHeader user={user} />
 
-          <main className="flex flex-col bg-dashboard-bg h-[calc(100vh-114px)] md:h-auto mt-3 rounded-[36px] overflow-hidden pb-4">
+          <main className="flex flex-col bg-dashboard-bg min-h-0 flex-1 mt-3 rounded-[36px] overflow-y-auto pb-4 md:overflow-visible md:h-auto">
             <PageHeading title="EXPERT REVIEW" />
 
             <ExpertReviewPageContent />

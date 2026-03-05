@@ -15,6 +15,7 @@ interface StatusChipProps {
 /**
  * Reusable status chip with hover states.
  * Uses variant mapping from status string; override with variant prop when needed.
+ * "Review Done" is displayed as "Completed".
  */
 export function StatusChip({ status, className, variant }: StatusChipProps) {
   const key = variant ?? getStatusVariant(status);

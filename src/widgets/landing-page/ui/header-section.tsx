@@ -74,16 +74,10 @@ function Header({ variant = 'default' }: HeaderProps) {
   };
 
   const handleDashboardClick = () => {
-    if (user) {
-      router.push('/dashboard');
-    } else {
-      const callbackUrl = encodeURIComponent(pathname + window.location.search);
-      router.push(`/auth?callbackUrl=${callbackUrl}`);
-    }
+    router.push('/dashboard');
     trackEvent('navigation_click', {
       source: 'landing_header',
-      destination: user ? 'dashboard' : 'auth',
-      action: user ? 'dashboard' : 'sign_in',
+      destination: 'dashboard',
     });
   };
 
@@ -272,14 +266,22 @@ function Header({ variant = 'default' }: HeaderProps) {
           </Button>
           */}
 
-          {user && (
+          {!user && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleDashboardClick}
+              onClick={() => {
+                const callbackUrl = encodeURIComponent(pathname + window.location.search);
+                router.push(`/auth?callbackUrl=${callbackUrl}`);
+                trackEvent('navigation_click', {
+                  source: 'landing_header',
+                  destination: 'auth',
+                  action: 'sign_in',
+                });
+              }}
               className={cn(
                 'font-semibold text-lg cursor-pointer',
-                pathname === '/dashboard'
+                pathname === '/auth'
                   ? isRoast
                     ? 'text-blue-400'
                     : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
@@ -288,9 +290,27 @@ function Header({ variant = 'default' }: HeaderProps) {
                     : 'text-blue-900 hover:text-gray-900',
               )}
             >
-              Dashboard
+              Sign In
             </Button>
           )}
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDashboardClick}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              pathname === '/dashboard' || pathname.startsWith('/dashboard')
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
+            )}
+          >
+            Dashboard
+          </Button>
         </div>
 
         {/* Mobile Menu Button - Hidden on Desktop */}

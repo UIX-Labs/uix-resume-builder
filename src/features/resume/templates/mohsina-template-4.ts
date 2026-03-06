@@ -124,6 +124,78 @@ const mohsinaTemplate4 = {
                     },
                   ],
                 },
+                {
+                  type: 'group',
+                  className: 'flex flex-col',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'GitHub',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.github.title',
+                      href: 'personalDetails.items[0].links.github.link',
+                      fallback: '9999444555',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
+                    },
+                  ],
+                },
+                {
+                  type: 'group',
+                  className: 'flex flex-col',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Portfolio',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.website.title',
+                      href: 'personalDetails.items[0].links.website.link',
+                      fallback: '9999444555',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
+                    },
+                  ],
+                },
+                {
+                  type: 'group',
+                  className: 'flex flex-col',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Dribble',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.dribble.title',
+                      href: 'personalDetails.items[0].links.dribble.link',
+                      fallback: '9999444555',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
+                    },
+                  ],
+                },
+                {
+                  type: 'group',
+                  className: 'flex flex-col',
+                  items: [
+                    {
+                      type: 'text',
+                      fallback: 'Behance',
+                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.behance.title',
+                      href: 'personalDetails.items[0].links.behance.link',
+                      fallback: '9999444555',
+                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
+                    },
+                  ],
+                },
               ],
             },
           ],

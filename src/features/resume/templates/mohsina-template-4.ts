@@ -98,11 +98,54 @@ const mohsinaTemplate4 = {
                       className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
                     },
                     {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.linkedin.title',
-                      href: 'personalDetails.items[0].links.linkedin.link',
-                      fallback: 'Portfolio/LinkedIn',
-                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins break-words',
+                      type: 'inline-group',
+                      className:
+                        'flex flex-wrap text-[10px] font-semibold text-black leading-[16px] font-poppins underline decoration-1 underline-offset-2 break-words',
+                      separator: '/',
+                      items: [
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.website.title',
+                          href: 'personalDetails.items[0].links.website.link',
+                          condition: 'personalDetails.items[0].links.website.link',
+                          fallback: 'Portfolio',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.linkedin.title',
+                          href: 'personalDetails.items[0].links.linkedin.link',
+                          condition: 'personalDetails.items[0].links.linkedin.link',
+                          fallback: 'LinkedIn',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.github.title',
+                          href: 'personalDetails.items[0].links.github.link',
+                          condition: 'personalDetails.items[0].links.github.link',
+                          fallback: 'GitHub',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.dribble.title',
+                          href: 'personalDetails.items[0].links.dribble.link',
+                          condition: 'personalDetails.items[0].links.dribble.link',
+                          fallback: 'Dribble',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.behance.title',
+                          href: 'personalDetails.items[0].links.behance.link',
+                          condition: 'personalDetails.items[0].links.behance.link',
+                          fallback: 'Behance',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.youtube.title',
+                          href: 'personalDetails.items[0].links.youtube.link',
+                          condition: 'personalDetails.items[0].links.youtube.link',
+                          fallback: 'YouTube',
+                        },
+                      ],
                     },
                   ],
                 },
@@ -119,78 +162,6 @@ const mohsinaTemplate4 = {
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
-                      fallback: '9999444555',
-                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
-                    },
-                  ],
-                },
-                {
-                  type: 'group',
-                  className: 'flex flex-col',
-                  items: [
-                    {
-                      type: 'text',
-                      fallback: 'GitHub',
-                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
-                    },
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.github.title',
-                      href: 'personalDetails.items[0].links.github.link',
-                      fallback: '9999444555',
-                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
-                    },
-                  ],
-                },
-                {
-                  type: 'group',
-                  className: 'flex flex-col',
-                  items: [
-                    {
-                      type: 'text',
-                      fallback: 'Portfolio',
-                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
-                    },
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.website.title',
-                      href: 'personalDetails.items[0].links.website.link',
-                      fallback: '9999444555',
-                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
-                    },
-                  ],
-                },
-                {
-                  type: 'group',
-                  className: 'flex flex-col',
-                  items: [
-                    {
-                      type: 'text',
-                      fallback: 'Dribble',
-                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
-                    },
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.dribble.title',
-                      href: 'personalDetails.items[0].links.dribble.link',
-                      fallback: '9999444555',
-                      className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
-                    },
-                  ],
-                },
-                {
-                  type: 'group',
-                  className: 'flex flex-col',
-                  items: [
-                    {
-                      type: 'text',
-                      fallback: 'Behance',
-                      className: 'text-[10px] font-medium text-[#8B8B8B] leading-[16px] font-montserrat',
-                    },
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.behance.title',
-                      href: 'personalDetails.items[0].links.behance.link',
                       fallback: '9999444555',
                       className: 'text-[10px] font-semibold text-black leading-[16px] font-poppins',
                     },

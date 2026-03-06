@@ -35,9 +35,6 @@ export function renderField(
     if (isEmptyValue(conditionValue)) {
       return null;
     }
-  if (field.condition) {
-    const conditionValue = resolvePath(data, field.condition);
-    if (!conditionValue) return null;
   }
 
   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
@@ -307,25 +304,6 @@ export function renderField(
         ))}
       </div>
     );
-    const items = field.items
-      .map((subField: any, idx: number) => {
-        const rendered = renderField(
-          subField,
-          data,
-          itemId,
-          suggestedUpdates,
-          isThumbnail,
-          skipImageFallbacks,
-          sectionId,
-        );
-        if (!rendered) return null;
-        return <React.Fragment key={idx}>{rendered}</React.Fragment>;
-      })
-      .filter(Boolean);
-
-    if (items.length === 0) return null;
-
-    return <div className={field.className}>{items}</div>;
   }
 
   if (field.type === 'text') {

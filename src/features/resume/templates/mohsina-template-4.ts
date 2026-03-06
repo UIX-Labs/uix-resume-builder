@@ -54,6 +54,7 @@ const mohsinaTemplate4 = {
                 {
                   type: 'group',
                   className: 'flex flex-col ',
+                  condition: 'personalDetails.items[0].address',
                   items: [
                     {
                       type: 'text',
@@ -72,6 +73,7 @@ const mohsinaTemplate4 = {
                 {
                   type: 'group',
                   className: 'flex flex-col gap-0',
+                  condition: 'personalDetails.items[0].email',
                   items: [
                     {
                       type: 'text',
@@ -91,6 +93,7 @@ const mohsinaTemplate4 = {
                 {
                   type: 'group',
                   className: 'flex flex-col',
+                  condition: 'personalDetails.items[0].links',
                   items: [
                     {
                       type: 'text',
@@ -107,22 +110,19 @@ const mohsinaTemplate4 = {
                           type: 'link',
                           path: 'personalDetails.items[0].links.website.title',
                           href: 'personalDetails.items[0].links.website.link',
-                          condition: 'personalDetails.items[0].links.website.link',
-                          fallback: 'Portfolio',
+                          condition: 'personalDetails.items[0].links.website.title',
                         },
                         {
                           type: 'link',
                           path: 'personalDetails.items[0].links.linkedin.title',
                           href: 'personalDetails.items[0].links.linkedin.link',
-                          condition: 'personalDetails.items[0].links.linkedin.link',
-                          fallback: 'LinkedIn',
+                          condition: 'personalDetails.items[0].links.linkedin.title',
                         },
                         {
                           type: 'link',
                           path: 'personalDetails.items[0].links.github.title',
                           href: 'personalDetails.items[0].links.github.link',
-                          condition: 'personalDetails.items[0].links.github.link',
-                          fallback: 'GitHub',
+                          condition: 'personalDetails.items[0].links.github.title',
                         },
                         {
                           type: 'link',
@@ -153,6 +153,7 @@ const mohsinaTemplate4 = {
                 {
                   type: 'group',
                   className: 'flex flex-col ',
+                  condition: 'personalDetails.items[0].phone',
                   items: [
                     {
                       type: 'text',

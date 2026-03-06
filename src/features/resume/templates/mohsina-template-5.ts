@@ -30,7 +30,7 @@ const mohsinaTemplate5 = {
                 {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
-                  fallback: '/images/profileimg.jpeg',
+                  condition: 'personalDetails.items[0].profilePicturePublicUrl',
                   className: 'w-[99px] h-[99px] rounded-full object-cover border border-[#005FF2] flex-shrink-0',
                 },
 

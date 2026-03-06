@@ -18,6 +18,25 @@ export function renderField(
   skipImageFallbacks?: boolean,
   sectionId?: string,
 ): React.ReactNode {
+  // 1. Handle condition check if it exists
+  if (field.condition) {
+    const conditionValue = resolvePath(data, field.condition);
+    const isEmptyValue = (val: any): boolean => {
+      if (val === null || val === undefined) return true;
+      if (typeof val === 'string') return val.trim() === '' || val === 'null' || val === 'undefined';
+      if (Array.isArray(val)) return val.length === 0 || val.every(isEmptyValue);
+      if (typeof val === 'object') {
+        const values = Object.values(val);
+        if (values.length === 0) return true;
+        return values.every(isEmptyValue);
+      }
+      return false;
+    };
+    if (isEmptyValue(conditionValue)) {
+      return null;
+    }
+  }
+
   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
   const errorSuggestions = fieldPath ? getFieldSuggestions(suggestedUpdates, itemId, fieldPath) : [];
   const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(errorSuggestions);
@@ -238,16 +257,22 @@ export function renderField(
   }
 
   if (field.type === 'group') {
+    const renderedItems = field.items
+      .map((subField: any, idx: number) => ({
+        idx,
+        element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId),
+      }))
+      .filter(
+        ({ element }: { element: React.ReactNode }) => element !== null && element !== undefined && element !== '',
+      );
+
+    if (renderedItems.length === 0) return null;
+
     return (
       <div className={field.className}>
-        {field.items.map((subField: any, idx: number) => {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: static list
-            <React.Fragment key={idx}>
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {renderedItems.map(({ element, idx }: { element: React.ReactNode; idx: number }) => (
+          <React.Fragment key={idx}>{element}</React.Fragment>
+        ))}
       </div>
     );
   }

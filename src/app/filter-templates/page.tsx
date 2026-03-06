@@ -16,24 +16,24 @@ export default function FilterTemplatesPage() {
   const [offset, setOffset] = useState(0);
 
   const style = searchParams.get('style') || undefined;
-  const column = searchParams.get('column') || undefined;
+  const layoutType = searchParams.get('layoutType') || undefined;
   const role = searchParams.get('role') || undefined;
+  const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
+  const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
 
   useEffect(() => {
     setOffset(0);
-  }, [style, column, role]);
+  }, [style, role, layoutType, hasProfilePhoto]);
 
-  const hasFilters = style || role || column;
-
-  // const {data:allData,isLoading:allIsLoading} = useGetAllTemplates();
-  // console.log("allData",allData)
+  const hasFilters = style || role || layoutType || hasProfilePhoto !== undefined;
 
   const { data, isLoading } = useGetAllTemplates(
     hasFilters
       ? {
           ...(style && { style }),
           ...(role && { role }),
-          ...(column && { column }),
+          ...(layoutType && { layoutType }),
+          ...(hasProfilePhoto !== undefined && { hasProfilePhoto }),
           offset,
           limit: LIMIT,
         }

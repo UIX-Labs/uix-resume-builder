@@ -1,54 +1,67 @@
 'use client';
 
 import { useIsMobile } from '@shared/hooks/use-mobile';
-import { CloseIcon } from '@shared/icons/close-icon';
-import { SlidersHorizontal } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
 import FilterDropdown from './filter-drop-down';
 import { FILTER_OPTIONS } from './filter-options';
+import MobileFilterChip from './mobile-filter-chip';
 import SelectedFilters from './selected-filter';
 
 export default function TemplateFilter({ results }: { results: number }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const formatQueryValue = (value: string) => value.toLowerCase().trim().replace(/\s+/g, '_');
-
-  const getLabelFromValue = (category: keyof typeof FILTER_OPTIONS, urlValue: string) => {
-    const options = (FILTER_OPTIONS as any)[category] as { label: string; value: string }[];
-    const option = options.find((opt) => formatQueryValue(opt.value) === urlValue);
-    return option ? option.label : urlValue;
-  };
-
-  const getValueFromLabel = (category: keyof typeof FILTER_OPTIONS, label: string) => {
-    const options = (FILTER_OPTIONS as any)[category] as { label: string; value: string }[];
-    const option = options.find((opt) => opt.label === label);
-    return option ? option.value : label;
-  };
-
   const isMobile = useIsMobile();
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  // Parse current params
   const style = searchParams.get('style')?.split(',').filter(Boolean) || [];
-  const column = searchParams.get('column')?.split(',').filter(Boolean) || [];
+  const layoutType = searchParams.get('layoutType')?.split(',').filter(Boolean) || [];
   const role = searchParams.get('role')?.split(',').filter(Boolean) || [];
+  const hasProfilePhoto = searchParams.get('hasProfilePhoto');
 
-  const updateFilter = (key: string, values: string[]) => {
+  const getLabelFromValue = (category: keyof typeof FILTER_OPTIONS, value: string) => {
+    const options = (FILTER_OPTIONS as any)[category] as { label: string; value: string }[];
+    const option = options.find((opt) => opt.value === value);
+    return option ? option.label : value;
+  };
+
+  const updateFilters = (updates: Record<string, string[] | string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
-
-    if (values.length > 0) {
-      params.set(key, values.map((v) => formatQueryValue(v)).join(','));
-    } else {
-      params.delete(key);
+    
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === null || (Array.isArray(value) && value.length === 0)) {
+        params.delete(key);
+      } else if (Array.isArray(value)) {
+        params.set(key, value.join(','));
+      } else {
+        params.set(key, value);
+      }
     }
+    
     params.delete('offset');
-
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
   const clearAll = () => router.replace('?', { scroll: false });
+
+  const getStyleDisplayValues = () => {
+    const labels = style.map((s) => getLabelFromValue('style', s));
+    if (hasProfilePhoto?.split(',').includes('true')) labels.push('With Photo');
+    if (hasProfilePhoto?.split(',').includes('false')) labels.push('Without Photo');
+    return labels;
+  };
+
+
+
+const MOBILE_FILTERS: MobileFilter[] = [
+  { label: "All Templates", type: "clear", value: null },
+
+  { label: "Traditional", type: "style", value: "traditional" },
+  { label: "Modern", type: "style", value: "modern" },
+  { label: "Creative", type: "style", value: "creative" },
+
+  { label: "Single Column", type: "layoutType", value: "single_column" },
+];
 
   return (
     <>
@@ -56,146 +69,100 @@ export default function TemplateFilter({ results }: { results: number }) {
         <div className="w-full bg-white rounded-3xl md:px-6 md:py-4 flex items-center gap-4 border p-0">
           <span className="text-md font-semibold text-black">Filter by</span>
 
-          {/* STYLE */}
+          {/* STYLE Dropdown */}
           <FilterDropdown
             label="Style"
             options={FILTER_OPTIONS.style}
-            selectedValues={style.map((s) => getLabelFromValue('style', s))}
-            onSelect={(vals) => updateFilter('style', vals)}
+            selectedValues={[
+              ...style,
+              ...(hasProfilePhoto?.split(',').includes('true') ? ['with_photo'] : []),
+              ...(hasProfilePhoto?.split(',').includes('false') ? ['without_photo'] : []),
+            ]}
+            onSelect={(vals) => {
+          const photoVals = vals.filter((v) => v === 'with_photo' || v === 'without_photo');
+          const styleVals = vals.filter((v) => v !== 'with_photo' && v !== 'without_photo');
+
+          
+          const photoParams = photoVals.map((v) => v === 'with_photo' ? 'true' : 'false');
+
+          updateFilters({
+            style: styleVals,
+            hasProfilePhoto: photoParams.length > 0 ? photoParams.join(',') : null,
+          });
+}}
           />
 
-          {/* COLUMN */}
+          {/* LAYOUT TYPE Dropdown */}
           <FilterDropdown
             label="Column"
-            options={FILTER_OPTIONS.column}
-            selectedValues={column.map((c) => getLabelFromValue('column', c))}
-            onSelect={(vals) => updateFilter('column', vals)}
+            options={FILTER_OPTIONS.layoutType}
+            selectedValues={layoutType}
+            onSelect={(vals) => updateFilters({ layoutType: vals })}
           />
 
-          {/* ROLE */}
+          {/* ROLE Dropdown */}
           <FilterDropdown
             label="Role"
             options={FILTER_OPTIONS.role}
-            selectedValues={role.map((r) => getLabelFromValue('role', r))}
-            onSelect={(vals) => updateFilter('role', vals)}
+            selectedValues={role}
+            onSelect={(vals) => updateFilters({ role: vals })}
           />
         </div>
 
         {/* SELECTED FILTERS DISPLAY */}
         <SelectedFilters
-          style={style.map((s) => getLabelFromValue('style', s))}
-          column={column.map((c) => getLabelFromValue('column', c))}
+          style={getStyleDisplayValues()}
+          column={layoutType.map((l) => getLabelFromValue('layoutType', l))}
           role={role.map((r) => getLabelFromValue('role', r))}
           results={results}
           onClearAll={clearAll}
-          onRemoveStyle={(label) =>
-            updateFilter(
-              'style',
-              style
-                .filter((s) => getLabelFromValue('style', s) !== label)
-                .map((s) => getValueFromLabel('style', getLabelFromValue('style', s))),
-            )
-          }
-          onRemoveColumn={(label) =>
-            updateFilter(
-              'column',
-              column
-                .filter((c) => getLabelFromValue('column', c) !== label)
-                .map((c) => getValueFromLabel('column', getLabelFromValue('column', c))),
-            )
-          }
-          onRemoveRole={(label) =>
-            updateFilter(
-              'role',
-              role
-                .filter((r) => getLabelFromValue('role', r) !== label)
-                .map((r) => getValueFromLabel('role', getLabelFromValue('role', r))),
-            )
-          }
+          onRemoveStyle={(label) => {
+            if (label === 'With Photo' || label === 'Without Photo') {
+              updateFilters({ hasProfilePhoto: null });
+            } else {
+              const valueToRemove = FILTER_OPTIONS.style.find(opt => opt.label === label)?.value;
+              updateFilters({ style: style.filter(s => s !== valueToRemove) });
+            }
+          }}
+          onRemoveColumn={(label) => {
+            const valueToRemove = FILTER_OPTIONS.layoutType.find((opt: any) => opt.label === label)?.value;
+            updateFilters({ layoutType: layoutType.filter(l => l !== valueToRemove) });
+          }}
+          onRemoveRole={(label) => {
+            const valueToRemove = FILTER_OPTIONS.role.find((opt: any) => opt.label === label)?.value;
+            updateFilters({ role: role.filter(r => r !== valueToRemove) });
+          }}
         />
       </div>
+        
 
-      {isMobile && (
-        <div className="w-fit">
-          <div className="bg-white border-2 border-gray-200 rounded-lg px-4 py-2">
-            <button type="button" onClick={() => setIsFilterOpen(!isFilterOpen)} className="flex items-center gap-2">
-              <SlidersHorizontal className="w-4 h-4" />
-              <span className="text-md font-semibold text-black">filter</span>
-            </button>
-          </div>
-        </div>
-      )}
-      {isFilterOpen && isMobile && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl px-6 pt-4 pb-8 animate-in slide-in-from-bottom duration-300 h-[60vh]">
-          <div className="flex flex-col gap-2 p-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold">Filter Templates</h3>
-              <button
-                type="button"
-                onClick={() => setIsFilterOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <CloseIcon className="w-5 h-5" />
-              </button>
-            </div>
 
-            <FilterDropdown
-              label="Style"
-              options={FILTER_OPTIONS.style}
-              selectedValues={style.map((s) => getLabelFromValue('style', s))}
-              onSelect={(vals) => updateFilter('style', vals)}
-            />
+       {isMobile && 
+         <MobileFilterChip
+          filters={MOBILE_FILTERS}
+          onSelect={(filter) => {
 
-            {/* COLUMN */}
-            <FilterDropdown
-              label="Column"
-              options={FILTER_OPTIONS.column}
-              selectedValues={column.map((c) => getLabelFromValue('column', c))}
-              onSelect={(vals) => updateFilter('column', vals)}
-            />
+            if (filter.type === "clear") {
+              clearAll();
+              return;
+            }
 
-            {/* ROLE */}
-            <FilterDropdown
-              label="Role"
-              options={FILTER_OPTIONS.role}
-              selectedValues={role.map((r) => getLabelFromValue('role', r))}
-              onSelect={(vals) => updateFilter('role', vals)}
-            />
+            updateFilters({
+              [filter.type]: filter.value ? [filter.value] : null,
+            });
 
-            {/* <SelectedFilters
-        style={style.map((s) => getLabelFromValue('style', s))}
-        column={column.map((c) => getLabelFromValue('column', c))}
-        role={role.map((r) => getLabelFromValue('role', r))}
-        results={results}
-        onClearAll={clearAll}
-        onRemoveStyle={(label) =>
-          updateFilter(
-            'style',
-            style
-              .filter((s) => getLabelFromValue('style', s) !== label)
-              .map((s) => getValueFromLabel('style', getLabelFromValue('style', s)))
-          )
-        }
-        onRemoveColumn={(label) =>
-          updateFilter(
-            'column',
-            column
-              .filter((c) => getLabelFromValue('column', c) !== label)
-              .map((c) => getValueFromLabel('column', getLabelFromValue('column', c)))
-          )
-        }
-        onRemoveRole={(label) =>
-          updateFilter(
-            'role',
-            role
-              .filter((r) => getLabelFromValue('role', r) !== label)
-              .map((r) => getValueFromLabel('role', getLabelFromValue('role', r)))
-          )
-        }
-      /> */}
-          </div>
-        </div>
-      )}
+    }}
+    results={results}
+  />
+}
+
+
+
+
+      
+
+            
+      
     </>
   );
 }

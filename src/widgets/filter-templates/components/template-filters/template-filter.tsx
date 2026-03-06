@@ -12,7 +12,6 @@ export default function TemplateFilter({ results }: { results: number }) {
   const searchParams = useSearchParams();
   const isMobile = useIsMobile();
 
-
   // Parse current params
   const style = searchParams.get('style')?.split(',').filter(Boolean) || [];
   const layoutType = searchParams.get('layoutType')?.split(',').filter(Boolean) || [];
@@ -27,7 +26,7 @@ export default function TemplateFilter({ results }: { results: number }) {
 
   const updateFilters = (updates: Record<string, string[] | string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     for (const [key, value] of Object.entries(updates)) {
       if (value === null || (Array.isArray(value) && value.length === 0)) {
         params.delete(key);
@@ -37,7 +36,7 @@ export default function TemplateFilter({ results }: { results: number }) {
         params.set(key, value);
       }
     }
-    
+
     params.delete('offset');
     router.replace(`?${params.toString()}`, { scroll: false });
   };
@@ -51,17 +50,15 @@ export default function TemplateFilter({ results }: { results: number }) {
     return labels;
   };
 
+  const MOBILE_FILTERS: MobileFilter[] = [
+    { label: 'All Templates', type: 'clear', value: null },
 
+    { label: 'Traditional', type: 'style', value: 'traditional' },
+    { label: 'Modern', type: 'style', value: 'modern' },
+    { label: 'Creative', type: 'style', value: 'creative' },
 
-const MOBILE_FILTERS: MobileFilter[] = [
-  { label: "All Templates", type: "clear", value: null },
-
-  { label: "Traditional", type: "style", value: "traditional" },
-  { label: "Modern", type: "style", value: "modern" },
-  { label: "Creative", type: "style", value: "creative" },
-
-  { label: "Single Column", type: "layoutType", value: "single_column" },
-];
+    { label: 'Single Column', type: 'layoutType', value: 'single_column' },
+  ];
 
   return (
     <>
@@ -79,17 +76,16 @@ const MOBILE_FILTERS: MobileFilter[] = [
               ...(hasProfilePhoto?.split(',').includes('false') ? ['without_photo'] : []),
             ]}
             onSelect={(vals) => {
-          const photoVals = vals.filter((v) => v === 'with_photo' || v === 'without_photo');
-          const styleVals = vals.filter((v) => v !== 'with_photo' && v !== 'without_photo');
+              const photoVals = vals.filter((v) => v === 'with_photo' || v === 'without_photo');
+              const styleVals = vals.filter((v) => v !== 'with_photo' && v !== 'without_photo');
 
-          
-          const photoParams = photoVals.map((v) => v === 'with_photo' ? 'true' : 'false');
+              const photoParams = photoVals.map((v) => (v === 'with_photo' ? 'true' : 'false'));
 
-          updateFilters({
-            style: styleVals,
-            hasProfilePhoto: photoParams.length > 0 ? photoParams.join(',') : null,
-          });
-}}
+              updateFilters({
+                style: styleVals,
+                hasProfilePhoto: photoParams.length > 0 ? photoParams.join(',') : null,
+              });
+            }}
           />
 
           {/* LAYOUT TYPE Dropdown */}
@@ -120,29 +116,26 @@ const MOBILE_FILTERS: MobileFilter[] = [
             if (label === 'With Photo' || label === 'Without Photo') {
               updateFilters({ hasProfilePhoto: null });
             } else {
-              const valueToRemove = FILTER_OPTIONS.style.find(opt => opt.label === label)?.value;
-              updateFilters({ style: style.filter(s => s !== valueToRemove) });
+              const valueToRemove = FILTER_OPTIONS.style.find((opt) => opt.label === label)?.value;
+              updateFilters({ style: style.filter((s) => s !== valueToRemove) });
             }
           }}
           onRemoveColumn={(label) => {
             const valueToRemove = FILTER_OPTIONS.layoutType.find((opt: any) => opt.label === label)?.value;
-            updateFilters({ layoutType: layoutType.filter(l => l !== valueToRemove) });
+            updateFilters({ layoutType: layoutType.filter((l) => l !== valueToRemove) });
           }}
           onRemoveRole={(label) => {
             const valueToRemove = FILTER_OPTIONS.role.find((opt: any) => opt.label === label)?.value;
-            updateFilters({ role: role.filter(r => r !== valueToRemove) });
+            updateFilters({ role: role.filter((r) => r !== valueToRemove) });
           }}
         />
       </div>
-        
 
-
-       {isMobile && 
-         <MobileFilterChip
+      {isMobile && (
+        <MobileFilterChip
           filters={MOBILE_FILTERS}
           onSelect={(filter) => {
-
-            if (filter.type === "clear") {
+            if (filter.type === 'clear') {
               clearAll();
               return;
             }
@@ -150,19 +143,10 @@ const MOBILE_FILTERS: MobileFilter[] = [
             updateFilters({
               [filter.type]: filter.value ? [filter.value] : null,
             });
-
-    }}
-    results={results}
-  />
-}
-
-
-
-
-      
-
-            
-      
+          }}
+          results={results}
+        />
+      )}
     </>
   );
 }

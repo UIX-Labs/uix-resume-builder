@@ -28,7 +28,7 @@ export default function MobileFilterChip({
 
           return (
             <button
-            type='button'
+              type="button"
               key={filter.label}
               onClick={() => {
                 setSelectedFilter(filter.label);
@@ -44,7 +44,9 @@ export default function MobileFilterChip({
       </div>
 
       {/* RESULTS BUTTON */}
-      <button type="button" className="w-fit mx-auto bg-blue-500 text-white py-2 px-6 rounded-full">Results ({results})</button>
+      <button type="button" className="w-fit mx-auto bg-blue-500 text-white py-2 px-6 rounded-full">
+        Results ({results})
+      </button>
     </div>
   );
 }

@@ -121,11 +121,11 @@ export default function FilterDropdown({ label, options, selectedValues, onSelec
             const isSelected = selectedValues.includes(option.value);
             if (option.disabled) {
               return (
-            <div key={option.label} className="px-4 py-1 text-xs text-gray-400 border-t border-gray-100 mt-1">
-              Photo
-            </div>
-          );
-        }
+                <div key={option.label} className="px-4 py-1 text-xs text-gray-400 border-t border-gray-100 mt-1">
+                  Photo
+                </div>
+              );
+            }
             return (
               <div
                 key={option.value}

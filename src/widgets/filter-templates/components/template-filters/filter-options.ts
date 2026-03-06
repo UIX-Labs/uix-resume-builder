@@ -17,8 +17,8 @@ export const FILTER_OPTIONS = {
     { label: 'Software Developer', value: 'software_developer' },
     { label: 'Retail & Sales', value: 'retail_sales' },
     { label: 'Management & Executive', value: 'management_executive' },
-    {label:'Finance', value:'finance'}
+    { label: 'Finance', value: 'finance' },
   ],
 
   colors: ['#C5244E', '#F03126', '#3DB482', '#FFBE1B', '#6927B3', '#D52078', '#16C5F5', '#005FF2'],
-}
+};

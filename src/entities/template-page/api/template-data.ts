@@ -40,7 +40,7 @@ export const fetchAllTemplates = async (params?: {
   style?: string;
   role?: string;
   layoutType?: string;
-  hasProfilePhoto?: boolean; 
+  hasProfilePhoto?: boolean;
   offset?: number;
   limit?: number;
 }): Promise<TemplateListResponse> => {
@@ -89,7 +89,7 @@ export const useGetAllTemplates = (params?: {
   style?: string;
   role?: string;
   layoutType?: string;
-  hasProfilePhoto?: boolean; 
+  hasProfilePhoto?: boolean;
   offset?: number;
   limit?: number;
 }) => {

@@ -1,10 +1,10 @@
 'use client';
 
-import HeroSection from '@/widgets/filter-templates/hero-section';
 import { useGetAllTemplates } from '@entities/template-page/api/template-data';
-import NotFoundFilter from '@widgets/filter-templates/components/Not-found-filter';
-import TemplateCardGrid from '@widgets/filter-templates/components/template-card-grid';
-import TemplateFilter from '@widgets/filter-templates/components/template-filters/template-filter';
+import NotFoundFilter from '@widgets/all-templates/components/Not-found-filter';
+import TemplateCardGrid from '@widgets/all-templates/components/template-card-grid';
+import TemplateFilter from '@widgets/all-templates/components/template-filters/template-filter';
+import HeroSection from '@widgets/all-templates/hero-section';
 import { templates } from '@widgets/landing-page/models/constants';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -38,6 +38,9 @@ export default function FilterTemplatesPage() {
           limit: LIMIT,
         }
       : undefined,
+
+
+       
   );
   // console.log("data",data)
   return (

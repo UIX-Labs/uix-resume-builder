@@ -141,10 +141,10 @@ export function TemplateCarousel() {
               variant="default"
               size="lg"
               onClick={() => {
-                router.push('/templates');
+                router.push('/all-templates');
                 trackEvent('navigation_click', {
                   source: 'landing_carousel',
-                  destination: 'all_templates',
+                  destination: 'all-templates',
                 });
               }}
               className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto cursor-pointer"

@@ -8,6 +8,9 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
+import NotFoundSearch from '@widgets/all-templates/components/Not-found-filter';
+import { TemplateCardFilter } from '@widgets/all-templates/components/template-card-filter';
+import TemplateFilter from '@widgets/all-templates/components/template-filters/template-filter';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
 import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
@@ -15,30 +18,42 @@ import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import NotFoundSearch from '@widgets/filter-templates/components/Not-found-filter';
-import { TemplateCardFilter } from '@widgets/filter-templates/components/template-card-filter';
-import TemplateFilter from '@widgets/filter-templates/components/template-filters/template-filter';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
-  const searchParams = useSearchParams();
-  const style = searchParams.get('style') || '';
-  const column = searchParams.get('column') || '';
-  const role = searchParams.get('role') || '';
-
-  const { data: response } = useGetAllTemplates({
-    style,
-    role,
-    column,
-    limit: 10,
-    offset: 0,
-  });
-  const templates = response?.data;
-
+   const searchParams = useSearchParams();
+    const [offset, setOffset] = useState(0);
+    const LIMIT = 10;
+  
+    const style = searchParams.get('style') || undefined;
+    const layoutType = searchParams.get('layoutType') || undefined;
+    const role = searchParams.get('role') || undefined;
+    const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
+    const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
+  
+    useEffect(() => {
+      setOffset(0);
+    }, [style, role, layoutType, hasProfilePhoto]);
+  
+    const hasFilters = style || role || layoutType || hasProfilePhoto !== undefined;
+  
+    const { data } = useGetAllTemplates(
+      hasFilters
+        ? {
+            ...(style && { style }),
+            ...(role && { role }),
+            ...(layoutType && { layoutType }),
+            ...(hasProfilePhoto !== undefined && { hasProfilePhoto }),
+            offset,
+            limit: LIMIT,
+          }
+        : undefined,
+    );
+      const templates = Array.isArray(data) ? data : data?.data || [];
   const isMobile = useIsMobile();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);

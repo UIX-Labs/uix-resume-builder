@@ -1,6 +1,6 @@
 'use client';
 
-import { BlogPost } from '@/shared/lib/blog';
+import type { BlogPost } from '@/shared/lib/blog';
 import { Clock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -15,6 +15,7 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
       <div className="h-full min-h-[280px] sm:min-h-[400px] bg-[url('/images/blog/hero-section/Dot-bg.png')] bg-[#F2F2F233] rounded-2xl relative overflow-hidden cursor-pointer border-2 sm:border-4 border-white transition-all hover:shadow-sm group">
         {/* IMAGE */}
         <div className="absolute top-0 right-0 w-[60%] md:w-[53%] h-full">
+          {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
           <img
             src="/images/blog/features/pencil.png"
             alt={post.frontmatter.title}
@@ -42,6 +43,7 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
             {/* META ROW: */}
             <div className="flex items-center gap-3 mt-4">
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
+                {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
                 <img
                   src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
                   className="w-full h-full object-cover"

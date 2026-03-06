@@ -33,7 +33,7 @@ export const TopAnnouncementStrip = () => {
           <Image src="/images/crown.svg" alt="Crown" width={24} height={24} className="md:w-9 md:h-9" />
 
           <span className="text-xs md:text-lg text-start md:text-left leading-tight">
-            Free lifetime access for the first <span className="font-semibold">{MAX_USERS} users</span>.
+            Free lifetime access for the first <span className="font-semibold">{MAX_USERS} users</span>.{' '}
             <button type="button" onClick={handleSignUpClick} className="underline cursor-pointer whitespace-nowrap">
               Sign up now
             </button>

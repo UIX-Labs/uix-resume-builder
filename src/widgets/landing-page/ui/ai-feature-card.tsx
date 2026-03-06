@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@shared/lib/cn';
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 

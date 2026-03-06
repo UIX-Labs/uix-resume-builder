@@ -50,6 +50,7 @@ export const useGetAllTemplates = () => {
 export const useGetTemplateById = (templateId: string | null) => {
   return useFetch({
     queryKey: ['template', templateId],
+    // biome-ignore lint/style/noNonNullAssertion: value is checked by enabled flag
     queryFn: () => fetchTemplateById(templateId!),
     enabled: !!templateId,
   });

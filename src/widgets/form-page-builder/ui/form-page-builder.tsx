@@ -23,7 +23,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { Download, GripVertical } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -700,6 +700,55 @@ export function FormPageBuilder() {
       setFormData(resumeData as Omit<ResumeData, 'templateId'>, resumeId);
     }
   }, [resumeId, resumeData, analyzedData, analyzerResumeId, setFormData, formDataResumeId]);
+
+  // Fetch and merge expert review suggestions (if any)
+  // Skipped when the analyzer flow is about to handle it (pending_analyzer pattern)
+  useEffect(() => {
+    if (!resumeId || !formData) return;
+
+    // Skip if the analyzer flow will handle loading review suggestions
+    const pendingAnalyzer = typeof window !== 'undefined' && localStorage.getItem('pending_analyzer_resume_id');
+    if (pendingAnalyzer === resumeId) return;
+
+    // Skip if formData already has suggestions (prevents re-merge after analyzer completes)
+    const alreadyHasSuggestions = Object.values(formData).some((section: any) => section?.suggestedUpdates?.length > 0);
+    if (alreadyHasSuggestions) return;
+
+    async function fetchReviewSuggestions() {
+      try {
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+        const response = await fetch(`${backendUrl}/resume/${resumeId}/review-suggestions`, {
+          credentials: 'include',
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!data?.suggestions) return;
+
+        // Merge review suggestions into formData sections
+        const updatedData = { ...formData };
+        let hasMerged = false;
+
+        for (const [sectionKey, sectionSuggestions] of Object.entries(data.suggestions)) {
+          if (sectionKey in updatedData && (sectionSuggestions as any)?.suggestedUpdates?.length) {
+            const existing = (updatedData as any)[sectionKey]?.suggestedUpdates || [];
+            (updatedData as any)[sectionKey] = {
+              ...(updatedData as any)[sectionKey],
+              suggestedUpdates: [...existing, ...(sectionSuggestions as any).suggestedUpdates],
+            };
+            hasMerged = true;
+          }
+        }
+
+        if (hasMerged) {
+          setFormData(updatedData as Omit<ResumeData, 'templateId'>, resumeId);
+        }
+      } catch {
+        // Silently fail - review suggestions are optional
+      }
+    }
+
+    fetchReviewSuggestions();
+  }, [resumeId]);
 
   // Initialize last save time from resume data
   useEffect(() => {

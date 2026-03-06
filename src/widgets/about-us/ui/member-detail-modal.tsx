@@ -110,6 +110,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     <div className="flex gap-2">
                       {workHistory.slice(0, 3).map((work, index) => (
                         <div
+                          // biome-ignore lint/suspicious/noArrayIndexKey: static list
                           key={index}
                           className="w-[36px] h-[36px] md:w-[49px] md:h-[49px] rounded overflow-hidden bg-gray-100"
                         >
@@ -132,6 +133,7 @@ export function MemberDetailModal({ isOpen, onClose, member, allMembers = [], on
                     <div className="flex flex-wrap gap-[7px]">
                       {styleTags.map((tag, index) => (
                         <div
+                          // biome-ignore lint/suspicious/noArrayIndexKey: static list
                           key={index}
                           className="flex items-center gap-1 px-2 md:px-3 py-1 bg-[#E9ECF1] rounded-[25px]"
                         >

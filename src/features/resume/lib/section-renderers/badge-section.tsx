@@ -1,18 +1,17 @@
-import type { BadgeTemplateSection } from '@features/resume-beta/models/template-types';
-import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
-import type React from 'react';
+import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
+import type { LucideIcon } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
-import { resolvePath } from '../resolve-path';
+import type React from 'react';
 import { renderDivider } from '../components/Divider';
-import { hasPendingSuggestions, flattenAndFilterItemsWithContext, extractRenderableValue } from '../section-utils';
-import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { resolvePath } from '../resolve-path';
+import { extractRenderableValue, flattenAndFilterItemsWithContext, hasPendingSuggestions } from '../section-utils';
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderBadgeSection(
-  section: BadgeTemplateSection,
-  data: CleanedResumeData,
+  section: any,
+  data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -33,12 +32,15 @@ export function renderBadgeSection(
   const flattenedItemsWithContext = flattenAndFilterItemsWithContext(items, section.itemPath, parentId);
 
   // Icon component mapping
-  const getIconComponent = (iconName?: string) => {
+  const getIconComponent = (iconName?: string): LucideIcon | null => {
     if (!iconName) return null;
+    if (!(iconName in LucideIcons)) return null;
 
-    // @ts-ignore - Dynamic icon access
-    const Icon = LucideIcons[iconName];
-    return Icon || null;
+    // biome-ignore lint/performance/noDynamicNamespaceImportAccess: dynamic icon lookup by name
+    const Icon = LucideIcons[iconName as keyof typeof LucideIcons];
+    // Only return actual icon components, not utility functions like createLucideIcon
+    if (typeof Icon !== 'function' || Icon.length > 1) return null;
+    return Icon as LucideIcon;
   };
 
   const IconComponent = section.icon ? getIconComponent(section.icon) : null;
@@ -104,7 +106,7 @@ export function renderBadgeSection(
     fieldName = section.itemPath;
   }
 
-  const suggestedUpdates = sectionKey ? data[sectionKey as keyof CleanedResumeData]?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey ? data[sectionKey as keyof any]?.suggestedUpdates : undefined;
   return (
     <div
       data-canbreak={isBreakable ? 'true' : undefined}
@@ -173,6 +175,7 @@ export function renderBadgeSection(
           // If icon exists
           if (IconComponent) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               <div key={idx} className={section.itemClassName} data-canbreak={isBreakable ? 'true' : undefined}>
                 <IconComponent className={section.iconClassName} />
                 <span
@@ -187,7 +190,8 @@ export function renderBadgeSection(
 
           // Default rendering without icon
           return (
-            <span key={idx} data-canbreak={isBreakable ? 'true' : undefined}>
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+            <span key={idx} data-canbreak={section.break ? 'true' : undefined}>
               <span
                 className={cn(section.badgeClassName, errorBgColor, hasClickableSuggestions && 'cursor-pointer')}
                 data-suggestion={suggestionData}

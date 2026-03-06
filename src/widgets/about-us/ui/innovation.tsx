@@ -100,6 +100,7 @@ function Innovation() {
                       width={18}
                       height={18}
                       alt=""
+                      // biome-ignore lint/suspicious/noArrayIndexKey: static list
                       key={i}
                       className="w-4 h-4 md:w-[23px] md:h-[23px]"
                     />

@@ -7,16 +7,21 @@ const PUBLIC_ROUTES = [
   '/auth/linkedin/callback',
   '/about-us',
   '/roast',
+  '/expert-review',
   '/dashboard',
   '/resume',
-  '/resumes',
-  '/get-all-resumes',
+  '/my-resumes',
+  '/templates',
+  '/pricing',
   '/blog',
   '/upload-resume',
   '/resume-beta',
+  '/resume-examples',
 ];
 
-async function checkAuth(request: NextRequest): Promise<boolean> {
+const ADMIN_ALLOWED_DOMAINS = ['@uixlabs.in'];
+
+async function checkAuth(request: NextRequest): Promise<{ isLoggedIn: boolean; email?: string }> {
   try {
     const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -31,27 +36,61 @@ async function checkAuth(request: NextRequest): Promise<boolean> {
 
     if (response.ok) {
       const data = await response.json();
-      return data.user?.isLoggedIn === true;
+      return {
+        isLoggedIn: data.user?.isLoggedIn === true,
+        email: data.user?.email,
+      };
     }
 
-    return false;
+    return { isLoggedIn: false };
   } catch (error) {
     console.error('Auth check failed:', error);
-    return false;
+    return { isLoggedIn: false };
   }
 }
 
 export async function middleware(request: NextRequest) {
   try {
     const { pathname } = request.nextUrl;
+    const hostname = request.headers.get('host') || '';
+
+    // Redirect www to non-www for SEO canonicalization
+    if (hostname.startsWith('www.')) {
+      const newUrl = new URL(request.url);
+      newUrl.host = hostname.replace('www.', '');
+      return NextResponse.redirect(newUrl, 301);
+    }
+
     const isAuthRoute = pathname === '/auth';
     const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+
+    const isAdminRoute = pathname.startsWith('/admin');
+
+    // Admin route protection: require auth + allowed email domain
+    if (isAdminRoute) {
+      if (pathname === '/admin/unauthorized') {
+        return NextResponse.next();
+      }
+
+      const { isLoggedIn, email } = await checkAuth(request);
+
+      if (!isLoggedIn) {
+        return NextResponse.redirect(new URL(`/auth?callbackUrl=${encodeURIComponent(pathname)}`, request.url));
+      }
+
+      const isAllowedDomain = email && ADMIN_ALLOWED_DOMAINS.some((domain) => email.endsWith(domain));
+      if (!isAllowedDomain) {
+        return NextResponse.redirect(new URL('/admin/unauthorized', request.url));
+      }
+
+      return NextResponse.next();
+    }
 
     if (isPublicRoute) {
       return NextResponse.next();
     }
 
-    const isAuthenticated = await checkAuth(request);
+    const { isLoggedIn: isAuthenticated, email: _email } = await checkAuth(request);
 
     if (isAuthenticated && isAuthRoute) {
       const callbackUrl = request.nextUrl.searchParams.get('callbackUrl');

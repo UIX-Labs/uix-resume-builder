@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type * as React from 'react';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { Slot } from 'radix-ui';
 
@@ -41,7 +41,7 @@ function BreadcrumbLink({
 
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
   return (
-    // biome-ignore lint/a11y/useFocusableInteractive: <explanation>
+    // biome-ignore lint/a11y/useFocusableInteractive: breadcrumb page is non-interactive
     <span
       data-slot="breadcrumb-page"
       role="link"

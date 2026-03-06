@@ -1,22 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { AiFeatureCard } from './ai-feature-card';
 
 export function AiFeaturesSection() {
   const [hoveredId, setHoveredId] = useState<'left' | 'right' | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const hoverLeft = useCallback(() => setHoveredId('left'), []);
   const hoverRight = useCallback(() => setHoveredId('right'), []);
   const clearHover = useCallback(() => setHoveredId(null), []);
-
-  if (!isMounted) return null;
 
   return (
     <section className="py-12 sm:py-16 md:py-24" aria-labelledby="ai-features-heading">

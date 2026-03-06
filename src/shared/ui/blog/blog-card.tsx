@@ -36,6 +36,7 @@ export function BlogCard({ post, featured = false }: BlogCardProps) {
         {/* Cover Image */}
         {frontmatter.coverImage && (
           <div className={cn('relative shrink-0 overflow-hidden bg-gray-100', featured ? 'h-64 md:h-80' : 'h-48')}>
+            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
             <img
               src={frontmatter.coverImage}
               alt={frontmatter.title}

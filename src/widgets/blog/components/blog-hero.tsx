@@ -26,6 +26,7 @@ export default function BlogHero({ description, image, children, breadcrumbs }: 
                          lg:translate-x-0 lg:right-auto"
         >
           {breadcrumbs.map((item, index) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <span key={index}>
               {item.href ? (
                 <a href={item.href} className="hover:text-black transition-colors">

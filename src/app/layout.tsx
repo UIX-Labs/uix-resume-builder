@@ -124,8 +124,13 @@ export const metadata: Metadata = {
 
   // LLM Metadata for AI previews
   other: {
-    'ai-content': 'Create professional AI-powered resumes in minutes using modern templates and smart suggestions.',
+    'ai-content':
+      'Pika Resume is a free AI-powered resume builder. Create ATS-optimized resumes from scratch, import from LinkedIn, upload and enhance existing resumes, or tailor to job descriptions. Features include AI Resume Roast for instant feedback and Expert Resume Review by professionals from Google, Microsoft, and TikTok.',
     'ai:generate': 'true',
+    'ai:description':
+      'Free AI resume builder with ATS-optimized templates, LinkedIn import, resume roasting, and expert review by professionals from top companies.',
+    'ai:site_type': 'SaaS application',
+    'ai:category': 'Career Tools, Resume Builder',
   },
 };
 
@@ -136,7 +141,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
+        style={{ '--font-arial': 'Arial, Helvetica, sans-serif' } as React.CSSProperties}
+      >
         <Script
           id="structured-data"
           type="application/ld+json"

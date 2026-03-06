@@ -1,9 +1,3 @@
-import type {
-  TableTemplateSection,
-  TableColumn as TableColumnType,
-  TemplateField,
-} from '@features/resume-beta/models/template-types';
-import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import * as LucideIcons from 'lucide-react';
@@ -16,8 +10,8 @@ import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 // Table section renderer (row-based layout with configurable columns)
 export function renderTableSection(
-  section: TableTemplateSection,
-  data: CleanedResumeData,
+  section: any,
+  data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -123,8 +117,8 @@ export function renderTableSection(
             )}
 
             {/* Render content columns with all items */}
-            {columns.map((column: TableColumnType, colIdx: number) => {
-              const renderColumnContent = (col: TableColumnType): React.ReactNode => {
+            {columns.map((column: any, columnIdx: number) => {
+              const renderColumnContent = (col: any): React.ReactNode => {
                 let content: React.ReactNode = null;
 
                 if (col.type === 'badge-list') {
@@ -147,7 +141,7 @@ export function renderTableSection(
 
                     content = (
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
-                        {allBadgeItems.map(({ value, itemId }, badgeIdx: number) => {
+                        {allBadgeItems.map(({ value, itemId }, badgeIndex: number) => {
                           // Extract renderable value - will return null for complex objects
                           const actualValue = extractRenderableValue(value);
 
@@ -174,7 +168,8 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
-                              <div key={badgeIdx} className={col.itemClassName}>
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                              <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
                                   className={cn(
@@ -191,7 +186,8 @@ export function renderTableSection(
                           }
                           return (
                             <span
-                              key={badgeIdx}
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                              key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
@@ -213,7 +209,8 @@ export function renderTableSection(
 
               return (
                 <div
-                  key={colIdx}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                  key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
                   data-has-breakable-content={column.break ? 'true' : undefined}
@@ -225,12 +222,12 @@ export function renderTableSection(
           </div>
         ) : (
           // Multi-row mode: each item gets a row
-          validItems.map((item: Record<string, any>, itemIdx: number) => {
+          validItems.map((item: any, itemIndex: number) => {
             // Get itemId for this item
             const itemId = item.itemId || item.id;
 
             // Handle different column types for a single item
-            const renderColumnContent = (column: TableColumnType): React.ReactNode => {
+            const renderColumnContent = (column: any): React.ReactNode => {
               let content: React.ReactNode = null;
 
               if (column.type === 'field') {
@@ -245,7 +242,7 @@ export function renderTableSection(
                 );
               } else if (column.type === 'inline-group') {
                 const renderedItems = column.items
-                  .map((subField: TemplateField, subIdx: number) => {
+                  .map((subField: any, subIdx: number) => {
                     return {
                       idx: subIdx,
                       element: renderField(
@@ -328,11 +325,11 @@ export function renderTableSection(
               } else if (column.type === 'group') {
                 // Render a group of fields stacked vertically
                 const groupItems = column.items
-                  .map((subField: TemplateField) => {
+                  .map((subField: any) => {
                     // Handle inline-group specially to preserve inline layout
                     if (subField.type === 'inline-group') {
                       const renderedItems = subField.items
-                        .map((inlineSubField: TemplateField, idx: number) => {
+                        .map((inlineSubField: any, idx: number) => {
                           return {
                             idx,
                             element: renderField(
@@ -427,14 +424,16 @@ export function renderTableSection(
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
                     if (!iconName) return null;
-                    const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
+                    const Icon = (
+                      LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>
+                    )[iconName];
                     return Icon || null;
                   };
                   const IconComponent = column.icon ? getIconComponent(column.icon) : null;
 
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
-                      {badgeItems.map((badgeItem: { value: unknown; itemId?: string }, badgeIdx: number) => {
+                      {badgeItems.map((badgeItem: any, badgeIndex: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
 
@@ -469,7 +468,8 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div key={badgeIdx} className={column.itemClassName}>
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                            <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
@@ -486,7 +486,8 @@ export function renderTableSection(
                         }
                         return (
                           <span
-                            key={badgeIdx}
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                            key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
@@ -508,7 +509,8 @@ export function renderTableSection(
 
             return (
               <div
-                key={itemIdx}
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn('grid', section.rowClassName)}
@@ -517,7 +519,7 @@ export function renderTableSection(
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
                   <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
-                    {itemIdx === 0 && section.heading && (
+                    {itemIndex === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>
                           {resolvePath(data, section.heading.path, section.heading.fallback)}
@@ -529,14 +531,14 @@ export function renderTableSection(
                 )}
 
                 {/* Render content columns for each item */}
-                {columns.map((column: TableColumnType, colIdx: number) => (
+                {columns.map((column: any, columnIdx: number) => (
                   <div
-                    key={`${itemIdx}-${colIdx}`}
+                    key={`${item.itemId}-${columnIdx}`}
                     className={column.className}
                     data-canbreak={column.break ? 'true' : undefined}
                     data-has-breakable-content={column.break ? 'true' : undefined}
                     style={{
-                      gridColumn: section.headingColumn ? colIdx + 2 : colIdx + 1,
+                      gridColumn: section.headingColumn ? columnIdx + 2 : columnIdx + 1,
                     }}
                   >
                     {renderColumnContent(column)}

@@ -29,11 +29,18 @@ const brianWayneTemplate = {
       type: 'header',
       column: 'left',
       className: 'flex flex-col gap-3 mt-4',
+
       fields: {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Brian T. Wayne',
           className: 'text-2xl break-words font-bold text-white',
+        },
+
+        title: {
+          path: 'personalDetails.items[0].jobTitle',
+          fallback: 'Senior UX Designer',
+          className: 'text-[10px] uppercase tracking-[2px] leading-[18px] font-arial text-white',
         },
       },
     },
@@ -44,27 +51,30 @@ const brianWayneTemplate = {
       type: 'header',
       column: 'left',
       className: 'flex flex-col gap-3',
+
       fields: {
         contact: {
           type: 'contact-grid',
-          className: 'flex flex-col gap-1 mt-4',
+          className:
+            'flex flex-col gap-2 mt-4 text-[8px] font-arial uppercase tracking-[1px] leading-[16px] text-black',
+
           items: [
             // Email
             {
               type: 'inline-group-with-icon',
-              className: 'flex items-center gap-3 mt-4',
+              className: 'flex items-center gap-3',
               items: [
                 {
                   type: 'icon',
                   name: 'Mail',
                   size: 16,
-                  className: 'text-white text-xs',
+                  className: 'text-white',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
-                  fallback: 'brian@wayne.com',
+                  fallback: 'email@example.com',
                   className: 'text-xs text-white',
                 },
               ],
@@ -125,7 +135,7 @@ const brianWayneTemplate = {
                 },
               ],
             },
-            // GitHub
+            // Github
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -134,17 +144,18 @@ const brianWayneTemplate = {
                   type: 'icon',
                   name: 'Github',
                   size: 16,
-                  className: 'text-white',
+                  className: 'text-black',
                 },
                 {
                   type: 'link',
                   path: 'personalDetails.items[0].links.github.title',
                   href: 'personalDetails.items[0].links.github.link',
-                  fallback: '',
-                  className: 'text-xs text-white hover:text-green-200',
+                  fallback: 'email@example.com',
+                  className: 'text-xs text-white',
                 },
               ],
             },
+            // Website
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -183,7 +194,7 @@ const brianWayneTemplate = {
                 },
               ],
             },
-            // Dribble
+            // Dribbble
             {
               type: 'inline-group-with-icon',
               className: 'flex items-center gap-3',
@@ -196,8 +207,8 @@ const brianWayneTemplate = {
                 },
                 {
                   type: 'link',
-                  path: 'personalDetails.items[0].links.dribble.title',
-                  href: 'personalDetails.items[0].links.dribble.link',
+                  path: 'personalDetails.items[0].links.dribbble.title',
+                  href: 'personalDetails.items[0].links.dribbble.link',
                   fallback: '',
                   className: 'text-xs text-white hover:text-green-200',
                 },
@@ -210,7 +221,7 @@ const brianWayneTemplate = {
               items: [
                 {
                   type: 'icon',
-                  name: 'Palette',
+                  name: 'Behance',
                   size: 16,
                   className: 'text-white',
                 },

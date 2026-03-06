@@ -1,15 +1,12 @@
-import type { ListTemplateSection } from '@features/resume-beta/models/template-types';
-import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
-import type React from 'react';
 import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
+import type React from 'react';
 import { renderDivider } from '../components/Divider';
+import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
-import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
-
 export function renderListSection(
-  section: ListTemplateSection,
-  data: CleanedResumeData,
+  section: any,
+  data: any,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -86,6 +83,8 @@ export function renderListSection(
           // e.g., "skills.items" -> "skills" which matches formData.skills
           const formDataSectionKey = sectionKey || sectionId;
 
+          if (!section.itemTemplate) return null;
+
           const content = section.itemTemplate.rows
             ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)
             : renderItemWithFields(
@@ -96,12 +95,12 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {
             return (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
@@ -128,6 +127,7 @@ export function renderListSection(
 
           return (
             <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               key={idx}
               className={cn(
                 section.itemTemplate.className,

@@ -1,5 +1,6 @@
 'use client';
 
+import { useCachedUser } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import type { NavItem } from '@shared/ui/components/mobile-nav-drawer';
 import { MobileNavDrawer } from '@shared/ui/components/mobile-nav-drawer';
@@ -15,6 +16,7 @@ export interface MobileSidebarProps {
 export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const user = useCachedUser();
   const [showMobileTextView, setShowMobileTextView] = useState(false);
 
   const handleNavigation = (path: string, eventName: string, destination: string) => {
@@ -53,6 +55,13 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     handleNavigation('/', 'navigation_click', 'home');
   };
 
+  const handleSignInClick = () => {
+    const callbackUrl = encodeURIComponent(pathname + (typeof window !== 'undefined' ? window.location.search : ''));
+    router.push(`/auth?callbackUrl=${callbackUrl}`);
+    onClose();
+    trackEvent('navigation_click', { source: 'mobile_sidebar', destination: 'auth', action: 'sign_in' });
+  };
+
   const navItems: NavItem[] = [
     {
       label: 'Home',
@@ -74,23 +83,20 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },
-    // WIP - Pricing nav item hidden temporarily
-    // {
-    //   label: 'Pricing',
-    //   onClick: handlePricingClick,
-    //   isActive: pathname === '/pricing',
-    // },
-    // WIP - Resume Examples nav item hidden temporarily
-    // {
-    //   label: 'Resume Examples',
-    //   onClick: () => handleNavigation('/resume-examples', 'navigation_click', 'resume_examples'),
-    //   isActive: pathname === '/resume-examples',
-    // },
     {
       label: 'Dashboard',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard',
     },
+    ...(!user
+      ? [
+          {
+            label: 'Sign In',
+            onClick: handleSignInClick,
+            isActive: pathname === '/auth',
+          },
+        ]
+      : []),
   ];
 
   return (

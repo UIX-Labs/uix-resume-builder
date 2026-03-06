@@ -750,7 +750,9 @@
   animation: floatBlob linear infinite;
 }
 html {
-  scroll-behavior: smooth;
+  &[data-scroll-behavior="smooth"] {
+    scroll-behavior: smooth;
+  }
 }
 .templates-dialog-mobile-overlay {
   inset: 0 0 72px 0;

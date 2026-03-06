@@ -44,16 +44,16 @@ export const mohsinaTemplate9 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-1 mb-2',
+              className: 'flex flex-col items-start gap-[2px] mb-2',
               items: [
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Mail',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
 
@@ -62,19 +62,19 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'amanguppta@gmail.com',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'MapPin',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
 
@@ -82,19 +82,19 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].location',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Linkedin',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
 
@@ -103,38 +103,38 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: 'Portfolio / linkedin',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Phone',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Link',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
 
@@ -143,19 +143,19 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].links.website.title',
                       href: 'personalDetails.items[0].links.website.link',
                       fallback: 'Portfolio',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Github',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
 
@@ -164,19 +164,19 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].links.github.title',
                       href: 'personalDetails.items[0].links.github.link',
                       fallback: 'Github',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Palette',
-                      size: 10,
+                      size: 12,
                       className: 'text-[#3E6AF2]',
                     },
                     {
@@ -184,7 +184,7 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].links.behance.title',
                       href: 'personalDetails.items[0].links.behance.link',
                       fallback: 'Behance',
-                      className: 'text-xs text-black',
+                      className: 'text-[13px] text-black',
                     },
                   ],
                 },
@@ -202,7 +202,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap mt-1',
       },
 
       content: {
@@ -219,19 +219,19 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap mt-1',
       },
 
       listPath: 'education.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-0 mb-4',
+      containerClassName: 'ml-[160px] flex flex-col gap-2 mb-4',
 
       itemTemplate: {
-        className: 'flex flex-col',
+        className: 'flex flex-col ',
 
         rows: [
           {
-            className: 'flex justify-between items-center w-full mt-1',
+            className: 'flex justify-between items-center w-full gap1 mt-1',
             cells: [
               {
                 type: 'group',
@@ -273,7 +273,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
       },
 
       listPath: 'experience.items',
@@ -289,7 +289,7 @@ export const mohsinaTemplate9 = {
             cells: [
               {
                 type: 'group',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex flex-wrap gap-1 mt-1',
                 items: [
                   {
                     path: 'position',
@@ -331,12 +331,12 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap',
       },
 
       listPath: 'projects.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mb-4',
+      containerClassName: 'ml-[160px] flex flex-col gap-3 mb-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -383,7 +383,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap ',
       },
 
       listPath: 'achievements.items[0].items',
@@ -401,12 +401,12 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap ',
       },
 
       listPath: 'certifications.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mb-4',
+      containerClassName: 'ml-[160px] flex flex-col gap-3 mb-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -448,7 +448,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
       },
 
       listPath: 'skills.items',
@@ -469,7 +469,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'block float-left w-[140px] text-black text-md font-bold uppercase whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
       },
 
       listPath: 'interests.items[0].items',

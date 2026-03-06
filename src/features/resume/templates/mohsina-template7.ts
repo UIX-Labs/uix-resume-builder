@@ -397,7 +397,7 @@ export const mohsinaTemplate7 = {
                     path: 'description',
                     breakable: true,
                     className:
-                      'text-[13px] text-[#323232] font-lato leading-[16px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
+                      'text-[13px] text-[#323232] font-lato leading-[16px] -mt-1 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
                   },
                 ],
               },
@@ -468,7 +468,7 @@ export const mohsinaTemplate7 = {
         path: 'certifications.title',
         fallback: 'Certifications',
         className:
-          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-3',
       },
 
       listPath: 'certifications.items',
@@ -523,7 +523,7 @@ export const mohsinaTemplate7 = {
         path: 'interests.heading',
         fallback: 'Interests',
         className:
-          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-2 mb-2',
+          'flex-row items-center w-full gap-3 text-xs font-bold leading-[15px] tracking-widest uppercase [&>p]:text-white [&>p]:bg-[#4C77FF] [&>p]:px-3 [&>p]:py-1 after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[1] mt-3 mb-2',
       },
 
       listPath: 'interests.items[0].items',

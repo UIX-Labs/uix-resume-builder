@@ -14,6 +14,9 @@ import erenTemplate3 from '@features/resume/templates/eren-templete-3';
 import erenTemplate1 from '@features/resume/templates/eren-templete1';
 import erenTemplate2 from '@features/resume/templates/eren-templete2';
 //import mohsinaTemplate1 from '@features/resume/templates/mohsina-template1';
+import { mohsinaTemplate6 } from '@features/resume/templates/mohsina-template6';
+import { mohsinaTemplate7 } from '@features/resume/templates/mohsina-template7';
+import { mohsinaTemplate8 } from '@features/resume/templates/mohsina-template8';
 import standard from '@features/resume/templates/standard';
 import standard2 from '@features/resume/templates/standard2';
 import template7 from '@features/resume/templates/template-7';
@@ -29,6 +32,8 @@ import template5 from '@features/resume/templates/template5';
 import template6 from '@features/resume/templates/template6';
 import template8 from '@features/resume/templates/template8';
 import template9 from '@features/resume/templates/template9';
+import { mohsinaTemplate9 } from '../templates/mohsina-template-9';
+import { mohsinaTemplate10 } from '../templates/mohsina-template-10';
 import mohsinaTemplate5 from '@features/resume/templates/mohsina-template-5';
 
 export const templateRegistry: Record<string, any> = {
@@ -55,6 +60,11 @@ export const templateRegistry: Record<string, any> = {
   'enzo-template2': enzoTemplate2,
   'enzo-template3': enzoTemplate3,
   // 'mohsina-template1': mohsinaTemplate1,
+  'mohsina-template6': mohsinaTemplate6,
+  'mohsina-template7': mohsinaTemplate7,
+  'mohsina-template8': mohsinaTemplate8,
+  'mohsina-template9': mohsinaTemplate9,
+  'mohsina-template10': mohsinaTemplate10,
   'mohsina-template5': mohsinaTemplate5,
 };
 

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Lato, Poppins } from 'next/font/google';
 import Script from 'next/script';
 import '../app/globals.css';
 
@@ -24,6 +24,20 @@ const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
   style: ['normal', 'italic'],
+});
+
+const poppins = Poppins({
+  weight: ['100', '300', '400', '700', '900'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-poppins',
+});
+
+const lato = Lato({
+  weight: ['100', '300', '400', '700', '900'],
+  style: ['normal', 'italic'],
+  subsets: ['latin'],
+  variable: '--font-lato',
 });
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
@@ -142,8 +156,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
-        style={{ '--font-arial': 'Arial, Helvetica, sans-serif' } as React.CSSProperties}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${poppins.variable}  antialiased`}
       >
         <Script
           id="structured-data"

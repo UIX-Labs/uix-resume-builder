@@ -35,6 +35,9 @@ export function renderField(
     if (isEmptyValue(conditionValue)) {
       return null;
     }
+  if (field.condition) {
+    const conditionValue = resolvePath(data, field.condition);
+    if (!conditionValue) return null;
   }
 
   const fieldPath = field.path?.split('.').pop(); // Get the field name from path like "experience.items[0].description"
@@ -44,18 +47,17 @@ export function renderField(
   const hasSuggestions = !!suggestionData;
 
   if (field.type === 'container') {
-    return (
-      <div className={cn(field.className)}>
-        {field.children?.map((child: any, idx: number) => {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: static list
-            <React.Fragment key={idx}>
-              {renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
-      </div>
-    );
+    const children = field.children
+      ?.map((child: any, idx: number) => {
+        const rendered = renderField(child, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId);
+        if (!rendered) return null;
+        return <React.Fragment key={idx}>{rendered}</React.Fragment>;
+      })
+      .filter(Boolean);
+
+    if (!children || children.length === 0) return null;
+
+    return <div className={cn(field.className)}>{children}</div>;
   }
 
   // Handle badge type
@@ -131,6 +133,24 @@ export function renderField(
   }
 
   if (field.type === 'contact-grid') {
+    const items = field.items
+      ?.map((subField: any, idx: number) => {
+        const rendered = renderField(
+          subField,
+          data,
+          itemId,
+          suggestedUpdates,
+          isThumbnail,
+          skipImageFallbacks,
+          sectionId,
+        );
+        if (!rendered) return null;
+        return <React.Fragment key={idx}>{rendered}</React.Fragment>;
+      })
+      .filter(Boolean);
+
+    if (!items || items.length === 0) return null;
+
     return (
       <div className={field.className}>
         {field.heading && (
@@ -139,32 +159,36 @@ export function renderField(
             {field.heading.divider && renderDivider(field.heading.divider)}
           </div>
         )}
-        {field.items?.map((subField: any, idx: number) => {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: static list
-            <React.Fragment key={idx}>
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
+        {items}
       </div>
     );
   }
 
   if (field.type === 'horizontal-group') {
-    return (
-      <div className={cn('flex flex-row items-center', field.className)}>
-        {field.items.map((subField: any, idx: number) => {
-          return (
-            // biome-ignore lint/suspicious/noArrayIndexKey: static list
-            <React.Fragment key={idx}>
-              {idx > 0 && field.separator && <span>{field.separator}</span>}
-              {renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId)}
-            </React.Fragment>
-          );
-        })}
-      </div>
-    );
+    const items = field.items
+      .map((subField: any, idx: number) => {
+        const rendered = renderField(
+          subField,
+          data,
+          itemId,
+          suggestedUpdates,
+          isThumbnail,
+          skipImageFallbacks,
+          sectionId,
+        );
+        if (!rendered) return null;
+        return (
+          <React.Fragment key={idx}>
+            {idx > 0 && field.separator && <span>{field.separator}</span>}
+            {rendered}
+          </React.Fragment>
+        );
+      })
+      .filter(Boolean);
+
+    if (items.length === 0) return null;
+
+    return <div className={cn('flex flex-row items-center', field.className)}>{items}</div>;
   }
 
   if (field.type === 'inline-group') {
@@ -226,15 +250,24 @@ export function renderField(
 
   if (field.type === 'image') {
     // Get the actual value from data path (without fallback first to check if real image exists)
-    const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, '&');
-    const hasActualImage = actualSrc && actualSrc.trim() !== '';
+    const actualValue = resolvePath(data, field.path);
+    const actualSrc = (typeof actualValue === 'string' ? actualValue : '')?.replace(/&amp;/g, '&');
+    const hasActualImage = actualSrc && actualSrc.trim() !== '' && actualSrc !== 'undefined' && actualSrc !== 'null';
 
-    if (field.skipIfNoActualValue && !hasActualImage) {
+    // If skipImageFallbacks is on, we ONLY render if we have actual data
+    if (skipImageFallbacks && !hasActualImage) {
+      return null;
+    }
+
+    // If a path is provided but no image is found at that path,
+    // we return null to allow columns/groups to collapse.
+    // This is the global fix for all templates.
+    if (field.path && !hasActualImage) {
       return null;
     }
 
     const src = hasActualImage ? actualSrc : field.fallback;
-    if (!src) return null;
+    if (!src || src === 'undefined' || src === 'null') return null;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {
@@ -242,7 +275,6 @@ export function renderField(
     };
 
     // Use proxy ONLY for thumbnails with external URLs to avoid CORS issues
-    // Local images (like /images/google.svg) don't need proxying
     const imageSrc = isThumbnail && src && isExternalUrl(src) ? `/api/proxy-image?url=${encodeURIComponent(src)}` : src;
 
     return (
@@ -250,7 +282,7 @@ export function renderField(
       <img
         src={imageSrc}
         crossOrigin={isThumbnail && isExternalUrl(src) ? 'anonymous' : undefined}
-        alt={field.alt || 'Image'}
+        alt={field.alt || 'Profile Picture'}
         className={cn(field.className)}
       />
     );
@@ -275,6 +307,25 @@ export function renderField(
         ))}
       </div>
     );
+    const items = field.items
+      .map((subField: any, idx: number) => {
+        const rendered = renderField(
+          subField,
+          data,
+          itemId,
+          suggestedUpdates,
+          isThumbnail,
+          skipImageFallbacks,
+          sectionId,
+        );
+        if (!rendered) return null;
+        return <React.Fragment key={idx}>{rendered}</React.Fragment>;
+      })
+      .filter(Boolean);
+
+    if (items.length === 0) return null;
+
+    return <div className={field.className}>{items}</div>;
   }
 
   if (field.type === 'text') {

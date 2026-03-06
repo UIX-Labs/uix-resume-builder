@@ -1,9 +1,9 @@
 'use client';
 
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@shared/ui/dialog';
 import { useEffect, useState } from 'react';
-import { useIsMobile } from '@shared/hooks/use-mobile';
 import { PreviewModal } from './preview-modal';
 import { TemplateCard } from './template-card';
 
@@ -19,7 +19,8 @@ export function TemplatesDialog({ children, onTemplateSelect, currentTemplateId 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const isMobile = useIsMobile();
 
-  const { data: templates } = useGetAllTemplates();
+  const { data: response } = useGetAllTemplates();
+  const templates = response?.data;
 
   const handleTemplateClick = (template: Template) => {
     setPreviewTemplate(template);

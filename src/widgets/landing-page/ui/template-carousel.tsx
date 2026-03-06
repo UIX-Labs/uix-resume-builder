@@ -3,22 +3,22 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useMutation } from '@tanstack/react-query';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { useCallback, useEffect, useState } from 'react';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -107,10 +107,11 @@ export function TemplateCarousel() {
     handleTemplateSelect(template);
   };
 
-  const { data: templates } = useGetAllTemplates();
+  const { data: response } = useGetAllTemplates();
+  const templates = response?.data || [];
 
   // Limit templates to 3 on mobile, show all on desktop
-  const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
+  const displayTemplates = isMobile ? templates.slice(0, 3) : templates;
 
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[24px] md:rounded-[36px] overflow-hidden min-h-[556px] m-2 md:m-4">

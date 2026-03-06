@@ -31,8 +31,8 @@ export default function NotFoundSearch({ suggestions }: NotFoundSearchProps) {
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 w-full max-w-md md:max-w-none">
           {suggestions.map((suggestion) => (
             <button
-              key={suggestion.slug}
               type="button"
+              key={suggestion.slug}
               onClick={() => handleSuggestionClick(suggestion.slug)}
               className="px-4 py-2 md:px-4 md:py-3
               rounded-lg bg-[#EB5E3B] text-white text-sm md:text-base line-clamp-2 hover:bg-red-500 transition-colors duration-200 cursor-pointer"

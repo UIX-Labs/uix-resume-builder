@@ -24,7 +24,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
-                  fallback: '/images/profileimg.jpeg',
+                  condition: 'personalDetails.items[0].profilePicturePublicUrl',
                   className: 'w-20 h-20 rounded-full object-cover',
                   alt: 'Profile image',
                 },
@@ -220,7 +220,7 @@ export const mohsinaTemplate6 = {
         path: 'education.heading',
         fallback: 'Education',
         className:
-          'flex-row items-center gap-3 w-full text-base font-bold leading-[20px] tracking-[-0.3px] text-black after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2 mb-2 ',
+          'flex-row items-center gap-3 w-full text-base font-bold leading-[20px] tracking-[-0.3px] text-black after:content-[""] after:flex-1 after:border-b-2 after:border-black after:opacity-[0.05] mt-2  ',
       },
 
       listPath: 'education.items',

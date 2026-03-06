@@ -3,7 +3,7 @@ export const mohsinaTemplate7 = {
   page: {
     background: '#ffffff',
     className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Arial,Lato',
+    fontFamily: 'Lato, Arial',
   },
 
   sections: [
@@ -24,7 +24,7 @@ export const mohsinaTemplate7 = {
                 {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
-                  fallback: '/images/profileimg.jpeg',
+                  condition: 'personalDetails.items[0].profilePicturePublicUrl',
                   className: 'w-20 h-20 rounded-full object-cover',
                   alt: 'Profile image',
                 },
@@ -261,12 +261,12 @@ export const mohsinaTemplate7 = {
                     items: [
                       {
                         path: 'degree',
-                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] font-[Arial]',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] ',
                       },
                       {
                         path: 'grade.value',
                         prefix: ', ',
-                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] font-[Arial]',
+                        className: 'text-base font-semibold font-lato text-[#101214] leading-[19px] ',
                       },
                     ],
                   },
@@ -455,7 +455,7 @@ export const mohsinaTemplate7 = {
       containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 ',
 
       badgeClassName:
-        'flex items-center gap-3 text-[13px] font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
+        'flex items-center gap-3 text-[13px] font-semibold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
     },
     {
       id: 'certifications',
@@ -532,7 +532,7 @@ export const mohsinaTemplate7 = {
       containerClassName: 'flex flex-wrap gap-x-4 gap-y-1 ',
 
       badgeClassName:
-        'flex items-center gap-3 text-[13px] font-lato font-bold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
+        'flex items-center gap-3 text-[13px] font-lato font-semibold tracking-[0.1px] text-black before:content-[""] before:w-1.5 before:h-1.5 before:bg-[#4C77FF]',
     },
   ],
 };

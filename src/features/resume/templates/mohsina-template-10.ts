@@ -2,8 +2,8 @@ export const mohsinaTemplate10 = {
   name: 'Mohsina Template 10',
   page: {
     background: '#ffffff',
-    className: 'text-neutral-900 leading-relaxed',
-    fontFamily: 'Helvetica, Poppins',
+    className: 'text-[#4d4d4d] leading-relaxed',
+    fontFamily: 'Inter, Poppins',
   },
 
   sections: [
@@ -11,39 +11,39 @@ export const mohsinaTemplate10 = {
       //HEADER SECTION
       id: 'header',
       type: 'banner',
-      className: 'flex flex-col justify-center  px-8 py-6',
+      className: 'flex flex-col justify-center  px-8 py-4',
       fields: {
         container: {
           type: 'group',
-          className: 'flex flex-row justify-between items-center w-full',
+          className: 'flex flex-row justify-between items-center w-full -ml-5',
           items: [
             {
               type: 'group',
-              className: 'flex items-center gap-5',
+              className: 'flex items-center  ',
               items: [
                 {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
-                  fallback: '/images/profileimg.jpeg',
-                  className: 'w-20 h-20 rounded-full object-cover',
+                  condition: 'personalDetails.items[0].profilePicturePublicUrl',
+                  className: 'w-[100px] h-[100px] rounded-full object-cover -ml-2',
                   alt: 'Profile image',
                 },
 
                 {
                   type: 'group',
-                  className: 'flex flex-col items-stretch ',
+                  className: 'flex flex-col items-stretch gap-[4px] ',
                   items: [
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-4xl uppercase  font-normal tracking-[3px] text-black',
+                      className: 'text-[36px] uppercase  font-medium font-poppins text-black',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].jobTitle',
                       fallback: 'UX-DESIGNER',
-                      className: 'text-[13px] tracking-[2px] font-normal uppercase text-gray-500',
+                      className: 'text-[13px] tracking-[2px] font-normal uppercase text-gray-500 -mt-2',
                     },
                   ],
                 },
@@ -52,7 +52,7 @@ export const mohsinaTemplate10 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-1 mb-2',
+              className: 'flex flex-col items-start gap-1 mb-2 -mr-10',
               items: [
                 {
                   type: 'inline-group-with-icon',
@@ -88,7 +88,7 @@ export const mohsinaTemplate10 = {
                       type: 'text',
                       path: 'personalDetails.items[0].location',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-xs text-black',
+                      className: 'text-xs text-black-300',
                     },
                   ],
                 },
@@ -109,7 +109,7 @@ export const mohsinaTemplate10 = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: 'Portfolio / linkedin',
-                      className: 'text-xs text-black',
+                      className: 'text-xs text-gray-500',
                     },
                   ],
                 },
@@ -209,14 +209,14 @@ export const mohsinaTemplate10 = {
         path: 'summary.heading',
         fallback: 'Profile',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] tracking-[1px] font-normal  uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] tracking-[1px] font-semibold uppercase whitespace-nowrap',
       },
 
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
-        className: 'ml-32 text-[13px] text-gray-500 leading-[18px] font-[Inter] mb-4',
+        className: 'ml-35 text-[13px] text-gray-500 leading-[18px] font-[Inter] mb-4',
       },
     },
     {
@@ -226,12 +226,12 @@ export const mohsinaTemplate10 = {
         path: 'experience.heading',
         fallback: 'Experience',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'experience.items',
 
-      containerClassName: 'ml-32 flex flex-col gap-2 mb-4',
+      containerClassName: 'ml-35 flex flex-col gap-2 mb-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -289,12 +289,12 @@ export const mohsinaTemplate10 = {
         path: 'projects.heading',
         fallback: 'Projects',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'projects.items',
 
-      containerClassName: 'ml-32 flex flex-col gap-2 mb-4',
+      containerClassName: 'ml-35 flex flex-col gap-2 mb-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -343,12 +343,12 @@ export const mohsinaTemplate10 = {
         path: 'education.heading',
         fallback: 'Education',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'education.items',
 
-      containerClassName: 'ml-32 flex flex-col mb-4',
+      containerClassName: 'ml-35 flex flex-col mb-4',
 
       itemTemplate: {
         className: 'flex flex-col ',
@@ -368,7 +368,7 @@ export const mohsinaTemplate10 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-gray-500 leading-[13px] ',
+                className: 'text-xs text-black leading-[13px] ',
               },
             ],
           },
@@ -395,7 +395,7 @@ export const mohsinaTemplate10 = {
         path: 'skills.heading',
         fallback: 'Skills',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'skills.items',
@@ -403,7 +403,7 @@ export const mohsinaTemplate10 = {
 
       itemSeparator: ' | ',
 
-      containerClassName: 'ml-32 flex flex-row flex-wrap mb-4',
+      containerClassName: 'ml-35 flex flex-row flex-wrap mb-4',
 
       badgeClassName: 'text-xs font-normal font-[Inter] text-black tracking-[0.2px] ml-2',
     },
@@ -419,14 +419,14 @@ export const mohsinaTemplate10 = {
         path: 'achievements.heading',
         fallback: 'Achievements',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'achievements.items[0].items',
       itemPath: '',
       itemPrefix: '• ',
 
-      containerClassName: 'ml-32 flex flex-col gap-1 mb-4',
+      containerClassName: 'ml-35 flex flex-col gap-1 mb-4',
 
       badgeClassName: 'block text-[13px] text-gray-500 leading-[18px] whitespace-pre-wrap',
     },
@@ -438,12 +438,12 @@ export const mohsinaTemplate10 = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'certifications.items',
 
-      containerClassName: 'ml-32 flex flex-col gap-2 mb-4',
+      containerClassName: 'ml-37 flex flex-col gap-2 mb-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -498,7 +498,7 @@ export const mohsinaTemplate10 = {
         path: 'interests.heading',
         fallback: 'Interests',
         className:
-          'block float-left w-32 text-[#005FF2] font-[Inter] text-[13px] font-normal tracking-[1px] uppercase whitespace-nowrap',
+          'block float-left w-32 text-[#005FF2] font-poppins text-[13px] font-semibold tracking-[1px] uppercase whitespace-nowrap',
       },
 
       listPath: 'interests.items[0].items',
@@ -506,7 +506,7 @@ export const mohsinaTemplate10 = {
 
       itemSeparator: ' | ',
 
-      containerClassName: 'ml-32 flex flex-row flex-wrap mb-4',
+      containerClassName: 'ml-35 flex flex-row flex-wrap mb-4',
 
       badgeClassName: 'text-xs font-normal font-[Inter] text-black tracking-[0.2px] ml-2',
     },

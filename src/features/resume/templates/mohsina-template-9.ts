@@ -11,7 +11,7 @@ export const mohsinaTemplate9 = {
       //HEADER SECTION
       id: 'header',
       type: 'banner',
-      className: 'flex flex-col justify-center  px-8 py-6',
+      className: 'flex flex-col justify-center   py-6',
       fields: {
         container: {
           type: 'group',
@@ -29,13 +29,13 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].jobTitle',
                       fallback: 'UX-DESIGNER',
-                      className: 'text-base leading-[11px] font-normal uppercase text-gray-500 tracking-[1px]',
+                      className: 'text-base leading-[11px] font-normal uppercase text-gray-500 tracking-[1px] ',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-3xl leading-[15px] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
+                      className: 'text-[34px] leading-[15px] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
                     },
                   ],
                 },
@@ -202,7 +202,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'summary.heading',
         fallback: 'Profile',
-        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-lg font-bold whitespace-nowrap mt-1',
       },
 
       content: {
@@ -219,7 +219,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'education.heading',
         fallback: 'Education',
-        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap mt-1',
+        className: 'block float-left w-[140px] text-black text-lg font-bold  whitespace-nowrap mt-1',
       },
 
       listPath: 'education.items',
@@ -244,7 +244,7 @@ export const mohsinaTemplate9 = {
                   {
                     path: 'grade.value',
                     prefix: ', ',
-                    className: 'text-base font-bold text-[#005FF2] leading-[13px]',
+                    className: 'text-base font-bold text-[#005FF2] leading-[13px] italic',
                   },
                 ],
               },
@@ -273,7 +273,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Experience',
-        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
+        className: 'block float-left w-[140px] text-black text-lg font-bold whitespace-nowrap ',
       },
 
       listPath: 'experience.items',
@@ -331,7 +331,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'projects.heading',
         fallback: 'Projects',
-        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap',
+        className: 'block float-left w-[140px] text-black text-lg font-bold  whitespace-nowrap',
       },
 
       listPath: 'projects.items',
@@ -383,7 +383,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'achievements.heading',
         fallback: 'Achievements',
-        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap ',
+        className: 'block float-left w-[140px] text-black text-lg font-bold  whitespace-nowrap ',
       },
 
       listPath: 'achievements.items[0].items',
@@ -401,7 +401,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'certifications.heading',
         fallback: 'Certifications',
-        className: 'block float-left w-[140px] text-black text-md font-bold  whitespace-nowrap ',
+        className: 'block float-left w-[140px] text-black text-lg font-bold  whitespace-nowrap ',
       },
 
       listPath: 'certifications.items',
@@ -448,7 +448,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'skills.heading',
         fallback: 'Skills',
-        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
+        className: 'block float-left w-[140px] text-black text-lg font-bold whitespace-nowrap ',
       },
 
       listPath: 'skills.items',
@@ -469,7 +469,7 @@ export const mohsinaTemplate9 = {
       heading: {
         path: 'interests.heading',
         fallback: 'Interests',
-        className: 'block float-left w-[140px] text-black text-md font-bold whitespace-nowrap ',
+        className: 'block float-left w-[140px] text-black text-lg font-bold whitespace-nowrap ',
       },
 
       listPath: 'interests.items[0].items',

@@ -24,8 +24,8 @@ export const mohsinaTemplate8 = {
                 {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
-                  fallback: '/images/profileimg.jpeg',
-                  className: 'w-22 h-22 rounded-full object-cover',
+                  condition: 'personalDetails.items[0].profilePicturePublicUrl',
+                  className: 'w-[100px] h-[100px] rounded-full object-cover',
                   alt: 'Profile image',
                 },
 
@@ -37,7 +37,7 @@ export const mohsinaTemplate8 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-5xl  font-medium tracking-[-0.3px] text-[#3E6AF2] uppercase',
+                      className: 'text-5xl  font-medium  text-[#3E6AF2] uppercase',
                     },
                     {
                       type: 'text',
@@ -207,7 +207,7 @@ export const mohsinaTemplate8 = {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
-        className: 'ml-[160px] text-[13px] text-black-700 leading-[18px] font-[Inter]',
+        className: 'ml-[160px] text-xs text-[#4d4d4d] leading-[18px] font-[Inter]',
       },
     },
     {
@@ -263,7 +263,7 @@ export const mohsinaTemplate8 = {
                 type: 'html',
                 path: 'description',
                 breakable: true,
-                className: 'text-sm text-[#6B6B6B] leading-[18px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
+                className: 'text-xs text-[#4d4d4d] leading-[18px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
               },
             ],
           },
@@ -285,7 +285,7 @@ export const mohsinaTemplate8 = {
 
       listPath: 'education.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-0 mt-4',
+      containerClassName: 'ml-[160px] flex flex-col gap-2 mt-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -305,7 +305,7 @@ export const mohsinaTemplate8 = {
                   {
                     path: 'grade.value',
                     prefix: ', ',
-                    className: 'text-sm font-bold text-[#005FF2] leading-[13px]',
+                    className: 'text-sm font-bold text-[#005FF2] leading-[13px] ',
                   },
                 ],
               },
@@ -317,11 +317,11 @@ export const mohsinaTemplate8 = {
             ],
           },
           {
-            className: 'mt-2',
+            className: '',
             cells: [
               {
                 path: 'institution',
-                className: 'text-sm text-[#6B6B6B] leading-[18px]',
+                className: 'text-xs text-[#6B6B6B] leading-[18px]',
               },
             ],
           },

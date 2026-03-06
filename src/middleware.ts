@@ -15,6 +15,7 @@ const PUBLIC_ROUTES = [
   '/pricing',
   '/blog',
   '/upload-resume',
+  '/resume-beta',
   '/resume-examples',
 ];
 

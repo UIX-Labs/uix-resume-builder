@@ -1,15 +1,17 @@
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
+import type { TemplateSection, TwoColumnTemplateSection } from '@features/resume-beta/models/template-types';
 import { cn } from '@shared/lib/cn';
 import React from 'react';
 
 export function renderTwoColumnLayout(
-  section: any,
-  data: any,
+  section: TwoColumnTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
   renderSection?: (
-    section: any,
-    data: any,
+    section: TemplateSection,
+    data: CleanedResumeData,
     currentSection?: string,
     hasSuggestions?: boolean,
     isThumbnail?: boolean,

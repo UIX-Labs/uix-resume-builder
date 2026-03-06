@@ -13,7 +13,7 @@ export function renderListSection(
 ): React.ReactNode {
   const rawItems = resolvePath(data, section.listPath, []);
 
-  const items = rawItems.map((item: any) => ({ ...item }));
+  const items = rawItems.map((item: Record<string, unknown>) => ({ ...item }));
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -76,7 +76,7 @@ export function renderListSection(
         className={section.containerClassName}
         id="teacher-content"
       >
-        {items.map((item: any, idx: number) => {
+        {items.map((item: Record<string, unknown>, idx: number) => {
           const itemId = item.itemId || item.id;
 
           // Use sectionKey (from listPath) instead of sectionId because sectionKey matches formData keys

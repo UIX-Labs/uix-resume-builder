@@ -9,11 +9,7 @@ interface ExpertReviewEmptyStateProps {
 const EMPTY_MESSAGE = 'No resumes submitted yet. Upload your resume to get expert feedback.';
 const LOADING_MESSAGE = 'Loading...';
 
-export function ExpertReviewEmptyState({
-  isLoading,
-  colSpan = 5,
-  isMobile = false,
-}: ExpertReviewEmptyStateProps) {
+export function ExpertReviewEmptyState({ isLoading, colSpan = 5, isMobile = false }: ExpertReviewEmptyStateProps) {
   const content = isLoading ? LOADING_MESSAGE : EMPTY_MESSAGE;
   const className = 'px-4 sm:px-6 py-12 text-center text-[#959DA8]';
 

@@ -106,7 +106,7 @@ export function renderBadgeSection(
     fieldName = section.itemPath;
   }
 
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey ? data[sectionKey as keyof any]?.suggestedUpdates : undefined;
   return (
     <div
       data-canbreak={isBreakable ? 'true' : undefined}

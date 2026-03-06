@@ -1,20 +1,20 @@
 'use client';
 
 import { type ResumeDataKey, useResumeData } from '@entities/resume';
+import { ResumeNotAccessibleModal } from '@features/resume/ui/resume-not-accessible-modal';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
-import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
-import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
-import { useFormDataStore, TRANSITION_TEXTS } from '@widgets/form-page-builder/models/store';
-import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import { AlertCircle, X } from 'lucide-react';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { Button } from '@shared/ui/button';
 import { NewProgressBar } from '@shared/ui/components/new-progress-bar';
-import { useBuilderIntelligence } from '@widgets/form-page-builder/hooks/use-builder-intelligence';
-import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import { useQueryClient } from '@tanstack/react-query';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { ResumeNotAccessibleModal } from '@features/resume/ui/resume-not-accessible-modal';
+import { FormPageBuilder, Sidebar } from '@widgets/form-page-builder';
+import { useBuilderIntelligence } from '@widgets/form-page-builder/hooks/use-builder-intelligence';
+import { FormPageBuilderProvider } from '@widgets/form-page-builder/models/ctx';
+import { TRANSITION_TEXTS, useFormDataStore } from '@widgets/form-page-builder/models/store';
+import { AlertCircle, X } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function FormPage() {
   const params = useParams();

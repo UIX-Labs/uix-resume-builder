@@ -1,6 +1,8 @@
 import type { SuggestedUpdates } from '@entities/resume';
+import type { ItemTemplate, TemplateField } from '@features/resume-beta/models/template-types';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
+import { isNil } from '@shared/lib/guards';
 import { isHtml } from '@shared/lib/markdown';
 import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
@@ -10,8 +12,8 @@ import { resolvePath } from './resolve-path';
 import { getSuggestionDataAttribute } from './suggestion-utils';
 
 export function renderField(
-  field: any,
-  data: any,
+  field: TemplateField,
+  data: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
@@ -41,13 +43,13 @@ export function renderField(
 
   // Handle badge type
   if (field.type === 'badge') {
-    const value = field.pathWithFallback
-      ? resolvePath(data, field.pathWithFallback.path, field.pathWithFallback.fallback)
-      : resolvePath(data, field.path, field.fallback);
+    const value = field?.pathWithFallback
+      ? resolvePath(data, field?.pathWithFallback?.path ?? '', field?.pathWithFallback?.fallback ?? '')
+      : resolvePath(data, field?.path ?? '', field?.fallback ?? '');
 
-    const href = field.hrefPathWithFallback
-      ? resolvePath(data, field.hrefPathWithFallback.path, field.hrefPathWithFallback.fallback)
-      : resolvePath(data, field.href);
+    const href = field?.hrefPathWithFallback
+      ? resolvePath(data, field?.hrefPathWithFallback?.path ?? '', field?.hrefPathWithFallback?.fallback ?? '')
+      : resolvePath(data, field?.href ?? '');
 
     if (!value) return null;
 
@@ -57,7 +59,7 @@ export function renderField(
       <span
         className={cn(
           'inline-flex items-center gap-1 rounded-full py-1 px-2',
-          field.badgeClassName,
+          field?.badgeClassName ?? '',
           errorBgColor,
           hasSuggestions && 'cursor-pointer',
         )}
@@ -114,10 +116,10 @@ export function renderField(
   if (field.type === 'contact-grid') {
     return (
       <div className={field.className}>
-        {field.heading && (
-          <div className={field.heading.className}>
-            <p>{resolvePath(data, field.heading.path, field.heading.fallback)}</p>
-            {field.heading.divider && renderDivider(field.heading.divider)}
+        {field?.heading && (
+          <div className={field?.heading?.className ?? ''}>
+            <p>{resolvePath(data, field?.heading?.path ?? '', field?.heading?.fallback ?? '')}</p>
+            {field?.heading?.divider && renderDivider(field?.heading?.divider)}
           </div>
         )}
         {field.items?.map((subField: any, idx: number) => {
@@ -135,7 +137,7 @@ export function renderField(
   if (field.type === 'horizontal-group') {
     return (
       <div className={cn('flex flex-row items-center', field.className)}>
-        {field.items.map((subField: any, idx: number) => {
+        {field?.items?.map((subField: any, idx: number) => {
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
@@ -150,8 +152,8 @@ export function renderField(
 
   if (field.type === 'inline-group') {
     // Render all items and filter out null/empty values
-    const renderedItems = field.items
-      .map((subField: any, idx: number) => ({
+    const renderedItems = field?.items
+      ?.map((subField: TemplateField, idx: number) => ({
         idx,
         element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId),
       }))
@@ -160,9 +162,9 @@ export function renderField(
       );
 
     // Nothing to show
-    if (renderedItems.length === 0) return null;
+    if (renderedItems?.length === 0) return null;
 
-    const hasContainerClassName = !!field.containerClassName;
+    const hasContainerClassName = !!field?.containerClassName;
     const hasSeparator = !!field.separator;
 
     // Build content with optional separators
@@ -176,7 +178,7 @@ export function renderField(
     );
 
     // Decide wrapper class
-    const wrapperClassName = hasContainerClassName ? field.containerClassName : field.className;
+    const wrapperClassName = hasContainerClassName ? field?.containerClassName : field?.className;
 
     // Wrap in a div if a className exists
     if (wrapperClassName) {
@@ -200,17 +202,19 @@ export function renderField(
   }
 
   if (field.type === 'icon') {
-    const IconComponent = (LucideIcons as any)[field.name];
+    const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ size?: number; className?: string }>>)[
+      field?.name ?? ''
+    ];
     if (!IconComponent) return null;
     return <IconComponent size={field.size || 16} className={field.className} />;
   }
 
   if (field.type === 'image') {
     // Get the actual value from data path (without fallback first to check if real image exists)
-    const actualSrc = resolvePath(data, field.path)?.replace(/&amp;/g, '&');
+    const actualSrc = resolvePath(data, field?.path ?? '')?.replace(/&amp;/g, '&');
     const hasActualImage = actualSrc && actualSrc.trim() !== '';
 
-    if (field.skipIfNoActualValue && !hasActualImage) {
+    if (field?.skipIfNoActualValue && !hasActualImage) {
       return null;
     }
 
@@ -240,7 +244,7 @@ export function renderField(
   if (field.type === 'group') {
     return (
       <div className={field.className}>
-        {field.items.map((subField: any, idx: number) => {
+        {field?.items?.map((subField: any, idx: number) => {
           return (
             // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <React.Fragment key={idx}>
@@ -253,7 +257,7 @@ export function renderField(
   }
 
   if (field.type === 'text') {
-    const value = resolvePath(data, field.path, field.fallback);
+    const value = resolvePath(data, field?.path ?? '', field.fallback);
     if (!value) return null;
     return (
       <p
@@ -266,7 +270,7 @@ export function renderField(
   }
 
   if (field.type === 'skillLevel') {
-    const value = resolvePath(data, field.path, field.fallback);
+    const value = resolvePath(data, field?.path ?? '', field.fallback);
     if (!value) return null;
 
     const levelMap: Record<string, number> = {
@@ -299,29 +303,31 @@ export function renderField(
   }
 
   if (field.type === 'inline-group-with-icon') {
-    const renderedItems = field.items.map((subField: any, idx: number) => ({
+    const renderedItems = field?.items?.map((subField: TemplateField, idx: number) => ({
       idx,
       element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId),
       isIcon: subField.type === 'icon',
       subField,
     }));
 
-    const hasValidValues = renderedItems.some(
-      (item: any) => !item.isIcon && item.element !== null && item.element !== undefined && item.element !== '',
+    const hasValidValues = renderedItems?.some(
+      ({ isIcon, element }: { isIcon: boolean; element: React.ReactNode }) =>
+        !isIcon && !isNil(element) && element !== '',
     );
 
     if (!hasValidValues) return null;
 
-    const itemsToRender = renderedItems.filter(
-      (item: any) => item.isIcon || (item.element !== null && item.element !== undefined && item.element !== ''),
+    const itemsToRender = renderedItems?.filter(
+      ({ isIcon, element }: { isIcon: boolean; element: React.ReactNode }) =>
+        isIcon || (!isNil(element) && element !== ''),
     );
 
-    if (itemsToRender.length === 0) return null;
+    if (itemsToRender?.length === 0) return null;
 
     return (
       <div className={field.className}>
         {itemsToRender.map(({ element, idx }: { element: React.ReactNode; idx: number }, arrayIdx: number) => (
-          <span key={idx} className={cn(field.items[idx].className)}>
+          <span key={idx} className={cn(field?.items?.[idx]?.className ?? '')}>
             {arrayIdx > 0 && field.separator}
             {element}
           </span>
@@ -331,7 +337,7 @@ export function renderField(
   }
 
   if (field.type === 'duration') {
-    const duration = resolvePath(data, field.path, field.fallback);
+    const duration = resolvePath(data, field?.path ?? '', field.fallback);
     if (!duration) return null;
 
     if (duration.startDate && duration.endDate) {
@@ -359,7 +365,7 @@ export function renderField(
   }
 
   if (field.type === 'html') {
-    const value = resolvePath(data, field.path, field.fallback);
+    const value = resolvePath(data, field?.path ?? '', field.fallback);
     if (!value) return null;
     return (
       <div
@@ -375,8 +381,8 @@ export function renderField(
 
   if (field.type === 'link') {
     // First, check if the href path exists in the data (without fallback)
-    const _hrefValue = resolvePath(data, field.href);
-    const value = resolvePath(data, field.path, field.fallback);
+    const _hrefValue = field.href ? resolvePath(data, field.href) : null;
+    const value = field.path ? resolvePath(data, field.path, field.fallback) : null;
 
     // If the value itself doesn't exist, don't render
     if (!value || (typeof value === 'string' && value.trim() === '')) return null;
@@ -388,11 +394,11 @@ export function renderField(
       href = href.replace('{{value}}', value);
     } else {
       // Otherwise, resolve href as a path in the data
-      href = resolvePath(data, field.href);
-
-      // If no href data exists at all, don't render the link field
-      if (!href || (typeof href === 'string' && href.trim() === '')) return null;
+      href = field.href ? resolvePath(data, field.href) : null;
     }
+
+    // If no href data exists at all, don't render the link field
+    if (!href || (typeof href === 'string' && href.trim() === '')) return null;
 
     // Check if href is actually a URL (starts with http://, https://, or mailto:)
     const isValidUrl =
@@ -426,7 +432,7 @@ export function renderField(
     );
   }
 
-  const value = resolvePath(data, field.path, field.fallback);
+  const value = field.path ? resolvePath(data, field.path, field.fallback) : null;
   if (!value) return null;
 
   const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
@@ -455,16 +461,16 @@ export function renderField(
 }
 
 export function renderItemWithRows(
-  template: any,
-  item: any,
+  template: ItemTemplate,
+  item: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
   sectionId?: string,
 ): React.ReactNode {
-  return template.rows.map((row: any, index: number) => {
+  return template?.rows?.map((row: any, index: number) => {
     // Check if any cell in this row has break/breakable: true
-    const hasBreakableCell = row.cells.some((cell: any) => cell.break === true || cell.breakable === true);
+    const hasBreakableCell = row.cells.some((cell: TemplateField) => cell.break === true || cell.breakable === true);
     const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
 
     return (
@@ -489,14 +495,14 @@ export function renderItemWithRows(
 }
 
 export function renderItemWithFields(
-  template: any,
-  item: any,
+  template: ItemTemplate,
+  item: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
   sectionId?: string,
 ): React.ReactNode {
-  return template.fields.map((field: any, index: number) => {
+  return template?.fields?.map((field: any, index: number) => {
     return (
       <div
         // biome-ignore lint/suspicious/noArrayIndexKey: static list

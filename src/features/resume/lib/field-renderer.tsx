@@ -249,7 +249,16 @@ export function renderField(
     // Get the actual value from data path (without fallback first to check if real image exists)
     const actualValue = resolvePath(data, field.path);
     const actualSrc = (typeof actualValue === 'string' ? actualValue : '')?.replace(/&amp;/g, '&');
-    const hasActualImage = actualSrc && actualSrc.trim() !== '' && actualSrc !== 'undefined' && actualSrc !== 'null';
+    const isDefaultPlaceholder =
+      actualSrc === '/images/profileimg.jpeg' ||
+      actualSrc === '/images/profileimg.jpg' ||
+      actualSrc === '/images/profileimg.png';
+    const hasActualImage =
+      actualSrc &&
+      actualSrc.trim() !== '' &&
+      actualSrc !== 'undefined' &&
+      actualSrc !== 'null' &&
+      !isDefaultPlaceholder;
 
     // If skipImageFallbacks is on, we ONLY render if we have actual data
     if (skipImageFallbacks && !hasActualImage) {

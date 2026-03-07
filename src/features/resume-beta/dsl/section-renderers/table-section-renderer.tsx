@@ -14,28 +14,14 @@ import type { FieldRenderContext } from '../field-registry';
 import { FieldRegistry } from '../field-registry';
 import type { SectionRenderContext, SectionRenderer } from '../section-registry';
 import type { TableSection } from '../template-config';
+import { hasValidItems, filterValidItems } from '../../lib/section-utils';
 
 export const tableSectionRenderer: SectionRenderer<TableSection> = {
   type: 'table-section',
 
   willRender(section: TableSection, ctx: SectionRenderContext): boolean {
     const items = resolvePath(ctx.data, section.listPath as string, []);
-    if (!Array.isArray(items) || items.length === 0) return false;
-
-    const validItems = items.filter((item: Record<string, unknown>) => {
-      if (!item || typeof item !== 'object') return false;
-      return Object.values(item).some((value: unknown) => {
-        if (!value) return false;
-        if (typeof value === 'string' && value.trim() === '') return false;
-        if (typeof value === 'object') {
-          const nestedValues = Object.values(value as Record<string, unknown>);
-          return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
-        }
-        return true;
-      });
-    });
-
-    return validItems.length > 0;
+    return hasValidItems(items);
   },
 
   render(section: TableSection, ctx: SectionRenderContext): React.ReactNode {
@@ -49,19 +35,7 @@ export const tableSectionRenderer: SectionRenderer<TableSection> = {
 
     if (!Array.isArray(items) || items.length === 0) return null;
 
-    const validItems = items.filter((item: Record<string, unknown>) => {
-      if (!item || typeof item !== 'object') return false;
-      return Object.values(item).some((value: unknown) => {
-        if (!value) return false;
-        if (typeof value === 'string' && value.trim() === '') return false;
-        if (typeof value === 'object') {
-          const nestedValues = Object.values(value as Record<string, unknown>);
-          return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
-        }
-        return true;
-      });
-    });
-
+    const validItems = filterValidItems(items);
     if (validItems.length === 0) return null;
 
     const sectionId = section.id || section.heading?.path?.split('.').pop() || 'table-section';

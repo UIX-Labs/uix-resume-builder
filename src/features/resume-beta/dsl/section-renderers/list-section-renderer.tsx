@@ -5,6 +5,7 @@ import type { FieldRenderContext } from '../field-registry';
 import { resolvePath } from '@features/resume/lib/resolve-path';
 import { renderDivider } from '@features/resume/lib/components/Divider';
 import { hasPendingSuggestions } from '@features/resume/lib/section-utils';
+import { hasValidItems } from '../../lib/section-utils';
 import { cn } from '@shared/lib/cn';
 import React from 'react';
 
@@ -72,6 +73,11 @@ function renderItemWithFields(
 
 export const listSectionRenderer: SectionRenderer<ListSection> = {
   type: 'list-section',
+
+  willRender(section: ListSection, ctx: SectionRenderContext): boolean {
+    const items = resolvePath(ctx.data, section.listPath as string, []);
+    return hasValidItems(items);
+  },
 
   render(section: ListSection, ctx: SectionRenderContext): React.ReactNode {
     const rawItems = resolvePath(ctx.data, section.listPath as string, []);

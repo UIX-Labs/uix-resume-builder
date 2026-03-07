@@ -8,6 +8,7 @@
 
 import type React from 'react';
 import type { CleanedResumeDataCompat } from './cleaned-data';
+import { isSectionHidden } from '../lib/section-utils';
 
 // ---------------------------------------------------------------------------
 // Context passed to every section renderer
@@ -58,6 +59,10 @@ class SectionRegistryImpl {
   }
 
   renderSection(section: { type: string }, ctx: SectionRenderContext): React.ReactNode {
+    if (isSectionHidden(section as Record<string, unknown>, ctx.data as Record<string, unknown>)) {
+      return null;
+    }
+
     const renderer = this.renderers.get(section.type);
     if (!renderer) {
       if (process.env.NODE_ENV !== 'production') {
@@ -69,6 +74,10 @@ class SectionRegistryImpl {
   }
 
   willSectionRender(section: { type: string }, ctx: SectionRenderContext): boolean {
+    if (isSectionHidden(section as Record<string, unknown>, ctx.data as Record<string, unknown>)) {
+      return false;
+    }
+
     const renderer = this.renderers.get(section.type);
     if (!renderer?.willRender) return true;
     return renderer.willRender(section, ctx);

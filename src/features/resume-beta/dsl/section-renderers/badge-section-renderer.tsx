@@ -17,6 +17,12 @@ import React from 'react';
 export const badgeSectionRenderer: SectionRenderer<BadgeSection> = {
   type: 'badge-section',
 
+  willRender(section: BadgeSection, ctx: SectionRenderContext): boolean {
+    const items = resolvePath(ctx.data, section.listPath as string, []);
+    const flattenedItems = flattenAndFilterItemsWithContext(items, (section as any).itemPath);
+    return flattenedItems.length > 0;
+  },
+
   render(section: BadgeSection, ctx: SectionRenderContext): React.ReactNode {
     const isBreakable = section.break === true || section.breakable === true;
     const items = resolvePath(ctx.data, section.listPath as string, []);

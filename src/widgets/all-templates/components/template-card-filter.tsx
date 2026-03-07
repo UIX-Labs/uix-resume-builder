@@ -44,7 +44,7 @@ export function TemplateCardFilter({
 
           {/* "+X MORE" badge with hover popup */}
           {template.role.length > 1 && (
-            <div className="relative group inline-block">
+            <div className="relative  inline-block group/more">
               {/* +MORE Tag */}
               <div
                 className="bg-gray-100 backdrop-blur-md 
@@ -62,9 +62,9 @@ export function TemplateCardFilter({
               <div
                 className="absolute left-1/2 -translate-x-1/2 bottom-full mb-3 
                         opacity-0 scale-95 pointer-events-none
-                        group-hover:opacity-100 
-                        group-hover:scale-100 
-                        group-hover:pointer-events-auto
+                        group-hover/more:opacity-100
+                        group-hover/more:scale-100 
+                        group-hover/more:pointer-events-auto
                         transition-all duration-200 ease-out
                         z-50"
               >

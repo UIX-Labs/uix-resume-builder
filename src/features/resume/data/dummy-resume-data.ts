@@ -33,7 +33,7 @@ export const dummyResumeData = {
         pincode: '94110',
         description:
           'Results-driven full-stack engineer with 6+ years of experience designing, building, and scaling web applications. Passionate about clean architecture, developer experience, and mentoring junior engineers. Motivated [Role] graduate with a strong foundation in [Skill A] and [Skill B]. Demonstrated ability to solve complex problems through [Project or Internship Experience]. Eager to apply a background in [Your Background] to contribute to the [Department] team at [Company].',
-        profilePicturePublicUrl: '/images/profileimg.jpeg',
+
         links: {
           linkedin: {
             title: 'linkedin.com/in/sophiamartinez',

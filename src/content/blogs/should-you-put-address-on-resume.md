@@ -71,9 +71,9 @@ The right answer depends on your situation. Here is a clean reference for what t
 | **Relocating Soon** | Target City, State (with relocation note) |
 | **Identity Privacy Concern** | City and State Only |
 
-> **The Relocation Hack**
->
-> If you are currently in Delhi but applying for roles in Bangalore because you are planning to move, do not put your Delhi address. Instead, write: **"Bangalore (Relocating June 2026)."** This small change prevents the recruiter from assuming you need a relocation package and stops your resume from being filtered out before they even read it.
+<ProTip title="The Relocation Hack">
+If you are currently in Delhi but applying for roles in Bangalore because you are planning to move, do not put your Delhi address. Instead, write: **"Bangalore (Relocating June 2026)."** This small change prevents the recruiter from assuming you need a relocation package and stops your resume from being filtered out before they even read it.
+</ProTip>
 
 
 ## 4. What About LinkedIn and Other Contact Details?

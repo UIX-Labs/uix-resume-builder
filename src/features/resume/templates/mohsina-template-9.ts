@@ -35,7 +35,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-[34px] leading-[15px] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
+                      className: 'text-[34px] leading-[1.1] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
                     },
                   ],
                 },

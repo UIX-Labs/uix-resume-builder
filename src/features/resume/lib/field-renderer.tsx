@@ -9,6 +9,18 @@ import { renderDivider } from './components/Divider';
 import { resolvePath } from './resolve-path';
 import { getSuggestionDataAttribute } from './suggestion-utils';
 
+const isEmptyValue = (val: any): boolean => {
+  if (val === null || val === undefined) return true;
+  if (typeof val === 'string') return val.trim() === '' || val === 'null' || val === 'undefined';
+  if (Array.isArray(val)) return val.length === 0 || val.every(isEmptyValue);
+  if (typeof val === 'object') {
+    const values = Object.values(val);
+    if (values.length === 0) return true;
+    return values.every(isEmptyValue);
+  }
+  return false;
+};
+
 export function renderField(
   field: any,
   data: any,
@@ -21,17 +33,7 @@ export function renderField(
   // 1. Handle condition check if it exists
   if (field.condition) {
     const conditionValue = resolvePath(data, field.condition);
-    const isEmptyValue = (val: any): boolean => {
-      if (val === null || val === undefined) return true;
-      if (typeof val === 'string') return val.trim() === '' || val === 'null' || val === 'undefined';
-      if (Array.isArray(val)) return val.length === 0 || val.every(isEmptyValue);
-      if (typeof val === 'object') {
-        const values = Object.values(val);
-        if (values.length === 0) return true;
-        return values.every(isEmptyValue);
-      }
-      return false;
-    };
+
     if (isEmptyValue(conditionValue)) {
       return null;
     }
@@ -249,7 +251,12 @@ export function renderField(
     // Get the actual value from data path (without fallback first to check if real image exists)
     const actualValue = resolvePath(data, field.path);
     const actualSrc = (typeof actualValue === 'string' ? actualValue : '')?.replace(/&amp;/g, '&');
-    const hasActualImage = actualSrc && actualSrc.trim() !== '' && actualSrc !== 'undefined' && actualSrc !== 'null';
+    const isDefaultPlaceholder = [
+      '/images/profileimg.jpeg',
+      '/images/profileimg.jpg',
+      '/images/profileimg.png',
+    ].includes(actualSrc);
+    const hasActualImage = !isEmptyValue(actualValue) && !isDefaultPlaceholder;
 
     // If skipImageFallbacks is on, we ONLY render if we have actual data
     if (skipImageFallbacks && !hasActualImage) {
@@ -264,7 +271,7 @@ export function renderField(
     }
 
     const src = hasActualImage ? actualSrc : field.fallback;
-    if (!src || src === 'undefined' || src === 'null') return null;
+    if (isEmptyValue(src)) return null;
 
     // Helper to check if URL is external (S3, http, https)
     const isExternalUrl = (url: string) => {

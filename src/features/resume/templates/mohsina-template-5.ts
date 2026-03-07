@@ -43,7 +43,8 @@ const mohsinaTemplate5 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'Aman Gupta',
-                      className: 'text-3xl font-bold text-[#005FF2] leading-none font-arial',
+                      className:
+                        'text-3xl font-bold text-[#005FF2] leading-none font-arial max-w-[calc(100%-100px)] break-words',
                     },
                     {
                       type: 'text',
@@ -59,7 +60,7 @@ const mohsinaTemplate5 = {
             // RIGHT SIDE
             {
               type: 'group',
-              className: 'flex flex-col gap-2 items-start text-left',
+              className: 'flex flex-col gap-2 items-start text-left flex-shrink-0',
 
               items: [
                 {

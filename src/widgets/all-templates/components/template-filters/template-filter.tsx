@@ -1,5 +1,6 @@
 'use client';
 
+import { updateFilters } from '@shared/hooks/update-filter';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useTemplateFilters } from '@shared/hooks/use-template-filter';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -23,29 +24,12 @@ export default function TemplateFilter({ results }: { results: number }) {
     return option ? option.label : value;
   };
 
-  const updateFilters = (updates: Record<string, string[] | string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    for (const [key, value] of Object.entries(updates)) {
-      if (value === null || (Array.isArray(value) && value.length === 0)) {
-        params.delete(key);
-      } else if (Array.isArray(value)) {
-        params.set(key, value.join(','));
-      } else {
-        params.set(key, value);
-      }
-    }
-
-    params.delete('offset');
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
-
   const clearAll = () => router.replace('?', { scroll: false });
 
   const getStyleDisplayValues = () => {
     const labels = filters.style.map((s) => getLabelFromValue('style', s));
-    if (filters.hasProfilePhoto?.split(',').includes('true')) labels.push('With Photo');
-    if (filters.hasProfilePhoto?.split(',').includes('false')) labels.push('Without Photo');
+    if(filters.hasProfilePhoto === 'true') labels.push('With Photo');
+if(filters.hasProfilePhoto === 'false') labels.push('Without Photo');
     return labels;
   };
 
@@ -71,8 +55,8 @@ export default function TemplateFilter({ results }: { results: number }) {
             options={FILTER_OPTIONS.style}
             selectedValues={[
               ...filters.style,
-              ...(filters.hasProfilePhoto?.split(',').includes('true') ? ['with_photo'] : []),
-              ...(filters.hasProfilePhoto?.split(',').includes('false') ? ['without_photo'] : []),
+              ...(filters.hasProfilePhoto === 'true' ? ['with_photo'] : []),
+              ...(filters.hasProfilePhoto === 'false' ? ['without_photo'] : []),
             ]}
             onSelect={(vals) => {
               const photoVals = vals.filter((v) => v === 'with_photo' || v === 'without_photo');
@@ -82,8 +66,8 @@ export default function TemplateFilter({ results }: { results: number }) {
 
               updateFilters({
                 style: styleVals,
-                hasProfilePhoto: photoParams.length > 0 ? photoParams.join(',') : null,
-              });
+                hasProfilePhoto: photoParams.length === 2 ? null : photoParams.length === 1 ? photoParams[0] : null,
+              },searchParams,router);
             }}
           />
 
@@ -92,7 +76,7 @@ export default function TemplateFilter({ results }: { results: number }) {
             label="Column"
             options={FILTER_OPTIONS.layoutType}
             selectedValues={filters.layoutType}
-            onSelect={(vals) => updateFilters({ layoutType: vals })}
+            onSelect={(vals) => updateFilters({ layoutType: vals }, searchParams, router)}
           />
 
           {/* ROLE Dropdown */}
@@ -100,7 +84,7 @@ export default function TemplateFilter({ results }: { results: number }) {
             label="Role"
             options={FILTER_OPTIONS.role}
             selectedValues={filters.role}
-            onSelect={(vals) => updateFilters({ role: vals })}
+            onSelect={(vals) => updateFilters({ role: vals }, searchParams, router)}
           />
         </div>
 
@@ -113,19 +97,19 @@ export default function TemplateFilter({ results }: { results: number }) {
           onClearAll={clearAll}
           onRemoveStyle={(label) => {
             if (label === 'With Photo' || label === 'Without Photo') {
-              updateFilters({ hasProfilePhoto: null });
+              updateFilters({ hasProfilePhoto: null },searchParams,router);
             } else {
               const valueToRemove = FILTER_OPTIONS.style.find((opt) => opt.label === label)?.value;
-              updateFilters({ style: filters.style.filter((s) => s !== valueToRemove) });
+              updateFilters({ style: filters.style.filter((s) => s !== valueToRemove) },searchParams,router);
             }
           }}
           onRemoveColumn={(label) => {
             const valueToRemove = FILTER_OPTIONS.layoutType.find((opt: any) => opt.label === label)?.value;
-            updateFilters({ layoutType: filters.layoutType.filter((l: string) => l !== valueToRemove) });
+            updateFilters({ layoutType: filters.layoutType.filter((l: string) => l !== valueToRemove) },searchParams,router);
           }}
           onRemoveRole={(label) => {
             const valueToRemove = FILTER_OPTIONS.role.find((opt: any) => opt.label === label)?.value;
-            updateFilters({ role: filters.role.filter((r: string) => r !== valueToRemove) });
+            updateFilters({ role: filters.role.filter((r: string) => r !== valueToRemove) },searchParams,router);
           }}
         />
       </div>
@@ -141,7 +125,7 @@ export default function TemplateFilter({ results }: { results: number }) {
 
             updateFilters({
               [filter.type]: filter.value ? [filter.value] : null,
-            });
+            },searchParams,router);
           }}
           results={results}
         />

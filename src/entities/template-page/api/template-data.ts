@@ -6,6 +6,7 @@ export interface TemplateApiResponse {
   json: any;
   publicImageUrl: string;
   role?: string[];
+  hasProfilePhoto?: boolean 
   layoutType?: string[];
   style?: string[];
   slug?: string[];
@@ -40,7 +41,7 @@ export const fetchAllTemplates = async (params?: {
   style?: string;
   role?: string;
   layoutType?: string;
-  hasProfilePhoto?: boolean;
+  hasProfilePhoto?: string;
   offset?: number;
   limit?: number;
 }): Promise<TemplateListResponse> => {
@@ -48,7 +49,7 @@ export const fetchAllTemplates = async (params?: {
   if (params?.style) query.set('style', params.style);
   if (params?.role) query.set('role', params.role);
   if (params?.layoutType) query.set('layoutType', params.layoutType);
-  if (params?.hasProfilePhoto !== undefined) query.set('hasProfilePhoto', String(params.hasProfilePhoto));
+ if (params?.hasProfilePhoto) query.set('hasProfilePhoto', params.hasProfilePhoto);
   if (params?.offset !== undefined) query.set('offset', String(params.offset));
   if (params?.limit !== undefined) query.set('limit', String(params.limit));
 
@@ -89,7 +90,7 @@ export const useGetAllTemplates = (params?: {
   style?: string;
   role?: string;
   layoutType?: string;
-  hasProfilePhoto?: boolean;
+  hasProfilePhoto?: string;
   offset?: number;
   limit?: number;
 }) => {

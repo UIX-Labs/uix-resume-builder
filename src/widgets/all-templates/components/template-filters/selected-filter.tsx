@@ -1,5 +1,5 @@
 'use client';
-import Image from 'next/image';
+import { X } from 'lucide-react';
 interface Props {
   style: string[];
   column: string[];
@@ -46,7 +46,7 @@ export default function SelectedFilters({
         >
           Clear filters
           <div className="relative w-4 h-4 ml-1">
-            <Image src="/images/template-search/fe_loop.svg" alt="Clear" fill />
+            <X className="w-4 h-4 ml-1" />
           </div>
         </button>
       )}
@@ -59,7 +59,7 @@ function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
     <div className="flex items-center gap-2 px-3 py-1 rounded-full text-sm bg-[#E7EEF3] border border-gray-200 cursor-pointer">
       <span>{label}</span>
       <button type="button" onClick={onRemove} className="cursor-pointer">
-        ✕
+        <X className="w-4 h-4 ml-1" />
       </button>
     </div>
   );

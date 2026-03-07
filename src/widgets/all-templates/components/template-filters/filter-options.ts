@@ -1,4 +1,20 @@
-export const FILTER_OPTIONS = {
+export interface FilterOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+export interface FilterOptions {
+  style: FilterOption[];
+  layoutType: FilterOption[];
+  role: FilterOption[];
+  colors: string[];
+}
+
+
+
+
+export const FILTER_OPTIONS :FilterOptions = {
   style: [
     { label: 'Traditional', value: 'traditional' },
     { label: 'Creative', value: 'creative' },

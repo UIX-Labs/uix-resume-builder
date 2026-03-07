@@ -37,8 +37,8 @@ if(filters.hasProfilePhoto === 'false') labels.push('Without Photo');
     { label: 'All Templates', type: 'clear', value: null },
 
     { label: 'Traditional', type: 'style', value: 'traditional' },
-    { label: 'Modern', type: 'style', value: 'modern' },
     { label: 'Creative', type: 'style', value: 'creative' },
+    { label: 'Software Developer', type: 'role', value: 'software_developer' },
 
     { label: 'Single Column', type: 'layoutType', value: 'single_column' },
   ];

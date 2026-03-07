@@ -11,7 +11,7 @@ const mohsinaTemplate11 = {
       //HEADER SECTION
       id: 'header',
       type: 'banner',
-      className: 'flex flex-col justify-center  px-8 py-6',
+      className: 'flex flex-col justify-center ',
       fields: {
         container: {
           type: 'group',
@@ -25,7 +25,7 @@ const mohsinaTemplate11 = {
                   type: 'image',
                   path: 'personalDetails.items[0].profilePicturePublicUrl',
                   fallback: '/images/profileimg.jpeg',
-                  className: 'w-20 h-20 rounded-full object-cover',
+                  className: 'w-20 h-20 rounded-full object-cover shrink-0',
                   alt: 'Profile image',
                 },
 
@@ -37,7 +37,7 @@ const mohsinaTemplate11 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-[30px]   font-bold  ',
+                      className: 'text-[30px] font-bold leading-tight ',
                     },
                     {
                       type: 'text',
@@ -52,143 +52,122 @@ const mohsinaTemplate11 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-0 mb-2',
+              className: 'flex flex-col justify-end items-start gap-x-4 gap-y-2 max-w-[30%] shrink-0 py-2',
               items: [
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex  items-start gap-1 whitespace-nowrap',
                   items: [
                     {
                       type: 'icon',
                       name: 'Mail',
-                      size: 10,
-                      className: '   ',
+                      size: 11,
                     },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'amanguppta@gmail.com',
-                      className: 'text-[10px] text-white ',
+                      className: 'text-[10px] font-bold text-white',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex  items-start gap-1 whitespace-nowrap',
                   items: [
                     {
                       type: 'icon',
                       name: 'MapPin',
-                      size: 10,
-                      className: '   ',
+                      size: 11,
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].location',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[10px] text-white  ',
+                      className: 'text-[10px] font-bold text-white',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
-                  items: [
-                    {
-                      type: 'icon',
-                      name: 'Linkedin',
-                      size: 10,
-                      className: '   ',
-                    },
-
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.linkedin.title',
-                      href: 'personalDetails.items[0].links.linkedin.link',
-                      fallback: 'Portfolio / linkedin',
-                      className: 'text-[10px] text-white  ',
-                    },
-                  ],
-                },
-
-                {
-                  type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-center gap-1 whitespace-nowrap',
                   items: [
                     {
                       type: 'icon',
                       name: 'Phone',
-                      size: 10,
-                      className: '   ',
+                      size: 11,
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[10px] text-white ',
+                      className: 'text-[10px] font-bold text-white',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
+                  className: 'flex items-start gap-1',
+                  condition: 'personalDetails.items[0].links',
                   items: [
                     {
                       type: 'icon',
                       name: 'Link',
-                      size: 10,
-                      className: '   ',
+                      size: 11,
                     },
                     {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.website.title',
-                      href: 'personalDetails.items[0].links.website.link',
-                      fallback: 'Portfolio',
-                      className: 'text-[10px] text-white  ',
-                    },
-                  ],
-                },
-
-                {
-                  type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
-                  items: [
-                    {
-                      type: 'icon',
-                      name: 'Github',
-                      size: 10,
-                      className: '   ',
-                    },
-
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.github.title',
-                      href: 'personalDetails.items[0].links.github.link',
-                      fallback: 'Github',
-                      className: 'text-[10px] text-white  ',
-                    },
-                  ],
-                },
-
-                {
-                  type: 'inline-group-with-icon',
-                  className: 'flex gap-1',
-                  items: [
-                    {
-                      type: 'icon',
-                      name: 'Palette',
-                      size: 10,
-                    },
-                    {
-                      type: 'link',
-                      path: 'personalDetails.items[0].links.behance.title',
-                      href: 'personalDetails.items[0].links.behance.link',
-                      fallback: 'Behance',
-                      className: 'text-[9px] text-white  ',
+                      type: 'inline-group',
+                      className:
+                        'flex flex-wrap text-[10px] font-bold text-white leading-[16px] font-poppins underline decoration-1 underline-offset-2 break-all',
+                      separator: ' / ',
+                      items: [
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.website.title',
+                          href: 'personalDetails.items[0].links.website.link',
+                          condition: 'personalDetails.items[0].links.website.title',
+                          fallback: 'Portfolio',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.linkedin.title',
+                          href: 'personalDetails.items[0].links.linkedin.link',
+                          condition: 'personalDetails.items[0].links.linkedin.title',
+                          fallback: 'LinkedIn',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.github.title',
+                          href: 'personalDetails.items[0].links.github.link',
+                          condition: 'personalDetails.items[0].links.github.title',
+                          fallback: 'Github',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.dribble.title',
+                          href: 'personalDetails.items[0].links.dribble.link',
+                          condition: 'personalDetails.items[0].links.dribble.link',
+                          fallback: 'Dribble',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.behance.title',
+                          href: 'personalDetails.items[0].links.behance.link',
+                          condition: 'personalDetails.items[0].links.behance.link',
+                          fallback: 'Behance',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.youtube.title',
+                          href: 'personalDetails.items[0].links.youtube.link',
+                          condition: 'personalDetails.items[0].links.youtube.link',
+                          fallback: 'YouTube',
+                        },
+                      ],
                     },
                   ],
                 },
@@ -414,9 +393,9 @@ const mohsinaTemplate11 = {
         divider: { variant: 'line', className: 'bg-white w-full h-[1.5px]' },
       },
       listPath: 'achievements.items[0].items',
-      containerClassName: 'flex flex-col gap-0 mt-2',
+      containerClassName: 'flex flex-col gap-0 mt-1',
       itemPrefix: '• ',
-      badgeClassName: 'text-white text-xs text-justify  whitespace-pre-wrap  ',
+      badgeClassName: 'text-white text-xs text-justify whitespace-pre-wrap leading-tight',
     },
     //certifications
     {

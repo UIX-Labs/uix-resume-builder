@@ -19,7 +19,7 @@ export function ProTip({
 
       {/* Content */}
       <div className="px-4 py-4 [&>p]:mt-0">
-        <p className="font-semibold text-blue-500 underline mb-2 text-xl">
+        <p className="font-semibold text-blue-500 mb-2 text-xl">
           {title}
         </p>
 

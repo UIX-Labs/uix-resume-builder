@@ -2,6 +2,7 @@ import { ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
 import { CodeBlock } from './code-block';
+import { ProTip } from './ProTip';
 
 /* ------------------------------------------------------------------ */
 /*  Helper to generate heading ID from text                            */
@@ -189,6 +190,9 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
       {children}
     </th>
   ),
+
+
+  ProTip,
 
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
     <td className="border-t border-gray-100 px-4 py-3 text-gray-700" {...props}>

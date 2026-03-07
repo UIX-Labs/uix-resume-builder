@@ -1,4 +1,20 @@
-export const FILTER_OPTIONS = {
+export interface FilterOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+export interface FilterOptions {
+  style: FilterOption[];
+  layoutType: FilterOption[];
+  role: FilterOption[];
+  colors: string[];
+}
+
+
+
+
+export const FILTER_OPTIONS :FilterOptions = {
   style: [
     { label: 'Traditional', value: 'traditional' },
     { label: 'Creative', value: 'creative' },
@@ -15,8 +31,8 @@ export const FILTER_OPTIONS = {
 
   role: [
     { label: 'Software Developer', value: 'software_developer' },
-    { label: 'Retail & Sales', value: 'retail_sales' },
-    { label: 'Management & Executive', value: 'management_executive' },
+    { label: 'Retail And Sales', value: 'retail_and_sales' },
+    { label: 'Management And Executive', value: 'management_and_executive' },
     { label: 'Finance', value: 'finance' },
   ],
 

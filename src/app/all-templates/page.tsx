@@ -1,46 +1,33 @@
 'use client';
 
 import { useGetAllTemplates } from '@entities/template-page/api/template-data';
+import { useTemplateFilters } from '@shared/hooks/use-template-filter';
 import NotFoundFilter from '@widgets/all-templates/components/Not-found-filter';
 import TemplateCardGrid from '@widgets/all-templates/components/template-card-grid';
 import TemplateFilter from '@widgets/all-templates/components/template-filters/template-filter';
 import HeroSection from '@widgets/all-templates/hero-section';
 import { templates } from '@widgets/landing-page/models/constants';
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const LIMIT = 10;
 
 export default function FilterTemplatesPage() {
-  const searchParams = useSearchParams();
   const [offset, setOffset] = useState(0);
-
-  const style = searchParams.get('style') || undefined;
-  const layoutType = searchParams.get('layoutType') || undefined;
-  const role = searchParams.get('role') || undefined;
-  const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
-  const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
+   const { filters, hasFilters } = useTemplateFilters(); 
 
   useEffect(() => {
     setOffset(0);
-  }, [style, role, layoutType, hasProfilePhoto]);
+  }, [filters.style, filters.role, filters.layoutType, filters.hasProfilePhoto]);
 
-  const hasFilters = style || role || layoutType || hasProfilePhoto !== undefined;
-
-  const { data, isLoading } = useGetAllTemplates(
-    hasFilters
-      ? {
-          ...(style && { style }),
-          ...(role && { role }),
-          ...(layoutType && { layoutType }),
-          ...(hasProfilePhoto !== undefined && { hasProfilePhoto }),
-          offset,
-          limit: LIMIT,
-        }
-      : undefined,
-
-
-       
+ const { data, isLoading } = useGetAllTemplates(
+    hasFilters ? {
+      ...(filters.style.length > 0 && { style: filters.style.join(',') }),
+      ...(filters.role.length > 0 && { role: filters.role.join(',') }),
+      ...(filters.layoutType.length > 0 && { layoutType: filters.layoutType.join(',') }),
+      ...(filters.hasProfilePhoto && { hasProfilePhoto: filters.hasProfilePhoto }), 
+      offset,
+      limit: LIMIT,
+    } : undefined
   );
   // console.log("data",data)
   return (

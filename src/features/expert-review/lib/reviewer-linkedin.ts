@@ -11,7 +11,7 @@ const REVIEWER_LINKEDIN_URLS: Record<string, string> = {
   anmol: 'https://www.linkedin.com/in/anmolsaxena-li/',
   arijt: 'https://www.linkedin.com/in/thearijitbanerjee/',
   arijit: 'https://www.linkedin.com/in/thearijitbanerjee/',
-  vivek: 'https://www.linkedin.com/in/aman-juneja-71869855/',
+  vivek: 'https://www.linkedin.com/in/vivek-j-842241293/',
 };
 
 export function getReviewerLinkedInUrl(reviewer: string): string | null {

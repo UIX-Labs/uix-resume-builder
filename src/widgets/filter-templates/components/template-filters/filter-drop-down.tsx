@@ -38,6 +38,9 @@ export default function FilterDropdown({ label, options, selectedValues, onSelec
     }
   };
 
+ 
+const getLabel = (value: string) => options.find((o) => o.value === value)?.label ?? value;
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Trigger Button */}
@@ -53,7 +56,7 @@ export default function FilterDropdown({ label, options, selectedValues, onSelec
           {selectedValues.length > 0 ? (
             <>
               <span className="text-lg">{label}:</span>
-              <span className="text-gray-700 text-md px-2 py-0.5 rounded-full">{selectedValues[0]}</span>
+              <span className="text-gray-700 text-md px-2 py-0.5 rounded-full">{getLabel(selectedValues[0])}</span>
 
               {/* +X More badge with hover popup */}
               {selectedValues.length > 1 && (

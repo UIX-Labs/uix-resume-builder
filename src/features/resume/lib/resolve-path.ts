@@ -1,6 +1,4 @@
-// Utility to resolve data paths for renderer
-// This is a simplified version specifically for renderer use cases
-// where we work with partial data objects, not just full ResumeData
+/** Utility to resolve data paths for renderer */
 export function resolvePath(data: any, path: string, fallback?: any): any {
   if (!path) return fallback;
 

@@ -1,6 +1,7 @@
 import type { SuggestedUpdates } from '@entities/resume';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
+import { isNil } from '@shared/lib/guards';
 import { isHtml } from '@shared/lib/markdown';
 import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
@@ -23,7 +24,7 @@ const isEmptyValue = (val: any): boolean => {
 
 export function renderField(
   field: any,
-  data: any,
+  data: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
@@ -193,7 +194,7 @@ export function renderField(
   if (field.type === 'inline-group') {
     // Render all items and filter out null/empty values
     const renderedItems = field.items
-      .map((subField: any, idx: number) => ({
+      .map((subField: TemplateField, idx: number) => ({
         idx,
         element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId),
       }))
@@ -242,7 +243,9 @@ export function renderField(
   }
 
   if (field.type === 'icon') {
-    const IconComponent = (LucideIcons as any)[field.name];
+    const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ size?: number; className?: string }>>)[
+      field.name!
+    ];
     if (!IconComponent) return null;
     return <IconComponent size={field.size || 16} className={field.className} />;
   }
@@ -360,7 +363,7 @@ export function renderField(
   }
 
   if (field.type === 'inline-group-with-icon') {
-    const renderedItems = field.items.map((subField: any, idx: number) => ({
+    const renderedItems = field.items.map((subField: TemplateField, idx: number) => ({
       idx,
       element: renderField(subField, data, itemId, suggestedUpdates, isThumbnail, skipImageFallbacks, sectionId),
       isIcon: subField.type === 'icon',
@@ -368,13 +371,15 @@ export function renderField(
     }));
 
     const hasValidValues = renderedItems.some(
-      (item: any) => !item.isIcon && item.element !== null && item.element !== undefined && item.element !== '',
+      ({ isIcon, element }: { isIcon: boolean; element: React.ReactNode }) =>
+        !isIcon && !isNil(element) && element !== '',
     );
 
     if (!hasValidValues) return null;
 
     const itemsToRender = renderedItems.filter(
-      (item: any) => item.isIcon || (item.element !== null && item.element !== undefined && item.element !== ''),
+      ({ isIcon, element }: { isIcon: boolean; element: React.ReactNode }) =>
+        isIcon || (!isNil(element) && element !== ''),
     );
 
     if (itemsToRender.length === 0) return null;
@@ -516,8 +521,8 @@ export function renderField(
 }
 
 export function renderItemWithRows(
-  template: any,
-  item: any,
+  template: ItemTemplate,
+  item: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,
@@ -525,7 +530,7 @@ export function renderItemWithRows(
 ): React.ReactNode {
   return template.rows.map((row: any, index: number) => {
     // Check if any cell in this row has break/breakable: true
-    const hasBreakableCell = row.cells.some((cell: any) => cell.break === true || cell.breakable === true);
+    const hasBreakableCell = row.cells.some((cell: TemplateField) => cell.break === true || cell.breakable === true);
     const isRowBreakable = row.break === true || row.breakable === true || hasBreakableCell;
 
     return (
@@ -551,7 +556,7 @@ export function renderItemWithRows(
 
 export function renderItemWithFields(
   template: any,
-  item: any,
+  item: Record<string, unknown>,
   itemId?: string,
   suggestedUpdates?: SuggestedUpdates,
   isThumbnail?: boolean,

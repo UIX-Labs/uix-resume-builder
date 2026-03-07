@@ -64,7 +64,7 @@ function ResumeRendererComponent({
   isThumbnail = false,
   skipImageFallbacks = false,
 }: RenderProps) {
-  const [pages, setPages] = useState<[React.ReactNode[], React.ReactNode[]][]>([]);
+  const [pages, setPages] = useState<[HTMLElement[], HTMLElement[]][]>([]);
   const dummyContentRef = useRef<HTMLDivElement>(null);
 
   const { page } = template;
@@ -102,13 +102,13 @@ function ResumeRendererComponent({
   const PAGE_PADDING = page.padding ?? 24;
   const PAGE_PADDING_PX = PAGE_PADDING;
   const safeBottomPaddingPx = Math.max(
-    (page as any)?.safeBottomPaddingPx ?? DEFAULT_SAFE_BOTTOM_PADDING_PX,
+    page.safeBottomPaddingPx ?? DEFAULT_SAFE_BOTTOM_PADDING_PX,
     DEFAULT_SAFE_BOTTOM_PADDING_PX,
   );
 
   const leftWidth = columnConfig.left.width;
   const rightWidth = columnConfig.right.width;
-  const spacing = columnConfig.spacing;
+  const spacing = String(columnConfig.spacing ?? '0px');
   const leftColumnClassName = columnConfig.left.className || '';
   const rightColumnClassName = columnConfig.right.className || '';
 
@@ -136,7 +136,7 @@ function ResumeRendererComponent({
     if (isThumbnail) {
       const leftNodes = leftCol ? Array.from(leftCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
       const rightNodes = rightCol ? Array.from(rightCol.children).map((n) => n.cloneNode(true) as HTMLElement) : [];
-      setPages([[leftNodes as any, rightNodes as any]]);
+      setPages([[leftNodes, rightNodes]]);
       return;
     }
 
@@ -397,9 +397,9 @@ function ResumeRendererComponent({
     const rightPages = rightCol ? paginateOneColumn(rightCol, 'right') : [];
 
     const totalPages = Math.max(leftPages.length, rightPages.length);
-    const merged: [React.ReactNode[], React.ReactNode[]][] = [];
+    const merged: [HTMLElement[], HTMLElement[]][] = [];
     for (let i = 0; i < totalPages; i++) {
-      merged.push([(leftPages[i] || []) as any, (rightPages[i] || []) as any]);
+      merged.push([leftPages[i] || [], rightPages[i] || []]);
     }
 
     setPages(merged);

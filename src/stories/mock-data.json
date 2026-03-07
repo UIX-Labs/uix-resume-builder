@@ -1,0 +1,366 @@
+{
+  "updatedAt": 1764581313934,
+  "personalDetails": {
+    "id": "pd-001",
+    "title": "personal_info",
+    "items": [
+      {
+        "itemId": "pd-item-001",
+        "fullName": "Alexandra Chen",
+        "email": "alexandra.chen@email.com",
+        "phone": "+1 (415) 987-6543",
+        "address": "742 Innovation Drive, San Francisco, CA 94107",
+        "city": "San Francisco",
+        "state": "California",
+        "country": "United States",
+        "pincode": "94107",
+        "jobTitle": "Staff Software Engineer",
+        "description": "Staff engineer specializing in distributed systems, developer tooling, and frontend architecture with 8+ years of experience building products at scale.",
+        "profilePicturePublicUrl": "/images/profileimg.jpeg",
+        "links": {
+          "linkedin": {
+            "title": "linkedin.com/in/alexandrachen",
+            "link": "https://linkedin.com/in/alexandrachen"
+          },
+          "github": {
+            "title": "github.com/alexchen",
+            "link": "https://github.com/alexchen"
+          },
+          "website": {
+            "title": "alexchen.dev",
+            "link": "https://alexchen.dev"
+          },
+          "behance": {
+            "title": "behance.net/alexchen",
+            "link": "https://behance.net/alexchen"
+          },
+          "dribble": {
+            "title": "dribbble.com/alexchen",
+            "link": "https://dribbble.com/alexchen"
+          },
+          "youtube": {
+            "title": "youtube.com/@alexchen",
+            "link": "https://youtube.com/@alexchen"
+          }
+        }
+      }
+    ]
+  },
+  "professionalSummary": {
+    "id": "ps-001",
+    "title": "Professional Summary",
+    "items": [
+      {
+        "id": "ps-item-001",
+        "summary": "Staff Software Engineer with 8+ years of experience architecting and delivering high-impact products across the full stack. Led cross-functional teams of up to 12 engineers, shipping systems that serve 50M+ monthly active users. Deep expertise in React, TypeScript, Node.js, and distributed systems. Passionate about developer experience, performance optimization, and building inclusive engineering cultures. Speaker at ReactConf and GraphQL Summit."
+      }
+    ]
+  },
+  "experience": {
+    "id": "exp-001",
+    "title": "experience",
+    "items": [
+      {
+        "itemId": "exp-item-001",
+        "company": "Stripe",
+        "position": "Staff Software Engineer",
+        "location": "San Francisco, CA",
+        "description": "<ul><li>Architected and led the migration of the merchant dashboard from a monolithic Rails app to a micro-frontend architecture using React and TypeScript, reducing page load times by 45% and improving developer velocity by 3x</li><li>Designed and implemented a real-time fraud detection pipeline processing 10M+ transactions daily using Apache Kafka, Flink, and custom ML models, reducing false positives by 32%</li><li>Mentored 8 engineers across 3 teams, establishing code review standards and technical design doc processes adopted org-wide</li><li>Led the design system initiative, creating 60+ reusable components used across 15 product teams, reducing UI inconsistencies by 70%</li></ul>",
+        "rank": 0,
+        "duration": {
+          "startDate": "2022-03",
+          "endDate": "",
+          "ongoing": true
+        },
+        "link": {
+          "title": "stripe.com",
+          "link": "https://stripe.com"
+        }
+      },
+      {
+        "itemId": "exp-item-002",
+        "company": "Airbnb",
+        "position": "Senior Software Engineer",
+        "location": "San Francisco, CA",
+        "description": "<ul><li>Built the next-generation search experience using React Server Components and Edge Functions, improving Time-to-Interactive by 60% across mobile devices</li><li>Developed a GraphQL federation gateway that unified 12 microservices, reducing API response times by 40% and eliminating 200+ redundant endpoints</li><li>Implemented A/B testing infrastructure supporting 500+ concurrent experiments, enabling data-driven product decisions across the platform</li><li>Contributed to open-source projects including Apollo GraphQL and Next.js, with 3 merged PRs improving server-side rendering performance</li></ul>",
+        "rank": 1,
+        "duration": {
+          "startDate": "2019-08",
+          "endDate": "2022-02",
+          "ongoing": false
+        },
+        "link": {
+          "title": "airbnb.com",
+          "link": "https://airbnb.com"
+        }
+      },
+      {
+        "itemId": "exp-item-003",
+        "company": "Shopify",
+        "position": "Software Engineer",
+        "location": "Ottawa, ON (Remote)",
+        "description": "<ul><li>Developed the storefront rendering engine powering 2M+ online stores, optimizing Largest Contentful Paint scores by 35% through image lazy-loading and critical CSS extraction</li><li>Built a plugin architecture for the checkout flow, enabling merchants to add custom payment methods and shipping integrations without modifying core code</li><li>Reduced CI/CD pipeline execution time from 45 minutes to 12 minutes by parallelizing test suites and implementing intelligent test selection based on code changes</li></ul>",
+        "rank": 2,
+        "duration": {
+          "startDate": "2017-06",
+          "endDate": "2019-07",
+          "ongoing": false
+        },
+        "link": {
+          "title": "shopify.com",
+          "link": "https://shopify.com"
+        }
+      }
+    ]
+  },
+  "education": {
+    "id": "edu-001",
+    "title": "education",
+    "items": [
+      {
+        "itemId": "edu-item-001",
+        "institution": "University of California, Berkeley",
+        "degree": "Master of Science",
+        "fieldOfStudy": "Computer Science — Distributed Systems",
+        "rank": 0,
+        "duration": {
+          "startDate": "2015-08",
+          "endDate": "2017-05",
+          "ongoing": false
+        },
+        "grade": "3.92 GPA"
+      },
+      {
+        "itemId": "edu-item-002",
+        "institution": "University of Toronto",
+        "degree": "Bachelor of Science (Honours)",
+        "fieldOfStudy": "Computer Science & Mathematics",
+        "rank": 1,
+        "duration": {
+          "startDate": "2011-09",
+          "endDate": "2015-06",
+          "ongoing": false
+        },
+        "grade": "3.85 GPA — Dean's List"
+      }
+    ]
+  },
+  "skills": {
+    "id": "skills-001",
+    "title": "skills",
+    "items": [
+      {
+        "itemId": "skills-item-001",
+        "name": "TypeScript / JavaScript",
+        "level": "Expert",
+        "category": "Languages",
+        "rank": 0
+      },
+      {
+        "itemId": "skills-item-002",
+        "name": "Python",
+        "level": "Advanced",
+        "category": "Languages",
+        "rank": 1
+      },
+      {
+        "itemId": "skills-item-003",
+        "name": "Go",
+        "level": "Intermediate",
+        "category": "Languages",
+        "rank": 2
+      },
+      {
+        "itemId": "skills-item-004",
+        "name": "React / Next.js",
+        "level": "Expert",
+        "category": "Frontend",
+        "rank": 3
+      },
+      {
+        "itemId": "skills-item-005",
+        "name": "GraphQL / Apollo",
+        "level": "Expert",
+        "category": "Frontend",
+        "rank": 4
+      },
+      {
+        "itemId": "skills-item-006",
+        "name": "Node.js / Express",
+        "level": "Expert",
+        "category": "Backend",
+        "rank": 5
+      },
+      {
+        "itemId": "skills-item-007",
+        "name": "PostgreSQL / Redis",
+        "level": "Advanced",
+        "category": "Databases",
+        "rank": 6
+      },
+      {
+        "itemId": "skills-item-008",
+        "name": "AWS / GCP / Terraform",
+        "level": "Advanced",
+        "category": "Infrastructure",
+        "rank": 7
+      },
+      {
+        "itemId": "skills-item-009",
+        "name": "Docker / Kubernetes",
+        "level": "Advanced",
+        "category": "DevOps",
+        "rank": 8
+      },
+      {
+        "itemId": "skills-item-010",
+        "name": "Apache Kafka / Flink",
+        "level": "Intermediate",
+        "category": "Data Engineering",
+        "rank": 9
+      }
+    ]
+  },
+  "projects": {
+    "id": "proj-001",
+    "title": "projects",
+    "items": [
+      {
+        "itemId": "proj-item-001",
+        "title": "DevFlow — Developer Productivity Platform",
+        "description": "<ul><li>Built an open-source developer productivity platform that unifies code review, CI/CD monitoring, and incident management into a single dashboard</li><li>Achieved 4,200+ GitHub stars and 180+ contributors within 6 months of launch</li><li>Implemented real-time collaboration using CRDTs and WebSocket connections, supporting 500+ concurrent users</li></ul>",
+        "techStack": ["Next.js", "TypeScript", "tRPC", "Prisma", "PostgreSQL", "WebSockets"],
+        "link": {
+          "title": "devflow.dev",
+          "link": "https://devflow.dev"
+        },
+        "rank": 0,
+        "duration": {
+          "startDate": "2023-01",
+          "endDate": "",
+          "ongoing": true
+        }
+      },
+      {
+        "itemId": "proj-item-002",
+        "title": "LightQuery — Lightweight GraphQL Client",
+        "description": "<ul><li>Created a zero-dependency GraphQL client for React that is 8x smaller than Apollo Client while supporting 90% of common use cases</li><li>Featured in JavaScript Weekly and adopted by 300+ production applications</li><li>Implemented automatic persisted queries and intelligent request batching, reducing network overhead by 55%</li></ul>",
+        "techStack": ["TypeScript", "React", "GraphQL", "Rollup"],
+        "link": {
+          "title": "npm: lightquery",
+          "link": "https://npmjs.com/package/lightquery"
+        },
+        "rank": 1,
+        "duration": {
+          "startDate": "2022-06",
+          "endDate": "2023-08",
+          "ongoing": false
+        }
+      },
+      {
+        "itemId": "proj-item-003",
+        "title": "SnapDeploy — One-Click Deployment CLI",
+        "description": "<ul><li>Developed a CLI tool that automates infrastructure provisioning, Docker containerization, and deployment to AWS/GCP with a single command</li><li>Reduced average deployment time from 25 minutes to under 3 minutes for small-to-medium projects</li><li>Supports automatic SSL provisioning, environment variable management, and rollback capabilities</li></ul>",
+        "techStack": ["Go", "Docker", "AWS CDK", "Terraform"],
+        "link": {
+          "title": "github.com/alexchen/snapdeploy",
+          "link": "https://github.com/alexchen/snapdeploy"
+        },
+        "rank": 2,
+        "duration": {
+          "startDate": "2021-09",
+          "endDate": "2022-05",
+          "ongoing": false
+        }
+      }
+    ]
+  },
+  "certifications": {
+    "id": "cert-001",
+    "title": "certifications",
+    "items": [
+      {
+        "itemId": "cert-item-001",
+        "title": "AWS Solutions Architect — Professional",
+        "issuer": "Amazon Web Services",
+        "link": {
+          "title": "Verify Credential",
+          "link": "https://aws.amazon.com/verification/ABC123"
+        },
+        "rank": 0,
+        "duration": {
+          "startDate": "2023-06",
+          "endDate": "2026-06",
+          "ongoing": false
+        }
+      },
+      {
+        "itemId": "cert-item-002",
+        "title": "Google Cloud Professional Cloud Architect",
+        "issuer": "Google Cloud",
+        "link": {
+          "title": "Verify Credential",
+          "link": "https://cloud.google.com/certification/verify/DEF456"
+        },
+        "rank": 1,
+        "duration": {
+          "startDate": "2022-11",
+          "endDate": "2024-11",
+          "ongoing": false
+        }
+      },
+      {
+        "itemId": "cert-item-003",
+        "title": "Certified Kubernetes Administrator (CKA)",
+        "issuer": "Cloud Native Computing Foundation",
+        "link": {
+          "title": "Verify Credential",
+          "link": "https://training.linuxfoundation.org/verify/GHI789"
+        },
+        "rank": 2,
+        "duration": {
+          "startDate": "2021-08",
+          "endDate": "2024-08",
+          "ongoing": false
+        }
+      }
+    ]
+  },
+  "achievements": {
+    "id": "ach-001",
+    "title": "achievements",
+    "items": [
+      {
+        "itemId": "ach-item-001",
+        "items": [
+          "Speaker at ReactConf 2024 — 'Scaling Micro-Frontends at Stripe'",
+          "Winner, Stripe Internal Hackathon 2023 — Built AI-powered code review assistant",
+          "Published 'Practical Guide to GraphQL Federation' — 15K+ reads on engineering blog",
+          "Open Source Contributor — 50+ merged PRs across React, Next.js, and Apollo projects",
+          "Keynote at GraphQL Summit 2023 — 'Zero-Downtime Schema Evolution at Scale'",
+          "Recipient of Airbnb Engineering Excellence Award (2021)"
+        ]
+      }
+    ]
+  },
+  "interests": {
+    "id": "int-001",
+    "title": "interests",
+    "items": [
+      {
+        "itemId": "int-item-001",
+        "items": [
+          "Open Source Development",
+          "Systems Design",
+          "Technical Writing",
+          "Rock Climbing",
+          "Mechanical Keyboards",
+          "Specialty Coffee",
+          "Competitive Programming",
+          "Board Games"
+        ]
+      }
+    ]
+  },
+  "templateId": "1b6a9b7a-6f13-4faf-a8a9-37e788edfb6d"
+}

@@ -4,6 +4,7 @@ import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useTemplateFilters } from '@shared/hooks/use-template-filter';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { SidebarProvider } from '@shared/ui/sidebar';
@@ -24,36 +25,35 @@ import { useEffect, useState } from 'react';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
+  const { filters, hasFilters } = useTemplateFilters();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
-   const searchParams = useSearchParams();
-    const [offset, setOffset] = useState(0);
-    const LIMIT = 10;
-  
-    const style = searchParams.get('style') || undefined;
-    const layoutType = searchParams.get('layoutType') || undefined;
-    const role = searchParams.get('role') || undefined;
-    const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
-    const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
-  
-    useEffect(() => {
-      setOffset(0);
-    }, [style, role, layoutType, hasProfilePhoto]);
-  
-    const hasFilters = style || role || layoutType || hasProfilePhoto !== undefined;
-  
-    const { data } = useGetAllTemplates(
-      hasFilters
-        ? {
-            ...(style && { style }),
-            ...(role && { role }),
-            ...(layoutType && { layoutType }),
-            ...(hasProfilePhoto !== undefined && { hasProfilePhoto }),
-            offset,
-            limit: LIMIT,
-          }
-        : undefined,
-    );
-      const templates = Array.isArray(data) ? data : data?.data || [];
+  const searchParams = useSearchParams();
+  const [offset, setOffset] = useState(0);
+  const LIMIT = 10;
+
+  const style = searchParams.get('style') || undefined;
+  const layoutType = searchParams.get('layoutType') || undefined;
+  const role = searchParams.get('role') || undefined;
+  const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
+  const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
+
+  useEffect(() => {
+    setOffset(0);
+  }, [style, role, layoutType, hasProfilePhoto]);
+
+  const { data } = useGetAllTemplates(
+    hasFilters
+      ? {
+          ...(filters.style.length > 0 && { style: filters.style.join(',') }),
+          ...(filters.role.length > 0 && { role: filters.role.join(',') }),
+          ...(filters.layoutType.length > 0 && { layoutType: filters.layoutType.join(',') }),
+          ...(filters.hasProfilePhoto && { hasProfilePhoto: filters.hasProfilePhoto }),
+          offset,
+          limit: LIMIT,
+        }
+      : undefined,
+  );
+  const templates = Array.isArray(data) ? data : data?.data || [];
   const isMobile = useIsMobile();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -100,6 +100,7 @@ export default function GetAllResumesPage() {
     setCreationTemplate(template);
     setIsCreationModalOpen(true);
   };
+
 
   const handleTemplateSelect = async (templateId: string) => {
     try {

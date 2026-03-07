@@ -81,6 +81,18 @@ function Header({ variant = 'default' }: HeaderProps) {
     });
   };
 
+  const handleAllTemplateClick = () => {
+    router.push('/all-templates');
+    trackEvent('navigation_click', {
+      source: 'landing_header',
+      destination: 'all-templates',
+    });
+  };
+
+
+
+
+
   const handleRoastClick = () => {
     router.push('/roast');
     trackEvent('navigation_click', {
@@ -200,6 +212,25 @@ function Header({ variant = 'default' }: HeaderProps) {
             )}
           >
             Roast
+          </Button>
+
+
+           <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleAllTemplateClick}
+            className={cn(
+              'font-semibold text-lg cursor-pointer',
+              pathname === '/all-templates'
+                ? isRoast
+                  ? 'text-blue-400'
+                  : 'bg-blue-200 text-blue-900 hover:bg-blue-300'
+                : isRoast
+                  ? 'text-white hover:bg-white/10 hover:text-white'
+                  : 'text-blue-900 hover:text-gray-900',
+            )}
+          >
+            All Templates
           </Button>
 
           <Button

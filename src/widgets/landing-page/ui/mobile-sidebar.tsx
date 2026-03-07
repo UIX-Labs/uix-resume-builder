@@ -51,6 +51,10 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
     handleNavigation('/blog', 'navigation_click', 'blog');
   };
 
+   const handleTemplateClick = () => {
+    handleNavigation('/all-templates', 'navigation_click', 'blog');
+  };
+
   const handleLogoClick = () => {
     handleNavigation('/', 'navigation_click', 'home');
   };
@@ -79,15 +83,22 @@ export const MobileSidebar = ({ isOpen, onClose }: MobileSidebarProps) => {
       isActive: pathname === '/roast',
     },
     {
+      label: 'All Templates',
+      onClick: handleTemplateClick,
+      isActive: pathname === '/all-templates',
+    },
+    {
       label: 'Blogs',
       onClick: handleBlogClick,
       isActive: pathname === '/blog',
     },
+
     {
       label: 'Dashboard',
       onClick: handleDashboardClick,
       isActive: pathname === '/dashboard',
     },
+     
     ...(!user
       ? [
           {

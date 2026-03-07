@@ -16,6 +16,12 @@ import React from 'react';
 export const inlineListSectionRenderer: SectionRenderer<InlineListSection> = {
   type: 'inline-list-section',
 
+  willRender(section: InlineListSection, ctx: SectionRenderContext): boolean {
+    const items = resolvePath(ctx.data, section.listPath as string, []);
+    const flattenedItems = flattenAndFilterItemsWithContext(items, section.itemPath as string | undefined);
+    return flattenedItems.length > 0;
+  },
+
   render(section: InlineListSection, ctx: SectionRenderContext): React.ReactNode {
     const isBreakable = section.break === true || section.breakable === true;
     const items = resolvePath(ctx.data, section.listPath as string, []);

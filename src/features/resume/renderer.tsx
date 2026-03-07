@@ -2,7 +2,6 @@ import { cn } from '@shared/lib/cn';
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { renderSection, willSectionRender } from './lib/section-renderers';
 
-
 export { hasPendingSuggestions } from './lib/section-utils';
 export { generateThumbnail } from './lib/thumbnail/thumbnail';
 export type { ThumbnailOptions } from './lib/thumbnail/thumbnail';

@@ -16,6 +16,7 @@ const PUBLIC_ROUTES = [
   '/blog',
   '/upload-resume',
   '/resume-examples',
+  '/all-templates'
 ];
 
 const ADMIN_ALLOWED_DOMAINS = ['@uixlabs.in'];

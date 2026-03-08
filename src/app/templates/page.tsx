@@ -1,29 +1,59 @@
 'use client';
-import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useTemplateFilters } from '@shared/hooks/use-template-filter';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import { useMutation } from '@tanstack/react-query';
+import NotFoundSearch from '@widgets/all-templates/components/Not-found-filter';
+import { TemplateCardFilter } from '@widgets/all-templates/components/template-card-filter';
+import TemplateFilter from '@widgets/all-templates/components/template-filters/template-filter';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
-import { TemplateCard } from '@widgets/templates-page/ui/template-card';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
-import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function GetAllResumesPage() {
   const router = useRouter();
+  const { filters, hasFilters } = useTemplateFilters();
   const { data: user, isLoading: isUserLoading } = useUserProfile();
-  const { data: templates } = useGetAllTemplates();
+  const searchParams = useSearchParams();
+  const [offset, setOffset] = useState(0);
+  const LIMIT = 10;
+
+  const style = searchParams.get('style') || undefined;
+  const layoutType = searchParams.get('layoutType') || undefined;
+  const role = searchParams.get('role') || undefined;
+  const hasProfilePhotoParam = searchParams.get('hasProfilePhoto');
+  const hasProfilePhoto = hasProfilePhotoParam === 'true' ? true : hasProfilePhotoParam === 'false' ? false : undefined;
+
+  useEffect(() => {
+    setOffset(0);
+  }, [style, role, layoutType, hasProfilePhoto]);
+
+  const { data } = useGetAllTemplates(
+    hasFilters
+      ? {
+          ...(filters.style.length > 0 && { style: filters.style.join(',') }),
+          ...(filters.role.length > 0 && { role: filters.role.join(',') }),
+          ...(filters.layoutType.length > 0 && { layoutType: filters.layoutType.join(',') }),
+          ...(filters.hasProfilePhoto && { hasProfilePhoto: filters.hasProfilePhoto }),
+          offset,
+          limit: LIMIT,
+        }
+      : undefined,
+  );
+  const templates = Array.isArray(data) ? data : data?.data || [];
   const isMobile = useIsMobile();
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -70,6 +100,7 @@ export default function GetAllResumesPage() {
     setCreationTemplate(template);
     setIsCreationModalOpen(true);
   };
+
 
   const handleTemplateSelect = async (templateId: string) => {
     try {
@@ -147,7 +178,15 @@ export default function GetAllResumesPage() {
                 userName={isUserLoading ? '...' : user ? `${user.firstName} ${user.lastName ?? ''}` : 'Guest User'}
               />
 
-              <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap">
+              <div className="px-4 my-4">
+                <TemplateFilter results={templates?.length ?? 0} />
+              </div>
+
+              {/* No results */}
+              {!isLoading && (templates?.length ?? 0) === 0 && <NotFoundSearch />}
+
+              {/* <div className="flex items-center gap-4 sm:gap-6 my-4 sm:my-6 mx-2 sm:mx-4 justify-center sm:justify-evenly flex-wrap"> */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
                 {templates?.map((template) => {
                   const handleClick = () => {
                     if (isMobile) {
@@ -157,16 +196,24 @@ export default function GetAllResumesPage() {
                     }
                   };
 
-                  const handlePreview = () => {
-                    handleTemplateClick(template);
-                  };
+                  // const handlePreview = () => {
+                  //   handleTemplateClick(template);
+                  // };
 
+                  // return (
+                  //   <TemplateCard
+                  //     key={template.id}
+                  //     template={template}
+                  //     onClick={handleClick}
+                  //     onPreviewClick={handlePreview}
+                  //   />
+                  // );
                   return (
-                    <TemplateCard
+                    <TemplateCardFilter
                       key={template.id}
                       template={template}
                       onClick={handleClick}
-                      onPreviewClick={handlePreview}
+                      onPreviewClick={() => handleTemplateClick(template)}
                     />
                   );
                 })}

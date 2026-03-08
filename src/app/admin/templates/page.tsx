@@ -1,25 +1,25 @@
 'use client';
 
-import { useState, useCallback } from 'react';
 import { DataTable, type Column } from '@/features/admin/components/data-table';
 import {
   useAdminTemplates,
-  useUpdateTemplateStatus,
-  useUpdateTemplateMetadata,
-  useCreateTemplate,
-  useUpdateTemplate,
-  useRoles,
   useCreateRole,
+  useCreateTemplate,
   useDeleteRole,
+  useRoles,
+  useUpdateTemplate,
+  useUpdateTemplateMetadata,
+  useUpdateTemplateStatus,
 } from '@/features/admin/hooks/use-admin-queries';
 import type {
   AdminTemplate,
-  TemplateStatus,
-  TemplateLayoutType,
   ColorVariation,
   Role,
+  TemplateLayoutType,
+  TemplateStatus,
   UpdateTemplateMetadataPayload,
 } from '@/features/admin/types/admin.types';
+import { useCallback, useState } from 'react';
 
 // ─── Status Config ──────────────────────────────────────────────
 const STATUS_CONFIG: Record<TemplateStatus, { label: string; bgClass: string; textClass: string }> = {

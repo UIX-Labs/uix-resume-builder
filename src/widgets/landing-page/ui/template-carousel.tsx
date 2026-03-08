@@ -3,22 +3,22 @@
 import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
+import { useIsMobile } from '@shared/hooks/use-mobile';
+import { useCachedUser } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { PreviewButton } from '@shared/ui/components/preview-button';
+import { useMutation } from '@tanstack/react-query';
+import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import type { EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
-import { useMutation } from '@tanstack/react-query';
-import { createResume, updateResumeTemplate } from '@entities/resume';
-import { useIsMobile } from '@shared/hooks/use-mobile';
-import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { PreviewButton } from '@shared/ui/components/preview-button';
-import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
+import { useCallback, useEffect, useState } from 'react';
 
 export function TemplateCarousel() {
   const options: EmblaOptionsType = {
@@ -107,10 +107,11 @@ export function TemplateCarousel() {
     handleTemplateSelect(template);
   };
 
-  const { data: templates } = useGetAllTemplates();
+  const { data: response } = useGetAllTemplates();
+  const templates = response?.data || [];
 
   // Limit templates to 3 on mobile, show all on desktop
-  const displayTemplates = isMobile && templates ? templates.slice(0, 3) : templates;
+  const displayTemplates = isMobile ? templates.slice(0, 3) : templates;
 
   return (
     <div className="relative bg-[rgb(23,23,23)] text-white rounded-[24px] md:rounded-[36px] overflow-hidden min-h-[556px] m-2 md:m-4">
@@ -140,10 +141,10 @@ export function TemplateCarousel() {
               variant="default"
               size="lg"
               onClick={() => {
-                router.push('/templates');
+                router.push('/all-templates');
                 trackEvent('navigation_click', {
                   source: 'landing_carousel',
-                  destination: 'all_templates',
+                  destination: 'all-templates',
                 });
               }}
               className="hidden lg:flex bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white shadow-sm px-6 md:px-7 py-3 md:py-4 h-[52px] md:h-[68px] text-[20px] md:text-[28px] lg:text-[32px] font-semibold leading-[1.2] tracking-[-0.03em] rounded-xl w-full sm:w-auto cursor-pointer"

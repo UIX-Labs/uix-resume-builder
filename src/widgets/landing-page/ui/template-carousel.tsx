@@ -158,47 +158,74 @@ export function TemplateCarousel() {
             <div className="w-full lg:pl-[61px]">
               <div className="overflow-hidden w-full lg:w-[900px]" ref={emblaRef}>
                 <div className="flex gap-2 items-center">
-                  {displayTemplates?.map((template) => (
-                    <div key={template.id} className="group">
-                      <div className="cursor-pointer h-full">
-                        <div className="p-4 h-full">
-                          <div className="relative w-[240px] sm:w-[280px] lg:w-[312px] h-[330px] sm:h-[380px] lg:h-[428px] bg-white/5 p-3 md:p-4 rounded-[16px] md:rounded-[20px] overflow-hidden">
-                            <div className="w-full h-full relative">
-                              <Image
-                                src={template.publicImageUrl}
-                                alt={`Template ${template.id}`}
-                                fill
-                                className="object-fit rounded-[16px] md:rounded-[20px]"
-                                unoptimized
+                  {displayTemplates?.map((template) => {
+                    const isNew = Date.now() - new Date(template.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
+                    const roles = template.roles || [];
+                    const hasTags = roles.length > 0 || isNew || template.isTrending;
+                    return (
+                      <div key={template.id} className="group">
+                        <div className="cursor-pointer h-full">
+                          <div className="p-4 h-full">
+                            <div className="relative w-[240px] sm:w-[280px] lg:w-[312px] h-[330px] sm:h-[380px] lg:h-[428px] bg-white/5 p-3 md:p-4 rounded-[16px] md:rounded-[20px] overflow-hidden">
+                              <div className="w-full h-full relative">
+                                <Image
+                                  src={template.publicImageUrl}
+                                  alt={`Template ${template.id}`}
+                                  fill
+                                  className="object-fit rounded-[16px] md:rounded-[20px]"
+                                  unoptimized
+                                />
+                              </div>
+
+                              {/* Preview Button */}
+                              <PreviewButton
+                                onClick={() => {
+                                  setPreviewTemplate(template);
+                                  setIsPreviewOpen(true);
+                                }}
                               />
+
+                              <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-9 gap-2 transition-colors duration-500">
+                                <Button
+                                  variant="secondary"
+                                  size="lg"
+                                  onClick={() => handleMobileTemplateClick(template)}
+                                  className={cn(
+                                    'cursor-pointer transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
+                                    'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl',
+                                  )}
+                                >
+                                  Use This Template
+                                </Button>
+                              </div>
                             </div>
-
-                            {/* Preview Button */}
-                            <PreviewButton
-                              onClick={() => {
-                                setPreviewTemplate(template);
-                                setIsPreviewOpen(true);
-                              }}
-                            />
-
-                            <div className="absolute inset-0 flex items-end justify-center pb-6 md:pb-9 gap-2 transition-colors duration-500">
-                              <Button
-                                variant="secondary"
-                                size="lg"
-                                onClick={() => handleMobileTemplateClick(template)}
-                                className={cn(
-                                  'cursor-pointer transform transition-all duration-500 ease-out translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100',
-                                  'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-[rgb(242,242,242)] border border-gray-400 shadow-sm px-4 md:px-7 py-2 md:py-3 h-10 md:h-12 text-sm md:text-lg font-semibold rounded-lg md:rounded-xl',
+                            {hasTags && (
+                              <div className="flex items-center gap-1.5 mt-2 px-1 flex-wrap">
+                                {roles.map((role) => (
+                                  <span
+                                    key={role.id}
+                                    className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/10 text-white/70"
+                                  >
+                                    {role.name.replace(/_/g, ' ').replace(/\b\w/g, (c: string) => c.toUpperCase())}
+                                  </span>
+                                ))}
+                                {isNew && (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-500 text-white">
+                                    New
+                                  </span>
                                 )}
-                              >
-                                Use This Template
-                              </Button>
-                            </div>
+                                {template.isTrending && (
+                                  <span className="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-500 text-white">
+                                    Trending
+                                  </span>
+                                )}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>

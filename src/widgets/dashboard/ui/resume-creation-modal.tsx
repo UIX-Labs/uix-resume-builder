@@ -7,7 +7,6 @@ import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
-import { Button } from '@shared/ui/components/button';
 import { Modal, ModalBody } from '@shared/ui/components/modal';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -184,101 +183,64 @@ export default function ResumeCreationModal({
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        className="w-[300px] sm:w-[380px]"
+        className="w-[90vw] max-w-[832px] border border-[#D5E5FF] rounded-[36px]"
         showCloseButton={true}
-        closeButtonVariant="custom"
-        title="Create Resume"
+        closeButtonVariant="default"
         overlayClassName="backdrop-blur-md"
       >
-        <ModalBody className="">
-          <div className="divide-y divide-gray-100">
-            {/* From Scratch */}
-            <Button
-              onClick={resumeCreateHandler}
-              disabled={optionsLocked && activeAction !== ResumeCreationAction.CREATE}
-              className="w-full flex items-center justify-start gap-3 px-0 pb-6 transition-colors bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-left text-base mt-3"
-            >
-              {/* <FileText className="w-5 h-5 text-gray-500 flex-shrink-0" /> */}
-              <Image src="/images/from-scratch.svg" alt="" width={24} height={24} />
-              <span className="text-gray-700 font-normal">From Scratch</span>
-            </Button>
-
-            {/* Upload Resume */}
-            <div className="relative">
-              <Button
-                onClick={handleUploadResumeClick}
-                className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors hover:bg-gray-50 bg-white text-left text-base"
-              >
-                <Image src="/images/file_upload.svg" alt="" width={24} height={24} />
-                <span className="text-gray-700 font-normal">Upload Resume</span>
-              </Button>
-              {/* <FileUpload
-                onSuccess={handleUploadSuccess}
-                onError={handleUploadError}
-                onPendingChange={handleUploadPendingChange}
-                disabled={optionsLocked && activeAction !== 'upload'}
-                renderAsOverlay={true}
-                onUploadClick={() => {
-                  if (isMobile) {
-                    setShowMobileView(true);
-                    onClose();
-                    trackEvent('upload_resume_click', {
-                      source: template ? 'template_modal' : 'dashboard_modal',
-                      blocked: 'mobile_device',
-                    });
-                    return false; // Prevent upload
-                  }
-
-                  trackEvent('upload_resume_click', {
-                    source: template ? 'template_modal' : 'dashboard_modal',
-                  });
-                  // For guest users, create guest email for API tracking
-                  if (!user.data?.isLoggedIn) {
-                    getOrCreateGuestEmail();
-                  }
-                }}
-              /> */}
-            </div>
-
-            {/* Auto-fill via LinkedIn */}
-            <Button
-              onClick={handleLinkedInClick}
-              className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
-            >
-              <Image src="/images/auto_mode.svg" alt="" width={24} height={24} />
-
-              <span className="text-gray-700 font-normal">Auto-fill via Linkedin</span>
-            </Button>
-
-            {/* Tailored with JD - Recommended */}
-            <Button
-              onClick={handleOpenTailoredWithJD}
-              disabled={optionsLocked && activeAction !== ResumeCreationAction.TAILORED_JD}
-              className="w-full flex items-center justify-start gap-3 px-0 py-6 transition-colors text-left text-base bg-white"
-            >
-              <Image src="/images/file_open.svg" alt="" width={24} height={24} />
-              <span className="text-gray-700 font-normal">Tailored with JD</span>
-              <span className="bg-green-500 text-white text-xs font-medium rounded-md px-2 py-0.5">recommended</span>
-            </Button>
+        <ModalBody className="px-8 sm:px-12 py-8 sm:py-10">
+          {/* Heading */}
+          <div className="text-center mb-2">
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">
+              Let&apos;s get <span className="text-blue-600">Started</span>
+            </h2>
+            <p className="text-gray-400 mt-1 text-base">How do you want to create your Resume?</p>
           </div>
 
-          {/* Template Image Section */}
-          {template && (
-            <div className="pt-4 flex gap-4 items-end">
-              <div className="relative min-w-[180px] h-[254px] rounded-lg overflow-hidden shadow-md border border-gray-200">
-                <Image
-                  src={template.publicImageUrl}
-                  alt={`Template ${template.id}`}
-                  fill
-                  className="object-fill"
-                  unoptimized
-                />
-              </div>
-              <div className="pb-4 text-gray-400 text-sm -rotate-90 origin-bottom-left translate-x-8 whitespace-nowrap">
-                selected template
-              </div>
-            </div>
-          )}
+          {/* Options */}
+          <div className="flex flex-col gap-4 mt-6">
+            {/* Start from Scratch */}
+            <button
+              type="button"
+              onClick={resumeCreateHandler}
+              disabled={optionsLocked && activeAction !== ResumeCreationAction.CREATE}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-[#FFE4E1] transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <Image src="/images/from-scratch.svg" alt="" width={24} height={24} />
+              <span className="text-gray-700 font-medium text-base">Start from Scratch</span>
+            </button>
+
+            {/* Upload Existing Resume */}
+            <button
+              type="button"
+              onClick={handleUploadResumeClick}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-[#F3E8FF] transition-colors text-left cursor-pointer"
+            >
+              <Image src="/images/file_upload.svg" alt="" width={24} height={24} />
+              <span className="text-gray-700 font-medium text-base">Upload Existing Resume</span>
+            </button>
+
+            {/* Import from LinkedIn */}
+            <button
+              type="button"
+              onClick={handleLinkedInClick}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-[#E0F7FA] transition-colors text-left cursor-pointer"
+            >
+              <Image src="/images/auto_mode.svg" alt="" width={24} height={24} />
+              <span className="text-gray-700 font-medium text-base">Import from LinkedIn/ Use LinkedIn Resume</span>
+            </button>
+
+            {/* Tailored with Job Description */}
+            <button
+              type="button"
+              onClick={handleOpenTailoredWithJD}
+              disabled={optionsLocked && activeAction !== ResumeCreationAction.TAILORED_JD}
+              className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-[#E0F2F1] transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <Image src="/images/file_open.svg" alt="" width={24} height={24} />
+              <span className="text-gray-700 font-medium text-base">Tailored with Job Description</span>
+            </button>
+          </div>
         </ModalBody>
       </Modal>
 

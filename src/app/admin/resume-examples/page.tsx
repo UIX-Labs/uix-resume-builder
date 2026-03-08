@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from 'next/link';
 import { DataTable, type Column } from '@/features/admin/components/data-table';
 import { FilterBar } from '@/features/admin/components/filter-bar';
@@ -12,6 +12,7 @@ import {
   useUpdateResumeExample,
   useDeleteResumeExample,
   useToggleResumeExamplePublish,
+  useParseResumeForExample,
 } from '@/features/admin/hooks/use-admin-queries';
 import type { AdminQueryParams, AdminResumeExample } from '@/features/admin/types/admin.types';
 
@@ -41,10 +42,13 @@ export default function AdminResumeExamplesPage() {
   const updateMutation = useUpdateResumeExample();
   const deleteMutation = useDeleteResumeExample();
   const togglePublishMutation = useToggleResumeExamplePublish();
+  const parseMutation = useParseResumeForExample();
 
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [isParsed, setIsParsed] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFilterChange = (newParams: Partial<AdminQueryParams>) => {
     setParams((prev) => ({ ...prev, ...newParams }));
@@ -53,6 +57,7 @@ export default function AdminResumeExamplesPage() {
   const openCreate = () => {
     setEditingId(null);
     setForm(EMPTY_FORM);
+    setIsParsed(false);
     setShowModal(true);
   };
 
@@ -74,7 +79,70 @@ export default function AdminResumeExamplesPage() {
       isPublished: example.isPublished,
       rank: example.rank,
     });
+    setIsParsed(false);
     setShowModal(true);
+  };
+
+  const handlePdfUpload = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const result = await parseMutation.mutateAsync(formData);
+
+      // Auto-match category by suggested slug
+      let matchedCategoryId = '';
+      if (result.suggestedCategorySlug && categories) {
+        const matched = categories.find((c) => c.slug === result.suggestedCategorySlug);
+        if (matched) matchedCategoryId = matched.id;
+      }
+
+      // Auto-select first template
+      const defaultTemplateId = templates?.[0]?.id || '';
+
+      setForm({
+        title: result.title,
+        slug: result.slug,
+        categoryId: matchedCategoryId,
+        templateId: defaultTemplateId,
+        resumeData: JSON.stringify(result.resumeData, null, 2),
+        role: result.role,
+        experienceYears: result.experienceYears?.toString() || '',
+        primaryColor: result.primaryColor || '',
+        colorName: result.colorName || '',
+        layout: result.layout || 'two-column',
+        metaTitle: result.metaTitle || '',
+        metaDescription: result.metaDescription || '',
+        isPublished: true,
+        rank: result.rank || 0,
+      });
+      setIsParsed(true);
+      setEditingId(null);
+      setShowModal(true);
+    } catch {
+      alert('Failed to parse the resume PDF. Please try again.');
+    }
+  };
+
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handlePdfUpload(file);
+      // Reset file input so the same file can be re-selected
+      e.target.value = '';
+    }
+  };
+
+  const handleModalFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handlePdfUpload(file);
+      e.target.value = '';
+    }
   };
 
   const handleSubmit = async () => {
@@ -111,6 +179,7 @@ export default function AdminResumeExamplesPage() {
     setShowModal(false);
     setForm(EMPTY_FORM);
     setEditingId(null);
+    setIsParsed(false);
   };
 
   const handleDelete = async (id: string) => {
@@ -210,7 +279,7 @@ export default function AdminResumeExamplesPage() {
     },
   ];
 
-  const isPending = createMutation.isPending || updateMutation.isPending;
+  const isSaving = createMutation.isPending || updateMutation.isPending;
 
   return (
     <div>
@@ -225,13 +294,50 @@ export default function AdminResumeExamplesPage() {
             </Link>
           </p>
         </div>
-        <button
-          type="button"
-          onClick={openCreate}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Add Example
-        </button>
+        <div className="flex gap-3">
+          <input ref={fileInputRef} type="file" accept=".pdf" onChange={handleFileChange} className="hidden" />
+          <button
+            type="button"
+            onClick={handleFileSelect}
+            disabled={parseMutation.isPending}
+            className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+          >
+            {parseMutation.isPending ? (
+              <>
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Parsing Resume...
+              </>
+            ) : (
+              <>
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                Upload Resume PDF
+              </>
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Add Manually
+          </button>
+        </div>
       </div>
 
       <FilterBar onFilterChange={handleFilterChange} showStatusFilter />
@@ -254,6 +360,85 @@ export default function AdminResumeExamplesPage() {
             <h3 className="text-lg font-semibold mb-4">
               {editingId ? 'Edit Resume Example' : 'Add New Resume Example'}
             </h3>
+
+            {/* PDF Upload zone inside modal (only when creating) */}
+            {!editingId && (
+              <div className="mb-5">
+                {isParsed ? (
+                  <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                    <div className="flex items-center gap-2 text-sm text-green-700">
+                      <svg
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      Resume parsed successfully — fields auto-filled below
+                    </div>
+                    <label className="text-xs text-green-600 hover:text-green-800 font-medium cursor-pointer">
+                      Re-upload
+                      <input type="file" accept=".pdf" onChange={handleModalFileChange} className="hidden" />
+                    </label>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-6 cursor-pointer hover:border-blue-400 hover:bg-blue-50/50 transition-colors">
+                    {parseMutation.isPending ? (
+                      <div className="flex flex-col items-center gap-2">
+                        <svg
+                          className="animate-spin h-8 w-8 text-blue-500"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                          />
+                        </svg>
+                        <span className="text-sm text-blue-600 font-medium">
+                          Parsing resume... this may take up to 60 seconds
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <svg
+                          className="h-8 w-8 text-gray-400 mb-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={1.5}
+                          aria-hidden="true"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m6.75 12l-3-3m0 0l-3 3m3-3v6m-1.5-15H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+                          />
+                        </svg>
+                        <span className="text-sm text-gray-600 font-medium">
+                          Upload a resume PDF to auto-fill fields
+                        </span>
+                        <span className="text-xs text-gray-400 mt-1">or fill the form manually below</span>
+                      </>
+                    )}
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleModalFileChange}
+                      className="hidden"
+                      disabled={parseMutation.isPending}
+                    />
+                  </label>
+                )}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -420,10 +605,13 @@ export default function AdminResumeExamplesPage() {
                   <textarea
                     value={form.resumeData}
                     onChange={(e) => onChange('resumeData', e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 p-3 text-sm h-48 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={`w-full rounded-lg border p-3 text-sm h-48 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      isParsed ? 'border-green-300 bg-green-50/30' : 'border-gray-300'
+                    }`}
                     placeholder='{"personalDetails": {...}, "experience": [...], ...}'
                   />
                 </label>
+                {isParsed && <p className="text-xs text-green-600 mt-1">Auto-generated from uploaded resume PDF</p>}
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6">
@@ -432,6 +620,7 @@ export default function AdminResumeExamplesPage() {
                 onClick={() => {
                   setShowModal(false);
                   setEditingId(null);
+                  setIsParsed(false);
                 }}
                 className="px-4 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
               >
@@ -440,10 +629,17 @@ export default function AdminResumeExamplesPage() {
               <button
                 type="button"
                 onClick={handleSubmit}
-                disabled={isPending || !form.title || !form.slug || !form.categoryId || !form.templateId}
+                disabled={
+                  isSaving ||
+                  parseMutation.isPending ||
+                  !form.title ||
+                  !form.slug ||
+                  !form.categoryId ||
+                  !form.templateId
+                }
                 className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50"
               >
-                {isPending ? 'Saving...' : editingId ? 'Update' : 'Create'}
+                {isSaving ? 'Saving...' : editingId ? 'Update' : 'Create'}
               </button>
             </div>
           </div>

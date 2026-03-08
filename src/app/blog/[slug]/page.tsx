@@ -3,10 +3,10 @@ import ArticleHeader, { type BreadcrumbItem } from '@/widgets/blog/slug/article-
 import { TableOfContents } from '@/widgets/blog/slug/table-of-content';
 import { extractHeadings, getAllPosts, getAllSlugs, getPostBySlug } from '@shared/lib/blog';
 import { mdxComponents } from '@shared/ui/blog/mdx-components';
+import { TagBadge } from '@shared/ui/blog/tag-badge';
 import { BlogGrid } from '@widgets/blog';
 import BlogCreateResume from '@widgets/blog/slug/blog-create-resume';
 import JDCTACard from '@widgets/blog/slug/jd-cta-card';
-import { TagBadge } from '@shared/ui/blog/tag-badge';
 import type { Metadata } from 'next';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import Link from 'next/link';

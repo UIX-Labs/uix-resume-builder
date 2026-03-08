@@ -8,7 +8,7 @@ authorRole: "Career Experts"
 authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
 tags:
   - "cover-letter"
-  - "job-search"
+  - "job"
 published: true
 coverImage: ""
 ---

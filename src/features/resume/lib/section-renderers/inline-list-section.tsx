@@ -1,3 +1,5 @@
+import type { InlineListTemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
 import { normalizeMarkdownContent } from '@shared/lib/markdown';
@@ -8,8 +10,8 @@ import { extractRenderableValue, flattenAndFilterItemsWithContext, hasPendingSug
 import { getSuggestionDataAttribute } from '../suggestion-utils';
 
 export function renderInlineListSection(
-  section: any,
-  data: any,
+  section: InlineListTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
@@ -76,7 +78,7 @@ export function renderInlineListSection(
     fieldName = section.itemPath;
   }
 
-  const suggestedUpdates = sectionKey ? (data[sectionKey] as any)?.suggestedUpdates : undefined;
+  const suggestedUpdates = sectionKey ? data[sectionKey as keyof CleanedResumeData]?.suggestedUpdates : undefined;
 
   return (
     <div

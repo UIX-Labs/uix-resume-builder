@@ -1,22 +1,39 @@
 import React from 'react';
 import { cn } from '@shared/lib/cn';
+import type { HeaderTemplateSection } from '@features/resume-beta/models/template-types';
+import type { CleanedResumeData } from '@features/resume-beta/models/cleaned-data';
 import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderField } from '../field-renderer';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 
+/** Loose field shape covering all property accesses in the header renderer */
+interface HeaderField {
+  type?: string;
+  path?: string;
+  fallback?: string;
+  className?: string;
+  href?: string;
+  separator?: string;
+  items?: HeaderField[];
+  [key: string]: unknown;
+}
+
 export function renderHeaderSection(
-  section: any,
-  data: any,
+  section: HeaderTemplateSection,
+  data: CleanedResumeData,
   currentSection?: string,
   hasSuggestions?: boolean,
   isThumbnail?: boolean,
   skipImageFallbacks?: boolean,
 ): React.ReactNode {
-  const { fields, className, id } = section;
+  // Cast fields to a loosely-typed record since the code dynamically accesses
+  // named keys (name, title, contact, address, etc.) with runtime guards.
+  const fields = section.fields as Record<string, HeaderField>;
+  const { className, id } = section;
 
   const hasGenericFields = Object.values(fields).some(
-    (field: any) => field?.type && ['image', 'group', 'text'].includes(field.type),
+    (field: HeaderField) => field?.type && ['image', 'group', 'text'].includes(field.type),
   );
 
   const sectionId = id || 'header-section';
@@ -30,7 +47,11 @@ export function renderHeaderSection(
 
   // Get itemId for personalDetails (typically the first item)
   const personalDetailsItem = data.personalDetails?.items?.[0];
-  const personalDetailsItemId = personalDetailsItem?.itemId || personalDetailsItem?.id;
+  const personalDetailsItemId =
+    personalDetailsItem && typeof personalDetailsItem === 'object'
+      ? ((personalDetailsItem as Record<string, unknown>).itemId as string | undefined) ||
+        ((personalDetailsItem as Record<string, unknown>).id as string | undefined)
+      : undefined;
 
   // Helper function to get error background color for a field
   const getFieldErrorBgColor = (fieldName: string): string => {
@@ -110,7 +131,7 @@ export function renderHeaderSection(
         <div className={fields.nameTitle.className}>
           {fields.name && (
             <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
+              {resolvePath(data, fields.name.path || '', fields.name.fallback)}
             </p>
           )}
           {fields.title?.path && (
@@ -132,7 +153,7 @@ export function renderHeaderSection(
         <>
           {fields.name && (
             <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
+              {resolvePath(data, fields.name.path || '', fields.name.fallback)}
             </p>
           )}
           {fields.title?.path && (
@@ -168,23 +189,27 @@ export function renderHeaderSection(
         <div className={fields.contact.className}>
           {(() => {
             const validItems = fields.contact.items
-              .map((item: any, idx: number) => {
-                const value = resolvePath(data, item.path, item.fallback);
+              .map((item: HeaderField, idx: number) => {
+                const value = resolvePath(data, item.path || '', item.fallback);
                 if (!value) return null;
                 // Extract field name from path for error highlighting (e.g., "personalDetails.items[0].email" -> "email")
                 const fieldName = item.path?.split('.').pop() || '';
                 return { item, value, originalIdx: idx, fieldName };
               })
-              .filter((entry: any) => entry !== null);
-            return validItems.map((entry: any, arrayIdx: number) => {
+              .filter(
+                (entry): entry is { item: HeaderField; value: string; originalIdx: number; fieldName: string } =>
+                  entry !== null,
+              );
+            return validItems.map((entry, arrayIdx: number) => {
               const { item, value, originalIdx, fieldName } = entry;
               const showSeparator = arrayIdx > 0 && fields.contact.separator;
               const errorBgColor = getFieldErrorBgColor(fieldName);
               if (item.type === 'link') {
-                const href = item.href.startsWith('mailto:')
-                  ? item.href.replace('{{value}}', value)
-                  : resolvePath(data, item.href);
-                const linkProps = item.href.startsWith('mailto:')
+                const itemHref = item.href || '';
+                const href = itemHref.startsWith('mailto:')
+                  ? itemHref.replace('{{value}}', value)
+                  : resolvePath(data, itemHref);
+                const linkProps = itemHref.startsWith('mailto:')
                   ? {}
                   : { target: '_blank', rel: 'noopener noreferrer' };
                 return (
@@ -209,7 +234,7 @@ export function renderHeaderSection(
 
       {fields.address && (
         <p className={cn(fields.address.className, getFieldErrorBgColor('address'))}>
-          {resolvePath(data, fields.address.path, fields.address.fallback)}
+          {resolvePath(data, fields.address.path || '', fields.address.fallback)}
         </p>
       )}
     </div>

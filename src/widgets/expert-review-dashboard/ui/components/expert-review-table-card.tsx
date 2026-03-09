@@ -28,10 +28,7 @@ export function ExpertReviewTableCard({ reviews, isLoading }: ExpertReviewTableC
         ) : (
           <div className="flex flex-col gap-4">
             {reviews.map((review, index) => (
-              <ExpertReviewTableRowMobile
-                key={`${review.name}-${review.submitted}-${index}`}
-                review={review}
-              />
+              <ExpertReviewTableRowMobile key={`${review.name}-${review.submitted}-${index}`} review={review} />
             ))}
           </div>
         )}

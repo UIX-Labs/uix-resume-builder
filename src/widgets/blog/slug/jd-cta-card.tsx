@@ -51,7 +51,7 @@ export default function JDCTACard() {
       {/* Resume Preview Image */}
       {/* Resume Preview Image Container */}
       <div className="relative mt-6 flex justify-center w-full h-[120px]">
-        <div className="w-full h-full">
+        <div className="relative w-full h-full">
           <Image
             src="/images/blog/slug/upload-resume.svg"
             alt="Resume preview"

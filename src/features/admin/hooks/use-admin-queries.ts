@@ -110,6 +110,20 @@ export const useDeleteRole = () => {
   });
 };
 
+// ─── Users ────────────────────────────────────────────────────
+export const useUsers = (params: AdminQueryParams) =>
+  useQuery({
+    queryKey: ['admin', 'users', params],
+    queryFn: () => adminApi.getUsers(params),
+  });
+
+// ─── Referrals ────────────────────────────────────────────────
+export const useReferrals = (params: AdminQueryParams) =>
+  useQuery({
+    queryKey: ['admin', 'referrals', params],
+    queryFn: () => adminApi.getReferrals(params),
+  });
+
 // ─── Feedbacks ─────────────────────────────────────────────────
 export const useFeedbacks = (params: AdminQueryParams) =>
   useQuery({
@@ -267,3 +281,9 @@ export const useToggleResumeExamplePublish = () => {
     },
   });
 };
+
+// ─── Parse Resume for Example ──────────────────────────────────
+export const useParseResumeForExample = () =>
+  useMutation({
+    mutationFn: (formData: FormData) => adminApi.parseResumeForExample(formData),
+  });

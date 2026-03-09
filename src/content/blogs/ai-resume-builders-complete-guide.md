@@ -8,8 +8,8 @@ authorRole: "Career Experts"
 authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp" 
 tags:
   - "resume"
-  - "job search"
-featured: "primary"
+  - "job"
+  - "interview"
 published: true
 coverImage: ""
 ---

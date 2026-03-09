@@ -61,18 +61,23 @@ export function TemplatesDialog({ children, onTemplateSelect, currentTemplateId 
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex-1 overflow-y-auto p-3 md:p-6">
               <div className="flex flex-col md:flex-row md:flex-wrap items-center justify-center gap-6 md:gap-8">
-                {templates?.map((template) => (
-                  <TemplateCard
-                    key={template.id}
-                    template={template}
-                    onClick={() => {
-                      onTemplateSelect?.(template);
-                      setIsOpen(false);
-                    }}
-                    onPreviewClick={() => handleTemplateClick(template)}
-                    isCurrent={currentTemplateId === template.id}
-                  />
-                ))}
+                {templates?.map((template) => {
+                  const isNew = Date.now() - new Date(template.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
+                  return (
+                    <TemplateCard
+                      key={template.id}
+                      template={template}
+                      onClick={() => {
+                        onTemplateSelect?.(template);
+                        setIsOpen(false);
+                      }}
+                      onPreviewClick={() => handleTemplateClick(template)}
+                      isCurrent={currentTemplateId === template.id}
+                      isNew={isNew}
+                      isTrending={template.isTrending}
+                    />
+                  );
+                })}
               </div>
             </div>
           </div>

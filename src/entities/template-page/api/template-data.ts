@@ -5,8 +5,13 @@ export interface TemplateApiResponse {
   id: string;
   json: any;
   publicImageUrl: string;
+  style: string[];
+  colorVariations: { name: string; primaryColor: string }[];
+  layoutType: string;
+  roles: { id: string; name: string }[];
   createdAt: string;
   updatedAt: string;
+  isTrending?: boolean;
 }
 
 export interface Template extends TemplateApiResponse {}

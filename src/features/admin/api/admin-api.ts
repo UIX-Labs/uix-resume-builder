@@ -16,6 +16,9 @@ import type {
   TemplateStatus,
   UpdateTemplateMetadataPayload,
   Role,
+  ParsedResumeExampleResponse,
+  UserRow,
+  ReferralRow,
 } from '../types/admin.types';
 
 function buildQueryString(params: AdminQueryParams): string {
@@ -81,6 +84,14 @@ export const deleteRole = (id: string) =>
   fetcher<{ success: boolean }>(`admin/roles/${id}`, {
     options: { method: 'DELETE' },
   });
+
+// ─── Users ────────────────────────────────────────────────────
+export const getUsers = (params: AdminQueryParams = {}) =>
+  fetcher<PaginatedResponse<UserRow>>(`admin/users${buildQueryString(params)}`);
+
+// ─── Referrals ────────────────────────────────────────────────
+export const getReferrals = (params: AdminQueryParams = {}) =>
+  fetcher<PaginatedResponse<ReferralRow>>(`admin/referrals${buildQueryString(params)}`);
 
 // ─── Feedbacks ─────────────────────────────────────────────────
 export const getFeedbacks = (params: AdminQueryParams = {}) =>
@@ -166,4 +177,9 @@ export const deleteResumeExample = (id: string) =>
 export const toggleResumeExamplePublish = (id: string) =>
   fetcher<AdminResumeExampleDetail>(`admin/resume-examples/${id}/toggle-publish`, {
     options: { method: 'PATCH' },
+  });
+
+export const parseResumeForExample = (formData: FormData) =>
+  fetcher<ParsedResumeExampleResponse>('admin/resume-examples/parse-resume', {
+    options: { method: 'POST', body: formData },
   });

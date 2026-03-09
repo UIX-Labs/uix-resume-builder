@@ -177,7 +177,7 @@ export function TemplateFilterBar({
       {/* Row 1: Filter controls — Figma: W 1075, H 71, Gap 19 */}
       <div
         className={cn(
-          'flex items-center gap-[19px] bg-white rounded-2xl px-4 py-3 shadow-sm flex-nowrap overflow-x-auto scrollbar-hide',
+          'flex items-center gap-[19px] bg-white rounded-2xl px-4 py-3 shadow-sm flex-nowrap',
           align === 'center' ? 'justify-center' : 'justify-start',
         )}
       >
@@ -190,7 +190,7 @@ export function TemplateFilterBar({
           onChange={(e) => onFilterChange({ layoutType: e.target.value || undefined })}
           className="px-3 py-1.5 rounded-lg border border-gray-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
         >
-          <option value="">Column</option>
+          <option value="">Layout</option>
           {COLUMN_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

@@ -1,5 +1,6 @@
 export interface OverviewStats {
   users: { total: number; daily: number; weekly: number };
+  logins: { total: number; daily: number; weekly: number };
   downloads: { total: number; daily: number; weekly: number };
   reviews: { total: number; pending: number; completed: number; daily: number; weekly: number };
   feedbacks: { total: number; daily: number; weekly: number };

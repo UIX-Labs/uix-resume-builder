@@ -1,0 +1,2328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StackForce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+  scroll-behavior: smooth;
+}
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ═══════════════════════════════════════
+     HERO SECTION
+  ═══════════════════════════════════════ */
+
+  .hero {
+    width: 100%;
+    min-height: 100vh;
+    background: #080c1c;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 120px 40px 100px;
+  }
+
+  /* Canvas background */
+  .hero__canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+  }
+
+  /* Floating glow orbs */
+  .hero__orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .hero__orb--1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(91,88,224,0.35) 0%, transparent 70%);
+    top: -100px;
+    left: -100px;
+    animation: orbDrift1 18s ease-in-out infinite alternate;
+  }
+
+  .hero__orb--2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+    bottom: -80px;
+    right: -80px;
+    animation: orbDrift2 22s ease-in-out infinite alternate;
+  }
+
+  .hero__orb--3 {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%);
+    top: 40%;
+    left: 60%;
+    animation: orbDrift3 14s ease-in-out infinite alternate;
+  }
+
+  @keyframes orbDrift1 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(80px, 60px) scale(1.15); }
+  }
+  @keyframes orbDrift2 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-60px, -80px) scale(1.2); }
+  }
+  @keyframes orbDrift3 {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(-40px, 50px) scale(0.85); }
+  }
+
+  /* Noise grain overlay */
+  .hero__grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+  }
+
+
+  /* Content */
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Badge */
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(91,88,224,0.15);
+    border: 1px solid rgba(91,88,224,0.35);
+    color: #a5b4fc;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 7px 16px;
+    border-radius: 100px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+  }
+
+  .hero__badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #818cf8;
+    border-radius: 50%;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+  /* Heading */
+  .hero__heading {
+    font-size: 88px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.0;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.25s forwards;
+  }
+
+  .hero__heading-accent {
+    background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subheading */
+  .hero__subheading {
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
+  }
+
+  /* CTA row */
+  .hero__ctas {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.55s forwards;
+  }
+
+  .hero__btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #5B58E0;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1),
+                box-shadow 0.25s ease,
+                background 0.2s ease;
+  }
+
+  .hero__btn-primary:hover {
+    background: #6c6ae8;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(91,88,224,0.45);
+  }
+
+  .hero__btn-primary svg {
+    transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1);
+  }
+  .hero__btn-primary:hover svg { transform: translateX(3px); }
+
+  .hero__btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: rgba(255,255,255,0.65);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 16px 24px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s ease,
+                color 0.2s ease,
+                transform 0.25s cubic-bezier(0.34,1.3,0.64,1);
+  }
+
+  .hero__btn-ghost:hover {
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.28);
+    transform: translateY(-2px);
+  }
+
+  /* Disclaimer */
+  .hero__disclaimer {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+    font-weight: 400;
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.7s forwards;
+  }
+
+  /* Social proof strip */
+  .hero__proof {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 72px;
+    opacity: 0;
+    animation: heroFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.85s forwards;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero__proof-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  .hero__proof-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .hero__proof-number {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1;
+  }
+
+  .hero__proof-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* Entrance animation */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(22px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+
+  /* ═══════════════════════════════════════
+     SECTION 0 — PAIN POINTS
+  ═══════════════════════════════════════ */
+
+  .pp {
+    width: 100%;
+    background: #ECEEF6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 40px 100px;
+  }
+
+  .pp__inner {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Eyebrow pill */
+.pp__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px; /* <-- NEW: Adds space between the dot and the text */
+    background: #EEF2FF;
+    border: 1px solid rgba(215, 218, 244, 1);
+    color: #4B5563;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  /* ── PULSATING DOT ───────────────────── */
+  .pp__eyebrow-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #E5443B;
+    border-radius: 50%;
+    animation: pulseRed 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseRed {
+    0%, 100% { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+    50% { 
+      opacity: 0.45; 
+      transform: scale(0.75); 
+    }
+  }
+
+  /* Heading */
+  .pp__heading {
+    font-size: 46px;
+    font-weight: 800;
+    color: #0F0E17;
+    line-height: 1.15;
+    text-align: center;
+    max-width: 780;
+    margin-bottom: 64px;
+  }
+
+  .pp__heading-stat {
+    color: #E5443B;
+  }
+
+  /* Cards grid */
+.pp__grid {
+    display: flex;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid rgba(215, 218, 244, 1);
+    overflow: hidden;
+  }
+
+  @media (max-width: 900px) {
+    .pp__grid { flex-direction: column; }
+    .pp__card { border-right: none !important; border-bottom: 1px solid #E8EAF2; }
+    .pp__card:last-child { border-bottom: none; }
+  }
+
+  .pp__card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 28px 36px;
+    border-right: 1px solid rgba(215, 218, 244, 1);
+    gap: 0;
+  }
+
+  .pp__card:last-child {
+    border-right: none;
+  }
+
+  .pp__card-icon-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #ECEEF8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    flex-shrink: 0;
+  }
+
+  .pp__card-icon-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .pp__card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F0E17;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  .pp__card-desc {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #6B7280;
+    line-height: 1.65;
+  }
+
+  /* Transition between sections — light fade to white */
+  .pp__bottom-fade {
+    width: 100%;
+    height: 60px;
+    background: linear-gradient(to bottom, #ECEEF6, #ffffff);
+    margin-top: -1px;
+  }
+
+
+  /* ═══════════════════════════════════════
+     SCROLL-GROW BRIDGE
+  ═══════════════════════════════════════ */
+
+  .bw-bridge {
+    width: 100%;
+    background: linear-gradient(to bottom, #ECEEF6 0%, #ffffff 60%);
+    display: flex;
+    justify-content: center;
+    padding: 52px 40px 0;
+  }
+
+  .bw-bridge__text {
+    font-size: 18px;
+    font-weight: 800;
+    color: #5B58E0;
+    line-height: 1.1;
+    text-align: center;
+    will-change: font-size, letter-spacing;
+  }
+
+
+  /* ═══════════════════════════════════════
+     SECTION 1 — BETTER WAY
+  ═══════════════════════════════════════ */
+
+  .bw {
+    max-width: 1200px;
+    width: 100%;
+    padding: 32px 40px 0;
+  }
+
+  /* Heading */
+  .bw__heading {
+    text-align: center;
+    font-size: 46px;
+    font-weight: 800;
+    color: #5B58E0;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  /* StackForce logo box */
+  .bw__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 40px;
+    width: fit-content;
+    overflow: hidden;
+  }
+
+  .bw__logo-part {
+    font-size: 22px;
+    font-weight: 800;
+    color: #5B58E0;
+    padding: 8px 18px;
+  }
+
+  .bw__logo-divider {
+    width: 1.5px;
+    align-self: stretch;
+    background: #C7D2FE;
+  }
+
+  /* Dark card */
+  .bw__card {
+    background: #080c1c;
+    border-radius: 24px;
+    padding: 36px 40px 44px;
+    overflow: hidden;
+  }
+
+  /* Tab bar */
+  .bw__tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+
+  .bw__tablist {
+    position: relative;
+    display: flex;
+    background: #13172b;
+    border-radius: 100px;
+    padding: 5px;
+    gap: 2px;
+  }
+
+  /* Sliding pill indicator */
+  .bw__tab-indicator {
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    height: calc(100% - 10px);
+    background: #5B58E0;
+    border-radius: 100px;
+    transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+                width    0.35s cubic-bezier(0.34, 1.2, 0.64, 1);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .bw__tab {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    border: none;
+    border-radius: 100px;
+    padding: 9px 28px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.25s ease;
+    white-space: nowrap;
+    outline: none;
+  }
+
+  .bw__tab:hover:not(.is-active) {
+    color: #a5b4fc;
+  }
+
+  .bw__tab.is-active {
+    color: #ffffff;
+  }
+
+  /* Stage — clips the sliding content */
+  .bw__stage {
+    position: relative;
+    overflow: hidden;
+    height: 520px;
+  }
+
+  /* Each content panel */
+  .bw__panel {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0;
+    width: 100%;
+  }
+
+  .bw__panel.is-active {
+    display: flex;
+  }
+
+  /* Slide animations — direction set by JS class on .bw__stage */
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(80px); }
+    to   { opacity: 1; transform: translateX(0);    }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-80px); }
+    to   { opacity: 1; transform: translateX(0);     }
+  }
+  @keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0);     }
+    to   { opacity: 0; transform: translateX(-80px); }
+  }
+  @keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0);    }
+    to   { opacity: 0; transform: translateX(80px); }
+  }
+
+  .bw__panel.anim-in-right  { animation: slideInRight  0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .bw__panel.anim-in-left   { animation: slideInLeft   0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .bw__panel.anim-out-left  { animation: slideOutLeft  0.28s ease-in forwards; position: absolute; top: 0; left: 0; width: 100%; }
+  .bw__panel.anim-out-right { animation: slideOutRight 0.28s ease-in forwards; position: absolute; top: 0; left: 0; width: 100%; }
+
+  /* Panel image */
+  .bw__panel-img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    display: block;
+    margin-bottom: 32px;
+  }
+
+  /* Panel text */
+  .bw__panel-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 14px;
+  }
+
+  .bw__panel-desc {
+    font-size: 14px;
+    color: #6b7a9f;
+    line-height: 1.75;
+    max-width: 640px;
+  }
+
+  /* ═══════════════════════════════════════
+     SECTION 2 — HOW IT WORKS
+  ═══════════════════════════════════════ */
+
+  .hiw {
+    max-width: 1200px;
+    width: 100%;
+    padding: 100px 40px 80px;
+    align-items: center;
+  }
+
+.hiw__eyebrow {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto 22px auto;   
+    align-items: center;
+    gap: 7px;
+    background: #EEF2FF;
+    color: #4B5563;
+    border-radius: 100px;
+    border: 1px solid rgba(215, 218, 244, 1);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 18px;
+    margin-bottom: 32px;
+  }
+
+  .hiw__eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    background: #10B981;
+    border-radius: 50%;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.45; transform: scale(0.7); }
+  }
+
+  .hiw__heading {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 800;
+    color: #0F0E17;
+    line-height: 1.13;
+    margin-bottom: 14px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hiw__subheading {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6B7280;
+    line-height: 1.7;
+    margin-bottom: 56px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hiw__body {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    gap: 64px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .hiw__body { grid-template-columns: 1fr; gap: 36px; }
+    .hiw__panel { order: -1; }
+  }
+
+  .hiw__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .hiw__card {
+    position: relative;
+    background: transparent;
+    border: none;
+    border-radius: 14px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    overflow: hidden;
+    outline: none;
+  }
+
+  .hiw__card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #818CF8 0%, #6366F1 100%);
+    border-radius: 3px 0 0 3px;
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .hiw__card:hover:not(.is-active) { background: #F8F8FF; }
+
+  .hiw__card.is-active {
+    background: #EEF2FF;
+  }
+
+  .hiw__card.is-active::before { transform: scaleY(1); }
+
+  .hiw__title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.3;
+    transition: color 0.3s;
+    pointer-events: none;
+  }
+
+  .hiw__card.is-active .hiw__title { color: #3730A3; }
+
+  .hiw__card-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    margin-top: 0;
+    transition:
+      grid-template-rows 0.42s cubic-bezier(0.4, 0, 0.2, 1),
+      opacity            0.38s ease,
+      margin-top         0.42s ease;
+    pointer-events: none;
+  }
+
+  .hiw__card-body-inner { overflow: hidden; }
+
+  .hiw__card.is-active .hiw__card-body {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 8px;
+  }
+
+  .hiw__desc {
+    font-size: 14px;
+    color: #4B5563;
+    line-height: 1.72;
+  }
+
+  .hiw__panel {
+    position: relative;
+    height: 600px;
+    max-width: 100%;
+  }
+
+  .hiw__img-slot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hiw__img-slot img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 25px;
+    display: block;
+  }
+
+  .hiw__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+  }
+
+  .hiw__placeholder-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #C7D2FE;
+    letter-spacing: 0.05em;
+  }
+
+  @keyframes imgEnter {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); filter: blur(5px);  }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    filter: blur(0px); }
+  }
+
+  @keyframes imgExit {
+    from { opacity: 1; transform: translateY(0)     scale(1);    filter: blur(0);   }
+    to   { opacity: 0; transform: translateY(-10px) scale(1.02); filter: blur(4px); }
+  }
+
+  .hiw__img-slot.is-entering { animation: imgEnter 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .hiw__img-slot.is-exiting  { animation: imgExit  0.32s ease-in forwards; }
+
+/* ═══════════════════════════════════════
+     SECTION 3 — FAQ
+  ═══════════════════════════════════════ */
+
+  .faq {
+    max-width: 900px;
+    width: 100%;
+    padding: 80px 40px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #EEF2FF;
+    border: 1px solid rgba(215, 218, 244, 1);
+    color: #4B5563;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 7px 18px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+  }
+
+  .faq__eyebrow-dot {
+    width: 6px;
+    height: 6px;
+    background: #6366F1;
+    border-radius: 50%;
+    animation: pulseDot 2s ease-in-out infinite;
+  }
+
+.faq__heading {
+    font-size: 46px;
+    font-weight: 800;
+    color: #0F0E17;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .faq__subheading {
+    font-size: 16px;
+    font-weight: 400;
+    color: #6B7280;
+    text-align: center;
+    margin-bottom: 52px;
+  }
+
+  .faq__list {
+    width: 100%;
+  }
+
+  .faq__item {
+    border-top: 1px solid #E5E7EB;
+  }
+
+  .faq__item:last-child {
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  .faq__trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    background: none;
+    border: none;
+    padding: 26px 0;
+    cursor: pointer;
+    text-align: left;
+    outline: none;
+  }
+
+  .faq__trigger:focus-visible .faq__question {
+    color: #4F46E5;
+  }
+
+  .faq__question {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0F0E17;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+  }
+
+  .faq__item.is-open .faq__question {
+    color: #0F0E17;
+  }
+
+  .faq__chevron {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    color: #9CA3AF;
+    transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1),
+                color 0.2s ease;
+  }
+
+  .faq__item.is-open .faq__chevron {
+    transform: rotate(180deg);
+    color: #4F46E5;
+  }
+
+  .faq__body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .faq__item.is-open .faq__body {
+    grid-template-rows: 1fr;
+  }
+
+  .faq__body-inner {
+    overflow: hidden;
+  }
+
+  .faq__answer {
+    font-size: 15px;
+    color: #6B7280;
+    line-height: 1.75;
+    padding-bottom: 28px;
+    max-width: 820px;
+  }
+
+  /* ═══════════════════════════════════════
+     SECTION 4 — CTA
+  ═══════════════════════════════════════ */
+
+  .cta {
+    width: 100%;
+    background: linear-gradient(135deg, #6366F1 0%, #5B58E0 40%, #7B78E8 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 120px 40px;
+  }
+
+  .cta__inner {
+    max-width: 700px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta__heading {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .cta__subheading {
+    font-size: 17px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.65;
+    margin-bottom: 40px;
+  }
+
+  .cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    color: #3730A3;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 16px 32px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1),
+                box-shadow 0.25s ease;
+    margin-bottom: 18px;
+  }
+
+  .cta__btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .cta__btn svg {
+    transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1);
+  }
+
+  .cta__btn:hover svg {
+    transform: translateX(3px);
+  }
+
+  .cta__disclaimer {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 400;
+  }
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+
+.footer {
+  width: 100%;
+  background: #080c1c;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Reuse hero orb style */
+.footer__orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.footer__orb--1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(91,88,224,0.22) 0%, transparent 70%);
+  bottom: -160px;
+  left: -100px;
+  animation: orbDrift2 20s ease-in-out infinite alternate;
+}
+
+.footer__orb--2 {
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(139,92,246,0.16) 0%, transparent 70%);
+  top: -80px;
+  right: -60px;
+  animation: orbDrift1 16s ease-in-out infinite alternate;
+}
+
+.footer__grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  pointer-events: none;
+}
+
+.footer__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+/* Top divider line */
+.footer__rule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(99,102,241,0.5) 30%,
+    rgba(167,139,250,0.6) 50%,
+    rgba(99,102,241,0.5) 70%,
+    transparent 100%
+  );
+}
+
+/* Main footer body */
+.footer__inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  width: 100%;
+  padding: 80px 40px 0;
+}
+
+/* Top row */
+.footer__top {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 64px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+@media (max-width: 960px) {
+  .footer__top {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer__brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 560px) {
+  .footer__top { grid-template-columns: 1fr; }
+}
+
+/* Brand column */
+.footer__brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  text-decoration: none;
+}
+
+.footer__brand-wordmark {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.footer__brand-wordmark span {
+  color: #818cf8;
+}
+
+.footer__brand-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.38);
+  line-height: 1.75;
+  max-width: 280px;
+  margin-bottom: 28px;
+}
+
+/* Newsletter */
+.footer__newsletter {
+  display: flex;
+  gap: 0;
+  max-width: 300px;
+}
+
+.footer__email-input {
+  flex: 1;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.footer__email-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.footer__email-input:focus {
+  border-color: rgba(99,102,241,0.5);
+  background: rgba(99,102,241,0.08);
+}
+
+.footer__email-btn {
+  background: #5B58E0;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  padding: 11px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.footer__email-btn:hover { background: #6c6ae8; }
+
+.footer__email-btn svg { color: #fff; display: block; }
+
+/* Nav columns */
+.footer__col-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+
+.footer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  list-style: none;
+}
+
+.footer__nav a {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.48);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  position: relative;
+  width: fit-content;
+}
+
+.footer__nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #818cf8;
+  transition: width 0.25s ease;
+}
+
+.footer__nav a:hover {
+  color: rgba(255,255,255,0.9);
+}
+
+.footer__nav a:hover::after { width: 100%; }
+
+/* Bottom row */
+.footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 0 36px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer__legal {
+  font-size: 13px;
+  color: rgba(255,255,255,0.2);
+  font-weight: 400;
+}
+
+.footer__legal a {
+  color: rgba(255,255,255,0.35);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer__legal a:hover { color: rgba(255,255,255,0.7); }
+
+/* Social icons */
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer__social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.footer__social-btn:hover {
+  background: rgba(91,88,224,0.2);
+  border-color: rgba(91,88,224,0.4);
+  color: #a5b4fc;
+  transform: translateY(-2px);
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+<section class="hero">
+
+  <!-- Animated canvas grid -->
+  <canvas class="hero__canvas" id="hero-canvas"></canvas>
+
+  <!-- Glow orbs -->
+  <div class="hero__orb hero__orb--1"></div>
+  <div class="hero__orb hero__orb--2"></div>
+  <div class="hero__orb hero__orb--3"></div>
+
+  <!-- Grain texture -->
+  <div class="hero__grain"></div>
+
+  <!-- Bottom fade -->
+  <div class="hero__fade"></div>
+
+  <!-- Content -->
+  <div class="hero__inner">
+
+    <div class="hero__badge">
+      <span class="hero__badge-dot"></span>
+      24/7 AI recruiting assistant
+    </div>
+
+    <h1 class="hero__heading">
+      Let AI hire your<br>
+      <span class="hero__heading-accent">Next best employee.</span>
+    </h1>
+
+    <p class="hero__subheading">
+      Stackforce's AI agent autonomously sources, vets, and engages top candidates — so your team wakes up to a pipeline, not a to-do list.
+    </p>
+
+    <div class="hero__ctas">
+      <a href="#" class="hero__btn-primary">
+        Start Sourcing Free
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="8" x2="13" y2="8"/>
+          <polyline points="9 4 13 8 9 12"/>
+        </svg>
+      </a>
+      <a href="#hiw" class="hero__btn-ghost">
+        See how it works
+      </a>
+    </div>
+
+    <p class="hero__disclaimer">No credit card required · Set up in under 2 minutes</p>
+
+    <div class="hero__proof">
+      <div class="hero__proof-stat">
+        <span class="hero__proof-number">20+</span>
+        <span class="hero__proof-label">Teams onboarded</span>
+      </div>
+      <div class="hero__proof-divider"></div>
+      <div class="hero__proof-stat">
+        <span class="hero__proof-number">3×</span>
+        <span class="hero__proof-label">Higher reply rates</span>
+      </div>
+      <div class="hero__proof-divider"></div>
+      <div class="hero__proof-stat">
+        <span class="hero__proof-number">60%</span>
+        <span class="hero__proof-label">Less time sourcing</span>
+      </div>
+      <div class="hero__proof-divider"></div>
+      <div class="hero__proof-stat">
+        <span class="hero__proof-number">48h</span>
+        <span class="hero__proof-label">To first candidate</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SECTION 0 — PAIN POINTS
+════════════════════════════════════════ -->
+<section class="pp">
+  <div class="pp__inner">
+
+    <div class="pp__eyebrow">
+      <span class="pp__eyebrow-dot"></span>
+      Are You Still Recruiting Like It's 2016?
+  </div>
+
+    <h2 class="pp__heading">
+      Recruiters waste <span class="pp__heading-stat">60%</span> of their time on
+      manual sourcing, bad fits, and follow-ups
+    </h2>
+
+<div class="pp__grid">
+
+  <div class="pp__card">
+    <div class="pp__card-icon-wrap">
+      <img src="icon-linkedin.png" alt="">
+    </div>
+    <div class="pp__card-title">Manual LinkedIn scraping</div>
+    <p class="pp__card-desc">Recruiters spend hours searching LinkedIn and databases just to find a few potential candidates.</p>
+  </div>
+
+  <div class="pp__card">
+    <div class="pp__card-icon-wrap">
+      <img src="icon-followup.png" alt="">
+    </div>
+    <div class="pp__card-title">No follow-up reminders</div>
+    <p class="pp__card-desc">Great candidates slip through the cracks when follow-ups depend on manual reminders and recruiter memory.</p>
+  </div>
+
+  <div class="pp__card">
+    <div class="pp__card-icon-wrap">
+      <img src="icon-ats.png" alt="">
+    </div>
+    <div class="pp__card-title">Chaotic ATS tracking</div>
+    <p class="pp__card-desc">Candidates get scattered across spreadsheets, ATS tools, and inboxes making it hard to track real progress.</p>
+  </div>
+
+  <div class="pp__card">
+    <div class="pp__card-icon-wrap">
+      <img src="icon-stack.png" alt="">
+    </div>
+    <div class="pp__card-title">Fragmented hiring stack</div>
+    <p class="pp__card-desc">Sourcing tools, ATS platforms, email outreach, and analytics live in separate systems that don't talk to each other.</p>
+  </div>
+
+</div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SCROLL-GROW HEADING BRIDGE
+════════════════════════════════════════ -->
+<div class="bw-bridge">
+  <h2 class="bw-bridge__text" id="bw-heading">There's a better way!</h2>
+</div>
+
+
+<!-- ═══════════════════════════════════════
+     SECTION 1 — BETTER WAY
+════════════════════════════════════════ -->
+<section class="bw">
+
+  <div class="bw__logo">
+    <img src="stackforce-logo.png">
+  </div>
+
+  <div class="bw__card">
+
+    <!-- Tab bar -->
+    <div class="bw__tabs">
+      <div class="bw__tablist" role="tablist">
+        <div class="bw__tab-indicator" id="bw-indicator"></div>
+        <button class="bw__tab is-active" data-bw-tab="0" role="tab" aria-selected="true">Sourcing</button>
+        <button class="bw__tab"           data-bw-tab="1" role="tab" aria-selected="false">Intelligence</button>
+        <button class="bw__tab"           data-bw-tab="2" role="tab" aria-selected="false">Outreach</button>
+        <button class="bw__tab"           data-bw-tab="3" role="tab" aria-selected="false">Prediction</button>
+      </div>
+    </div>
+
+    <!-- Stage -->
+    <div class="bw__stage" id="bw-stage">
+
+      <div class="bw__panel is-active" data-bw-panel="0">
+        <img class="bw__panel-img" src="sourcing.webp" alt="24/7 Autonomous Sourcing"
+          onerror="this.style.display='none'">
+        <h3 class="bw__panel-title">24/7 Autonomous Sourcing</h3>
+        <p class="bw__panel-desc">Stackforce AI doesn't just search, it executes. It autonomously scours talent pools, runs deep-profile analysis to verify exact fit, and launches hyper-personalized outreach on its own. Wake up every day to an inbox full of pre-vetted, high-intent candidates ready to interview.</p>
+      </div>
+
+      <div class="bw__panel" data-bw-panel="1">
+        <img class="bw__panel-img" src="intelligence.webp" alt="Instant Candidate Intelligence"
+          onerror="this.style.display='none'">
+        <h3 class="bw__panel-title">Instant Candidate Intelligence</h3>
+        <p class="bw__panel-desc">Every bullet point, project, and gap on a candidate's profile — analyzed in seconds. Stackforce builds a comprehensive, hiring-manager-ready pitch that tells you exactly what they built, the specific skills they used, and whether they're a match for your role.</p>
+      </div>
+
+      <div class="bw__panel" data-bw-panel="2">
+        <img class="bw__panel-img" src="per-outreach.webp" alt="Hyper-Personalized Outreach at Scale"
+          onerror="this.style.display='none'">
+        <h3 class="bw__panel-title">Hyper-Personalized Outreach at Scale</h3>
+        <p class="bw__panel-desc">Top-tier candidates ignore generic recruiter spam. Build and launch campaigns personalized to every candidate and every job description. Get the scale of marketing automation with the personalization required to drive actual replies.</p>
+      </div>
+
+      <div class="bw__panel" data-bw-panel="3">
+        <img class="bw__panel-img" src="prediction.webp" alt="Predictive Hiring Intelligence"
+          onerror="this.style.display='none'">
+        <h3 class="bw__panel-title">Predictive Hiring Intelligence</h3>
+        <p class="bw__panel-desc">Stop guessing who will succeed. Stackforce models historical hiring data, role performance signals, and candidate trajectory to surface who is most likely to thrive — before you ever make an offer.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SECTION 2 — HOW IT WORKS
+════════════════════════════════════════ -->
+<section class="hiw" id="hiw">
+
+  <div class="hiw__eyebrow">
+    <span class="hiw__eyebrow-dot"></span>
+    How It Works
+  </div>
+  <h2 class="hiw__heading">From Criteria to Candidate Pipeline</h2>
+  <p class="hiw__subheading">Four steps. Fully autonomous. Your team focuses on what they do best — building relationships and closing hires.</p>
+
+  <div class="hiw__body">
+
+    <div class="hiw__steps">
+
+      <div class="hiw__card is-active" data-index="0" tabindex="0" role="button" aria-pressed="true">
+        <div class="hiw__title">Define Your Ideal Candidate</div>
+        <div class="hiw__card-body">
+          <div class="hiw__card-body-inner">
+            <p class="hiw__desc">Set your criteria — role, skills, experience. The AI understands the nuance behind your requirements, from micro-skills to founder mentality.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw__card" data-index="1" tabindex="0" role="button" aria-pressed="false">
+        <div class="hiw__title">AI Sources & Vets Autonomously</div>
+        <div class="hiw__card-body">
+          <div class="hiw__card-body-inner">
+            <p class="hiw__desc">Our AI scans thousands of profiles across LinkedIn, GitHub, and proprietary databases — scoring and ranking every candidate against your exact criteria, around the clock.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw__card" data-index="2" tabindex="0" role="button" aria-pressed="false">
+        <div class="hiw__title">Launch Personalized Outreach</div>
+        <div class="hiw__card-body">
+          <div class="hiw__card-body-inner">
+            <p class="hiw__desc">Craft hyper-personalized messages for every candidate. AI tailors each outreach based on their background, interests, and the role — driving 3× higher response rates.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw__card" data-index="3" tabindex="0" role="button" aria-pressed="false">
+        <div class="hiw__title">Review & Hire</div>
+        <div class="hiw__card-body">
+          <div class="hiw__card-body-inner">
+            <p class="hiw__desc">Get a curated shortlist with AI-generated summaries, skill assessments, and fit scores — so you can make confident hiring decisions faster than ever.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="hiw__panel">
+
+      <div class="hiw__img-slot is-entering" id="slot-0">
+        <img src="define-candidate.webp" alt="Define Your Ideal Candidate"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hiw__placeholder" style="display:none;">
+          <span class="hiw__placeholder-name">define-candidate.png</span>
+        </div>
+      </div>
+
+      <div class="hiw__img-slot" id="slot-1">
+        <img src="ai-sourcing.webp" alt="AI Sources & Vets Autonomously"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hiw__placeholder" style="display:none;">
+          <span class="hiw__placeholder-name">ai-sourcing.png</span>
+        </div>
+      </div>
+
+      <div class="hiw__img-slot" id="slot-2">
+        <img src="outreach.webp" alt="Launch Personalized Outreach"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hiw__placeholder" style="display:none;">
+          <span class="hiw__placeholder-name">outreach.png</span>
+        </div>
+      </div>
+
+      <div class="hiw__img-slot" id="slot-3">
+        <img src="review-hire.webp" alt="Review & Hire"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="hiw__placeholder" style="display:none;">
+          <span class="hiw__placeholder-name">review-hire.png</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SECTION 3 — FAQ
+════════════════════════════════════════ -->
+<section class="faq">
+
+  <div class="faq__eyebrow">
+    <span class="faq__eyebrow-dot"></span>
+    FAQ
+  </div>
+  <h2 class="faq__heading">Got questions? We've got answers.</h2>
+  <p class="faq__subheading">Everything you need to know about Stackforce — how it works, what it replaces, and why it's different.</p>
+
+  <div class="faq__list">
+
+    <div class="faq__item is-open">
+      <button class="faq__trigger" aria-expanded="true">
+        <span class="faq__question">What is Stackforce and how is it different from LinkedIn Recruiter?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">Stackforce is an AI-native recruiting platform that autonomously sources, vets, and engages candidates. Unlike LinkedIn Recruiter which is a search tool that still requires manual effort at every step, Stackforce's AI agent handles the entire top-of-funnel — from identifying candidates to launching personalized outreach — without human intervention.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item">
+      <button class="faq__trigger" aria-expanded="false">
+        <span class="faq__question">How does the AI sourcing agent actually work?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">Our AI agent continuously scans LinkedIn, GitHub, and proprietary talent databases using your role requirements as a living brief. It scores every profile against your criteria, filters out poor fits automatically, and queues only pre-vetted candidates for outreach — all without you lifting a finger.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item">
+      <button class="faq__trigger" aria-expanded="false">
+        <span class="faq__question">Does Stackforce replace my recruiters?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">No — Stackforce eliminates the repetitive, low-value work so your recruiters can focus on what actually matters: building relationships, evaluating culture fit, and closing top candidates. Think of it as giving every recruiter on your team a tireless AI research assistant.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item">
+      <button class="faq__trigger" aria-expanded="false">
+        <span class="faq__question">What makes your outreach different from other sequencing tools?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">Most sequencing tools send the same templated message to everyone. Stackforce generates a unique message for every candidate based on their specific background, projects, and the role — resulting in 3× higher reply rates compared to generic outreach campaigns.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item">
+      <button class="faq__trigger" aria-expanded="false">
+        <span class="faq__question">How quickly can I see results?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">Most teams see qualified candidates in their inbox within 48 hours of setting up a role. Full pipeline velocity — consistent daily candidate flow with reply tracking — typically kicks in within the first week.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="faq__item">
+      <button class="faq__trigger" aria-expanded="false">
+        <span class="faq__question">What about data privacy and compliance?</span>
+        <svg class="faq__chevron" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="5 8 10 13 15 8"/>
+        </svg>
+      </button>
+      <div class="faq__body">
+        <div class="faq__body-inner">
+          <p class="faq__answer">Stackforce is built with GDPR and CCPA compliance at its core. All candidate data is processed and stored securely, outreach respects opt-out signals, and we never store personal data beyond what's required to run your campaigns.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     SECTION 4 — CTA
+════════════════════════════════════════ -->
+<section class="cta">
+  <div class="cta__inner">
+    <h2 class="cta__heading">Stop Searching. Start Hiring.</h2>
+    <p class="cta__subheading">Your competitors are already using AI to build their pipeline. Every day you wait is a candidate you lose.</p>
+    <a href="#" class="cta__btn">
+      Start Sourcing Free
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="8" x2="13" y2="8"/>
+        <polyline points="9 4 13 8 9 12"/>
+      </svg>
+    </a>
+    <p class="cta__disclaimer">No credit card required. Set up in under 2 minutes.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="footer">
+
+  <canvas class="footer__canvas" id="footer-canvas"></canvas>
+  <div class="footer__orb footer__orb--1"></div>
+  <div class="footer__orb footer__orb--2"></div>
+  <div class="footer__grain"></div>
+  <div class="footer__rule"></div>
+
+  <div class="footer__inner">
+
+    <!-- Top grid -->
+    <div class="footer__top">
+
+      <!-- Brand + newsletter -->
+      <div class="footer__brand">
+        <a href="#" class="footer__brand-logo">
+          <span class="footer__brand-wordmark">Stack<span>force</span></span>
+        </a>
+        <p class="footer__brand-desc">
+          The AI-native recruiting platform that sources, vets, and engages top candidates — autonomously.
+        </p>
+        <div class="footer__newsletter">
+          <input class="footer__email-input" type="email" placeholder="Get product updates" />
+          <button class="footer__email-btn" aria-label="Subscribe">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="8" x2="13" y2="8"/>
+              <polyline points="9 4 13 8 9 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Product -->
+      <div>
+        <p class="footer__col-label">Product</p>
+        <ul class="footer__nav">
+          <li><a href="#bw-stage">AI Sourcing</a></li>
+          <li><a href="#bw-stage">Candidate Intelligence</a></li>
+          <li><a href="#bw-stage">Outreach Campaigns</a></li>
+          <li><a href="#bw-stage">Predictive Hiring</a></li>
+        </ul>
+      </div>
+
+      <!-- Company -->
+      <div>
+        <p class="footer__col-label">Company</p>
+        <ul class="footer__nav">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <p class="footer__col-label">Resources</p>
+        <ul class="footer__nav">
+          <li><a href="#">Documentation</a></li>
+          <li><a href="#">Security</a></li>
+          <li><a href="#">GDPR & CCPA</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer__bottom">
+
+      <p class="footer__legal">
+        © 2026 Stackforce, Inc. · <a href="#">Privacy Policy</a> · <a href="#">Terms of Service</a>
+      </p>
+
+      <div class="footer__socials">
+        <!-- LinkedIn -->
+        <a href="#" class="footer__social-btn" aria-label="LinkedIn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+          </svg>
+        </a>
+        <!-- Twitter / X -->
+        <a href="#" class="footer__social-btn" aria-label="X / Twitter">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.261 5.632 5.903-5.632zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+<script>
+
+/* ═══════════════════════════════════
+   HERO — animated dot-grid canvas
+═══════════════════════════════════ */
+(function () {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let W, H, dots, mouse = { x: -999, y: -999 };
+  const SPACING   = 36;
+  const BASE_R    = 1.2;
+  const GLOW_R    = 3.5;
+  const COLOR_DIM = 'rgba(91,88,224,0.25)';
+  const COLOR_LIT = 'rgba(165,164,255,0.9)';
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    buildDots();
+  }
+
+  function buildDots() {
+    dots = [];
+    const cols = Math.ceil(W / SPACING) + 1;
+    const rows = Math.ceil(H / SPACING) + 1;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        dots.push({
+          x: c * SPACING,
+          y: r * SPACING,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.4 + Math.random() * 0.6,
+          lit: 0   // 0–1 proximity brightness
+        });
+      }
+    }
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.012;
+
+    dots.forEach(d => {
+      // Proximity to mouse
+      const dx   = d.x - mouse.x;
+      const dy   = d.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const prox = Math.max(0, 1 - dist / 140);
+      d.lit += (prox - d.lit) * 0.12;
+
+      // Gentle pulse
+      const pulse = 0.5 + 0.5 * Math.sin(t * d.speed + d.phase);
+
+      const r     = BASE_R + (GLOW_R - BASE_R) * d.lit;
+      const alpha = (0.15 + 0.15 * pulse) + d.lit * 0.75;
+
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+
+      if (d.lit > 0.05) {
+        // Lit dot — glow
+        const grad = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, r * 3);
+        grad.addColorStop(0, `rgba(165,164,255,${alpha})`);
+        grad.addColorStop(1, `rgba(91,88,224,0)`);
+        ctx.fillStyle = grad;
+        ctx.arc(d.x, d.y, r * 3, 0, Math.PI * 2);
+      } else {
+        ctx.fillStyle = `rgba(91,88,224,${alpha})`;
+      }
+
+      ctx.fill();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  canvas.addEventListener('mousemove', e => {
+    const rect  = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  canvas.addEventListener('mouseleave', () => {
+    mouse.x = mouse.y = -999;
+  });
+
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  resize();
+  draw();
+})();
+
+/* ═══════════════════════════════════
+   SCROLL-GROW HEADING
+═══════════════════════════════════ */
+(function () {
+  const el = document.getElementById('bw-heading');
+  if (!el) return;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function easeInOut(t) { return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
+
+  const SIZE_START = 18;  // px — small, right below the pain-point cards
+  const SIZE_END   = 56;  // px — large, sitting above the logo
+
+  function update() {
+    const rect = el.getBoundingClientRect();
+    const vh   = window.innerHeight;
+
+    // Start growing when the element enters the bottom of the viewport.
+    // Finish growing when the element's centre hits ~20% from the top —
+    // that's roughly where it will visually sit "above the logo".
+    const start = vh;               // rect.top when element just enters
+    const end   = vh * 0.20;        // rect.top when fully grown
+
+    const raw      = (start - rect.top) / (start - end);
+    const progress = easeInOut(clamp(raw, 0, 1));
+
+    el.style.fontSize      = lerp(SIZE_START, SIZE_END, progress) + 'px';
+    el.style.letterSpacing = lerp(-0.01, -0.03, progress) + 'em';
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+
+
+
+/* ═══════════════════════════════════
+/* ═══════════════════════════════════
+   BETTER WAY — scroll-driven sticky tabs
+═══════════════════════════════════ */
+(function () {
+  const tabs      = document.querySelectorAll('.bw__tab');
+  const panels    = document.querySelectorAll('.bw__panel');
+  const indicator = document.getElementById('bw-indicator');
+  const section   = document.querySelector('section.bw');
+
+  const TAB_COUNT      = tabs.length;                             // 4
+  const SCROLL_PER_TAB = Math.round(window.innerHeight * 0.85);  // px per tab
+
+  /* ── 1. Wrapper: full-width, flex-centred (preserves body layout) ── */
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = [
+    'width: 100%',
+    'position: relative',
+    'display: flex',
+    'flex-direction: column',
+    'align-items: center',   // keeps section centred just like body does
+  ].join(';');
+  section.parentNode.insertBefore(wrapper, section);
+  wrapper.appendChild(section);
+
+  /* ── 2. Sticky pin ── */
+  section.style.position = 'sticky';
+  section.style.width    = '100%';   // stretch inside the flex wrapper
+
+  function updateStickyTop() {
+  const offset = Math.max(0, (window.innerHeight - section.offsetHeight) / 2);
+  section.style.top = offset + 'px';
+}
+updateStickyTop();
+
+  /* ── Wrapper height:
+        sectionHeight  → normal resting height
+      + TAB_COUNT × SCROLL_PER_TAB  → one full budget per tab (incl. tab 4)
+     When that budget is consumed the section naturally unsticks. ── */
+  function setWrapperHeight() {
+    wrapper.style.height =
+      (section.offsetHeight + SCROLL_PER_TAB * TAB_COUNT) + 'px';
+  }
+
+  /* ── Indicator ── */
+  function moveIndicator(tab) {
+    indicator.style.width     = tab.offsetWidth + 'px';
+    indicator.style.transform = 'translateX(' + tab.offsetLeft + 'px)';
+  }
+
+  /* ── Tab switch ── */
+  let current       = 0;
+  let transitioning = false;
+
+  function goTo(idx, forward) {
+    if (idx === current || transitioning) return;
+    transitioning = true;
+
+    const prev     = current;
+    current        = idx;
+    const outClass = forward ? 'anim-out-left'  : 'anim-out-right';
+    const inClass  = forward ? 'anim-in-right'  : 'anim-in-left';
+
+    panels[prev].classList.add(outClass);
+    panels[prev].addEventListener('animationend', () => {
+      panels[prev].classList.remove('is-active', outClass);
+    }, { once: true });
+
+    panels[idx].classList.add('is-active', inClass);
+    panels[idx].addEventListener('animationend', () => {
+      panels[idx].classList.remove(inClass);
+    }, { once: true });
+
+    tabs[prev].classList.remove('is-active');
+    tabs[prev].setAttribute('aria-selected', 'false');
+    tabs[idx].classList.add('is-active');
+    tabs[idx].setAttribute('aria-selected', 'true');
+
+    moveIndicator(tabs[idx]);
+    setTimeout(() => { transitioning = false; }, 480);
+  }
+
+  /* ── Click handlers ── */
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
+      if (i !== current) goTo(i, i > current);
+    });
+  });
+
+  /* ── 3. Scroll driver ──────────────────────────────────────────
+     scrolledIn: how many px the wrapper top has passed the
+     viewport top. Ranges 0 → SCROLL_PER_TAB * TAB_COUNT.
+     Each SCROLL_PER_TAB chunk maps to one tab.
+     Once the budget is exceeded the wrapper scrolls away
+     naturally — no JS needed for that handoff. ── */
+  function onScroll() {
+    const wTop       = wrapper.getBoundingClientRect().top;
+    const scrolledIn = -wTop;
+
+    // Not yet reached
+    if (scrolledIn < 0) return;
+
+    // Fully consumed — section has unstuck, let page scroll freely
+    const maxScroll = SCROLL_PER_TAB * TAB_COUNT;
+    if (scrolledIn > maxScroll) return;
+
+    // Map scroll position → tab index (0-based, clamped to last tab)
+    const tabIdx = Math.min(TAB_COUNT - 1, Math.floor(scrolledIn / SCROLL_PER_TAB));
+    if (tabIdx !== current) goTo(tabIdx, tabIdx > current);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    setWrapperHeight();
+    moveIndicator(tabs[current]);
+  });
+
+  /* ── Init ── */
+  setWrapperHeight();
+  requestAnimationFrame(() => moveIndicator(tabs[0]));
+})();
+
+
+/* ═══════════════════════════════════
+   HOW IT WORKS — scroll-driven sticky
+═══════════════════════════════════ */
+(function () {
+  const cards   = document.querySelectorAll('.hiw__card');
+  const slots   = document.querySelectorAll('.hiw__img-slot');
+  const section = document.querySelector('section.hiw');
+
+  const CARD_COUNT     = cards.length;                             // 4
+  const SCROLL_PER_CARD = Math.round(window.innerHeight * 0.85);
+
+  /* ── 1. Wrapper — mirrors the BW wrapper exactly ── */
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = [
+    'width: 100%',
+    'position: relative',
+    'display: flex',
+    'flex-direction: column',
+    'align-items: center',
+  ].join(';');
+  section.parentNode.insertBefore(wrapper, section);
+  wrapper.appendChild(section);
+
+  /* ── 2. Sticky pin — vertically centred ── */
+  section.style.position = 'sticky';
+  section.style.width    = '100%';
+
+function updateStickyTop() {
+  const body       = section.querySelector('.hiw__body');
+  const bodyTop    = body.offsetTop;        // distance from section top to cards
+  const bodyHeight = body.offsetHeight;
+  const vh         = window.innerHeight;
+
+  if (section.offsetHeight <= vh) {
+    // Whole section fits — center it normally
+    section.style.top = Math.max(0, (vh - section.offsetHeight) / 2) + 'px';
+    return;
+  }
+
+  // Section taller than viewport:
+  // Calculate top so the body (cards+images) is centred in the viewport.
+  // top + bodyTop = (vh - bodyHeight) / 2
+  const ideal = Math.round((vh - bodyHeight) / 2) - bodyTop;
+
+  // Clamp: don't go below -bodyTop (body flush with viewport top)
+  // and don't go positive (heading never pushed below viewport top)
+  section.style.top = Math.max(-bodyTop, Math.min(0, ideal)) + 'px';
+}
+
+  function setWrapperHeight() {
+    wrapper.style.height =
+      (section.offsetHeight + SCROLL_PER_CARD * CARD_COUNT) + 'px';
+  }
+
+  /* ── 3. Card / image switch ── */
+  let current       = 0;
+  let transitioning = false;
+
+  function goTo(idx, forward) {
+    if (idx === current || transitioning) return;
+    transitioning = true;
+
+    const prev = current;
+    current    = idx;
+
+    /* Cards */
+    cards[prev].classList.remove('is-active');
+    cards[prev].setAttribute('aria-pressed', 'false');
+    cards[idx].classList.add('is-active');
+    cards[idx].setAttribute('aria-pressed', 'true');
+
+    /* Images */
+    const prevSlot = slots[prev];
+    const nextSlot = slots[idx];
+
+    prevSlot.classList.remove('is-entering');
+    prevSlot.classList.add('is-exiting');
+    prevSlot.addEventListener('animationend', () => {
+      prevSlot.classList.remove('is-exiting');
+      prevSlot.style.opacity = '0';
+    }, { once: true });
+
+    nextSlot.style.opacity = '';
+    nextSlot.classList.remove('is-exiting');
+    nextSlot.classList.add('is-entering');
+
+    setTimeout(() => { transitioning = false; }, 480);
+  }
+
+  /* ── Click still works ── */
+  cards.forEach((card, i) => {
+    card.addEventListener('click',   () => { if (i !== current) goTo(i, i > current); });
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') goTo(i, i > current); });
+  });
+
+  /* ── 4. Scroll driver ── */
+  function onScroll() {
+    const wTop       = wrapper.getBoundingClientRect().top;
+    const scrolledIn = -wTop;
+
+    if (scrolledIn < 0) return;
+
+    const maxScroll = SCROLL_PER_CARD * CARD_COUNT;
+    if (scrolledIn > maxScroll) return;
+
+    const cardIdx = Math.min(CARD_COUNT - 1, Math.floor(scrolledIn / SCROLL_PER_CARD));
+    if (cardIdx !== current) goTo(cardIdx, cardIdx > current);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', () => {
+    setWrapperHeight();
+    updateStickyTop();
+  });
+
+  /* ── Init ── */
+  setWrapperHeight();
+  updateStickyTop();
+})();
+
+/* ═══════════════════════════════════
+   FAQ — accordion logic
+═══════════════════════════════════ */
+(function () {
+  document.querySelectorAll('.faq__trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+      const item = trigger.closest('.faq__item');
+      const isOpen = item.classList.contains('is-open');
+
+      // Close all
+      document.querySelectorAll('.faq__item').forEach(i => {
+        i.classList.remove('is-open');
+        i.querySelector('.faq__trigger').setAttribute('aria-expanded', 'false');
+      });
+
+      // Open clicked if it was closed
+      if (!isOpen) {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+})();
+
+/* ═══════════════════════════════════
+   HERO STATS — count-up animation
+═══════════════════════════════════ */
+(function () {
+  const DURATION = 1800; // ms for each counter
+
+  // Each stat: the numeric value, suffix, and optional prefix
+  const stats = [
+    { selector: '.hero__proof-stat:nth-child(1) .hero__proof-number', end: 20, suffix: '+' },
+    { selector: '.hero__proof-stat:nth-child(3) .hero__proof-number', end: 3,   suffix: '×' },
+    { selector: '.hero__proof-stat:nth-child(5) .hero__proof-number', end: 60,  suffix: '%' },
+    { selector: '.hero__proof-stat:nth-child(7) .hero__proof-number', end: 48,  suffix: 'h' },
+  ];
+
+  // Easing: ease-out cubic
+  function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function animateCounter(el, end, suffix) {
+    const startTime = performance.now();
+    el.textContent = '0' + suffix;
+
+    (function tick(now) {
+      const elapsed  = now - startTime;
+      const progress = Math.min(elapsed / DURATION, 1);
+      const value    = Math.round(easeOut(progress) * end);
+      el.textContent = value + suffix;
+      if (progress < 1) requestAnimationFrame(tick);
+    })(startTime);
+  }
+
+  // Fire counters once the proof strip becomes visible
+  const proofEl = document.querySelector('.hero__proof');
+  if (!proofEl) return;
+
+  let fired = false;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !fired) {
+        fired = true;
+        observer.disconnect();
+        stats.forEach(({ selector, end, suffix }) => {
+          const el = document.querySelector(selector);
+          if (el) animateCounter(el, end, suffix);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(proofEl);
+})();
+
+/* ═══════════════════════════════════
+   FOOTER — dot-grid canvas (mirrors hero)
+═══════════════════════════════════ */
+(function () {
+  const canvas = document.getElementById('footer-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  let W, H, dots;
+  const SPACING = 40;
+  const BASE_R  = 1.1;
+  const GLOW_R  = 3.2;
+
+  function resize() {
+    W = canvas.width  = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+    buildDots();
+  }
+
+  function buildDots() {
+    dots = [];
+    const cols = Math.ceil(W / SPACING) + 1;
+    const rows = Math.ceil(H / SPACING) + 1;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        dots.push({
+          x:     c * SPACING,
+          y:     r * SPACING,
+          phase: Math.random() * Math.PI * 2,
+          speed: 0.3 + Math.random() * 0.5,
+        });
+      }
+    }
+  }
+
+  let t = 0;
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    t += 0.01;
+    dots.forEach(d => {
+      const pulse = 0.5 + 0.5 * Math.sin(t * d.speed + d.phase);
+      const alpha = 0.08 + 0.1 * pulse;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, BASE_R + (GLOW_R - BASE_R) * pulse * 0.3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(91,88,224,${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  const ro = new ResizeObserver(resize);
+  ro.observe(canvas);
+  resize();
+  draw();
+})();
+
+</script>
+</body>
+</html>

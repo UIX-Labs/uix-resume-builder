@@ -15,7 +15,7 @@ export default function AdminReferralsPage() {
     sortBy: 'referredAt',
     sortOrder: 'DESC',
   });
-  const { data, isLoading } = useReferrals(params);
+  const { data, isLoading, error } = useReferrals(params);
 
   const handleFilterChange = (newParams: Partial<AdminQueryParams>) => {
     setParams((prev) => ({ ...prev, ...newParams, page: 1 }));
@@ -80,6 +80,12 @@ export default function AdminReferralsPage() {
       <p className="text-sm text-gray-500 mb-6">User referral tracking</p>
 
       <FilterBar onFilterChange={handleFilterChange} />
+
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          Failed to load referrals: {(error as Error).message || 'Unknown error'}
+        </div>
+      )}
 
       <DataTable
         columns={columns}

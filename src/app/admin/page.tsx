@@ -12,8 +12,8 @@ export default function AdminOverviewPage() {
     return (
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {Array.from({ length: 5 }).map((_, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          {Array.from({ length: 6 }).map((_, i) => (
             // biome-ignore lint/suspicious/noArrayIndexKey: static list
             <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 animate-pulse">
               <div className="h-4 bg-gray-200 rounded w-20 mb-3" />
@@ -32,8 +32,14 @@ export default function AdminOverviewPage() {
     <div>
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Overview</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <StatCard label="Total Users" total={stats.users.total} daily={stats.users.daily} weekly={stats.users.weekly} />
+        <StatCard
+          label="Logins"
+          total={stats.logins?.total ?? 0}
+          daily={stats.logins?.daily ?? 0}
+          weekly={stats.logins?.weekly ?? 0}
+        />
         <StatCard
           label="Downloads"
           total={stats.downloads.total}

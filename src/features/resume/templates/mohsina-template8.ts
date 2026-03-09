@@ -52,10 +52,10 @@ export const mohsinaTemplate8 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-1 mb-2 w-[30%] flex-shrink-0 text-left',
+              className: 'flex flex-col items-start gap-0 mb-2 w-[30%] flex-shrink-0 text-left',
               items: [
                 {
-                  type: 'group',
+                  type: 'inline-group',
                   className: 'flex gap-2 items-baseline',
                   items: [
                     {
@@ -74,8 +74,8 @@ export const mohsinaTemplate8 = {
                 },
 
                 {
-                  type: 'group',
-                  className: 'flex gap-2 items-baseline',
+                  type: 'inline-group',
+                  className: 'flex gap-2 items-baseline -mt-2',
                   items: [
                     {
                       type: 'text',
@@ -92,8 +92,8 @@ export const mohsinaTemplate8 = {
                 },
 
                 {
-                  type: 'group',
-                  className: 'flex gap-2 items-baseline',
+                  type: 'inline-group',
+                  className: 'flex gap-2 items-baseline -mt-2',
                   items: [
                     {
                       type: 'text',
@@ -110,8 +110,8 @@ export const mohsinaTemplate8 = {
                 },
 
                 {
-                  type: 'group',
-                  className: 'flex gap-2 items-baseline',
+                  type: 'inline-group',
+                  className: 'flex gap-2 items-baseline -mt-2',
                   items: [
                     {
                       type: 'text',
@@ -119,7 +119,7 @@ export const mohsinaTemplate8 = {
                       className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0',
                     },
                     {
-                      type: 'inline-group',
+                      type: 'group',
                       className:
                         'flex flex-wrap gap-1 items-center text-[10px] font-semibold text-black leading-[16px] font-poppins underline decoration-1 underline-offset-2 break-words',
                       separator: '/',
@@ -186,14 +186,14 @@ export const mohsinaTemplate8 = {
         path: 'summary.heading',
         fallback: 'Profile',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
       },
 
       content: {
         type: 'html',
         path: 'personalDetails.items[0].description',
         fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
-        className: 'ml-[160px] text-xs text-[#4d4d4d] leading-[18px] font-[Inter]',
+        className: 'ml-[180px] text-xs text-[#4d4d4d] leading-[18px] font-[Inter]',
       },
     },
     {
@@ -204,12 +204,12 @@ export const mohsinaTemplate8 = {
         path: 'experience.heading',
         fallback: 'Experience',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
       },
 
       listPath: 'experience.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2',
+      containerClassName: 'ml-[180px] flex flex-col gap-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -237,7 +237,7 @@ export const mohsinaTemplate8 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-[#6B6B6B] leading-[13px] whitespace-nowrap flex-shrink-0',
+                className: 'text-xs text-[#6B6B6B] leading-[13px] whitespace-nowrap flex-shrink-0',
               },
             ],
           },
@@ -266,12 +266,12 @@ export const mohsinaTemplate8 = {
         path: 'education.heading',
         fallback: 'Education',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
       },
 
       listPath: 'education.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mt-4',
+      containerClassName: 'ml-[180px] flex flex-col gap-4 mt-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -298,7 +298,7 @@ export const mohsinaTemplate8 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-[#6B6B6B] leading-[13px] whitespace-nowrap flex-shrink-0',
+                className: 'text-xs text-[#6B6B6B] leading-[13px] whitespace-nowrap flex-shrink-0',
               },
             ],
           },
@@ -323,12 +323,12 @@ export const mohsinaTemplate8 = {
         path: 'projects.heading',
         fallback: 'Projects',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
       },
 
       listPath: 'projects.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mt-4',
+      containerClassName: 'ml-[180px] flex flex-col gap-4 mt-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -377,14 +377,14 @@ export const mohsinaTemplate8 = {
         path: 'achievements.heading',
         fallback: 'Achievements',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
       },
 
       listPath: 'achievements.items[0].items',
       itemPath: '',
       itemPrefix: '• ',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mt-4',
+      containerClassName: 'ml-[180px] flex flex-col gap-2 mt-4',
 
       badgeClassName: 'block text-xs text-[#6B6B6B] leading-[18px] whitespace-pre-wrap',
     },
@@ -397,12 +397,12 @@ export const mohsinaTemplate8 = {
         path: 'certifications.heading',
         fallback: 'Certifications',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap ',
       },
 
       listPath: 'certifications.items',
 
-      containerClassName: 'ml-[160px] flex flex-col gap-2 mt-4',
+      containerClassName: 'ml-[180px] flex flex-col gap-2 mt-4',
 
       itemTemplate: {
         className: 'flex flex-col',
@@ -447,7 +447,7 @@ export const mohsinaTemplate8 = {
         path: 'skills.heading',
         fallback: 'Skills',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
       },
 
       listPath: 'skills.items',
@@ -455,7 +455,7 @@ export const mohsinaTemplate8 = {
 
       itemSeparator: ' | ',
 
-      containerClassName: 'ml-[160px] flex flex-row flex-wrap mt-4',
+      containerClassName: 'ml-[180px] flex flex-row flex-wrap mt-4',
 
       badgeClassName: 'text-xs font-bold text-black font-poppins tracking-[0.2px] ml-2',
     },
@@ -471,7 +471,7 @@ export const mohsinaTemplate8 = {
         path: 'interests.heading',
         fallback: 'Interests',
         className:
-          'block float-left w-[140px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
+          'block float-left w-[180px] text-[#005FF2] font-[Inter] text-sm font-bold tracking-[1px] uppercase whitespace-nowrap mt-1',
       },
 
       listPath: 'interests.items[0].items',
@@ -479,7 +479,7 @@ export const mohsinaTemplate8 = {
 
       itemSeparator: ' | ',
 
-      containerClassName: 'ml-[160px] flex flex-row flex-wrap mt-4',
+      containerClassName: 'ml-[180px] flex flex-row flex-wrap mt-4',
 
       badgeClassName: 'text-xs font-bold text-black tracking-[0.2px] ml-2',
     },

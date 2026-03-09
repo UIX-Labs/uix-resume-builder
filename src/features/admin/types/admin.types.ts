@@ -199,3 +199,43 @@ export interface AdminResumeExampleDetail extends AdminResumeExample {
   category: AdminResumeExampleCategory | null;
   template: { id: string; json: Record<string, any> | null } | null;
 }
+
+export interface UserRow {
+  userId: string;
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  createdAt: string;
+  updatedAt: string;
+  downloads: number;
+  referralCount: number;
+  roastCount: number;
+  reviewCount: number;
+}
+
+export interface ReferralRow {
+  id: string;
+  referredEmail: string;
+  referredFirstName: string | null;
+  referredLastName: string | null;
+  referredAt: string;
+  referrerEmail: string;
+  referrerFirstName: string | null;
+  referrerLastName: string | null;
+  status: string;
+}
+
+export interface ParsedResumeExampleResponse {
+  title: string;
+  slug: string;
+  role: string;
+  experienceYears: number;
+  metaTitle: string;
+  metaDescription: string;
+  suggestedCategorySlug: string;
+  resumeData: Record<string, any>;
+  rank: number;
+  layout: string;
+  primaryColor: string;
+  colorName: string;
+}

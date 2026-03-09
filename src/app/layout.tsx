@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter, Lato, Poppins } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Lato, Montserrat, Poppins } from 'next/font/google';
 import Script from 'next/script';
 import '../app/globals.css';
 
@@ -26,18 +26,24 @@ const inter = Inter({
   style: ['normal', 'italic'],
 });
 
-const poppins = Poppins({
-  weight: ['100', '300', '400', '700', '900'],
-  style: ['normal', 'italic'],
+const montserrat = Montserrat({
+  variable: '--font-montserrat',
   subsets: ['latin'],
+  style: ['normal', 'italic'],
+});
+
+const poppins = Poppins({
   variable: '--font-poppins',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
 const lato = Lato({
-  weight: ['100', '300', '400', '700', '900'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
   variable: '--font-lato',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['100', '300', '400', '700', '900'],
 });
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
@@ -156,7 +162,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${lato.variable} ${poppins.variable}  antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${poppins.variable} ${lato.variable} antialiased`}
       >
         <Script
           id="structured-data"

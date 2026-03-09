@@ -17,6 +17,11 @@ import erenTemplate2 from '@features/resume/templates/eren-templete2';
 import { mohsinaTemplate6 } from '@features/resume/templates/mohsina-template6';
 import { mohsinaTemplate7 } from '@features/resume/templates/mohsina-template7';
 import { mohsinaTemplate8 } from '@features/resume/templates/mohsina-template8';
+import { mohsinaTemplate9 } from '../templates/mohsina-template-9';
+import { mohsinaTemplate10 } from '../templates/mohsina-template-10';
+import mohsinaTemplate11 from '@features/resume/templates/mohsina-template-11';
+import mohsinaTemplate4 from '@features/resume/templates/mohsina-template-4';
+import mohsinaTemplate5 from '@features/resume/templates/mohsina-template-5';
 import standard from '@features/resume/templates/standard';
 import standard2 from '@features/resume/templates/standard2';
 import template7 from '@features/resume/templates/template-7';
@@ -32,9 +37,6 @@ import template5 from '@features/resume/templates/template5';
 import template6 from '@features/resume/templates/template6';
 import template8 from '@features/resume/templates/template8';
 import template9 from '@features/resume/templates/template9';
-import { mohsinaTemplate9 } from '../templates/mohsina-template-9';
-import { mohsinaTemplate10 } from '../templates/mohsina-template-10';
-import mohsinaTemplate5 from '@features/resume/templates/mohsina-template-5';
 
 export const templateRegistry: Record<string, any> = {
   aniket,
@@ -65,6 +67,8 @@ export const templateRegistry: Record<string, any> = {
   'mohsina-template8': mohsinaTemplate8,
   'mohsina-template9': mohsinaTemplate9,
   'mohsina-template10': mohsinaTemplate10,
+  'mohsina-template-11': mohsinaTemplate11,
+  'mohsina-template4': mohsinaTemplate4,
   'mohsina-template5': mohsinaTemplate5,
 };
 

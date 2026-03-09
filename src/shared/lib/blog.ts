@@ -41,10 +41,16 @@ export function getAllPosts(): BlogPost[] {
       const fileContent = fs.readFileSync(filePath, 'utf-8');
       const { data, content } = matter(fileContent);
       const stats = readingTime(content);
+      const frontmatter = data as BlogFrontmatter;
+
+      // Normalize tags to lowercase
+      if (frontmatter.tags) {
+        frontmatter.tags = frontmatter.tags.map((tag) => tag.toLowerCase());
+      }
 
       return {
         slug,
-        frontmatter: data as BlogFrontmatter,
+        frontmatter,
         content,
         readingTime: stats.text,
       };
@@ -70,10 +76,16 @@ export function getPostBySlug(slug: string): BlogPost | null {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const { data, content } = matter(fileContent);
   const stats = readingTime(content);
+  const frontmatter = data as BlogFrontmatter;
+
+  // Normalize tags to lowercase
+  if (frontmatter.tags) {
+    frontmatter.tags = frontmatter.tags.map((tag) => tag.toLowerCase());
+  }
 
   return {
     slug,
-    frontmatter: data as BlogFrontmatter,
+    frontmatter,
     content,
     readingTime: stats.text,
   };

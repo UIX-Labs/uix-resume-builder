@@ -23,7 +23,7 @@ export const mohsinaTemplate9 = {
               items: [
                 {
                   type: 'group',
-                  className: 'flex flex-col items-stretch gap-4',
+                  className: 'flex flex-col items-stretch gap-4 -mt-8',
                   items: [
                     {
                       type: 'text',
@@ -35,7 +35,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'AMAN GUPTA',
-                      className: 'text-[34px] leading-[15px] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
+                      className: 'text-[34px] leading-[1.1] font-semibold tracking-[-0.3px] text-[#3E6AF2]',
                     },
                   ],
                 },
@@ -184,6 +184,25 @@ export const mohsinaTemplate9 = {
                       path: 'personalDetails.items[0].links.behance.title',
                       href: 'personalDetails.items[0].links.behance.link',
                       fallback: 'Behance',
+                      className: 'text-[13px] text-black',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-center gap-1',
+                  items: [
+                    {
+                      type: 'icon',
+                      name: 'Youtube',
+                      size: 12,
+                      className: 'text-[#3E6AF2]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.youtube.title',
+                      href: 'personalDetails.items[0].links.youtube.link',
+                      fallback: 'Youtube',
                       className: 'text-[13px] text-black',
                     },
                   ],

@@ -88,7 +88,7 @@ export const mohsinaTemplate10 = {
                       type: 'text',
                       path: 'personalDetails.items[0].location',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-xs text-black-300',
+                      className: 'text-xs text-black',
                     },
                   ],
                 },
@@ -109,7 +109,7 @@ export const mohsinaTemplate10 = {
                       path: 'personalDetails.items[0].links.linkedin.title',
                       href: 'personalDetails.items[0].links.linkedin.link',
                       fallback: 'Portfolio / linkedin',
-                      className: 'text-xs text-gray-500',
+                      className: 'text-xs text-black',
                     },
                   ],
                 },
@@ -175,14 +175,13 @@ export const mohsinaTemplate10 = {
                 },
 
                 {
-                  type: 'group',
+                  type: 'inline-group-with-icon',
                   className: 'flex gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Palette',
                       size: 12,
-
                       className: 'text-[9px] text-[#005FF2]',
                     },
                     {

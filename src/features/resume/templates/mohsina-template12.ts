@@ -21,7 +21,7 @@ const mohsinaTemplate12 = {
     right: {
       width: 'calc(100% - 272px)',
       className:
-        'p-8 flex flex-col bg-white mt-6 -mb-6 bg-[linear-gradient(to_bottom,transparent_32px,#e5e5e5_32px)] bg-[size:6px_100%] bg-left bg-no-repeat',
+        'p-8 flex flex-col bg-white mt-6 pb-12 bg-[linear-gradient(to_bottom,transparent_32px,#e5e5e5_32px,#e5e5e5_calc(100%-32px),transparent_calc(100%-32px))] bg-[size:6px_100%] bg-left bg-no-repeat',
     },
   },
 
@@ -33,7 +33,7 @@ const mohsinaTemplate12 = {
       id: 'contact',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col mb-3 mt-25',
+      className: 'flex flex-col mb-3  mt-10',
       fields: {
         contact: {
           type: 'group',
@@ -57,7 +57,7 @@ const mohsinaTemplate12 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'San Francisco, California',
-                  className: 'text-xs text-[#878787]',
+                  className: 'text-xs text-[#555555]',
                 },
               ],
             },
@@ -74,7 +74,7 @@ const mohsinaTemplate12 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '(315) 802-8179',
-                  className: 'text-xs text-[#878787]',
+                  className: 'text-xs text-[#555555]',
                 },
               ],
             },
@@ -93,7 +93,7 @@ const mohsinaTemplate12 = {
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'ricktang@gmail.com',
-                  className: 'text-xs text-[#878787] underline decoration-1 underline-offset-2',
+                  className: 'text-xs text-[#555555] underline decoration-1 underline-offset-2',
                 },
               ],
             },
@@ -110,7 +110,7 @@ const mohsinaTemplate12 = {
                 {
                   type: 'inline-group',
                   className:
-                    'flex flex-wrap text-xs text-[#878787] font-poppins underline decoration-1 underline-offset-2',
+                    'flex flex-wrap text-xs text-[#555555] font-poppins underline decoration-1 underline-offset-2',
                   separator: '/',
                   items: [
                     {
@@ -204,7 +204,7 @@ const mohsinaTemplate12 = {
         path: 'personalDetails.items[0].description',
         fallback:
           'Digital Marketing Specialist with 6+ years of experience in online marketing, branding, and business strategy across music, media, and entertainment industries.',
-        className: 'text-xs font-normal leading-tight whitespace-pre-wrap text-[#878787]',
+        className: 'text-xs font-normal leading-tight whitespace-pre-wrap text-[#555555]',
       },
     },
     /**
@@ -273,7 +273,7 @@ const mohsinaTemplate12 = {
                       {
                         path: 'institution',
                         fallback: 'National Institute of Design',
-                        className: 'text-xs text-[#878787] font-normal',
+                        className: 'text-xs text-[#555555] font-normal',
                       },
                     ],
                   },
@@ -304,7 +304,6 @@ const mohsinaTemplate12 = {
         className: 'mb-2 flex flex-col',
         break: true,
         fields: [
-          // Row 1: Blue Dot + Position, Company
           {
             type: 'horizontal-group',
             className: 'flex items-center gap-2 -mb-1',
@@ -340,40 +339,16 @@ const mohsinaTemplate12 = {
             className: 'text-xs text-black ml-5 font-poppins  ',
           },
 
-          // Row 3: Description points
           {
             type: 'html',
             path: 'description',
             break: true,
             className:
-              'text-[12px] text-[#878787] font-poppins leading-normal mt-1 ml-4 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
+              'text-[12px] text-[#555555] font-poppins leading-normal mt-1 ml-4 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
           },
         ],
       },
     },
-
-    /**
-     * SKILLS - Right Column
-     */
-    // {
-    //   id: "skills",
-    //   type: "inline-list-section",
-    //   column: "right",
-    //   showBullet: true,
-    //   break: true,
-    //   breakable: true,
-    //   heading: {
-    //     path: "skills.heading",
-    //     fallback: "SKILLS",
-    //     className:
-    //       "text-sm font-bold text-neutral-900 uppercase tracking-wide mb-4 pb-2 border-b-2 border-[#D58D40] mt-2",
-    //   },
-    //   listPath: "skills.items",
-    //   itemPath: "name",
-    //   itemClassName: "text-xs text-neutral-900 inline-block",
-    //   containerClassName: "grid grid-cols-2 gap-3",
-    //   itemSeparator: "",
-    // },
 
     {
       id: 'skills',
@@ -390,7 +365,7 @@ const mohsinaTemplate12 = {
       itemPath: 'name',
       showBullet: true,
       containerClassName: 'flex flex-col gap-1 mt-3',
-      itemClassName: 'text-[12px] text-[#878787] font-poppins',
+      itemClassName: 'text-[12px] text-[#555555] font-poppins',
     },
 
     /**
@@ -443,7 +418,7 @@ const mohsinaTemplate12 = {
             path: 'description',
             break: true,
             className:
-              'text-[12px] text-[#878787] font-poppins leading-normal mt-1 ml-7 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
+              'text-[12px] text-[#555555] font-poppins leading-normal mt-1 ml-7 [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-1 whitespace-pre-wrap',
           },
         ],
       },
@@ -464,7 +439,7 @@ const mohsinaTemplate12 = {
       listPath: 'interests.items[0].items',
       itemPath: '',
       containerClassName: 'flex flex-col gap-1 mt-3',
-      itemClassName: 'text-[12px] text-[#878787] font-poppins',
+      itemClassName: 'text-[12px] text-[#555555] font-poppins',
     },
 
     /**

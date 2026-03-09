@@ -22,9 +22,9 @@ function formatRoleName(name: string): string {
 
 export function TemplateCardSkeleton() {
   return (
-    <div className="flex-shrink-0 w-[234px]">
+    <div className="flex-shrink-0 w-[300px] sm:w-[234px]">
       <div className="h-[18px] mb-2" />
-      <div className="w-[234px] h-[312px] rounded-[28px] p-3 border-[2px] border-white bg-white/5 glass-card2 animate-pulse">
+      <div className="w-full h-[400px] sm:h-[312px] rounded-[28px] p-3 border-[2px] border-white bg-white/5 glass-card2 animate-pulse">
         <div className="w-full h-full rounded-[24px] bg-gray-200" />
       </div>
     </div>
@@ -44,7 +44,7 @@ export function TemplateCard({
   const roles = template.roles || [];
 
   return (
-    <div className={cn('group cursor-pointer flex-shrink-0 w-[234px]')}>
+    <div className={cn('group cursor-pointer flex-shrink-0 w-[300px] sm:w-[234px]')}>
       {/* Role pills row ABOVE card — Figma: H 18, gap 4, mb 8 */}
       <div className="flex items-center gap-1 mb-2 h-[18px] overflow-x-auto overflow-y-hidden scrollbar-hide">
         {isTrending && (
@@ -70,7 +70,7 @@ export function TemplateCard({
       {/* Card parent — Figma: 234×312, radius 28, white 5% fill, white 2px stroke inside, glass, 12px padding */}
       <div
         className={cn(
-          'relative w-[234px] h-[312px] rounded-[28px] p-3',
+          'relative w-full h-[400px] sm:h-[312px] rounded-[28px] p-3',
           'border-[2px] border-white',
           'bg-white/5 glass-card2',
         )}

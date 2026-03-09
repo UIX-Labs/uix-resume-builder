@@ -1,26 +1,26 @@
 'use client';
 import type { ResumeCreationAction, ResumeCreationActionType } from '@entities/dashboard/types/type';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 import { useGetAllTemplates, type Template } from '@entities/template-page/api/template-data';
 import { useTemplateFilters } from '@entities/template-page/hooks/use-template-filters';
 import { filterTemplates } from '@entities/template-page/lib/filter-templates';
 import { useUserProfile } from '@shared/hooks/use-user';
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { Button } from '@shared/ui/components/button';
 import { SidebarProvider } from '@shared/ui/sidebar';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
+import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
 import { LinkedInModal } from '@widgets/dashboard/ui/linkedin-integration-card';
 import PageHeading from '@widgets/dashboard/ui/page-heading';
-import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
 import ResumeCreationModal from '@widgets/dashboard/ui/resume-creation-modal';
+import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
+import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard, TemplateCardSkeleton } from '@widgets/templates-page/ui/template-card';
 import { TemplateFilterBar } from '@widgets/templates-page/ui/template-filter-bar';
 import { useRouter } from 'next/navigation';
 import { Suspense, useMemo, useState } from 'react';
-import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
-import JDUploadMobileModal from '@widgets/dashboard/ui/jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import Header from '@widgets/landing-page/ui/header-section';
-import { Button } from '@shared/ui/components/button';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 
 function TemplatesPageContent() {
   const router = useRouter();
@@ -106,7 +106,7 @@ function TemplatesPageContent() {
   );
 
   const gridClasses = isLoggedIn
-    ? 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 justify-start flex-wrap px-4 sm:px-6'
+    ? 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 justify-center flex-wrap px-4 sm:px-6'
     : 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 mx-auto justify-center flex-wrap max-w-[1346px] px-4';
 
   const skeletonGrid = (
@@ -193,7 +193,7 @@ function TemplatesPageContent() {
         <Header />
 
         {/* Body container — Figma: W 1384, radius 36, fill #F5F8FA, stroke #D5E5FF inside 3px */}
-        <div className="relative max-w-[1384px] mx-auto mt-0 rounded-[36px] border-[3px] border-[#D5E5FF] bg-[#F5F8FA] overflow-hidden pb-10">
+        <div className="relative max-w-[1384px] mx-4 sm:mx-auto mt-0 rounded-[36px] border-[3px] border-[#D5E5FF] bg-[#F5F8FA] overflow-hidden pb-10">
           {/* Dot pattern background — per Figma "Dot bg" at 12% opacity */}
           <div className="dot-pattern-bg absolute inset-0 z-0" />
 
@@ -209,13 +209,16 @@ function TemplatesPageContent() {
                   Choose from free and premium templates, customise with our intuitive drag-and-drop builder, and
                   download your resume as a polished PDF in minutes.
                 </p>
-                <div className="flex items-center justify-center gap-3 mt-6">
+                <div className="flex flex-row items-center justify-center gap-3 mt-6">
                   <Button
                     onClick={() => {
                       setIsLinkedInModalOpen(true);
                       trackEvent('create_resume_click', { source: 'templates_hero', method: 'linkedin_autofill' });
                     }}
-                    className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white px-6 py-3 h-12 text-base font-semibold rounded-xl cursor-pointer"
+                    className="bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white px-3 sm:px-6 py-2 sm:py-3 
+               h-10 sm:h-12 
+               text-[12px] sm:text-base 
+               rounded-xl cursor-pointer whitespace-nowrap"
                   >
                     Auto-fill via LinkedIn
                   </Button>
@@ -225,7 +228,10 @@ function TemplatesPageContent() {
                       trackEvent('create_resume_click', { source: 'templates_hero', method: 'upload_existing' });
                       router.push('/dashboard?action=upload');
                     }}
-                    className="px-6 py-3 h-12 text-base font-semibold rounded-xl cursor-pointer"
+                    className="px-3 sm:px-6 py-2 sm:py-3 
+               h-10 sm:h-12 
+               text-[12px] sm:text-base 
+               rounded-xl cursor-pointer whitespace-nowrap"
                   >
                     Upload Existing Resume
                   </Button>

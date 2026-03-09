@@ -1,5 +1,4 @@
 import { Lightbulb } from 'lucide-react';
-import React from 'react';
 
 export function ProTip({ title, children }: { title: string; children: React.ReactNode }) {
   return (

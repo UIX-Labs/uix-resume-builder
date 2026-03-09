@@ -9,20 +9,20 @@ export function filterTemplates(templates: Template[], filters: TemplateFilters)
       if (!hasMatch) return false;
     }
 
-    if (filters.layoutType) {
-      if (template.layoutType !== filters.layoutType) return false;
+    if (filters.layoutType && filters.layoutType.length > 0) {
+      if (!filters.layoutType.includes(template.layoutType)) return false;
     }
 
-    if (filters.role) {
-      const hasRole = template.roles?.some((r) => r.name === filters.role);
-      if (!hasRole) return false;
+    if (filters.role && filters.role.length > 0) {
+      const hasMatch = template.roles?.some((r) => filters.role?.includes(r.name));
+      if (!hasMatch) return false;
     }
 
     if (filters.primaryColor) {
-      const hasColor = template.colorVariations?.some(
+      const hasMatch = template.colorVariations?.some(
         (cv) => cv.primaryColor.toLowerCase() === filters.primaryColor?.toLowerCase(),
       );
-      if (!hasColor) return false;
+      if (!hasMatch) return false;
     }
 
     return true;

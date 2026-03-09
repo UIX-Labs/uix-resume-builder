@@ -32,6 +32,7 @@ import template5 from '@features/resume/templates/template5';
 import template6 from '@features/resume/templates/template6';
 import template8 from '@features/resume/templates/template8';
 import template9 from '@features/resume/templates/template9';
+import mohsinaTemplate12 from '@features/resume/templates/mohsina-template12';
 
 export const templateRegistry: Record<string, any> = {
   aniket,
@@ -60,6 +61,7 @@ export const templateRegistry: Record<string, any> = {
   'mohsina-template-11': mohsinaTemplate11,
   'mohsina-template4': mohsinaTemplate4,
   'mohsina-template5': mohsinaTemplate5,
+  'mohsina-template12': mohsinaTemplate12,
 };
 
 /** Union type of all valid template keys */

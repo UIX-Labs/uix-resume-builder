@@ -17,6 +17,7 @@ import erenTemplate2 from '@features/resume/templates/eren-templete2';
 import mohsinaTemplate11 from '@features/resume/templates/mohsina-template-11';
 import mohsinaTemplate4 from '@features/resume/templates/mohsina-template-4';
 import mohsinaTemplate5 from '@features/resume/templates/mohsina-template-5';
+import srishtiTemplate1 from '@features/resume/templates/srishti-template-1';
 import standard from '@features/resume/templates/standard';
 import standard2 from '@features/resume/templates/standard2';
 import template7 from '@features/resume/templates/template-7';
@@ -60,6 +61,7 @@ export const templateRegistry: Record<string, any> = {
   'mohsina-template-11': mohsinaTemplate11,
   'mohsina-template4': mohsinaTemplate4,
   'mohsina-template5': mohsinaTemplate5,
+  'srishti-template-1': srishtiTemplate1,
 };
 
 /** Union type of all valid template keys */

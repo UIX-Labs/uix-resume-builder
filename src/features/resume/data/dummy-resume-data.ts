@@ -31,6 +31,7 @@ export const dummyResumeData = {
         state: 'California',
         country: 'United States',
         pincode: '94110',
+        profilePicturePublicUrl:'https://picsum.photos/200/300',
         description:
           'Results-driven full-stack engineer with 6+ years of experience designing, building, and scaling web applications. Passionate about clean architecture, developer experience, and mentoring junior engineers. Motivated [Role] graduate with a strong foundation in [Skill A] and [Skill B]. Demonstrated ability to solve complex problems through [Project or Internship Experience]. Eager to apply a background in [Your Background] to contribute to the [Department] team at [Company].',
 

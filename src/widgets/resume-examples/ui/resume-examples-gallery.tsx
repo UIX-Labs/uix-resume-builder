@@ -32,9 +32,6 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
     setSelectedSlug(null);
   }, []);
 
-  const handleSelectSimilar = useCallback((example: ResumeExampleListItem) => {
-    setSelectedSlug(example.slug);
-  }, []);
 
   const currentPage = filters.page ?? 1;
   const totalPages = data?.totalPages ?? 1;
@@ -130,7 +127,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
         exampleSlug={selectedSlug}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        onSelectSimilar={handleSelectSimilar}
+        onSimilarClick={(slug) => setSelectedSlug(slug)}
       />
     </div>
   );

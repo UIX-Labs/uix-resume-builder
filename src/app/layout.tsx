@@ -52,7 +52,7 @@ const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/
 export const metadata: Metadata = {
   title: {
     default: 'Pika Resume - Build AI Powered Resume in Minutes',
-    template: '%s | Pika Resume',
+    template: '',
   },
   description: 'Choose from practical resume templates and power it with smart resume builder suggestions.',
   metadataBase: new URL(DOMAIN_URL),

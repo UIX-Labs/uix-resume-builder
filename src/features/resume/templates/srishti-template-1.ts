@@ -1,4 +1,3 @@
-
 const template12 = {
   name: 'LinkedIn Two Column with Photo',
 
@@ -33,7 +32,7 @@ const template12 = {
       fields: {
         photo: {
           type: 'image',
-          path: 'personalDetails.items[0].photo',
+          path: 'personalDetails.items[0].profilePicturePublicUrl',
           className: 'w-[80px] h-[80px] rounded-full object-cover border-2 border-[#015619] mb-2',
         },
         nameTitle: {
@@ -52,126 +51,123 @@ const template12 = {
       },
     },
 
-
-{
-  id: 'contact',
-  type: 'header',
-  column: 'left',
-  break: false,
-  fields: {
-    contact: {
-      type: 'contact-grid',
-      className: 'flex flex-col gap-2 border-t border-[#E2E6EE] pt-3 text-[10px]',
-      heading: {
-         path: 'personalDetails.items[0].connect',
-         fallback: 'Connect',
-        className: 'text-[13px] font-bold text-[#47516B] uppercase tracking-wide mb-2 leading-[1.21]',
-      },
-      items: [
-       
-        {
-          type: 'inline-group-with-icon',
-          className: 'flex items-center gap-2',
+    {
+      id: 'contact',
+      type: 'header',
+      column: 'left',
+      break: false,
+      fields: {
+        contact: {
+          type: 'contact-grid',
+          className: 'flex flex-col gap-2 border-t border-[#E2E6EE] pt-3 text-[10px]',
+          heading: {
+            path: 'personalDetails.items[0].connect',
+            fallback: 'Connect',
+            className: 'text-[13px] font-bold text-[#47516B] uppercase tracking-wide mb-2 leading-[1.21]',
+          },
           items: [
-            { type: 'icon', name: 'Link', size: 13, className: 'text-[#015619] flex-shrink-0' },
-           
             {
-              type: 'inline-group',
-              className: 'flex flex-row flex-wrap items-center',
-              separator: ' / ',
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
               items: [
+                { type: 'icon', name: 'Link', size: 13, className: 'text-[#015619] flex-shrink-0' },
+
+                {
+                  type: 'inline-group',
+                  className: 'flex flex-row flex-wrap items-center',
+                  separator: ' / ',
+                  items: [
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.linkedin.title',
+                      href: 'personalDetails.items[0].links.linkedin.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.github.title',
+                      href: 'personalDetails.items[0].links.github.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.youtube.title',
+                      href: 'personalDetails.items[0].links.youtube.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.website.title',
+                      href: 'personalDetails.items[0].links.website.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.dribble.title',
+                      href: 'personalDetails.items[0].links.dribble.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.behance.title',
+                      href: 'personalDetails.items[0].links.behance.link',
+                      className: 'text-[11px] text-[#333]',
+                    },
+                  ],
+                },
+              ],
+            },
+
+            // Email
+            {
+              type: 'inline-group-with-icon',
+              text: 'gmail',
+              className: 'flex items-center gap-2 ',
+              items: [
+                { type: 'icon', name: 'Mail', size: 13, className: 'text-[#015619] flex-shrink-0' },
                 {
                   type: 'link',
-                  path: 'personalDetails.items[0].links.linkedin.title',
-                  href: 'personalDetails.items[0].links.linkedin.link',
+                  path: 'personalDetails.items[0].email',
+                  href: 'mailto:{{value}}',
+                  fallback: 'nutproddesigner@gmail.com',
                   className: 'text-[11px] text-[#333]',
                 },
+              ],
+            },
+
+            // Phone
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'Phone', size: 13, className: 'text-[#015619] flex-shrink-0' },
                 {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.github.title',
-                  href: 'personalDetails.items[0].links.github.link',
+                  path: 'personalDetails.items[0].phone',
+                  fallback: '+234 814 2686 61',
                   className: 'text-[11px] text-[#333]',
                 },
+              ],
+            },
+
+            // Location
+            {
+              type: 'inline-group-with-icon',
+              className: 'flex items-center gap-2',
+              items: [
+                { type: 'icon', name: 'MapPin', size: 13, className: 'text-[#015619] flex-shrink-0' },
                 {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.youtube.title',
-                  href: 'personalDetails.items[0].links.youtube.link',
-                  className: 'text-[11px] text-[#333]',
-                },
-                {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.website.title',
-                  href: 'personalDetails.items[0].links.website.link',
-                  className: 'text-[11px] text-[#333]',
-                },
-                {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.dribble.title',
-                  href: 'personalDetails.items[0].links.dribble.link',
-                  className: 'text-[11px] text-[#333]',
-                },
-                {
-                  type: 'link',
-                  path: 'personalDetails.items[0].links.behance.title',
-                  href: 'personalDetails.items[0].links.behance.link',
+                  path: 'personalDetails.items[0].address',
+                  fallback: 'Gurugram, Haryana',
                   className: 'text-[11px] text-[#333]',
                 },
               ],
             },
           ],
         },
-
-        // Email
-        {
-          type: 'inline-group-with-icon',
-          text: 'gmail',
-          className: 'flex items-center gap-2 ',
-          items: [
-            { type: 'icon', name: 'Mail', size: 13, className: 'text-[#015619] flex-shrink-0' },
-            {
-              type: 'link',
-              path: 'personalDetails.items[0].email',
-              href: 'mailto:{{value}}',
-              fallback: 'nutproddesigner@gmail.com',
-              className: 'text-[11px] text-[#333]',
-            },
-          ],
-        },
-
-        // Phone
-        {
-          type: 'inline-group-with-icon',
-          className: 'flex items-center gap-2',
-          items: [
-            { type: 'icon', name: 'Phone', size: 13, className: 'text-[#015619] flex-shrink-0' },
-            {
-              path: 'personalDetails.items[0].phone',
-              fallback: '+234 814 2686 61',
-              className: 'text-[11px] text-[#333]',
-            },
-          ],
-        },
-
-        // Location
-        {
-          type: 'inline-group-with-icon',
-          className: 'flex items-center gap-2',
-          items: [
-            { type: 'icon', name: 'MapPin', size: 13, className: 'text-[#015619] flex-shrink-0' },
-            {
-              path: 'personalDetails.items[0].address',
-              fallback: 'Gurugram, Haryana',
-              className: 'text-[11px] text-[#333]',
-            },
-          ],
-        },
-      ],
+      },
     },
-  },
-},
 
-
-  {
+    {
       id: 'skills',
       type: 'inline-list-section',
       column: 'left',
@@ -259,29 +255,29 @@ const template12 = {
 
     // Summary - Right
     {
-      id: 'summary',
-     type: 'content-section',
-      column: 'right',
+      id: 'summary',
+      type: 'content-section',
+      column: 'right',
 
-      className: 'mt-2',            
+      className: 'mt-2',
 
-      heading: {
-        path: 'summary.heading',
-        fallback: 'Profile',
-        className: ' text-[#015619] font-poppins text-base font-semibold whitespace-nowrap',
-        divider: {
-          variant: 'line',  
-          className: 'bg-[#015619] w-[42.56px] h-[2.66px] rounded-[5.32px] mt-1',
-        },
-      },
+      heading: {
+        path: 'summary.heading',
+        fallback: 'Profile',
+        className: ' text-[#015619] font-poppins text-base font-semibold whitespace-nowrap',
+        divider: {
+          variant: 'line',
+          className: 'bg-[#015619] w-[42.56px] h-[2.66px] rounded-[5.32px] mt-1',
+        },
+      },
 
-      content: {
-        type: 'html',
-        path: 'personalDetails.items[0].description',
-        fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
-        className: ' text-xs text-black leading-[18px] font-poppins',
-      },
-    },
+      content: {
+        type: 'html',
+        path: 'personalDetails.items[0].description',
+        fallback: 'Versatile Full-Stack Software Engineer with 6+ years of hands-on experience...',
+        className: ' text-xs text-black leading-[18px] font-poppins',
+      },
+    },
 
     // Experience - Right
     {
@@ -463,8 +459,7 @@ const template12 = {
               {
                 type: 'html',
                 path: 'description',
-                className:
-                  'text-[11px] leading-[1.6] text-[#444] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc',
+                className: 'text-[11px] leading-[1.6] text-[#444] whitespace-pre-wrap [&_ul]:ml-3 [&_li]:list-disc',
               },
             ],
           },
@@ -510,4 +505,3 @@ const template12 = {
 };
 
 export default template12;
-

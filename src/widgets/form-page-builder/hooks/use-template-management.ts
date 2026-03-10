@@ -1,9 +1,8 @@
 import { useUpdateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
-import srishtiTemplate from '@features/resume/templates/srishti-template-1';
 import aniketTemplate from '@features/resume/templates/standard';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 interface UseTemplateManagementParams {
@@ -18,11 +17,11 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
-    useEffect(() => {
-   if (srishtiTemplate) {
-       setSelectedTemplate(srishtiTemplate);
-     }
-   }, [srishtiTemplate]);
+  // useEffect(() => {
+  //   if (srishtiTemplate) {
+  //     setSelectedTemplate(srishtiTemplate);
+  //   }
+  // }, [srishtiTemplate]);
 
   // useEffect(() => {
   //   if (initialTemplateId) {

@@ -30,7 +30,6 @@ interface ResumeCreationModalProps {
 export default function ResumeCreationModal({
   isOpen,
   onClose,
-  onJDModalOpen,
   onLinkedInClick,
   onActionLock,
   onActionRelease,
@@ -50,13 +49,18 @@ export default function ResumeCreationModal({
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  const handleUploadResumeClick = useCallback(() => {
-    trackEvent('upload_resume_click', {
-      source: template ? 'template_modal' : 'dashboard_modal',
-      device: 'mobile',
-    });
-    router.push('/upload-resume');
-  }, [template, router]);
+  // const handleUploadResumeClick = useCallback(() => {
+  //   trackEvent('upload_resume_click', {
+  //     source: template ? 'template_modal' : 'dashboard_modal',
+  //     device: 'mobile',
+  //   });
+  //   router.push('/upload-resume');
+  // }, [template, router]);
+
+  const handleUploadClick = () => {
+    trackEvent('create_resume_click', { source: 'dashboard_modal', method: 'upload_existing' });
+    router.push('/dashboard?action=upload');
+  };
 
   const handleLinkedInClick = useCallback(() => {
     trackEvent('create_resume_click', {
@@ -160,30 +164,51 @@ export default function ResumeCreationModal({
   //   }
   // };
 
+  // const handleOpenTailoredWithJD = () => {
+  //   trackEvent('create_resume_click', {
+  //     source: 'dashboard_modal', method: 'tailored_with_jd',
+  //   });
+  //   router.push('/dashboard?action=tailored_with_jd');
+
   const handleOpenTailoredWithJD = () => {
     trackEvent('create_resume_click', {
-      source: template ? 'template_modal' : 'dashboard_modal',
+      source: 'dashboard_modal',
       method: 'tailored_with_jd',
     });
 
-    // Guest users must login for Tailored JD flow
-    if (!user.data?.id || !user.data?.isLoggedIn) {
+    if (!user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setIsAuthModalOpen(true);
+      router.push('/auth');
       return;
     }
 
-    onActionLock(ResumeCreationAction.TAILORED_JD);
-    onClose();
-    onJDModalOpen();
+    router.push('/dashboard?action=tailored_jd');
   };
+
+  // const handleUploadClick = () => {
+  // trackEvent('create_resume_click',
+  //   { source: 'dashboard_modal', method: 'upload_existing', });
+  //   router.push('/dashboard?action=upload');
+  // };
+
+  // Guest users must login for Tailored JD flow
+  //   if (!user.data?.id || !user.data?.isLoggedIn) {
+  //     localStorage.setItem('openJDModal', 'true');
+  //     setIsAuthModalOpen(true);
+  //     return;
+  //   }
+
+  //   onActionLock(ResumeCreationAction.TAILORED_JD);
+  //   onClose();
+  //   onJDModalOpen();
+  // };
 
   return (
     <>
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        className="w-[90vw] max-w-[832px] border border-[#D5E5FF] rounded-[36px]"
+        className="w-[90vw] max-w-[832px] md:max-w-[500px] border border-[#D5E5FF] rounded-[36px]"
         showCloseButton={true}
         closeButtonVariant="default"
         overlayClassName="backdrop-blur-md"
@@ -213,7 +238,7 @@ export default function ResumeCreationModal({
             {/* Upload Existing Resume */}
             <button
               type="button"
-              onClick={handleUploadResumeClick}
+              onClick={handleUploadClick}
               className="w-full flex items-center gap-3 px-5 py-4 rounded-xl border border-gray-200 bg-white hover:bg-[#F3E8FF] transition-colors text-left cursor-pointer"
             >
               <Image src="/images/file_upload.svg" alt="" width={24} height={24} />

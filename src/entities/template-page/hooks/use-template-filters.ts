@@ -11,11 +11,15 @@ export function useTemplateFilters() {
 
   const filters: TemplateFilters = useMemo(() => {
     const stylesParam = searchParams.get('styles');
+    const layoutTypeParam = searchParams.get('layoutType');
+    const roleParam = searchParams.get('role');
+    const colorParam = searchParams.get('color');
+
     return {
       styles: stylesParam ? stylesParam.split(',') : undefined,
-      layoutType: searchParams.get('layoutType') || undefined,
-      role: searchParams.get('role') || undefined,
-      primaryColor: searchParams.get('color') || undefined,
+      layoutType: layoutTypeParam ? layoutTypeParam.split(',') : undefined,
+      role: roleParam ? roleParam.split(',') : undefined,
+      primaryColor: colorParam || undefined,
     };
   }, [searchParams]);
 
@@ -23,25 +27,22 @@ export function useTemplateFilters() {
     (newFilters: Partial<TemplateFilters>) => {
       const params = new URLSearchParams(searchParams.toString());
       for (const [key, value] of Object.entries(newFilters)) {
-        if (key === 'styles') {
-          const arr = value as string[] | undefined;
-          if (arr && arr.length > 0) {
-            params.set('styles', arr.join(','));
-          } else {
-            params.delete('styles');
-          }
-        } else if (key === 'primaryColor') {
+        const paramKey = key === 'primaryColor' ? 'color' : key;
+
+        if (key === 'primaryColor') {
           if (value) {
-            params.set('color', String(value));
+            params.set(paramKey, String(value));
           } else {
-            params.delete('color');
+            params.delete(paramKey);
           }
+          continue;
+        }
+
+        const arr = value as string[] | undefined;
+        if (arr && arr.length > 0) {
+          params.set(paramKey, arr.join(','));
         } else {
-          if (value !== undefined && value !== null && value !== '') {
-            params.set(key, String(value));
-          } else {
-            params.delete(key);
-          }
+          params.delete(paramKey);
         }
       }
       const qs = params.toString();

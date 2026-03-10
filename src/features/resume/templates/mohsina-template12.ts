@@ -1,7 +1,7 @@
 // Lauren Chen style template - Orange sidebar with white content area
 
 const mohsinaTemplate12 = {
-  name: 'Lauren Chen Professional',
+  name: 'mohsina-template12',
 
   page: {
     width: 794,
@@ -16,12 +16,12 @@ const mohsinaTemplate12 = {
     spacing: '0px',
     left: {
       width: '272px',
-      className: 'text-black p-4 pt-8  flex flex-col',
+      className: 'text-black p-4 pb-4 pt-6   flex flex-col',
     },
     right: {
       width: 'calc(100% - 272px)',
       className:
-        'p-8 flex flex-col bg-white mt-6 pb-12 bg-[linear-gradient(to_bottom,transparent_32px,#e5e5e5_32px,#e5e5e5_calc(100%-32px),transparent_calc(100%-32px))] bg-[size:6px_100%] bg-left bg-no-repeat',
+        'p-8 flex flex-col bg-white pb-12 pl-10 bg-[linear-gradient(to_bottom,transparent_30px,#e5e7eb_30px,#e5e7eb_calc(100%-45px),transparent_calc(100%-45px))] bg-[size:8px_1122px] bg-left-top bg-repeat-y',
     },
   },
 
@@ -33,7 +33,7 @@ const mohsinaTemplate12 = {
       id: 'contact',
       type: 'header',
       column: 'left',
-      className: 'flex flex-col mb-3  mt-10',
+      className: 'flex flex-col mb-3  mt-5',
       fields: {
         contact: {
           type: 'group',
@@ -110,8 +110,8 @@ const mohsinaTemplate12 = {
                 {
                   type: 'inline-group',
                   className:
-                    'flex flex-wrap text-xs text-[#555555] font-poppins underline decoration-1 underline-offset-2',
-                  separator: '/',
+                    'flex flex-wrap text-xs text-[#555555] font-poppins underline decoration-1 underline-offset-2 ',
+                  separator: '/ ',
                   items: [
                     {
                       type: 'link',
@@ -170,7 +170,7 @@ const mohsinaTemplate12 = {
       className: 'flex flex-col gap-2 mb-10',
       fields: {
         nameTitle: {
-          className: 'border-l-8 border-blue-600 pl-6 flex flex-col justify-center -ml-10 py-1',
+          className: 'border-l-8 border-blue-600 pl-6 flex flex-col justify-center -ml-12 -mt-0.5',
         },
         name: {
           path: 'personalDetails.items[0].fullName',

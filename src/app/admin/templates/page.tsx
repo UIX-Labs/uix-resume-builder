@@ -557,11 +557,14 @@ export default function AdminTemplatesPage() {
           {(row.colorVariations || []).slice(0, 5).map((cv, i) => (
             <div
               key={`${row.id}-color-${i}`}
-              className="w-5 h-5 rounded-full border border-gray-200"
-              style={{ backgroundColor: cv.primaryColor }}
-              title={cv.name}
+              className="w-5 h-5 rounded-full border border-gray-300 shrink-0"
+              style={{ backgroundColor: cv.primaryColor || '#ccc' }}
+              title={`${cv.name} (${cv.primaryColor})`}
             />
           ))}
+          {(row.colorVariations || []).length > 5 && (
+            <span className="text-[10px] text-gray-500">+{row.colorVariations.length - 5}</span>
+          )}
           {(!row.colorVariations || row.colorVariations.length === 0) && (
             <span className="text-xs text-gray-400">None</span>
           )}

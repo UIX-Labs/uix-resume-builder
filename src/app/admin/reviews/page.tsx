@@ -10,7 +10,12 @@ import type { AdminQueryParams, ReviewRow } from '@/features/admin/types/admin.t
 import { fromNow } from '@/features/admin/lib/format-date';
 
 export default function AdminReviewsPage() {
-  const [params, setParams] = useState<AdminQueryParams>({ page: 1, limit: 20, sortOrder: 'DESC' });
+  const [params, setParams] = useState<AdminQueryParams>({
+    page: 1,
+    limit: 20,
+    sortOrder: 'DESC',
+    excludeInternal: true,
+  });
   const { data, isLoading } = useReviews(params);
   const router = useRouter();
 
@@ -87,7 +92,7 @@ export default function AdminReviewsPage() {
         </span>
       </div>
 
-      <FilterBar onFilterChange={handleFilterChange} showStatusFilter />
+      <FilterBar onFilterChange={handleFilterChange} showStatusFilter showInternalFilter />
 
       <DataTable
         columns={columns}

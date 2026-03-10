@@ -37,7 +37,12 @@ function ActionBadges({ actions }: { actions: RoastRow['actions'] }) {
 }
 
 export default function AdminRoastsPage() {
-  const [params, setParams] = useState<AdminQueryParams>({ page: 1, limit: 20, sortOrder: 'DESC' });
+  const [params, setParams] = useState<AdminQueryParams>({
+    page: 1,
+    limit: 20,
+    sortOrder: 'DESC',
+    excludeInternal: true,
+  });
   const { data, isLoading } = useRoasts(params);
   const [expandedOutput, setExpandedOutput] = useState<string | null>(null);
   const [expandedInput, setExpandedInput] = useState<string | null>(null);
@@ -134,7 +139,7 @@ export default function AdminRoastsPage() {
         Total: <span className="font-semibold text-gray-900">{data?.total || 0}</span> resumes roasted
       </p>
 
-      <FilterBar onFilterChange={handleFilterChange} />
+      <FilterBar onFilterChange={handleFilterChange} showInternalFilter />
 
       <DataTable
         columns={columns}

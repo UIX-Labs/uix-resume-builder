@@ -235,6 +235,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           title={frontmatter.title}
           description={frontmatter.description}
           author={frontmatter.author}
+          authorImage={frontmatter.authorImage as string}
           authorRole={frontmatter.authorRole}
           date={formatDate(frontmatter.date)}
           readingTime={readingTime}
@@ -270,18 +271,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               </div>
 
               <div
-                className="prose prose-lg prose-gray prose-headings:scroll-mt-0
+                className="prose prose-lg prose-gray prose-headings:scroll-mt-24
                  prose-headings:text-black prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl 
                  prose-pre:bg-text-blue-500 prose-pre:text-black
                     prose-a:text-blue-500 w-full prose-headings:font-semibold
-                    prose-table:mx-auto
-                    prose-table:w-full
                     prose-th:text-center
                     prose-td:text-center
                     prose-th:px-4
                     prose-td:px-4
-                    prose-th:py-3
-                    prose-td:py-3"
+                    prose-th:py-4
+                    prose-td:py-4"
               >
                 <MDXRemote
                   source={content}

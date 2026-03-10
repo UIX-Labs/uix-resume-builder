@@ -42,14 +42,11 @@ export default function FeaturedPrimaryCard({ post, badgeColor }: FeaturedPrimar
 
             {/* META ROW: */}
             <div className="flex items-center gap-3 mt-4">
-              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
-                {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
-                <img
-                  src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
-                  className="w-full h-full object-cover"
-                  alt={post.frontmatter.author}
-                />
-              </div>
+              <img
+                src={post.frontmatter.authorImage || 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp'}
+                className="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover border border-white flex-shrink-0 shadow-sm"
+                alt={post.frontmatter.author}
+              />
 
               <div className="flex items-center text-[10px] sm:text-[12px] font-medium" style={{ color: '#8A8C99' }}>
                 <span className="truncate max-w-[80px] sm:max-w-none">{post.frontmatter.author}</span>

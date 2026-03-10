@@ -7,6 +7,7 @@ interface BlogCardProps {
   category: string;
   title: string;
   author: string;
+  authorImage?: string;
   date: string;
   slug?: string;
   badgeColor?: string;
@@ -17,6 +18,7 @@ export default function BlogCard({
   category,
   title,
   author,
+  authorImage,
   date,
   slug = '#',
   badgeColor = '#000',
@@ -76,9 +78,9 @@ export default function BlogCard({
           >
             {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
             <img
-              src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
-              className="w-6 h-6 rounded-full"
-              alt=""
+              src={authorImage || "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"}
+              className="w-6 h-6 rounded-full object-cover"
+              alt={author}
             />
 
             <span>

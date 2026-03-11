@@ -1,4 +1,5 @@
 import { Clock } from 'lucide-react';
+import { AuthorImage } from '../author-img';
 
 export interface BreadcrumbItem {
   label: string;
@@ -9,7 +10,6 @@ interface ArticleHeaderProps {
   title: string;
   description: string;
   author: string;
-  authorImage?: string;
   authorRole?: string;
   date: string;
   readingTime: string;
@@ -23,7 +23,6 @@ export default function ArticleHeader({
   highlightWord,
   description,
   author,
-  authorImage,
   date,
   readingTime,
   breadcrumbs,
@@ -92,13 +91,15 @@ export default function ArticleHeader({
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:text-base text-[#8A8C99] border-t border-gray-200 lg:border-none pt-4 lg:pt-0">
           <span className="flex items-center gap-2 text-black font-medium">
-            {authorImage && (
+            {/* {authorImage && (
               <img
                 src={authorImage}
                 alt={author}
                 className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm"
               />
-            )}
+            )} */}
+
+            <AuthorImage author={author} />
             Published by- <span className="text-[#8A8C99] font-normal ml-1">{author}</span>
           </span>
 

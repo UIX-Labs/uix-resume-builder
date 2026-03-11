@@ -235,7 +235,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           title={frontmatter.title}
           description={frontmatter.description}
           author={frontmatter.author}
-          authorImage={frontmatter.authorImage as string}
+          // authorImage={frontmatter.authorImage}
           authorRole={frontmatter.authorRole}
           date={formatDate(frontmatter.date)}
           readingTime={readingTime}

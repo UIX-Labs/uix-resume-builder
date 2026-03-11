@@ -1,6 +1,6 @@
 import type React from 'react';
 import { cn } from '@shared/lib/cn';
-import { normalizeMarkdownContent } from '@shared/lib/markdown';
+import { normalizeMarkdownContent, decodeHtmlEntities } from '@shared/lib/markdown';
 import * as LucideIcons from 'lucide-react';
 import { resolvePath } from '../resolve-path';
 import { renderDivider } from '../components/Divider';
@@ -148,7 +148,7 @@ export function renderBadgeSection(
           const errorBgColor = isThumbnail ? '' : getSuggestionBackgroundColor(valueSuggestions);
 
           const displayValue = `${section.itemPrefix || ''}${actualValue}${section.itemSuffix || ''}`;
-          const html = normalizeMarkdownContent(displayValue);
+          const html = normalizeMarkdownContent(decodeHtmlEntities(displayValue));
 
           // Use sectionKey (which maps to formData) - same pattern as list-section
           // e.g., "interests", "achievements" which matches formData keys

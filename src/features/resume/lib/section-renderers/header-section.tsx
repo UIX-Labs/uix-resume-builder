@@ -4,6 +4,7 @@ import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
 import { renderField } from '../field-renderer';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
+import { decodeHtmlEntities } from '@shared/lib/markdown';
 
 export function renderHeaderSection(
   section: any,
@@ -110,7 +111,7 @@ export function renderHeaderSection(
         <div className={fields.nameTitle.className}>
           {fields.name && (
             <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
+              {decodeHtmlEntities(resolvePath(data, fields.name.path, fields.name.fallback))}
             </p>
           )}
           {fields.title?.path && (
@@ -132,7 +133,7 @@ export function renderHeaderSection(
         <>
           {fields.name && (
             <p className={cn(fields.name.className, getFieldErrorBgColor('fullName'))}>
-              {resolvePath(data, fields.name.path, fields.name.fallback)}
+              {decodeHtmlEntities(resolvePath(data, fields.name.path, fields.name.fallback))}
             </p>
           )}
           {fields.title?.path && (

@@ -1,6 +1,6 @@
 import { getArrayValueSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
-import { normalizeMarkdownContent } from '@shared/lib/markdown';
+import { normalizeMarkdownContent, decodeHtmlEntities } from '@shared/lib/markdown';
 import type React from 'react';
 import { renderDivider } from '../components/Divider';
 import { resolvePath } from '../resolve-path';
@@ -90,7 +90,9 @@ export function renderInlineListSection(
       {/* {shouldHighlight && <SparkleIndicator />} */}
       <div className={cn('flex flex-col', section.heading.className)}>
         {section.heading && (
-          <p data-item="heading">{resolvePath(data, section.heading.path, section.heading.fallback)}</p>
+          <p data-item="heading">
+            {decodeHtmlEntities(resolvePath(data, section.heading.path, section.heading.fallback))}
+          </p>
         )}
 
         {section.heading.divider && renderDivider(section.heading.divider)}
@@ -107,7 +109,7 @@ export function renderInlineListSection(
               if (actualValue === null) {
                 return null;
               }
-              const html = normalizeMarkdownContent(actualValue);
+              const html = normalizeMarkdownContent(decodeHtmlEntities(actualValue));
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier
@@ -165,7 +167,7 @@ export function renderInlineListSection(
                 return null;
               }
 
-              const html = normalizeMarkdownContent(actualValue);
+              const html = normalizeMarkdownContent(decodeHtmlEntities(actualValue));
 
               // Ensure itemId is present (it should come from flattenAndFilterItemsWithContext)
               // If not present, use parentId we extracted earlier

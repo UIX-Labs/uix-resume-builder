@@ -80,24 +80,6 @@ export const mohsinaTemplate7 = {
                   items: [
                     {
                       type: 'icon',
-                      name: 'MapPin',
-                      size: 10,
-                      className: 'text-white bg-[#4C77FF] p-0.5 mt-[2px]',
-                    },
-                    {
-                      type: 'text',
-                      path: 'personalDetails.items[0].address',
-                      fallback: 'Gurugram, Haryana',
-                      className: 'text-[13px] leading-tight text-black break-words mr-2',
-                    },
-                  ],
-                },
-                {
-                  type: 'inline-group-with-icon',
-                  className: 'flex items-start gap-1',
-                  items: [
-                    {
-                      type: 'icon',
                       name: 'Linkedin',
                       size: 10,
                       className: 'text-white bg-[#4C77FF] p-0.5 mt-[2px]',

@@ -75,24 +75,6 @@ export const mohsinaTemplate8 = {
 
                 {
                   type: 'inline-group',
-                  className: 'flex gap-2 items-start ',
-                  items: [
-                    {
-                      type: 'text',
-                      fallback: 'Location:',
-                      className: 'text-[10px] font-semibold text-gray-500 leading-tight  flex-shrink-0 mt-[3px]',
-                    },
-                    {
-                      type: 'text',
-                      path: 'personalDetails.items[0].address',
-                      fallback: 'Gurugram, Haryana',
-                      className: 'text-[10px] text-black leading-[2px] ',
-                    },
-                  ],
-                },
-
-                {
-                  type: 'inline-group',
                   className: 'flex gap-2 items-start',
                   items: [
                     {

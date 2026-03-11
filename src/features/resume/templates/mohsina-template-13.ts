@@ -70,7 +70,7 @@ const mohsinaTemplate13 = {
             {
               type: 'contact-grid',
               className:
-                'flex flex-col items-start w-[30%] text-left text-[11px] gap-1.5 text-neutral-700 ml-auto leading-tight',
+                'flex flex-col items-start w-40 shrink-0 text-left text-[11px] gap-1.5 text-neutral-700 ml-auto leading-tight',
               items: [
                 {
                   type: 'inline-group-with-icon',
@@ -83,7 +83,7 @@ const mohsinaTemplate13 = {
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'john.doe@email.com',
-                      className: 'break-all ',
+                      className: 'text-[11px] break-all leading-tight',
                     },
                   ],
                 },
@@ -96,7 +96,7 @@ const mohsinaTemplate13 = {
                     {
                       type: 'inline-group',
                       separator: ' / ',
-                      className: 'flex flex-wrap ',
+                      className: 'flex flex-wrap break-all leading-tight',
                       items: [
                         {
                           type: 'link',
@@ -112,6 +112,34 @@ const mohsinaTemplate13 = {
                           condition: 'personalDetails.items[0].links.website.link',
                           fallback: 'Portfolio',
                         },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.github.title',
+                          href: 'personalDetails.items[0].links.github.link',
+                          condition: 'personalDetails.items[0].links.github.link',
+                          fallback: 'github',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.dribble.title',
+                          href: 'personalDetails.items[0].links.dribble.link',
+                          condition: 'personalDetails.items[0].links.dribble.link',
+                          fallback: 'dribble',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.youtube.title',
+                          href: 'personalDetails.items[0].links.youtube.link',
+                          condition: 'personalDetails.items[0].links.youtube.link',
+                          fallback: 'youtube',
+                        },
+                        {
+                          type: 'link',
+                          path: 'personalDetails.items[0].links.behance.title',
+                          href: 'personalDetails.items[0].links.behance.link',
+                          condition: 'personalDetails.items[0].links.behance.link',
+                          fallback: 'behance',
+                        },
                       ],
                     },
                   ],
@@ -126,6 +154,7 @@ const mohsinaTemplate13 = {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '+1 (555) 123-4567',
+                      className: 'break-words leading-tight',
                     },
                   ],
                 },
@@ -139,7 +168,7 @@ const mohsinaTemplate13 = {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'San Francisco, CA',
-                      className: 'leading-tight',
+                      className: 'break-words leading-tight',
                     },
                   ],
                 },
@@ -244,7 +273,7 @@ const mohsinaTemplate13 = {
                 type: 'duration',
                 path: 'duration',
                 className:
-                  'text-[13px] font-black text-[#878787] font-mulish leading-tight w-32 shrink-0 text-right mt-0.5',
+                  'text-[13px] font-black text-[#878787] font-mulish leading-tight w-40 shrink-0 text-right mt-0.5',
               },
             ],
           },
@@ -298,7 +327,7 @@ const mohsinaTemplate13 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[13px] font-black text-[#878787] font-mulish',
+                className: 'text-[13px] font-black text-[#878787] font-mulish w-40 shrink-0 text-right',
               },
             ],
           },
@@ -356,7 +385,7 @@ const mohsinaTemplate13 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[13px] font-black text-[#878787] font-mulish w-32 shrink-0 text-right mt-0.5',
+                className: 'text-[13px] font-black text-[#878787] font-mulish w-40 shrink-0 text-right mt-0.5',
               },
             ],
           },
@@ -404,7 +433,7 @@ const mohsinaTemplate13 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[13px] font-black text-[#878787]  font-mulish shrink-0',
+                className: 'text-[13px] font-black text-[#878787] font-mulish w-40 shrink-0 text-right mt-0.5',
               },
             ],
           },

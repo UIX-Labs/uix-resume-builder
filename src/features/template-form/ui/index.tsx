@@ -56,15 +56,20 @@ export function TemplateForm({
 
       case 'data': {
         return (
-          <Input
+          <TiptapTextArea
+            value={data.value}
             placeholder={section.placeholder}
+            showToolbar={false}
             className={cn(
               isMobile
-                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white px-4'
                 : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
-            value={data.value}
-            onChange={(e) => onChange({ ...data, value: e.target.value })}
+            minHeight={isMobile ? '48px' : '48px'}
+            maxHeight={isMobile ? '48px' : '48px'}
+            onChange={(_value, html) => {
+              onChange({ ...data, value: html });
+            }}
           />
         );
       }
@@ -143,15 +148,20 @@ export function TemplateForm({
 
       default: {
         return (
-          <Input
+          <TiptapTextArea
+            value={typeof data === 'string' ? data : ''}
             placeholder={section.placeholder}
+            showToolbar={false}
             className={cn(
               isMobile
-                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white h-[48px] px-4'
+                ? 'border border-section-border ring-4 ring-form-ring-light rounded-xl placeholder:text-gray-400 text-sm text-gray-900 font-normal focus:border-blue-500 focus:ring-0 bg-white px-4'
                 : 'border border-section-border ring-4 ring-form-ring-light rounded-xl text-base text-form-text-dark font-normal focus:border-blue-800 focus:ring-form-focus-ring placeholder:text-form-placeholder bg-form-bg-light',
             )}
-            value={data}
-            onChange={(e) => onChange(e.target.value)}
+            minHeight={isMobile ? '48px' : '48px'}
+            maxHeight={isMobile ? '48px' : '48px'}
+            onChange={(_value, html) => {
+              onChange(html);
+            }}
           />
         );
       }

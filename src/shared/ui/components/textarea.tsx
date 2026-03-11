@@ -208,9 +208,11 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     const editor = useEditor({
       extensions: [
         StarterKit.configure({
-          heading: {
-            levels: [1, 2, 3, 4, 5, 6],
-          },
+          heading: showToolbar
+            ? {
+                levels: [1, 2, 3, 4, 5, 6],
+              }
+            : false,
           /**
            * The `bulletList` prop in the StarterKit Tiptap extension configures the behavior and HTML rendering of bulleted lists.
            *
@@ -226,34 +228,44 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
            *      (e.g. `marked`, `remark`, or `markdown-it`) to produce valid HTML, or use an extension that enables markdown parsing.
            *   3. Once the content is valid HTML (e.g. with <ul><li>... </li></ul>), and this configuration is present, the lists will render and style correctly.
            */
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: true,
-            HTMLAttributes: {
-              style: 'list-style-type: disc;',
-            },
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: true,
-            HTMLAttributes: {
-              style: 'list-style-type: decimal;',
-            },
-          },
+          bulletList: showToolbar
+            ? {
+                keepMarks: true,
+                keepAttributes: true,
+                HTMLAttributes: {
+                  style: 'list-style-type: disc;',
+                },
+              }
+            : false,
+          orderedList: showToolbar
+            ? {
+                keepMarks: true,
+                keepAttributes: true,
+                HTMLAttributes: {
+                  style: 'list-style-type: decimal;',
+                },
+              }
+            : false,
           hardBreak: {
             keepMarks: false,
           },
+          bold: showToolbar,
+          italic: showToolbar,
         }),
         Placeholder.configure({
           placeholder,
         }),
-        Underline,
-        Link.configure({
-          openOnClick: false,
-          HTMLAttributes: {
-            class: 'text-primary underline underline-offset-4',
-          },
-        }),
+        ...(showToolbar ? [Underline] : []),
+        ...(showToolbar
+          ? [
+              Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                  class: 'text-primary underline underline-offset-4',
+                },
+              }),
+            ]
+          : []),
         ErrorHighlight as any,
       ] as any,
       content: normalizedDefaultValue,
@@ -273,7 +285,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       },
       onFocus: () => {
         hasUserInteractedRef.current = true;
-        setIsToolbarVisible(true);
+        if (showToolbar) {
+          setIsToolbarVisible(true);
+        }
       },
       onBlur: () => {
         // Delay hiding to allow toolbar clicks

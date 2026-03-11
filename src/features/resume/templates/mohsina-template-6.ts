@@ -130,7 +130,7 @@ export const mohsinaTemplate6 = {
                     {
                       type: 'text',
 
-                      path: 'personalDetails.items[0].location',
+                      path: 'personalDetails.items[0].address',
 
                       fallback: 'Gurugram, Haryana',
 
@@ -341,57 +341,36 @@ export const mohsinaTemplate6 = {
       containerClassName: 'flex flex-col gap-3 mt-1',
 
       itemTemplate: {
-        className: 'flex flex-row gap-4',
+        className: 'flex flex-col gap-2',
 
         rows: [
           {
-            className: 'block w-full',
+            className: 'flex justify-between items-start gap-4 w-full',
 
             cells: [
               {
-                type: 'duration',
-
-                path: 'duration',
-
-                className:
-                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-[14px] flex-shrink-0 whitespace-nowrap mt-0.5 font-[lato]',
-              },
-
-              {
                 type: 'group',
-
-                className: 'ml-28 flex flex-col gap-[4px]',
-
+                className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
                 items: [
                   {
-                    type: 'group',
-
-                    className: 'flex items-center gap-1',
-
-                    items: [
-                      {
-                        path: 'degree',
-
-                        className:
-                          'text-[13px] font-semibold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
-                      },
-                      {
-                        path: 'grade.value',
-
-                        prefix: ', ',
-
-                        className:
-                          'text-[13px] font-semibold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
-                      },
-                    ],
+                    path: 'degree',
+                    className: 'text-[13px] font-semibold text-black tracking-[0.1px] font-[lato]',
                   },
-
+                  {
+                    path: 'grade.value',
+                    className: 'text-[13px] font-semibold text-black tracking-[0.1px] font-[lato]',
+                  },
                   {
                     path: 'institution',
-
-                    className: 'text-[13px] font-normal text-black leading-[18px]    font-[lato]',
+                    className: 'text-[13px] font-normal text-black font-[lato]',
                   },
                 ],
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'text-[10px] uppercase text-[#3E6AF2] leading-tight w-32 shrink-0 whitespace-nowrap mt-1 font-[lato] text-right',
               },
             ],
           },
@@ -454,57 +433,35 @@ export const mohsinaTemplate6 = {
 
         rows: [
           {
-            className: 'block w-full',
+            className: 'flex justify-between items-start gap-4 w-full',
 
             cells: [
               {
-                type: 'duration',
-
-                path: 'duration',
-
-                className:
-                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-[11px] flex-shrink-0 whitespace-nowrap  mt-1 font-[lato]',
-              },
-
-              {
                 type: 'group',
-
-                className: 'ml-28 flex flex-col gap-[4px] flex-1',
-
+                className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
                 items: [
                   {
-                    type: 'group',
-
-                    className: 'flex flex-wrap gap-1',
-
-                    items: [
-                      {
-                        path: 'position',
-
-                        className: 'text-[13px] font-bold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
-                      },
-
-                      {
-                        path: 'company',
-
-                        prefix: ', ',
-
-                        className: 'text-[13px] font-bold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
-                      },
-                    ],
+                    path: 'position',
+                    className: 'text-[13px] font-bold text-black tracking-[0.1px] font-[lato]',
                   },
-
+                  {
+                    path: 'company',
+                    className: 'text-[13px] font-bold text-black tracking-[0.1px] font-[lato]',
+                  },
                   {
                     type: 'html',
-
                     path: 'description',
-
                     breakable: true,
-
                     className:
-                      'text-[13px] text-[#4D4D4D] leading-[16px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]    font-[lato]',
+                      'text-[13px] text-[#4D4D4D] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px] font-[lato] mt-1',
                   },
                 ],
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'text-[10px] uppercase text-[#3E6AF2] leading-tight w-32 shrink-0 whitespace-nowrap mt-1 font-[lato] text-right',
               },
             ],
           },

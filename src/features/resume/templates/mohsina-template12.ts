@@ -228,18 +228,12 @@ const mohsinaTemplate12 = {
         fields: [
           {
             type: 'horizontal-group',
-            className: 'flex items-start ',
+            className: 'flex justify-between items-start gap-4',
             items: [
-              // Duration on left
-              {
-                type: 'duration',
-                path: 'duration',
-                className: 'text-xs text-black font-normal w-32 flex-shrink-0 pt-1',
-              },
-              // Content group on right
+              // Content group on left
               {
                 type: 'horizontal-group',
-                className: 'flex items-start gap-2 flex-1 ml-4',
+                className: 'flex items-start gap-2 flex-1 min-w-0',
                 items: [
                   // Blue Dot
                   {
@@ -250,22 +244,22 @@ const mohsinaTemplate12 = {
                   // Vertical stack: Degree + Institution
                   {
                     type: 'group',
-                    className: 'flex flex-col gap-0.5',
+                    className: 'flex flex-col gap-0.5 flex-1 min-w-0',
                     items: [
-                      // Row 1: Degree + CGPA
+                      // Row 1: Degree + GPA
                       {
-                        type: 'horizontal-group',
-                        className: 'flex items-center gap-2',
+                        type: 'group',
+                        className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                         items: [
                           {
                             path: 'degree',
                             fallback: 'Bachelor of Design',
-                            className: 'text-sm font-semibold text-black',
+                            className: 'text-sm font-semibold text-black leading-tight',
                           },
                           {
                             path: 'gpa',
                             fallback: '9.0 CGPA',
-                            className: 'text-sm font-semibold text-black',
+                            className: 'text-sm font-semibold text-black leading-tight',
                           },
                         ],
                       },
@@ -278,6 +272,12 @@ const mohsinaTemplate12 = {
                     ],
                   },
                 ],
+              },
+              // Duration on right
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-black font-normal w-32 shrink-0 text-right pt-1',
               },
             ],
           },
@@ -306,37 +306,41 @@ const mohsinaTemplate12 = {
         fields: [
           {
             type: 'horizontal-group',
-            className: 'flex items-center gap-2 -mb-1',
+            className: 'flex justify-between items-start gap-4 -mb-1',
             items: [
               {
-                type: 'text',
-                fallback: '●',
-                className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
-              },
-              {
                 type: 'horizontal-group',
-                separator: ', ',
-                className: 'flex items-baseline gap-1',
+                className: 'flex items-center gap-2 flex-1 min-w-0',
                 items: [
                   {
-                    path: 'position',
-                    fallback: 'Senior UX Designer',
-                    className: 'text-sm font-semibold text-black',
+                    type: 'text',
+                    fallback: '●',
+                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
                   },
                   {
-                    path: 'company',
-                    fallback: 'ORACLE',
-                    className: 'text-sm font-semibold text-black',
+                    type: 'group',
+                    className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
+                    items: [
+                      {
+                        path: 'position',
+                        fallback: 'Senior UX Designer',
+                        className: 'text-sm font-semibold text-black leading-tight',
+                      },
+                      {
+                        path: 'company',
+                        fallback: 'ORACLE',
+                        className: 'text-sm font-semibold text-black leading-tight',
+                      },
+                    ],
                   },
                 ],
               },
+              {
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-black font-poppins w-32 shrink-0 text-right mt-1',
+              },
             ],
-          },
-
-          {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-xs text-black ml-5 font-poppins  ',
           },
 
           {

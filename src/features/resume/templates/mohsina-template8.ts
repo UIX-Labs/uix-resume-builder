@@ -56,72 +56,72 @@ export const mohsinaTemplate8 = {
               items: [
                 {
                   type: 'inline-group',
-                  className: 'flex gap-2 items-baseline',
+                  className: 'flex gap-2 items-start',
                   items: [
                     {
                       type: 'text',
                       fallback: 'Email:',
-                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0',
+                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0 mt-[3px]',
                     },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'amanguppta@gmail.com',
-                      className: 'text-[10px] text-black break-all leading-[16px]',
+                      className: 'text-[10px] text-black break-all leading-tight',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group',
-                  className: 'flex gap-2 items-baseline -mt-2',
+                  className: 'flex gap-2 items-start ',
                   items: [
                     {
                       type: 'text',
                       fallback: 'Location:',
-                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0',
+                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0 mt-[3px]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[10px] text-black leading-[16px]',
+                      className: 'text-[10px] text-black ',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group',
-                  className: 'flex gap-2 items-baseline -mt-2',
+                  className: 'flex gap-2 items-start',
                   items: [
                     {
                       type: 'text',
                       fallback: 'Phone:',
-                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0',
+                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0 mt-[3px]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[10px] text-black leading-[16px]',
+                      className: 'text-[10px] text-black leading-tight',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group',
-                  className: 'flex gap-2 items-baseline -mt-2',
+                  className: 'flex gap-2 items-start',
                   items: [
                     {
                       type: 'text',
                       fallback: 'Connect:',
-                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0',
+                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0 mt-[3px]',
                     },
                     {
                       type: 'group',
                       className:
-                        'flex flex-wrap gap-1 items-center text-[10px] font-semibold text-black leading-[16px] font-poppins underline decoration-1 underline-offset-2 break-words',
+                        'flex flex-wrap gap-1 items-center text-[10px] font-semibold text-black leading-tight font-poppins underline decoration-1 underline-offset-2 break-words',
                       separator: '/',
                       items: [
                         {
@@ -289,7 +289,7 @@ export const mohsinaTemplate8 = {
                   },
                   {
                     path: 'grade.value',
-                    className: 'text-sm font-bold text-[#005FF2]',
+                    className: 'text-sm font-bold text-[#005FF2] -mt-1',
                   },
                   {
                     path: 'institution',
@@ -406,7 +406,7 @@ export const mohsinaTemplate8 = {
             cells: [
               {
                 path: 'title',
-                className: 'text-sm font-bold text-[#101214] leading-[13px]',
+                className: 'text-sm font-bold text-[#101214] leading-[20px]',
               },
               {
                 type: 'duration',

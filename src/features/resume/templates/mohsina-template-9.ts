@@ -80,7 +80,7 @@ export const mohsinaTemplate9 = {
 
                     {
                       type: 'text',
-                      path: 'personalDetails.items[0].location',
+                      path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
                       className: 'text-[13px] text-black',
                     },
@@ -246,40 +246,34 @@ export const mohsinaTemplate9 = {
       containerClassName: 'ml-[160px] flex flex-col gap-2 mb-4',
 
       itemTemplate: {
-        className: 'flex flex-col ',
+        className: 'flex flex-col',
 
         rows: [
           {
-            className: 'flex justify-between items-center w-full gap1 mt-1',
+            className: 'flex justify-between items-start w-full gap-4 mt-1',
             cells: [
               {
                 type: 'group',
-                className: 'flex items-center gap-1',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'degree',
-                    className: 'text-base font-bold text-[#101214] leading-[13px]',
+                    className: 'text-base font-bold text-[#101214]',
                   },
                   {
                     path: 'grade.value',
-                    prefix: ', ',
-                    className: 'text-base font-bold text-[#005FF2] leading-[13px] italic',
+                    className: 'text-base font-bold text-[#005FF2] italic',
+                  },
+                  {
+                    path: 'institution',
+                    className: 'text-[13px] text-[#4d4d4d] leading-tight',
                   },
                 ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] text-[#3E6AF2] leading-[13px] whitespace-nowrap flex-shrink-0',
-              },
-            ],
-          },
-          {
-            className: '',
-            cells: [
-              {
-                path: 'institution',
-                className: 'text-[13px] text-[#4d4d4d] leading-[14px]',
+                className: 'text-[10px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right mt-1.5',
               },
             ],
           },
@@ -304,20 +298,26 @@ export const mohsinaTemplate9 = {
 
         rows: [
           {
-            className: 'flex justify-between items-start w-full ',
+            className: 'flex justify-between items-start w-full gap-4',
             cells: [
               {
                 type: 'group',
-                className: 'flex flex-wrap gap-1 mt-1',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'position',
-                    className: 'text-base font-bold text-[#101214] leading-[13px]',
+                    className: 'text-base font-bold text-[#101214]',
                   },
                   {
                     path: 'company',
-                    prefix: ', ',
-                    className: 'text-base font-bold text-[#101214] leading-[13px]',
+                    className: 'text-base font-bold text-[#101214]',
+                  },
+                  {
+                    type: 'html',
+                    path: 'description',
+                    breakable: true,
+                    className:
+                      'text-[13px] text-[#4d4d4d] leading-tight [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px] mt-1',
                   },
                 ],
               },
@@ -325,19 +325,7 @@ export const mohsinaTemplate9 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] text-[#3E6AF2] leading-[13px] whitespace-nowrap flex-shrink-0',
-              },
-            ],
-          },
-
-          {
-            className: 'mt-2',
-            cells: [
-              {
-                type: 'html',
-                path: 'description',
-                breakable: true,
-                className: 'text-[13px] text-[#4d4d4d] leading-[20px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]',
+                className: 'text-[10px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right mt-1.5',
               },
             ],
           },

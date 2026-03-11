@@ -3,7 +3,7 @@ title: "How to Show a Promotion on Your Resume? (And Why Most People Get It Wron
 description: "Getting promoted is the ultimate proof that you are a high-performer, but most people bury that win in a messy layout. Here is how to display your promotion the right way in 2026."
 author: "Astha Narang"
 authorRole: "Career Expert at PikaResume"
-authorImage: "https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
+authorImage: "/images/astha-img.png"
 date: "2026-03-07"
 slug: "how-to-show-promotion-on-resume"
 keywords: "how to show promotion on resume, promotion on resume, title stacking resume, resume promotion format, resume career growth, ATS resume tips"

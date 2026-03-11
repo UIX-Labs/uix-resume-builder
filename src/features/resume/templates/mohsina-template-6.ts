@@ -429,6 +429,12 @@ export const mohsinaTemplate6 = {
                   },
                 ],
               },
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'text-[10px] uppercase text-[#3E6AF2] leading-tight w-32 shrink-0 whitespace-nowrap mt-1 font-[lato] text-right',
+              },
             ],
           },
         ],
@@ -519,6 +525,12 @@ export const mohsinaTemplate6 = {
                       'text-[13px] text-[#4D4D4D] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px] font-[lato] mt-1',
                   },
                 ],
+              },
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'text-[10px] uppercase text-[#3E6AF2] leading-tight w-32 shrink-0 whitespace-nowrap mt-1 font-[lato] text-right',
               },
             ],
           },

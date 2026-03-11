@@ -84,7 +84,7 @@ const mohsinaTemplate11 = {
                     },
                     {
                       type: 'text',
-                      path: 'personalDetails.items[0].location',
+                      path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
                       className: 'text-[10px] font-bold text-white',
                     },
@@ -219,25 +219,19 @@ const mohsinaTemplate11 = {
         className: 'flex flex-col mt-3',
         rows: [
           {
-            className: 'flex flex-row justify-between items-start',
+            className: 'flex flex-row justify-between items-start gap-4',
             cells: [
               {
                 type: 'group',
-                className: 'flex flex-col leading-tight',
+                className: 'flex flex-col leading-tight flex-1 min-w-0 gap-0.5',
                 items: [
                   {
-                    type: 'inline-group',
-                    separator: ', ',
-                    items: [
-                      {
-                        path: 'degree',
-                        className: 'text-sm font-bold text-white',
-                      },
-                      {
-                        path: 'grade.value',
-                        className: 'text-sm font-medium text-white',
-                      },
-                    ],
+                    path: 'degree',
+                    className: 'text-sm font-bold text-white',
+                  },
+                  {
+                    path: 'grade.value',
+                    className: 'text-sm font-medium text-white',
                   },
                   {
                     path: 'institution',
@@ -248,15 +242,9 @@ const mohsinaTemplate11 = {
 
               // RIGHT: Duration
               {
-                type: 'group',
-                className: 'flex flex-col items-end text-right leading-tight',
-                items: [
-                  {
-                    type: 'duration',
-                    path: 'duration',
-                    className: 'text-xs tracking-[2px]',
-                  },
-                ],
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs tracking-[2px] leading-tight w-32 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -281,21 +269,24 @@ const mohsinaTemplate11 = {
         break: true,
         rows: [
           {
-            className: 'flex flex-row justify-between items-center text-sm   mb-1',
+            className: 'flex flex-row justify-between items-start text-sm gap-4 mb-1',
             cells: [
               {
                 type: 'group',
-                className: 'flex flex-col gap-1',
+                className: 'flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
                 break: true,
                 items: [
                   { path: 'position', className: 'font-semibold text-white text-sm' },
-                  { path: 'company', className: 'font-normal tracking-[2px] uppercase text-white text-sm' },
+                  {
+                    path: 'company',
+                    className: 'font-normal tracking-[2px] uppercase text-white text-sm',
+                  },
                 ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'font-normal text-xs tracking-[2px] self-start',
+                className: 'font-normal text-xs tracking-[2px] w-32 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -331,17 +322,17 @@ const mohsinaTemplate11 = {
         break: true,
         rows: [
           {
-            className: 'flex flex-row justify-between items-center',
+            className: 'flex flex-row justify-between items-start',
             cells: [
               {
                 path: 'title',
                 fallback: 'Project Title',
-                className: 'text-sm font-semibold text-white',
+                className: 'text-sm font-semibold text-white leading-tight',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs tracking-[2px]',
+                className: 'text-xs tracking-[2px] mt-1',
               },
             ],
           },

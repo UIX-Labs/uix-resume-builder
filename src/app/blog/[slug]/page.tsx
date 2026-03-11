@@ -183,54 +183,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       />
 
       <article className="mx-auto px-3 py-6 sm:px-6 max-w-[1395px]">
-        {/* Back link */}
-        {/* <Link
-          href="/blog"
-          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-gray-900"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to all articles
-        </Link> */}
-
-        {/* Article header */}
-        {/*   <header className="mb-10">
-
-          <div className="mb-4 flex flex-wrap gap-2">
-            {frontmatter.tags.map((tag) => (
-              <TagBadge key={tag} tag={tag} size="md" />
-            ))}
-          </div>
-
-
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-5xl">
-            {frontmatter.title}
-          </h1>
-
-
-          <p className="mt-4 text-lg leading-relaxed text-gray-600">{frontmatter.description}</p>
-
-
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-y border-gray-100 py-4">
-            <div className="flex flex-wrap items-center gap-5 text-sm text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <User className="h-4 w-4" />
-                <span className="font-medium text-gray-700">{frontmatter.author}</span>
-                {frontmatter.authorRole && <span className="text-gray-400">&middot; {frontmatter.authorRole}</span>}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Calendar className="h-4 w-4" />
-                {formatDate(frontmatter.date)}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4" />
-                {readingTime}
-              </span>
-            </div>
-
-            <ShareButton title={frontmatter.title} url={`${DOMAIN_URL}/blog/${slug}`} />
-          </div>
-        </header>
-        */}
         <ArticleHeader
           title={frontmatter.title}
           description={frontmatter.description}

@@ -8,7 +8,6 @@ interface BlogCardProps {
   category: string;
   title: string;
   author: string;
-  authorImage?: string;
   date: string;
   slug?: string;
   badgeColor?: string;
@@ -19,7 +18,6 @@ export default function BlogCard({
   category,
   title,
   author,
-  authorImage,
   date,
   slug = '#',
   badgeColor = '#000',

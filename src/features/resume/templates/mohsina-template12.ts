@@ -16,12 +16,12 @@ const mohsinaTemplate12 = {
     spacing: '0px',
     left: {
       width: '272px',
-      className: 'text-black p-4 pb-4 pt-6   flex flex-col',
+      className: 'text-black  pl-4 pr-4 pb-11 pt-6   flex flex-col',
     },
     right: {
       width: 'calc(100% - 272px)',
       className:
-        'p-8 flex flex-col bg-white pb-12 pl-10 bg-[linear-gradient(to_bottom,transparent_30px,#e5e7eb_30px,#e5e7eb_calc(100%-45px),transparent_calc(100%-45px))] bg-[size:8px_1122px] bg-left-top bg-repeat-y',
+        'p-8 flex flex-col bg-white pb-12 pl-10 bg-[linear-gradient(to_bottom,transparent_30px,#e5e7eb_30px,#e5e7eb_calc(100%-35px),transparent_calc(100%-45px))] bg-[size:8px_1122px] bg-left-top bg-repeat-y',
     },
   },
 
@@ -57,7 +57,7 @@ const mohsinaTemplate12 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'San Francisco, California',
-                  className: 'text-xs text-[#555555]',
+                  className: 'text-xs text-[#555555] break-words leading-tight',
                 },
               ],
             },
@@ -74,7 +74,7 @@ const mohsinaTemplate12 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '(315) 802-8179',
-                  className: 'text-xs text-[#555555]',
+                  className: 'text-xs text-[#555555] break-words leading-tight',
                 },
               ],
             },
@@ -93,7 +93,7 @@ const mohsinaTemplate12 = {
                   path: 'personalDetails.items[0].email',
                   href: 'mailto:{{value}}',
                   fallback: 'ricktang@gmail.com',
-                  className: 'text-xs text-[#555555] underline decoration-1 underline-offset-2',
+                  className: 'text-xs text-[#555555] underline decoration-1 underline-offset-2 break-all leading-tight',
                 },
               ],
             },
@@ -110,7 +110,7 @@ const mohsinaTemplate12 = {
                 {
                   type: 'inline-group',
                   className:
-                    'flex flex-wrap text-xs text-[#555555] font-poppins underline decoration-1 underline-offset-2 ',
+                    'flex flex-wrap text-xs text-[#555555] font-poppins underline decoration-1 underline-offset-2 break-all leading-tight',
                   separator: '/ ',
                   items: [
                     {
@@ -239,7 +239,7 @@ const mohsinaTemplate12 = {
                   {
                     type: 'text',
                     fallback: '●',
-                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
+                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 -mt-1 ',
                   },
                   // Vertical stack: Degree + Institution
                   {
@@ -257,7 +257,7 @@ const mohsinaTemplate12 = {
                             className: 'text-sm font-semibold text-black leading-tight',
                           },
                           {
-                            path: 'gpa',
+                            path: 'grade.value',
                             fallback: '9.0 CGPA',
                             className: 'text-sm font-semibold text-black leading-tight',
                           },
@@ -277,7 +277,7 @@ const mohsinaTemplate12 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-black font-normal w-32 shrink-0 text-right pt-1',
+                className: 'text-xs text-black font-normal w-32 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -306,16 +306,16 @@ const mohsinaTemplate12 = {
         fields: [
           {
             type: 'horizontal-group',
-            className: 'flex justify-between items-start gap-4 -mb-1',
+            className: 'flex justify-between items-start gap-4 ',
             items: [
               {
                 type: 'horizontal-group',
-                className: 'flex items-center gap-2 flex-1 min-w-0',
+                className: 'flex items-start gap-2 flex-1 min-w-0',
                 items: [
                   {
                     type: 'text',
                     fallback: '●',
-                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
+                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 -mt-0.5 ',
                   },
                   {
                     type: 'group',
@@ -391,29 +391,33 @@ const mohsinaTemplate12 = {
         className: 'mb-2 flex flex-col',
         break: true,
         fields: [
-          // Row 1: Blue Dot + Project Title
+          // Row 1: Blue Dot + Project Title + Duration
           {
             type: 'horizontal-group',
-            className: 'flex items-center gap-2 -mb-1',
+            className: 'flex justify-between items-start gap-4 -mb-1',
             items: [
               {
-                type: 'text',
-                fallback: '●',
-                className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
+                type: 'horizontal-group',
+                className: 'flex items-center gap-2 flex-1 min-w-0',
+                items: [
+                  {
+                    type: 'text',
+                    fallback: '●',
+                    className: 'text-blue-600 text-xl leading-none flex-shrink-0 ',
+                  },
+                  {
+                    path: 'title',
+                    fallback: 'Project Title',
+                    className: 'text-[13px] font-bold text-black leading-tight',
+                  },
+                ],
               },
               {
-                path: 'title',
-                fallback: 'Project Title',
-                className: 'text-[13px] font-bold text-black',
+                type: 'duration',
+                path: 'duration',
+                className: 'text-xs text-black font-poppins w-32 shrink-0 text-right mt-1',
               },
             ],
-          },
-
-          // Row 2: Duration (indented)
-          {
-            type: 'duration',
-            path: 'duration',
-            className: 'text-xs text-black ml-7 font-poppins',
           },
 
           // Row 3: Description (indented)

@@ -25,7 +25,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h1 id={id} className="mt-12 mb-4 scroll-mt-0 text-4xl font-bold tracking-tight text-gray-900" {...props}>
+      <h1 id={id} className="mt-10 mb-6 scroll-mt-24 text-4xl font-bold tracking-tight text-gray-900" {...props}>
         {children}
       </h1>
     );
@@ -36,7 +36,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
     return (
       <h2
         id={id}
-        className="group mt-10 mb-4 scroll-mt-0 border-b border-gray-200 pb-2 text-2xl font-semibold tracking-tight text-gray-900"
+        className="group mt-8 mb-4 scroll-mt-24 border-b border-gray-200 pb-2 text-2xl font-semibold tracking-tight text-gray-900"
         {...props}
       >
         {children}
@@ -56,7 +56,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h3 id={id} className="group mt-8 mb-3 scroll-mt-0 text-xl font-semibold tracking-tight text-gray-900" {...props}>
+      <h3 id={id} className="group mt-6 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight text-gray-900" {...props}>
         {children}
       </h3>
     );
@@ -71,12 +71,15 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
     );
   },
 
-  /* --- Paragraph -------------------------------------------------- */
-  p: ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p className="my-4 leading-7 text-gray-700 [&:not(:first-child)]:mt-4" {...props}>
-      {children}
-    </p>
-  ),
+  /* --- Paragraph/Div Wrapper -------------------------------------- */
+  p: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+    if (!children) return null;
+    return (
+      <div className="my-4 leading-7 text-gray-700" {...props}>
+        {children}
+      </div>
+    );
+  },
 
   /* --- Links ------------------------------------------------------ */
   a: ({ href, children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
@@ -162,7 +165,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   /* --- Images ----------------------------------------------------- */
   img: ({ src, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <figure className="my-8">
-      <div className="overflow-hidden rounded-xl border border-gray-200">
+      <div className="overflow-hidden">
         {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
         <img src={src} alt={alt || ''} className="w-full object-cover" loading="lazy" {...props} />
       </div>
@@ -172,7 +175,7 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
 
   /* --- Table ------------------------------------------------------ */
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
-    <div className="my-6 overflow-x-auto rounded-lg border border-gray-200">
+    <div className="my-8 overflow-hidden rounded-xl border border-gray-200">
       <table className="w-full text-left text-sm" {...props}>
         {children}
       </table>
@@ -180,13 +183,13 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   ),
 
   thead: ({ children, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) => (
-    <thead className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600" {...props}>
+    <thead className="border-b border-gray-200 bg-[#F8F9FA] text-xs font-semibold text-gray-600" {...props}>
       {children}
     </thead>
   ),
 
   th: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <th className="px-4 py-3 font-semibold text-base" {...props}>
+    <th className="px-6 py-4 font-semibold text-base text-center" {...props}>
       {children}
     </th>
   ),
@@ -194,19 +197,19 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   ProTip,
 
   td: ({ children, ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
-    <td className="border-t border-gray-100 px-4 py-3 text-gray-700" {...props}>
+    <td className="border-t border-gray-100 px-6 py-4 text-gray-700 text-center" {...props}>
       {children}
     </td>
   ),
 
   tr: ({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
-    <tr className="transition-colors hover:bg-gray-50/50" {...props}>
+    <tr className="transition-colors hover:bg-gray-50/50 even:bg-gray-50/30" {...props}>
       {children}
     </tr>
   ),
 
   /* --- Horizontal rule -------------------------------------------- */
-  hr: (props: React.HTMLAttributes<HTMLHRElement>) => <hr className="my-8 border-gray-200" {...props} />,
+  hr: (props: React.HTMLAttributes<HTMLHRElement>) => <hr className="my-10 border-gray-200" {...props} />,
 
   /* --- Strong / Em ------------------------------------------------ */
   strong: ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (

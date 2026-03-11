@@ -1,4 +1,5 @@
 import { Clock } from 'lucide-react';
+import { AuthorImage } from '../author-img';
 
 export interface BreadcrumbItem {
   label: string;
@@ -89,7 +90,8 @@ export default function ArticleHeader({
         <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 max-w-[600px]">{description}</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:text-base text-[#8A8C99] border-t border-gray-200 lg:border-none pt-4 lg:pt-0">
-          <span className="flex items-center gap-1 text-black font-medium">
+          <span className="flex items-center gap-2 text-black font-medium">
+            <AuthorImage author={author} />
             Published by- <span className="text-[#8A8C99] font-normal ml-1">{author}</span>
           </span>
 

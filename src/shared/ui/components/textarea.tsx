@@ -255,9 +255,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
         Placeholder.configure({
           placeholder,
         }),
-        ...(showToolbar ? [Underline] : []),
         ...(showToolbar
           ? [
+              Underline,
               Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {

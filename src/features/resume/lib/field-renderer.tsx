@@ -1,7 +1,7 @@
 import type { SuggestedUpdates } from '@entities/resume';
 import { getFieldSuggestions, getSuggestionBackgroundColor } from '@features/template-form/lib/get-field-errors';
 import { cn } from '@shared/lib/cn';
-import { isHtml, normalizeMarkdownContent } from '@shared/lib/markdown';
+import { isHtml, normalizeMarkdownContent, decodeHtmlEntities } from '@shared/lib/markdown';
 import dayjs from 'dayjs';
 import * as LucideIcons from 'lucide-react';
 import React from 'react';
@@ -72,6 +72,7 @@ export function renderField(
     if (!value) return null;
 
     const iconElement = field.icon ? renderField(field.icon, data) : null;
+    const decodedValue = decodeHtmlEntities(value);
 
     const content = (
       <span
@@ -84,7 +85,7 @@ export function renderField(
         data-suggestion={suggestionData}
       >
         {iconElement}
-        {value}
+        {decodedValue}
       </span>
     );
 
@@ -106,7 +107,7 @@ export function renderField(
       : resolvePath(data, field.path, field.fallback);
 
     if (!value) return null;
-    const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+    const text = `${field.prefix || ''}${decodeHtmlEntities(value)}${field.suffix || ''}`;
 
     const hasHtmlTags = isHtml(text);
 
@@ -316,12 +317,13 @@ export function renderField(
   if (field.type === 'text') {
     const value = resolvePath(data, field.path, field.fallback);
     if (!value) return null;
+    const decodedValue = decodeHtmlEntities(value);
     return (
       <p
         className={cn(field.className, errorBgColor, hasSuggestions && 'cursor-pointer')}
         data-suggestion={suggestionData}
       >
-        {value}
+        {decodedValue}
       </p>
     );
   }
@@ -442,17 +444,20 @@ export function renderField(
     // If the value itself doesn't exist, don't render
     if (!value || (typeof value === 'string' && value.trim() === '')) return null;
 
+    const decodedValue = decodeHtmlEntities(value);
     let href = field.href;
 
     // Handle template placeholders like mailto:{{value}}
     if (href?.includes('{{value}}')) {
-      href = href.replace('{{value}}', value);
+      href = href.replace('{{value}}', decodedValue);
     } else {
       // Otherwise, resolve href as a path in the data
       href = resolvePath(data, field.href);
 
       // If no href data exists at all, don't render the link field
       if (!href || (typeof href === 'string' && href.trim() === '')) return null;
+
+      href = decodeHtmlEntities(href);
     }
 
     // Check if href is actually a URL (starts with http://, https://, or mailto:)
@@ -482,7 +487,7 @@ export function renderField(
           }
         }}
       >
-        {value}
+        {decodedValue}
       </a>
     );
   }
@@ -490,7 +495,8 @@ export function renderField(
   const value = resolvePath(data, field.path, field.fallback);
   if (!value) return null;
 
-  const text = `${field.prefix || ''}${value}${field.suffix || ''}`;
+  const decodedValue = decodeHtmlEntities(value);
+  const text = `${field.prefix || ''}${decodedValue}${field.suffix || ''}`;
 
   const hasHtmlTags = isHtml(text);
 

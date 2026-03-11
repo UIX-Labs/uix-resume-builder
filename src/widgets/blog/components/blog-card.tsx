@@ -1,6 +1,7 @@
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { AuthorImage } from '../author-img';
 
 interface BlogCardProps {
   image: string;
@@ -74,12 +75,7 @@ export default function BlogCard({
               group-hover:text-white
             "
           >
-            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
-            <img
-              src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
-              className="w-6 h-6 rounded-full"
-              alt=""
-            />
+           <AuthorImage author={author} />
 
             <span>
               By <span className="font-semibold text-black group-hover:text-white">{author}</span> &nbsp;|&nbsp;

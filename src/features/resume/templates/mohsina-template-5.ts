@@ -43,14 +43,14 @@ const mohsinaTemplate5 = {
                       type: 'text',
                       path: 'personalDetails.items[0].fullName',
                       fallback: 'Aman Gupta',
-                      className:
-                        'text-3xl font-bold text-[#005FF2] leading-none font-arial max-w-[calc(100%-100px)] break-words',
+                      className: 'text-3xl font-bold text-[#005FF2] leading-none font-arial max-w-[300px] break-words',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].jobTitle',
                       fallback: 'WEB DESIGNER',
-                      className: 'text-[13px] uppercase tracking-[2px] leading-[18px] text-black font-arial',
+                      className:
+                        'text-[13px] uppercase tracking-[2px] leading-[18px] text-black font-arial max-w-[300px] break-words',
                     },
                   ],
                 },
@@ -60,12 +60,12 @@ const mohsinaTemplate5 = {
             // RIGHT SIDE
             {
               type: 'group',
-              className: 'flex flex-col gap-2 items-start text-left flex-shrink-0',
+              className: 'flex flex-col gap-0.5 items-start text-left w-40 flex-shrink-0',
 
               items: [
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'Mail', size: 12, className: 'text-[#005FF2]' },
                     {
@@ -78,7 +78,7 @@ const mohsinaTemplate5 = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'Phone', size: 12, className: 'text-[#005FF2]' },
                     {
@@ -89,7 +89,7 @@ const mohsinaTemplate5 = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'Linkedin', size: 12, className: 'text-[#005FF2]' },
                     {
@@ -102,7 +102,7 @@ const mohsinaTemplate5 = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'Github', size: 12, className: 'text-[#005FF2]' },
                     {
@@ -115,7 +115,7 @@ const mohsinaTemplate5 = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'Globe', size: 12, className: 'text-[#005FF2]' },
                     {
@@ -128,12 +128,38 @@ const mohsinaTemplate5 = {
                 },
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-2',
+                  className: 'flex items-start gap-2',
                   items: [
                     { type: 'icon', name: 'MapPin', size: 12, className: 'text-[#005FF2]' },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-start gap-2',
+                  items: [
+                    { type: 'icon', name: 'Palette', size: 12, className: 'text-[#005FF2]' },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.behance.title',
+                      href: 'personalDetails.items[0].links.behance.link',
+                      className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+                  className: 'flex items-start gap-2',
+                  items: [
+                    { type: 'icon', name: 'Dribble', size: 12, className: 'text-[#005FF2]' },
+                    {
+                      type: 'link',
+                      path: 'personalDetails.items[0].links.dribble.title',
+                      href: 'personalDetails.items[0].links.dribble.link',
                       className: 'text-[8px] uppercase tracking-[1px] leading-[18px] text-black font-arial',
                     },
                   ],
@@ -188,45 +214,37 @@ const mohsinaTemplate5 = {
       listPath: 'education.items',
 
       itemTemplate: {
-        className: 'flex flex-col gap-y-1',
+        className: 'flex flex-col gap-8',
 
         rows: [
           {
-            className: 'flex justify-between items-center',
+            className: 'flex justify-between items-center g',
 
             cells: [
               {
-                type: 'inline-group',
-                separator: ', ',
-                className: 'flex items-center -mt-2',
-
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'degree',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] font-arial',
                   },
                   {
                     path: 'grade.value',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] font-arial',
+                  },
+                  {
+                    path: 'institution',
+                    className:
+                      'text-[10px] font-normal text-black uppercase tracking-[1px] leading-tight font-arial mb-2',
                   },
                 ],
               },
-
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
-              },
-            ],
-          },
-
-          {
-            className: '-mt-2 mb-2',
-
-            cells: [
-              {
-                path: 'institution',
-                className: 'text-[10px] font-normal text-black uppercase tracking-[1px]  leading-[18px] font-arial',
+                className:
+                  'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial w-40 shrink-0 text-right mt-0.5',
               },
             ],
           },
@@ -242,7 +260,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Work Experience',
-        className: 'uppercase text-sm font-bold text-black tracking-[2.5px] leading-[18px] font-arial -mt-4',
+        className: 'uppercase text-sm font-bold text-[#005ff2] tracking-[2.5px] leading-[18px] font-arial ',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -256,27 +274,27 @@ const mohsinaTemplate5 = {
 
         rows: [
           {
-            className: 'flex justify-between items-center ',
-
+            className: 'flex justify-between items-start',
             cells: [
               {
-                path: 'position',
-                className: 'text-[13px] font-bold text-black leading-[18px] font-arial',
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-1',
+                items: [
+                  {
+                    path: 'position',
+                    className: 'text-[13px] font-bold text-black font-arial',
+                  },
+                  {
+                    path: 'company',
+                    className: 'text-[13px] font-normal text-black uppercase tracking-[2px] font-arial',
+                  },
+                ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
-              },
-            ],
-          },
-
-          {
-            className: '-mt-1',
-            cells: [
-              {
-                path: 'company',
-                className: 'text-[13px] font-normal text-[#005FF2] uppercase tracking-[2px] leadin-[18px] font-arial',
+                className:
+                  'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] font-arial w-40 shrink-0 text-right mt-0.5',
               },
             ],
           },
@@ -287,7 +305,7 @@ const mohsinaTemplate5 = {
                 type: 'html',
                 path: 'description',
                 className:
-                  'text-[13px] text-black leading-[18px] font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
+                  'text-[13px] text-black  leading-[18px] font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
               },
             ],
           },
@@ -321,15 +339,22 @@ const mohsinaTemplate5 = {
 
             cells: [
               {
-                path: 'title',
-                fallback: 'Project Title',
-                className: 'text-[13px] font-bold text-black leading-[18px] font-arial',
-              },
-              {
-                type: 'duration',
-                path: 'duration',
-                fallback: '',
-                className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
+                type: 'group',
+                className: 'flex flex-row justify-between items-start w-full gap-4',
+                items: [
+                  {
+                    path: 'title',
+                    fallback: 'Project Title',
+                    className: 'text-[13px] font-bold text-black leading-[18px] font-arial flex-1 min-w-0',
+                  },
+                  {
+                    type: 'duration',
+                    path: 'duration',
+                    fallback: '',
+                    className:
+                      'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] w-40 shrink-0 text-right mt-0.5 font-arial',
+                  },
+                ],
               },
             ],
           },
@@ -342,7 +367,7 @@ const mohsinaTemplate5 = {
                 fallback: '',
                 break: true,
                 className:
-                  'text-[13px] text-black leading-[18px] font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
+                  'text-[13px] text-black leading-[18px]mt-1 font-arial break-words whitespace-pre-wrap [&_ul]:ml-4 [&_li]:list-disc',
               },
             ],
           },

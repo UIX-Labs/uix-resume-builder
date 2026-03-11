@@ -48,7 +48,6 @@ export default function BlogGrid({ posts, badgeColor, currentCategoryId }: BlogG
                 category={displayCategoryId}
                 title={blog.frontmatter.title}
                  author={blog.frontmatter.author}
-                // authorImage={blog.frontmatter.authorImage as string}
                 date={blog.frontmatter.date}
                 slug={`/blog/${blog.slug}`}
                 badgeColor={category?.color || badgeColor}

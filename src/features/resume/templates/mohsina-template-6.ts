@@ -29,7 +29,7 @@ export const mohsinaTemplate6 = {
             {
               type: 'group',
 
-              className: 'flex items-center gap-4',
+              className: 'flex items-center gap-4 ',
 
               items: [
                 {
@@ -57,7 +57,7 @@ export const mohsinaTemplate6 = {
 
                       fallback: 'UX-DESIGNER',
 
-                      className: 'text-md leading-[11px] font-[lato] font-normal uppercase text-[#3E6AF2]',
+                      className: 'text-md leading-[18px] font-[lato] font-normal  uppercase text-[#3E6AF2]',
                     },
 
                     {
@@ -78,13 +78,13 @@ export const mohsinaTemplate6 = {
             {
               type: 'group',
 
-              className: 'flex flex-col items-start gap-2',
+              className: 'flex flex-col items-start gap-2 w-40',
 
               items: [
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -114,7 +114,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -142,7 +142,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -172,7 +172,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -200,7 +200,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -230,7 +230,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -260,7 +260,7 @@ export const mohsinaTemplate6 = {
                 {
                   type: 'inline-group-with-icon',
 
-                  className: 'flex items-center gap-1',
+                  className: 'flex items-start gap-1',
 
                   items: [
                     {
@@ -281,6 +281,64 @@ export const mohsinaTemplate6 = {
                       href: 'personalDetails.items[0].links.behance.link',
 
                       fallback: 'Behance',
+
+                      className: 'text-xs leading-[13px] text-[#777777]    font-[lato]',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+
+                  className: 'flex items-start gap-1',
+
+                  items: [
+                    {
+                      type: 'icon',
+
+                      name: 'Dribble',
+
+                      size: 12,
+
+                      className: 'text-[#3E6AF2]',
+                    },
+
+                    {
+                      type: 'link',
+
+                      path: 'personalDetails.items[0].links.Dribble.title',
+
+                      href: 'personalDetails.items[0].links.Dribble.link',
+
+                      fallback: 'Dribble',
+
+                      className: 'text-xs leading-[13px] text-[#777777]    font-[lato]',
+                    },
+                  ],
+                },
+                {
+                  type: 'inline-group-with-icon',
+
+                  className: 'flex items-start gap-1',
+
+                  items: [
+                    {
+                      type: 'icon',
+
+                      name: 'Youtube',
+
+                      size: 12,
+
+                      className: 'text-[#3E6AF2]',
+                    },
+
+                    {
+                      type: 'link',
+
+                      path: 'personalDetails.items[0].links.youtube.title',
+
+                      href: 'personalDetails.items[0].links.youtube.link',
+
+                      fallback: 'Youtube',
 
                       className: 'text-xs leading-[13px] text-[#777777]    font-[lato]',
                     },
@@ -345,9 +403,14 @@ export const mohsinaTemplate6 = {
 
         rows: [
           {
-            className: 'flex justify-between items-start gap-4 w-full',
-
+            className: 'block w-full',
             cells: [
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-tight shrink-0 whitespace-nowrap mt-1 font-[lato]',
+              },
               {
                 type: 'group',
                 className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
@@ -403,7 +466,8 @@ export const mohsinaTemplate6 = {
 
       itemPrefix: '• ',
 
-      badgeClassName: 'block w-full text-[13px] text-[#4D4D4D] leading-[18px]  ml-28  font-[lato]',
+      badgeClassName:
+        'block text-[13px] text-[#4D4D4D] leading-[18px] ml-28 break-words whitespace-pre-wrap font-[lato]',
     },
 
     {
@@ -429,13 +493,18 @@ export const mohsinaTemplate6 = {
       containerClassName: 'flex flex-col gap-2 mt-1',
 
       itemTemplate: {
-        className: 'flex flex-col gap-2',
+        className: 'flex flex-col gap-1',
 
         rows: [
           {
-            className: 'flex justify-between items-start gap-4 w-full',
-
+            className: 'block w-full',
             cells: [
+              {
+                type: 'duration',
+                path: 'duration',
+                className:
+                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-tight shrink-0 whitespace-nowrap mt-1 font-[lato]',
+              },
               {
                 type: 'group',
                 className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
@@ -490,45 +559,33 @@ export const mohsinaTemplate6 = {
       containerClassName: 'flex flex-col gap-2 mt-1',
 
       itemTemplate: {
-        className: 'flex flex-col gap-2',
+        className: 'flex flex-col gap-1.5',
 
         rows: [
           {
             className: 'block w-full',
-
             cells: [
               {
                 type: 'duration',
-
                 path: 'duration',
-
                 className:
-                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-[11px] flex-shrink-0 whitespace-nowrap mt-1 font-[lato]',
+                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-tight shrink-0 whitespace-nowrap mt-1 font-[lato]',
               },
-
               {
                 type: 'group',
-
-                className: 'ml-28 flex flex-col gap-[4px] flex-1',
-
+                className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
                 items: [
                   {
                     path: 'title',
-
                     fallback: 'Project Title',
-
-                    className: 'text-[13px] font-bold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
+                    className: 'text-[13px] font-bold text-black tracking-[0.1px] font-[lato]',
                   },
-
                   {
                     type: 'html',
-
                     path: 'description',
-
                     breakable: true,
-
                     className:
-                      'text-[13px] text-[#4D4D4D] leading-[16px] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px]    font-[lato]',
+                      'text-[13px] text-[#4D4D4D] [&_ul]:ml-4 [&_li]:list-disc [&_li]:mb-[2px] font-[lato] mt-1',
                   },
                 ],
               },
@@ -589,42 +646,31 @@ export const mohsinaTemplate6 = {
       containerClassName: 'flex flex-col gap-3 mt-1',
 
       itemTemplate: {
-        className: 'flex flex-col gap-2',
+        className: 'flex flex-col gap-1.5',
 
         rows: [
           {
             className: 'block w-full',
-
             cells: [
               {
                 type: 'duration',
-
                 path: 'duration',
-
                 className:
-                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-[11px] flex-shrink-0 whitespace-nowrap mt-1 font-[lato]',
+                  'float-left w-28 text-[10px] uppercase text-[#3E6AF2] leading-tight shrink-0 whitespace-nowrap mt-1 font-[lato]',
               },
-
               {
                 type: 'group',
-
-                className: 'ml-28 flex flex-col gap-[2px]',
-
+                className: 'ml-28 flex flex-col gap-0.5 flex-1 min-w-0 leading-tight',
                 items: [
                   {
                     path: 'title',
-
                     fallback: 'Certification Title',
-
-                    className: 'text-[13px] font-bold text-black leading-[18px] tracking-[0.1px]    font-[lato]',
+                    className: 'text-[13px] font-bold text-black tracking-[0.1px] font-[lato]',
                   },
-
                   {
                     path: 'issuer',
-
                     fallback: 'Issuer',
-
-                    className: 'text-[13px] font-normal text-black leading-[18px]    font-[lato]',
+                    className: 'text-[13px] font-normal text-black font-[lato]',
                   },
                 ],
               },

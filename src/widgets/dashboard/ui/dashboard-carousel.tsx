@@ -174,6 +174,7 @@ export default function DashboardCarousel() {
                   }}
                   isNew={isNew}
                   isTrending={template.isTrending}
+                  showColorSwatches={false}
                 />
               );
             })}

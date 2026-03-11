@@ -5,6 +5,7 @@ import { cn } from '@shared/lib/cn';
 import { Button } from '@shared/ui/components/button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface TemplateCardProps {
   template: Template;
@@ -14,6 +15,7 @@ interface TemplateCardProps {
   isCurrent?: boolean;
   isNew?: boolean;
   isTrending?: boolean;
+  showColorSwatches?: boolean;
 }
 
 function formatRoleName(name: string): string {
@@ -27,6 +29,7 @@ export function TemplateCardSkeleton() {
       <div className="w-full h-[400px] sm:h-[312px] rounded-[28px] p-3 border-[2px] border-white bg-white/5 glass-card2 animate-pulse">
         <div className="w-full h-full rounded-[24px] bg-gray-200" />
       </div>
+      <div className="h-[24px]" />
     </div>
   );
 }
@@ -40,8 +43,10 @@ export function TemplateCard({
   isCurrent = false,
   isNew = false,
   isTrending = false,
+  showColorSwatches = true,
 }: TemplateCardProps) {
   const roles = template.roles || [];
+  const [hoveredColor, setHoveredColor] = useState<string | null>(null);
 
   return (
     <div className={cn('group cursor-pointer flex-shrink-0 w-[300px] sm:w-[234px]')}>
@@ -92,6 +97,17 @@ export function TemplateCard({
             className="object-contain object-top"
             unoptimized
           />
+          {/* Color variation overlay — tints preview on swatch hover */}
+          {hoveredColor && (
+            <div
+              className="absolute inset-0 pointer-events-none transition-opacity duration-200"
+              style={{
+                backgroundColor: hoveredColor,
+                mixBlendMode: 'color',
+                opacity: 0.55,
+              }}
+            />
+          )}
         </div>
 
         {/* Eye Icon - Preview Button */}
@@ -115,6 +131,25 @@ export function TemplateCard({
             Use This Template
           </Button>
         </div>
+      </div>
+
+      {/* Color swatches — appear on hover, fixed height to prevent layout shift */}
+      <div className="h-[24px]">
+        {showColorSwatches && template.colorVariations?.length > 0 && (
+          <div className="flex items-center justify-center gap-2 pt-1.5 transition-opacity duration-300 opacity-0 lg:group-hover:opacity-100">
+            {template.colorVariations.slice(0, 5).map((cv) => (
+              <button
+                key={cv.primaryColor}
+                type="button"
+                className="w-4 h-4 rounded-full border border-white shadow-sm transition-transform duration-200 hover:scale-125 cursor-pointer"
+                style={{ backgroundColor: cv.primaryColor }}
+                title={cv.name}
+                onMouseEnter={() => setHoveredColor(cv.primaryColor)}
+                onMouseLeave={() => setHoveredColor(null)}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

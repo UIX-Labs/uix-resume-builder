@@ -31,7 +31,7 @@ const mohsinaTemplate11 = {
 
                 {
                   type: 'group',
-                  className: 'flex flex-col items-stretch ',
+                  className: 'flex flex-col items-stretch mr-15 ',
                   items: [
                     {
                       type: 'text',
@@ -52,59 +52,62 @@ const mohsinaTemplate11 = {
 
             {
               type: 'group',
-              className: 'flex flex-col justify-end items-start gap-x-4 gap-y-2 max-w-[30%] shrink-0 py-2',
+              className: 'flex flex-col justify-end items-start gap-y-2 w-40 shrink-0 py-2 mr-4',
               items: [
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex  items-start gap-1 whitespace-nowrap',
+                  className: 'flex items-start gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Mail',
                       size: 11,
+                      className: '',
                     },
                     {
                       type: 'link',
                       path: 'personalDetails.items[0].email',
                       href: 'mailto:{{value}}',
                       fallback: 'amanguppta@gmail.com',
-                      className: 'text-[10px] font-bold text-white',
+                      className: 'text-[10px] font-bold text-white break-all leading-tight',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex  items-start gap-1 whitespace-nowrap',
+                  className: 'flex items-start gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'MapPin',
                       size: 11,
+                      className: 'mt-[2px]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[10px] font-bold text-white',
+                      className: 'text-[10px] font-bold text-white break-all leading-tight',
                     },
                   ],
                 },
 
                 {
                   type: 'inline-group-with-icon',
-                  className: 'flex items-center gap-1 whitespace-nowrap',
+                  className: 'flex items-start gap-1',
                   items: [
                     {
                       type: 'icon',
                       name: 'Phone',
                       size: 11,
+                      className: 'mt-[2px]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[10px] font-bold text-white',
+                      className: 'text-[10px] font-bold text-white break-all leading-tight',
                     },
                   ],
                 },
@@ -118,6 +121,7 @@ const mohsinaTemplate11 = {
                       type: 'icon',
                       name: 'Link',
                       size: 11,
+                      className: 'mt-[2px]',
                     },
                     {
                       type: 'inline-group',
@@ -244,7 +248,7 @@ const mohsinaTemplate11 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs tracking-[2px] leading-tight w-32 shrink-0 text-right mt-1',
+                className: 'text-xs tracking-[2px] leading-tight w-40 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -286,7 +290,7 @@ const mohsinaTemplate11 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'font-normal text-xs tracking-[2px] w-32 shrink-0 text-right mt-1',
+                className: 'font-normal text-xs tracking-[2px] w-40 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -332,7 +336,7 @@ const mohsinaTemplate11 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs tracking-[2px] mt-1',
+                className: 'text-xs tracking-[2px] w-40 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -433,7 +437,7 @@ const mohsinaTemplate11 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs tracking-[2px]',
+                className: 'text-xs tracking-[2px] w-32 shrink-0 text-right',
               },
             ],
           },

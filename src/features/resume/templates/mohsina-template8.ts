@@ -19,7 +19,7 @@ export const mohsinaTemplate8 = {
           items: [
             {
               type: 'group',
-              className: 'flex items-start gap-5 flex-1 min-w-0 max-w-[55%]',
+              className: 'flex items-start gap-8 -ml-6 flex-1 min-w-0 max-w-[70%]',
               items: [
                 {
                   type: 'image',
@@ -80,13 +80,13 @@ export const mohsinaTemplate8 = {
                     {
                       type: 'text',
                       fallback: 'Location:',
-                      className: 'text-[10px] font-semibold text-gray-500 w-[55px] flex-shrink-0 mt-[3px]',
+                      className: 'text-[10px] font-semibold text-gray-500 leading-tight  flex-shrink-0 mt-[3px]',
                     },
                     {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[10px] text-black ',
+                      className: 'text-[10px] text-black leading-[2px] ',
                     },
                   ],
                 },

@@ -3,6 +3,7 @@ import type { CreateResumeResponse } from '../types';
 
 export async function createResume(data: {
   title: string;
+  templateId?: string;
   userInfo: {
     userId: string;
   };

@@ -1,20 +1,20 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
-import { useFormDataStore } from '@widgets/form-page-builder/models/store';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import LinkedinIntegrationCard from '@widgets/dashboard/ui/linkedin-integration-card';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
-import PageHeading from '@widgets/dashboard/ui/page-heading';
-import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
+import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 
 function DashboardContent() {
   const { data: user, isLoading } = useUserProfile();
@@ -25,16 +25,27 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(null);
+  const [templateId, setTemplateId] = useState<string | null>(null);
 
   useEffect(() => {
     // Unified action param: ?action=from_scratch | upload | tailored_jd
     const action = searchParams?.get('action');
+    const tId = searchParams?.get('templateId');
     // Backward compat: ?openModal=jd
     const openModal = searchParams?.get('openModal');
 
+    if (tId) {
+      setTemplateId(tId);
+    }
+
     if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') {
       setAutoAction(action);
-      router.replace('/dashboard');
+      // router.replace('/dashboard');
+       router.replace(
+    tId
+      ? `/dashboard?templateId=${tId}`
+      : '/dashboard'
+  )
     } else if (openModal === 'jd') {
       setAutoAction('tailored_jd');
       router.replace('/dashboard');
@@ -85,7 +96,7 @@ function DashboardContent() {
               />
 
               <div className="px-4">
-                <ResumeCreationCard autoAction={autoAction} />
+                <ResumeCreationCard autoAction={autoAction} templateId={templateId} />
               </div>
 
               <div className="flex-1 mt-4 px-4">

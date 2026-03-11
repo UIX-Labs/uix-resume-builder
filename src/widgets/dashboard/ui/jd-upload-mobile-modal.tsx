@@ -19,12 +19,14 @@ interface JDUploadMobileModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmittingChange?: (isSubmitting: boolean, hasError?: boolean) => void;
+  templateId?: string;
 }
 
 export default function JDUploadMobileModal({
   isOpen,
   onClose,
   onSubmittingChange: _onSubmittingChange,
+  templateId,
 }: JDUploadMobileModalProps) {
   const [isMobileTextViewOpen, setIsMobileTextViewOpen] = useState(false);
 
@@ -127,6 +129,7 @@ export default function JDUploadMobileModal({
                       onRetryResume={handleRetryResume}
                       onRunPikaIntelligence={handleAnalyze}
                       // isSubmitting={isSubmitting}
+                      
                     />
                   );
 

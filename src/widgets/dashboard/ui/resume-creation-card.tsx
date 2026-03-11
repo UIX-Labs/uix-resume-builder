@@ -1,8 +1,11 @@
-import { createResume } from '@entities/resume';
+import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
+import { createResume, updateResumeTemplate } from '@entities/resume';
+import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import { Button } from '@shared/ui/components/button';
 import { NewProgressBar, type TransitionText } from '@shared/ui/components/new-progress-bar';
 import { useMutation } from '@tanstack/react-query';
@@ -10,14 +13,11 @@ import { FileUpload, type FileUploadHandle } from '@widgets/resumes/file-upload'
 import { Upload } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
 import BuilderIntelligenceModal from './builder-intelligence-modal';
-import ResumeCreationModal from './resume-creation-modal';
+import JDUploadMobileModal from './jd-upload-mobile-modal';
 import { LinkedInModal } from './linkedin-integration-card';
 import ResumeCreationMobileCard from './resume-creation-mobile-card';
-import JDUploadMobileModal from './jd-upload-mobile-modal';
-import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { useIsMobile } from '@shared/hooks/use-mobile';
+import ResumeCreationModal from './resume-creation-modal';
 
 const UPLOAD_TRANSITION_TEXTS: TransitionText[] = [
   {
@@ -39,14 +39,23 @@ interface ResumeCreationCardProps {
   shouldOpenJDModal?: boolean;
   /** Unified auto-action triggered from landing page query params */
   autoAction?: 'from_scratch' | 'upload' | 'tailored_jd' | null;
+  templateId?: string | null;
 }
 
-export default function ResumeCreationCard({ shouldOpenJDModal = false, autoAction = null }: ResumeCreationCardProps) {
+export default function ResumeCreationCard({
+  shouldOpenJDModal = false,
+  autoAction = null,
+  templateId = null,
+}: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
   const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
+  });
+
+  const updateTemplateMutation = useMutation({
+    mutationFn: updateResumeTemplate,
   });
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
@@ -100,6 +109,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     try {
       const data = await createResumeMutation.mutateAsync({
         title: 'Frontend Engineer Resume',
+        templateId: templateId ?? undefined,
         userInfo: {
           userId: user.data?.id ?? '',
         },
@@ -113,11 +123,22 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     }
   };
 
-  const handleUploadSuccess = (data: any) => {
+  const handleUploadSuccess = async (data: any) => {
     trackEvent('resume_uploaded', {
       source: 'dashboard_card',
       resumeId: data.resumeId,
     });
+
+    if (templateId) {
+      try {
+        await updateTemplateMutation.mutateAsync({
+          resumeId: data.resumeId,
+          templateId,
+        });
+      } catch (error) {
+        console.error('Failed to apply template:', error);
+      }
+    }
 
     setTimeout(() => {
       setShowScanningOverlay(false);
@@ -153,7 +174,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent('/dashboard')}`);
+      const callbackUrl = templateId
+        ? `/dashboard?action=tailored_jd&templateId=${templateId}`
+        : '/dashboard';
+      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       setIsAuthModalOpen(true);
       return;
     }
@@ -237,6 +261,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
       showJDUpload,
       showResumeUpload,
       onSubmittingChange: handleBuilderIntelligenceSubmittingChange,
+      templateId: templateId ?? undefined,
     }),
     [
       handleBuilderIntelligenceSubmittingChange,
@@ -244,6 +269,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
       isBuilderIntelligenceModalOpen,
       showJDUpload,
       showResumeUpload,
+      templateId,
     ],
   );
 
@@ -308,8 +334,9 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
-        activeAction={activeAction}
+        activeAction={activeAction as any}
         optionsLocked={optionsLocked}
+        templateId={templateId}
       />
 
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
@@ -318,8 +345,10 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
         isOpen={isJDModalOpen}
         onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
+        templateId={templateId}
+      
       />
-
+   
       <div className="relative hidden md:block min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
           <div className="w-full">
@@ -365,6 +394,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
                   onPendingChange={handleUploadPendingChange}
                   disabled={optionsLocked && activeAction !== 'upload'}
                   renderAsOverlay={true}
+                  templateId={templateId ?? undefined}
                   onUploadClick={() => {
                     trackEvent('upload_resume_click', {
                       source: 'dashboard_card',

@@ -11,9 +11,10 @@ import { useState } from 'react';
 interface LinkedInModalProps {
   isOpen: boolean;
   onClose: () => void;
+  templateId?: string;
 }
 
-export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
+export function LinkedInModal({ isOpen, onClose, templateId }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -46,17 +47,25 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     // Ensure guest email exists for API tracking if user is not logged in
     getOrCreateGuestEmail();
 
-    parseLinkedInMutation.mutate(cleanUrl, {
-      onSuccess: (response) => {
-        onClose();
-        const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;
-        router.push(url);
-        setLinkedinUrl('');
-      },
-      onError: (err) => {
-        setError(err instanceof Error ? err.message : 'Failed to parse LinkedIn profile');
-      },
-    });
+    parseLinkedInMutation.mutate(
+  {
+    url: cleanUrl,
+    templateId: templateId,
+  },
+  {
+    onSuccess: (response) => {
+      onClose();
+      const url = isMobile
+        ? `/resume/${response.resumeId}?openForm=true`
+        : `/resume/${response.resumeId}`;
+      router.push(url);
+      setLinkedinUrl('');
+    },
+    onError: (err) => {
+      setError(err instanceof Error ? err.message : 'Failed to parse LinkedIn profile');
+    },
+  }
+);
   };
 
   return (

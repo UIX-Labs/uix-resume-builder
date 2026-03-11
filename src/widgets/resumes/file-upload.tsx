@@ -1,10 +1,10 @@
 'use client';
 
 import { useParsePdfResume } from '@entities/resume';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
-import { Button } from '@shared/ui/components/button';
 import StarsIcon from '@shared/icons/stars-icon';
 import { cn } from '@shared/lib/cn';
+import { Button } from '@shared/ui/components/button';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 interface FileUploadProps {
   onSuccess?: (data: any) => void;
@@ -17,7 +17,10 @@ interface FileUploadProps {
   onPendingChange?: (pending: boolean) => void;
   renderAsOverlay?: boolean;
   onUploadClick?: () => void;
+  templateId?: string;
 }
+
+
 
 export interface FileUploadHandle {
   triggerClick: () => void;
@@ -35,6 +38,7 @@ export const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(function
     onPendingChange,
     renderAsOverlay = false,
     onUploadClick,
+    templateId,
   },
   ref,
 ) {
@@ -70,19 +74,22 @@ export const FileUpload = forwardRef<FileUploadHandle, FileUploadProps>(function
 
     onPendingChange?.(true);
 
-    parsePdfResume(file, {
-      onSuccess: (data) => {
-        onSuccess?.(data);
-        onPendingChange?.(false);
+    parsePdfResume(
+      { file, templateId },
+      {
+        onSuccess: (data) => {
+          onSuccess?.(data);
+          onPendingChange?.(false);
+        },
+        onError: (error) => {
+          console.error('Upload error:', error);
+          const errorMessage = error?.message;
+          alert(`Upload failed: ${errorMessage}`);
+          onError?.(error);
+          onPendingChange?.(false);
+        },
       },
-      onError: (error) => {
-        console.error('Upload error:', error);
-        const errorMessage = error?.message;
-        alert(`Upload failed: ${errorMessage}`);
-        onError?.(error);
-        onPendingChange?.(false);
-      },
-    });
+    );
   };
 
   const handleButtonClick = () => {

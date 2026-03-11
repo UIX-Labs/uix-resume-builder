@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCachedUser } from '@shared/hooks/use-user';
-import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
-import { TestimonialsModal } from '@widgets/landing-page/ui/testimonials-modal';
-import { useMutation } from '@tanstack/react-query';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
+import { useCachedUser } from '@shared/hooks/use-user';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
+import { useMutation } from '@tanstack/react-query';
+import { TestimonialsModal } from '@widgets/landing-page/ui/testimonials-modal';
+import { TemplatesDialog } from '@widgets/templates-page/ui/templates-dialog';
+import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface NavigationLink {
   label: string;
@@ -59,7 +59,7 @@ const FooterNavigation = () => {
 
   const leftColumnLinks: NavigationLink[] = [
     { label: 'About Us', href: '/about-us' },
-    { label: 'Check Templates', isTemplateDialog: true },
+    { label: 'Check Templates', href: '/templates' },
     { label: 'Resume Examples', href: '/resume-examples' },
     { label: 'Blog', href: '/blog' },
   ];

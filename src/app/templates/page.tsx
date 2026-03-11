@@ -176,11 +176,13 @@ function TemplatesPageContent() {
         optionsLocked={optionsLocked}
         template={creationTemplate}
       />
-      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
+      <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)}  templateId={creationTemplate?.id}/>
       <JDUploadMobileModal
         isOpen={isJDModalOpen}
         onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
+        templateId={creationTemplate?.id}
+        
       />
     </>
   );

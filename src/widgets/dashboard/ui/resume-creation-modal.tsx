@@ -1,7 +1,7 @@
 'use client';
 
 import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { createResume, updateResumeTemplate } from '@entities/resume';
+import { createResume } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
@@ -25,6 +25,7 @@ interface ResumeCreationModalProps {
   activeAction: ResumeCreationActionType;
   optionsLocked: boolean;
   template?: Template | null;
+  templateId?: string | null;
 }
 
 export default function ResumeCreationModal({
@@ -36,6 +37,7 @@ export default function ResumeCreationModal({
   activeAction,
   optionsLocked,
   template,
+  templateId,
 }: ResumeCreationModalProps) {
   const router = useRouter();
   const user = useUserProfile();
@@ -43,9 +45,9 @@ export default function ResumeCreationModal({
     mutationFn: createResume,
   });
 
-  const updateTemplateMutation = useMutation({
-    mutationFn: updateResumeTemplate,
-  });
+  // const updateTemplateMutation = useMutation({
+  //   mutationFn: updateResumeTemplate,
+  // });
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
@@ -59,7 +61,9 @@ export default function ResumeCreationModal({
 
   const handleUploadClick = () => {
     trackEvent('create_resume_click', { source: 'dashboard_modal', method: 'upload_existing' });
-    router.push('/dashboard?action=upload');
+    const tId = templateId || template?.id;
+    const url = tId ? `/dashboard?action=upload&templateId=${tId}` : '/dashboard?action=upload';
+    router.push(url);
   };
 
   const handleLinkedInClick = useCallback(() => {
@@ -106,17 +110,12 @@ export default function ResumeCreationModal({
 
       const data = await createResumeMutation.mutateAsync({
         title,
+        templateId: templateId || template?.id || undefined,
         userInfo: {
           userId: user.data?.id ?? '',
         },
       });
 
-      if (template) {
-        await updateTemplateMutation.mutateAsync({
-          resumeId: data.id,
-          templateId: template.id,
-        });
-      }
       router.push(`/resume/${data.id}`);
     } catch (error) {
       console.error('Failed to create resume:', error);
@@ -182,7 +181,9 @@ export default function ResumeCreationModal({
       return;
     }
 
-    router.push('/dashboard?action=tailored_jd');
+    const tId = templateId || template?.id;
+    const url = tId ? `/dashboard?action=tailored_jd&templateId=${tId}` : '/dashboard?action=tailored_jd';
+    router.push(url);
   };
 
   // const handleUploadClick = () => {

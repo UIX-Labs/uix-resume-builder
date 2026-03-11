@@ -106,7 +106,7 @@ function TemplatesPageContent() {
   );
 
   const gridClasses = isLoggedIn
-    ? 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 justify-center flex-wrap px-4 sm:px-6'
+    ? 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 justify-start flex-wrap px-4 sm:px-6'
     : 'flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 mx-auto justify-center flex-wrap max-w-[1346px] px-4';
 
   const skeletonGrid = (

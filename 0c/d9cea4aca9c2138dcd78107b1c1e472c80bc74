@@ -1,0 +1,38 @@
+src/features/template-form/ui/index.tsx
+  81de41cca5a3c152 59-60,62,65,68-72,151-152,154,157,160-164
+src/shared/ui/components/textarea.tsx
+  81de41cca5a3c152 211,213,235-236,242,246-247,252-253,258
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "0cd9cea4aca9c2138dcd78107b1c1e472c80bc74",
+  "prompts": {
+    "81de41cca5a3c152": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "393198",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 72,
+      "total_deletions": 23,
+      "accepted_lines": 31,
+      "overriden_lines": 0
+    },
+    "8314654d3c5b1d51": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "393222",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 1,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  }
+}

@@ -196,37 +196,28 @@ const mohsinaTemplate5 = {
 
             cells: [
               {
-                type: 'inline-group',
-                separator: ', ',
-                className: 'flex items-center -mt-2',
-
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'degree',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] font-arial',
                   },
                   {
                     path: 'grade.value',
-                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] leading-[18px] font-arial',
+                    className: 'text-[13px] font-bold text-black uppercase tracking-[1px] font-arial',
+                  },
+                  {
+                    path: 'institution',
+                    className: 'text-[10px] font-normal text-black uppercase tracking-[1px] leading-tight font-arial',
                   },
                 ],
               },
-
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
-              },
-            ],
-          },
-
-          {
-            className: '-mt-2 mb-2',
-
-            cells: [
-              {
-                path: 'institution',
-                className: 'text-[10px] font-normal text-black uppercase tracking-[1px]  leading-[18px] font-arial',
+                className:
+                  'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial w-32 shrink-0 text-right mt-0.5',
               },
             ],
           },
@@ -242,7 +233,7 @@ const mohsinaTemplate5 = {
       heading: {
         path: 'experience.heading',
         fallback: 'Work Experience',
-        className: 'uppercase text-sm font-bold text-black tracking-[2.5px] leading-[18px] font-arial -mt-4',
+        className: 'uppercase text-sm font-bold text-[#005ff2] tracking-[2.5px] leading-[18px] font-arial -mt-4',
         divider: {
           variant: 'line',
           className: 'border-b border-black mt-1 mb-3',
@@ -256,27 +247,27 @@ const mohsinaTemplate5 = {
 
         rows: [
           {
-            className: 'flex justify-between items-center ',
-
+            className: 'flex justify-between items-start',
             cells: [
               {
-                path: 'position',
-                className: 'text-[13px] font-bold text-black leading-[18px] font-arial',
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
+                items: [
+                  {
+                    path: 'position',
+                    className: 'text-[13px] font-bold text-black font-arial',
+                  },
+                  {
+                    path: 'company',
+                    className: 'text-[13px] font-normal text-[#005FF2] uppercase tracking-[2px] font-arial',
+                  },
+                ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] leading-[18px] font-arial',
-              },
-            ],
-          },
-
-          {
-            className: '-mt-1',
-            cells: [
-              {
-                path: 'company',
-                className: 'text-[13px] font-normal text-[#005FF2] uppercase tracking-[2px] leadin-[18px] font-arial',
+                className:
+                  'text-[10px] font-bold text-[#005FF2] uppercase tracking-[2px] font-arial w-32 shrink-0 text-right mt-0.5',
               },
             ],
           },

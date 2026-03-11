@@ -210,34 +210,43 @@ const mohsinaTemplate13 = {
         className: 'mb-2 last:mb-0 flex flex-col gap-0',
         break: true,
         fields: [
-          // Row 1: Degree (left) | Duration (right)
+          // Row 1: Content (left) | Duration (right)
           {
             type: 'horizontal-group',
-            className: 'flex justify-between items-baseline mb-0.5',
+            className: 'flex justify-between items-start gap-4 mb-0.5',
             items: [
               {
-                path: 'degree',
-                fallback: 'Bachelor of Design',
-                className: 'text-[13px] font-black text-black uppercase leading-tight',
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
+                items: [
+                  {
+                    path: 'degree',
+                    fallback: 'Bachelor of Design',
+                    className: 'text-[13px] font-black text-black uppercase',
+                  },
+                  {
+                    path: 'grade.value',
+                    className: 'text-[13px] font-black text-black uppercase',
+                  },
+                  {
+                    path: 'gpa',
+                    fallback: '8.0 CGPA',
+                    className: 'text-xs font-black text-[#FF6161] leading-tight block',
+                  },
+                  {
+                    path: 'institution',
+                    fallback: 'National Institute of Design',
+                    className: 'text-sm text-black font-normal leading-tight block',
+                  },
+                ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[13px] font-black text-[#878787] font-mulish leading-tight',
+                className:
+                  'text-[13px] font-black text-[#878787] font-mulish leading-tight w-32 shrink-0 text-right mt-0.5',
               },
             ],
-          },
-          // Row 2: GPA
-          {
-            path: 'gpa',
-            fallback: '8.0 CGPA',
-            className: 'text-xs font-black text-[#FF6161] leading-tight block',
-          },
-          // Row 3: Institution
-          {
-            path: 'institution',
-            fallback: 'National Institute of Design',
-            className: 'text-sm text-black font-normal leading-tight block',
           },
         ],
       },
@@ -325,29 +334,29 @@ const mohsinaTemplate13 = {
           // Row 1: Position, Company + Duration
           {
             type: 'horizontal-group',
-            className: 'flex justify-between items-baseline w-full gap-x-3 ',
+            className: 'flex justify-between items-baseline w-full gap-4',
             items: [
               {
-                type: 'horizontal-group',
+                type: 'group',
                 path: '.',
-                separator: ', ',
-                className:
-                  'flex flex-row flex-wrap items-baseline gap-1 text-[13px] font-black text-black uppercase flex-1 min-w-0 leading-[12px]',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'position',
                     fallback: 'Senior UX Designer',
+                    className: 'text-[13px] font-black text-black uppercase',
                   },
                   {
                     path: 'company',
                     fallback: 'ORACLE',
+                    className: 'text-[13px] font-black text-black uppercase',
                   },
                 ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[13px] font-black text-[#878787]  font-mulish shrink-0',
+                className: 'text-[13px] font-black text-[#878787] font-mulish w-32 shrink-0 text-right mt-0.5',
               },
             ],
           },

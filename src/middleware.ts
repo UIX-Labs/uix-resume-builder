@@ -55,11 +55,11 @@ export async function middleware(request: NextRequest) {
     const hostname = request.headers.get('host') || '';
 
     // Redirect www to non-www for SEO canonicalization
-    if (hostname.startsWith('www.')) {
-      const newUrl = new URL(request.url);
-      newUrl.host = hostname.replace('www.', '');
-      return NextResponse.redirect(newUrl, 301);
-    }
+    #if (hostname.startsWith('www.')) {
+    # const newUrl = new URL(request.url);
+    # newUrl.host = hostname.replace('www.', '');
+    #  return NextResponse.redirect(newUrl, 301);
+    #}
 
     const isAuthRoute = pathname === '/auth';
     const isPublicRoute = PUBLIC_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));

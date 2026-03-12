@@ -203,26 +203,26 @@ const mohsinaTemplate4 = {
                 className: 'flex justify-between w-full items-start',
                 items: [
                   {
-                    type: 'inline-group',
-                    className: 'flex items-baseline mt-0 ',
-                    separator: ', ',
+                    type: 'group',
+                    className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                     items: [
                       {
                         path: 'position',
                         fallback: 'Software Engineer',
-                        className: 'text-base font-semibold leading-[13px] text-black font-poppins -mt-2',
+                        className: 'text-base font-semibold text-black font-poppins',
                       },
                       {
                         path: 'company',
                         fallback: 'Oracle',
-                        className: 'text-base pl-1  font-semibold font-poppins text-black ',
+                        className: 'text-base font-semibold font-poppins text-black -mt-1',
                       },
                     ],
                   },
                   {
                     type: 'duration',
                     path: 'duration',
-                    className: 'text-xs font-medium leading-[14px] text-gray-500 font-montserrat text-right',
+                    className:
+                      'text-xs font-medium leading-[14px] text-gray-500 font-montserrat text-right w-32 shrink-0 mt-0.5',
                   },
                 ],
               },
@@ -276,32 +276,32 @@ const mohsinaTemplate4 = {
                     className: 'flex justify-between w-full items-baseline',
                     items: [
                       {
-                        type: 'inline-group',
-                        separator: ', ',
-                        className: 'flex items-baseline mt-2 ',
+                        type: 'group',
+                        className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                         items: [
                           {
                             path: 'degree',
                             fallback: 'Masters of Design',
-                            className: 'text-base leading-[14px] font-semibold text-black font-poppins ',
+                            className: 'text-base font-semibold text-black font-poppins',
                           },
                           {
                             path: 'cgpa',
                             fallback: '8.0 CGPA',
-                            className: 'text-base leading-[14px] font-semibold text-[#005FF2] font-poppins ml-1',
+                            className: 'text-base font-semibold text-[#005FF2] font-poppins',
+                          },
+                          {
+                            path: 'institution',
+                            className: 'text-xs leading-tight font-normal text-gray-500 font-poppins',
                           },
                         ],
                       },
                       {
                         type: 'duration',
                         path: 'duration',
-                        className: 'text-xs font-medium leading-[16px] text-gray-500 font-montserrat',
+                        className:
+                          'text-xs font-medium leading-[16px] text-gray-500 font-montserrat w-32 shrink-0 text-right mt-0.5',
                       },
                     ],
-                  },
-                  {
-                    path: 'institution',
-                    className: 'text-xs  leading-[18px] font-normal text-gray-500 font-poppins',
                   },
                 ],
               },

@@ -48,7 +48,6 @@ export default function JDCTACard() {
         </button>
       </div>
 
-      {/* Resume Preview Image */}
       {/* Resume Preview Image Container */}
       <div className="relative mt-6 flex justify-center w-full h-[120px]">
         <div className="relative w-full h-full">

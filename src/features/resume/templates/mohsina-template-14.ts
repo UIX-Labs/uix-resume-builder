@@ -211,17 +211,17 @@ const mohsinaTemplate14 = {
         break: true,
         rows: [
           {
-            className: 'flex flex-row items-start gap-2',
+            className: 'flex flex-row items-start gap-6',
             cells: [
               {
                 path: 'title',
                 fallback: 'Certification Title',
-                className: 'text-sm font-normal text-white',
+                className: 'text-sm font-normal text-white w-[180px] break-words',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-white/80 w-[85px] shrink-0 pt-0.5',
+                className: 'text-xs text-white/80 w-[150px] shrink-0 ml-6  pt-0.5',
               },
             ],
           },
@@ -302,7 +302,7 @@ const mohsinaTemplate14 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs font-normal text-black w-[100px] shrink-0 pt-0.5',
+                className: 'text-xs font-normal text-black w-[130px] shrink-0 pt-0.5',
               },
               {
                 type: 'group',
@@ -315,7 +315,7 @@ const mohsinaTemplate14 = {
                   },
                   {
                     type: 'group',
-                    className: 'flex flex-col w-[280px]',
+                    className: 'flex flex-col w-[250px]',
                     items: [
                       {
                         type: 'group',

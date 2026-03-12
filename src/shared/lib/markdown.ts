@@ -3,13 +3,16 @@ export function decodeHtmlEntities(text: string | any): string {
   const str = typeof text === 'string' ? text : String(text);
   if (!str) return '';
 
-  return str
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#039;/g, "'")
-    .replace(/&nbsp;/g, ' ');
+  const entities: Array<[RegExp, string]> = [
+    [/&amp;/g, '&'],
+    [/&lt;/g, '<'],
+    [/&gt;/g, '>'],
+    [/&quot;/g, '"'],
+    [/&#039;/g, "'"],
+    [/&nbsp;/g, ' '],
+  ];
+
+  return entities.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), str);
 }
 
 /**

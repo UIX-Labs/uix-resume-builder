@@ -56,11 +56,11 @@ export async function middleware(request: NextRequest) {
 
     // Redirect www to non-www for SEO canonicalization
     
-    // if (hostname.startsWith('www.')) {
-    //  const newUrl = new URL(request.url);
-    //  newUrl.host = hostname.replace('www.', '');
-    //   return NextResponse.redirect(newUrl, 301);
-    // }
+    if (hostname.startsWith('www.')) {
+     const newUrl = new URL(request.url);
+     newUrl.host = hostname.replace('www.', '');
+      return NextResponse.redirect(newUrl, 301);
+    }
     
 
     const isAuthRoute = pathname === '/auth';

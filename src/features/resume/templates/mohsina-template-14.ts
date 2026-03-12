@@ -38,12 +38,12 @@ const mohsinaTemplate14 = {
         name: {
           path: 'personalDetails.items[0].fullName',
           fallback: 'Divyam Malik',
-          className: 'text-[28px] break-words font-semibold text-white leading-tight',
+          className: 'text-[28px] break-words font-semibold text-white leading-tight w-full max-w-full px-2',
         },
         title: {
           path: 'personalDetails.items[0].jobTitle',
           fallback: 'Technical Lead, Sopra Steria',
-          className: 'text-[16px] font-normal text-white opacity-90 -mt-2',
+          className: 'text-[16px] font-normal text-white opacity-90 -mt-2 w-full break-words max-w-full px-2',
         },
       },
     },
@@ -132,7 +132,7 @@ const mohsinaTemplate14 = {
                 {
                   path: 'personalDetails.items[0].phone',
                   fallback: '+918527886118',
-                  className: 'text-[14px] text-black font-normal',
+                  className: 'text-[14px] text-black font-normal break-all w-full text-center',
                 },
               ],
             },
@@ -160,7 +160,7 @@ const mohsinaTemplate14 = {
                 {
                   path: 'personalDetails.items[0].address',
                   fallback: 'Noida',
-                  className: 'text-[14px] text-black font-normal',
+                  className: 'text-[14px] text-black font-normal break-all w-full text-center',
                 },
               ],
             },
@@ -211,7 +211,7 @@ const mohsinaTemplate14 = {
         break: true,
         rows: [
           {
-            className: 'flex flex-row justify-between items-baseline',
+            className: 'flex flex-row items-start gap-2',
             cells: [
               {
                 path: 'title',
@@ -221,7 +221,7 @@ const mohsinaTemplate14 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-sm text-white',
+                className: 'text-xs text-white/80 w-[85px] shrink-0 pt-0.5',
               },
             ],
           },
@@ -306,7 +306,7 @@ const mohsinaTemplate14 = {
               },
               {
                 type: 'group',
-                className: 'flex flex-col flex-1 relative pl-6',
+                className: 'flex flex-col flex-1 relative pl-6 min-w-0',
                 items: [
                   {
                     type: 'text',
@@ -315,26 +315,26 @@ const mohsinaTemplate14 = {
                   },
                   {
                     type: 'group',
-                    className: 'flex flex-col',
+                    className: 'flex flex-col w-[280px]',
                     items: [
                       {
                         type: 'group',
-                        className: 'flex justify-left gap-2 items-baseline',
+                        className: 'flex flex-col gap-0.5',
                         items: [
                           {
                             path: 'degree',
-                            className: 'text-sm font-bold text-black',
+                            className: 'text-sm font-bold text-black leading-tight break-words',
                           },
                           {
                             path: 'gpa',
                             fallback: '9.0 CGPA',
-                            className: 'text-sm font-bold text-black',
+                            className: 'text-sm font-bold text-black leading-tight break-words',
                           },
                         ],
                       },
                       {
                         path: 'institution',
-                        className: 'text-xs font-normal text-neutral-600 mt-1',
+                        className: 'text-xs font-normal text-neutral-600 mt-1 break-words w-full block',
                       },
                     ],
                   },
@@ -372,21 +372,19 @@ const mohsinaTemplate14 = {
               {
                 type: 'text',
                 fallback: ' ',
-                className: 'absolute left-0 top-2 w-[10.64px] h-[10.64px] rounded-full bg-[#E5E5E5] block',
+                className: 'absolute left-0 top-1 w-[10.64px] h-[10.64px] rounded-full bg-[#E5E5E5] block',
               },
               {
-                type: 'horizontal-group',
-                path: '.',
-                separator: ', ',
-                className: 'flex items-baseline gap-1',
+                type: 'group',
+                className: 'flex flex-col gap-0.5 w-[350px]',
                 items: [
                   {
                     path: 'position',
-                    className: 'text-sm font-bold text-black',
+                    className: 'text-sm font-bold text-black leading-tight break-words',
                   },
                   {
                     path: 'company',
-                    className: 'text-sm font-bold text-black',
+                    className: 'text-sm font-bold text-black leading-tight break-words',
                   },
                 ],
               },

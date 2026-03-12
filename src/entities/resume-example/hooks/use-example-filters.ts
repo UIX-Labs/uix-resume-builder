@@ -41,8 +41,9 @@ export function useExampleFilters(initialCategory?: string) {
   );
 
   const resetFilters = useCallback(() => {
-    router.push(pathname, { scroll: false });
-  }, [router, pathname]);
+    // Navigate to the base /resume-examples route, clearing category slug + all query params
+    router.push('/resume-examples', { scroll: false });
+  }, [router]);
 
   return { filters, setFilters, resetFilters };
 }

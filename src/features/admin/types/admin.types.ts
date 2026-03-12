@@ -186,6 +186,7 @@ export interface AdminResumeExample {
   isPublished: boolean;
   rank: number;
   categoryId: string;
+  categoryIds?: string[];
   categoryName: string | null;
   categorySlug: string | null;
   templateId: string;
@@ -198,6 +199,7 @@ export interface AdminResumeExample {
 export interface AdminResumeExampleDetail extends AdminResumeExample {
   resumeData: Record<string, any>;
   category: AdminResumeExampleCategory | null;
+  categories?: { id: string; slug: string; name: string }[];
   template: { id: string; json: Record<string, any> | null } | null;
 }
 

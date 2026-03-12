@@ -9,8 +9,9 @@ import {
   useAdminTemplates,
   useUpdateResumeExample,
   useResumeExampleById,
-  useParseResumeForExample,
 } from '@/features/admin/hooks/use-admin-queries';
+import { parsePdfResume } from '@entities/resume/api/pdf-parse';
+import { getResumeData } from '@entities/resume/api/get-resume-data';
 import { toast } from 'sonner';
 import {
   Loader2,
@@ -25,7 +26,9 @@ import {
   ChevronUp,
   Check,
   Layout,
+  X,
 } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -34,7 +37,7 @@ const STEPS = ['Edit Resume Data', 'Metadata', 'Preview & Save'] as const;
 const EMPTY_METADATA = {
   title: '',
   slug: '',
-  categoryId: '',
+  categoryIds: [] as string[],
   templateId: '',
   role: '',
   experienceYears: '',
@@ -59,9 +62,9 @@ export default function AdminEditResumeExamplePage() {
   const [metadata, setMetadata] = useState(EMPTY_METADATA);
   const [initialized, setInitialized] = useState(false);
 
+  const [isReparsing, setIsReparsing] = useState(false);
   const { data: example, isLoading: exampleLoading, error: exampleError } = useResumeExampleById(id);
   const updateMutation = useUpdateResumeExample();
-  const parseMutation = useParseResumeForExample();
   const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useResumeExampleCategories();
   const { data: templates, isLoading: templatesLoading, error: templatesError } = useAdminTemplates();
 
@@ -72,7 +75,7 @@ export default function AdminEditResumeExamplePage() {
       setMetadata({
         title: example.title || '',
         slug: example.slug || '',
-        categoryId: example.categoryId || '',
+        categoryIds: (example.categories || []).map((c: any) => c.id),
         templateId: example.templateId || '',
         role: example.role || '',
         experienceYears: example.experienceYears?.toString() || '',
@@ -93,21 +96,25 @@ export default function AdminEditResumeExamplePage() {
     [templates, metadata.templateId],
   );
 
-  // ─── Re-parse PDF handler ──────────────────────────────────────────
+  // ─── Re-parse PDF handler (uses same endpoint as dashboard) ─────────
   const handleReparse = useCallback(
     async (file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
-
+      setIsReparsing(true);
       try {
-        const result = await parseMutation.mutateAsync(formData);
-        setResumeData(result.resumeData);
+        // Step 1: Parse PDF using dashboard endpoint
+        const { resumeId } = await parsePdfResume(file);
+        // Step 2: Fetch full resume data with properly formatted dates
+        const resumeResponse = await getResumeData(resumeId, true);
+        const { id: _id, updatedAt: _updatedAt, template: _template, publicThumbnail: _thumb, isAnalyzed: _analyzed, ...sections } = resumeResponse;
+        setResumeData(sections);
         toast.success('Resume re-parsed successfully! Review the data below.');
       } catch {
         toast.error('Failed to parse the resume PDF.');
+      } finally {
+        setIsReparsing(false);
       }
     },
-    [parseMutation],
+    [],
   );
 
   // ─── Save Handler ──────────────────────────────────────────────────
@@ -117,7 +124,7 @@ export default function AdminEditResumeExamplePage() {
     const payload = {
       title: metadata.title,
       slug: metadata.slug,
-      categoryId: metadata.categoryId,
+      categoryIds: metadata.categoryIds,
       templateId: metadata.templateId,
       resumeData,
       role: metadata.role || undefined,
@@ -243,7 +250,7 @@ export default function AdminEditResumeExamplePage() {
               </div>
               <label className="cursor-pointer">
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 text-sm text-blue-600 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                  {parseMutation.isPending ? (
+                  {isReparsing ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Parsing...
@@ -266,7 +273,7 @@ export default function AdminEditResumeExamplePage() {
                     }
                   }}
                   className="hidden"
-                  disabled={parseMutation.isPending}
+                  disabled={isReparsing}
                 />
               </label>
             </div>
@@ -281,11 +288,8 @@ export default function AdminEditResumeExamplePage() {
           onChange={setMetadata}
           onTitleChange={handleTitleChange}
           categories={categories || []}
-          templates={templates || []}
           categoriesLoading={categoriesLoading}
           categoriesError={categoriesError}
-          templatesLoading={templatesLoading}
-          templatesError={templatesError}
         />
       )}
 
@@ -330,7 +334,7 @@ export default function AdminEditResumeExamplePage() {
               updateMutation.isPending ||
               !metadata.title ||
               !metadata.slug ||
-              !metadata.categoryId ||
+              metadata.categoryIds.length === 0 ||
               !metadata.templateId
             }
             className="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
@@ -419,8 +423,8 @@ function EditStep({
               <Input label="Position" value={item.position || ''} onChange={(v) => updateItem({ ...item, position: v })} />
               <Input label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <Input label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} placeholder="e.g., Jan 2020" />
-              <Input label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} placeholder="e.g., Dec 2023 or Present" />
+              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} placeholder="e.g., Jan 2020" />
+              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} placeholder="e.g., Dec 2023 or Present" />
               <div className="col-span-full">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
@@ -433,7 +437,7 @@ function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ company: '', position: '', location: '', description: '', link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ company: '', position: '', location: '', description: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 
@@ -448,12 +452,12 @@ function EditStep({
               <Input label="Degree" value={item.degree || ''} onChange={(v) => updateItem({ ...item, degree: v })} />
               <Input label="Field of Study" value={item.fieldOfStudy || item.fieldofStudy || ''} onChange={(v) => updateItem({ ...item, fieldOfStudy: v })} />
               <Input label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
-              <Input label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <Input label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <Input label="Grade" value={item.grade || ''} onChange={(v) => updateItem({ ...item, grade: v })} />
             </div>
           )}
-          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', startDate: '', endDate: '', grade: '', ongoing: false }}
+          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', duration: { startDate: '', endDate: '', ongoing: false }, grade: '' }}
         />
       </SectionWrapper>
 
@@ -483,8 +487,8 @@ function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <Input label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <Input label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <div className="col-span-full">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
@@ -499,7 +503,7 @@ function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ title: '', description: '', techStack: [], link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ title: '', description: '', techStack: [], link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 
@@ -512,12 +516,12 @@ function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Issuer" value={item.issuer || ''} onChange={(v) => updateItem({ ...item, issuer: v })} />
-              <Input label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <Input label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
             </div>
           )}
-          emptyItem={{ title: '', issuer: '', link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ title: '', issuer: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 
@@ -558,21 +562,15 @@ function MetadataStep({
   onChange,
   onTitleChange,
   categories,
-  templates,
   categoriesLoading,
   categoriesError,
-  templatesLoading,
-  templatesError,
 }: {
   metadata: typeof EMPTY_METADATA;
   onChange: (data: typeof EMPTY_METADATA) => void;
   onTitleChange: (title: string) => void;
   categories: any[];
-  templates: any[];
   categoriesLoading?: boolean;
   categoriesError?: Error | null;
-  templatesLoading?: boolean;
-  templatesError?: Error | null;
 }) {
   const set = (field: string, value: any) => onChange({ ...metadata, [field]: value });
 
@@ -581,7 +579,7 @@ function MetadataStep({
       <Input label="Title *" value={metadata.title} onChange={onTitleChange} placeholder="e.g., Senior Software Engineer Resume" />
       <Input label="Slug *" value={metadata.slug} onChange={(v) => set('slug', v)} placeholder="auto-generated-from-title" mono />
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Categories *</label>
         {categoriesError ? (
           <p className="text-sm text-red-600 p-2.5 bg-red-50 rounded-lg border border-red-200">
             Failed to load categories. Check that the backend is running and you are logged in with an admin account.
@@ -598,43 +596,11 @@ function MetadataStep({
             </a>
           </p>
         ) : (
-          <select
-            value={metadata.categoryId}
-            onChange={(e) => set('categoryId', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select category...</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Template *</label>
-        {templatesError ? (
-          <p className="text-sm text-red-600 p-2.5 bg-red-50 rounded-lg border border-red-200">
-            Failed to load templates.
-          </p>
-        ) : templatesLoading ? (
-          <p className="text-sm text-gray-500 p-2.5 bg-gray-50 rounded-lg border border-gray-200 animate-pulse">
-            Loading templates...
-          </p>
-        ) : (
-          <select
-            value={metadata.templateId}
-            onChange={(e) => set('templateId', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Select template...</option>
-            {templates.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.id.slice(0, 8)}... (Rank: {t.rank})
-              </option>
-            ))}
-          </select>
+          <CategoryMultiSelect
+            categories={categories}
+            selectedIds={metadata.categoryIds}
+            onChange={(ids) => set('categoryIds', ids)}
+          />
         )}
       </div>
       <Input label="Role" value={metadata.role} onChange={(v) => set('role', v)} placeholder="e.g., Software Engineer" />
@@ -712,6 +678,12 @@ function PreviewStep({
     [resumeData],
   );
 
+  // Filter out draft templates — only show active ones
+  const activeTemplates = useMemo(
+    () => templates.filter((t) => t.status !== 'draft'),
+    [templates],
+  );
+
   if (!template) {
     return (
       <div className="text-center py-20 text-gray-500">
@@ -732,7 +704,7 @@ function PreviewStep({
   const missingFields = [];
   if (!metadata.title) missingFields.push('Title');
   if (!metadata.slug) missingFields.push('Slug');
-  if (!metadata.categoryId) missingFields.push('Category');
+  if (metadata.categoryIds.length === 0) missingFields.push('Category');
   if (!metadata.templateId) missingFields.push('Template');
 
   return (
@@ -744,11 +716,11 @@ function PreviewStep({
       )}
 
       {/* Template Selector */}
-      {templates.length > 0 && (
+      {activeTemplates.length > 0 && (
         <div className="mb-6 border border-gray-200 rounded-lg bg-white p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-3">Selected Template</h3>
           <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
-            {templates.map((tmpl) => {
+            {activeTemplates.map((tmpl) => {
               const isSelected = tmpl.id === selectedTemplateId;
               return (
                 <button
@@ -973,5 +945,89 @@ function StringListEditor({
         Add Item
       </button>
     </div>
+  );
+}
+
+// ─── Multi-selector dropdown for categories ─────────────────────────
+
+function CategoryMultiSelect({
+  categories,
+  selectedIds,
+  onChange,
+}: {
+  categories: { id: string; name: string }[];
+  selectedIds: string[];
+  onChange: (ids: string[]) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const selectedNames = categories
+    .filter((c) => selectedIds.includes(c.id))
+    .map((c) => c.name);
+
+  const toggle = (id: string) => {
+    const next = selectedIds.includes(id)
+      ? selectedIds.filter((i) => i !== id)
+      : [...selectedIds, id];
+    onChange(next);
+  };
+
+  const remove = (id: string) => {
+    onChange(selectedIds.filter((i) => i !== id));
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="w-full flex items-center justify-between gap-2 rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[42px] text-left"
+        >
+          {selectedNames.length === 0 ? (
+            <span className="text-gray-400">Select categories...</span>
+          ) : (
+            <div className="flex flex-wrap gap-1 flex-1">
+              {selectedNames.map((name, i) => (
+                <span
+                  key={selectedIds[i]}
+                  className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded"
+                >
+                  {name}
+                  <X
+                    className="w-3 h-3 cursor-pointer hover:text-blue-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      remove(selectedIds[i]);
+                    }}
+                  />
+                </span>
+              ))}
+            </div>
+          )}
+          <ChevronDown className="w-4 h-4 shrink-0 text-gray-400" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-1" align="start">
+        <div className="max-h-[200px] overflow-y-auto">
+          {categories.map((c) => {
+            const isChecked = selectedIds.includes(c.id);
+            return (
+              <label
+                key={c.id}
+                className="flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => toggle(c.id)}
+                  className="rounded border-gray-300"
+                />
+                <span className="text-sm">{c.name}</span>
+              </label>
+            );
+          })}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

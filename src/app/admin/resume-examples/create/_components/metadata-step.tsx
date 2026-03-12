@@ -1,8 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { ShadcnInput } from '@shared/ui/input';
 import { Label } from '@shared/ui/label';
 import { Checkbox } from '@shared/ui/checkbox';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
+import { ChevronDown, X } from 'lucide-react';
 import { LabeledInput } from './shared';
 import type { ExampleMetadata } from './constants';
 
@@ -11,21 +14,15 @@ export function MetadataStep({
   onChange,
   onTitleChange,
   categories,
-  templates,
   categoriesLoading,
   categoriesError,
-  templatesLoading,
-  templatesError,
 }: {
   metadata: ExampleMetadata;
   onChange: (data: ExampleMetadata) => void;
   onTitleChange: (title: string) => void;
   categories: any[];
-  templates: any[];
   categoriesLoading?: boolean;
   categoriesError?: Error | null;
-  templatesLoading?: boolean;
-  templatesError?: Error | null;
 }) {
   const set = (field: string, value: any) => onChange({ ...metadata, [field]: value });
 
@@ -34,7 +31,7 @@ export function MetadataStep({
       <LabeledInput label="Title *" value={metadata.title} onChange={onTitleChange} placeholder="e.g., Senior Software Engineer Resume" />
       <LabeledInput label="Slug *" value={metadata.slug} onChange={(v) => set('slug', v)} placeholder="auto-generated-from-title" mono />
       <div className="space-y-1">
-        <Label htmlFor="metadata-category">Category *</Label>
+        <Label>Categories *</Label>
         {categoriesError ? (
           <p className="text-sm text-red-600 p-2.5 bg-red-50 rounded-lg border border-red-200">
             Failed to load categories. Check that the backend is running and you are logged in with an admin account.
@@ -51,45 +48,11 @@ export function MetadataStep({
             </a>
           </p>
         ) : (
-          <select
-            id="metadata-category"
-            value={metadata.categoryId}
-            onChange={(e) => set('categoryId', e.target.value)}
-            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none"
-          >
-            <option value="">Select category...</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        )}
-      </div>
-      <div className="space-y-1">
-        <Label htmlFor="metadata-template">Template *</Label>
-        {templatesError ? (
-          <p className="text-sm text-red-600 p-2.5 bg-red-50 rounded-lg border border-red-200">
-            Failed to load templates.
-          </p>
-        ) : templatesLoading ? (
-          <p className="text-sm text-gray-500 p-2.5 bg-gray-50 rounded-lg border border-gray-200 animate-pulse">
-            Loading templates...
-          </p>
-        ) : (
-          <select
-            id="metadata-template"
-            value={metadata.templateId}
-            onChange={(e) => set('templateId', e.target.value)}
-            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none"
-          >
-            <option value="">Select template...</option>
-            {templates.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.id.slice(0, 8)}... (Rank: {t.rank})
-              </option>
-            ))}
-          </select>
+          <CategoryMultiSelect
+            categories={categories}
+            selectedIds={metadata.categoryIds}
+            onChange={(ids) => set('categoryIds', ids)}
+          />
         )}
       </div>
       <LabeledInput label="Role" value={metadata.role} onChange={(v) => set('role', v)} placeholder="e.g., Software Engineer" />
@@ -136,5 +99,87 @@ export function MetadataStep({
         <Label htmlFor="isPublished">Published</Label>
       </div>
     </div>
+  );
+}
+
+// ─── Multi-selector dropdown for categories ─────────────────────────
+
+function CategoryMultiSelect({
+  categories,
+  selectedIds,
+  onChange,
+}: {
+  categories: { id: string; name: string }[];
+  selectedIds: string[];
+  onChange: (ids: string[]) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const selectedNames = categories
+    .filter((c) => selectedIds.includes(c.id))
+    .map((c) => c.name);
+
+  const toggle = (id: string) => {
+    const next = selectedIds.includes(id)
+      ? selectedIds.filter((i) => i !== id)
+      : [...selectedIds, id];
+    onChange(next);
+  };
+
+  const remove = (id: string) => {
+    onChange(selectedIds.filter((i) => i !== id));
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          className="w-full flex items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none min-h-[38px] text-left"
+        >
+          {selectedNames.length === 0 ? (
+            <span className="text-muted-foreground">Select categories...</span>
+          ) : (
+            <div className="flex flex-wrap gap-1 flex-1">
+              {selectedNames.map((name, i) => (
+                <span
+                  key={selectedIds[i]}
+                  className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-xs font-medium px-2 py-0.5 rounded"
+                >
+                  {name}
+                  <X
+                    className="w-3 h-3 cursor-pointer hover:text-blue-600"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      remove(selectedIds[i]);
+                    }}
+                  />
+                </span>
+              ))}
+            </div>
+          )}
+          <ChevronDown className="w-4 h-4 shrink-0 text-muted-foreground" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[--radix-popover-trigger-width] p-1" align="start">
+        <div className="max-h-[200px] overflow-y-auto">
+          {categories.map((c) => {
+            const isChecked = selectedIds.includes(c.id);
+            return (
+              <label
+                key={c.id}
+                className="flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-gray-100 transition-colors"
+              >
+                <Checkbox
+                  checked={isChecked}
+                  onCheckedChange={() => toggle(c.id)}
+                />
+                <span className="text-sm">{c.name}</span>
+              </label>
+            );
+          })}
+        </div>
+      </PopoverContent>
+    </Popover>
   );
 }

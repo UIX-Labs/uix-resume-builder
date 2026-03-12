@@ -47,11 +47,10 @@ export const getCleanDataForRenderer = (
         delete sectionData.suggestedUpdates;
       }
 
-      if (isGeneratingPdf) {
-        const sectionIsEmpty = isSectionEmpty(section);
-        if (sectionIsEmpty) {
-          sectionData.isHidden = true;
-        }
+      // Always hide empty sections in preview/PDF — the edit form handles its own rendering
+      const sectionIsEmpty = isSectionEmpty(section);
+      if (sectionIsEmpty) {
+        sectionData.isHidden = true;
       }
 
       if (Array.isArray(sectionData.items)) {

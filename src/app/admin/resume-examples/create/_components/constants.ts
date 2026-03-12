@@ -3,7 +3,7 @@ export const STEPS = ['Upload PDF', 'Edit Resume Data', 'Metadata', 'Preview & S
 export const EMPTY_METADATA = {
   title: '',
   slug: '',
-  categoryId: '',
+  categoryIds: [] as string[],
   templateId: '',
   role: '',
   experienceYears: '',

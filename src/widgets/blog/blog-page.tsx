@@ -90,10 +90,11 @@ export default function BlogPageContent({ posts, tags: _tags }: { posts: BlogPos
         <div id="search-area">
           {searchQuery.trim() !== '' && filteredPosts.length === 0 ? (
             <NotFoundSearch
-              suggestions={[primaryPost, ...secondaryPosts].map((p) => ({
-                label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
-                slug: p.slug,
-              }))}
+              suggestions={[
+                { label: 'Resume', slug: 'resume', isCategory: true },
+                { label: 'Interview', slug: 'interview', isCategory: true },
+                { label: 'Career', slug: 'career', isCategory: true },
+              ]}
             />
           ) : (
             <div className="mt-6 md:mt-10">

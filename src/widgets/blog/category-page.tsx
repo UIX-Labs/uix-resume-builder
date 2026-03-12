@@ -25,10 +25,11 @@ export default function CategoryPageContent({ posts, allPosts, title, placeholde
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const suggestions = allPosts.slice(0, 3).map((p) => ({
-    label: p.frontmatter.highlightWord || p.frontmatter.tags[1] || p.frontmatter.tags[0],
-    slug: p.slug,
-  }));
+  const suggestions = [
+    { label: 'Resume', slug: 'resume', isCategory: true },
+    { label: 'Interview', slug: 'interview', isCategory: true },
+    { label: 'Career', slug: 'career', isCategory: true },
+  ];
 
   return (
     <div className="max-w-[1395px] mx-auto px-4">

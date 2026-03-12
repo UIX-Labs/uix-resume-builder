@@ -10,7 +10,6 @@ tags:
   - "career"
   - "job"
   - "cover-letter"
-featured: "secondary2"
 published: true
 coverImage: ""
 ---

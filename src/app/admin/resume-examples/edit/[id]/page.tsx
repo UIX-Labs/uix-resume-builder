@@ -148,16 +148,13 @@ export default function AdminEditResumeExamplePage() {
   }, [resumeData, metadata, updateMutation, router, id]);
 
   // ─── Metadata auto-slug ────────────────────────────────────────────
-  const handleTitleChange = useCallback(
-    (title: string) => {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-      setMetadata((prev) => ({ ...prev, title, slug }));
-    },
-    [],
-  );
+  const handleTitleChange = useCallback((title: string) => {
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    setMetadata((prev) => ({ ...prev, title, slug }));
+  }, []);
 
   if (exampleLoading) {
     return (
@@ -181,9 +178,7 @@ export default function AdminEditResumeExamplePage() {
           </button>
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Resume Example Not Found</h2>
-            <p className="text-sm text-red-500">
-              {exampleError?.message || 'The resume example could not be loaded.'}
-            </p>
+            <p className="text-sm text-red-500">{exampleError?.message || 'The resume example could not be loaded.'}</p>
           </div>
         </div>
       </div>
@@ -217,16 +212,12 @@ export default function AdminEditResumeExamplePage() {
               type="button"
               onClick={() => setCurrentStep(i)}
               className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                i === currentStep
-                  ? 'text-blue-600'
-                  : 'text-gray-500 hover:text-gray-700 cursor-pointer'
+                i === currentStep ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700 cursor-pointer'
               }`}
             >
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                  i === currentStep
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-100 text-gray-500'
+                  i === currentStep ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-500'
                 }`}
               >
                 {i + 1}
@@ -310,7 +301,7 @@ export default function AdminEditResumeExamplePage() {
       <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
         <button
           type="button"
-          onClick={() => currentStep > 0 ? setCurrentStep((s) => s - 1) : router.push('/admin/resume-examples')}
+          onClick={() => (currentStep > 0 ? setCurrentStep((s) => s - 1) : router.push('/admin/resume-examples'))}
           className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -389,18 +380,53 @@ function EditStep({
   return (
     <div className="space-y-4">
       {/* Personal Details */}
-      <SectionWrapper title="Personal Details" section="personalDetails" collapsed={collapsed} onToggle={toggleCollapse}>
+      <SectionWrapper
+        title="Personal Details"
+        section="personalDetails"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="Full Name" value={personalDetails.fullName || ''} onChange={(v) => updatePersonalDetails('fullName', v)} />
-          <Input label="Job Title" value={personalDetails.jobTitle || ''} onChange={(v) => updatePersonalDetails('jobTitle', v)} />
-          <Input label="Email" value={personalDetails.email || ''} onChange={(v) => updatePersonalDetails('email', v)} type="email" />
-          <Input label="Phone" value={personalDetails.phone || ''} onChange={(v) => updatePersonalDetails('phone', v)} />
-          <Input label="Address" value={personalDetails.address || ''} onChange={(v) => updatePersonalDetails('address', v)} />
+          <Input
+            label="Full Name"
+            value={personalDetails.fullName || ''}
+            onChange={(v) => updatePersonalDetails('fullName', v)}
+          />
+          <Input
+            label="Job Title"
+            value={personalDetails.jobTitle || ''}
+            onChange={(v) => updatePersonalDetails('jobTitle', v)}
+          />
+          <Input
+            label="Email"
+            value={personalDetails.email || ''}
+            onChange={(v) => updatePersonalDetails('email', v)}
+            type="email"
+          />
+          <Input
+            label="Phone"
+            value={personalDetails.phone || ''}
+            onChange={(v) => updatePersonalDetails('phone', v)}
+          />
+          <Input
+            label="Address"
+            value={personalDetails.address || ''}
+            onChange={(v) => updatePersonalDetails('address', v)}
+          />
           <Input label="City" value={personalDetails.city || ''} onChange={(v) => updatePersonalDetails('city', v)} />
-          <Input label="State" value={personalDetails.state || ''} onChange={(v) => updatePersonalDetails('state', v)} />
-          <Input label="Country" value={personalDetails.country || ''} onChange={(v) => updatePersonalDetails('country', v)} />
+          <Input
+            label="State"
+            value={personalDetails.state || ''}
+            onChange={(v) => updatePersonalDetails('state', v)}
+          />
+          <Input
+            label="Country"
+            value={personalDetails.country || ''}
+            onChange={(v) => updatePersonalDetails('country', v)}
+          />
         </div>
         <div className="mt-4">
+          {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with textarea */}
           <label className="block text-sm font-medium text-gray-700 mb-1">Professional Summary</label>
           <textarea
             value={personalDetails.description || ''}
@@ -413,19 +439,34 @@ function EditStep({
       </SectionWrapper>
 
       {/* Experience */}
-      <SectionWrapper title="Experience" section="experience" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.experience?.items?.length || 0}>
+      <SectionWrapper
+        title="Experience"
+        section="experience"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.experience?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.experience?.items || []}
           onChange={(items) => updateSection('experience', items)}
-          renderItem={(item, index, updateItem) => (
+          renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Company" value={item.company || ''} onChange={(v) => updateItem({ ...item, company: v })} />
-              <Input label="Position" value={item.position || ''} onChange={(v) => updateItem({ ...item, position: v })} />
-              <Input label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
+              <Input
+                label="Position"
+                value={item.position || ''}
+                onChange={(v) => updateItem({ ...item, position: v })}
+              />
+              <Input
+                label="Location"
+                value={item.location || ''}
+                onChange={(v) => updateItem({ ...item, location: v })}
+              />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
               <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} placeholder="e.g., Jan 2020" />
               <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} placeholder="e.g., Dec 2023 or Present" />
               <div className="col-span-full">
+                {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with textarea */}
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
                   value={item.description || ''}
@@ -442,13 +483,23 @@ function EditStep({
       </SectionWrapper>
 
       {/* Education */}
-      <SectionWrapper title="Education" section="education" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.education?.items?.length || 0}>
+      <SectionWrapper
+        title="Education"
+        section="education"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.education?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.education?.items || []}
           onChange={(items) => updateSection('education', items)}
-          renderItem={(item, index, updateItem) => (
+          renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Input label="Institution" value={item.institution || ''} onChange={(v) => updateItem({ ...item, institution: v })} />
+              <Input
+                label="Institution"
+                value={item.institution || ''}
+                onChange={(v) => updateItem({ ...item, institution: v })}
+              />
               <Input label="Degree" value={item.degree || ''} onChange={(v) => updateItem({ ...item, degree: v })} />
               <Input label="Field of Study" value={item.fieldOfStudy || item.fieldofStudy || ''} onChange={(v) => updateItem({ ...item, fieldOfStudy: v })} />
               <Input label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
@@ -462,15 +513,31 @@ function EditStep({
       </SectionWrapper>
 
       {/* Skills */}
-      <SectionWrapper title="Skills" section="skills" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.skills?.items?.length || 0}>
+      <SectionWrapper
+        title="Skills"
+        section="skills"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.skills?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.skills?.items || []}
           onChange={(items) => updateSection('skills', items)}
-          renderItem={(item, index, updateItem) => (
+          renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <Input label="Skill Name" value={item.name || ''} onChange={(v) => updateItem({ ...item, name: v })} />
-              <Input label="Category" value={item.category || ''} onChange={(v) => updateItem({ ...item, category: v })} placeholder="e.g., Programming" />
-              <Input label="Level" value={item.level || ''} onChange={(v) => updateItem({ ...item, level: v })} placeholder="e.g., Advanced" />
+              <Input
+                label="Category"
+                value={item.category || ''}
+                onChange={(v) => updateItem({ ...item, category: v })}
+                placeholder="e.g., Programming"
+              />
+              <Input
+                label="Level"
+                value={item.level || ''}
+                onChange={(v) => updateItem({ ...item, level: v })}
+                placeholder="e.g., Advanced"
+              />
             </div>
           )}
           emptyItem={{ name: '', category: '', level: '' }}
@@ -479,17 +546,24 @@ function EditStep({
       </SectionWrapper>
 
       {/* Projects */}
-      <SectionWrapper title="Projects" section="projects" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.projects?.items?.length || 0}>
+      <SectionWrapper
+        title="Projects"
+        section="projects"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.projects?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.projects?.items || []}
           onChange={(items) => updateSection('projects', items)}
-          renderItem={(item, index, updateItem) => (
+          renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
               <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
               <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <div className="col-span-full">
+                {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with textarea */}
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea
                   value={item.description || ''}
@@ -499,7 +573,19 @@ function EditStep({
                 />
               </div>
               <div className="col-span-full">
-                <Input label="Tech Stack (comma-separated)" value={(item.techStack || []).join(', ')} onChange={(v) => updateItem({ ...item, techStack: v.split(',').map((s: string) => s.trim()).filter(Boolean) })} />
+                <Input
+                  label="Tech Stack (comma-separated)"
+                  value={(item.techStack || []).join(', ')}
+                  onChange={(v) =>
+                    updateItem({
+                      ...item,
+                      techStack: v
+                        .split(',')
+                        .map((s: string) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                />
               </div>
             </div>
           )}
@@ -508,11 +594,17 @@ function EditStep({
       </SectionWrapper>
 
       {/* Certifications */}
-      <SectionWrapper title="Certifications" section="certifications" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.certifications?.items?.length || 0}>
+      <SectionWrapper
+        title="Certifications"
+        section="certifications"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.certifications?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.certifications?.items || []}
           onChange={(items) => updateSection('certifications', items)}
-          renderItem={(item, index, updateItem) => (
+          renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Issuer" value={item.issuer || ''} onChange={(v) => updateItem({ ...item, issuer: v })} />
@@ -526,7 +618,13 @@ function EditStep({
       </SectionWrapper>
 
       {/* Achievements */}
-      <SectionWrapper title="Achievements" section="achievements" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.achievements?.items?.length || 0}>
+      <SectionWrapper
+        title="Achievements"
+        section="achievements"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.achievements?.items?.length || 0}
+      >
         <StringListEditor
           items={resumeData.achievements?.items || []}
           onChange={(items) => updateSection('achievements', items)}
@@ -576,8 +674,19 @@ function MetadataStep({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <Input label="Title *" value={metadata.title} onChange={onTitleChange} placeholder="e.g., Senior Software Engineer Resume" />
-      <Input label="Slug *" value={metadata.slug} onChange={(v) => set('slug', v)} placeholder="auto-generated-from-title" mono />
+      <Input
+        label="Title *"
+        value={metadata.title}
+        onChange={onTitleChange}
+        placeholder="e.g., Senior Software Engineer Resume"
+      />
+      <Input
+        label="Slug *"
+        value={metadata.slug}
+        onChange={(v) => set('slug', v)}
+        placeholder="auto-generated-from-title"
+        mono
+      />
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Categories *</label>
         {categoriesError ? (
@@ -603,9 +712,21 @@ function MetadataStep({
           />
         )}
       </div>
-      <Input label="Role" value={metadata.role} onChange={(v) => set('role', v)} placeholder="e.g., Software Engineer" />
-      <Input label="Experience Years" value={metadata.experienceYears} onChange={(v) => set('experienceYears', v)} type="number" placeholder="e.g., 5" />
+      <Input
+        label="Role"
+        value={metadata.role}
+        onChange={(v) => set('role', v)}
+        placeholder="e.g., Software Engineer"
+      />
+      <Input
+        label="Experience Years"
+        value={metadata.experienceYears}
+        onChange={(v) => set('experienceYears', v)}
+        type="number"
+        placeholder="e.g., 5"
+      />
       <div>
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with input */}
         <label className="block text-sm font-medium text-gray-700 mb-1">Primary Color</label>
         <div className="flex gap-2">
           <input
@@ -621,8 +742,14 @@ function MetadataStep({
           />
         </div>
       </div>
-      <Input label="Color Name" value={metadata.colorName} onChange={(v) => set('colorName', v)} placeholder="e.g., Blue" />
+      <Input
+        label="Color Name"
+        value={metadata.colorName}
+        onChange={(v) => set('colorName', v)}
+        placeholder="e.g., Blue"
+      />
       <div>
+        {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with select */}
         <label className="block text-sm font-medium text-gray-700 mb-1">Layout</label>
         <select
           value={metadata.layout}
@@ -634,8 +761,18 @@ function MetadataStep({
         </select>
       </div>
       <Input label="Rank" value={metadata.rank.toString()} onChange={(v) => set('rank', v)} type="number" />
-      <Input label="Meta Title" value={metadata.metaTitle} onChange={(v) => set('metaTitle', v)} placeholder="SEO title" />
-      <Input label="Meta Description" value={metadata.metaDescription} onChange={(v) => set('metaDescription', v)} placeholder="SEO description" />
+      <Input
+        label="Meta Title"
+        value={metadata.metaTitle}
+        onChange={(v) => set('metaTitle', v)}
+        placeholder="SEO title"
+      />
+      <Input
+        label="Meta Description"
+        value={metadata.metaDescription}
+        onChange={(v) => set('metaDescription', v)}
+        placeholder="SEO description"
+      />
       <div className="flex items-center gap-2 pt-4">
         <input
           type="checkbox"
@@ -673,10 +810,7 @@ function PreviewStep({
   onSave: () => void;
   isSaving: boolean;
 }) {
-  const cleanedData = useMemo(
-    () => (resumeData ? getCleanDataForRenderer(resumeData) : null),
-    [resumeData],
-  );
+  const cleanedData = useMemo(() => (resumeData ? getCleanDataForRenderer(resumeData) : null), [resumeData]);
 
   // Filter out draft templates — only show active ones
   const activeTemplates = useMemo(
@@ -793,6 +927,7 @@ function Input({
 }) {
   return (
     <div>
+      {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with the input below */}
       <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
       <input
         type={type}
@@ -835,7 +970,11 @@ function SectionWrapper({
             <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">{count}</span>
           )}
         </div>
-        {isCollapsed ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronUp className="w-4 h-4 text-gray-400" />}
+        {isCollapsed ? (
+          <ChevronDown className="w-4 h-4 text-gray-400" />
+        ) : (
+          <ChevronUp className="w-4 h-4 text-gray-400" />
+        )}
       </button>
       {!isCollapsed && <div className="px-4 pb-4">{children}</div>}
     </div>

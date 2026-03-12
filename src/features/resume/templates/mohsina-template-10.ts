@@ -86,7 +86,7 @@ export const mohsinaTemplate10 = {
                     },
                     {
                       type: 'text',
-                      path: 'personalDetails.items[0].location',
+                      path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
                       className: 'text-xs text-black',
                     },
@@ -237,32 +237,26 @@ export const mohsinaTemplate10 = {
 
         rows: [
           {
-            className: 'flex items-start w-full',
+            className: 'flex justify-between items-start w-full gap-4',
             cells: [
               {
                 type: 'group',
-                className: 'flex flex-wrap gap-1',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
                 items: [
                   {
                     path: 'position',
-                    className: 'text-sm font-semibold font-[Inter] text-black leading-[13px]',
+                    className: 'text-sm font-semibold font-[Inter] text-black',
                   },
                   {
                     path: 'company',
-                    prefix: ', ',
-                    className: 'text-sm font-semibold font-[Inter] text-black leading-[13px]',
+                    className: 'text-sm font-semibold font-[Inter] text-black',
                   },
                 ],
               },
-            ],
-          },
-          {
-            className: '-mt-[2px]',
-            cells: [
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-black font-normal leading-[13px]',
+                className: 'text-xs text-black font-normal leading-tight w-32 shrink-0 text-right mt-1',
               },
             ],
           },
@@ -354,29 +348,30 @@ export const mohsinaTemplate10 = {
 
         rows: [
           {
+            className: 'flex justify-between items-start w-full gap-4',
             cells: [
               {
-                path: 'degree',
-                className: 'text-sm font-semibold font-[Inter] text-black leading-[13px]',
+                type: 'group',
+                className: 'flex flex-col flex-1 min-w-0 leading-tight gap-0.5',
+                items: [
+                  {
+                    path: 'degree',
+                    className: 'text-sm font-semibold font-[Inter] text-black',
+                  },
+                  {
+                    path: 'grade.value',
+                    className: 'text-sm font-semibold font-[Inter] text-black',
+                  },
+                  {
+                    path: 'institution',
+                    className: 'text-xs text-gray-500 leading-tight',
+                  },
+                ],
               },
-            ],
-          },
-          {
-            className: '-mt-1',
-            cells: [
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs text-black leading-[13px] ',
-              },
-            ],
-          },
-          {
-            className: '-mt-1',
-            cells: [
-              {
-                path: 'institution',
-                className: 'text-xs text-gray-500 leading-[14px] -mt-1',
+                className: 'text-xs text-black leading-tight w-32 shrink-0 text-right mt-1',
               },
             ],
           },

@@ -1,6 +1,6 @@
 'use client';
 
-import { Label } from "@/shared/ui/label";
+import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import type { Template } from '@entities/template-page/api/template-data';
 import type { TemplateFilters } from '@entities/template-page/types/template-filters';
@@ -248,6 +248,7 @@ export function TemplateFilterBar({
             />
           </div>
 
+          {/* Color filter — hidden until color swatch implementation is complete
           <div className="flex items-center gap-[15px] flex-shrink-0 bg-gray-50/50 px-4 py-2 rounded-xl border border-gray-100 ml-4">
             <span className="text-sm font-semibold text-gray-500 whitespace-nowrap">Colors :</span>
             <div className="flex items-center gap-3">
@@ -272,6 +273,7 @@ export function TemplateFilterBar({
               ))}
             </div>
           </div>
+          */}
         </div>
 
         {/* Row 2: Active filters */}

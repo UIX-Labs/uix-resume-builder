@@ -4,9 +4,10 @@ import { useParseLinkedInProfile } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { getOrCreateGuestEmail } from '@shared/lib/guest-email';
 import { Dialog, DialogContent } from '@shared/ui/dialog';
+import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface LinkedInModalProps {
   isOpen: boolean;
@@ -25,6 +26,25 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const mutationError = parseLinkedInMutation.error?.message;
 
   const displayError = error || mutationError;
+
+  // Animated loading steps
+  const loadingSteps = [
+    'Extracting profile data...',
+    'Analyzing experience...',
+    'Building your resume...',
+  ];
+  const [loadingStepIndex, setLoadingStepIndex] = useState(0);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setLoadingStepIndex(0);
+      return;
+    }
+    const interval = setInterval(() => {
+      setLoadingStepIndex((prev) => (prev + 1) % loadingSteps.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [isLoading, loadingSteps.length]);
 
   const handleSubmit = async () => {
     if (!linkedinUrl.trim()) {
@@ -106,26 +126,50 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
                   disabled={isLoading || !linkedinUrl.trim()}
                   className="flex items-center justify-center gap-2 bg-blue-900 border-2 border-amber-50 md:border-none md:bg-[#0066FF] text-white rounded-[12px] md:rounded-xl px-4 py-3 h-[48px] md:h-11 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0051d4] transition-colors cursor-pointer font-semibold text-lg w-[216px] md:w-auto mx-auto md:mx-0"
                 >
-                  <span className="text-lg font-semibold leading-[1.333em] tracking-tight">
-                    {isLoading ? 'Processing...' : 'Convert to Resume'}
-                  </span>
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" />
+                      <span className="text-lg font-semibold leading-[1.333em] tracking-tight">Processing...</span>
+                    </>
+                  ) : (
+                    <span className="text-lg font-semibold leading-[1.333em] tracking-tight">Convert to Resume</span>
+                  )}
                 </button>
               </div>
             </div>
 
-            <h3 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
-              in one click
-            </h3>
-
-            <p className="text-white/80 font-normal text-base leading-[1.5] tracking-[-0.011em] text-center max-w-[380px] px-4">
-              Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
-            </p>
-
-            <div className="flex flex-col items-center gap-3 mt-2 px-4">
-              <div className="flex items-center justify-center gap-3">
-                <span className="w-60 md:max-w-[520px] h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-40" />
+            {/* Loading progress indicator */}
+            {isLoading && (
+              <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  <p className="text-blue-300 text-sm font-medium transition-all">
+                    {loadingSteps[loadingStepIndex]}
+                  </p>
+                </div>
+                <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full animate-[progress_8s_ease-in-out_infinite]" style={{ width: '60%' }} />
+                </div>
               </div>
-            </div>
+            )}
+
+            {!isLoading && (
+              <>
+                <h3 className="text-white font-semibold text-[40px] leading-[1.15] md:text-[56px] md:leading-[1.2] tracking-[-0.03em] text-center">
+                  in one click
+                </h3>
+
+                <p className="text-white/80 font-normal text-base leading-[1.5] tracking-[-0.011em] text-center max-w-[380px] px-4">
+                  Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
+                </p>
+
+                <div className="flex flex-col items-center gap-3 mt-2 px-4">
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="w-60 md:max-w-[520px] h-[1px] bg-gradient-to-r from-transparent via-gray-300 to-transparent opacity-40" />
+                  </div>
+                </div>
+              </>
+            )}
 
             {displayError && <p className="text-red-400 text-sm text-center px-4">{displayError}</p>}
           </div>

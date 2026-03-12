@@ -69,8 +69,8 @@ export function EditStep({
               <LabeledInput label="Position" value={item.position || ''} onChange={(v) => updateItem({ ...item, position: v })} />
               <LabeledInput label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <LabeledInput label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} placeholder="e.g., Jan 2020" />
-              <LabeledInput label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} placeholder="e.g., Dec 2023 or Present" />
+              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} placeholder="e.g., Jan 2020" />
+              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} placeholder="e.g., Dec 2023 or Present" />
               <div className="col-span-full space-y-1">
                 <Label htmlFor={`experience-description-${index}`}>Description</Label>
                 <textarea
@@ -84,7 +84,7 @@ export function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ company: '', position: '', location: '', description: '', link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ company: '', position: '', location: '', description: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 
@@ -99,12 +99,12 @@ export function EditStep({
               <LabeledInput label="Degree" value={item.degree || ''} onChange={(v) => updateItem({ ...item, degree: v })} />
               <LabeledInput label="Field of Study" value={item.fieldOfStudy || item.fieldofStudy || ''} onChange={(v) => updateItem({ ...item, fieldOfStudy: v })} />
               <LabeledInput label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
-              <LabeledInput label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <LabeledInput label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <LabeledInput label="Grade" value={item.grade || ''} onChange={(v) => updateItem({ ...item, grade: v })} />
             </div>
           )}
-          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', startDate: '', endDate: '', grade: '', ongoing: false }}
+          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', duration: { startDate: '', endDate: '', ongoing: false }, grade: '' }}
         />
       </SectionWrapper>
 
@@ -134,8 +134,8 @@ export function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <LabeledInput label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <LabeledInput label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <LabeledInput label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <div className="col-span-full space-y-1">
                 <Label htmlFor={`project-description-${index}`}>Description</Label>
                 <textarea
@@ -151,7 +151,7 @@ export function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ title: '', description: '', techStack: [], link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ title: '', description: '', techStack: [], link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 
@@ -164,12 +164,12 @@ export function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <LabeledInput label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <LabeledInput label="Issuer" value={item.issuer || ''} onChange={(v) => updateItem({ ...item, issuer: v })} />
-              <LabeledInput label="Start Date" value={item.startDate || ''} onChange={(v) => updateItem({ ...item, startDate: v })} />
-              <LabeledInput label="End Date" value={item.endDate || ''} onChange={(v) => updateItem({ ...item, endDate: v })} />
+              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
+              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
             </div>
           )}
-          emptyItem={{ title: '', issuer: '', link: '', startDate: '', endDate: '', ongoing: false }}
+          emptyItem={{ title: '', issuer: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
         />
       </SectionWrapper>
 

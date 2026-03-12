@@ -6,8 +6,9 @@ import {
   useResumeExampleCategories,
   useAdminTemplates,
   useCreateResumeExample,
-  useParseResumeForExample,
 } from '@/features/admin/hooks/use-admin-queries';
+import { parsePdfResume } from '@entities/resume/api/pdf-parse';
+import { getResumeData } from '@entities/resume/api/get-resume-data';
 import { toast } from 'sonner';
 import { Loader2, ArrowLeft, ArrowRight, Save } from 'lucide-react';
 import { Button } from '@shared/ui/button';
@@ -24,7 +25,7 @@ export default function AdminCreateResumeExamplePage() {
   const [resumeData, setResumeData] = useState<Record<string, any> | null>(null);
   const [metadata, setMetadata] = useState(EMPTY_METADATA);
 
-  const parseMutation = useParseResumeForExample();
+  const [isParsing, setIsParsing] = useState(false);
   const createMutation = useCreateResumeExample();
   const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useResumeExampleCategories();
   const { data: templates, isLoading: templatesLoading, error: templatesError } = useAdminTemplates();
@@ -36,44 +37,61 @@ export default function AdminCreateResumeExamplePage() {
 
   const handlePdfUpload = useCallback(
     async (file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
-
+      setIsParsing(true);
       try {
-        const result = await parseMutation.mutateAsync(formData);
+        // Step 1: Parse PDF using the same endpoint as dashboard upload
+        const { resumeId } = await parsePdfResume(file);
 
-        let matchedCategoryId = '';
-        if (result.suggestedCategorySlug && categories) {
-          const matched = categories.find((c) => c.slug === result.suggestedCategorySlug);
-          if (matched) matchedCategoryId = matched.id;
-        }
+        // Step 2: Fetch the full resume data (dates are properly formatted)
+        const resumeResponse = await getResumeData(resumeId, true);
 
-        const defaultTemplateId = templates?.[0]?.id || '';
+        // Step 3: Extract resume sections data (exclude metadata fields)
+        const { id: _id, updatedAt: _updatedAt, template, publicThumbnail: _thumb, isAnalyzed: _analyzed, ...sections } = resumeResponse;
 
-        setResumeData(result.resumeData);
+        setResumeData(sections);
+
+        // Step 4: Derive metadata from parsed data
+        const personalDetails = sections.personalDetails?.items?.[0] || {};
+        const fullName = personalDetails.fullName || '';
+        const jobTitle = personalDetails.jobTitle || '';
+        const title = jobTitle
+          ? `${jobTitle} Resume`
+          : fullName
+            ? `${fullName} Resume`
+            : 'Resume Example';
+        const slug = title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+        const defaultTemplateId = template?.id || templates?.[0]?.id || '';
+
         setMetadata({
-          title: result.title,
-          slug: result.slug,
-          categoryId: matchedCategoryId,
+          title,
+          slug,
+          categoryIds: [],
           templateId: defaultTemplateId,
-          role: result.role,
-          experienceYears: result.experienceYears?.toString() || '',
-          primaryColor: result.primaryColor || '#2563EB',
-          colorName: result.colorName || 'Blue',
-          layout: result.layout || 'two-column',
-          metaTitle: result.metaTitle || '',
-          metaDescription: result.metaDescription || '',
+          role: jobTitle || '',
+          experienceYears: '',
+          primaryColor: '#2563EB',
+          colorName: 'Blue',
+          layout: 'two-column',
+          metaTitle: `${title} Example | Pika Resume`,
+          metaDescription: jobTitle
+            ? `Download this professional ${jobTitle.toLowerCase()} resume example. Built with Pika Resume.`
+            : '',
           isPublished: true,
-          rank: result.rank || 0,
+          rank: 0,
         });
 
         toast.success('Resume parsed successfully!');
         setCurrentStep(1);
       } catch {
         toast.error('Failed to parse the resume PDF. Please try again.');
+      } finally {
+        setIsParsing(false);
       }
     },
-    [parseMutation, categories, templates],
+    [templates],
   );
 
   const handleSkipUpload = useCallback(() => {
@@ -96,7 +114,7 @@ export default function AdminCreateResumeExamplePage() {
     const payload = {
       title: metadata.title,
       slug: metadata.slug,
-      categoryId: metadata.categoryId,
+      categoryIds: metadata.categoryIds,
       templateId: metadata.templateId,
       resumeData,
       role: metadata.role || undefined,
@@ -188,7 +206,7 @@ export default function AdminCreateResumeExamplePage() {
         <UploadStep
           onUpload={handlePdfUpload}
           onSkip={handleSkipUpload}
-          isParsing={parseMutation.isPending}
+          isParsing={isParsing}
         />
       )}
 
@@ -202,11 +220,8 @@ export default function AdminCreateResumeExamplePage() {
           onChange={setMetadata}
           onTitleChange={handleTitleChange}
           categories={categories || []}
-          templates={templates || []}
           categoriesLoading={categoriesLoading}
           categoriesError={categoriesError}
-          templatesLoading={templatesLoading}
-          templatesError={templatesError}
         />
       )}
 
@@ -246,7 +261,7 @@ export default function AdminCreateResumeExamplePage() {
                 createMutation.isPending ||
                 !metadata.title ||
                 !metadata.slug ||
-                !metadata.categoryId ||
+                metadata.categoryIds.length === 0 ||
                 !metadata.templateId
               }
               className="bg-green-600 hover:bg-green-700"

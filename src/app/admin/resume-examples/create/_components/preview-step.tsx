@@ -28,6 +28,12 @@ export function PreviewStep({
     [resumeData],
   );
 
+  // Filter out draft templates — only show active ones
+  const activeTemplates = useMemo(
+    () => templates.filter((t) => t.status !== 'draft'),
+    [templates],
+  );
+
   if (!template) {
     return (
       <div className="text-center py-20 text-gray-500">
@@ -48,7 +54,7 @@ export function PreviewStep({
   const missingFields = [];
   if (!metadata.title) missingFields.push('Title');
   if (!metadata.slug) missingFields.push('Slug');
-  if (!metadata.categoryId) missingFields.push('Category');
+  if (metadata.categoryIds.length === 0) missingFields.push('Category');
   if (!metadata.templateId) missingFields.push('Template');
 
   return (
@@ -74,11 +80,11 @@ export function PreviewStep({
         </div>
 
         {/* Template Selector - Right Side */}
-        {templates.length > 0 && (
+        {activeTemplates.length > 0 && (
           <div className="w-48 shrink-0 border border-gray-200 rounded-lg bg-white p-3 sticky top-4">
             <h3 className="text-sm font-semibold text-gray-900 mb-3">Templates</h3>
             <div className="grid grid-cols-2 gap-2">
-              {templates.map((tmpl) => {
+              {activeTemplates.map((tmpl) => {
                 const isSelected = tmpl.id === selectedTemplateId;
                 return (
                   <button

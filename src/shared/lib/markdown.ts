@@ -46,38 +46,41 @@ export const cleanHtml = (text: string): string => text.replace(/<[^>]*>/g, '').
 export function stripMarkdown(text: string): string {
   if (!text) return '';
 
-  let cleaned = text;
+  const patterns: Array<[RegExp, string]> = [
+    // Links: [text](url) → text
+    [/\[([^\]]+)\]\([^)]+\)/g, '$1'],
 
-  cleaned = cleaned.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1');
+    // Bold: **text** or __text__ → text
+    [/\*\*(.+?)\*\*/g, '$1'],
+    [/__(.+?)__/g, '$1'],
 
-  // Remove bold **text** or __text__ → text
-  cleaned = cleaned.replace(/\*\*(.+?)\*\*/g, '$1');
-  cleaned = cleaned.replace(/__(.+?)__/g, '$1');
+    // Italic: *text* or _text_ → text (avoiding bold markers)
+    [/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '$1'],
+    [/(?<!_)_([^_\n]+?)_(?!_)/g, '$1'],
 
-  // Remove italic *text* or _text_ → text
-  cleaned = cleaned.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '$1');
-  cleaned = cleaned.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '$1');
+    // Strikethrough: ~~text~~ → text
+    [/~~(.+?)~~/g, '$1'],
 
-  // Remove strikethrough ~~text~~ → text
-  cleaned = cleaned.replace(/~~(.+?)~~/g, '$1');
+    // Inline code: `code` → code
+    [/`([^`]+)`/g, '$1'],
 
-  // Remove inline code `code` → code
-  cleaned = cleaned.replace(/`([^`]+)`/g, '$1');
+    // Headings: # text → text
+    [/^#{1,6}\s+(.+)$/gm, '$1'],
 
-  // Remove headings # text → text
-  cleaned = cleaned.replace(/^#{1,6}\s+(.+)$/gm, '$1');
+    // Blockquotes: > text → text
+    [/^>\s+(.+)$/gm, '$1'],
 
-  // Remove blockquotes > text → text
-  cleaned = cleaned.replace(/^>\s+(.+)$/gm, '$1');
+    // Unordered list markers: -, *, +
+    [/^[-*+]\s+/gm, ''],
 
-  // Remove list markers (- * + or 1. 2. etc)
-  cleaned = cleaned.replace(/^[-*+]\s+/gm, '');
-  cleaned = cleaned.replace(/^\d+\.\s+/gm, '');
+    // Ordered list markers: 1. 2. 3.
+    [/^\d+\.\s+/gm, ''],
 
-  // Remove horizontal rules
-  cleaned = cleaned.replace(/^([-*_])\1{2,}$/gm, '');
+    // Horizontal rules: ---, ***, ___
+    [/^([-*_])\1{2,}$/gm, ''],
+  ];
 
-  return cleaned.trim();
+  return patterns.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), text).trim();
 }
 
 export function normalizeMarkdownContent(content: string | undefined | null): string {

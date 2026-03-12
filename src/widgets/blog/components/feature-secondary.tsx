@@ -1,6 +1,6 @@
 'use client';
 
-import { BlogPost } from '@/shared/lib/blog';
+import type { BlogPost } from '@/shared/lib/blog';
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -20,13 +20,19 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
       rounded-2xl border-2 sm:border-4 border-white relative overflow-hidden group transition-all hover:shadow-sm"
       >
         <div className="w-[120px] sm:w-[35%] shrink-0 relative">
-          <Image src={featureImage} alt="feature" fill className="object-cover" />
+          <Image
+            src={featureImage}
+            alt="feature"
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 120px, 35vw"
+          />
         </div>
 
         <div className="flex-1 flex flex-col justify-center gap-1 sm:gap-2 p-3 sm:p-5">
           <div>
             <span
-              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-2 py-1 rounded-sm"
+              className="text-[10px] sm:text-[12px] font-semibold text-white uppercase px-3 py-1 rounded-sm"
               style={{ backgroundColor: badgeColor }}
             >
               {post.frontmatter.tags[0]}
@@ -39,6 +45,7 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
 
           <div className="flex items-center gap-3 mt-4">
             <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-100 overflow-hidden relative border border-white flex-shrink-0">
+              {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
               <img
                 src={post.frontmatter.authorImage || 'https://picsum.photos/200'}
                 className="w-full h-full object-cover"

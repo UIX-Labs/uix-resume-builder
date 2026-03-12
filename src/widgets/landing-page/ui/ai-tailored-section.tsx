@@ -206,6 +206,7 @@ export function AITailorSection() {
                         const mobileWidth = (w / 334) * 100; // Convert to percentage for mobile
                         return (
                           <motion.div
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
                             key={i}
                             initial={{ width: 0 }}
                             animate={{ width: '100%' }}

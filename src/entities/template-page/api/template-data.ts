@@ -5,8 +5,13 @@ export interface TemplateApiResponse {
   id: string;
   json: any;
   publicImageUrl: string;
+  style: string[];
+  colorVariations: { name: string; primaryColor: string }[];
+  layoutType: string;
+  roles: { id: string; name: string }[];
   createdAt: string;
   updatedAt: string;
+  isTrending?: boolean;
 }
 
 export interface Template extends TemplateApiResponse {}
@@ -50,6 +55,7 @@ export const useGetAllTemplates = () => {
 export const useGetTemplateById = (templateId: string | null) => {
   return useFetch({
     queryKey: ['template', templateId],
+    // biome-ignore lint/style/noNonNullAssertion: value is checked by enabled flag
     queryFn: () => fetchTemplateById(templateId!),
     enabled: !!templateId,
   });

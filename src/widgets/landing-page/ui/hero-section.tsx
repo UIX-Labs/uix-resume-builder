@@ -38,7 +38,7 @@ const HeroSection = () => {
     });
   }, [currentStats?.latestUsers]);
 
-  const handleNavigate = () => {
+  const _handleNavigate = () => {
     router.push('/dashboard');
   };
 
@@ -51,11 +51,11 @@ const HeroSection = () => {
   };
 
   const handleUploadClick = () => {
-    handleNavigate();
     trackEvent('create_resume_click', {
       source: 'landing_hero',
       method: 'upload_existing',
     });
+    router.push('/dashboard?action=upload');
   };
 
   return (
@@ -108,8 +108,12 @@ const HeroSection = () => {
                   </div>
                 </h1>
 
-                {/* Mobile View */}
-                <h1 className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2">
+                {/* Mobile View - uses div to avoid duplicate H1 (desktop H1 above is the canonical one) */}
+                <div
+                  className="block md:hidden text-center tracking-[-0.03em] leading-tight px-2"
+                  role="presentation"
+                  aria-hidden="true"
+                >
                   <div className="flex flex-col items-center gap-1">
                     <span className="font-geist font-semibold text-4xl">Build a</span>
                     <span className="text-blue-800 font-[800] text-[48px]">Professional</span>
@@ -118,23 +122,29 @@ const HeroSection = () => {
                     <span className="text-green-600 font-[800] text-5xl">Resume</span>
                     <span className="text-xl font-semibold">in under 3 minutes</span>
                   </div>
-                </h1>
+                </div>
               </div>
 
+              {/* Subtitle */}
+              <p className="mt-3 lg:mt-4 text-base lg:text-lg text-gray-600 text-center md:text-left max-w-[520px]">
+                Import from LinkedIn, upload your resume, or start fresh. Pika&apos;s AI crafts ATS-optimized content
+                that gets you hired.
+              </p>
+
               {/* Buttons */}
-              <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row gap-4 items-center md:items-start">
+              <div className="mt-8 lg:mt-10 flex flex-col sm:flex-row flex-wrap gap-4 items-center md:items-start">
                 <Button
                   onClick={handleLinkedInUnified}
-                  className="w-[280px] lg:w-[300px] h-[56px] lg:h-[64px] text-lg lg:text-xl p-1 bg-[#005FF2] text-white font-bold rounded-[12px] hover:bg-blue-700 transition-all duration-300 shadow-sm border-white border-2"
+                  className="w-[280px] lg:w-[280px] h-[56px] lg:h-[64px] text-lg lg:text-lg p-1 bg-[#005FF2] text-white font-bold rounded-[12px] hover:bg-blue-700 transition-all duration-300 shadow-sm border-white border-2"
                 >
                   Auto-fill via LinkedIn
                 </Button>
 
                 <Button
                   onClick={handleUploadClick}
-                  className="w-[260px] lg:w-[300px] h-[56px] lg:h-[64px] text-base lg:text-lg bg-white text-[#171717] font-bold rounded-[12px] border border-gray-200 hover:bg-gray-50 hover:text-[#005FF2] transition-all duration-300 p-1"
+                  className="w-[280px] lg:w-[280px] h-[56px] lg:h-[64px] text-base lg:text-lg bg-white text-[#171717] font-bold rounded-[12px] border border-gray-200 hover:bg-gray-50 hover:text-[#005FF2] transition-all duration-300 p-1"
                 >
-                  Upload existing resume
+                  Upload Existing Resume
                 </Button>
               </div>
             </div>

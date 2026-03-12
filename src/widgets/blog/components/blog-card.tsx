@@ -25,12 +25,18 @@ export default function BlogCard({
     <Link href={slug}>
       <div
         className="group bg-white border border-[#E5E7EB] rounded-lg cursor-pointer p-4 overflow-hidden 
-        transition-all duration-300 hover:shadow-md hover:bg-[var(--card-color)]"
+        transition-all duration-250 hover:shadow-md hover:bg-[var(--card-color)] ease-in-out"
         style={{ ['--card-color' as any]: badgeColor }}
       >
         {/* IMAGE */}
-        <div className="relative w-full h-[255px] rounded-md overflow-hidden">
-          <Image src={image} alt={title} fill className="object-cover" />
+        <div className="relative w-full md:h-[255px] h-[200px] rounded-md overflow-hidden">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         </div>
 
         {/* CONTENT */}
@@ -41,8 +47,9 @@ export default function BlogCard({
               inline-flex items-center justify-center 
               text-white text-sm font-semibold px-3 py-1 rounded-md w-fit
               bg-[var(--card-color)]
-              transition-all duration-300
+              transition-all duration-250 ease-in-out
               group-hover:bg-white
+              uppercase
             "
           >
             <span className="group-hover:text-[var(--card-color)]">{category}</span>
@@ -52,7 +59,7 @@ export default function BlogCard({
           <h3
             className="
               text-[#17171A] text-[20px] font-semibold leading-snug line-clamp-2
-              transition-all duration-300
+              transition-all duration-250 ease-in-out
               group-hover:text-white
             "
           >
@@ -63,10 +70,11 @@ export default function BlogCard({
           <div
             className="
               flex items-center gap-2 text-xs text-gray-500
-              transition-all duration-300
+              transition-all duration-250 ease-in-out
               group-hover:text-white
             "
           >
+            {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
             <img
               src="https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp"
               className="w-6 h-6 rounded-full"

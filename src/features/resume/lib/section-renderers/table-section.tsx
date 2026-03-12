@@ -28,18 +28,18 @@ export function renderTableSection(
   if (!Array.isArray(items) || items.length === 0) return null;
 
   // Filter out items where all values are empty, null, or undefined
-  const validItems = items.filter((item: any) => {
+  const validItems = items.filter((item: Record<string, unknown>) => {
     if (!item || typeof item !== 'object') {
       return false;
     }
 
     // Check if at least one field has a non-empty value
-    const hasContent = Object.values(item).some((value: any) => {
+    const hasContent = Object.values(item).some((value: unknown) => {
       if (!value) return false;
       if (typeof value === 'string' && value.trim() === '') return false;
       if (typeof value === 'object') {
         const nestedValues = Object.values(value);
-        return nestedValues.some((v: any) => v && (typeof v !== 'string' || v.trim() !== ''));
+        return nestedValues.some((v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''));
       }
       return true;
     });
@@ -117,7 +117,7 @@ export function renderTableSection(
             )}
 
             {/* Render content columns with all items */}
-            {columns.map((column: any, colIdx: number) => {
+            {columns.map((column: any, columnIdx: number) => {
               const renderColumnContent = (col: any): React.ReactNode => {
                 let content: React.ReactNode = null;
 
@@ -132,14 +132,16 @@ export function renderTableSection(
                   if (allBadgeItems.length > 0) {
                     const getIconComponent = (iconName?: string) => {
                       if (!iconName) return null;
-                      const Icon = (LucideIcons as any)[iconName];
+                      const Icon = (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[
+                        iconName
+                      ];
                       return Icon || null;
                     };
                     const IconComponent = col.icon ? getIconComponent(col.icon) : null;
 
                     content = (
                       <div className={cn('flex gap-1 flex-wrap', col.containerClassName)}>
-                        {allBadgeItems.map(({ value, itemId }, badgeIdx: number) => {
+                        {allBadgeItems.map(({ value, itemId }, badgeIndex: number) => {
                           // Extract renderable value - will return null for complex objects
                           const actualValue = extractRenderableValue(value);
 
@@ -166,7 +168,8 @@ export function renderTableSection(
 
                           if (IconComponent) {
                             return (
-                              <div key={badgeIdx} className={col.itemClassName}>
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                              <div key={badgeIndex} className={col.itemClassName}>
                                 <IconComponent className={col.iconClassName} />
                                 <span
                                   className={cn(
@@ -183,7 +186,8 @@ export function renderTableSection(
                           }
                           return (
                             <span
-                              key={badgeIdx}
+                              // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                              key={badgeIndex}
                               className={cn(
                                 col.badgeClassName,
                                 errorBgColor,
@@ -205,7 +209,8 @@ export function renderTableSection(
 
               return (
                 <div
-                  key={colIdx}
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                  key={columnIdx}
                   className={column.className}
                   data-canbreak={column.break ? 'true' : undefined}
                   data-has-breakable-content={column.break ? 'true' : undefined}
@@ -217,7 +222,7 @@ export function renderTableSection(
           </div>
         ) : (
           // Multi-row mode: each item gets a row
-          validItems.map((item: any, itemIdx: number) => {
+          validItems.map((item: any, itemIndex: number) => {
             // Get itemId for this item
             const itemId = item.itemId || item.id;
 
@@ -410,7 +415,7 @@ export function renderTableSection(
                 const badgeItems = column.itemPath
                   ? flattenAndFilterItemsWithContext([item], column.itemPath)
                   : (Array.isArray(item) ? item : [item]).filter(
-                      (v: any) => v && (typeof v !== 'string' || v.trim() !== ''),
+                      (v: unknown) => v && (typeof v !== 'string' || v.trim() !== ''),
                     );
 
                 // Determine fieldName for suggestions
@@ -419,14 +424,16 @@ export function renderTableSection(
                 if (badgeItems.length > 0) {
                   const getIconComponent = (iconName?: string) => {
                     if (!iconName) return null;
-                    const Icon = (LucideIcons as any)[iconName];
+                    const Icon = (
+                      LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>
+                    )[iconName];
                     return Icon || null;
                   };
                   const IconComponent = column.icon ? getIconComponent(column.icon) : null;
 
                   content = (
                     <div className={cn('flex gap-1 flex-wrap', column.containerClassName)}>
-                      {badgeItems.map((badgeItem: any, badgeIdx: number) => {
+                      {badgeItems.map((badgeItem: any, badgeIndex: number) => {
                         // Extract renderable value - will return null for complex objects
                         const value = extractRenderableValue(badgeItem);
 
@@ -461,7 +468,8 @@ export function renderTableSection(
 
                         if (IconComponent) {
                           return (
-                            <div key={badgeIdx} className={column.itemClassName}>
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                            <div key={badgeIndex} className={column.itemClassName}>
                               <IconComponent className={column.iconClassName} />
                               <span
                                 className={cn(
@@ -478,7 +486,8 @@ export function renderTableSection(
                         }
                         return (
                           <span
-                            key={badgeIdx}
+                            // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                            key={badgeIndex}
                             className={cn(
                               column.badgeClassName,
                               errorBgColor,
@@ -500,7 +509,8 @@ export function renderTableSection(
 
             return (
               <div
-                key={itemIdx}
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
+                key={itemIndex}
                 data-item="table-row"
                 data-has-breakable-content={section.break ? 'true' : undefined}
                 className={cn('grid', section.rowClassName)}
@@ -509,7 +519,7 @@ export function renderTableSection(
                 {/* Render heading column (only for first row) */}
                 {section.headingColumn && (
                   <div className={section.headingColumn.className} style={{ gridColumn: 1 }}>
-                    {itemIdx === 0 && section.heading && (
+                    {itemIndex === 0 && section.heading && (
                       <>
                         <p data-item="heading" className={section.heading.className}>
                           {resolvePath(data, section.heading.path, section.heading.fallback)}
@@ -521,14 +531,14 @@ export function renderTableSection(
                 )}
 
                 {/* Render content columns for each item */}
-                {columns.map((column: any, colIdx: number) => (
+                {columns.map((column: any, columnIdx: number) => (
                   <div
-                    key={`${itemIdx}-${colIdx}`}
+                    key={`${item.itemId}-${columnIdx}`}
                     className={column.className}
                     data-canbreak={column.break ? 'true' : undefined}
                     data-has-breakable-content={column.break ? 'true' : undefined}
                     style={{
-                      gridColumn: section.headingColumn ? colIdx + 2 : colIdx + 1,
+                      gridColumn: section.headingColumn ? columnIdx + 2 : columnIdx + 1,
                     }}
                   >
                     {renderColumnContent(column)}

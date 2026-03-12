@@ -95,7 +95,7 @@ export default function JDSection() {
       <div></div>
       {/* MOBILE: Heading */}
       <div className="md:hidden text-center mt-12 mb-5 px-4">
-        <h1 className="text-5xl leading-none font-black text-blue-600">Match Your Resume</h1>
+        <h2 className="text-5xl leading-none font-black text-blue-600">Match Your Resume</h2>
         <p className="text-[28px] font-semibold text-black leading-none">to the job description</p>
       </div>
 
@@ -123,11 +123,11 @@ export default function JDSection() {
 
       {/* RIGHT: Content (Desktop only) */}
       <div className="hidden md:flex flex-1 flex-col pl-20">
-        <h1 className="mb-6 text-[80px] leading-none">
+        <h2 className="mb-6 text-[80px] leading-none">
           <span className="text-blue-600 font-black">Match your resume</span>
           <br />
           <span className="text-black font-semibold">to the job description</span>
-        </h1>
+        </h2>
 
         <p className="mb-4 max-w-md text-base text-gray-500 text-nowrap">
           Pika rewrites your resume based on the job description — instantly.

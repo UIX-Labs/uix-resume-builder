@@ -1,10 +1,9 @@
-import type React from 'react';
 import { cn } from '@shared/lib/cn';
-import { resolvePath } from '../resolve-path';
+import type React from 'react';
 import { renderDivider } from '../components/Divider';
+import { renderItemWithFields, renderItemWithRows } from '../field-renderer';
+import { resolvePath } from '../resolve-path';
 import { hasPendingSuggestions } from '../section-utils';
-import { renderItemWithRows, renderItemWithFields } from '../field-renderer';
-
 export function renderListSection(
   section: any,
   data: any,
@@ -14,7 +13,7 @@ export function renderListSection(
 ): React.ReactNode {
   const rawItems = resolvePath(data, section.listPath, []);
 
-  const items = rawItems.map((item: any) => ({ ...item }));
+  const items = rawItems.map((item: Record<string, unknown>) => ({ ...item }));
 
   const sectionId = section.id || section.heading?.path?.split('.').pop() || 'list-section';
   const isActive = currentSection && sectionId.toLowerCase() === currentSection.toLowerCase();
@@ -77,12 +76,14 @@ export function renderListSection(
         className={section.containerClassName}
         id="teacher-content"
       >
-        {items.map((item: any, idx: number) => {
+        {items.map((item: Record<string, unknown>, idx: number) => {
           const itemId = item.itemId || item.id;
 
           // Use sectionKey (from listPath) instead of sectionId because sectionKey matches formData keys
           // e.g., "skills.items" -> "skills" which matches formData.skills
           const formDataSectionKey = sectionKey || sectionId;
+
+          if (!section.itemTemplate) return null;
 
           const content = section.itemTemplate.rows
             ? renderItemWithRows(section.itemTemplate, item, itemId, suggestedUpdates, isThumbnail, formDataSectionKey)
@@ -94,12 +95,12 @@ export function renderListSection(
                 isThumbnail,
                 formDataSectionKey,
               );
-
           const isItemBreakable = section.break || section.itemTemplate?.break;
 
           if (section.break && idx === 0) {
             return (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static list
                 key={idx}
                 className={cn(section.itemTemplate.className, shouldBlur ? 'blur-[2px] pointer-events-none' : '')}
                 style={itemWrapperStyle}
@@ -126,6 +127,7 @@ export function renderListSection(
 
           return (
             <div
+              // biome-ignore lint/suspicious/noArrayIndexKey: static list
               key={idx}
               className={cn(
                 section.itemTemplate.className,

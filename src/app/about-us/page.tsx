@@ -1,6 +1,7 @@
 'use client';
 import Header from '@widgets/landing-page/ui/header-section';
 import Image from 'next/image';
+import Link from 'next/link';
 import { OurVision } from '@widgets/about-us/ui/our-vision';
 import { JourneyTimeline } from '@widgets/about-us/ui/journey-timeline';
 import Innovation from '@widgets/about-us/ui/innovation';
@@ -77,6 +78,58 @@ function AboutPage() {
       <OurVision />
       <JourneyTimeline />
       <Innovation />
+
+      {/* SEO content section for text/HTML ratio and internal linking */}
+      <section className="py-12 sm:py-16 bg-gray-50/50" aria-label="About Pika Resume">
+        <div className="container mx-auto px-4 sm:px-6 max-w-4xl text-center">
+          <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-6">
+            Building the Future of Resume Creation
+          </h2>
+          <p className="text-base text-gray-700 leading-relaxed mb-4">
+            Pika Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-optimized
+            resumes in minutes. Our platform combines cutting-edge artificial intelligence with insights from hiring
+            professionals at leading companies to deliver resumes that get results.
+          </p>
+          <p className="text-base text-gray-700 leading-relaxed mb-8">
+            Whether you are building your first resume, switching careers, or targeting your dream role, Pika Resume
+            provides the tools you need — from AI content suggestions and LinkedIn import to expert human review and job
+            description matching.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <Link
+              href="/"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              href="/templates"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            >
+              Resume Templates
+            </Link>
+            <Link
+              href="/roast"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            >
+              AI Resume Roast
+            </Link>
+            <Link
+              href="/expert-review"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            >
+              Expert Review
+            </Link>
+            <Link
+              href="/blog"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-gray-700 hover:border-blue-300 hover:text-blue-600 transition-colors"
+            >
+              Blog
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <div className="border border-white rounded-md mx-2 sm:mx-4 overflow-hidden mt-12 bg-[radial-gradient(circle,#ccc_1px,transparent_1px)] bg-[length:20px_20px]">
         <FooterSection />
       </div>

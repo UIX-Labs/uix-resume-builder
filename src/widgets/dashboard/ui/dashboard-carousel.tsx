@@ -1,7 +1,6 @@
 'use client';
 
 import { type Template, useGetAllTemplates } from '@entities/template-page/api/template-data';
-import { useSelectTemplate } from '@shared/hooks/use-select-template';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
 import { TemplateCard } from '@widgets/templates-page/ui/template-card';
 import type { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
@@ -161,18 +160,23 @@ export default function DashboardCarousel() {
 
         <div className="overflow-hidden rounded-xl" ref={emblaRef}>
           <div className="flex my-4 sm:my-6 gap-2 sm:gap-4 items-center">
-            {templates?.map((template) => (
-              <TemplateCard
-                key={template.id}
-                template={template}
-                onClick={() => (isMobile ? handleMobileUseTemplate(template) : handleTemplateSelect(template.id))}
-                isDashboard={true}
-                onPreviewClick={() => {
-                  setPreviewTemplate(template);
-                  setIsPreviewOpen(true);
-                }}
-              />
-            ))}
+            {templates?.map((template) => {
+              const isNew = Date.now() - new Date(template.createdAt).getTime() < 30 * 24 * 60 * 60 * 1000;
+              return (
+                <TemplateCard
+                  key={template.id}
+                  template={template}
+                  onClick={() => (isMobile ? handleMobileUseTemplate(template) : handleTemplateSelect(template.id))}
+                  isDashboard={true}
+                  onPreviewClick={() => {
+                    setPreviewTemplate(template);
+                    setIsPreviewOpen(true);
+                  }}
+                  isNew={isNew}
+                  isTrending={template.isTrending}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

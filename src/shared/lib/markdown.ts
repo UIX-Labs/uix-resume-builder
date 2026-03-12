@@ -1,7 +1,9 @@
-export function decodeHtmlEntities(text: string): string {
-  if (!text) return '';
+export function decodeHtmlEntities(text: string | any): string {
+  if (text === null || text === undefined) return '';
+  const str = typeof text === 'string' ? text : String(text);
+  if (!str) return '';
 
-  return text
+  return str
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')

@@ -1,10 +1,10 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { Button } from '@/shared/ui/components/button';
+import { motion } from 'framer-motion';
 import Image from 'next/image';
-import FooterNavigation from './navigation-footer';
 import { useRouter } from 'next/navigation';
+import FooterNavigation from './navigation-footer';
 
 const FooterSection = () => {
   const router = useRouter();
@@ -17,7 +17,8 @@ const FooterSection = () => {
       id: 'colors',
       content: (
         <div className="glass-card overlay-item bg-white/20 rounded-2xl">
-          <img src="images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
+          {/* biome-ignore lint/performance/noImgElement: dynamic image source */}
+          <img src="/images/color-palete.svg" alt="Hired at Meta" className="w-full h-auto" />
         </div>
       ),
       desktopPosition: { top: '-1%', left: '2%' },
@@ -34,7 +35,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/google-logo.svg" alt="google" fill className="object-contain" />
+                  <Image src="/images/google-logo.svg" alt="google" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Google</span>
@@ -56,7 +57,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/microsoft-logo.svg" alt="microsoft" fill className="object-contain" />
+                  <Image src="/images/microsoft-logo.svg" alt="microsoft" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Microsoft</span>
@@ -78,7 +79,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-black">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/apple-logo.svg" alt="apple" fill className="object-contain" />
+                  <Image src="/images/apple-logo.svg" alt="apple" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Apple</span>
@@ -100,7 +101,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(214,235,255,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/meta-logo.svg" alt="meta" fill className="object-contain" />
+                  <Image src="/images/meta-logo.svg" alt="meta" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Meta</span>
@@ -122,7 +123,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(255,241,200,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/amazon-logo.svg" alt="amazon" fill className="object-contain" />
+                  <Image src="/images/amazon-logo.svg" alt="amazon" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Amazon</span>
@@ -144,7 +145,7 @@ const FooterSection = () => {
             <div className="flex items-center gap-[9px]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center bg-[rgba(197,255,156,1)]">
                 <div className="relative w-[26px] h-[26px]">
-                  <Image src="images/nvidia-logo.svg" alt="nvidia" fill className="object-contain" />
+                  <Image src="/images/nvidia-logo.svg" alt="nvidia" fill className="object-contain" />
                 </div>
               </div>
               <span className="text-gray-700 font-medium">Nvidia</span>
@@ -169,13 +170,13 @@ const FooterSection = () => {
 
         <div className="flex-1 flex items-center justify-center relative z-20">
           <div className="text-center">
-            <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight whitespace-nowrap">
+            <h2 className="text-[40px] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-foreground mb-4 leading-tight whitespace-nowrap">
               Right <span className="text-blue-800 font-black">Resume</span>
               <br />
               <span className="text-[28px] md:text-[80px] block -mt-2 sm:-mt-4 md:-mt-6 lg:-mt-8 mx-auto w-fit px-4 sm:px-6 md:px-8 lg:px-[49px] py-1 sm:py-0 rounded-full text-[rgba(0,137,65,1)] font-black backdrop-blur-xs bg-[rgba(0,242,85,0.2)] border border-white shadow-lg">
                 Right Opportunity
               </span>
-            </h1>
+            </h2>
 
             <div className="mt-6 sm:mt-8 lg:mt-10 flex flex-col items-center gap-[10px]">
               <Button

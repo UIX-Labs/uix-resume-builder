@@ -1,0 +1,23 @@
+src/shared/lib/markdown.ts
+  797c2b3ded247886 49-51,53-55,57-59,61-62,64-65,67-68,70-71,73-74,76-77,79-81,83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "d0bfc2dad2be3a275fe34d9e98d29cc63bc20a7e",
+  "prompts": {
+    "797c2b3ded247886": {
+      "agent_id": {
+        "tool": "DeputyDev",
+        "id": "394064",
+        "model": "CLAUDE_4_POINT_5_SONNET"
+      },
+      "human_author": "Shreya-singh-uix <shreya@uixlabs.in>",
+      "messages": [],
+      "total_additions": 43,
+      "total_deletions": 32,
+      "accepted_lines": 38,
+      "overriden_lines": 0
+    }
+  }
+}

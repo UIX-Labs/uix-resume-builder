@@ -44,7 +44,7 @@ export const mohsinaTemplate9 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-[2px] mb-2 w-[15%] flex-shrink-0 text-left',
+              className: 'flex flex-col items-start gap-[2px] mb-2 w-[35%] flex-shrink-0 text-left',
               items: [
                 {
                   type: 'inline-group-with-icon',
@@ -82,7 +82,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[13px] text-black break-words',
+                      className: 'text-[13px] text-black break-all',
                     },
                   ],
                 },
@@ -122,7 +122,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[13px] text-black break-words',
+                      className: 'text-[13px] text-black break-all',
                     },
                   ],
                 },

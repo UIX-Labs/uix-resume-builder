@@ -103,15 +103,6 @@ export const data = {
       subTitleKey: 'startDate',
     },
 
-    duration: {
-      name: 'duration',
-      type: 'duration',
-      placeholder: 'Enter your duration',
-      label: 'Duration',
-      fluid: true,
-      required: true,
-    },
-
     company: {
       name: 'company',
       type: 'text',
@@ -136,14 +127,6 @@ export const data = {
       label: 'Location',
     },
 
-    startDate: {
-      name: 'startDate',
-      type: 'text',
-      placeholder: 'Enter your start date',
-      required: true,
-      label: 'Start Date',
-    },
-
     description: {
       name: 'description',
       type: 'textarea',
@@ -151,6 +134,23 @@ export const data = {
       required: true,
       label: 'Description',
       fluid: true,
+    },
+
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
+      fluid: true,
+      required: true,
+    },
+
+    startDate: {
+      name: 'startDate',
+      type: 'text',
+      placeholder: 'Enter your start date',
+      required: true,
+      label: 'Start Date',
     },
 
     link: {
@@ -173,13 +173,12 @@ export const data = {
       subTitleKey: 'level',
     },
 
-    category: {
-      name: 'category',
+    name: {
+      name: 'name',
       type: 'text',
-      placeholder: 'Enter your category',
+      placeholder: 'Enter your skill name',
       required: true,
-      fluid: true,
-      label: 'Category',
+      label: 'Name',
     },
 
     level: {
@@ -191,12 +190,13 @@ export const data = {
       options: ['Beginner', 'Intermediate', 'Expert'],
     },
 
-    name: {
-      name: 'name',
+    category: {
+      name: 'category',
       type: 'text',
-      placeholder: 'Enter your skill name',
+      placeholder: 'Enter your category',
       required: true,
-      label: 'Name',
+      fluid: true,
+      label: 'Category',
     },
   },
 
@@ -240,6 +240,14 @@ export const data = {
       label: 'Degree',
     },
 
+    fieldOfStudy: {
+      name: 'fieldOfStudy',
+      type: 'text',
+      placeholder: 'Enter your field of study',
+      required: true,
+      label: 'Field of Study',
+    },
+
     duration: {
       name: 'duration',
       type: 'duration',
@@ -247,14 +255,6 @@ export const data = {
       required: true,
       label: 'Duration',
       fluid: true,
-    },
-
-    fieldOfStudy: {
-      name: 'fieldOfStudy',
-      type: 'text',
-      placeholder: 'Enter your field of study',
-      required: true,
-      label: 'Field of Study',
     },
 
     grade: {
@@ -276,19 +276,20 @@ export const data = {
 
     itemsType: 'draggable',
 
-    duration: {
-      name: 'duration',
-      type: 'duration',
-      placeholder: 'Enter your duration',
-      label: 'Duration',
+    title: {
+      name: 'title',
+      type: 'text',
+      placeholder: 'Enter your title',
+      label: 'Title',
+      fluid: true,
       required: true,
     },
 
-    link: {
-      name: 'link',
-      type: 'url',
-      placeholder: 'Enter your link',
-      label: 'Link',
+    description: {
+      name: 'description',
+      type: 'textarea',
+      placeholder: 'Enter your description',
+      label: 'Description',
       required: true,
       fluid: true,
     },
@@ -302,21 +303,20 @@ export const data = {
       fluid: true,
     },
 
-    description: {
-      name: 'description',
-      type: 'textarea',
-      placeholder: 'Enter your description',
-      label: 'Description',
+    link: {
+      name: 'link',
+      type: 'url',
+      placeholder: 'Enter your link',
+      label: 'Link',
       required: true,
       fluid: true,
     },
 
-    title: {
-      name: 'title',
-      type: 'text',
-      placeholder: 'Enter your title',
-      label: 'Title',
-      fluid: true,
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
       required: true,
     },
   },
@@ -338,11 +338,11 @@ export const data = {
     subTitle: 'Show your relevant certifications',
     itemsType: 'draggable',
 
-    duration: {
-      name: 'duration',
-      type: 'duration',
-      placeholder: 'Enter your duration',
-      label: 'Duration',
+    title: {
+      name: 'title',
+      type: 'text',
+      placeholder: 'Enter your title',
+      label: 'Title',
       required: true,
       fluid: true,
     },
@@ -363,11 +363,11 @@ export const data = {
       fluid: true,
     },
 
-    title: {
-      name: 'title',
-      type: 'text',
-      placeholder: 'Enter your title',
-      label: 'Title',
+    duration: {
+      name: 'duration',
+      type: 'duration',
+      placeholder: 'Enter your duration',
+      label: 'Duration',
       required: true,
       fluid: true,
     },

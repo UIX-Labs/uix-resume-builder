@@ -33,8 +33,9 @@ import template5 from '@features/resume/templates/template5';
 import template6 from '@features/resume/templates/template6';
 import template8 from '@features/resume/templates/template8';
 import template9 from '@features/resume/templates/template9';
-import mohsinaTemplate13 from '../templates/mohsina-template-13';
+import mohsinaContrast from '../templates/mohsina-contrast';
 import { mohsinaTemplate10 } from '../templates/mohsina-template-10';
+import mohsinaTemplate13 from '../templates/mohsina-template-13';
 import { mohsinaTemplate6 } from '../templates/mohsina-template-6';
 import { mohsinaTemplate9 } from '../templates/mohsina-template-9';
 
@@ -70,6 +71,7 @@ export const templateRegistry: Record<string, any> = {
   'mohsina-template10': mohsinaTemplate10,
   'mohsina-template6': mohsinaTemplate6,
   'mohsina-template9': mohsinaTemplate9,
+  'mohsina-contrast': mohsinaContrast,
 };
 
 /** Union type of all valid template keys */

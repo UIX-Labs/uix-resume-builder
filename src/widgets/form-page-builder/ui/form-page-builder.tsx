@@ -16,9 +16,9 @@ import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 import { Button } from '@shared/ui/button';
 import AnalyzerModal from '@shared/ui/components/analyzer-modal';
 import { AuthRedirectModal } from '@shared/ui/components/auth-redirect-modal';
+import { DownloadButton } from '@shared/ui/components/download-button';
 import { MobileTemplateButton } from '@shared/ui/components/mobile-template-button';
 import { PreviewButton } from '@shared/ui/components/preview-button';
-import { DownloadButton } from '@shared/ui/components/download-button';
 import { useQueryClient } from '@tanstack/react-query';
 import Header from '@widgets/landing-page/ui/header-section';
 import { PreviewModal } from '@widgets/templates-page/ui/preview-modal';
@@ -952,6 +952,7 @@ export function FormPageBuilder() {
             onSectionClick={handleMobileStepClick}
             onBackClick={handleMobileBackToResume}
             onToggleHideSection={handleToggleHideSection}
+            importSource={searchParams.get('importSource') as any}
           />
 
           <MobileFooter

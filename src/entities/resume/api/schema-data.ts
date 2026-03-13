@@ -87,14 +87,6 @@ export const data = {
     label: 'Experience',
     subTitle:
       'Show your relevant experience (last 10 years). Use bullet points to note your achievements, if possible - use numbers/facts (Achieved X, measured by Y, by doing Z).',
-    title: {
-      name: 'title',
-      type: 'text',
-      placeholder: 'Enter your heading',
-      label: 'Title',
-      required: true,
-      fluid: true,
-    },
 
     itemsType: 'draggable',
 
@@ -145,13 +137,6 @@ export const data = {
       required: true,
     },
 
-    startDate: {
-      name: 'startDate',
-      type: 'text',
-      placeholder: 'Enter your start date',
-      required: true,
-      label: 'Start Date',
-    },
 
     link: {
       name: 'link',
@@ -190,14 +175,6 @@ export const data = {
       options: ['Beginner', 'Intermediate', 'Expert'],
     },
 
-    category: {
-      name: 'category',
-      type: 'text',
-      placeholder: 'Enter your category',
-      required: true,
-      fluid: true,
-      label: 'Category',
-    },
   },
 
   education: {
@@ -205,14 +182,6 @@ export const data = {
     subTitle:
       'A varied education on your resume sums up the value that your learnings and background will bring to job.',
 
-    heading: {
-      name: 'heading',
-      type: 'text',
-      placeholder: 'Enter your heading',
-      label: 'Heading',
-      required: true,
-      fluid: true,
-    },
 
     itemsType: 'draggable',
 
@@ -294,14 +263,6 @@ export const data = {
       fluid: true,
     },
 
-    techStack: {
-      name: 'techStack',
-      type: 'tags',
-      placeholder: 'Enter your tech stack',
-      label: 'Tech Stack',
-      required: true,
-      fluid: true,
-    },
 
     link: {
       name: 'link',

@@ -235,9 +235,9 @@ export function Draggable({
                 <button
                   type="button"
                   className={cn(
-                    'absolute cursor-pointer bg-[#959DA8] rounded-full w-7 h-7 justify-center items-center',
+                    'absolute cursor-pointer bg-[#959DA8] rounded-full w-8 h-8 justify-center items-center',
                     'bottom-0 right-0 translate-x-1/2 translate-y-1/2 transition-all duration-300',
-                    isMobile ? 'flex' : 'hidden group-hover:flex',
+                    isMobile ? 'flex' : 'hidden group-hover:flex z-50',
                   )}
                   onClick={() => handlePlusClick(index)}
                 >

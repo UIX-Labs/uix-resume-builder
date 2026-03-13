@@ -109,18 +109,10 @@ export function HardcodedLinksInput({ data, onChange }: HardcodedLinksInputProps
   }, [linksData]);
 
   const updateLink = (key: string, link: string) => {
-    if (!link.trim()) {
-      setLinksData((prev) => {
-        const { [key]: _, ...rest } = prev;
-        return rest;
-      });
-      setLinksOrder((prev) => prev.filter((k) => k !== key));
-    } else {
-      setLinksData((prev) => ({
-        ...prev,
-        [key]: { title: getLinkType(key)?.label || key, link },
-      }));
-    }
+    setLinksData((prev) => ({
+      ...prev,
+      [key]: { title: getLinkType(key)?.label || key, link },
+    }));
   };
 
   const deleteLink = (key: string) => {

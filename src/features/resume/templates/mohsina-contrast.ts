@@ -11,14 +11,14 @@ const mohsinaContrast = {
   },
 
   columns: {
-    spacing: '0px',
+    spacing: '32px',
     left: {
       width: '385px',
-      className: 'text-white pl-8 pr-4 pb-11 pt-6 flex flex-col bg-black gap-[26px]',
+      className: 'text-white pl-8 pr-4 pb-11 pt-6 flex flex-col bg-black gap-[20px]',
     },
     right: {
       width: 'calc(100% - 385px)',
-      className: 'p-8 flex flex-col bg-black pb-12 pl-10 text-white gap-[26px]',
+      className: 'p-8 flex flex-col bg-black pb-12 pl-10 text-white gap-[20px]',
     },
   },
 
@@ -26,16 +26,16 @@ const mohsinaContrast = {
     {
       id: 'header',
       type: 'banner',
-      className: 'mb-4 w-full z-10 pt-10 px-8',
+      className: 'mb-2 w-full z-10 pt-10 px-8',
       fields: {
         container: {
           type: 'group',
-          className: 'flex flex-row justify-between items-center w-full gap-4',
+          className: 'flex flex-row justify-between items-center w-full gap-[172px]',
           items: [
             // Left: Name and Title
             {
               type: 'group',
-              className: 'flex flex-col w-120',
+              className: 'flex flex-col max-w-[450px] gap-1',
               items: [
                 {
                   type: 'text',
@@ -47,7 +47,7 @@ const mohsinaContrast = {
                   type: 'text',
                   path: 'personalDetails.items[0].jobTitle',
                   fallback: 'Digital Marketing Specialist',
-                  className: 'text-[22px] font-bold text-[#E6753E] uppercase tracking-widest leading-tight',
+                  className: 'text-[22px] font-bold text-[#E6753E] uppercase tracking-widest leading-tight mt-1',
                 },
               ],
             },
@@ -55,7 +55,7 @@ const mohsinaContrast = {
             {
               type: 'group',
               className:
-                'flex w-[98.605px] h-[98.605px] p-[9.328px] items-center justify-center flex-shrink-0 bg-[#E6753E] rounded-full overflow-hidden',
+                'flex w-[98.605px] h-[98.605px] p-[9.328px] items-center justify-center flex-shrink-0 bg-[#E6753E] overflow-hidden',
               items: [
                 {
                   type: 'image',
@@ -102,7 +102,7 @@ const mohsinaContrast = {
       listPath: 'experience.items',
       containerClassName: 'flex flex-col gap-4',
       itemTemplate: {
-        className: 'flex flex-col gap-0',
+        className: 'flex flex-col  max-w-[419px]',
         break: true,
         fields: [
           {
@@ -113,13 +113,13 @@ const mohsinaContrast = {
           {
             path: 'company',
             fallback: 'ORACLE',
-            className: 'text-[18px] font-bold text-white tracking-widest leading-none block mt-1',
+            className: 'text-[18px] font-bold text-white tracking-widest leading-none ',
           },
           {
             type: 'duration',
             path: 'duration',
             fallback: 'Jan 2022 - Dec 2022',
-            className: 'text-xs font-medium text-white tracking-widest leading-none block mt-1 ',
+            className: 'text-xs font-medium text-white tracking-widest uppercase leading-tight block mt-0 ',
           },
           {
             type: 'html',
@@ -141,9 +141,9 @@ const mohsinaContrast = {
         className: 'text-base text-[#E6753E] font-bold leading-[21px] mb-2',
       },
       listPath: 'projects.items',
-      containerClassName: 'flex flex-col gap-5',
+      containerClassName: 'flex flex-col gap-3',
       itemTemplate: {
-        className: 'flex flex-col gap-0',
+        className: 'flex flex-col gap-2 max-w-[419px]',
         break: true,
         fields: [
           {
@@ -155,7 +155,7 @@ const mohsinaContrast = {
             type: 'duration',
             path: 'duration',
             fallback: 'Jan 2022 - Dec 2022',
-            className: 'text-xs font-medium text-white tracking-widest leading-none',
+            className: 'text-xs font-medium text-white tracking-widest uppercase leading-none',
           },
           {
             type: 'html',
@@ -300,37 +300,37 @@ const mohsinaContrast = {
         className: 'text-base text-[#E6753E] font-bold leading-[21px] mb-[8px]',
       },
       listPath: 'education.items',
-      containerClassName: 'flex flex-col gap-2',
+      containerClassName: 'flex flex-col gap-[12px]',
       itemTemplate: {
-        className: 'flex flex-col gap-1',
+        className: 'flex flex-col gap-1 w-[270px]',
         break: true,
         fields: [
           {
             path: 'degree',
             fallback: 'Bachelor of Design',
-            className: 'text-[18px] font-bold text-white tracking-widest leading-tight',
+            className: 'text-[18px] font-bold text-white leading-tight',
           },
           {
-            className: '',
             type: 'inline-group',
             separator: ' | ',
+            className: 'flex flex-row items-baseline gap-1 -mt-1 -mb-1',
             items: [
               {
                 path: 'grade.value',
                 fallback: '9.0 CGPA',
-                className: 'text-xs font-bold text-[#E6753E] tracking-widest leading-tight ',
+                className: 'text-xs font-bold text-[#E6753E] tracking-widest leading-none w-[93px] shrink-0',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-xs font-normal text-white tracking-widest leading-tight',
+                className: 'text-xs font-normal text-white tracking-widest uppercase leading-none w-[163px] shrink-0',
               },
             ],
           },
           {
             path: 'institution',
             fallback: 'National Institute of Design',
-            className: 'text-[13px] font-normal text-[#75787B] leading-normal mt-1',
+            className: 'text-[13px] font-normal text-[#75787B] leading-tight',
           },
         ],
       },
@@ -346,20 +346,20 @@ const mohsinaContrast = {
         className: 'text-base text-[#E6753E] font-bold leading-[21px] mb-[8px]',
       },
       listPath: 'certifications.items',
-      containerClassName: 'flex flex-col gap-[4px]',
+      containerClassName: 'flex flex-col gap-[8px]',
       itemTemplate: {
-        className: 'flex flex-col gap-0',
+        className: 'flex flex-col gap-1 max-w-[270px]',
         break: true,
         fields: [
           {
             path: 'title',
             fallback: 'Certification Title',
-            className: 'text-[18px] font-bold text-white tracking-widest leading-tight',
+            className: 'text-[18px] font-semibold text-white  leading-tight',
           },
           {
             type: 'duration',
             path: 'duration',
-            className: 'text-xs font-normal text-[#75787B] tracking-widest leading-tight',
+            className: 'text-xs font-normal text-[#75787B] tracking-widest uppercase leading-tight block -mt-0',
           },
         ],
       },
@@ -377,7 +377,7 @@ const mohsinaContrast = {
       listPath: 'skills.items',
       itemPath: 'name',
       showBullet: true,
-      itemClassName: 'text-[13px] font-normal text-[#75787B] leading-[18px]',
+      itemClassName: 'text-[13px] font-normal text-[#75787B] leading-[18px] max-w-[270px]',
     },
     {
       id: 'interests',
@@ -393,7 +393,7 @@ const mohsinaContrast = {
       },
       listPath: 'interests.items[0].items',
       itemPath: '',
-      itemClassName: 'text-[13px] font-normal text-[#75787B] leading-[18px]',
+      itemClassName: 'text-[13px] font-normal text-[#75787B] leading-[18px] max-w-[270px]',
     },
   ],
 };

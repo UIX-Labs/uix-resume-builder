@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { FieldErrorBadges } from '../error-badges';
 import { getFieldErrors } from '../../lib/get-field-errors';
 import type { SuggestedUpdates } from '@entities/resume';
+import { PlusIcon } from 'lucide-react';
 
 function CollapsedState({ value, subValue }: { value: string; subValue: string }) {
   return (
@@ -153,6 +154,45 @@ export function Draggable({
     newCollapsed[index] = !newCollapsed[index];
     setCollapsed(newCollapsed);
   }
+
+  function handleAddFirstItem() {
+   
+    const newItem: Record<string, string> = { itemId: crypto.randomUUID() };
+    
+    Object.keys(section).forEach((key) => {
+      const fieldDef = section[key];
+      
+      if (
+        key === 'label' || 
+        key === 'itemsType' || 
+        key === 'collapsedState' ||
+        typeof fieldDef !== 'object' ||
+        fieldDef === null
+      ) {
+        return;
+      }
+
+      newItem[key] = '';
+    });
+
+    onChange([newItem]);
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="flex items-center justify-center p-8 border border-dashed border-gray-400 rounded-[12px] bg-white">
+        <button
+          type="button"
+          onClick={handleAddFirstItem}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-dark-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+        >
+          <PlusIcon size={16}/>
+          <span>Add Item</span>
+        </button>
+      </div>
+    );
+  }
+
   return (
     <Sortable data={data} getId={(item) => item.itemId} onDragEnd={onChange}>
       {(localData) => {

@@ -7,6 +7,8 @@ import { Input } from '@shared/ui/components/input';
 import { ArrowLeft, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { SECTION_ICONS, SECTION_PLACEHOLDERS } from '../lib/section-utils';
 
+
+
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
   formData: Omit<ResumeData, 'templateId'>;
@@ -14,6 +16,7 @@ interface MobileSectionListProps {
   onSectionClick: (step: ResumeDataKey) => void;
   onBackClick: () => void;
   onToggleHideSection?: (sectionId: string, isHidden: boolean) => void;
+  importSource?: 'linkedin' | 'pdf' | null;
 }
 
 const SectionItemWithData = ({
@@ -53,6 +56,9 @@ const SectionItemWithData = ({
   );
 };
 
+  
+
+
 export function MobileSectionList({
   navs,
   formData,
@@ -60,10 +66,11 @@ export function MobileSectionList({
   onSectionClick,
   onBackClick,
   onToggleHideSection,
+  importSource,
 }: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})
-      .filter(([_, sectionData]) => sectionData?.isCompleted)
+      .filter(([_, sectionData]) => typeof sectionData === 'object' && sectionData !== null && 'isCompleted' in sectionData && (sectionData as any).isCompleted)
       .map(([key]) => key),
   );
 
@@ -155,10 +162,12 @@ export function MobileSectionList({
 
         <div className="flex-1">
           <h1 className="text-[18px] font-semibold text-section-text-primary">Your resume is ready</h1>
-          <p className="text-[13px] text-section-text-secondary">
-            We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit, improve,
-            or personalize it anytime.
-          </p>
+          {importSource === 'linkedin' && (
+            <p className="text-[13px] text-section-text-secondary">
+              We've filled in all your details from LinkedIn. Take a moment to review everything — you can edit,
+              improve, or personalize it anytime.
+            </p>
+          )}
         </div>
       </div>
 

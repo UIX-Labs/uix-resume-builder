@@ -1,3 +1,4 @@
+import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
 import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
@@ -68,11 +69,11 @@ export default function ResumeCreationCard({
 
   const [showJDUpload, setShowJDUpload] = useState(false);
   const [showResumeUpload, setShowResumeUpload] = useState(false);
-  const [activeAction, setActiveAction] = useState<'create' | 'upload' | 'tailoredResume' | 'tailoredJD' | null>(null);
+  const [activeAction, setActiveAction] = useState<ResumeCreationActionType>(null);
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: 'create' | 'upload' | 'tailoredResume' | 'tailoredJD') => {
+  const lockOptions = useCallback((action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_RESUME | ResumeCreationAction.TAILORED_JD) => {
     setActiveAction(action);
     setOptionsLocked(true);
   }, []);
@@ -87,7 +88,7 @@ export default function ResumeCreationCard({
   });
 
   const resumeCreateHandler = async () => {
-    lockOptions('create');
+    lockOptions(ResumeCreationAction.CREATE);
     setShowScanningOverlay(true);
 
     trackEvent('create_resume_click', {
@@ -142,7 +143,7 @@ export default function ResumeCreationCard({
 
     setTimeout(() => {
       setShowScanningOverlay(false);
-      router.push(`/resume/${data.resumeId}`);
+      router.push(`/resume/${data.resumeId}?importSource=pdf`);
     }, 300);
   };
 
@@ -154,7 +155,7 @@ export default function ResumeCreationCard({
 
   const handleUploadPendingChange = (pending: boolean) => {
     if (pending) {
-      lockOptions('upload');
+      lockOptions(ResumeCreationAction.UPLOAD);
       setShowScanningOverlay(true);
       return;
     }
@@ -182,7 +183,7 @@ export default function ResumeCreationCard({
       return;
     }
 
-    lockOptions('tailoredJD');
+    lockOptions(ResumeCreationAction.TAILORED_JD);
 
     if (isMobile) {
       handleJDModal(true);

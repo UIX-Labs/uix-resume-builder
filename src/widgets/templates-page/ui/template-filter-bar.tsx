@@ -1,5 +1,6 @@
 'use client';
 
+import { Label } from '@/shared/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/shared/ui/popover';
 import type { Template } from '@entities/template-page/api/template-data';
 import type { TemplateFilters } from '@entities/template-page/types/template-filters';
@@ -106,7 +107,7 @@ function FilterMultiSelect({ label, selected, options, onChange }: FilterMultiSe
       </PopoverTrigger>
       <PopoverContent align="start" className="p-1 min-w-[180px] max-h-[300px] overflow-y-auto">
         {options.map((opt) => (
-          <div
+          <Label
             key={opt.value}
             className="flex items-center gap-2 px-3 py-1.5 hover:bg-gray-50 cursor-pointer text-sm rounded"
           >
@@ -122,7 +123,7 @@ function FilterMultiSelect({ label, selected, options, onChange }: FilterMultiSe
               />
             )}
             <span className="flex-1 truncate">{label === 'Role' ? formatRoleName(opt.label) : opt.label}</span>
-          </div>
+          </Label>
         ))}
       </PopoverContent>
     </Popover>
@@ -247,6 +248,7 @@ export function TemplateFilterBar({
             />
           </div>
 
+          {/* Color filter — hidden until color swatch implementation is complete
           <div className="flex items-center gap-[15px] flex-shrink-0 bg-gray-50/50 px-4 py-2 rounded-xl border border-gray-100 ml-4">
             <span className="text-sm font-semibold text-gray-500 whitespace-nowrap">Colors :</span>
             <div className="flex items-center gap-3">
@@ -271,6 +273,7 @@ export function TemplateFilterBar({
               ))}
             </div>
           </div>
+          */}
         </div>
 
         {/* Row 2: Active filters */}

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter, Lato, Montserrat, Poppins } from 'next/font/google';
+import { Geist, Geist_Mono, Inter, Lato, Montserrat, Mulish, Poppins } from 'next/font/google';
 import Script from 'next/script';
 import '../app/globals.css';
 
@@ -45,6 +45,12 @@ const lato = Lato({
   style: ['normal', 'italic'],
   weight: ['100', '300', '400', '700', '900'],
 });
+const mulish = Mulish({
+  variable: '--font-mulish',
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['200', '300', '400', '500', '600', '700', '800', '900'],
+});
 
 const DOMAIN_URL = process.env.NEXT_PUBLIC_DOMAIN_URL || 'https://pikaresume.com';
 const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/Pika-Resume-logo_tkkeon.webp';
@@ -52,7 +58,7 @@ const LOGO_URL = 'https://res.cloudinary.com/dvrzhxhmr/image/upload/v1765530541/
 export const metadata: Metadata = {
   title: {
     default: 'Pika Resume - Build AI Powered Resume in Minutes',
-    template: '%s | Pika Resume',
+    template: '',
   },
   description: 'Choose from practical resume templates and power it with smart resume builder suggestions.',
   metadataBase: new URL(DOMAIN_URL),
@@ -162,7 +168,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${poppins.variable} ${lato.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${poppins.variable} ${lato.variable} ${mulish.variable} antialiased`}
       >
         <Script
           id="structured-data"

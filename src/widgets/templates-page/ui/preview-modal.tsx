@@ -50,25 +50,29 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
           )}
         >
           <DialogTitle className="sr-only">Resume Preview</DialogTitle>
-          <button
-            type="button"
-            onClick={onClose}
-            className="absolute -top-3 -right-3 md:-top-4 md:-right-4 z-[100] cursor-pointer bg-white rounded-full p-1 shadow-lg hover:bg-gray-100 transition-colors"
-          >
-            <CloseIcon className="h-6 w-6 md:h-8 md:w-8" />
-          </button>
 
           {showImage ? (
-            <div className="relative w-full h-full overflow-y-auto flex justify-center">
+            <div className="w-full h-full overflow-y-auto flex justify-center [&::-webkit-scrollbar]:hidden
+            [-ms-overflow-style:none]
+            [scrollbar-width:none]">
+               <div className="relative">
               <Image
                 src={activeTemplate.publicImageUrl}
                 alt={`Template ${activeTemplate.id} preview`}
                 width={794}
                 height={1123}
-                className="object-contain rounded-lg shadow-2xl"
+                className="object-contain rounded-lg shadow-2xl relative"
                 unoptimized
               />
-            </div>
+            <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-0 right-0 md:right-0 md:top-0 z-[100] cursor-pointer bg-white rounded-full p-0 shadow-lg hover:bg-gray-100 transition-colors"
+          >
+            <CloseIcon className="h-6 w-6 md:h-10 md:w-10" />
+          </button>
+           </div>
+           </div>
           ) : (
             <div ref={containerRef} className="h-full overflow-y-auto">
               <div
@@ -97,3 +101,6 @@ export function PreviewModal({ template, isOpen, onClose, resumeData }: PreviewM
     </Dialog>
   );
 }
+
+
+

@@ -1,9 +1,9 @@
+import { Achievements } from '@shared/icons/achievements';
 import { Education } from '@shared/icons/education';
 import { Experience } from '@shared/icons/experience';
 import { PersonalInfo } from '@shared/icons/personal-info';
 import { ProfessionalSummary } from '@shared/icons/prof-summary';
 import { Skills } from '@shared/icons/skills';
-import { Achievements } from '@shared/icons/achievements';
 
 export const SECTION_ICONS = {
   personalDetails: PersonalInfo,
@@ -126,8 +126,7 @@ export function isSectionEmpty(section: unknown): boolean {
         return false;
       } else if (typeof item === 'object' && item !== null) {
         const hasNonEmptyField = Object.entries(item as Record<string, unknown>).some(([key, value]) => {
-          // Skip id, title, itemId, rank, ongoing and metadata fields
-          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank' || key === 'title') {
+          if (key === 'id' || key === 'itemId' || key === 'ongoing' || key === 'rank') {
             return false;
           }
 

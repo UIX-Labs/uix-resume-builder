@@ -8,7 +8,9 @@ export interface ResumeExampleListItem {
   colorName: string;
   layout: string;
   publicThumbnail: { url: string } | null;
+  templateImageUrl: string | null;
   category: { slug: string; name: string };
+  categories: { id: string; slug: string; name: string }[];
   template: { id: string; json: Record<string, any> | null };
 }
 

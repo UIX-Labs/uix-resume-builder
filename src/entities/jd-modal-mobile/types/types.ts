@@ -44,7 +44,7 @@ export interface StepProps {
 
 export type UploadJDStepProps = Pick<StepProps, StepPropKey.JD_FILE_INPUT_REF | StepPropKey.ON_JD_FILE_SELECT>;
 
-export type UploadingJDStepProps = Pick<StepProps, StepPropKey.UPLOAD_PROGRESS | StepPropKey.ON_REMOVE_JD>;
+export type UploadingJDStepProps = Pick<StepProps, StepPropKey.UPLOAD_PROGRESS | StepPropKey.ON_REMOVE_JD  | StepPropKey.JD_FILE>;
 
 export type UploadResumeStepProps = Pick<
   StepProps,

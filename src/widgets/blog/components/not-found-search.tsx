@@ -2,14 +2,18 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 interface NotFoundSearchProps {
-  suggestions: { label: string; slug: string }[];
+  suggestions: { label: string; slug: string; isCategory?: boolean }[];
 }
 
 export default function NotFoundSearch({ suggestions }: NotFoundSearchProps) {
   const router = useRouter();
 
-  const handleSuggestionClick = (slug: string) => {
-    router.push(`/blog/${slug}`);
+  const handleSuggestionClick = (suggestion: { slug: string; isCategory?: boolean }) => {
+    if (suggestion.isCategory) {
+      router.push(`/blog/categories/${suggestion.slug}`);
+    } else {
+      router.push(`/blog/${suggestion.slug}`);
+    }
   };
 
   return (
@@ -33,9 +37,9 @@ export default function NotFoundSearch({ suggestions }: NotFoundSearchProps) {
             <button
               key={suggestion.slug}
               type="button"
-              onClick={() => handleSuggestionClick(suggestion.slug)}
+              onClick={() => handleSuggestionClick(suggestion)}
               className="px-4 py-2 md:px-4 md:py-3
-              rounded-lg bg-[#EB5E3B] text-white text-sm md:text-base line-clamp-2 hover:bg-red-500 transition-colors duration-200 cursor-pointer"
+              rounded-lg bg-[#EB5E3B] text-white text-sm md:text-base line-clamp-2 hover:bg-red-500 transition-colors duration-200 cursor-pointer uppercase font-semibold"
             >
               {suggestion.label}
             </button>

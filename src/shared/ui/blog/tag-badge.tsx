@@ -32,7 +32,7 @@ export function TagBadge({ tag, isActive, onClick, size = 'sm' }: TagBadgeProps)
       type="button"
       onClick={onClick}
       className={cn(
-        'inline-flex items-center rounded-full border font-medium transition-all duration-200',
+        'inline-flex items-center rounded-full border font-medium transition-all duration-200 uppercase',
         size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3.5 py-1.5 text-sm',
         colorClass,
         isActive && 'ring-2 ring-offset-1 ring-current shadow-sm',

@@ -24,33 +24,28 @@ function DashboardContent() {
   const setFormData = useFormDataStore((state) => state.setFormData);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(null);
-  const [templateId, setTemplateId] = useState<string | null>(null);
+  const action = searchParams?.get('action');
+  const tId = searchParams?.get('templateId');
+  const openModal = searchParams?.get('openModal');
+
+  const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(() => {
+    if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') return action;
+    if (openModal === 'jd') return 'tailored_jd';
+    return null;
+  });
 
   useEffect(() => {
-    // Unified action param: ?action=from_scratch | upload | tailored_jd
-    const action = searchParams?.get('action');
-    const tId = searchParams?.get('templateId');
-    // Backward compat: ?openModal=jd
-    const openModal = searchParams?.get('openModal');
+    const isNewAction = action === 'from_scratch' || action === 'upload' || action === 'tailored_jd';
+    const isLegacyAction = openModal === 'jd';
 
-    if (tId) {
-      setTemplateId(tId);
-    }
+    if (isNewAction || isLegacyAction) {
+      if (isNewAction) setAutoAction(action);
+      else setAutoAction('tailored_jd');
 
-    if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') {
-      setAutoAction(action);
-      // router.replace('/dashboard');
-       router.replace(
-    tId
-      ? `/dashboard?templateId=${tId}`
-      : '/dashboard'
-  )
-    } else if (openModal === 'jd') {
-      setAutoAction('tailored_jd');
-      router.replace('/dashboard');
+      router.replace(tId ? `/dashboard?templateId=${tId}` : '/dashboard');
     }
-  }, [searchParams, router]);
+  }, [action, openModal, tId, router]);
+  const templateId = tId;
 
   useEffect(() => {
     const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');

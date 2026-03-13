@@ -28,8 +28,19 @@ export function MetadataStep({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <LabeledInput label="Title *" value={metadata.title} onChange={onTitleChange} placeholder="e.g., Senior Software Engineer Resume" />
-      <LabeledInput label="Slug *" value={metadata.slug} onChange={(v) => set('slug', v)} placeholder="auto-generated-from-title" mono />
+      <LabeledInput
+        label="Title *"
+        value={metadata.title}
+        onChange={onTitleChange}
+        placeholder="e.g., Senior Software Engineer Resume"
+      />
+      <LabeledInput
+        label="Slug *"
+        value={metadata.slug}
+        onChange={(v) => set('slug', v)}
+        placeholder="auto-generated-from-title"
+        mono
+      />
       <div className="space-y-1">
         <Label>Categories *</Label>
         {categoriesError ? (
@@ -55,8 +66,19 @@ export function MetadataStep({
           />
         )}
       </div>
-      <LabeledInput label="Role" value={metadata.role} onChange={(v) => set('role', v)} placeholder="e.g., Software Engineer" />
-      <LabeledInput label="Experience Years" value={metadata.experienceYears} onChange={(v) => set('experienceYears', v)} type="number" placeholder="e.g., 5" />
+      <LabeledInput
+        label="Role"
+        value={metadata.role}
+        onChange={(v) => set('role', v)}
+        placeholder="e.g., Software Engineer"
+      />
+      <LabeledInput
+        label="Experience Years"
+        value={metadata.experienceYears}
+        onChange={(v) => set('experienceYears', v)}
+        type="number"
+        placeholder="e.g., 5"
+      />
       <div className="space-y-1">
         <Label htmlFor="metadata-primary-color">Primary Color</Label>
         <div className="flex gap-2">
@@ -74,7 +96,12 @@ export function MetadataStep({
           />
         </div>
       </div>
-      <LabeledInput label="Color Name" value={metadata.colorName} onChange={(v) => set('colorName', v)} placeholder="e.g., Blue" />
+      <LabeledInput
+        label="Color Name"
+        value={metadata.colorName}
+        onChange={(v) => set('colorName', v)}
+        placeholder="e.g., Blue"
+      />
       <div className="space-y-1">
         <Label htmlFor="metadata-layout">Layout</Label>
         <select
@@ -88,8 +115,18 @@ export function MetadataStep({
         </select>
       </div>
       <LabeledInput label="Rank" value={metadata.rank.toString()} onChange={(v) => set('rank', v)} type="number" />
-      <LabeledInput label="Meta Title" value={metadata.metaTitle} onChange={(v) => set('metaTitle', v)} placeholder="SEO title" />
-      <LabeledInput label="Meta Description" value={metadata.metaDescription} onChange={(v) => set('metaDescription', v)} placeholder="SEO description" />
+      <LabeledInput
+        label="Meta Title"
+        value={metadata.metaTitle}
+        onChange={(v) => set('metaTitle', v)}
+        placeholder="SEO title"
+      />
+      <LabeledInput
+        label="Meta Description"
+        value={metadata.metaDescription}
+        onChange={(v) => set('metaDescription', v)}
+        placeholder="SEO description"
+      />
       <div className="flex items-center gap-2 pt-4">
         <Checkbox
           id="isPublished"
@@ -115,14 +152,10 @@ function CategoryMultiSelect({
 }) {
   const [open, setOpen] = useState(false);
 
-  const selectedNames = categories
-    .filter((c) => selectedIds.includes(c.id))
-    .map((c) => c.name);
+  const selectedNames = categories.filter((c) => selectedIds.includes(c.id)).map((c) => c.name);
 
   const toggle = (id: string) => {
-    const next = selectedIds.includes(id)
-      ? selectedIds.filter((i) => i !== id)
-      : [...selectedIds, id];
+    const next = selectedIds.includes(id) ? selectedIds.filter((i) => i !== id) : [...selectedIds, id];
     onChange(next);
   };
 
@@ -170,10 +203,7 @@ function CategoryMultiSelect({
                 key={c.id}
                 className="flex items-center gap-2 px-2 py-1.5 rounded cursor-pointer hover:bg-gray-100 transition-colors"
               >
-                <Checkbox
-                  checked={isChecked}
-                  onCheckedChange={() => toggle(c.id)}
-                />
+                <Checkbox checked={isChecked} onCheckedChange={() => toggle(c.id)} />
                 <span className="text-sm">{c.name}</span>
               </label>
             );

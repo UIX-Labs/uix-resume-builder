@@ -258,9 +258,7 @@ export function FilterBar({ filters, onFilterChange, onReset, resultCount }: Fil
             label="Layout"
             selected={selectedLayout}
             options={LAYOUT_OPTIONS}
-            onChange={(values) =>
-              onFilterChange({ layout: values.length > 0 ? values[values.length - 1] : undefined })
-            }
+            onChange={(values) => onFilterChange({ layout: values.length > 0 ? values[values.length - 1] : undefined })}
           />
         </div>
 
@@ -298,9 +296,7 @@ export function FilterBar({ filters, onFilterChange, onReset, resultCount }: Fil
       >
         <div className="overflow-hidden">
           <div className="flex items-center gap-[15px] flex-wrap pt-3 justify-center">
-            {resultCount !== undefined && (
-              <span className="text-sm text-gray-500">Results ({resultCount})</span>
-            )}
+            {resultCount !== undefined && <span className="text-sm text-gray-500">Results ({resultCount})</span>}
             {activeFilterPills.map((pill) => (
               <span
                 key={pill.label}

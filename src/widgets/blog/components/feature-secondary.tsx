@@ -45,7 +45,6 @@ export default function FeaturedSecondaryCard({ post, featureImage, badgeColor }
           </h3>
 
           <div className="flex items-center gap-3 mt-4">
-
             <AuthorImage author={post.frontmatter.author} />
 
             <div className="flex items-center text-[10px] sm:text-[12px] font-medium" style={{ color: '#8A8C99' }}>

@@ -16,15 +16,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchAndMergeResumeData } from '../lib/merge-resume-data';
 import type { ResumeData, ResumeDataKey } from '../types/resume-data';
 
-
 interface ParseLinkedInPayload {
   url: string;
   templateId?: string;
 }
 
 interface ParsePdfPayload {
-  file: File
-  templateId?: string
+  file: File;
+  templateId?: string;
 }
 
 export function useTemplateFormSchema() {
@@ -58,7 +57,6 @@ export const useDeleteResume = () => {
   return useMutation({
     mutationFn: deleteResume,
     onSuccess: () => {
-
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },
   });
@@ -78,14 +76,13 @@ export const useUpdateResumeTemplate = () => {
 // export const useParseLinkedInProfile = () => {
 //   return useMutation({
 //     mutationFn: (url: string) => parseLinkedInProfile(url),
-    
+
 //   });
 // };
 
 export const useParseLinkedInProfile = () => {
   return useMutation({
-    mutationFn: ({ url, templateId }: ParseLinkedInPayload) =>
-      parseLinkedInProfile(url, templateId),
+    mutationFn: ({ url, templateId }: ParseLinkedInPayload) => parseLinkedInProfile(url, templateId),
   });
 };
 
@@ -101,8 +98,7 @@ export const useParsePdfResume = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ file, templateId }: ParsePdfPayload) =>
-      parsePdfResume(file, templateId),
+    mutationFn: ({ file, templateId }: ParsePdfPayload) => parsePdfResume(file, templateId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['resumes'] });
     },

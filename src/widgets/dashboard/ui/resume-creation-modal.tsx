@@ -42,7 +42,6 @@ export default function ResumeCreationModal({
   const router = useRouter();
   const user = useUserProfile();
 
- 
   const effectiveTemplateId = templateId || template?.id;
 
   const navigateToDashboardWithAction = useCallback(
@@ -88,32 +87,32 @@ export default function ResumeCreationModal({
     onActionLock(ResumeCreationAction.CREATE);
     onClose();
 
-      trackEvent('create_resume_click', {
-        source: template ? 'template_modal' : 'dashboard_modal',
-        method: 'from_scratch',
-        ...(effectiveTemplateId && { templateId: effectiveTemplateId }),
+    trackEvent('create_resume_click', {
+      source: template ? 'template_modal' : 'dashboard_modal',
+      method: 'from_scratch',
+      ...(effectiveTemplateId && { templateId: effectiveTemplateId }),
+    });
+
+    // For guest users, create guest email for API tracking
+    if (!user.data?.isLoggedIn) {
+      getOrCreateGuestEmail();
+    }
+
+    if (!user.data?.id && user.data?.isLoggedIn) {
+      onActionRelease();
+      return;
+    }
+
+    try {
+      const title = getTitle();
+
+      const data = await createResumeMutation.mutateAsync({
+        title,
+        templateId: effectiveTemplateId || undefined,
+        userInfo: {
+          userId: user.data?.id ?? '',
+        },
       });
-
-      // For guest users, create guest email for API tracking
-      if (!user.data?.isLoggedIn) {
-        getOrCreateGuestEmail();
-      }
-
-      if (!user.data?.id && user.data?.isLoggedIn) {
-        onActionRelease();
-        return;
-      }
-
-      try {
-        const title = getTitle();
-
-        const data = await createResumeMutation.mutateAsync({
-          title,
-          templateId: effectiveTemplateId || undefined,
-          userInfo: {
-            userId: user.data?.id ?? '',
-          },
-        });
 
       router.push(`/resume/${data.id}`);
     } catch (error) {

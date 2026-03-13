@@ -9,14 +9,10 @@ interface UploadingStepProps {
   title: string;
   subtitle: string;
   fileSize?: number;
-
 }
 
 export function UploadingStep({ uploadProgress, onCancel, title, subtitle, fileSize }: UploadingStepProps) {
-    const formattedSize = fileSize
-  ? `${(fileSize / 1024 / 1024).toFixed(2)} MB`
-  : '';
-
+  const formattedSize = fileSize ? `${(fileSize / 1024 / 1024).toFixed(2)} MB` : '';
 
   return (
     <>
@@ -42,7 +38,9 @@ export function UploadingStep({ uploadProgress, onCancel, title, subtitle, fileS
                 <span className="text-[#CEEEDD] font-semibold text-center leading-[1.2em] tracking-[-0.03em] text-5xl">
                   {uploadProgress}%
                 </span>
-                 <span className="text-[#75A88D] text-xs leading-[1.5em] text-center font-normal mt-0.5">{formattedSize}</span> 
+                <span className="text-[#75A88D] text-xs leading-[1.5em] text-center font-normal mt-0.5">
+                  {formattedSize}
+                </span>
               </div>
             </div>
           </CircularProgress>

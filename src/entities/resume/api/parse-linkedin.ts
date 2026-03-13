@@ -1,11 +1,11 @@
 import { fetch } from '@shared/api';
 import type { ParseLinkedInResponse } from '../types';
 
-export async function parseLinkedInProfile(url: string,templateId?:string): Promise<ParseLinkedInResponse> {
+export async function parseLinkedInProfile(url: string, templateId?: string): Promise<ParseLinkedInResponse> {
   try {
     const encodedUrl = encodeURIComponent(url);
     let endpoint = `resume/parse-linkedin?url=${encodedUrl}`;
-    if(templateId){
+    if (templateId) {
       endpoint += `&templateId=${templateId}`;
     }
     const response = await fetch<ParseLinkedInResponse>(endpoint);
@@ -15,6 +15,3 @@ export async function parseLinkedInProfile(url: string,templateId?:string): Prom
     throw new Error(error instanceof Error ? error.message : 'Failed to parse LinkedIn profile. Please try again.');
   }
 }
-
-
-

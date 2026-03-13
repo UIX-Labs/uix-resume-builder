@@ -20,8 +20,6 @@ interface FileUploadProps {
   templateId?: string;
 }
 
-
-
 export interface FileUploadHandle {
   triggerClick: () => void;
 }

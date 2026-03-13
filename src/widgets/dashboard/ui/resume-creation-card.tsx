@@ -73,10 +73,19 @@ export default function ResumeCreationCard({
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_RESUME | ResumeCreationAction.TAILORED_JD) => {
-    setActiveAction(action);
-    setOptionsLocked(true);
-  }, []);
+  const lockOptions = useCallback(
+    (
+      action:
+        | ResumeCreationAction.CREATE
+        | ResumeCreationAction.UPLOAD
+        | ResumeCreationAction.TAILORED_RESUME
+        | ResumeCreationAction.TAILORED_JD,
+    ) => {
+      setActiveAction(action);
+      setOptionsLocked(true);
+    },
+    [],
+  );
 
   const releaseOptions = useCallback(() => {
     setActiveAction(null);
@@ -175,9 +184,7 @@ export default function ResumeCreationCard({
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      const callbackUrl = templateId
-        ? `/dashboard?action=tailored_jd&templateId=${templateId}`
-        : '/dashboard';
+      const callbackUrl = templateId ? `/dashboard?action=tailored_jd&templateId=${templateId}` : '/dashboard';
       setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       setIsAuthModalOpen(true);
       return;
@@ -347,9 +354,8 @@ export default function ResumeCreationCard({
         onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
         templateId={templateId}
-      
       />
-   
+
       <div className="relative hidden md:block min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
         <div className="relative z-10 m-5 h-[237px] bg-white/10 rounded-2xl border border-dashed border-[rgb(204,212,223)] flex items-center justify-center p-6">
           <div className="w-full">

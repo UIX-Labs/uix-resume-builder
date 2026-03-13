@@ -60,14 +60,9 @@ export default function BuilderIntelligenceModal({
     try {
       const formData = new FormData();
       formData.append('resume', resumeFile);
-      if(templateId){
+      if (templateId) {
         formData.append('templateId', templateId);
       }
-     
-
-
-
-
 
       let response: UpdateResumeAnalyzer;
 

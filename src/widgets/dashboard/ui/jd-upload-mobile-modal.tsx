@@ -101,7 +101,9 @@ export default function JDUploadMobileModal({
                   return <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />;
 
                 case ModalStep.UPLOADING_JD:
-                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />;
+                  return (
+                    <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />
+                  );
 
                 case ModalStep.UPLOAD_RESUME:
                   return (
@@ -129,7 +131,6 @@ export default function JDUploadMobileModal({
                       onRetryResume={handleRetryResume}
                       onRunPikaIntelligence={handleAnalyze}
                       // isSubmitting={isSubmitting}
-                      
                     />
                   );
 

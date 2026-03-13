@@ -23,16 +23,10 @@ export function PreviewStep({
   onSave: () => void;
   isSaving: boolean;
 }) {
-  const cleanedData = useMemo(
-    () => (resumeData ? getCleanDataForRenderer(resumeData) : null),
-    [resumeData],
-  );
+  const cleanedData = useMemo(() => (resumeData ? getCleanDataForRenderer(resumeData) : null), [resumeData]);
 
   // Filter out draft templates — only show active ones
-  const activeTemplates = useMemo(
-    () => templates.filter((t) => t.status !== 'draft'),
-    [templates],
-  );
+  const activeTemplates = useMemo(() => templates.filter((t) => t.status !== 'draft'), [templates]);
 
   if (!template) {
     return (

@@ -34,16 +34,54 @@ export function EditStep({
   return (
     <div className="space-y-4">
       {/* Personal Details */}
-      <SectionWrapper title="Personal Details" section="personalDetails" collapsed={collapsed} onToggle={toggleCollapse}>
+      <SectionWrapper
+        title="Personal Details"
+        section="personalDetails"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <LabeledInput label="Full Name" value={personalDetails.fullName || ''} onChange={(v) => updatePersonalDetails('fullName', v)} />
-          <LabeledInput label="Job Title" value={personalDetails.jobTitle || ''} onChange={(v) => updatePersonalDetails('jobTitle', v)} />
-          <LabeledInput label="Email" value={personalDetails.email || ''} onChange={(v) => updatePersonalDetails('email', v)} type="email" />
-          <LabeledInput label="Phone" value={personalDetails.phone || ''} onChange={(v) => updatePersonalDetails('phone', v)} />
-          <LabeledInput label="Address" value={personalDetails.address || ''} onChange={(v) => updatePersonalDetails('address', v)} />
-          <LabeledInput label="City" value={personalDetails.city || ''} onChange={(v) => updatePersonalDetails('city', v)} />
-          <LabeledInput label="State" value={personalDetails.state || ''} onChange={(v) => updatePersonalDetails('state', v)} />
-          <LabeledInput label="Country" value={personalDetails.country || ''} onChange={(v) => updatePersonalDetails('country', v)} />
+          <LabeledInput
+            label="Full Name"
+            value={personalDetails.fullName || ''}
+            onChange={(v) => updatePersonalDetails('fullName', v)}
+          />
+          <LabeledInput
+            label="Job Title"
+            value={personalDetails.jobTitle || ''}
+            onChange={(v) => updatePersonalDetails('jobTitle', v)}
+          />
+          <LabeledInput
+            label="Email"
+            value={personalDetails.email || ''}
+            onChange={(v) => updatePersonalDetails('email', v)}
+            type="email"
+          />
+          <LabeledInput
+            label="Phone"
+            value={personalDetails.phone || ''}
+            onChange={(v) => updatePersonalDetails('phone', v)}
+          />
+          <LabeledInput
+            label="Address"
+            value={personalDetails.address || ''}
+            onChange={(v) => updatePersonalDetails('address', v)}
+          />
+          <LabeledInput
+            label="City"
+            value={personalDetails.city || ''}
+            onChange={(v) => updatePersonalDetails('city', v)}
+          />
+          <LabeledInput
+            label="State"
+            value={personalDetails.state || ''}
+            onChange={(v) => updatePersonalDetails('state', v)}
+          />
+          <LabeledInput
+            label="Country"
+            value={personalDetails.country || ''}
+            onChange={(v) => updatePersonalDetails('country', v)}
+          />
         </div>
         <div className="mt-4 space-y-1">
           <Label htmlFor="professional-summary">Professional Summary</Label>
@@ -59,18 +97,46 @@ export function EditStep({
       </SectionWrapper>
 
       {/* Experience */}
-      <SectionWrapper title="Experience" section="experience" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.experience?.items?.length || 0}>
+      <SectionWrapper
+        title="Experience"
+        section="experience"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.experience?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.experience?.items || []}
           onChange={(items) => updateSection('experience', items)}
           renderItem={(item, index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <LabeledInput label="Company" value={item.company || ''} onChange={(v) => updateItem({ ...item, company: v })} />
-              <LabeledInput label="Position" value={item.position || ''} onChange={(v) => updateItem({ ...item, position: v })} />
-              <LabeledInput label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
+              <LabeledInput
+                label="Company"
+                value={item.company || ''}
+                onChange={(v) => updateItem({ ...item, company: v })}
+              />
+              <LabeledInput
+                label="Position"
+                value={item.position || ''}
+                onChange={(v) => updateItem({ ...item, position: v })}
+              />
+              <LabeledInput
+                label="Location"
+                value={item.location || ''}
+                onChange={(v) => updateItem({ ...item, location: v })}
+              />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} placeholder="e.g., Jan 2020" />
-              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} placeholder="e.g., Dec 2023 or Present" />
+              <LabeledInput
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+                placeholder="e.g., Jan 2020"
+              />
+              <LabeledInput
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+                placeholder="e.g., Dec 2023 or Present"
+              />
               <div className="col-span-full space-y-1">
                 <Label htmlFor={`experience-description-${index}`}>Description</Label>
                 <textarea
@@ -84,40 +150,108 @@ export function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ company: '', position: '', location: '', description: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
+          emptyItem={{
+            company: '',
+            position: '',
+            location: '',
+            description: '',
+            link: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+          }}
         />
       </SectionWrapper>
 
       {/* Education */}
-      <SectionWrapper title="Education" section="education" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.education?.items?.length || 0}>
+      <SectionWrapper
+        title="Education"
+        section="education"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.education?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.education?.items || []}
           onChange={(items) => updateSection('education', items)}
           renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <LabeledInput label="Institution" value={item.institution || ''} onChange={(v) => updateItem({ ...item, institution: v })} />
-              <LabeledInput label="Degree" value={item.degree || ''} onChange={(v) => updateItem({ ...item, degree: v })} />
-              <LabeledInput label="Field of Study" value={item.fieldOfStudy || item.fieldofStudy || ''} onChange={(v) => updateItem({ ...item, fieldOfStudy: v })} />
-              <LabeledInput label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
-              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
-              <LabeledInput label="Grade" value={item.grade || ''} onChange={(v) => updateItem({ ...item, grade: v })} />
+              <LabeledInput
+                label="Institution"
+                value={item.institution || ''}
+                onChange={(v) => updateItem({ ...item, institution: v })}
+              />
+              <LabeledInput
+                label="Degree"
+                value={item.degree || ''}
+                onChange={(v) => updateItem({ ...item, degree: v })}
+              />
+              <LabeledInput
+                label="Field of Study"
+                value={item.fieldOfStudy || item.fieldofStudy || ''}
+                onChange={(v) => updateItem({ ...item, fieldOfStudy: v })}
+              />
+              <LabeledInput
+                label="Location"
+                value={item.location || ''}
+                onChange={(v) => updateItem({ ...item, location: v })}
+              />
+              <LabeledInput
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <LabeledInput
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
+              <LabeledInput
+                label="Grade"
+                value={item.grade || ''}
+                onChange={(v) => updateItem({ ...item, grade: v })}
+              />
             </div>
           )}
-          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', duration: { startDate: '', endDate: '', ongoing: false }, grade: '' }}
+          emptyItem={{
+            institution: '',
+            degree: '',
+            fieldOfStudy: '',
+            location: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+            grade: '',
+          }}
         />
       </SectionWrapper>
 
       {/* Skills */}
-      <SectionWrapper title="Skills" section="skills" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.skills?.items?.length || 0}>
+      <SectionWrapper
+        title="Skills"
+        section="skills"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.skills?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.skills?.items || []}
           onChange={(items) => updateSection('skills', items)}
           renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              <LabeledInput label="Skill Name" value={item.name || ''} onChange={(v) => updateItem({ ...item, name: v })} />
-              <LabeledInput label="Category" value={item.category || ''} onChange={(v) => updateItem({ ...item, category: v })} placeholder="e.g., Programming" />
-              <LabeledInput label="Level" value={item.level || ''} onChange={(v) => updateItem({ ...item, level: v })} placeholder="e.g., Advanced" />
+              <LabeledInput
+                label="Skill Name"
+                value={item.name || ''}
+                onChange={(v) => updateItem({ ...item, name: v })}
+              />
+              <LabeledInput
+                label="Category"
+                value={item.category || ''}
+                onChange={(v) => updateItem({ ...item, category: v })}
+                placeholder="e.g., Programming"
+              />
+              <LabeledInput
+                label="Level"
+                value={item.level || ''}
+                onChange={(v) => updateItem({ ...item, level: v })}
+                placeholder="e.g., Advanced"
+              />
             </div>
           )}
           emptyItem={{ name: '', category: '', level: '' }}
@@ -126,16 +260,34 @@ export function EditStep({
       </SectionWrapper>
 
       {/* Projects */}
-      <SectionWrapper title="Projects" section="projects" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.projects?.items?.length || 0}>
+      <SectionWrapper
+        title="Projects"
+        section="projects"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.projects?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.projects?.items || []}
           onChange={(items) => updateSection('projects', items)}
           renderItem={(item, index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <LabeledInput label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
+              <LabeledInput
+                label="Title"
+                value={item.title || ''}
+                onChange={(v) => updateItem({ ...item, title: v })}
+              />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
+              <LabeledInput
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <LabeledInput
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
               <div className="col-span-full space-y-1">
                 <Label htmlFor={`project-description-${index}`}>Description</Label>
                 <textarea
@@ -147,25 +299,65 @@ export function EditStep({
                 />
               </div>
               <div className="col-span-full">
-                <LabeledInput label="Tech Stack (comma-separated)" value={(item.techStack || []).join(', ')} onChange={(v) => updateItem({ ...item, techStack: v.split(',').map((s: string) => s.trim()).filter(Boolean) })} />
+                <LabeledInput
+                  label="Tech Stack (comma-separated)"
+                  value={(item.techStack || []).join(', ')}
+                  onChange={(v) =>
+                    updateItem({
+                      ...item,
+                      techStack: v
+                        .split(',')
+                        .map((s: string) => s.trim())
+                        .filter(Boolean),
+                    })
+                  }
+                />
               </div>
             </div>
           )}
-          emptyItem={{ title: '', description: '', techStack: [], link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
+          emptyItem={{
+            title: '',
+            description: '',
+            techStack: [],
+            link: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+          }}
         />
       </SectionWrapper>
 
       {/* Certifications */}
-      <SectionWrapper title="Certifications" section="certifications" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.certifications?.items?.length || 0}>
+      <SectionWrapper
+        title="Certifications"
+        section="certifications"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.certifications?.items?.length || 0}
+      >
         <RepeatableSection
           items={resumeData.certifications?.items || []}
           onChange={(items) => updateSection('certifications', items)}
           renderItem={(item, _index, updateItem) => (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <LabeledInput label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
-              <LabeledInput label="Issuer" value={item.issuer || ''} onChange={(v) => updateItem({ ...item, issuer: v })} />
-              <LabeledInput label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <LabeledInput label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
+              <LabeledInput
+                label="Title"
+                value={item.title || ''}
+                onChange={(v) => updateItem({ ...item, title: v })}
+              />
+              <LabeledInput
+                label="Issuer"
+                value={item.issuer || ''}
+                onChange={(v) => updateItem({ ...item, issuer: v })}
+              />
+              <LabeledInput
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <LabeledInput
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
               <LabeledInput label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
             </div>
           )}
@@ -174,7 +366,13 @@ export function EditStep({
       </SectionWrapper>
 
       {/* Achievements */}
-      <SectionWrapper title="Achievements" section="achievements" collapsed={collapsed} onToggle={toggleCollapse} count={resumeData.achievements?.items?.length || 0}>
+      <SectionWrapper
+        title="Achievements"
+        section="achievements"
+        collapsed={collapsed}
+        onToggle={toggleCollapse}
+        count={resumeData.achievements?.items?.length || 0}
+      >
         <StringListEditor
           items={resumeData.achievements?.items || []}
           onChange={(items) => updateSection('achievements', items)}

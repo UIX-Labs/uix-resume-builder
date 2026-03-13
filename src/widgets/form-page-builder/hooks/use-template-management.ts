@@ -1,10 +1,9 @@
-import { useState } from 'react';
 import { useUpdateResumeTemplate } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
-import { toast } from 'sonner';
-import { trackEvent } from '@shared/lib/analytics/Mixpanel';
 import aniketTemplate from '@features/resume/templates/standard';
-
+import { trackEvent } from '@shared/lib/analytics/Mixpanel';
+import { useState } from 'react';
+import { toast } from 'sonner';
 interface UseTemplateManagementParams {
   resumeId: string;
   initialTemplate?: any;
@@ -17,14 +16,13 @@ export function useTemplateManagement({ resumeId, initialTemplate, initialTempla
 
   const { mutateAsync: updateResumeTemplateMutation } = useUpdateResumeTemplate();
 
-  //  useEffect(() => {
-  //   if (initialTemplate) {
-  //     setSelectedTemplate(initialTemplate);
+  //useEffect(() => {
+  // if (initialTemplate) {
+  //    setSelectedTemplate(initialTemplate);
   //   }
   // }, [initialTemplate]);
 
-  // useEffect(() => {
-  //   if (initialTemplateId) {
+  // useEffect(() => {        /   if (initialTemplateId) {
   //     setSelectedTemplateId(initialTemplateId);
   //   }
   // }, [initialTemplateId]);

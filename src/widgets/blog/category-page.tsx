@@ -6,6 +6,7 @@ import SearchBar from '@/widgets/blog/components/search-bar';
 import type { BlogPost } from '@shared/lib/blog';
 import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
+import { suggestions } from './suggestions';
 
 interface Props {
   posts: BlogPost[];
@@ -25,11 +26,7 @@ export default function CategoryPageContent({ posts, allPosts, title, placeholde
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
-  const suggestions = [
-    { label: 'Resume', slug: 'resume', isCategory: true },
-    { label: 'Interview', slug: 'interview', isCategory: true },
-    { label: 'Career', slug: 'career', isCategory: true },
-  ];
+ 
 
   return (
     <div className="max-w-[1395px] mx-auto px-4">

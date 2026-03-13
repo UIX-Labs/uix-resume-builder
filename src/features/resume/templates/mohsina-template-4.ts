@@ -285,7 +285,7 @@ const mohsinaTemplate4 = {
                             className: 'text-base font-semibold text-black font-poppins',
                           },
                           {
-                            path: 'cgpa',
+                            path: 'grade.value',
                             fallback: '8.0 CGPA',
                             className: 'text-base font-semibold text-[#005FF2] font-poppins',
                           },

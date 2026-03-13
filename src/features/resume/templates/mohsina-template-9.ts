@@ -44,7 +44,7 @@ export const mohsinaTemplate9 = {
 
             {
               type: 'group',
-              className: 'flex flex-col items-start gap-[2px] mb-2 w-[15%] flex-shrink-0 text-left',
+              className: 'flex flex-col items-start gap-[2px] mb-2 w-[35%] flex-shrink-0 text-left',
               items: [
                 {
                   type: 'inline-group-with-icon',
@@ -82,7 +82,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].address',
                       fallback: 'Gurugram, Haryana',
-                      className: 'text-[13px] text-black break-words',
+                      className: 'text-[13px] text-black break-all',
                     },
                   ],
                 },
@@ -122,7 +122,7 @@ export const mohsinaTemplate9 = {
                       type: 'text',
                       path: 'personalDetails.items[0].phone',
                       fallback: '(914) 479-6342',
-                      className: 'text-[13px] text-black break-words',
+                      className: 'text-[13px] text-black break-all',
                     },
                   ],
                 },
@@ -258,7 +258,7 @@ export const mohsinaTemplate9 = {
                 items: [
                   {
                     path: 'degree',
-                    className: 'text-base font-bold text-[#101214] leading-tight',
+                    className: 'text-base font-bold text-[#101214] leading-tight w-[450px] break-words',
                   },
                   {
                     path: 'grade.value',
@@ -266,14 +266,14 @@ export const mohsinaTemplate9 = {
                   },
                   {
                     path: 'institution',
-                    className: 'text-[13px] text-[#4d4d4d] leading-tight mt-0.5',
+                    className: 'text-[13px] text-[#4d4d4d] leading-tight mt-0.5 break-words w-[450px]',
                   },
                 ],
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[12px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right mt-1',
+                className: 'text-[12px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right',
               },
             ],
           },
@@ -306,11 +306,11 @@ export const mohsinaTemplate9 = {
                 items: [
                   {
                     path: 'position',
-                    className: 'text-base font-bold text-[#101214] leading-tight',
+                    className: 'text-base font-bold text-[#101214] leading-tight w-[450px] break-words',
                   },
                   {
                     path: 'company',
-                    className: 'text-xs  uppercase font-bold text-[#101214] leading-tight',
+                    className: 'text-xs uppercase font-bold text-[#101214] leading-tight break-words w-[450px]',
                   },
                 ],
               },
@@ -318,7 +318,7 @@ export const mohsinaTemplate9 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[12px]  text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right mt-1',
+                className: 'text-[12px]  text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right',
               },
             ],
           },
@@ -364,7 +364,7 @@ export const mohsinaTemplate9 = {
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[12px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right mt-1',
+                className: 'text-[12px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right',
               },
             ],
           },
@@ -423,16 +423,16 @@ export const mohsinaTemplate9 = {
 
         rows: [
           {
-            className: 'flex justify-between items-center w-full',
+            className: 'flex justify-between items-start w-full gap-4',
             cells: [
               {
                 path: 'title',
-                className: 'text-base font-bold text-[#101214] leading-[20px]',
+                className: 'text-base font-bold text-[#101214] leading-tight w-[450px] break-words',
               },
               {
                 type: 'duration',
                 path: 'duration',
-                className: 'text-[12px] text-[#3E6AF2] leading-[16px] whitespace-nowrap flex-shrink-0',
+                className: 'text-[12px] text-[#3E6AF2] leading-tight whitespace-nowrap w-32 shrink-0 text-right',
               },
             ],
           },

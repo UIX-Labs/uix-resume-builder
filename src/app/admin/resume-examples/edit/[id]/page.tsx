@@ -1,34 +1,34 @@
 'use client';
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
-import { useRouter, useParams } from 'next/navigation';
-import { getCleanDataForRenderer } from '@/widgets/form-page-builder/lib/data-cleanup';
-import { ResumeRenderer } from '@features/resume/renderer';
 import {
-  useResumeExampleCategories,
   useAdminTemplates,
-  useUpdateResumeExample,
   useResumeExampleById,
+  useResumeExampleCategories,
+  useUpdateResumeExample,
 } from '@/features/admin/hooks/use-admin-queries';
-import { parsePdfResume } from '@entities/resume/api/pdf-parse';
+import { getCleanDataForRenderer } from '@/widgets/form-page-builder/lib/data-cleanup';
 import { getResumeData } from '@entities/resume/api/get-resume-data';
-import { toast } from 'sonner';
+import { parsePdfResume } from '@entities/resume/api/pdf-parse';
+import { ResumeRenderer } from '@features/resume/renderer';
+import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
 import {
-  Loader2,
-  Upload,
   ArrowLeft,
   ArrowRight,
-  Eye,
-  Save,
-  Plus,
-  Trash2,
+  Check,
   ChevronDown,
   ChevronUp,
-  Check,
+  Eye,
   Layout,
+  Loader2,
+  Plus,
+  Save,
+  Trash2,
+  Upload,
   X,
 } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@shared/ui/popover';
+import { useParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -66,7 +66,7 @@ export default function AdminEditResumeExamplePage() {
   const { data: example, isLoading: exampleLoading, error: exampleError } = useResumeExampleById(id);
   const updateMutation = useUpdateResumeExample();
   const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useResumeExampleCategories();
-  const { data: templates, isLoading: templatesLoading, error: templatesError } = useAdminTemplates();
+  const { data: templates } = useAdminTemplates();
 
   // Pre-populate form when example data loads
   useEffect(() => {
@@ -97,25 +97,29 @@ export default function AdminEditResumeExamplePage() {
   );
 
   // ─── Re-parse PDF handler (uses same endpoint as dashboard) ─────────
-  const handleReparse = useCallback(
-    async (file: File) => {
-      setIsReparsing(true);
-      try {
-        // Step 1: Parse PDF using dashboard endpoint
-        const { resumeId } = await parsePdfResume(file);
-        // Step 2: Fetch full resume data with properly formatted dates
-        const resumeResponse = await getResumeData(resumeId, true);
-        const { id: _id, updatedAt: _updatedAt, template: _template, publicThumbnail: _thumb, isAnalyzed: _analyzed, ...sections } = resumeResponse;
-        setResumeData(sections);
-        toast.success('Resume re-parsed successfully! Review the data below.');
-      } catch {
-        toast.error('Failed to parse the resume PDF.');
-      } finally {
-        setIsReparsing(false);
-      }
-    },
-    [],
-  );
+  const handleReparse = useCallback(async (file: File) => {
+    setIsReparsing(true);
+    try {
+      // Step 1: Parse PDF using dashboard endpoint
+      const { resumeId } = await parsePdfResume(file);
+      // Step 2: Fetch full resume data with properly formatted dates
+      const resumeResponse = await getResumeData(resumeId, true);
+      const {
+        id: _id,
+        updatedAt: _updatedAt,
+        template: _template,
+        publicThumbnail: _thumb,
+        isAnalyzed: _analyzed,
+        ...sections
+      } = resumeResponse;
+      setResumeData(sections);
+      toast.success('Resume re-parsed successfully! Review the data below.');
+    } catch {
+      toast.error('Failed to parse the resume PDF.');
+    } finally {
+      setIsReparsing(false);
+    }
+  }, []);
 
   // ─── Save Handler ──────────────────────────────────────────────────
   const handleSave = useCallback(async () => {
@@ -463,8 +467,18 @@ function EditStep({
                 onChange={(v) => updateItem({ ...item, location: v })}
               />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} placeholder="e.g., Jan 2020" />
-              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} placeholder="e.g., Dec 2023 or Present" />
+              <Input
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+                placeholder="e.g., Jan 2020"
+              />
+              <Input
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+                placeholder="e.g., Dec 2023 or Present"
+              />
               <div className="col-span-full">
                 {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with textarea */}
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -478,7 +492,14 @@ function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ company: '', position: '', location: '', description: '', link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
+          emptyItem={{
+            company: '',
+            position: '',
+            location: '',
+            description: '',
+            link: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+          }}
         />
       </SectionWrapper>
 
@@ -501,14 +522,37 @@ function EditStep({
                 onChange={(v) => updateItem({ ...item, institution: v })}
               />
               <Input label="Degree" value={item.degree || ''} onChange={(v) => updateItem({ ...item, degree: v })} />
-              <Input label="Field of Study" value={item.fieldOfStudy || item.fieldofStudy || ''} onChange={(v) => updateItem({ ...item, fieldOfStudy: v })} />
-              <Input label="Location" value={item.location || ''} onChange={(v) => updateItem({ ...item, location: v })} />
-              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
+              <Input
+                label="Field of Study"
+                value={item.fieldOfStudy || item.fieldofStudy || ''}
+                onChange={(v) => updateItem({ ...item, fieldOfStudy: v })}
+              />
+              <Input
+                label="Location"
+                value={item.location || ''}
+                onChange={(v) => updateItem({ ...item, location: v })}
+              />
+              <Input
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <Input
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
               <Input label="Grade" value={item.grade || ''} onChange={(v) => updateItem({ ...item, grade: v })} />
             </div>
           )}
-          emptyItem={{ institution: '', degree: '', fieldOfStudy: '', location: '', duration: { startDate: '', endDate: '', ongoing: false }, grade: '' }}
+          emptyItem={{
+            institution: '',
+            degree: '',
+            fieldOfStudy: '',
+            location: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+            grade: '',
+          }}
         />
       </SectionWrapper>
 
@@ -560,8 +604,16 @@ function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
-              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
+              <Input
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <Input
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
               <div className="col-span-full">
                 {/* biome-ignore lint/a11y/noLabelWithoutControl: label is visually paired with textarea */}
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
@@ -589,7 +641,13 @@ function EditStep({
               </div>
             </div>
           )}
-          emptyItem={{ title: '', description: '', techStack: [], link: '', duration: { startDate: '', endDate: '', ongoing: false } }}
+          emptyItem={{
+            title: '',
+            description: '',
+            techStack: [],
+            link: '',
+            duration: { startDate: '', endDate: '', ongoing: false },
+          }}
         />
       </SectionWrapper>
 
@@ -608,8 +666,16 @@ function EditStep({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <Input label="Title" value={item.title || ''} onChange={(v) => updateItem({ ...item, title: v })} />
               <Input label="Issuer" value={item.issuer || ''} onChange={(v) => updateItem({ ...item, issuer: v })} />
-              <Input label="Start Date" value={item.duration?.startDate || item.startDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })} />
-              <Input label="End Date" value={item.duration?.endDate || item.endDate || ''} onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })} />
+              <Input
+                label="Start Date"
+                value={item.duration?.startDate || item.startDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, startDate: v } })}
+              />
+              <Input
+                label="End Date"
+                value={item.duration?.endDate || item.endDate || ''}
+                onChange={(v) => updateItem({ ...item, duration: { ...item.duration, endDate: v } })}
+              />
               <Input label="Link" value={item.link || ''} onChange={(v) => updateItem({ ...item, link: v })} />
             </div>
           )}
@@ -813,10 +879,7 @@ function PreviewStep({
   const cleanedData = useMemo(() => (resumeData ? getCleanDataForRenderer(resumeData) : null), [resumeData]);
 
   // Filter out draft templates — only show active ones
-  const activeTemplates = useMemo(
-    () => templates.filter((t) => t.status !== 'draft'),
-    [templates],
-  );
+  const activeTemplates = useMemo(() => templates.filter((t) => t.status !== 'draft'), [templates]);
 
   if (!template) {
     return (
@@ -1100,14 +1163,10 @@ function CategoryMultiSelect({
 }) {
   const [open, setOpen] = useState(false);
 
-  const selectedNames = categories
-    .filter((c) => selectedIds.includes(c.id))
-    .map((c) => c.name);
+  const selectedNames = categories.filter((c) => selectedIds.includes(c.id)).map((c) => c.name);
 
   const toggle = (id: string) => {
-    const next = selectedIds.includes(id)
-      ? selectedIds.filter((i) => i !== id)
-      : [...selectedIds, id];
+    const next = selectedIds.includes(id) ? selectedIds.filter((i) => i !== id) : [...selectedIds, id];
     onChange(next);
   };
 

@@ -7,15 +7,14 @@ import { Briefcase, Clock } from 'lucide-react';
 /* ─── Shared Sub-Components ─── */
 
 /** Reusable category pills row — shared between card and preview modal sidebar */
-export function CategoryPills({ categories, category }: {
+export function CategoryPills({
+  categories,
+  category,
+}: {
   categories?: { id?: string; slug: string; name: string }[];
   category?: { slug: string; name: string };
 }) {
-  const pills = categories?.length
-    ? categories
-    : category?.name
-      ? [{ slug: category.slug, name: category.name }]
-      : [];
+  const pills = categories?.length ? categories : category?.name ? [{ slug: category.slug, name: category.name }] : [];
 
   if (pills.length === 0) return <div className="h-[18px] mb-2" />;
 
@@ -34,7 +33,12 @@ export function CategoryPills({ categories, category }: {
 }
 
 /** Reusable metadata chips (role, experience, color) — shared between card and preview modal */
-export function MetadataChips({ role, experienceYears, primaryColor, colorName }: {
+export function MetadataChips({
+  role,
+  experienceYears,
+  primaryColor,
+  colorName,
+}: {
   role?: string;
   experienceYears?: number | null;
   primaryColor?: string;

@@ -28,8 +28,6 @@ export default function BlogPageContent({ posts, tags: _tags }: { posts: BlogPos
     secondaryPosts.push(...posts.filter((p) => p.slug !== primaryPost.slug).slice(0, 2));
   }
 
- 
-
   return (
     <main className="min-h-screen max-w-[1395px] mx-auto p-2">
       <div className="w-full">

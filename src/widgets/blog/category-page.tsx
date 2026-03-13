@@ -26,8 +26,6 @@ export default function CategoryPageContent({ posts, allPosts, title, placeholde
     post.frontmatter.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
- 
-
   return (
     <div className="max-w-[1395px] mx-auto px-4">
       <div

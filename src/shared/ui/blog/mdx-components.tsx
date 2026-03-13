@@ -56,7 +56,11 @@ export const mdxComponents: Record<string, React.ComponentType<any>> = {
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => {
     const id = toId(children);
     return (
-      <h3 id={id} className="group mt-6 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight text-gray-900" {...props}>
+      <h3
+        id={id}
+        className="group mt-6 mb-3 scroll-mt-24 text-xl font-semibold tracking-tight text-gray-900"
+        {...props}
+      >
         {children}
       </h3>
     );

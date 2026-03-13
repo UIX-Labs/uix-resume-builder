@@ -1,23 +1,23 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import {
-  useResumeExampleCategories,
   useAdminTemplates,
   useCreateResumeExample,
+  useResumeExampleCategories,
 } from '@/features/admin/hooks/use-admin-queries';
-import { parsePdfResume } from '@entities/resume/api/pdf-parse';
 import { getResumeData } from '@entities/resume/api/get-resume-data';
-import { toast } from 'sonner';
-import { Loader2, ArrowLeft, ArrowRight, Save } from 'lucide-react';
+import { parsePdfResume } from '@entities/resume/api/pdf-parse';
 import { Button } from '@shared/ui/button';
+import { ArrowLeft, ArrowRight, Loader2, Save } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useCallback, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
-import { STEPS, EMPTY_METADATA, EMPTY_PERSONAL_DETAILS } from './_components/constants';
-import { UploadStep } from './_components/upload-step';
+import { EMPTY_METADATA, EMPTY_PERSONAL_DETAILS, STEPS } from './_components/constants';
 import { EditStep } from './_components/edit-step';
 import { MetadataStep } from './_components/metadata-step';
 import { PreviewStep } from './_components/preview-step';
+import { UploadStep } from './_components/upload-step';
 
 export default function AdminCreateResumeExamplePage() {
   const router = useRouter();
@@ -28,7 +28,7 @@ export default function AdminCreateResumeExamplePage() {
   const [isParsing, setIsParsing] = useState(false);
   const createMutation = useCreateResumeExample();
   const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useResumeExampleCategories();
-  const { data: templates, isLoading: templatesLoading, error: templatesError } = useAdminTemplates();
+  const { data: templates } = useAdminTemplates();
 
   const selectedTemplate = useMemo(
     () => templates?.find((t) => t.id === metadata.templateId),
@@ -46,7 +46,14 @@ export default function AdminCreateResumeExamplePage() {
         const resumeResponse = await getResumeData(resumeId, true);
 
         // Step 3: Extract resume sections data (exclude metadata fields)
-        const { id: _id, updatedAt: _updatedAt, template, publicThumbnail: _thumb, isAnalyzed: _analyzed, ...sections } = resumeResponse;
+        const {
+          id: _id,
+          updatedAt: _updatedAt,
+          template,
+          publicThumbnail: _thumb,
+          isAnalyzed: _analyzed,
+          ...sections
+        } = resumeResponse;
 
         setResumeData(sections);
 
@@ -54,11 +61,7 @@ export default function AdminCreateResumeExamplePage() {
         const personalDetails = sections.personalDetails?.items?.[0] || {};
         const fullName = personalDetails.fullName || '';
         const jobTitle = personalDetails.jobTitle || '';
-        const title = jobTitle
-          ? `${jobTitle} Resume`
-          : fullName
-            ? `${fullName} Resume`
-            : 'Resume Example';
+        const title = jobTitle ? `${jobTitle} Resume` : fullName ? `${fullName} Resume` : 'Resume Example';
         const slug = title
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
@@ -137,26 +140,19 @@ export default function AdminCreateResumeExamplePage() {
     }
   }, [resumeData, metadata, createMutation, router]);
 
-  const handleTitleChange = useCallback(
-    (title: string) => {
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-      setMetadata((prev) => ({ ...prev, title, slug }));
-    },
-    [],
-  );
+  const handleTitleChange = useCallback((title: string) => {
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+    setMetadata((prev) => ({ ...prev, title, slug }));
+  }, []);
 
   return (
     <div className="max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => router.push('/admin/resume-examples')}
-        >
+        <Button variant="ghost" size="icon" onClick={() => router.push('/admin/resume-examples')}>
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <div>
@@ -202,17 +198,9 @@ export default function AdminCreateResumeExamplePage() {
       </div>
 
       {/* Step Content */}
-      {currentStep === 0 && (
-        <UploadStep
-          onUpload={handlePdfUpload}
-          onSkip={handleSkipUpload}
-          isParsing={isParsing}
-        />
-      )}
+      {currentStep === 0 && <UploadStep onUpload={handlePdfUpload} onSkip={handleSkipUpload} isParsing={isParsing} />}
 
-      {currentStep === 1 && resumeData && (
-        <EditStep resumeData={resumeData} onChange={setResumeData} />
-      )}
+      {currentStep === 1 && resumeData && <EditStep resumeData={resumeData} onChange={setResumeData} />}
 
       {currentStep === 2 && (
         <MetadataStep
@@ -241,10 +229,7 @@ export default function AdminCreateResumeExamplePage() {
       {/* Navigation */}
       {currentStep > 0 && (
         <div className="flex justify-between mt-8 pt-6 border-t border-gray-200">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentStep((s) => s - 1)}
-          >
+          <Button variant="outline" onClick={() => setCurrentStep((s) => s - 1)}>
             <ArrowLeft className="w-4 h-4" />
             Previous
           </Button>

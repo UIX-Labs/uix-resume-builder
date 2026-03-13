@@ -7,14 +7,15 @@ import { Dialog, DialogContent } from '@shared/ui/dialog';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface LinkedInModalProps {
   isOpen: boolean;
   onClose: () => void;
+  templateId?: string;
 }
 
-export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
+export function LinkedInModal({ isOpen, onClose, templateId }: LinkedInModalProps) {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -28,11 +29,7 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
   const displayError = error || mutationError;
 
   // Animated loading steps
-  const loadingSteps = [
-    'Extracting profile data...',
-    'Analyzing experience...',
-    'Building your resume...',
-  ];
+  const loadingSteps = ['Extracting profile data...', 'Analyzing experience...', 'Building your resume...'];
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
 
   useEffect(() => {
@@ -66,19 +63,23 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
     // Ensure guest email exists for API tracking if user is not logged in
     getOrCreateGuestEmail();
 
-    parseLinkedInMutation.mutate(cleanUrl, {
-      onSuccess: (response) => {
-        onClose();
-        const url = isMobile
-          ? `/resume/${response.resumeId}?openForm=true&importSource=linkedin`
-          : `/resume/${response.resumeId}?importSource=linkedin`;
-        router.push(url);
-        setLinkedinUrl('');
+    parseLinkedInMutation.mutate(
+      {
+        url: cleanUrl,
+        templateId: templateId,
       },
-      onError: (err) => {
-        setError(err instanceof Error ? err.message : 'Failed to parse LinkedIn profile');
+      {
+        onSuccess: (response) => {
+          onClose();
+          const url = isMobile ? `/resume/${response.resumeId}?openForm=true` : `/resume/${response.resumeId}`;
+          router.push(url);
+          setLinkedinUrl('');
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : 'Failed to parse LinkedIn profile');
+        },
       },
-    });
+    );
   };
 
   return (
@@ -145,12 +146,13 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
               <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
                 <div className="flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                  <p className="text-blue-300 text-sm font-medium transition-all">
-                    {loadingSteps[loadingStepIndex]}
-                  </p>
+                  <p className="text-blue-300 text-sm font-medium transition-all">{loadingSteps[loadingStepIndex]}</p>
                 </div>
                 <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full animate-[progress_8s_ease-in-out_infinite]" style={{ width: '60%' }} />
+                  <div
+                    className="h-full bg-blue-500 rounded-full animate-[progress_8s_ease-in-out_infinite]"
+                    style={{ width: '60%' }}
+                  />
                 </div>
               </div>
             )}
@@ -162,7 +164,8 @@ export function LinkedInModal({ isOpen, onClose }: LinkedInModalProps) {
                 </h3>
 
                 <p className="text-white/80 font-normal text-base leading-[1.5] tracking-[-0.011em] text-center max-w-[380px] px-4">
-                  Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in seconds.
+                  Paste your LinkedIn profile link and let Resume Builder craft a professional resume for you in
+                  seconds.
                 </p>
 
                 <div className="flex flex-col items-center gap-3 mt-2 px-4">

@@ -1,16 +1,17 @@
 'use client';
 
-import { Dialog, DialogContent } from '@shared/ui/dialog';
+import { updateResumeTemplate } from '@entities/resume';
+import type { UpdateResumeAnalyzer } from '@entities/resume/types';
+import { fetch } from '@shared/api';
 import { cn } from '@shared/lib/cn';
+import { useAnalyzerStore } from '@shared/stores/analyzer-store';
+import { Button } from '@shared/ui/components/button';
+import { Dialog, DialogContent } from '@shared/ui/dialog';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { JDUploadSection } from './components/jd-upload-section';
-import { Button } from '@shared/ui/components/button';
 import ResumeUploadSection from './components/resume-upload-section';
-import { fetch } from '@shared/api';
-import { useRouter } from 'next/navigation';
-import type { UpdateResumeAnalyzer } from '@entities/resume/types';
-import { useAnalyzerStore } from '@shared/stores/analyzer-store';
 
 interface BuilderIntelligenceModalProps {
   isOpen: boolean;
@@ -18,6 +19,7 @@ interface BuilderIntelligenceModalProps {
   showJDUpload?: boolean;
   showResumeUpload?: boolean;
   onSubmittingChange?: (isSubmitting: boolean, hasError?: boolean) => void;
+  templateId?: string;
 }
 
 export default function BuilderIntelligenceModal({
@@ -26,6 +28,7 @@ export default function BuilderIntelligenceModal({
   showJDUpload = false,
   showResumeUpload = false,
   onSubmittingChange,
+  templateId,
 }: BuilderIntelligenceModalProps) {
   const router = useRouter();
   const { setAnalyzedData } = useAnalyzerStore();
@@ -57,6 +60,9 @@ export default function BuilderIntelligenceModal({
     try {
       const formData = new FormData();
       formData.append('resume', resumeFile);
+      if (templateId) {
+        formData.append('templateId', templateId);
+      }
 
       let response: UpdateResumeAnalyzer;
 
@@ -83,6 +89,17 @@ export default function BuilderIntelligenceModal({
 
       if (response?.resumeId && response?.resume) {
         setAnalyzedData(response.resume, response.resumeId, !!jdFile);
+
+        if (templateId) {
+          try {
+            await updateResumeTemplate({
+              resumeId: response.resumeId,
+              templateId,
+            });
+          } catch (error) {
+            console.error('Failed to apply template:', error);
+          }
+        }
 
         router.push(`/resume/${response.resumeId}`);
       } else {

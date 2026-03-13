@@ -1,6 +1,6 @@
 import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
 import { useJDModal } from '@entities/jd-modal-mobile/hooks/use-jd-modal';
-import { createResume } from '@entities/resume';
+import { createResume, updateResumeTemplate } from '@entities/resume';
 import { useIsMobile } from '@shared/hooks/use-mobile';
 import { useUserProfile } from '@shared/hooks/use-user';
 import StarsIcon from '@shared/icons/stars-icon';
@@ -40,14 +40,23 @@ interface ResumeCreationCardProps {
   shouldOpenJDModal?: boolean;
   /** Unified auto-action triggered from landing page query params */
   autoAction?: 'from_scratch' | 'upload' | 'tailored_jd' | null;
+  templateId?: string | null;
 }
 
-export default function ResumeCreationCard({ shouldOpenJDModal = false, autoAction = null }: ResumeCreationCardProps) {
+export default function ResumeCreationCard({
+  shouldOpenJDModal = false,
+  autoAction = null,
+  templateId = null,
+}: ResumeCreationCardProps) {
   const router = useRouter();
   const user = useUserProfile();
   const isMobile = useIsMobile();
   const createResumeMutation = useMutation({
     mutationFn: createResume,
+  });
+
+  const updateTemplateMutation = useMutation({
+    mutationFn: updateResumeTemplate,
   });
 
   const [isBuilderIntelligenceModalOpen, setIsBuilderIntelligenceModalOpen] = useState(false);
@@ -64,10 +73,19 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
   const [optionsLocked, setOptionsLocked] = useState(false);
   const [showScanningOverlay, setShowScanningOverlay] = useState(false);
 
-  const lockOptions = useCallback((action: ResumeCreationAction.CREATE | ResumeCreationAction.UPLOAD | ResumeCreationAction.TAILORED_RESUME | ResumeCreationAction.TAILORED_JD) => {
-    setActiveAction(action);
-    setOptionsLocked(true);
-  }, []);
+  const lockOptions = useCallback(
+    (
+      action:
+        | ResumeCreationAction.CREATE
+        | ResumeCreationAction.UPLOAD
+        | ResumeCreationAction.TAILORED_RESUME
+        | ResumeCreationAction.TAILORED_JD,
+    ) => {
+      setActiveAction(action);
+      setOptionsLocked(true);
+    },
+    [],
+  );
 
   const releaseOptions = useCallback(() => {
     setActiveAction(null);
@@ -101,6 +119,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     try {
       const data = await createResumeMutation.mutateAsync({
         title: 'Frontend Engineer Resume',
+        templateId: templateId ?? undefined,
         userInfo: {
           userId: user.data?.id ?? '',
         },
@@ -114,11 +133,22 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     }
   };
 
-  const handleUploadSuccess = (data: any) => {
+  const handleUploadSuccess = async (data: any) => {
     trackEvent('resume_uploaded', {
       source: 'dashboard_card',
       resumeId: data.resumeId,
     });
+
+    if (templateId) {
+      try {
+        await updateTemplateMutation.mutateAsync({
+          resumeId: data.resumeId,
+          templateId,
+        });
+      } catch (error) {
+        console.error('Failed to apply template:', error);
+      }
+    }
 
     setTimeout(() => {
       setShowScanningOverlay(false);
@@ -154,7 +184,8 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
     // Guest users must login for Tailored JD flow
     if (!user.data?.id || !user.data?.isLoggedIn) {
       localStorage.setItem('openJDModal', 'true');
-      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent('/dashboard')}`);
+      const callbackUrl = templateId ? `/dashboard?action=tailored_jd&templateId=${templateId}` : '/dashboard';
+      setAuthRedirectUrl(`/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`);
       setIsAuthModalOpen(true);
       return;
     }
@@ -238,6 +269,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
       showJDUpload,
       showResumeUpload,
       onSubmittingChange: handleBuilderIntelligenceSubmittingChange,
+      templateId: templateId ?? undefined,
     }),
     [
       handleBuilderIntelligenceSubmittingChange,
@@ -245,6 +277,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
       isBuilderIntelligenceModalOpen,
       showJDUpload,
       showResumeUpload,
+      templateId,
     ],
   );
 
@@ -309,8 +342,9 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
         onLinkedInClick={() => setIsLinkedInModalOpen(true)}
         onActionLock={lockOptions}
         onActionRelease={releaseOptions}
-        activeAction={activeAction}
+        activeAction={activeAction as any}
         optionsLocked={optionsLocked}
+        templateId={templateId}
       />
 
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
@@ -319,6 +353,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
         isOpen={isJDModalOpen}
         onClose={() => handleJDModal(false)}
         onSubmittingChange={handleJDSubmittingChange}
+        templateId={templateId}
       />
 
       <div className="relative hidden md:block min-w-[600px] h-[277px] bg-white rounded-[20px] shadow-sm overflow-hidden mt-4">
@@ -366,6 +401,7 @@ export default function ResumeCreationCard({ shouldOpenJDModal = false, autoActi
                   onPendingChange={handleUploadPendingChange}
                   disabled={optionsLocked && activeAction !== 'upload'}
                   renderAsOverlay={true}
+                  templateId={templateId ?? undefined}
                   onUploadClick={() => {
                     trackEvent('upload_resume_click', {
                       source: 'dashboard_card',

@@ -75,7 +75,7 @@ export default function BlogCard({
               group-hover:text-white
             "
           >
-           <AuthorImage author={author} />
+            <AuthorImage author={author} />
 
             <span>
               By <span className="font-semibold text-black group-hover:text-white">{author}</span> &nbsp;|&nbsp;

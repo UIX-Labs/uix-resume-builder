@@ -1,7 +1,7 @@
 import { fetch } from '@shared/api';
 import type { ParsePdfResponse } from '../types';
 
-export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
+export async function parsePdfResume(file: File, templateId?: string): Promise<ParsePdfResponse> {
   try {
     const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
@@ -10,6 +10,9 @@ export async function parsePdfResume(file: File): Promise<ParsePdfResponse> {
 
     const formData = new FormData();
     formData.append('file', file);
+    if (templateId) {
+      formData.append('templateId', templateId);
+    }
 
     const data = await fetch<ParsePdfResponse>('resume/parse-pdf', {
       options: {

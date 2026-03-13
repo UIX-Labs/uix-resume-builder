@@ -16,15 +16,7 @@ import { cn } from '@shared/lib/cn';
 import { Dialog, DialogOverlay, DialogPortal, DialogTitle } from '@shared/ui/dialog';
 import { Button } from '@shared/ui/components/button';
 import { CloseIcon } from '@/shared/icons/close-icon';
-import {
-  Check,
-  Sparkles,
-  Briefcase,
-  Clock,
-  Layout,
-  AlertCircle,
-  Palette,
-} from 'lucide-react';
+import { Check, Sparkles, Briefcase, Clock, Layout, AlertCircle, Palette } from 'lucide-react';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 
 /* ─────────────────────────────────────────────────────
@@ -88,9 +80,7 @@ function TemplateThumbnail({
         'transition-shadow duration-150',
         'hover:shadow-md',
         // Outline for selection — does NOT affect layout (unlike border/ring)
-        isSelected
-          ? 'outline-[2.5px] outline-blue-500 outline-offset-[1.5px] shadow-md'
-          : 'outline-0',
+        isSelected ? 'outline-[2.5px] outline-blue-500 outline-offset-[1.5px] shadow-md' : 'outline-0',
       )}
     >
       {imageUrl ? (
@@ -160,9 +150,7 @@ function SimilarRow({ example, onClick }: { example: ResumeExampleListItem; onCl
         <p className="text-[12px] font-medium text-gray-800 line-clamp-1 group-hover/row:text-blue-600 transition-colors">
           {example.title}
         </p>
-        {example.role && (
-          <p className="text-[11px] text-gray-400 line-clamp-1">{example.role}</p>
-        )}
+        {example.role && <p className="text-[11px] text-gray-400 line-clamp-1">{example.role}</p>}
       </div>
     </button>
   );
@@ -315,15 +303,8 @@ export function ExamplePreviewModal({ exampleSlug, isOpen, onClose }: ExamplePre
               ) : detail ? (
                 /* ─── Content ─── */
                 <div className="flex flex-col lg:flex-row max-h-[88vh]">
-
                   {/* ═══════════ Left: Resume ═══════════ */}
-                  <div
-                    className={cn(
-                      'flex-1 relative overflow-y-auto',
-                      HIDE_SCROLLBAR,
-                      'bg-[#f8f9fb] p-5 lg:p-8',
-                    )}
-                  >
+                  <div className={cn('flex-1 relative overflow-y-auto', HIDE_SCROLLBAR, 'bg-[#f8f9fb] p-5 lg:p-8')}>
                     <div
                       className="relative mx-auto bg-white overflow-hidden rounded-lg shadow-[0_4px_24px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04]"
                       style={{
@@ -351,7 +332,6 @@ export function ExamplePreviewModal({ exampleSlug, isOpen, onClose }: ExamplePre
                     )}
                   >
                     <div className={cn('flex-1 overflow-y-auto', HIDE_SCROLLBAR)}>
-
                       {/* ── Info ── */}
                       <div className="px-6 pt-6 pb-5 space-y-3">
                         {/* Category badges */}
@@ -374,9 +354,7 @@ export function ExamplePreviewModal({ exampleSlug, isOpen, onClose }: ExamplePre
                         )}
 
                         {/* Title */}
-                        <h2 className="text-xl font-bold text-gray-900 leading-snug">
-                          {detail.title}
-                        </h2>
+                        <h2 className="text-xl font-bold text-gray-900 leading-snug">{detail.title}</h2>
 
                         {/* Inline metadata */}
                         {metaParts.length > 0 && (
@@ -433,9 +411,7 @@ export function ExamplePreviewModal({ exampleSlug, isOpen, onClose }: ExamplePre
                           <div className="grid grid-cols-4 gap-2">
                             {sortedTemplates.map((tmpl) => {
                               const isDefault = tmpl.id === detail.template?.id;
-                              const isSelected = selectedTemplateId
-                                ? tmpl.id === selectedTemplateId
-                                : isDefault;
+                              const isSelected = selectedTemplateId ? tmpl.id === selectedTemplateId : isDefault;
                               return (
                                 <TemplateThumbnail
                                   key={tmpl.id}
@@ -458,11 +434,7 @@ export function ExamplePreviewModal({ exampleSlug, isOpen, onClose }: ExamplePre
                           </p>
                           <div className="space-y-0.5">
                             {detail.similar.map((s) => (
-                              <SimilarRow
-                                key={s.id}
-                                example={s}
-                                onClick={() => handleSimilarClick(s.slug)}
-                              />
+                              <SimilarRow key={s.id} example={s} onClick={() => handleSimilarClick(s.slug)} />
                             ))}
                           </div>
                         </div>

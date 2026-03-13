@@ -156,15 +156,14 @@ export function Draggable({
   }
 
   function handleAddFirstItem() {
-   
     const newItem: Record<string, string> = { itemId: crypto.randomUUID() };
-    
+
     Object.keys(section).forEach((key) => {
       const fieldDef = section[key];
-      
+
       if (
-        key === 'label' || 
-        key === 'itemsType' || 
+        key === 'label' ||
+        key === 'itemsType' ||
         key === 'collapsedState' ||
         typeof fieldDef !== 'object' ||
         fieldDef === null
@@ -186,7 +185,7 @@ export function Draggable({
           onClick={handleAddFirstItem}
           className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-dark-900 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
         >
-          <PlusIcon size={16}/>
+          <PlusIcon size={16} />
           <span>Add Item</span>
         </button>
       </div>

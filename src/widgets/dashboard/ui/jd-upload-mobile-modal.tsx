@@ -19,12 +19,14 @@ interface JDUploadMobileModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmittingChange?: (isSubmitting: boolean, hasError?: boolean) => void;
+  templateId?: string;
 }
 
 export default function JDUploadMobileModal({
   isOpen,
   onClose,
   onSubmittingChange: _onSubmittingChange,
+  templateId,
 }: JDUploadMobileModalProps) {
   const [isMobileTextViewOpen, setIsMobileTextViewOpen] = useState(false);
 
@@ -99,7 +101,9 @@ export default function JDUploadMobileModal({
                   return <UploadJDStep jdFileInputRef={jdFileInputRef} onJDFileSelect={handleJDFileSelect} />;
 
                 case ModalStep.UPLOADING_JD:
-                  return <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />;
+                  return (
+                    <UploadingJDStep uploadProgress={uploadProgress} onRemoveJD={handleRemoveJD} jdFile={jdFile} />
+                  );
 
                 case ModalStep.UPLOAD_RESUME:
                   return (

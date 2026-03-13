@@ -7,8 +7,6 @@ import { Input } from '@shared/ui/components/input';
 import { ArrowLeft, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import { SECTION_ICONS, SECTION_PLACEHOLDERS } from '../lib/section-utils';
 
-
-
 interface MobileSectionListProps {
   navs: Array<{ name: string; label: string }>;
   formData: Omit<ResumeData, 'templateId'>;
@@ -56,9 +54,6 @@ const SectionItemWithData = ({
   );
 };
 
-  
-
-
 export function MobileSectionList({
   navs,
   formData,
@@ -70,7 +65,13 @@ export function MobileSectionList({
 }: MobileSectionListProps) {
   const completedSections = new Set(
     Object.entries(formData ?? {})
-      .filter(([_, sectionData]) => typeof sectionData === 'object' && sectionData !== null && 'isCompleted' in sectionData && (sectionData as any).isCompleted)
+      .filter(
+        ([_, sectionData]) =>
+          typeof sectionData === 'object' &&
+          sectionData !== null &&
+          'isCompleted' in sectionData &&
+          (sectionData as any).isCompleted,
+      )
       .map(([key]) => key),
   );
 

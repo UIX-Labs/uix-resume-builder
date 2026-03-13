@@ -1,20 +1,20 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { SidebarProvider } from '@shared/ui/sidebar';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
-import { useFormDataStore } from '@widgets/form-page-builder/models/store';
+import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
 import DashboardCarousel from '@widgets/dashboard/ui/dashboard-carousel';
 import DashboardSidebar from '@widgets/dashboard/ui/dashboard-sidebar';
+import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
 import LinkedinIntegrationCard from '@widgets/dashboard/ui/linkedin-integration-card';
+import PageHeading from '@widgets/dashboard/ui/page-heading';
 import ResumeCreationCard from '@widgets/dashboard/ui/resume-creation-card';
 import WelcomeHeader from '@widgets/dashboard/ui/welcome-header';
-import { runAnalyzerWithProgress } from '@shared/lib/analyzer/run-analyzer-with-progress';
-import PageHeading from '@widgets/dashboard/ui/page-heading';
-import ResponsiveDashboardHeader from '@widgets/dashboard/ui/header';
+import { useFormDataStore } from '@widgets/form-page-builder/models/store';
 
 function DashboardContent() {
   const { data: user, isLoading } = useUserProfile();
@@ -24,22 +24,28 @@ function DashboardContent() {
   const setFormData = useFormDataStore((state) => state.setFormData);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(null);
+  const action = searchParams?.get('action');
+  const tId = searchParams?.get('templateId');
+  const openModal = searchParams?.get('openModal');
+
+  const [autoAction, setAutoAction] = useState<'from_scratch' | 'upload' | 'tailored_jd' | null>(() => {
+    if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') return action;
+    if (openModal === 'jd') return 'tailored_jd';
+    return null;
+  });
 
   useEffect(() => {
-    // Unified action param: ?action=from_scratch | upload | tailored_jd
-    const action = searchParams?.get('action');
-    // Backward compat: ?openModal=jd
-    const openModal = searchParams?.get('openModal');
+    const isNewAction = action === 'from_scratch' || action === 'upload' || action === 'tailored_jd';
+    const isLegacyAction = openModal === 'jd';
 
-    if (action === 'from_scratch' || action === 'upload' || action === 'tailored_jd') {
-      setAutoAction(action);
-      router.replace('/dashboard');
-    } else if (openModal === 'jd') {
-      setAutoAction('tailored_jd');
-      router.replace('/dashboard');
+    if (isNewAction || isLegacyAction) {
+      if (isNewAction) setAutoAction(action);
+      else setAutoAction('tailored_jd');
+
+      router.replace(tId ? `/dashboard?templateId=${tId}` : '/dashboard');
     }
-  }, [searchParams, router]);
+  }, [action, openModal, tId, router]);
+  const templateId = tId;
 
   useEffect(() => {
     const pendingResumeId = localStorage.getItem('pending_analyzer_resume_id');
@@ -85,7 +91,7 @@ function DashboardContent() {
               />
 
               <div className="px-4">
-                <ResumeCreationCard autoAction={autoAction} />
+                <ResumeCreationCard autoAction={autoAction} templateId={templateId} />
               </div>
 
               <div className="flex-1 mt-4 px-4">

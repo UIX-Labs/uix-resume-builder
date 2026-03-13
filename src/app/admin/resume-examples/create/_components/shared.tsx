@@ -21,7 +21,10 @@ export function LabeledInput({
   type?: string;
   mono?: boolean;
 }) {
-  const id = `input-${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`;
+  const id = `input-${label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')}`;
 
   return (
     <div className="space-y-1">
@@ -68,7 +71,11 @@ export function SectionWrapper({
             <span className="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded-full">{count}</span>
           )}
         </div>
-        {isCollapsed ? <ChevronDown className="w-4 h-4 text-gray-400" /> : <ChevronUp className="w-4 h-4 text-gray-400" />}
+        {isCollapsed ? (
+          <ChevronDown className="w-4 h-4 text-gray-400" />
+        ) : (
+          <ChevronUp className="w-4 h-4 text-gray-400" />
+        )}
       </button>
       {!isCollapsed && <div className="px-4 pb-4">{children}</div>}
     </div>
@@ -118,7 +125,12 @@ export function RepeatableSection({
           {renderItem(item, index, (updated) => updateItem(index, updated))}
         </div>
       ))}
-      <Button type="button" variant="ghost" onClick={addItem} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={addItem}
+        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+      >
         <Plus className="w-4 h-4" />
         Add Item
       </Button>
@@ -168,7 +180,12 @@ export function StringListEditor({
           </Button>
         </div>
       ))}
-      <Button type="button" variant="ghost" onClick={addItem} className="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={addItem}
+        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+      >
         <Plus className="w-4 h-4" />
         Add Item
       </Button>

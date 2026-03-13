@@ -192,6 +192,7 @@ export default function DashboardCarousel() {
         activeAction={activeAction}
         optionsLocked={optionsLocked}
         template={creationTemplate}
+        templateId={creationTemplate?.id}
       />
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />
 

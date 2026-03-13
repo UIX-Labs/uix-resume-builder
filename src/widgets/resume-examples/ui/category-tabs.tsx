@@ -52,7 +52,7 @@ export function CategoryTabs() {
                 activeSlug === cat.slug
                   ? 'bg-[rgb(0,95,242)] hover:bg-[rgb(0,81,213)] text-white'
                   : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50 hover:text-gray-800',
-            )}
+              )}
             >
               {cat.name}
             </Link>

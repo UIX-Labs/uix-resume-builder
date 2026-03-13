@@ -40,11 +40,7 @@ function EmptyState({ onReset }: { onReset: () => void }) {
         We <span className="text-red-500">couldn&apos;t</span> find that.
       </h3>
       <p className="text-gray-500 text-center mb-4">No results matched your filters. Please try different options.</p>
-      <Button
-        variant="outline"
-        onClick={onReset}
-        className="rounded-xl cursor-pointer"
-      >
+      <Button variant="outline" onClick={onReset} className="rounded-xl cursor-pointer">
         Clear all filters
       </Button>
     </div>
@@ -220,11 +216,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
             <>
               <div className="flex items-start gap-x-[25px] gap-y-[44px] my-4 sm:my-6 mx-auto justify-center flex-wrap max-w-[1346px] px-4">
                 {data.data.map((example) => (
-                  <ExampleCard
-                    key={example.id}
-                    example={example}
-                    onClick={() => handleCardClick(example)}
-                  />
+                  <ExampleCard key={example.id} example={example} onClick={() => handleCardClick(example)} />
                 ))}
               </div>
               <Pagination
@@ -240,11 +232,7 @@ function GalleryContent({ initialCategory, categoryData }: ResumeExamplesGallery
       </div>
 
       {/* Preview modal — contains "Use This Template", template switching, similar examples */}
-      <ExamplePreviewModal
-        exampleSlug={selectedSlug}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <ExamplePreviewModal exampleSlug={selectedSlug} isOpen={isModalOpen} onClose={handleCloseModal} />
 
       {/* LinkedIn modal for hero CTA */}
       <LinkedInModal isOpen={isLinkedInModalOpen} onClose={() => setIsLinkedInModalOpen(false)} />

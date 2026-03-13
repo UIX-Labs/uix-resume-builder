@@ -1,7 +1,7 @@
 'use client';
 
 import { ResumeCreationAction, type ResumeCreationActionType } from '@entities/dashboard/types/type';
-import { createResume, updateResumeTemplate } from '@entities/resume';
+import { createResume } from '@entities/resume';
 import type { Template } from '@entities/template-page/api/template-data';
 import { useUserProfile } from '@shared/hooks/use-user';
 import { trackEvent } from '@shared/lib/analytics/Mixpanel';
@@ -25,6 +25,7 @@ interface ResumeCreationModalProps {
   activeAction: ResumeCreationActionType;
   optionsLocked: boolean;
   template?: Template | null;
+  templateId?: string | null;
 }
 
 export default function ResumeCreationModal({
@@ -36,30 +37,31 @@ export default function ResumeCreationModal({
   activeAction,
   optionsLocked,
   template,
+  templateId,
 }: ResumeCreationModalProps) {
   const router = useRouter();
   const user = useUserProfile();
+
+  const effectiveTemplateId = templateId || template?.id;
+
+  const navigateToDashboardWithAction = useCallback(
+    (action: 'upload' | 'tailored_jd') => {
+      const url = effectiveTemplateId
+        ? `/dashboard?action=${action}&templateId=${effectiveTemplateId}`
+        : `/dashboard?action=${action}`;
+      router.push(url);
+    },
+    [effectiveTemplateId, router],
+  );
+
   const createResumeMutation = useMutation({
     mutationFn: createResume,
   });
-
-  const updateTemplateMutation = useMutation({
-    mutationFn: updateResumeTemplate,
-  });
-
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-
-  // const handleUploadResumeClick = useCallback(() => {
-  //   trackEvent('upload_resume_click', {
-  //     source: template ? 'template_modal' : 'dashboard_modal',
-  //     device: 'mobile',
-  //   });
-  //   router.push('/upload-resume');
-  // }, [template, router]);
 
   const handleUploadClick = () => {
     trackEvent('create_resume_click', { source: 'dashboard_modal', method: 'upload_existing' });
-    router.push('/dashboard?action=upload');
+    navigateToDashboardWithAction('upload');
   };
 
   const handleLinkedInClick = useCallback(() => {
@@ -88,7 +90,7 @@ export default function ResumeCreationModal({
     trackEvent('create_resume_click', {
       source: template ? 'template_modal' : 'dashboard_modal',
       method: 'from_scratch',
-      ...(template && { templateId: template.id }),
+      ...(effectiveTemplateId && { templateId: effectiveTemplateId }),
     });
 
     // For guest users, create guest email for API tracking
@@ -106,69 +108,18 @@ export default function ResumeCreationModal({
 
       const data = await createResumeMutation.mutateAsync({
         title,
+        templateId: effectiveTemplateId || undefined,
         userInfo: {
           userId: user.data?.id ?? '',
         },
       });
 
-      if (template) {
-        await updateTemplateMutation.mutateAsync({
-          resumeId: data.id,
-          templateId: template.id,
-        });
-      }
       router.push(`/resume/${data.id}`);
     } catch (error) {
       console.error('Failed to create resume:', error);
       onActionRelease();
     }
   };
-
-  // const handleUploadSuccess = async (data: any) => {
-  //   trackEvent('resume_uploaded', {
-  //     source: template ? 'template_modal' : 'dashboard_modal',
-  //     resumeId: data.resumeId,
-  //     ...(template && { templateId: template.id }),
-  //   });
-
-  //   if (template) {
-  //     try {
-  //       await updateTemplateMutation.mutateAsync({
-  //         resumeId: data.resumeId,
-  //         templateId: template.id,
-  //       });
-  //     } catch (error) {
-  //       console.error('Failed to apply template to uploaded resume:', error);
-  //     }
-  //   }
-
-  //   setTimeout(() => {
-  //     router.push(`/resume/${data.resumeId}`);
-  //   }, 300);
-  // };
-
-  // const handleUploadError = (error: any) => {
-  //   onActionRelease();
-  //   console.error('Upload error:', error);
-  // };
-
-  // const handleUploadPendingChange = (pending: boolean) => {
-  //   if (pending) {
-  //     onActionLock('upload');
-  //     onClose();
-  //     return;
-  //   }
-
-  //   if (activeAction === 'upload') {
-  //     onActionRelease();
-  //   }
-  // };
-
-  // const handleOpenTailoredWithJD = () => {
-  //   trackEvent('create_resume_click', {
-  //     source: 'dashboard_modal', method: 'tailored_with_jd',
-  //   });
-  //   router.push('/dashboard?action=tailored_with_jd');
 
   const handleOpenTailoredWithJD = () => {
     trackEvent('create_resume_click', {
@@ -182,26 +133,8 @@ export default function ResumeCreationModal({
       return;
     }
 
-    router.push('/dashboard?action=tailored_jd');
+    navigateToDashboardWithAction('tailored_jd');
   };
-
-  // const handleUploadClick = () => {
-  // trackEvent('create_resume_click',
-  //   { source: 'dashboard_modal', method: 'upload_existing', });
-  //   router.push('/dashboard?action=upload');
-  // };
-
-  // Guest users must login for Tailored JD flow
-  //   if (!user.data?.id || !user.data?.isLoggedIn) {
-  //     localStorage.setItem('openJDModal', 'true');
-  //     setIsAuthModalOpen(true);
-  //     return;
-  //   }
-
-  //   onActionLock(ResumeCreationAction.TAILORED_JD);
-  //   onClose();
-  //   onJDModalOpen();
-  // };
 
   return (
     <>

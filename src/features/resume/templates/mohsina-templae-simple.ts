@@ -413,7 +413,7 @@ const mohsinaSimple = {
     // Skills Section - Right Column
     {
       id: 'skills',
-      type: 'list-section',
+      type: 'badge-section',
       column: 'right',
       break: true,
       className: 'mt-[10px]',
@@ -424,20 +424,11 @@ const mohsinaSimple = {
           'text-[16px] font-semibold text-[#333] leading-none mb-3 block relative after:absolute after:bottom-[-5px] after:left-0 after:bg-[#DE1D3E] after:w-[40%] after:h-[0.5px]',
       },
       listPath: 'skills.items',
-      containerClassName: 'flex flex-col mt-[12px]',
-      itemTemplate: {
-        className: 'flex flex-col',
-        rows: [
-          {
-            cells: [
-              {
-                path: 'name',
-                className: 'text-[12px] text-[#333] font-normal leading-[18px]',
-              },
-            ],
-          },
-        ],
-      },
+      itemPath: 'name',
+      itemSeparator: '/',
+      itemSeparatorClassName: 'text-[#DE1D3E] mx-1',
+      containerClassName: 'flex flex-wrap gap-x-1 mt-[12px] text-[12px] text-[#333] leading-[18px]',
+      badgeClassName: 'text-[12px] text-[#333] font-normal leading-[18px]',
     },
 
     // Interests Section - Right Column
@@ -447,6 +438,7 @@ const mohsinaSimple = {
       breakable: true,
       type: 'inline-list-section',
       column: 'right',
+      showBullet: true,
       className: 'mt-[10px]',
       heading: {
         path: 'interests.heading',
@@ -455,10 +447,8 @@ const mohsinaSimple = {
           'text-[16px] font-semibold text-[#333] leading-none mb-3 block relative after:absolute after:bottom-[-5px] after:left-0 after:bg-[#DE1D3E] after:w-[40%] after:h-[0.5px]',
       },
       listPath: 'interests.items[0].items',
-      itemClassName: 'text-[12px] text-gray-500 leading-[20px] inline',
-      containerClassName:
-        'block mt-[12px] [&>span]:inline [&>span>span:nth-child(2)]:text-[#DE1D3E] [&>span>span:nth-child(2)]:mx-1',
-      itemSeparator: '|',
+      itemClassName: 'text-[12px] text-[#333] leading-[18px]',
+      containerClassName: 'flex flex-col gap-1 mt-[12px] text-[12px] text-[#333] leading-[18px]',
     },
 
     // Certifications Section - Right Column

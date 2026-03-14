@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono, Inter, Lato, Montserrat, Mulish, Poppins } from 'next/font/google';
+import { Alexandria, Geist, Geist_Mono, Inter, Lato, Montserrat, Mulish, Poppins } from 'next/font/google';
 import Script from 'next/script';
 import '../app/globals.css';
 
@@ -36,6 +36,12 @@ const poppins = Poppins({
   variable: '--font-poppins',
   subsets: ['latin'],
   style: ['normal', 'italic'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+});
+
+const alexandria = Alexandria({
+  variable: '--font-alexandria',
+  subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
@@ -168,7 +174,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${poppins.variable} ${lato.variable} ${mulish.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${montserrat.variable} ${poppins.variable} ${alexandria.variable} ${lato.variable} ${mulish.variable} antialiased`}
       >
         <Script
           id="structured-data"

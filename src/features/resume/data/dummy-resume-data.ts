@@ -11,6 +11,7 @@
  * correctly out of the box.
  */
 
+
 export const dummyResumeData = {
   updatedAt: Date.now(),
 
@@ -24,6 +25,7 @@ export const dummyResumeData = {
         itemId: 'pd-item-001',
         fullName: 'Sophia Martinez',
         jobTitle: 'Full-Stack Software Engineer',
+        profilePicturePublicUrl: 'https://picsum.photos/200/300',
         email: 'sophia.martinez@email.com',
         phone: '+1 (415) 987-6543',
         address: '742 Evergreen Terrace, San Francisco, CA 94110',

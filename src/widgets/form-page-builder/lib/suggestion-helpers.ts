@@ -1,5 +1,6 @@
 import type { SuggestedUpdate } from '@entities/resume';
 import { SuggestionType } from '@entities/resume';
+import { normalizeMarkdownContent } from '@shared/lib/markdown';
 
 /**
  * Finds an item in the array by its ID
@@ -60,41 +61,19 @@ const normalizeText = (str: string): string => {
 };
 
 /**
- * Converts text with \n to proper HTML format for TipTap
- * Handles both plain text and text that already contains HTML tags
+ * Converts text (including markdown) to proper HTML format for TipTap
+ * Handles markdown syntax, plain text, and existing HTML
  */
 const convertTextToHtml = (text: string): string => {
   if (!text) return '';
 
-  // Check if text already contains HTML paragraph tags
-  const hasHtmlParagraphs = /<p[^>]*>/.test(text);
-
-  if (hasHtmlParagraphs) {
-    // Already has proper HTML structure, return as-is
-    return text;
-  }
-
-  // Check if text has other HTML tags (like <b>, <strong>, etc.)
-  const hasHtmlTags = /<[^>]+>/.test(text);
-
-  if (hasHtmlTags) {
-    // Has HTML tags but no paragraphs - split by \n and wrap each in <p>
-    const lines = text.split('\n').filter((line) => line.trim());
-    if (lines.length === 0) return '';
-    if (lines.length === 1) return `<p>${lines[0]}</p>`;
-    return lines.map((line) => `<p>${line}</p>`).join('');
-  }
-
-  // Plain text - split by \n and wrap in <p> tags
-  const lines = text.split('\n').filter((line) => line.trim());
-  if (lines.length === 0) return '';
-  if (lines.length === 1) return `<p>${lines[0]}</p>`;
-  return lines.map((line) => `<p>${line}</p>`).join('');
+  return normalizeMarkdownContent(text);
 };
 
 /**
  * Applies suggestions to array fields (like achievements, interests)
  * Finds matching strings in the array and replaces them
+ * Converts markdown to HTML in the process
  */
 export const applySuggestionsToArrayField = (
   currentValue: string[],
@@ -108,7 +87,7 @@ export const applySuggestionsToArrayField = (
       const matchIndex = updatedArray.findIndex((item) => item.trim() === suggestion.old?.trim());
 
       if (matchIndex !== -1) {
-        updatedArray[matchIndex] = suggestion.new;
+        updatedArray[matchIndex] = normalizeMarkdownContent(suggestion.new);
       }
     }
   });
@@ -134,11 +113,7 @@ export const applySuggestionsToFieldValue = (
       const isHtmlField = /<[^>]+>/.test(updatedValue);
 
       if (normalizedCurrent === normalizedOld) {
-        if (isHtmlField) {
-          updatedValue = convertTextToHtml(suggestion.new);
-        } else {
-          updatedValue = suggestion.new.replace(/\n/g, ' ');
-        }
+        updatedValue = convertTextToHtml(suggestion.new);
       } else if (normalizedCurrent.includes(normalizedOld)) {
         // Partial match - find and replace only that sentence within the field
 
@@ -146,17 +121,17 @@ export const applySuggestionsToFieldValue = (
           // Try direct replacement first (works if no HTML tags interrupt the text)
 
           if (updatedValue.includes(suggestion.old)) {
-            // Direct match found - replace as-is
-            updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
+            const convertedNew = convertTextToHtml(suggestion.new);
+            updatedValue = updatedValue.replace(suggestion.old, convertedNew);
           } else {
             // Direct match failed - HTML tags likely interrupt the text
             // Strip HTML tags and decode entities, do replacement on plain text, then re-wrap in HTML
             const plainText = decodeHtmlEntities(updatedValue.replace(/<[^>]*>/g, ''));
 
             if (plainText.includes(suggestion.old)) {
-              const updatedPlainText = plainText.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
-              // Re-wrap in HTML paragraph tags
-              updatedValue = convertTextToHtml(updatedPlainText);
+              const convertedNew = convertTextToHtml(suggestion.new);
+              const updatedPlainText = plainText.replace(suggestion.old, convertedNew);
+              updatedValue = updatedPlainText;
             } else {
               // Since we can't reliably find the exact position, replace the whole field
               updatedValue = convertTextToHtml(suggestion.new);
@@ -166,7 +141,8 @@ export const applySuggestionsToFieldValue = (
           // For plain text, direct replacement
 
           if (updatedValue.includes(suggestion.old)) {
-            updatedValue = updatedValue.replace(suggestion.old, suggestion.new.replace(/\n/g, ' '));
+            const convertedNew = convertTextToHtml(suggestion.new);
+            updatedValue = updatedValue.replace(suggestion.old, convertedNew);
           }
         }
       }

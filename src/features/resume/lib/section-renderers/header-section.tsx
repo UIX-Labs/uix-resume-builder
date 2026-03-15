@@ -115,9 +115,13 @@ export function renderHeaderSection(
             </p>
           )}
           {fields.title?.path && (
-            <p className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}>
-              {resolvePath(data, fields.title.path)}
-            </p>
+            <div
+              className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.title.path) || '',
+              }}
+            />
           )}
           {fields.description?.path && (
             <div
@@ -137,9 +141,13 @@ export function renderHeaderSection(
             </p>
           )}
           {fields.title?.path && (
-            <p className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}>
-              {resolvePath(data, fields.title.path)}
-            </p>
+            <div
+              className={cn(fields.title.className, getFieldErrorBgColor('jobTitle'))}
+              // biome-ignore lint/security/noDangerouslySetInnerHtml: Required for HTML content rendering
+              dangerouslySetInnerHTML={{
+                __html: resolvePath(data, fields.title.path) || '',
+              }}
+            />
           )}
           {fields.description?.path && (
             <div

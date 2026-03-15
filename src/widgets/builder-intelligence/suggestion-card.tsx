@@ -2,6 +2,7 @@ import { Checkbox } from '@shared/ui/checkbox';
 import { Button } from '@shared/ui/components/button';
 import { Label } from '@shared/ui/label';
 import { RadioGroupItem } from '@shared/ui/radio-group';
+import { normalizeMarkdownContent } from '@shared/lib/markdown';
 import { useId } from 'react';
 
 interface HtmlContentProps {
@@ -11,7 +12,8 @@ interface HtmlContentProps {
 }
 
 /**
- * Converts plain text with \n to HTML format
+ * Converts markdown/plain text to formatted HTML for display in suggestions
+ * Shows styled text (bold, italic, etc.) without raw markdown syntax
  */
 export const processContentWithNewlines = (content: string): string => {
   if (!content) return '';
@@ -20,15 +22,13 @@ export const processContentWithNewlines = (content: string): string => {
   const hasHtmlTags = /<[^>]+>/.test(content);
 
   if (hasHtmlTags) {
-    // If already has HTML, just replace \n with <br>
-    return content.replace(/\n/g, '<br>');
-  } else {
-    // If plain text, wrap each line in <p> tags
-    const lines = content.split('\n').filter((line) => line.trim());
-    if (lines.length === 0) return '';
-    if (lines.length === 1) return lines[0];
-    return lines.map((line) => `<p>${line}</p>`).join('');
+    // If already has HTML, return as-is (already formatted)
+    return content;
   }
+
+  // Convert markdown to HTML (handles **, *, lists, etc.)
+  // This will display formatted text instead of raw markdown
+  return normalizeMarkdownContent(content);
 };
 
 const HtmlContent = ({ as = 'span', className, content }: HtmlContentProps) => {

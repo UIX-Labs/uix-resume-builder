@@ -1,5 +1,7 @@
-export function decodeHtmlEntities(text: string): string {
-  if (!text) return '';
+export function decodeHtmlEntities(text: string | any): string {
+  if (text === null || text === undefined) return '';
+  const str = typeof text === 'string' ? text : String(text);
+  if (!str) return '';
 
   const entities: Array<[RegExp, string]> = [
     [/&amp;/g, '&'],
@@ -48,6 +50,9 @@ export function stripMarkdown(text: string): string {
   if (!text) return '';
 
   const patterns: Array<[RegExp, string]> = [
+    // HTML tags: <p>, <div>, <span>, etc. → remove them
+    [/<[^>]*>/g, ''],
+
     // Links: [text](url) → text
     [/\[([^\]]+)\]\([^)]+\)/g, '$1'],
 
@@ -81,7 +86,9 @@ export function stripMarkdown(text: string): string {
     [/^([-*_])\1{2,}$/gm, ''],
   ];
 
-  return patterns.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), text).trim();
+  const stripped = patterns.reduce((result, [pattern, replacement]) => result.replace(pattern, replacement), text);
+  
+  return decodeHtmlEntities(stripped).trim();
 }
 
 export function normalizeMarkdownContent(content: string | undefined | null): string {

@@ -91,8 +91,22 @@ function normalizeContent(content: string | undefined): string {
     const line = lines[i];
     const bulletMatch = line.match(/^[-*•]\s+(.*)$/);
     const orderedMatch = line.match(/^\d+[.)]\s+(.*)$/);
+    const headerMatch = line.match(/^(#{1,6})\s+(.*)$/);
 
-    if (bulletMatch) {
+    if (headerMatch) {
+      if (inBulletList) {
+        result.push('</ul>');
+        inBulletList = false;
+      }
+      if (inOrderedList) {
+        result.push('</ol>');
+        inOrderedList = false;
+      }
+
+      const level = headerMatch[1].length;
+      const content = convertMarkdownToHtml(headerMatch[2]);
+      result.push(`<h${level}>${content}</h${level}>`);
+    } else if (bulletMatch) {
       // Start bullet list if not already in one
       if (!inBulletList) {
         // Close ordered list if open
@@ -194,7 +208,11 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
     const editor = useEditor({
       extensions: [
         StarterKit.configure({
-          heading: false,
+          heading: showToolbar
+            ? {
+                levels: [1, 2, 3, 4, 5, 6],
+              }
+            : false,
           /**
            * The `bulletList` prop in the StarterKit Tiptap extension configures the behavior and HTML rendering of bulleted lists.
            *
@@ -210,34 +228,44 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
            *      (e.g. `marked`, `remark`, or `markdown-it`) to produce valid HTML, or use an extension that enables markdown parsing.
            *   3. Once the content is valid HTML (e.g. with <ul><li>... </li></ul>), and this configuration is present, the lists will render and style correctly.
            */
-          bulletList: {
-            keepMarks: true,
-            keepAttributes: true,
-            HTMLAttributes: {
-              style: 'list-style-type: disc;',
-            },
-          },
-          orderedList: {
-            keepMarks: true,
-            keepAttributes: true,
-            HTMLAttributes: {
-              style: 'list-style-type: decimal;',
-            },
-          },
+          bulletList: showToolbar
+            ? {
+                keepMarks: true,
+                keepAttributes: true,
+                HTMLAttributes: {
+                  style: 'list-style-type: disc;',
+                },
+              }
+            : false,
+          orderedList: showToolbar
+            ? {
+                keepMarks: true,
+                keepAttributes: true,
+                HTMLAttributes: {
+                  style: 'list-style-type: decimal;',
+                },
+              }
+            : false,
           hardBreak: {
             keepMarks: false,
           },
+          bold: showToolbar,
+          italic: showToolbar,
         }),
         Placeholder.configure({
           placeholder,
         }),
-        Underline,
-        Link.configure({
-          openOnClick: false,
-          HTMLAttributes: {
-            class: 'text-primary underline underline-offset-4',
-          },
-        }),
+        ...(showToolbar
+          ? [
+              Underline,
+              Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                  class: 'text-primary underline underline-offset-4',
+                },
+              }),
+            ]
+          : []),
         ErrorHighlight as any,
       ] as any,
       content: normalizedDefaultValue,
@@ -257,7 +285,9 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
       },
       onFocus: () => {
         hasUserInteractedRef.current = true;
-        setIsToolbarVisible(true);
+        if (showToolbar) {
+          setIsToolbarVisible(true);
+        }
       },
       onBlur: () => {
         // Delay hiding to allow toolbar clicks
@@ -456,7 +486,8 @@ const TiptapTextArea = React.forwardRef<HTMLDivElement, TiptapTextAreaProps>(
               'prose-ol:text-sm prose-ol:mt-0 prose-ol:mb-2 prose-ol:list-decimal prose-ol:pl-6',
               'prose-li:mt-0 prose-li:mb-1 prose-li:marker:text-gray-600',
               'prose-strong:font-semibold',
-              'prose-em:italic  ml-2',
+              'prose-em:italic',
+              '[&_.ProseMirror_em]:italic [&_.ProseMirror_em]:font-[italic]',
               'prose-a:text-primary prose-a:underline prose-a:underline-offset-4',
               '[&_.ProseMirror]:outline-none [&_.ProseMirror]:min-h-full',
               '[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]',
